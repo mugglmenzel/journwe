@@ -1,5 +1,7 @@
 package controllers.dao.common;
 
+import play.Logger;
+
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapper;
 
 
@@ -12,6 +14,7 @@ public abstract class CommonDAO<T> implements IDAO<T> {
 		try {
 			pm.save(obj);
 		} catch (Exception e) {
+			Logger.error("Not saved " + obj, e);
 			return false;
 		}
 		return true;

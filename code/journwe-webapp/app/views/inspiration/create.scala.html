@@ -1,0 +1,34 @@
+@(inspForm: Form[Inspiration])(categories: Map[String, String])(inspirations: List[Inspiration])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Manage Inspirations") {
+  
+	<h2>Inspirations</h2>
+	<table class="table table-striped">
+		
+	@for(ins <- inspirations) {
+		<tr><td>@ins.getId()</td><td>@ins.getName()</td></tr>
+	}
+	</table>
+
+	<h2>Introduce a new Inspiration</h2>
+    @form(routes.InspirationController.save()) {
+    	<fieldset>
+       		@inputText(inspForm("name"), '_label -> "Inspiration name")
+    		@select(
+    			inspForm("inspirationCategoryId"), 
+    			options(categories), 
+    			'_default -> "--- Choose a Category ---",
+    			'_label -> "Category",
+    			'_error -> inspForm("inspirationCategoryId").error.map(_.withMessage("Please select a Category!"))
+    		)
+ 
+    	</fieldset>
+    	<div class="actions">
+    	  <input type="submit" value="Create Inspiration!" class="btn btn-primary"> | <a href="@routes.Application.index()" class="btn btn-link">Cancel</a>
+    	</div>
+    }
+    
+}

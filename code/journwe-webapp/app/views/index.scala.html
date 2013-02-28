@@ -1,9 +1,43 @@
-@(message: String) 
+@(message: String)(inspirations: List[Inspiration])
 
 @main("Welcome to JournWe") {
-	<p>@message</p>
-	
-	<div class="text-center">
-		<a href="/adventure/new" class="btn btn-primary text-center">Start a new Group Adventure!</a>
+<div class="alert">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	@message
+</div>
+
+<div class="text-center">
+	<a href="/adventure/new" class="btn btn-primary text-center">Start
+		a new Group Adventure!</a>
+	<div>- OR -</div>
+	<div>Get Inspired...</div>
+</div>
+
+<div class="tabbable">
+	<!-- Only required for left/right tabs -->
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#browse" data-toggle="tab">Browse</a></li>
+		<li><a href="#any" data-toggle="tab">Anything</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="browse">
+			<ul>
+			@for(ins <- inspirations) {
+				<li>@ins.getName()</li>	
+			}
+			</ul>
+		</div>
+		<div class="tab-pane" id="any">
+			<p>Anything.</p>
+		</div>
 	</div>
+</div>
+
+<div>
+	<h2>Maintenance</h2>
+	<ul>
+		<li><a href="/category/new" class="btn btn-link">Manage Category</a></li>
+		<li><a href="/inspiration/new" class="btn btn-link">Manage Inspiration</a></li>
+	</ul>
+</div>
 }

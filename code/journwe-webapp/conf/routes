@@ -6,17 +6,17 @@
 GET     /                           controllers.Application.index()
 
 GET		/adventure/new				controllers.AdventureController.create()
-#GET	/inspiration/new			controllers.Application.createInspiration()
+GET		/inspiration/new			controllers.InspirationController.create()
 GET		/category/new				controllers.CategoryController.create()
+
+POST	/adventure					controllers.AdventureController.save()
+POST	/inspiration				controllers.InspirationController.save()
+POST	/category					controllers.CategoryController.save()
 
 
 GET		/adventure/:id				controllers.Application.get(id:String)
 GET		/inspiration/:id			controllers.Application.get(id:String)
 
-
-POST	/adventure					controllers.AdventureController.save()
-#POST	/inspiration				controllers.Application.saveInspiration()
-POST	/category					controllers.CategoryController.save()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

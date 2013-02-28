@@ -5,7 +5,8 @@ import models.InspirationCategory;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.category.*;
+import views.html.category.create;
+import controllers.dao.CategoryDAO;
 
 public class CategoryController extends Controller {
 
@@ -19,8 +20,13 @@ public class CategoryController extends Controller {
 		Form<InspirationCategory> filledCatForm = catForm.bindFromRequest();
 		if (filledCatForm.hasErrors()) {
 			return badRequest(create.render(filledCatForm));
-		} else
-			return ok("Wow, Congratulations!");
+		} else {
+			InspirationCategory cat = filledCatForm.get();
+			if (new CategoryDAO().save(cat))
+				return ok("Wow, Congratulations!");
+			else
+				return internalServerError("Something went wrong during saving :(");
+		}
 	}
 
 }
