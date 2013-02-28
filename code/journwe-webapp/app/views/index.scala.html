@@ -1,7 +1,9 @@
-@(message: String)
+@(message: String) 
 
-@main("Welcome to Play 2.1") {
-    
-    @play20.welcome(message, style = "Java")
-    
+@main("Welcome to JournWe") {
+	<p>@message</p>
+	
+	<div class="text-center">
+		<a href="/adventure/new" class="btn btn-primary text-center">Start a new Group Adventure!</a>
+	</div>
 }

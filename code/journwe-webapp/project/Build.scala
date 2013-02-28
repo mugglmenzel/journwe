@@ -11,7 +11,8 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
-    javaEbean
+    javaEbean,
+    "com.amazonaws" % "aws-java-sdk" % "1.3.33"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

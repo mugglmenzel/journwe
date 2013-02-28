@@ -1,0 +1,16 @@
+@(categoryForm: Form[InspirationCategory])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Introduce a new Inspiration Category") {
+    @form(routes.CategoryController.save()) {
+    	<fieldset>
+       		@inputText(categoryForm("name"), '_label -> "Category name")
+    	</fieldset>
+    	<div class="actions">
+    	  <input type="submit" value="Create category!" class="btn btn-primary"> | <a href="@routes.Application.index()" class="btn btn-link">Cancel</a>
+    	</div>
+    }
+    
+}
