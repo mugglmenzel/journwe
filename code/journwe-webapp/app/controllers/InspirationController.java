@@ -13,6 +13,10 @@ public class InspirationController extends Controller {
 
 	private static Form<Inspiration> insForm = form(Inspiration.class);
 
+	public static Result get(String id) {
+		return ok();
+	}
+	
 	public static Result create() {
 		return ok(create.render(insForm, new CategoryDAO().allOptionsMap(50), new InspirationDAO().all(50)));
 	}

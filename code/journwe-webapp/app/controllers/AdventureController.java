@@ -17,6 +17,10 @@ public class AdventureController extends Controller {
 
 	private static Form<Adventure> advForm = form(Adventure.class);
 
+	public static Result get(String id) {
+		return ok();
+	}
+	
 	public static Result create() {
 		Logger.info("Test");
 		Map<String, String> inspireOptions = new InspirationDAO()

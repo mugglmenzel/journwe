@@ -1,34 +1,38 @@
-@(message: String)(inspirations: List[Inspiration])
+@(categories: List[Category])(inspirations: List[Inspiration])
 
 @main("Welcome to JournWe") {
-<div class="alert">
-	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	@message
-</div>
+
 
 <div class="text-center">
-	<a href="/adventure/new" class="btn btn-primary text-center">Start
+	<a href="/adventure/new" class="btn btn-primary btn-large text-center">Start
 		a new Group Adventure!</a>
 	<div>- OR -</div>
 	<div>Get Inspired...</div>
 </div>
 
-<div class="tabbable">
-	<!-- Only required for left/right tabs -->
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="#browse" data-toggle="tab">Browse</a></li>
-		<li><a href="#any" data-toggle="tab">Anything</a></li>
-	</ul>
-	<div class="tab-content">
-		<div class="tab-pane active" id="browse">
-			<ul>
-			@for(ins <- inspirations) {
-				<li>@ins.getName()</li>	
+<div class="row">
+	<div class="span2">
+		<ul class="nav nav-tabs nav-stacked">
+			@for(cat <- categories) {
+				<li><a href="#">@cat.getName()</a></li>
 			}
+		</ul>
+	</div>
+	<div class="span10">
+		<div class="tabbable">
+			<!-- Only required for left/right tabs -->
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#browse" data-toggle="tab">Browse</a></li>
 			</ul>
-		</div>
-		<div class="tab-pane" id="any">
-			<p>Anything.</p>
+			<div class="tab-content">
+				<div class="tab-pane active" id="browse">
+					<ul>
+					@for(ins <- inspirations) {
+						<li>@ins.getName()</li>	
+					}
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

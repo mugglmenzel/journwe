@@ -1,10 +1,11 @@
 @(advForm: Form[Adventure])(inspirations: Map[String, String])
 
 @import helper._
-@import helper.twitterBootstrap._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
 @main("Start a new Group Adventure") {
-    @form(routes.AdventureController.save()) {
+    @form(routes.AdventureController.save(), args = 'class -> "form-horizontal") {
     	<fieldset>
        		@inputText(advForm("name"), '_label -> "Adventure name")
     		@select(
@@ -16,7 +17,7 @@
     		)
     	</fieldset>
     	<div class="actions">
-    	  <input type="submit" value="Create Group Adventure!" class="btn btn-primary"> | <a href="@routes.Application.index()" class="btn btn-link">Cancel</a>
+    	  <input type="submit" value="Create Group Adventure!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
     	</div>
     }
     

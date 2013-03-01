@@ -13,19 +13,21 @@ public class CategoryController extends Controller {
 	private static Form<Category> catForm = form(Category.class);
 
 	public static Result create() {
-		return ok(create.render(catForm));
+		return ok(create.render(null, catForm, new CategoryDAO().all(50)));
 	}
 
 	public static Result save() {
 		Form<Category> filledCatForm = catForm.bindFromRequest();
 		if (filledCatForm.hasErrors()) {
-			return badRequest(create.render(filledCatForm));
+			return badRequest(create.render("Please fill out the form correctly.", filledCatForm,
+					new CategoryDAO().all(50)));
 		} else {
 			Category cat = filledCatForm.get();
 			if (new CategoryDAO().save(cat))
 				return ok("Wow, Congratulations!");
 			else
-				return internalServerError("Something went wrong during saving :(");
+				return internalServerError(create.render("Something went wrong during saving :(", filledCatForm,
+						new CategoryDAO().all(50)));
 		}
 	}
 

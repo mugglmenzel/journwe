@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
+GET     /                           controllers.ApplicationController.index()
 
 GET		/adventure/new				controllers.AdventureController.create()
 GET		/inspiration/new			controllers.InspirationController.create()
@@ -14,8 +14,8 @@ POST	/inspiration				controllers.InspirationController.save()
 POST	/category					controllers.CategoryController.save()
 
 
-GET		/adventure/:id				controllers.Application.get(id:String)
-GET		/inspiration/:id			controllers.Application.get(id:String)
+GET		/adventure/:id				controllers.AdventureController.get(id:String)
+GET		/inspiration/:id			controllers.InspirationController.get(id:String)
 
 
 # Map static resources from the /public folder to the /assets URL path

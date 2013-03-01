@@ -1,15 +1,35 @@
-@(categoryForm: Form[Category])
+@(message: String)(categoryForm: Form[Category])(categories: List[Category])
 
 @import helper._
-@import helper.twitterBootstrap._
 
-@main("Introduce a new Inspiration Category") {
-    @form(routes.CategoryController.save()) {
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+
+@main("Manage Inspiration Categories") {
+
+	@if(message) {
+	<div class="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		@message
+	</div>
+	}
+  
+	<h2>Inspirations</h2>
+	<table class="table table-striped">
+		
+	@for(cat <- categories) {
+		<tr><td>@cat.getId()</td><td>@cat.getName()</td></tr>
+	}
+	</table>
+
+	<h2>Introduce a new Inspiration Category</h2>
+
+    @form(routes.CategoryController.save(), args = 'class -> "form-horizontal") {
+
     	<fieldset>
        		@inputText(categoryForm("name"), '_label -> "Category name")
     	</fieldset>
     	<div class="actions">
-    	  <input type="submit" value="Create category!" class="btn btn-primary"> | <a href="@routes.Application.index()" class="btn btn-link">Cancel</a>
+    	  <input type="submit" value="Create category!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
     	</div>
     }
     

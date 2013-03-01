@@ -1,7 +1,8 @@
 @(inspForm: Form[Inspiration])(categories: Map[String, String])(inspirations: List[Inspiration])
 
 @import helper._
-@import helper.twitterBootstrap._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
 @main("Manage Inspirations") {
   
@@ -14,7 +15,7 @@
 	</table>
 
 	<h2>Introduce a new Inspiration</h2>
-    @form(routes.InspirationController.save()) {
+    @form(routes.InspirationController.save(), args = 'class -> "form-horizontal") {
     	<fieldset>
        		@inputText(inspForm("name"), '_label -> "Inspiration name")
     		@select(
@@ -27,7 +28,7 @@
  
     	</fieldset>
     	<div class="actions">
-    	  <input type="submit" value="Create Inspiration!" class="btn btn-primary"> | <a href="@routes.Application.index()" class="btn btn-link">Cancel</a>
+    	  <input type="submit" value="Create Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
     	</div>
     }
     
