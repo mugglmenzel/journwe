@@ -26,9 +26,14 @@
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="browse">
-					<ul>
+					<ul class="thumbnails">
 					@for(ins <- inspirations) {
-						<li>@ins.getName()</li>	
+						<li class="span3">
+							<a class="thumbnail" href="#">
+								<img src="@routes.Assets.at("images/favicon.png")">
+							</a>
+							<h4>@ins.getName()</h4>
+						</li>	
 					}
 					</ul>
 				</div>
