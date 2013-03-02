@@ -18,6 +18,8 @@ public class Inspiration {
 	@Required
 	private String name;
 
+	private String description;
+
 	/**
 	 * @return the inspirationCategoryId
 	 */
@@ -64,6 +66,20 @@ public class Inspiration {
 		this.name = name;
 	}
 
+	/**
+	 * @return the description
+	 */
+	@DynamoDBAttribute
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	
 	
 }

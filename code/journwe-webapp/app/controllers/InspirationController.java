@@ -2,10 +2,12 @@ package controllers;
 
 import static play.data.Form.form;
 import models.Inspiration;
+import models.Category;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.inspiration.create;
+import views.html.inspiration.get;
 import controllers.dao.CategoryDAO;
 import controllers.dao.InspirationDAO;
 
@@ -14,7 +16,9 @@ public class InspirationController extends Controller {
 	private static Form<Inspiration> insForm = form(Inspiration.class);
 
 	public static Result get(String id) {
-		return ok();
+		Inspiration ins = new InspirationDAO().get("c36949fb-68bb-456a-a168-10082fc2d392", id);
+		Category cat = new CategoryDAO().get(ins.getInspirationCategoryId());
+		return ok(get.render(ins, cat));
 	}
 	
 	public static Result create() {
