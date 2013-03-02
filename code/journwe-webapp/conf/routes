@@ -9,6 +9,8 @@ GET		/adventure/new				controllers.AdventureController.create()
 GET		/inspiration/new			controllers.InspirationController.create()
 GET		/category/new				controllers.CategoryController.create()
 
+GET 	/category/edit/:id				controllers.CategoryController.edit(id:String)
+
 POST	/adventure					controllers.AdventureController.save()
 POST	/inspiration				controllers.InspirationController.save()
 POST	/category					controllers.CategoryController.save()

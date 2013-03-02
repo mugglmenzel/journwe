@@ -17,7 +17,7 @@
 	<table class="table table-striped">
 		
 	@for(cat <- categories) {
-		<tr><td>@cat.getId()</td><td>@cat.getName()</td></tr>
+		<tr><td>@cat.getId()</td><td>@cat.getName()</td><td><a href="@routes.CategoryController.edit(cat.getId())">edit</a></td></tr>
 	}
 	</table>
 
