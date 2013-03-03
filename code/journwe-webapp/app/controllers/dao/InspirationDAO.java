@@ -8,6 +8,7 @@ import models.Inspiration;
 
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig.ConsistentReads;
+import com.amazonaws.services.dynamodb.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
 
 import controllers.dao.common.CommonChildDAO;
@@ -23,6 +24,7 @@ public class InspirationDAO extends CommonChildDAO<Inspiration> {
 
 	@Override
 	public Inspiration get(String parentId, String id) {
+	
 		return pm.load(Inspiration.class, parentId, id,
 				new DynamoDBMapperConfig(ConsistentReads.EVENTUAL));
 	}

@@ -18,7 +18,10 @@ public class Inspiration {
 	@Required
 	private String name;
 
+	@Required
 	private String description;
+	
+	private String image;
 
 	/**
 	 * @return the inspirationCategoryId
@@ -80,6 +83,32 @@ public class Inspiration {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	/**
+	 * @return the image
+	 */
+	@DynamoDBAttribute
+	public String getImage() {
+		return image;
+	}
+
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Inspiration [inspirationCategoryId=" + inspirationCategoryId
+				+ ", id=" + id + ", name=" + name + ", description="
+				+ description + ", image=" + image + "]";
+	}
+	
 	
 	
 }

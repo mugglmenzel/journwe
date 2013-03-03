@@ -7,7 +7,7 @@
 	<a href="/adventure/new" class="btn btn-primary btn-large text-center">Start
 		a new Group Adventure!</a>
 	<div>- OR -</div>
-	<div>Get Inspired...</div>
+	<p class="lead">Get Inspired...</p>
 </div>
 
 <div class="row">
@@ -22,20 +22,23 @@
 		<div class="tabbable">
 			<!-- Only required for left/right tabs -->
 			<ul class="nav nav-tabs">
-				<li class="active"><a href="#browse" data-toggle="tab">Browse</a></li>
+				<li class="active"><a href="#browse" data-toggle="tab"><i class="icon-th"></i>Browse</a></li>
+				<li><a href="#search" data-toggle="tab"><i class="icon-search"></i>Search</a></li>				
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="browse">
 					<ul class="thumbnails">
 					@for(ins <- inspirations) {
 						<li class="span3">
-							<a class="thumbnail" href="/inspiration/@ins.getId()">
-								<img src="@routes.Assets.at("img/favicon.png")">
+							<a class="thumbnail" href="@routes.InspirationController.get(ins.getInspirationCategoryId(), ins.getId())">
+								<img src="@ins.getImage()">
 							</a>
 							<h4>@ins.getName()</h4>
 						</li>	
 					}
 					</ul>
+				</div>
+				<div class="tab-pane" id="search">
 				</div>
 			</div>
 		</div>

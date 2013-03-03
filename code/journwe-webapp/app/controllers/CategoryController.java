@@ -30,11 +30,23 @@ public class CategoryController extends Controller {
 		} else {
 			Category cat = filledCatForm.get();
 			if (new CategoryDAO().save(cat))
-				return ok(manage.render("Wow, Congratulations!", catForm, new CategoryDAO().all(50)));
+				return ok(manage.render("Created a Category.", catForm,
+						new CategoryDAO().all(50)));
 			else
 				return internalServerError(manage.render(
 						"Something went wrong during saving :(", filledCatForm,
 						new CategoryDAO().all(50)));
 		}
+	}
+
+	public static Result delete(String id) {
+		if (new CategoryDAO().delete(id))
+			return ok(manage.render("Category with id " + id + " deleted.",
+					catForm, new CategoryDAO().all(50)));
+		else
+			return internalServerError(manage.render(
+					"Something went wrong during deletion :(", catForm,
+					new CategoryDAO().all(50)));
+
 	}
 }

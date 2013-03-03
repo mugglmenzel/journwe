@@ -1,0 +1,45 @@
+@(message: String)(inspForm: Form[Inspiration])(categories: Map[String, String])(inspirations: List[Inspiration])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
+
+@main("Manage Inspirations") {
+  
+	@if(message) {
+	<div class="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		@message
+	</div>
+	}
+  
+	<h2>Inspirations</h2>
+	<table class="table table-striped">
+		
+	@for(ins <- inspirations) {
+		<tr><td>@ins.getId()</td><td>@ins.getName()</td><td><a href="@routes.InspirationController.edit(ins.getInspirationCategoryId(), ins.getId())" class="act-primary"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.InspirationController.delete(ins.getInspirationCategoryId(), ins.getId())" class="act-danger"><i class="icon-trash"></i>delete</a></td></tr>
+	}
+	</table>
+
+	<h2>Inspiration Form</h2>
+    @form(routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+    	<fieldset>
+    		
+            @inputText(inspForm("name"), '_label -> "Inspiration name", 'placeholder -> "Name", 'required -> "")
+            @textarea(inspForm("description"), '_label -> "Description", 'placeholder -> "Some text",  'required -> "")
+    		@inputFile(inspForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
+    		@select(
+    			inspForm("inspirationCategoryId"), 
+    			options(categories), 
+    			'_default -> "--- Choose a Category ---",
+    			'_label -> "Category",
+    			'_error -> inspForm("inspirationCategoryId").error.map(_.withMessage("Please select a Category!"))
+    		)
+ 
+    	</fieldset>
+    	<div class="form-actions">
+    	  <input type="submit" value="Create Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+    	</div>
+    }
+    
+}

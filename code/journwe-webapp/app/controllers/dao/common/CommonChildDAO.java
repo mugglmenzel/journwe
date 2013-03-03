@@ -4,4 +4,13 @@ public abstract class CommonChildDAO<T> extends CommonDAO<T> implements IChildDA
 
 	public abstract T get(String parentId, String id);
 
+	public boolean delete(String parentId, String id) {
+		try {
+			pm.delete(get(parentId, id));
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
 }

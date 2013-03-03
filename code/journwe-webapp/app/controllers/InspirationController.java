@@ -1,43 +1,119 @@
 package controllers;
 
 import static play.data.Form.form;
-import models.Inspiration;
+
+import java.io.File;
+import java.util.Date;
+
 import models.Category;
+import models.Inspiration;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import views.html.inspiration.create;
 import views.html.inspiration.get;
+import views.html.inspiration.manage;
+
+import com.amazonaws.HttpMethod;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.typesafe.config.ConfigFactory;
+
 import controllers.dao.CategoryDAO;
 import controllers.dao.InspirationDAO;
 
 public class InspirationController extends Controller {
 
+	private static final String S3_BUCKET_INSPIRATION_IMAGES = "journwe-inspiration-images";
+
 	private static Form<Inspiration> insForm = form(Inspiration.class);
 
-	public static Result get(String id) {
-		Inspiration ins = new InspirationDAO().get("c36949fb-68bb-456a-a168-10082fc2d392", id);
-		Category cat = new CategoryDAO().get(ins.getInspirationCategoryId());
+	public static Result get(String catId, String id) {
+		Inspiration ins = new InspirationDAO().get(catId, id);
+		Category cat = new CategoryDAO().get(catId);
 		return ok(get.render(ins, cat));
 	}
-	
+
 	public static Result create() {
-		return ok(create.render(insForm, new CategoryDAO().allOptionsMap(50), new InspirationDAO().all(50)));
+		return ok(manage.render(null, insForm,
+				new CategoryDAO().allOptionsMap(50),
+				new InspirationDAO().all(50)));
+	}
+
+	public static Result edit(String catId, String id) {
+		Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(
+				catId, id));
+		return ok(manage.render(null, editInsForm,
+				new CategoryDAO().allOptionsMap(50),
+				new InspirationDAO().all(50)));
 	}
 
 	public static Result save() {
+
 		Form<Inspiration> filledInsForm = insForm.bindFromRequest();
-		if (filledInsForm.hasErrors()) {
-			return badRequest(create.render(filledInsForm, new CategoryDAO().allOptionsMap(50),
+		MultipartFormData body = request().body().asMultipartFormData();
+		FilePart picture = body.getFile("image");
+
+		if (filledInsForm.hasErrors() || picture == null) {
+			flash("error", picture == null ? "Missing file" : "");
+			return badRequest(manage.render(
+					"Please fill out the form correctly.", filledInsForm,
+					new CategoryDAO().allOptionsMap(50),
 					new InspirationDAO().all(50)));
 		} else {
-			Inspiration cat = filledInsForm.get();
-			if (new InspirationDAO().save(cat))
-				return ok("Wow, Congratulations!");
-			else
-				return internalServerError(create.render(filledInsForm, new CategoryDAO().allOptionsMap(50),
+			Inspiration ins = filledInsForm.get();
+			String fileName = picture.getFilename();
+			// String contentType = picture.getContentType();
+			File file = picture.getFile();
+
+			try {
+				if (!new InspirationDAO().save(ins))
+					throw new Exception();
+
+				ins = new InspirationDAO().get(ins.getInspirationCategoryId(),
+						ins.getId());
+
+				AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+						ConfigFactory.load().getString("aws.accessKey"),
+						ConfigFactory.load().getString("aws.secretKey")));
+				s3.putObject(new PutObjectRequest(S3_BUCKET_INSPIRATION_IMAGES,
+						ins.getId(), file)
+						.withCannedAcl(CannedAccessControlList.PublicRead));
+				ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
+						ins.getId()));
+
+				if (new InspirationDAO().save(ins))
+					return ok(manage.render(
+							"Created an Inspiration with image "
+									+ ins.getImage() + ".", insForm,
+							new CategoryDAO().allOptionsMap(50),
+							new InspirationDAO().all(50)));
+				else
+					throw new Exception();
+			} catch (Exception e) {
+				return internalServerError(manage.render(
+						"Something went wrong during saving :(", filledInsForm,
+						new CategoryDAO().allOptionsMap(50),
 						new InspirationDAO().all(50)));
+			}
 		}
+	}
+
+	public static Result delete(String catId, String id) {
+		if (new InspirationDAO().delete(catId, id))
+			return ok(manage.render("Inspiration with id " + id + " deleted.",
+					insForm, new CategoryDAO().allOptionsMap(50),
+					new InspirationDAO().all(50)));
+		else
+			return internalServerError(manage.render(
+					"Something went wrong during deletion :(", insForm,
+					new CategoryDAO().allOptionsMap(50),
+					new InspirationDAO().all(50)));
 	}
 
 }

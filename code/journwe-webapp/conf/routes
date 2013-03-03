@@ -3,22 +3,25 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.ApplicationController.index()
+GET     /                   				 				       controllers.ApplicationController.index()
 
-GET		/adventure/new				controllers.AdventureController.create()
-GET		/inspiration/new			controllers.InspirationController.create()
-GET		/category/new				controllers.CategoryController.create()
+GET		/adventure/new												controllers.AdventureController.create()
+GET		/inspiration/new											controllers.InspirationController.create()
+GET		/category/new												controllers.CategoryController.create()
 
-GET 	/category/edit/:id				controllers.CategoryController.edit(id:String)
+GET 	/category/:id/edit											controllers.CategoryController.edit(id:String)
+GET		/category/:catId/inspiration/:id/edit						controllers.InspirationController.edit(catId:String, id:String)
 
-POST	/adventure					controllers.AdventureController.save()
-POST	/inspiration				controllers.InspirationController.save()
-POST	/category					controllers.CategoryController.save()
+POST	/adventure/save												controllers.AdventureController.save()
+POST	/inspiration/save											controllers.InspirationController.save()
+POST	/category/save												controllers.CategoryController.save()
 
+GET		/category/:id/delete										controllers.CategoryController.delete(id:String)
+GET		/category/:catId/inspiration/:id/delete						controllers.InspirationController.delete(catId:String, id:String)
 
-GET		/adventure/:id				controllers.AdventureController.get(id:String)
-GET		/inspiration/:id			controllers.InspirationController.get(id:String)
+GET		/adventure/:id												controllers.AdventureController.get(id:String)
+GET		/category/:catId/inspiration/:id							controllers.InspirationController.get(catId:String, id:String)
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file								controllers.Assets.at(path="/public", file)
