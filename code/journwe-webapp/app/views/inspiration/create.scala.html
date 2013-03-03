@@ -17,7 +17,8 @@
 	<h2>Introduce a new Inspiration</h2>
     @form(routes.InspirationController.save(), args = 'class -> "form-horizontal") {
     	<fieldset>
-       		@inputText(inspForm("name"), '_label -> "Inspiration name")
+            @inputText(inspForm("name"), '_label -> "Inspiration name")
+            @textarea(inspForm("description"), '_label -> "Description")
     		@select(
     			inspForm("inspirationCategoryId"), 
     			options(categories), 

@@ -1,0 +1,13 @@
+@(ins: Inspiration)(category: Category)
+
+@main("Inspiration") {
+  
+	<div class="hero-unit">
+        <h1>@ins.getName()</h1>
+        <small><i  class="icon-book"></i> @category.getName()</small>
+        <p>
+            @ins.getDescription()
+        </p>
+    </h2>
+    
+}

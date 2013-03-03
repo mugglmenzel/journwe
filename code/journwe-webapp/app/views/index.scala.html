@@ -29,8 +29,8 @@
 					<ul class="thumbnails">
 					@for(ins <- inspirations) {
 						<li class="span3">
-							<a class="thumbnail" href="#">
-								<img src="@routes.Assets.at("images/favicon.png")">
+							<a class="thumbnail" href="/inspiration/@ins.getId()">
+								<img src="@routes.Assets.at("img/favicon.png")">
 							</a>
 							<h4>@ins.getName()</h4>
 						</li>	
