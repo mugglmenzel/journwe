@@ -14,8 +14,6 @@ public class Category {
 
 	@Required
 	private String name;
-
-	
 	
 	
 	/**

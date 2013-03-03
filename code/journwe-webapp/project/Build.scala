@@ -12,11 +12,20 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
-    "com.amazonaws" % "aws-java-sdk" % "1.3.33"
+    "com.amazonaws" % "aws-java-sdk" % "1.3.33",
+    "com.feth"    %% "play-authenticate" % "0.2.5-SNAPSHOT"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
-    // Add your own project settings here      
+    // Add your own project settings here    
+
+    // Repository for easy mail (used in authenticate)
+    resolvers += Resolver.url("play-easymail (release)", url("http://joscha.github.com/play-easymail/repo/releases/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("play-easymail (snapshot)", url("http://joscha.github.com/play-easymail/repo/snapshots/"))(Resolver.ivyStylePatterns),
+    // Repository for authenticate
+    resolvers += Resolver.url("play-authenticate (release)", url("http://joscha.github.com/play-authenticate/repo/releases/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns)
+
   )
 
 }

@@ -13,4 +13,8 @@ public class ApplicationController extends Controller {
 				new InspirationDAO().all(50)));
 	}
 
+	public static Result oAuthDenied(String provider){
+		return ok("oAuth went wrong");
+	}
+
 }

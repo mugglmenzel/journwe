@@ -1,4 +1,7 @@
 @(title: String)(content: Html)
+
+@import com.feth.play.module.pa.views.html._
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -30,7 +33,10 @@
 						<li><a href="#contact">Contact</a></li>
 					</ul>
 				</div>
-				<div class="btn btn-primary pull-right"><i class="icon-user icon-white"></i> Facebook Login &raquo;</div>
+
+                @forProviders() { p =>
+                    <a href="@p.getUrl()" class="btn btn-primary pull-right"><i class="icon-user icon-white"></i>@p.getKey() Login &raquo;</a>
+                }
 			</div>
 		</div>
 	</div>
