@@ -2,6 +2,7 @@ package services;
 
 import models.User;
 import play.Application;
+import play.Logger;
 
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
@@ -17,7 +18,7 @@ public class MyUserServicePlugin extends UserServicePlugin {
 	public Object save(final AuthUser authUser) {
 		final boolean isLinked = User.existsByAuthUserIdentity(authUser);
 		if (!isLinked) {
-			return User.create(authUser).getId();
+			return null; //User.create(authUser).getId();
 		} else {
 			// we have this user already, so return null
 			return null;
@@ -30,7 +31,7 @@ public class MyUserServicePlugin extends UserServicePlugin {
 		// ...and dont forget to sync the cache when users get deactivated/deleted
 		final User u = User.findByAuthUserIdentity(identity);
 		if(u != null) {
-			return u.getId();
+			return u.getProviderUserId();
 		} else {
 			return null;
 		}

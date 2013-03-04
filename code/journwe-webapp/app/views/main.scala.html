@@ -34,8 +34,15 @@
 					</ul>
 				</div>
 
-                @forProviders() { p =>
-                    <a href="@p.getUrl()" class="btn btn-primary pull-right"><i class="icon-user icon-white"></i> @p.getKey() Login &raquo;</a>
+                @currentAuth() { auth =>
+                    @if(auth != null && User.findByAuthUserIdentity(auth) != null) {
+                        <p class="navbar-text pull-right">Hello @User.findByAuthUserIdentity(auth).getShortName() (<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>)</p>
+                        
+                    } else {
+	                    @forProviders() { p =>
+		                    <a href="@p.getUrl()" class="btn btn-primary pull-right"><i class="icon-user icon-white"></i> @p.getKey() Login &raquo;</a>
+		                }
+	                }
                 }
 			</div>
 		</div>
