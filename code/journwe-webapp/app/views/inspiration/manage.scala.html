@@ -24,7 +24,10 @@
 	<h2>Inspiration Form</h2>
     @form(routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
     	<fieldset>
-    		
+    		@if(inspForm("id").value() != null) { 
+    		<input type="hidden" name="@inspForm("inspirationCategoryId").name()" value="@inspForm("inspirationCategoryId").value()"/>
+    		<input type="hidden" name="@inspForm("id").name()" value="@inspForm("id").value()"/>
+    		}
             @inputText(inspForm("name"), '_label -> "Inspiration name", 'placeholder -> "Name", 'required -> "")
             @textarea(inspForm("description"), '_label -> "Description", 'placeholder -> "Some text",  'required -> "")
     		@inputFile(inspForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
@@ -38,7 +41,7 @@
  
     	</fieldset>
     	<div class="form-actions">
-    	  <input type="submit" value="Create Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+    	  <input type="submit" value="Save Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
     	</div>
     }
     

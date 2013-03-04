@@ -56,13 +56,13 @@ public class InspirationController extends Controller {
 		FilePart image = body.getFile("image");
 
 		if (filledInsForm.hasErrors() || image == null) {
-			flash("error", image == null ? "Missing file" : "");
 			return badRequest(manage.render(
 					"Please fill out the form correctly.", filledInsForm,
 					new CategoryDAO().allOptionsMap(50),
 					new InspirationDAO().all(50)));
 		} else {
 			Inspiration ins = filledInsForm.get();
+	
 			File file = image.getFile();
 
 			try {
@@ -83,7 +83,7 @@ public class InspirationController extends Controller {
 
 				if (new InspirationDAO().save(ins))
 					return ok(manage.render(
-							"Created an Inspiration with image "
+							"Saved Inspiration with image "
 									+ ins.getImage() + ".", insForm,
 							new CategoryDAO().allOptionsMap(50),
 							new InspirationDAO().all(50)));

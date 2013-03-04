@@ -10,8 +10,8 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     javaCore,
-    javaJdbc,
-    javaEbean,
+    // javaJdbc,
+    // javaEbean,
     "com.amazonaws" % "aws-java-sdk" % "1.3.33",
     "com.feth"    %% "play-authenticate" % "0.2.5-SNAPSHOT"
   )
