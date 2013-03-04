@@ -1,4 +1,4 @@
-@(categories: List[Category])(inspirations: List[Inspiration])(catId: String = null)
+@(categories: List[models.helpers.CategoryCount])(inspirations: List[Inspiration])(catId: String = null)
 
 @main("Welcome to JournWe") {
 
@@ -12,9 +12,10 @@
 
 <div class="row">
 	<div class="span2">
-		<ul class="nav nav-tabs nav-stacked">
+		<ul class="nav nav-pills nav-stacked">
+			<li @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()">All</a></li>
 			@for(cat <- categories) {
-				<li @if(cat.getId() == catId) {class="active"}><a href="@routes.ApplicationController.categoryIndex(cat.getId())">@cat.getName()</a></li>
+				<li @if(cat.getCategory().getId() == catId) {class="active"}><a href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())">@cat.getCategory().getName() (@cat.getCount())</a></li>
 			}
 		</ul>
 	</div>

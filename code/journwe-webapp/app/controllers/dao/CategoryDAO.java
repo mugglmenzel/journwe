@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import models.Category;
+import models.Inspiration;
 
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig.ConsistentReads;
+import com.amazonaws.services.dynamodb.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodb.model.AttributeValue;
 
 import controllers.dao.common.CommonParentDAO;
 
@@ -24,12 +27,16 @@ public class CategoryDAO extends CommonParentDAO<Category> {
 		return pm.scanPage(Category.class,
 				new DynamoDBScanExpression().withLimit(max)).getResults();
 	}
-	
+
 	public Map<String, String> allOptionsMap(int max) {
 		Map<String, String> result = new HashMap<String, String>();
 		for (Category in : all(max))
 			result.put(in.getId(), in.getName());
 		return result;
 	}
-	
+
+	public Integer countInspirations(String id) {
+		return pm.count(Inspiration.class, new DynamoDBQueryExpression(
+				new AttributeValue(id)));
+	}
 }
