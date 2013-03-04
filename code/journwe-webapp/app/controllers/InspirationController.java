@@ -3,11 +3,9 @@ package controllers;
 import static play.data.Form.form;
 
 import java.io.File;
-import java.util.Date;
 
 import models.Category;
 import models.Inspiration;
-import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -16,9 +14,7 @@ import play.mvc.Result;
 import views.html.inspiration.get;
 import views.html.inspiration.manage;
 
-import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -57,19 +53,17 @@ public class InspirationController extends Controller {
 
 		Form<Inspiration> filledInsForm = insForm.bindFromRequest();
 		MultipartFormData body = request().body().asMultipartFormData();
-		FilePart picture = body.getFile("image");
+		FilePart image = body.getFile("image");
 
-		if (filledInsForm.hasErrors() || picture == null) {
-			flash("error", picture == null ? "Missing file" : "");
+		if (filledInsForm.hasErrors() || image == null) {
+			flash("error", image == null ? "Missing file" : "");
 			return badRequest(manage.render(
 					"Please fill out the form correctly.", filledInsForm,
 					new CategoryDAO().allOptionsMap(50),
 					new InspirationDAO().all(50)));
 		} else {
 			Inspiration ins = filledInsForm.get();
-			String fileName = picture.getFilename();
-			// String contentType = picture.getContentType();
-			File file = picture.getFile();
+			File file = image.getFile();
 
 			try {
 				if (!new InspirationDAO().save(ins))
@@ -105,15 +99,24 @@ public class InspirationController extends Controller {
 	}
 
 	public static Result delete(String catId, String id) {
-		if (new InspirationDAO().delete(catId, id))
-			return ok(manage.render("Inspiration with id " + id + " deleted.",
-					insForm, new CategoryDAO().allOptionsMap(50),
-					new InspirationDAO().all(50)));
-		else
+		try {
+			AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+					ConfigFactory.load().getString("aws.accessKey"),
+					ConfigFactory.load().getString("aws.secretKey")));
+			s3.deleteObject(S3_BUCKET_INSPIRATION_IMAGES, id);
+			if (new InspirationDAO().delete(catId, id))
+				return ok(manage.render("Inspiration with id " + id
+						+ " deleted.", insForm,
+						new CategoryDAO().allOptionsMap(50),
+						new InspirationDAO().all(50)));
+			else
+				throw new Exception();
+		} catch (Exception e) {
 			return internalServerError(manage.render(
 					"Something went wrong during deletion :(", insForm,
 					new CategoryDAO().allOptionsMap(50),
 					new InspirationDAO().all(50)));
+		}
 	}
 
 }
