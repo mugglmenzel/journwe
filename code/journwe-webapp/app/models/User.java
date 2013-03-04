@@ -156,11 +156,6 @@ public class User {
 		this.provider = provider;
 	}
 
-	public String getShortName(){
-		String name = this.getName();
-		return name.split(" ")[0];
-	}
-
 	/**public static final Finder<Long, User> find = new Finder<Long, User>(
 			Long.class, User.class); **/
 

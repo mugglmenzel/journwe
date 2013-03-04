@@ -18,7 +18,7 @@ public class MyUserServicePlugin extends UserServicePlugin {
 	public Object save(final AuthUser authUser) {
 		final boolean isLinked = User.existsByAuthUserIdentity(authUser);
 		if (!isLinked) {
-			return null; //User.create(authUser).getId();
+			return User.create(authUser).getProviderUserId();
 		} else {
 			// we have this user already, so return null
 			return null;
