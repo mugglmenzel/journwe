@@ -17,4 +17,7 @@ public class ApplicationController extends Controller {
 		return ok("oAuth went wrong");
 	}
 
+	public static Result ping() {
+		return ok("pong");
+	}
 }
