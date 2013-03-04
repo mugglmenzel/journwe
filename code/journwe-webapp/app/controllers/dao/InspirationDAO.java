@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig.ConsistentReads;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodb.model.AttributeValue;
 
 import controllers.dao.common.CommonChildDAO;
 
@@ -32,6 +33,11 @@ public class InspirationDAO extends CommonChildDAO<Inspiration> {
 	public List<Inspiration> all(int max) {
 		return pm.scanPage(Inspiration.class,
 				new DynamoDBScanExpression().withLimit(max)).getResults();
+	}
+	
+	public List<Inspiration> all(int max, String catId) {
+		return pm.queryPage(Inspiration.class,
+				new DynamoDBQueryExpression(new AttributeValue(catId)).withLimit(max)).getResults();
 	}
 
 	public Map<String, String> allOptionsMap(int max) {

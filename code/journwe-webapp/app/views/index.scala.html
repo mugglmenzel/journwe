@@ -1,4 +1,4 @@
-@(categories: List[Category])(inspirations: List[Inspiration])
+@(categories: List[Category])(inspirations: List[Inspiration])(catId: String = null)
 
 @main("Welcome to JournWe") {
 
@@ -14,7 +14,7 @@
 	<div class="span2">
 		<ul class="nav nav-tabs nav-stacked">
 			@for(cat <- categories) {
-				<li><a href="#">@cat.getName()</a></li>
+				<li @if(cat.getId() == catId) {class="active"}><a href="@routes.ApplicationController.categoryIndex(cat.getId())">@cat.getName()</a></li>
 			}
 		</ul>
 	</div>

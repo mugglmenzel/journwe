@@ -2,8 +2,6 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                   				 				       controllers.ApplicationController.index()
 
 GET		/adventure/new												controllers.AdventureController.create()
 GET		/inspiration/new											controllers.InspirationController.create()
@@ -33,3 +31,8 @@ GET     /assets/*file								controllers.Assets.at(path="/public", file)
 GET     /logout                     				com.feth.play.module.pa.controllers.Authenticate.logout
 GET     /authenticate/:provider     				com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)
 GET     /authenticate/:provider/denied     			controllers.ApplicationController.oAuthDenied(provider: String)
+
+# Home page
+GET     /  															controllers.ApplicationController.index()
+GET     /:catId                   				 					controllers.ApplicationController.categoryIndex(catId:String)
+

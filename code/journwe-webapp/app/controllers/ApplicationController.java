@@ -10,7 +10,12 @@ public class ApplicationController extends Controller {
 
 	public static Result index() {
 		return ok(index.render(new CategoryDAO().all(10),
-				new InspirationDAO().all(50)));
+				new InspirationDAO().all(50), null));
+	}
+	
+	public static Result categoryIndex(String catId) {
+		return ok(index.render(new CategoryDAO().all(10),
+				new InspirationDAO().all(50, catId), catId));
 	}
 
 	public static Result oAuthDenied(String provider){
