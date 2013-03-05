@@ -15,6 +15,10 @@
     			'_label -> "Inspiration",
     			'_error -> advForm("inspirationId").error.map(_.withMessage("Please select an Inspiration to type your Adventure!"))
     		)
+    		@checkbox(advForm("publish"), '_label -> "Public?")
+    		@checkbox(advForm("limited"), '_label -> "Limited?")
+    		@inputText(advForm("limit"), '_label -> "Max. # of Adventurers", 'type -> "number")
+    		
     	</fieldset>
     	<div class="form-actions">
     	  <input type="submit" value="Create Group Adventure!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>

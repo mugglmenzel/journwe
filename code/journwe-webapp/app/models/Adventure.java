@@ -17,6 +17,12 @@ public class Adventure {
 	
 	@Required
 	private String name;
+	
+	private boolean publish = false;
+	
+	private boolean limited = false;
+	
+	private Integer limit;
 
 	/**
 	 * @return the inspirationId
@@ -62,6 +68,51 @@ public class Adventure {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the publish
+	 */
+	@DynamoDBAttribute
+	public boolean isPublish() {
+		return publish;
+	}
+
+	/**
+	 * @param publish the publish to set
+	 */
+	public void setPublish(boolean publish) {
+		this.publish = publish;
+	}
+
+	/**
+	 * @return the limited
+	 */
+	@DynamoDBAttribute
+	public boolean isLimited() {
+		return limited;
+	}
+
+	/**
+	 * @param limited the limited to set
+	 */
+	public void setLimited(boolean limited) {
+		this.limited = limited;
+	}
+
+	/**
+	 * @return the limit
+	 */
+	@DynamoDBAttribute
+	public Integer getLimit() {
+		return limit;
+	}
+
+	/**
+	 * @param limit the limit to set
+	 */
+	public void setLimit(Integer limit) {
+		this.limit = limit;
 	}
 	
 	

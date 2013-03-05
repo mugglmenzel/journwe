@@ -15,7 +15,7 @@
 		<ul class="nav nav-pills nav-stacked">
 			<li @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()">All</a></li>
 			@for(cat <- categories) {
-				<li @if(cat.getCategory().getId() == catId) {class="active"}><a href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())">@cat.getCategory().getName() (@cat.getCount())</a></li>
+				<li @if(cat.getCategory().getId() == catId) {class="active"}><a href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())">@cat.getCategory().getName() <span class="badge badge-info pull-right">@cat.getCount()</span></a></li>
 			}
 		</ul>
 	</div>
@@ -46,6 +46,11 @@
 	</div>
 </div>
 
+<div id="about">
+	<h2>About</h2>
+	<p class="lead">We are great folks because ...</p>
+</div>
+
 <div>
 	<h2>Maintenance</h2>
 	<ul>
@@ -53,4 +58,6 @@
 		<li><a href="/inspiration/new" class="btn btn-link">Manage Inspiration</a></li>
 	</ul>
 </div>
+
+
 }
