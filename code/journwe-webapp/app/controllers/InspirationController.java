@@ -6,6 +6,7 @@ import java.io.File;
 
 import models.Category;
 import models.Inspiration;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -55,7 +56,7 @@ public class InspirationController extends Controller {
 		MultipartFormData body = request().body().asMultipartFormData();
 		FilePart image = body.getFile("image");
 
-		if (filledInsForm.hasErrors() || image == null) {
+		if (filledInsForm.hasErrors()) {
 			return badRequest(manage.render(
 					"Please fill out the form correctly.", filledInsForm,
 					new CategoryDAO().allOptionsMap(50),
@@ -72,6 +73,7 @@ public class InspirationController extends Controller {
 				ins = new InspirationDAO().get(ins.getInspirationCategoryId(),
 						ins.getId());
 
+				Logger.info("got image file " + file);
 				if (file != null) {
 					AmazonS3Client s3 = new AmazonS3Client(
 							new BasicAWSCredentials(ConfigFactory.load()
