@@ -26,7 +26,9 @@
     @form(routes.CategoryController.save(), args = 'class -> "form-horizontal") {
 
     	<fieldset>
-    		
+    		@if(categoryForm("id").value()) { 
+    		<input type="hidden" name="@categoryForm("id").name()" value="@categoryForm("id").value()" />
+    		}
        		@inputText(categoryForm("name"), '_label -> "Category name")
     	</fieldset>
     	<div class="form-actions">

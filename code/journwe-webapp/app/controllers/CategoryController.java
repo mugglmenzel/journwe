@@ -30,7 +30,7 @@ public class CategoryController extends Controller {
 		} else {
 			Category cat = filledCatForm.get();
 			if (new CategoryDAO().save(cat))
-				return ok(manage.render("Created a Category.", catForm,
+				return ok(manage.render("Saved Category.", catForm,
 						new CategoryDAO().all(50)));
 			else
 				return internalServerError(manage.render(

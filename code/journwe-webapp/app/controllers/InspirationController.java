@@ -62,7 +62,7 @@ public class InspirationController extends Controller {
 					new InspirationDAO().all(50)));
 		} else {
 			Inspiration ins = filledInsForm.get();
-	
+
 			File file = image.getFile();
 
 			try {
@@ -72,19 +72,21 @@ public class InspirationController extends Controller {
 				ins = new InspirationDAO().get(ins.getInspirationCategoryId(),
 						ins.getId());
 
-				AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
-						ConfigFactory.load().getString("aws.accessKey"),
-						ConfigFactory.load().getString("aws.secretKey")));
-				s3.putObject(new PutObjectRequest(S3_BUCKET_INSPIRATION_IMAGES,
-						ins.getId(), file)
-						.withCannedAcl(CannedAccessControlList.PublicRead));
-				ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
-						ins.getId()));
+				if (file != null) {
+					AmazonS3Client s3 = new AmazonS3Client(
+							new BasicAWSCredentials(ConfigFactory.load()
+									.getString("aws.accessKey"), ConfigFactory
+									.load().getString("aws.secretKey")));
+					s3.putObject(new PutObjectRequest(
+							S3_BUCKET_INSPIRATION_IMAGES, ins.getId(), file)
+							.withCannedAcl(CannedAccessControlList.PublicRead));
+					ins.setImage(s3.getResourceUrl(
+							S3_BUCKET_INSPIRATION_IMAGES, ins.getId()));
+				}
 
 				if (new InspirationDAO().save(ins))
-					return ok(manage.render(
-							"Saved Inspiration with image "
-									+ ins.getImage() + ".", insForm,
+					return ok(manage.render("Saved Inspiration with image "
+							+ ins.getImage() + ".", insForm,
 							new CategoryDAO().allOptionsMap(50),
 							new InspirationDAO().all(50)));
 				else

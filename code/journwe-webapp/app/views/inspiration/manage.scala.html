@@ -24,7 +24,7 @@
 	<h2>Inspiration Form</h2>
     @form(routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
     	<fieldset>
-    		@if(inspForm("id").value() != null) { 
+    		@if(inspForm("id").value()) { 
     		<input type="hidden" name="@inspForm("inspirationCategoryId").name()" value="@inspForm("inspirationCategoryId").value()"/>
     		<input type="hidden" name="@inspForm("id").name()" value="@inspForm("id").value()"/>
     		}
