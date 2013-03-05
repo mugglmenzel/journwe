@@ -11,7 +11,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     // javaJdbc,
-    // javaEbean,
+    javaEbean,
     "com.amazonaws" % "aws-java-sdk" % "1.3.33",
     "com.feth"    %% "play-authenticate" % "0.2.5-SNAPSHOT"
   )
