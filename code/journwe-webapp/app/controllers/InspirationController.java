@@ -87,13 +87,15 @@ public class InspirationController extends Controller {
 						ins.getId()));
 
 				if (new InspirationDAO().save(ins)
-						&& (ins.getInspirationCategoryId().equals(
-								filledInsForm.field(
-										"originalInspirationCategoryId")
-										.value()) || new InspirationDAO()
-								.delete(filledInsForm.field(
-										"originalInspirationCategoryId")
-										.value(), ins.getId())))
+						&& (filledInsForm
+								.field("originalInspirationCategoryId") == null
+								|| ins.getInspirationCategoryId()
+										.equals(filledInsForm
+												.field("originalInspirationCategoryId")
+												.value()) || new InspirationDAO()
+									.delete(filledInsForm.field(
+											"originalInspirationCategoryId")
+											.value(), ins.getId())))
 					return ok(manage.render("Saved Inspiration with image "
 							+ ins.getImage() + ".", insForm,
 							new CategoryDAO().allOptionsMap(50),
