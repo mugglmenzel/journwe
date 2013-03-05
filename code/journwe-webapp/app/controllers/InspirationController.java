@@ -73,18 +73,18 @@ public class InspirationController extends Controller {
 				ins = new InspirationDAO().get(ins.getInspirationCategoryId(),
 						ins.getId());
 
-				Logger.info("got image file " + file);
-				if (file != null) {
-					AmazonS3Client s3 = new AmazonS3Client(
-							new BasicAWSCredentials(ConfigFactory.load()
-									.getString("aws.accessKey"), ConfigFactory
-									.load().getString("aws.secretKey")));
+				Logger.info("got image file " + image.getFilename());
+				AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+						ConfigFactory.load().getString("aws.accessKey"),
+						ConfigFactory.load().getString("aws.secretKey")));
+				if (image.getFilename() != null
+						&& !"".equals(image.getFilename()) && file.length() > 0) {
 					s3.putObject(new PutObjectRequest(
 							S3_BUCKET_INSPIRATION_IMAGES, ins.getId(), file)
 							.withCannedAcl(CannedAccessControlList.PublicRead));
-					ins.setImage(s3.getResourceUrl(
-							S3_BUCKET_INSPIRATION_IMAGES, ins.getId()));
 				}
+				ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
+						ins.getId()));
 
 				if (new InspirationDAO().save(ins))
 					return ok(manage.render("Saved Inspiration with image "
