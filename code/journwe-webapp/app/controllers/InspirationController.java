@@ -86,7 +86,11 @@ public class InspirationController extends Controller {
 				ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
 						ins.getId()));
 
-				if (new InspirationDAO().save(ins))
+				if (new InspirationDAO().save(ins)
+						&& new InspirationDAO().delete(
+								filledInsForm.field(
+										"originalInspirationCategoryId")
+										.value(), ins.getId()))
 					return ok(manage.render("Saved Inspiration with image "
 							+ ins.getImage() + ".", insForm,
 							new CategoryDAO().allOptionsMap(50),
