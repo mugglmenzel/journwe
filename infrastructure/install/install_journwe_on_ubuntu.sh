@@ -56,6 +56,6 @@ git clone "$REPO" "$CLONE_TO_THIS_DIR"
 sudo apt-get install typesafe-stack
 
 ## compile and run server ##
-cd $CLONE_TO_THIS_DIR
+cd $CLONE_TO_THIS_DIR/journwe/code/journwe-webapp
 sudo sbt clean compile stage
 sudo target/play -Dhttp.port=80 &
