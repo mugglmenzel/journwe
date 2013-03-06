@@ -51,3 +51,11 @@ CLONE_TO_THIS_DIR=${2:-/usr/local/journwe}
 
 rm -Rd "$CLONE_TO_THIS_DIR"
 git clone "$REPO" "$CLONE_TO_THIS_DIR"
+
+## Scala build tools ##
+sudo apt-get install typesafe-stack
+
+## compile and run server ##
+cd $CLONE_TO_THIS_DIR
+sudo sbt clean compile stage
+sudo target/play -Dhttp.port=80 &
