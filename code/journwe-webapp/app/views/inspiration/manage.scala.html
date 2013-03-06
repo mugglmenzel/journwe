@@ -29,7 +29,7 @@
     		<input type="hidden" name="@inspForm("id").name()" value="@inspForm("id").value()"/>
     		}
             @inputText(inspForm("name"), '_label -> "Inspiration name", 'placeholder -> "Name", 'required -> "")
-            @textarea(inspForm("description"), '_label -> "Description", 'placeholder -> "Some text",  'required -> "")
+            @textarea(inspForm("description"), '_label -> "Description", 'placeholder -> "Some text",  'required -> "", 'class -> "editor editor-html ckeditor")
     		@inputFile(inspForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
     		@select(
     			inspForm("inspirationCategoryId"), 

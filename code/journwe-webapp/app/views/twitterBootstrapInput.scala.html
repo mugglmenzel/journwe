@@ -5,7 +5,7 @@
 **************************************************@
 <div class="control-group @if(elements.hasErrors) {error}">
     <label class="control-label" for="@elements.id">@elements.label</label>
-    <div class="controls">
+    <div class="controls @elements.args.get('_wrapperclass)">
         @elements.input
         <span class="help-inline">@elements.infos.mkString(", ")</span> 
     </div>

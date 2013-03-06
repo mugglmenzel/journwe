@@ -15,8 +15,8 @@
     			'_label -> "Inspiration",
     			'_error -> advForm("inspirationId").error.map(_.withMessage("Please select an Inspiration to type your Adventure!"))
     		)
-    		@checkbox(advForm("publish"), '_label -> "Public?")
-    		@checkbox(advForm("limited"), '_label -> "Limited?")
+    		@checkbox(advForm("publish"), '_label -> "Public?", '_wrapperclass -> "switch")
+    		@checkbox(advForm("limited"), '_label -> "Limited?", '_wrapperclass -> "switch pull-left")
     		@inputText(advForm("limit"), '_label -> "Max. # of Adventurers", 'type -> "number")
     		
     	</fieldset>
