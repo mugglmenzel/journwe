@@ -18,7 +18,6 @@ public class Inspiration {
 	@Required
 	private String name;
 
-	@Required
 	private String description;
 	
 	private String image;
