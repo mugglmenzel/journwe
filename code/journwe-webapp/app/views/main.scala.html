@@ -1,6 +1,7 @@
 @(title: String)(content: Html)
 
 @import com.feth.play.module.pa.views.html._
+@import com.feth.play.module.pa.providers.AuthProvider.Registry
 
 <!DOCTYPE html>
 
@@ -45,9 +46,17 @@
                         <p class="navbar-text pull-right">Hello @User.findByAuthUserIdentity(auth).getName() (<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>)</p>
                         
                     } else {
+                   		<div class="btn-group pull-right">
+							<a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-user icon-white"></i> Login</a>
+							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
 	                    @forProviders() { p =>
-		                    <a href="@p.getUrl()" class="btn btn-primary pull-right"><i class="icon-user icon-white"></i> @p.getKey() Login &raquo;</a>
+								<li><a href="@p.getUrl()"><i class="icon-lock"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
 		                }
+		                	</ul>
+						</div>
 	                }
                 }
 			</div>
@@ -55,7 +64,9 @@
 	</div>
 	<div style="background-color: white; width=device-width;">
 		<div class="container">
-			<h1>@title</h1>
+			<div class="page-header">
+				<h1>@Html(title)</h1>
+			</div>
 			@content
 		</div>
 	</div>
