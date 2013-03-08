@@ -7,8 +7,6 @@ import java.util.List;
 
 import models.Category;
 import models.Subscriber;
-import models.User;
-import models.UserRole;
 import models.helpers.CategoryCount;
 import play.data.Form;
 import play.mvc.Controller;
@@ -33,8 +31,7 @@ public class ApplicationController extends Controller {
 	public static Result index() {
 		AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
 		if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
-				&& UserRole.ADMIN.equals(((User) PlayAuthenticate
-						.getUserService().getLocalIdentity(usr)).getRole())) {
+				&& SecuredAdminUser.isAdmin(usr)) {
 			List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
 			for (Category cat : new CategoryDAO().all(10))
 				catCounts.add(new CategoryCount(cat, new CategoryDAO()

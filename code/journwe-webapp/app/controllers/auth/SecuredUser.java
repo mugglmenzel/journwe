@@ -1,7 +1,5 @@
 package controllers.auth;
 
-import models.User;
-import models.UserRole;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -22,9 +20,7 @@ public class SecuredUser extends Security.Authenticator {
 	public String getUsername(Context ctx) {
 		final AuthUser u = PlayAuthenticate.getUser(ctx.session());
 
-		if (u != null
-				&& UserRole.ADMIN.equals(User.findByAuthUserIdentity(u)
-						.getRole())) {
+		if (u != null) {
 			return u.getId();
 		} else {
 			return null;

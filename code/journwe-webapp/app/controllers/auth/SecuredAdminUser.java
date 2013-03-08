@@ -22,9 +22,7 @@ public class SecuredAdminUser extends Security.Authenticator {
 	public String getUsername(Context ctx) {
 		final AuthUser u = PlayAuthenticate.getUser(ctx.session());
 
-		if (u != null
-				&& UserRole.ADMIN.equals(User.findByAuthUserIdentity(u)
-						.getRole())) {
+		if (u != null && isAdmin(u)) {
 			return u.getId();
 		} else {
 			return null;
@@ -41,6 +39,10 @@ public class SecuredAdminUser extends Security.Authenticator {
 	public Result onUnauthorized(Context ctx) {
 		ctx.flash().put("error", "Nice try, but you need to log in first!");
 		return redirect(routes.ApplicationController.index());
+	}
+
+	public static boolean isAdmin(AuthUser u) {
+		return UserRole.ADMIN.equals(User.findByAuthUserIdentity(u).getRole());
 	}
 
 }
