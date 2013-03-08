@@ -211,7 +211,7 @@ public class User {
 		return user;
 	}
 	
-	private static class UserRoleMarshaller implements DynamoDBMarshaller<UserRole> {
+	public static class UserRoleMarshaller implements DynamoDBMarshaller<UserRole> {
 
 		@Override
 		public String marshall(UserRole role) {
