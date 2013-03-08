@@ -4,6 +4,8 @@ import play.data.validation.Constraints.Required;
 
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMarshaller;
+import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMarshalling;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBTable;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
@@ -149,7 +151,7 @@ public class User {
 	/**
 	 * @return the role
 	 */
-	@DynamoDBAttribute
+	@DynamoDBMarshalling(marshallerClass = UserRoleMarshaller.class)
 	public UserRole getRole() {
 		return role;
 	}
@@ -207,6 +209,20 @@ public class User {
 
 		new UserDAO().save(user);
 		return user;
+	}
+	
+	private static class UserRoleMarshaller implements DynamoDBMarshaller<UserRole> {
+
+		@Override
+		public String marshall(UserRole role) {
+			return role.name();
+		}
+
+		@Override
+		public UserRole unmarshall(Class<UserRole> roleClass, String roleString) {
+			return UserRole.valueOf(roleString);
+		}
+		
 	}
 
 }
