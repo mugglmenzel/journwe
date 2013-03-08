@@ -6,3 +6,7 @@ body {
 	background-attachment: fixed;
 	background-size: cover;
 }
+
+.navbar-inverse .brand, .hero-unit h1 {
+	color: #E97802;
+}
