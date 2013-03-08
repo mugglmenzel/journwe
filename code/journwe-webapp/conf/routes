@@ -33,6 +33,7 @@ GET     /authenticate/:provider     				com.feth.play.module.pa.controllers.Auth
 GET     /authenticate/:provider/denied     			controllers.ApplicationController.oAuthDenied(provider: String)
 
 # Home page
-GET     /  															controllers.ApplicationController.index()
+GET     /															controllers.ApplicationController.index()
+GET     /subscribe													controllers.ApplicationController.subscribe()
 GET     /:catId                   				 					controllers.ApplicationController.categoryIndex(catId:String)
 

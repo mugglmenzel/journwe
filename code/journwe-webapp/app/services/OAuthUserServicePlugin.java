@@ -2,15 +2,14 @@ package services;
 
 import models.User;
 import play.Application;
-import play.Logger;
 
+import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
-import com.feth.play.module.pa.service.UserServicePlugin;
 
-public class MyUserServicePlugin extends UserServicePlugin {
+public class OAuthUserServicePlugin extends UserServicePlugin {
 
-	public MyUserServicePlugin(final Application app) {
+	public OAuthUserServicePlugin(final Application app) {
 		super(app);
 	}
 

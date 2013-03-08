@@ -1,17 +1,10 @@
-@(message: String)(categoryForm: Form[Category])(categories: List[Category])
+@(categoryForm: Form[Category])(categories: List[Category])
 
 @import helper._
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
 @main("Manage Inspiration Categories") {
-
-	@if(message) {
-	<div class="alert">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		@message
-	</div>
-	}
   
 	<h2>Categories</h2>
 	<table class="table table-striped">

@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(subForm: Form[Subscriber])
 
 @import play.mvc.Controller._
 @import com.feth.play.module.pa.views.html._
@@ -8,7 +8,7 @@
 
 <html lang="en">
 <head>
-	<title>@title</title>
+	<title>JournWe - Where Adventurers meet. Coming soon.</title>
 	<link rel="stylesheet" href="@routes.Assets.at("css/main.css")">
 	<link rel="stylesheet" href="@routes.Assets.at("css/bootstrap.css")">
 	<link rel="stylesheet" href="@routes.Assets.at("css/bootstrap-responsive.css")">
@@ -37,8 +37,6 @@
 				<div class="nav-collapse collapse">
 					<ul class="nav">
 						<li class="active"><a href="@routes.ApplicationController.index">Home</a></li>
-						<li><a href="#about">About</a></li>
-						<li><a href="#contact">Contact</a></li>
 					</ul>
 				</div>
 
@@ -63,31 +61,43 @@
 			</div>
 		</div>
 	</div>
-	<div style="background-color: white; width=device-width;">
-		<div class="container">
-			<div class="page-header">
-				<h1>@Html(title)</h1>
-			</div>
-			@if(flash("error")) {
-			<div class="alert alert-error">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				@flash("error")
-			</div>
-			}
-			@if(flash("success")) {
-			<div class="alert alert-success">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				@flash("success")
-			</div>
-			}
-			@if(flash("info")) {
-			<div class="alert alert-info">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				@flash("info")
-			</div>
-			}
-			@content
+	<div class="row-fluid">
+	<div class="hero-unit span8 offset2">
+		<div class="page-header">
+			<h1>JournWe <small>Where Adventurers meet.</small></h1>
 		</div>
+		@if(flash("error")) {
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@flash("error")
+		</div>
+		}
+		@if(flash("success")) {
+		<div class="alert alert-success">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@flash("success")
+		</div>
+		}
+		@if(flash("info")) {
+		<div class="alert alert-info">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			@flash("info")
+		</div>
+		}
+		<p>JournWe helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join the adventure.</p>
+		<div class="text-center">
+			<p class="Lead"><strong>Subscribe with your email to get notified when we go online!</strong></p>
+		
+			<form action="@routes.ApplicationController.subscribe()" class = "form-horizontal">
+				<fieldset>
+					<div class="input-append">
+						<input name="email" type="email">
+						<input class="btn btn-primary" type="submit" value="Subscribe!"/>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
 	</div>
 	<script>
 		$.jqBootstrapValidation({autoAdd: {helpBlocks: false}})

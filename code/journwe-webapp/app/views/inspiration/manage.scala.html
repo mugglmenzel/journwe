@@ -1,4 +1,4 @@
-@(message: String)(inspForm: Form[Inspiration])(categories: Map[String, String])(inspirations: List[Inspiration])
+@(inspForm: Form[Inspiration])(categories: Map[String, String])(inspirations: List[Inspiration])
 
 @import helper._
 
@@ -6,12 +6,7 @@
 
 @main("Manage Inspirations") {
   
-	@if(message) {
-	<div class="alert">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		@message
-	</div>
-	}
+	
   
 	<h2>Inspirations</h2>
 	<table class="table table-striped">
