@@ -61,4 +61,4 @@ mv sbt-launch.jar /home/ubuntu/.sbt/.lib/0.12.2/sbt-launch.jar
 
 ## compile and run server ##
 (cd "$JOURNWE_HOME/code/journwe-webapp"; sudo sbt clean compile stage)
-sudo "$JOURNWE_HOME/code/journwe-webapptarget/play" -Dhttp.port=80 &
+sudo "./$JOURNWE_HOME/code/journwe-webapp/target/start" -Dhttp.port=80 &
