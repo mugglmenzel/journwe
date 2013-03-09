@@ -53,7 +53,10 @@ rm -Rd "$CLONE_TO_THIS_DIR"
 git clone "$REPO" "$CLONE_TO_THIS_DIR"
 
 ## Scala build tools ##
-sudo apt-get install typesafe-stack
+sudo wget http://apt.typesafe.com/repo-deb-build-0002.deb
+sudo dpkg -i repo-deb-build-0002.deb
+sudo apt-get update
+sudo apt-get install typesafe-stack -qq
 
 ## compile and run server ##
 cd $CLONE_TO_THIS_DIR/journwe/code/journwe-webapp
