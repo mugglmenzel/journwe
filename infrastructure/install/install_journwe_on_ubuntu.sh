@@ -45,20 +45,18 @@ fi
 ## Install software packages using apt-get ##
 sudo apt-get -y install git-core
 
-## Clone git repository with source code and configs ##
-#REPO=${1:-git@github.com:mugglmenzel/journwe.git}
-#CLONE_TO_THIS_DIR=${2:-/usr/local/journwe}
-
-#rm -Rd "$CLONE_TO_THIS_DIR"
-#git clone "$REPO" "$CLONE_TO_THIS_DIR"
+## Setup play and compile journwe ##
+JOURNWE_HOME=`(cd ../../; pwd)`
 
 ## Scala build tools ##
-sudo wget http://apt.typesafe.com/repo-deb-build-0002.deb
+wget http://apt.typesafe.com/repo-deb-build-0002.deb
 sudo dpkg -i repo-deb-build-0002.deb
 sudo apt-get update
 sudo apt-get install typesafe-stack -qq
+wget http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.12.2/sbt-launch.jar
+mkdir -p /home/ubuntu/.sbt/.lib/0.12.2
+mv sbt-launch.jar /home/ubuntu/.sbt/.lib/0.12.2/sbt-launch.jar
 
 ## compile and run server ##
-cd ../code/journwe-webapp
-sudo sbt clean compile stage
-sudo target/play -Dhttp.port=80 &
+(cd "$JOURNWE_HOME/code/journwe-webapp"; sudo sbt clean compile stage)
+sudo "$JOURNWE_HOME/code/journwe-webapptarget/play" -Dhttp.port=80 &
