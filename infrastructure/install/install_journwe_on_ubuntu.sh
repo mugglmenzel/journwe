@@ -25,8 +25,10 @@ sudo mkdir -p `dirname $target_java_dir`
 (cd $tmpdir; sudo mv jdk1* $target_java_dir)
 sudo rm -rf $tmpdir
 # Setup java alternatives.
-update-alternatives --install /usr/bin/java java "$target_java_dir/jdk1.6.0_35/bin/java" 17000
-update-alternatives --set java "$target_java_dir/jdk1.6.0_35/bin/java"
+sudo update-alternatives --install /usr/bin/java java "$target_java_dir/jdk1.6.0_35/bin/java" 17000
+sudo update-alternatives --set java "$target_java_dir/jdk1.6.0_35/bin/java"
+sudo update-alternatives --install /usr/bin/javac javac "$target_java_dir/jdk1.6.0_35/bin/javac" 17001
+sudo update-alternatives --set javac "$target_java_dir/jdk1.6.0_35/bin/javac"
 # Set java paths
 export JAVA_HOME="$target_java_dir/jdk1.6.0_35"
 if [ -f /etc/profile ]; then
