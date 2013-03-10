@@ -1,4 +1,23 @@
-This is your new Play 2.1 application
+Readme
 =====================================
 
-This file will be packaged with your application, when using `play dist`.
+Travel API credentials
+=====================================
+
+Hotwire API
+===========
+* Proxy API Key: 9cusk4pmus4zjm6fzfcutsk5
+* QuickConnect API Key: erudyj8bq6bxv4a4vxshc3kx
+
+Expedia EAN
+===========
+* Application: journwe 
+* Key: 2m65983vhjy9hzmcdjqtsk2y 
+* Shared Secret: hrAA3KD9 
+* Sandbox CID: 55505
+
+Travelport
+===========
+* Universal API User ID:  Universal API/uAPI8314073635
+* Universal API Password: TbdrPpPQM9pGaGMF5hEpD3Aay
+* Branch Code for 1G: P105354
