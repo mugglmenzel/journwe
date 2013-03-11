@@ -1,5 +1,5 @@
 body {
-	padding-top: 160px;
+	/*padding-top: 160px;*/
 	background-image: url("../img/kilimanjaro.jpg");
 	background-repeat: no-repeat;
 	background-position: left top;
@@ -7,6 +7,16 @@ body {
 	background-size: cover;
 }
 
-.navbar-inverse .brand, .hero-unit h1 {
+.spacer100 {
+	height: 100px;
+	width: 100%;
+	font-size: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	display: block;
+}
+
+.navbar-inverse .brand,.hero-unit h1 {
 	color: #E97802;
 }
