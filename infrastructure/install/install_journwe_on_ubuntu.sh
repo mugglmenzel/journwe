@@ -25,8 +25,10 @@ sudo mkdir -p `dirname $target_java_dir`
 (cd $tmpdir; sudo mv jdk1* $target_java_dir)
 sudo rm -rf $tmpdir
 # Setup java alternatives.
-update-alternatives --install /usr/bin/java java "$target_java_dir/jdk1.6.0_35/bin/java" 17000
-update-alternatives --set java "$target_java_dir/jdk1.6.0_35/bin/java"
+sudo update-alternatives --install /usr/bin/java java "$target_java_dir/jdk1.6.0_35/bin/java" 17000
+sudo update-alternatives --set java "$target_java_dir/jdk1.6.0_35/bin/java"
+sudo update-alternatives --install /usr/bin/javac javac "$target_java_dir/jdk1.6.0_35/bin/javac" 17001
+sudo update-alternatives --set javac "$target_java_dir/jdk1.6.0_35/bin/javac"
 # Set java paths
 export JAVA_HOME="$target_java_dir/jdk1.6.0_35"
 if [ -f /etc/profile ]; then
@@ -45,17 +47,18 @@ fi
 ## Install software packages using apt-get ##
 sudo apt-get -y install git-core
 
-## Clone git repository with source code and configs ##
-REPO=${1:-git@github.com:mugglmenzel/journwe.git}
-CLONE_TO_THIS_DIR=${2:-/usr/local/journwe}
-
-rm -Rd "$CLONE_TO_THIS_DIR"
-git clone "$REPO" "$CLONE_TO_THIS_DIR"
+## Setup play and compile journwe ##
+JOURNWE_HOME=`(cd ../../; pwd)`
 
 ## Scala build tools ##
-sudo apt-get install typesafe-stack
+wget http://apt.typesafe.com/repo-deb-build-0002.deb
+sudo dpkg -i repo-deb-build-0002.deb
+sudo apt-get update
+sudo apt-get install typesafe-stack -qq
+wget http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.12.2/sbt-launch.jar
+mkdir -p /home/ubuntu/.sbt/.lib/0.12.2
+mv sbt-launch.jar /home/ubuntu/.sbt/.lib/0.12.2/sbt-launch.jar
 
 ## compile and run server ##
-cd $CLONE_TO_THIS_DIR/journwe/code/journwe-webapp
-sudo sbt clean compile stage
-sudo target/play -Dhttp.port=80 &
+(cd "$JOURNWE_HOME/code/journwe-webapp"; sudo sbt clean compile stage)
+sudo "./$JOURNWE_HOME/code/journwe-webapp/target/start" -Dhttp.port=80 &
