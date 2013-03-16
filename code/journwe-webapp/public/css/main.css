@@ -1,5 +1,4 @@
 body {
-	/*padding-top: 160px;*/
 	background-image: url("../img/kilimanjaro.jpg");
 	background-repeat: no-repeat;
 	background-position: left top;
@@ -7,16 +6,31 @@ body {
 	background-size: cover;
 }
 
-.spacer100 {
-	height: 100px;
-	width: 100%;
-	font-size: 0;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	display: block;
+.main {
+	background-color: rgba(255,255,255,0.8);
+	box-shadow: 0 0 10px 0px black;
+	margin-top: 260px;
 }
 
-.navbar-inverse .brand,.hero-unit h1 {
+.main > .container {
+	top: -100px;
+	display: block;
+	background: white;
+	position: relative;
+	padding: 20px 50px;
+	box-shadow: 0 0 50px -5px black;
+	border-radius: 3px;
+}
+
+.navbar {
+	box-shadow: 0 0 10px -1px black;
+}
+
+.navbar-inverse .brand, .hero-unit h1 {
 	color: #E97802;
+}
+
+.controls.switch {
+	height: 28px;
+	margin-left: 20px;
 }
