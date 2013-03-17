@@ -24,6 +24,8 @@ public class Inspiration {
 
 	private String tripAdvisor;
 
+	private String pinterest;
+
 	/**
 	 * @return the inspirationCategoryId
 	 */
@@ -100,7 +102,6 @@ public class Inspiration {
 		this.image = image;
 	}
 
-
 	/**
 	 * @return the image
 	 */
@@ -116,6 +117,20 @@ public class Inspiration {
 		this.tripAdvisor = ta;
 	}
 
+	/**
+	 * @return the image
+	 */
+	@DynamoDBAttribute
+	public String getPinterest() {
+		return pinterest;
+	}
+
+	/**
+	 * @param pinterest Provides a snipped for trip advisor
+	 */
+	public void setPinterest(String pinterest) {
+		this.pinterest = pinterest;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

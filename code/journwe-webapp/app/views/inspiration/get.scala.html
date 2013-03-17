@@ -23,9 +23,18 @@
 		    	</div>
 			</td>
 			<td class="fixed-width">
-				<div class="tripadvisor">
-					@Html(ins.getTripAdvisor())
-				</div>
+				@if(ins.getTripAdvisor()){
+					<div class="tripadvisor">
+						@Html(ins.getTripAdvisor())
+					</div>
+				}
+
+				@if(ins.getPinterest()){
+					<div class="pinterest">
+						<a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110" data-pin-scale-height="300" data-pin-board-width="240"></a>
+						<script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+					</div>
+				}
 			</td>
 		</tr>
 	</table>
