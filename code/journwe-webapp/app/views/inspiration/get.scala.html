@@ -2,10 +2,33 @@
 
 @main(ins.getName()+ " <small>"+category.getName()+"</small>") {
 
-    <p>
-        @Html(ins.getDescription())
-    </p>
-    <img src="@ins.getImage()"/>
+	<table class="inspiration">
+		<tr>
+			<td>
+	  		<p>
+		        @Html(ins.getDescription())
+		    </p>
+		    	<div class="row-fluid images">
+		    		<div class="span6">
+		    			<img src="@ins.getImage()" class="img-polaroid"/>
+		    		</div>
+					<div class="span3">
+			    		<img src="@ins.getImage()" class="img-polaroid"/>
+			    		<img src="@ins.getImage()" class="img-polaroid"/>
+			    	</div>
+			    	<div class="span3">
+			    		<img src="@ins.getImage()" class="img-polaroid"/>
+			    		<img src="@ins.getImage()" class="img-polaroid"/>
+			    	</div>
+		    	</div>
+			</td>
+			<td class="fixed-width">
+				<div class="tripadvisor">
+					@Html(ins.getTripAdvisor())
+				</div>
+			</td>
+		</tr>
+	</table>
  
     
 }

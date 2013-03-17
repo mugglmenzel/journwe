@@ -30,7 +30,37 @@ body {
 	color: #E97802;
 }
 
+.spacer100 {
+	height: 100px;
+	width: 100%;
+}
+
 .controls.switch {
 	height: 28px;
 	margin-left: 20px;
+}
+
+table.inspiration td {
+	vertical-align: top;
+	padding-right: 40px;
+}
+
+table.inspiration td:last-child {
+	padding-right: 0px;
+}
+
+table.inspiration td.fixed-width {
+	width: 240px;
+}
+
+table.inspiration .images img {
+	margin-bottom: 10px;
+}
+
+.tripadvisor {
+
+}
+
+.tripadvisor .description {
+
 }

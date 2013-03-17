@@ -22,6 +22,8 @@ public class Inspiration {
 	
 	private String image;
 
+	private String tripAdvisor;
+
 	/**
 	 * @return the inspirationCategoryId
 	 */
@@ -96,6 +98,22 @@ public class Inspiration {
 	 */
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+
+	/**
+	 * @return the image
+	 */
+	@DynamoDBAttribute
+	public String getTripAdvisor() {
+		return tripAdvisor;
+	}
+
+	/**
+	 * @param tripAdvisor Provides a snipped for trip advisor
+	 */
+	public void setTripAdvisor(String ta) {
+		this.tripAdvisor = ta;
 	}
 
 	/* (non-Javadoc)
