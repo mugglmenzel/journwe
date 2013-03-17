@@ -8,19 +8,33 @@
 	  		<p>
 		        @Html(ins.getDescription())
 		    </p>
-		    	<div class="row-fluid images">
-		    		<div class="span6">
-		    			<img src="@ins.getImage()" class="img-polaroid"/>
-		    		</div>
-					<div class="span3">
-			    		<img src="@ins.getImage()" class="img-polaroid"/>
-			    		<img src="@ins.getImage()" class="img-polaroid"/>
-			    	</div>
-			    	<div class="span3">
-			    		<img src="@ins.getImage()" class="img-polaroid"/>
-			    		<img src="@ins.getImage()" class="img-polaroid"/>
-			    	</div>
-		    	</div>
+		    	<ul class="thumbnails">
+		    		<li class="span4">
+		    			<a class="thumbnail" href="#">
+		    				<img src="@ins.getImage()"/>
+		    			</a>
+		    		</li>
+		    		<li class="span2">
+		    			<a class="thumbnail" href="#">
+		    				<img src="@ins.getImage()"/>
+		    			</a>
+		    		</li>
+		    		<li class="span2">
+		    			<a class="thumbnail" href="#">
+		    				<img src="@ins.getImage()"/>
+		    			</a>
+		    		</li>
+		    		<li class="span2">
+		    			<a class="thumbnail" href="#">
+		    				<img src="@ins.getImage()"/>
+		    			</a>
+		    		</li>
+		    		<li class="span2">
+		    			<a class="thumbnail" href="#">
+		    				<img src="@ins.getImage()"/>
+		    			</a>
+		    		</li>
+		    	</ul>
 			</td>
 			<td class="fixed-width">
 				@if(ins.getTripAdvisor()){
