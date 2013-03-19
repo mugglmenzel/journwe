@@ -13,6 +13,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.imprint;
 import views.html.index;
 import views.html.subscribe;
 
@@ -52,6 +53,10 @@ public class ApplicationController extends Controller {
 			flash("error", "You could not be subscribed :(");
 		return ok(subscribe.render(subForm));
 	}
+
+    public static Result imprint() {
+        return ok(imprint.render());
+    }
 
 	@Security.Authenticated(SecuredAdminUser.class)
 	public static Result categoryIndex(String catId) {
