@@ -13,7 +13,8 @@ object ApplicationBuild extends Build {
     // javaJdbc,
     javaEbean,
     "com.amazonaws" % "aws-java-sdk" % "1.3.33",
-    "com.feth"    %% "play-authenticate" % "0.2.5-SNAPSHOT"
+    "com.feth"    %% "play-authenticate" % "0.2.5-SNAPSHOT",
+    "com.restfb" % "restfb" % "1.6.12"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
