@@ -53,10 +53,11 @@ public class ApplicationController extends Controller {
             flash("success", "You are subscribed now! We'll let you know.");
         else
             flash("error", "You could not be subscribed :(");
+
         try {
             ListSubscribeMethod listSubscribeMethod = new ListSubscribeMethod();
             listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
-            listSubscribeMethod.id = "92297";
+            listSubscribeMethod.id = "c18d5a32fb";
             listSubscribeMethod.email_address = sub.getEmail();
             listSubscribeMethod.double_optin = false;
             listSubscribeMethod.update_existing = true;
