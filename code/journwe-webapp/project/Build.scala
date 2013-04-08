@@ -14,6 +14,7 @@ object ApplicationBuild extends Build {
     javaEbean,
     "com.amazonaws" % "aws-java-sdk" % "1.3.33",
     "com.feth"    %% "play-authenticate" % "0.2.5-SNAPSHOT",
+    "com.restfb" % "restfb" % "1.6.12",
     "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5"
   )
 
