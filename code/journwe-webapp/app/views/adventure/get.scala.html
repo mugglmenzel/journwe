@@ -1,0 +1,86 @@
+@(adv: Adventure)(ins: Inspiration)
+
+@main(adv.getName()+ "<small>"+ins.getName()+"</small>") {
+
+<div class="tabbable">
+    <!-- Only required for left/right tabs -->
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#overview" data-toggle="tab"><i class="icon-th"></i>Overview</a>
+        </li>
+        <li><a href="#adventurers" data-toggle="tab"><i class="icon-th"></i>Adventurers</a></li>
+        <li><a href="#time" data-toggle="tab"><i class="icon-search"></i>Date &amp; Time</a></li>
+        <li><a href="#packing" data-toggle="tab"><i class="icon-search"></i>Packing List</a></li>
+        <li><a href="#files" data-toggle="tab"><i class="icon-search"></i>Files</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="overview">
+            <table class="inspiration">
+                <tr>
+                    <td>
+                        <p>
+                            @Html(ins.getDescription())
+                        </p>
+                        <ul class="thumbnails">
+                            <li class="span4">
+                                <a class="thumbnail" href="#">
+                                    <img src="http://i.embed.ly/1/image/resize?height=400&width=800&url=@ins.getImage()&key=xxxxx"/>
+                                </a>
+                            </li>
+                            <li class="span2">
+                                <a class="thumbnail" href="#"><img
+                                        src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=xxxxx"/>
+                                </a>
+                            </li>
+                            <li class="span2">
+                                <a class="thumbnail" href="#"><img
+                                        src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=xxxxx"/>
+                                </a>
+                            </li>
+                            <li class="span2">
+                                <a class="thumbnail" href="#"><img
+                                        src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=xxxxx"/>
+                                </a>
+                            </li>
+                            <li class="span2">
+                                <a class="thumbnail" href="#"><img
+                                        src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=xxxxx"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="fixed-width">
+                        @if(ins.getTripAdvisor()){
+                        <div class="tripadvisor">
+                            @Html(ins.getTripAdvisor())
+                        </div>
+                        }
+
+                        @if(ins.getPinterest()){
+                        <div class="pinterest">
+                            <a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110"
+                               data-pin-scale-height="300" data-pin-board-width="240"></a>
+                            <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+                        </div>
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane" id="adventurers">
+
+        </div>
+        <div class="tab-pane" id="time">
+
+        </div>
+        <div class="tab-pane" id="packing">
+
+        </div>
+        <div class="tab-pane" id="files">
+
+        </div>
+
+    </div>
+</div>
+
+
+}

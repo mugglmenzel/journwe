@@ -6,6 +6,7 @@ import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import controllers.auth.SecuredAdminUser;
+import controllers.dao.AdventureDAO;
 import controllers.dao.CategoryDAO;
 import controllers.dao.InspirationDAO;
 import controllers.dao.SubscriberDAO;
@@ -39,7 +40,7 @@ public class ApplicationController extends Controller {
             for (Category cat : new CategoryDAO().all(10))
                 catCounts.add(new CategoryCount(cat, new CategoryDAO()
                         .countInspirations(cat.getId())));
-            return ok(index.render(catCounts, new InspirationDAO().all(50),
+            return ok(index.render(catCounts, new InspirationDAO().all(50), new AdventureDAO().all(50),
                     null));
         } else {
             return ok(subscribe.render(subForm));
@@ -61,6 +62,7 @@ public class ApplicationController extends Controller {
             listSubscribeMethod.email_address = sub.getEmail();
             listSubscribeMethod.double_optin = false;
             listSubscribeMethod.update_existing = true;
+            listSubscribeMethod.send_welcome = true;
 
             new MailChimpClient().execute(listSubscribeMethod);
         } catch (IOException e) {
@@ -83,7 +85,7 @@ public class ApplicationController extends Controller {
         for (Category cat : new CategoryDAO().all(10))
             catCounts.add(new CategoryCount(cat, new CategoryDAO()
                     .countInspirations(cat.getId())));
-        return ok(index.render(catCounts, new InspirationDAO().all(50, catId),
+        return ok(index.render(catCounts, new InspirationDAO().all(50, catId), new AdventureDAO().all(50),
                 catId));
     }
 

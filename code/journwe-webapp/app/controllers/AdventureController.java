@@ -4,6 +4,7 @@ import static play.data.Form.form;
 
 import java.util.Map;
 
+import controllers.dao.AdventureDAO;
 import controllers.dao.InspirationDAO;
 
 import models.Adventure;
@@ -12,13 +13,14 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.adventure.create;
+import views.html.adventure.get;
 
 public class AdventureController extends Controller {
 
 	private static Form<Adventure> advForm = form(Adventure.class);
 
-	public static Result get(String id) {
-		return ok();
+	public static Result get(String catId, String insId, String id) {
+		return ok(get.render(new AdventureDAO().get(insId, id), new InspirationDAO().get(catId, insId)));
 	}
 	
 	public static Result create() {

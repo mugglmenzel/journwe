@@ -17,7 +17,7 @@ POST	/category/save												controllers.CategoryController.save()
 GET		/category/:id/delete										controllers.CategoryController.delete(id:String)
 GET		/category/:catId/inspiration/:id/delete						controllers.InspirationController.delete(catId:String, id:String)
 
-GET		/adventure/:id												controllers.AdventureController.get(id:String)
+GET		/category/:catId/inspiration/:insId/adventure/:id			controllers.AdventureController.get(catId:String, insId:String, id:String)
 GET		/category/:catId/inspiration/:id							controllers.InspirationController.get(catId:String, id:String)
 
 # Load Balancing

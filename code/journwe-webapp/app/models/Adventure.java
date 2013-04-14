@@ -17,8 +17,10 @@ public class Adventure {
 	
 	@Required
 	private String name;
-	
-	private boolean publish = false;
+
+    private String image;
+
+    private boolean publish = false;
 	
 	private boolean limited = false;
 	
@@ -70,7 +72,17 @@ public class Adventure {
 		this.name = name;
 	}
 
-	/**
+    @DynamoDBAttribute
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+
+    /**
 	 * @return the publish
 	 */
 	@DynamoDBAttribute
