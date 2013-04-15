@@ -9,6 +9,7 @@ import models.Adventurer;
 import models.Inspiration;
 
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,10 +24,15 @@ public class AdventurerDAO extends CommonEntityDAO<Adventurer> {
         super(Adventurer.class);
     }
 
+    public ListIterator<Adventurer> findByAdventureId(String advId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
+        return pm.scan(Adventurer.class, scan).listIterator();
+    }
+
     public List<Adventurer> all(int max, String advId) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
         scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
         return pm.scanPage(Adventurer.class, scan).getResults();
-
     }
 }

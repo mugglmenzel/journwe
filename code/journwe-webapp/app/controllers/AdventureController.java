@@ -16,6 +16,7 @@ import play.mvc.Result;
 import views.html.adventure.create;
 import views.html.adventure.get;
 
+import java.util.ListIterator;
 import java.util.Map;
 
 import static play.data.Form.form;
@@ -54,13 +55,22 @@ public class AdventureController extends Controller {
 
     public static Result participate(String advId) {
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventure adv = new AdventureDAO().get(advId);
+
+        ListIterator<Adventurer> adventurers = new AdventurerDAO().findByAdventureId(advId);
+        while (adventurers.hasNext()) {
+            if (adventurers.next().getUserId().equals(usr.getId()))
+                return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
+        }
+
+
         Adventurer advr = new Adventurer();
         advr.setUserId(usr.getId());
         advr.setAdventureId(advId);
         advr.setParticipationStatus(EAdventurerParticipation.GOING);
         new AdventurerDAO().save(advr);
 
-        Adventure adv = new AdventureDAO().get(advId);
+
         return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
     }
 

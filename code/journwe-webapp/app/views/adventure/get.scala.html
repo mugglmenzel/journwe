@@ -71,7 +71,7 @@
         <div class="tab-pane" id="adventurers">
             <ul>
             @adventurers.zipWithIndex.map { case(advr, i) =>
-                <li>@advr.getId()</li>
+                <li>@advr.getId(), @advr.getUserId(), @advr.getAdventureId(), @advr.getParticipationStatus()</li>
             }
             </ul>
             <a href="@routes.AdventureController.participate(adv.getId())">Participate</a>
