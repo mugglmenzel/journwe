@@ -12,15 +12,5 @@ public class UserDAO extends CommonEntityDAO<User> {
     public UserDAO() {
         super(User.class);
     }
-
-    @Override
-	public User get(String id) {
-		try {
-			return pm.load(User.class, id, new DynamoDBMapperConfig(
-					ConsistentReads.EVENTUAL));
-		} catch(ResourceNotFoundException e){
-			return null;
-		}
-	}
 	
 }

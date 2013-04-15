@@ -112,13 +112,13 @@ public class AdventureController extends Controller {
 
         Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(advId);
         while (advrs.hasNext()) {
-            if (usr.getId() != null && usr.getId().equals(advrs.next().getUserId()))
+            if (usr.getProviderUserId() != null && usr.getProviderUserId().equals(advrs.next().getUserId()))
                 return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
         }
 
 
         Adventurer advr = new Adventurer();
-        advr.setUserId(usr.getId());
+        advr.setUserId(usr.getProviderUserId());
         advr.setAdventureId(advId);
         advr.setParticipationStatus(EAdventurerParticipation.GOING);
         new AdventurerDAO().save(advr);
