@@ -56,7 +56,7 @@
 
                 @currentAuth() { auth =>
                     @if(auth != null && User.findByAuthUserIdentity(auth) != null) {
-                        <p class="navbar-text pull-right">Hello @User.findByAuthUserIdentity(auth).getName() (<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>)</p>
+                        <p class="navbar-text pull-right">Hello @User.findByAuthUserIdentity(auth).getName() (<a href="@controllers.routes.Authenticate.logout">Logout</a>)</p>
                         
                     } else {
                    		<div class="btn-group pull-right">

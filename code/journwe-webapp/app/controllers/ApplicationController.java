@@ -13,6 +13,7 @@ import controllers.dao.SubscriberDAO;
 import models.Category;
 import models.Subscriber;
 import models.helpers.CategoryCount;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http;
