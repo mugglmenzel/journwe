@@ -1,13 +1,15 @@
 package controllers;
 
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.typesafe.config.ConfigFactory;
 import controllers.dao.AdventureDAO;
 import controllers.dao.AdventurerDAO;
 import controllers.dao.InspirationDAO;
-import models.Adventure;
-import models.Adventurer;
-import models.EAdventurerParticipation;
-import models.User;
+import models.*;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -16,14 +18,15 @@ import play.mvc.Result;
 import views.html.adventure.create;
 import views.html.adventure.get;
 
+import java.io.File;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import static play.data.Form.form;
 
 public class AdventureController extends Controller {
+
+    private static final String S3_BUCKET_ADVENTURE_IMAGES = "journwe-adventure-images";
 
     private static Form<Adventure> advForm = form(Adventure.class);
 
@@ -43,14 +46,55 @@ public class AdventureController extends Controller {
 
     public static Result save() {
         Form<Adventure> filledAdvForm = advForm.bindFromRequest();
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart image = body.getFile("image");
+
         if (filledAdvForm.hasErrors()) {
             return badRequest(create.render(filledAdvForm,
                     new InspirationDAO().allOptionsMap(50)));
 
         } else {
             Adventure adv = filledAdvForm.get();
-            new AdventureDAO().save(adv);
-            return ok(get.render(new AdventureDAO().get(adv.getId()), new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, adv.getId())));
+            File file = image.getFile();
+
+            try {
+                if (!new AdventureDAO().save(adv))
+                    throw new Exception();
+
+                adv = new AdventureDAO().get(adv.getId());
+                Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
+
+                Logger.info("got image file " + image.getFilename());
+
+                if (image.getFilename() != null
+                        && !"".equals(image.getFilename()) && file.length() > 0) {
+                    AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+                            ConfigFactory.load().getString("aws.accessKey"),
+                            ConfigFactory.load().getString("aws.secretKey")));
+                    s3.putObject(new PutObjectRequest(
+                            S3_BUCKET_ADVENTURE_IMAGES, adv.getId(), file)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+                    adv.setImage(s3.getResourceUrl(S3_BUCKET_ADVENTURE_IMAGES,
+                            adv.getId()));
+                } else
+                    adv.setImage(ins.getImage());
+
+
+                if (new AdventureDAO().save(adv)) {
+
+                    flash("success",
+                            "Saved Adventure with image " + adv.getImage()
+                                    + ".");
+                    return ok(get.render(new AdventureDAO().get(adv.getId()), ins, new AdventurerDAO().all(50, adv.getId())));
+
+                } else
+                    throw new Exception();
+            } catch (Exception e) {
+                flash("error", "Something went wrong during saving :(");
+                return internalServerError(create.render(filledAdvForm,
+                        new InspirationDAO()
+                                .allOptionsMap(50)));
+            }
         }
 
     }
