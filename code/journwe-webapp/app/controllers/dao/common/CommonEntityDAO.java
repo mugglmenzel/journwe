@@ -9,7 +9,7 @@ public abstract class CommonEntityDAO<T> extends CommonDAO<T> implements IParent
     }
 
     public T get(String id) {
-        return pm.load((Class<T>) clazz.getClass(), id);
+        return pm.load(clazz, id);
     }
 
     public boolean delete(String id) {
