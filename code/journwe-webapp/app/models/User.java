@@ -33,7 +33,7 @@ public class User {
 
 	private String providerUserId;
 
-	private UserRole role = UserRole.USER;
+	private EUserRole role = EUserRole.USER;
 
 	/**
 	 * @return the id
@@ -152,14 +152,14 @@ public class User {
 	 * @return the role
 	 */
 	@DynamoDBMarshalling(marshallerClass = UserRoleMarshaller.class)
-	public UserRole getRole() {
+	public EUserRole getRole() {
 		return role;
 	}
 
 	/**
 	 * @param role the role to set
 	 */
-	public void setRole(UserRole role) {
+	public void setRole(EUserRole role) {
 		this.role = role;
 	}
 
@@ -211,16 +211,16 @@ public class User {
 		return user;
 	}
 	
-	public static class UserRoleMarshaller implements DynamoDBMarshaller<UserRole> {
+	public static class UserRoleMarshaller implements DynamoDBMarshaller<EUserRole> {
 
 		@Override
-		public String marshall(UserRole role) {
+		public String marshall(EUserRole role) {
 			return role.name();
 		}
 
 		@Override
-		public UserRole unmarshall(Class<UserRole> roleClass, String roleString) {
-			return UserRole.valueOf(roleString);
+		public EUserRole unmarshall(Class<EUserRole> roleClass, String roleString) {
+			return EUserRole.valueOf(roleString);
 		}
 		
 	}

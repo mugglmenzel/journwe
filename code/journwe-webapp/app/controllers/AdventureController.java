@@ -1,11 +1,17 @@
 package controllers;
 
+import com.feth.play.module.pa.PlayAuthenticate;
 import controllers.dao.AdventureDAO;
+import controllers.dao.AdventurerDAO;
 import controllers.dao.InspirationDAO;
 import models.Adventure;
+import models.Adventurer;
+import models.EAdventurerParticipation;
+import models.User;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import views.html.adventure.create;
 import views.html.adventure.get;
@@ -44,6 +50,18 @@ public class AdventureController extends Controller {
             return ok(get.render(new AdventureDAO().get(adv.getId()), new InspirationDAO().get(adv.getInspirationId())));
         }
 
+    }
+
+    public static Result participate(String advId) {
+        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventurer advr = new Adventurer();
+        advr.setUserId(usr.getId());
+        advr.setAdventureId(advId);
+        advr.setParticipationStatus(EAdventurerParticipation.GOING);
+        new AdventurerDAO().save(advr);
+
+        Adventure adv = new AdventureDAO().get(advId);
+        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId())));
     }
 
 }

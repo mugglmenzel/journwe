@@ -67,7 +67,12 @@
             </table>
         </div>
         <div class="tab-pane" id="adventurers">
-
+            <ul>
+            @(new AdventurerDAO().all(50, adv.getId()).zipWithIndex.map { case(advr, i) =>
+                <li>@advr.getId()</li>
+            }
+            </ul>
+            <a href="@routes.AdventureController.participate(adv.getId())">Participate</a>
         </div>
         <div class="tab-pane" id="time">
 

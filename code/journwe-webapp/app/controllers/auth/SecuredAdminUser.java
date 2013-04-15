@@ -1,7 +1,7 @@
 package controllers.auth;
 
+import models.EUserRole;
 import models.User;
-import models.UserRole;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -42,7 +42,7 @@ public class SecuredAdminUser extends Security.Authenticator {
 	}
 
 	public static boolean isAdmin(AuthUser u) {
-		return UserRole.ADMIN.equals(User.findByAuthUserIdentity(u).getRole());
+		return EUserRole.ADMIN.equals(User.findByAuthUserIdentity(u).getRole());
 	}
 
 }
