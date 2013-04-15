@@ -16,6 +16,8 @@ import play.mvc.Result;
 import views.html.adventure.create;
 import views.html.adventure.get;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -57,9 +59,9 @@ public class AdventureController extends Controller {
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
 
-        ListIterator<Adventurer> adventurers = new AdventurerDAO().findByAdventureId(advId);
-        while (adventurers.hasNext()) {
-            if (adventurers.next().getUserId().equals(usr.getId()))
+        Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(advId);
+        while (advrs.hasNext()) {
+            if (advrs.next().getUserId().equals(usr.getId()))
                 return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
         }
 

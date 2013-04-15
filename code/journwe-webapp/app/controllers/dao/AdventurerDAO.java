@@ -8,6 +8,7 @@ import controllers.dao.common.CommonEntityDAO;
 import models.Adventurer;
 import models.Inspiration;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -24,10 +25,10 @@ public class AdventurerDAO extends CommonEntityDAO<Adventurer> {
         super(Adventurer.class);
     }
 
-    public ListIterator<Adventurer> findByAdventureId(String advId) {
+    public Iterator<Adventurer> findByAdventureId(String advId) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.scan(Adventurer.class, scan).listIterator();
+        return pm.scan(Adventurer.class, scan).iterator();
     }
 
     public List<Adventurer> all(int max, String advId) {
