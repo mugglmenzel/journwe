@@ -9,7 +9,11 @@ import com.amazonaws.services.dynamodb.model.ResourceNotFoundException;
 
 public class UserDAO extends CommonEntityDAO<User> {
 
-	@Override
+    public UserDAO() {
+        super(User.class);
+    }
+
+    @Override
 	public User get(String id) {
 		try {
 			return pm.load(User.class, id, new DynamoDBMapperConfig(

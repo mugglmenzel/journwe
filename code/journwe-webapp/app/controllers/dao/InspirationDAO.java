@@ -21,7 +21,7 @@ public class InspirationDAO extends CommonEntityDAO<Inspiration> {
 	 * 
 	 */
 	public InspirationDAO() {
-		super();
+		super(Inspiration.class);
 	}
 
 	public List<Inspiration> all(int max) {

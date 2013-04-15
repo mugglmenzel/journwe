@@ -2,7 +2,11 @@ package controllers.dao.common;
 
 public abstract class CommonRangeEntityDAO<T> extends CommonDAO<T> implements IChildDAO<T> {
 
-	public abstract T get(String parentId, String id);
+    protected CommonRangeEntityDAO(Class<T> clazz) {
+        super(clazz);
+    }
+
+    public abstract T get(String parentId, String id);
 
 	public boolean delete(String parentId, String id) {
 		try {

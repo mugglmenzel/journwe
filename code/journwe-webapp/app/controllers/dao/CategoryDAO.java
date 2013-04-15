@@ -16,7 +16,11 @@ import com.amazonaws.services.dynamodb.model.AttributeValue;
 
 public class CategoryDAO extends CommonEntityDAO<Category> {
 
-	@Override
+    public CategoryDAO() {
+        super(Category.class);
+    }
+
+    @Override
 	public Category get(String id) {
 		return pm.load(Category.class, id, new DynamoDBMapperConfig(
 				ConsistentReads.EVENTUAL));

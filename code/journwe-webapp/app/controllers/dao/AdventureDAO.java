@@ -9,6 +9,10 @@ import java.util.List;
 
 public class AdventureDAO extends CommonEntityDAO<Adventure> {
 
+    public AdventureDAO() {
+        super(Adventure.class);
+    }
+
     public List<Adventure> all(int max) {
         return pm.scanPage(Adventure.class,
                 new DynamoDBScanExpression().withLimit(max)).getResults();

@@ -9,7 +9,13 @@ public abstract class CommonDAO<T> implements IDAO<T> {
 
 	protected static DynamoDBMapper pm = PersistenceHelper.getManager();
 
-	@Override
+    protected Class<T> clazz;
+
+    protected CommonDAO(Class<T> clazz) {
+        this.clazz = clazz;
+    }
+
+    @Override
 	public boolean save(T obj) {
 		try {
 			pm.save(obj);
