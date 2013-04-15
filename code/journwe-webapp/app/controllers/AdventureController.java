@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.typesafe.config.ConfigFactory;
+import controllers.auth.SecuredAdminUser;
 import controllers.dao.AdventureDAO;
 import controllers.dao.AdventurerDAO;
 import controllers.dao.InspirationDAO;
@@ -15,6 +16,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.Security;
 import views.html.adventure.create;
 import views.html.adventure.get;
 
@@ -30,11 +32,13 @@ public class AdventureController extends Controller {
 
     private static Form<Adventure> advForm = form(Adventure.class);
 
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result get(String id) {
         Adventure adv = new AdventureDAO().get(id);
         return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id)));
     }
 
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
         Logger.info("Test");
         Map<String, String> inspireOptions = new InspirationDAO()
@@ -44,6 +48,7 @@ public class AdventureController extends Controller {
 
     }
 
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result save() {
         Form<Adventure> filledAdvForm = advForm.bindFromRequest();
         Http.MultipartFormData body = request().body().asMultipartFormData();
@@ -99,6 +104,7 @@ public class AdventureController extends Controller {
 
     }
 
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result participate(String advId) {
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);

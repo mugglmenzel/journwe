@@ -1,4 +1,4 @@
-@(ins: Inspiration)(category: Category)
+@(ins: Inspiration)(category: Category)(images: List[String])
 
 @main(ins.getName()+ " <small>"+category.getName()+"</small>") {
 
@@ -14,22 +14,12 @@
 		    				<img src="http://i.embed.ly/1/image/resize?height=400&width=800&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
 		    			</a>
 		    		</li>
+                    @images.map { img =>
 		    		<li class="span2">
-		    			<a class="thumbnail" href="#"><img src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
+		    			<a class="thumbnail" href="#"><img src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@img&key=2c8ef5b200c6468f9f863bc75c46009f"/>
 		    			</a>
 		    		</li>
-		    		<li class="span2">
-		    			<a class="thumbnail" href="#"><img src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-		    			</a>
-		    		</li>
-		    		<li class="span2">
-		    			<a class="thumbnail" href="#"><img src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-		    			</a>
-		    		</li>
-		    		<li class="span2">
-		    			<a class="thumbnail" href="#"><img src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-		    			</a>
-		    		</li>
+		    		}
 		    	</ul>
 			</td>
 			<td class="fixed-width">

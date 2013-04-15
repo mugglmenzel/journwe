@@ -4,6 +4,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
 import controllers.dao.CategoryDAO;
@@ -21,6 +22,8 @@ import views.html.inspiration.get;
 import views.html.inspiration.manage;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -34,7 +37,15 @@ public class InspirationController extends Controller {
     public static Result get(String id) {
         Inspiration ins = new InspirationDAO().get(id);
         Category cat = new CategoryDAO().get(ins.getInspirationCategoryId());
-        return ok(get.render(ins, cat));
+        AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+                ConfigFactory.load().getString("aws.accessKey"),
+                ConfigFactory.load().getString("aws.secretKey")));
+        List<String> images = new ArrayList<String>();
+        for(S3ObjectSummary os : s3.listObjects(S3_BUCKET_INSPIRATION_IMAGES, id + "/").getObjectSummaries()){
+            images.add(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
+                    os.getKey()));
+        }
+        return ok(get.render(ins, cat, images));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -81,10 +92,10 @@ public class InspirationController extends Controller {
                             ConfigFactory.load().getString("aws.accessKey"),
                             ConfigFactory.load().getString("aws.secretKey")));
                     s3.putObject(new PutObjectRequest(
-                            S3_BUCKET_INSPIRATION_IMAGES, ins.getId(), file)
+                            S3_BUCKET_INSPIRATION_IMAGES, ins.getId() + "/title", file)
                             .withCannedAcl(CannedAccessControlList.PublicRead));
                     ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
-                            ins.getId()));
+                            ins.getId() + "/title"));
                 }
 
 
