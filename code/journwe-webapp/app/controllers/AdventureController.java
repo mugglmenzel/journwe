@@ -106,12 +106,13 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result participate(String advId) {
+        Logger.info("u are user: " + PlayAuthenticate.getUser(Http.Context.current()).getId());
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
 
         Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(advId);
         while (advrs.hasNext()) {
-            if (advrs.next().getUserId().equals(usr.getId()))
+            if (usr.getId() != null && usr.getId().equals(advrs.next().getUserId()))
                 return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
         }
 
