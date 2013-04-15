@@ -26,7 +26,7 @@ public class AdventureController extends Controller {
 
     public static Result get(String id) {
         Adventure adv = new AdventureDAO().get(id);
-        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id)));
     }
 
     public static Result create() {
@@ -47,7 +47,7 @@ public class AdventureController extends Controller {
         } else {
             Adventure adv = filledAdvForm.get();
             new AdventureDAO().save(adv);
-            return ok(get.render(new AdventureDAO().get(adv.getId()), new InspirationDAO().get(adv.getInspirationId())));
+            return ok(get.render(new AdventureDAO().get(adv.getId()), new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, adv.getId())));
         }
 
     }
@@ -61,7 +61,7 @@ public class AdventureController extends Controller {
         new AdventurerDAO().save(advr);
 
         Adventure adv = new AdventureDAO().get(advId);
-        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
     }
 
 }

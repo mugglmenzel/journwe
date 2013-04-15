@@ -20,6 +20,8 @@ GET		/inspiration/:id/delete			                			controllers.InspirationControl
 GET		/adventure/:id			                                    controllers.AdventureController.get(id:String)
 GET		/inspiration/:id	                						controllers.InspirationController.get(id:String)
 
+GET     /adventure/:id/participate                                  controllers.AdventureController.participate(id:String)
+
 # Load Balancing
 GET		/ping														controllers.ApplicationController.ping()
 

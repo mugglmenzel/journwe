@@ -1,4 +1,6 @@
-@(adv: Adventure)(ins: Inspiration)
+@(adv: Adventure)(ins: Inspiration)(adventurers: List[Adventurer])
+
+@import controllers.dao.AdventurerDAO
 
 @main(adv.getName()+ " <small>"+ins.getName()+"</small>") {
 
@@ -68,7 +70,7 @@
         </div>
         <div class="tab-pane" id="adventurers">
             <ul>
-            @(new AdventurerDAO().all(50, adv.getId()).zipWithIndex.map { case(advr, i) =>
+            @adventurers.zipWithIndex.map { case(advr, i) =>
                 <li>@advr.getId()</li>
             }
             </ul>
