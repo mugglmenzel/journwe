@@ -20,6 +20,6 @@ public class EnumMarshaller<T extends Enum> implements DynamoDBMarshaller<T> {
 
     @Override
     public T unmarshall(Class<T> clazz, String eS) {
-        return Enum.valueOf(clazz, eS);
+        return (T) Enum.valueOf(clazz, eS);
     }
 }
