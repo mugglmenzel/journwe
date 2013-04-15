@@ -40,7 +40,7 @@
                         <li class="span3">
                             <a class="thumbnail"
                                href="@routes.InspirationController.get(ins.getId())">
-                                <img src="@ins.getImage()">
+                                <img src="http://i.embed.ly/1/image/resize?width=300&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
                             </a>
                             <h4>@ins.getName()</h4>
                         </li>
@@ -56,7 +56,7 @@
                         @adventures.zipWithIndex.map { case(adv, i) =>
                         <li class="span3">
                             <a class="thumbnail" href="@routes.AdventureController.get(adv.getId())">
-                                <img src="@adv.getImage()">
+                                <img src="http://i.embed.ly/1/image/resize?width=300&url=@adv.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
                             </a>
                             <h4>@adv.getName()</h4>
                         </li>
