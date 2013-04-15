@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import controllers.dao.common.CommonEntityDAO;
 import models.Inspiration;
 
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig;
@@ -12,22 +13,15 @@ import com.amazonaws.services.dynamodb.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodb.model.AttributeValue;
 
-import controllers.dao.common.CommonChildDAO;
+import controllers.dao.common.CommonRangeEntityDAO;
 
-public class InspirationDAO extends CommonChildDAO<Inspiration> {
+public class InspirationDAO extends CommonEntityDAO<Inspiration> {
 
 	/**
 	 * 
 	 */
 	public InspirationDAO() {
 		super();
-	}
-
-	@Override
-	public Inspiration get(String parentId, String id) {
-	
-		return pm.load(Inspiration.class, parentId, id,
-				new DynamoDBMapperConfig(ConsistentReads.EVENTUAL));
 	}
 
 	public List<Inspiration> all(int max) {

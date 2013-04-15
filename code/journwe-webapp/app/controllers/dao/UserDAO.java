@@ -1,19 +1,13 @@
 package controllers.dao;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import controllers.dao.common.CommonEntityDAO;
 import models.User;
 
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig.ConsistentReads;
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodb.model.ResourceNotFoundException;
 
-import controllers.dao.common.CommonParentDAO;
-
-public class UserDAO extends CommonParentDAO<User> {
+public class UserDAO extends CommonEntityDAO<User> {
 
 	@Override
 	public User get(String id) {

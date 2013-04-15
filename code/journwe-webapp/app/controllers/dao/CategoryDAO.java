@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import controllers.dao.common.CommonEntityDAO;
 import models.Category;
 import models.Inspiration;
 
@@ -13,9 +14,7 @@ import com.amazonaws.services.dynamodb.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodb.model.AttributeValue;
 
-import controllers.dao.common.CommonParentDAO;
-
-public class CategoryDAO extends CommonParentDAO<Category> {
+public class CategoryDAO extends CommonEntityDAO<Category> {
 
 	@Override
 	public Category get(String id) {

@@ -12,7 +12,7 @@
 	<table class="table table-striped">
 		
 	@for(ins <- inspirations) {
-		<tr><td>@ins.getId()</td><td>@ins.getName()</td><td><a href="@routes.InspirationController.edit(ins.getInspirationCategoryId(), ins.getId())" class="act-primary"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.InspirationController.delete(ins.getInspirationCategoryId(), ins.getId())" class="act-danger"><i class="icon-trash"></i>delete</a></td></tr>
+		<tr><td>@ins.getId()</td><td>@ins.getName()</td><td><a href="@routes.InspirationController.edit(ins.getId())" class="act-primary"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.InspirationController.delete(ins.getId())" class="act-danger"><i class="icon-trash"></i>delete</a></td></tr>
 	}
 	</table>
 

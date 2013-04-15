@@ -18,8 +18,9 @@ public class AdventureController extends Controller {
 
     private static Form<Adventure> advForm = form(Adventure.class);
 
-    public static Result get(String catId, String insId, String id) {
-        return ok(get.render(new AdventureDAO().get(insId, id), new InspirationDAO().get(catId, insId)));
+    public static Result get(String id) {
+        Adventure adv = new AdventureDAO().get(id);
+        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId())));
     }
 
     public static Result create() {
@@ -40,7 +41,7 @@ public class AdventureController extends Controller {
         } else {
             Adventure adv = filledAdvForm.get();
             new AdventureDAO().save(adv);
-            return ok(get.render(new AdventureDAO().get(adv.getInspirationId(), adv.getId()), new InspirationDAO().get(null, adv.getInspirationId())));
+            return ok(get.render(new AdventureDAO().get(adv.getId()), new InspirationDAO().get(adv.getInspirationId())));
         }
 
     }
