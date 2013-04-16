@@ -3,7 +3,8 @@
 # ~~~~
 
 
-GET		/adventure/new												controllers.AdventureController.create()
+GET		/adventure/new											    controllers.AdventureController.create()
+GET		/adventure/:id/new											controllers.AdventureController.createFromInspiration(id:String)
 GET		/inspiration/new											controllers.InspirationController.create()
 GET		/category/new												controllers.CategoryController.create()
 
@@ -29,7 +30,7 @@ GET     /fbtest                                						controllers.FbController.te
 GET		/ping														controllers.ApplicationController.ping()
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file								controllers.Assets.at(path="/public", file)
+GET     /assets/*file								                controllers.Assets.at(path="/public", file)
 
 
 # Authentication

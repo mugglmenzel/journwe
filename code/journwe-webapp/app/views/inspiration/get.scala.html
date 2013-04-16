@@ -2,42 +2,48 @@
 
 @main(ins.getName()+ " <small>"+category.getName()+"</small>") {
 
-	<table class="inspiration">
-		<tr>
-			<td>
-	  		<p>
-		        @Html(ins.getDescription())
-		    </p>
-		    	<ul class="thumbnails">
-		    		<li class="span4">
-		    			<a class="thumbnail" href="#">
-		    				<img src="http://i.embed.ly/1/image/resize?height=400&width=800&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-		    			</a>
-		    		</li>
-                    @images.map { img =>
-		    		<li class="span2">
-		    			<a class="thumbnail" href="#"><img src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@img&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-		    			</a>
-		    		</li>
-		    		}
-		    	</ul>
-			</td>
-			<td class="fixed-width">
-				@if(ins.getTripAdvisor()){
-					<div class="tripadvisor">
-						@Html(ins.getTripAdvisor())
-					</div>
-				}
+<div class="text-center">
+    <a class="btn btn-primary btn-large text-center" href="@routes.AdventureController.createFromInspiration(ins.getId())">Start a
+        "@ins.getName()" Adventure</a>
+</div>
+<table class="inspiration">
+    <tr>
+        <td>
+            <p>
+                @Html(ins.getDescription())
+            </p>
+            <ul class="thumbnails">
+                <li class="span4">
+                    <a class="thumbnail" href="#">
+                        <img src="http://i.embed.ly/1/image/resize?height=400&width=800&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
+                    </a>
+                </li>
+                @images.map { img =>
+                <li class="span2">
+                    <a class="thumbnail" href="#"><img
+                            src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@img&key=2c8ef5b200c6468f9f863bc75c46009f"/>
+                    </a>
+                </li>
+                }
+            </ul>
+        </td>
+        <td class="fixed-width">
+            @if(ins.getTripAdvisor()){
+            <div class="tripadvisor">
+                @Html(ins.getTripAdvisor())
+            </div>
+            }
 
-				@if(ins.getPinterest()){
-					<div class="pinterest">
-						<a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110" data-pin-scale-height="300" data-pin-board-width="240"></a>
-						<script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
-					</div>
-				}
-			</td>
-		</tr>
-	</table>
- 
-    
+            @if(ins.getPinterest()){
+            <div class="pinterest">
+                <a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110"
+                   data-pin-scale-height="300" data-pin-board-width="240"></a>
+                <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+            </div>
+            }
+        </td>
+    </tr>
+</table>
+
+
 }

@@ -11,11 +11,11 @@ import com.amazonaws.services.dynamodb.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName="journwe-inspiration")
 public class Inspiration {
 	
-	private String inspirationCategoryId;
-	
 	private String id;
-	
-	@Required
+
+    private String inspirationCategoryId;
+
+    @Required
 	private String name;
 
 	private String description;

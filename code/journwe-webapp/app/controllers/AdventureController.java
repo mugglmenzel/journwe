@@ -40,11 +40,20 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
-        Logger.info("Test");
+        return createFromInspiration(null);
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result createFromInspiration(String insId) {
         Map<String, String> inspireOptions = new InspirationDAO()
                 .allOptionsMap(50);
-        Logger.info("Created Options List");
-        return ok(create.render(advForm, inspireOptions));
+        Form<Adventure> advFilledForm = advForm;
+        if (insId != null && !"".equals(insId)) {
+            Adventure adv = new Adventure();
+            adv.setInspirationId(insId);
+            advFilledForm = advForm.fill(adv);
+        } else advFilledForm = advForm.fill(new Adventure());
+        return ok(create.render(advFilledForm, inspireOptions));
 
     }
 
