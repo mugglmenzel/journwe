@@ -1,6 +1,16 @@
 Readme
 =====================================
 
+Start App in Dev Mode
+===========
+
+$ play start
+
+Start App in Production Mode
+===========
+
+$ play start -Dconfig.resource=application-prod.conf
+
 Travel API credentials
 =====================================
 
