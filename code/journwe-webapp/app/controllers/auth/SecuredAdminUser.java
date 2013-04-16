@@ -42,7 +42,7 @@ public class SecuredAdminUser extends Security.Authenticator {
 	}
 
 	public static boolean isAdmin(AuthUser u) {
-		return EUserRole.ADMIN.equals(User.findByAuthUserIdentity(u).getRole());
+		return User.findByAuthUserIdentity(u) != null && EUserRole.ADMIN.equals(User.findByAuthUserIdentity(u).getRole());
 	}
 
 }

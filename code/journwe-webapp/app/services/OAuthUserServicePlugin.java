@@ -17,7 +17,7 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
 	public Object save(final AuthUser authUser) {
 		final boolean isLinked = User.existsByAuthUserIdentity(authUser);
 		if (!isLinked) {
-			return User.create(authUser).getProviderUserId();
+			return User.create(authUser).getId();
 		} else {
 			// we have this user already, so return null
 			return null;
@@ -30,7 +30,7 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
 		// ...and dont forget to sync the cache when users get deactivated/deleted
 		final User u = User.findByAuthUserIdentity(identity);
 		if(u != null) {
-			return u.getProviderUserId();
+			return u.getId();
 		} else {
 			return null;
 		}
