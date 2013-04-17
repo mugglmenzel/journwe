@@ -1,0 +1,17 @@
+@(status: String)
+
+<div class="progress progress-striped active">
+	<div class="bar" id="myprogressbar" style="width: 0%;"></div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	var cometMessage = function(status) {
+		var pb = document.getElementById("myprogressbar");
+		pb.style.width = status + "%";
+		if (status == "100") {
+			window.location.href = "/";
+		}
+	}
+</script>
+
+<iframe src="/progress" style="display: none"></iframe>

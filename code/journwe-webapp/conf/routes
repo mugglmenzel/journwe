@@ -43,3 +43,5 @@ GET     /subscribe													controllers.ApplicationController.subscribe()
 GET     /imprint                                                    controllers.ApplicationController.imprint()
 GET     /:catId                   				 					controllers.ApplicationController.categoryIndex(catId:String)
 
+# Testing comet
+GET		/progress													controllers.ProgressController.getProgress()
