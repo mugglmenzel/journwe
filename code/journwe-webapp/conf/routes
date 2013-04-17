@@ -22,10 +22,15 @@ POST	/category/save												controllers.CategoryController.save()
 GET		/category/:id/delete										controllers.CategoryController.delete(id:String)
 GET		/inspiration/:id/delete			                			controllers.InspirationController.delete(id:String)
 
-GET		/adventure/:id			                                    controllers.AdventureController.get(id:String)
+# Adventure
+GET		/adventure/:id			                                    controllers.AdventureController.getIndex(id:String)
+GET		/adventure/:id/index	                                    controllers.AdventureController.getIndex(id:String)
+GET     /adventure/:id/adventurers                                  controllers.AdventureController.getAdventurers(id:String)
+GET     /adventure/:id/participate                                  controllers.AdventureController.participate(id:String)
+GET     /adventure/:id/participate/:status                          controllers.AdventureController.participateStatus(id:String, status:String)
+
 GET		/inspiration/:id	                						controllers.InspirationController.get(id:String)
 
-GET     /adventure/:id/participate                                  controllers.AdventureController.participate(id:String)
 
 # Facebook
 GET     /fbtest                                						controllers.FbController.test()
@@ -45,6 +50,6 @@ GET     /authenticate/:provider/denied     							controllers.ApplicationControl
 # Home page
 GET     /subscribe													controllers.ApplicationController.subscribe()
 GET     /imprint                                                    controllers.ApplicationController.imprint()
-GET     /:catId                   				 					controllers.ApplicationController.categoryIndex(catId:String)
+GET     /category/:catId                   				 					controllers.ApplicationController.categoryIndex(catId:String)
 GET     /															controllers.ApplicationController.index()
 

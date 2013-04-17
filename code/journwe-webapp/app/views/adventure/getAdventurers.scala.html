@@ -1,0 +1,20 @@
+@(adv: Adventure, ins: Inspiration)(adventurers: List[Adventurer])(status: String)
+
+@import models.EAdventurerParticipation
+
+@get(adv, ins, "adventurers") {
+<div>
+    <div class="btn-group">
+        <a class="btn btn-danger @if(status == "NOTGOING"){active}" href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())">Not Going</a>
+        <a class="btn btn-warning @if(status == "UNDECIDED"){active}" href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())">Undecided</a>
+        <a class="btn btn-primary @if(status == "GOING"){active}" href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())">Going</a>
+        <a class="btn btn-success @if(status == "BOOKED"){active}" href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())">Booked</a>
+    </div>
+</div>
+<ul>
+    @adventurers.zipWithIndex.map { case(advr, i) =>
+    <li>@advr.getId(), @advr.getUserId(), @advr.getAdventureId(), @advr.getParticipationStatus()</li>
+    }
+</ul>
+<a href="@routes.AdventureController.participate(adv.getId())">Participate</a>
+}

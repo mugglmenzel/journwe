@@ -26,7 +26,7 @@
         </ul>
     </div>
     <div class="span10">
-        <div class="tabbable">
+        <div>
             <!-- Only required for left/right tabs -->
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#inspirations" data-toggle="tab"><i class="icon-th"></i>Inspirations</a>
@@ -56,7 +56,7 @@
                     <ul class="thumbnails">
                         @adventures.zipWithIndex.map { case(adv, i) =>
                         <li class="span3">
-                            <a class="thumbnail" href="@routes.AdventureController.get(adv.getId())">
+                            <a class="thumbnail" href="@routes.AdventureController.getIndex(adv.getId())">
                                 <img src="http://i.embed.ly/1/image/resize?width=300&url=@adv.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
                             </a>
                             <h4>@adv.getName()</h4>

@@ -1,99 +1,19 @@
-@(adv: Adventure)(ins: Inspiration)(adventurers: List[Adventurer])
-
-@import controllers.dao.AdventurerDAO
+@(adv: Adventure, ins: Inspiration, active: String)(content: Html)
 
 @main(adv.getName()+ " <small>"+ins.getName()+"</small>") {
 
-<div class="tabbable">
+<div>
     <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#overview" data-toggle="tab"><i class="icon-th"></i>Overview</a>
-        </li>
-        <li><a href="@routes.AdventureController.get(adv.getId())#adventurers" data-toggle="tab"><i class="icon-th"></i>Adventurers</a></li>
-        <li><a href="#time" data-toggle="tab"><i class="icon-search"></i>Date &amp; Time</a></li>
-        <li><a href="#packing" data-toggle="tab"><i class="icon-search"></i>Packing List</a></li>
-        <li><a href="#files" data-toggle="tab"><i class="icon-search"></i>Files</a></li>
+        <li @if(active == "index"){class="active"}><a href="@routes.AdventureController.getIndex(adv.getId())"><i class="icon-th"></i>Overview</a></li>
+        <li @if(active == "adventurers"){class="active"}><a href="@routes.AdventureController.getAdventurers(adv.getId())"><i class="icon-th"></i>Adventurers</a></li>
+        <li @if(active == "messages"){class="active"}><a href="#messages"><i class="icon-search"></i>Messages</a></li>
+        <li @if(active == "time"){class="active"}><a href="#time"><i class="icon-search"></i>Date &amp; Time</a></li>
+        <li @if(active == "packing"){class="active"}><a href="#packing"><i class="icon-search"></i>Packing List</a></li>
+        <li @if(active == "files"){class="active"}><a href="#files"><i class="icon-search"></i>Files</a></li>
     </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="overview">
-            <table class="inspiration">
-                <tr>
-                    <td>
-                        <p>
-                            @Html(ins.getDescription())
-                        </p>
-                        <ul class="thumbnails">
-                            <li class="span4">
-                                <a class="thumbnail" href="#">
-                                    <img src="http://i.embed.ly/1/image/resize?height=400&width=800&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-                                </a>
-                            </li>
-                            <li class="span2">
-                                <a class="thumbnail" href="#"><img
-                                        src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-                                </a>
-                            </li>
-                            <li class="span2">
-                                <a class="thumbnail" href="#"><img
-                                        src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-                                </a>
-                            </li>
-                            <li class="span2">
-                                <a class="thumbnail" href="#"><img
-                                        src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-                                </a>
-                            </li>
-                            <li class="span2">
-                                <a class="thumbnail" href="#"><img
-                                        src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-                                </a>
-                            </li>
-                        </ul>
-                    </td>
-                    <td class="fixed-width">
-                        @if(ins.getTripAdvisor()){
-                        <div class="tripadvisor">
-                            @Html(ins.getTripAdvisor())
-                        </div>
-                        }
-
-                        @if(ins.getPinterest()){
-                        <div class="pinterest">
-                            <a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110"
-                               data-pin-scale-height="300" data-pin-board-width="240"></a>
-                            <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
-                        </div>
-                        }
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="tab-pane" id="adventurers">
-            <div>
-                <div class="btn-group">
-                    <button class="btn btn-danger">Not Going</button>
-                    <button class="btn btn-warning">Undecided</button>
-                    <button class="btn btn-primary">Going</button>
-                    <button class="btn btn-success">Booked</button>
-                </div>
-            </div>
-            <ul>
-                @adventurers.zipWithIndex.map { case(advr, i) =>
-                <li>@advr.getId(), @advr.getUserId(), @advr.getAdventureId(), @advr.getParticipationStatus()</li>
-                }
-            </ul>
-            <a href="@routes.AdventureController.participate(adv.getId())">Participate</a>
-        </div>
-        <div class="tab-pane" id="time">
-
-        </div>
-        <div class="tab-pane" id="packing">
-
-        </div>
-        <div class="tab-pane" id="files">
-
-        </div>
-
+    <div>
+      @content
     </div>
 </div>
 

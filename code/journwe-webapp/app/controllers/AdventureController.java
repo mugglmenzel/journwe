@@ -18,7 +18,8 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.adventure.create;
-import views.html.adventure.get;
+import views.html.adventure.getAdventurers;
+import views.html.adventure.getIndex;
 
 import java.io.File;
 import java.util.Iterator;
@@ -33,9 +34,24 @@ public class AdventureController extends Controller {
     private static Form<Adventure> advForm = form(Adventure.class);
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result get(String id) {
+    public static Result getIndex(String id) {
         Adventure adv = new AdventureDAO().get(id);
-        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id)));
+        return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result getAdventurers(String id) {
+        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventure adv = new AdventureDAO().get(id);
+
+        Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(id);
+        while (advrs.hasNext()) {
+            Adventurer advr = advrs.next();
+            if (usr.getId() != null && usr.getId().equals(advr.getUserId()))
+                return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), advr.getParticipationStatus().name()));
+        }
+
+        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), EAdventurerParticipation.NOTGOING.name()));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -99,7 +115,7 @@ public class AdventureController extends Controller {
                     flash("success",
                             "Saved Adventure with image " + adv.getImage()
                                     + ".");
-                    return ok(get.render(new AdventureDAO().get(adv.getId()), ins, new AdventurerDAO().all(50, adv.getId())));
+                    return ok(getIndex.render(new AdventureDAO().get(adv.getId()), ins));
 
                 } else
                     throw new Exception();
@@ -120,8 +136,9 @@ public class AdventureController extends Controller {
 
         Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(advId);
         while (advrs.hasNext()) {
-            if (usr.getId() != null && usr.getId().equals(advrs.next().getUserId()))
-                return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
+            Adventurer advr = advrs.next();
+            if (usr.getId() != null && usr.getId().equals(advr.getUserId()))
+                return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId), advr.getParticipationStatus().name()));
         }
 
 
@@ -132,10 +149,11 @@ public class AdventureController extends Controller {
         new AdventurerDAO().save(advr);
 
 
-        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
+        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId), advr.getParticipationStatus().name()));
     }
 
-    public static Result participateStatus(String advId, EAdventurerParticipation status) {
+    public static Result participateStatus(String advId, String statusStr) {
+        EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
 
@@ -143,11 +161,12 @@ public class AdventureController extends Controller {
         Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(advId);
         while (advrs.hasNext()) {
             Adventurer advr = advrs.next();
-            if (usr.getId() != null && usr.getId().equals(advr.getUserId()))  {
-               advr.setParticipationStatus(status);
+            if (usr.getId() != null && usr.getId().equals(advr.getUserId())) {
+                advr.setParticipationStatus(status);
+                new AdventurerDAO().save(advr);
             }
         }
-        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
+        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId), statusStr));
 
     }
 

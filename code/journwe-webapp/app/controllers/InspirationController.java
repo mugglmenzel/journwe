@@ -34,6 +34,7 @@ public class InspirationController extends Controller {
 
     private static Form<Inspiration> insForm = form(Inspiration.class);
 
+    @Cached(key = "inspiration.get")
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result get(String id) {
         Inspiration ins = new InspirationDAO().get(id);
