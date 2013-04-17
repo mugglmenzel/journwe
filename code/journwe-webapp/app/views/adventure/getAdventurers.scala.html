@@ -1,9 +1,22 @@
 @(adv: Adventure, ins: Inspiration)(adventurers: List[Adventurer])(status: String)
 
-@import models.EAdventurerParticipation
+@import controllers.dao.UserDAO
+
+@cssForStatus(status:String) = {
+    @status match {
+    case "NOTGOING" => {error}
+    case "UNDECIDED" => {warning}
+    case "GOING" => {info}
+    case "BOOKED" => {success}
+    }
+}
+
 
 @get(adv, ins, "adventurers") {
+
+        @if(status){
 <div>
+    <strong>You are...</strong>
     <div class="btn-group">
         <a class="btn btn-danger @if(status == "NOTGOING"){active}" href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())">Not Going</a>
         <a class="btn btn-warning @if(status == "UNDECIDED"){active}" href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())">Undecided</a>
@@ -11,10 +24,20 @@
         <a class="btn btn-success @if(status == "BOOKED"){active}" href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())">Booked</a>
     </div>
 </div>
-<ul>
+        } else {
+            <a href="@routes.AdventureController.participate(adv.getId())">Participate</a>
+        }
+
+<table class="table table-striped table-hover">
+    <caption>List of Adventurers</caption>
+    <thead>
+        <tr><th>Name</th><th>Status</th></tr>
+    </thead>
+    <tbody>
     @adventurers.zipWithIndex.map { case(advr, i) =>
-    <li>@advr.getId(), @advr.getUserId(), @advr.getAdventureId(), @advr.getParticipationStatus()</li>
+        <tr class="@cssForStatus(advr.getParticipationStatus().name())"><td>@{new UserDAO().get(advr.getUserId()).getName()}</td><td>@advr.getParticipationStatus()</td></tr>
     }
-</ul>
-<a href="@routes.AdventureController.participate(adv.getId())">Participate</a>
+    </tbody>
+</table>
+
 }

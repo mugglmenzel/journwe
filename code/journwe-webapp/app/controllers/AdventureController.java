@@ -51,7 +51,7 @@ public class AdventureController extends Controller {
                 return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), advr.getParticipationStatus().name()));
         }
 
-        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), EAdventurerParticipation.NOTGOING.name()));
+        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), null));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
