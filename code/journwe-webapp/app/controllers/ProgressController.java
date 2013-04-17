@@ -1,11 +1,20 @@
 package controllers;
 
+import controllers.auth.SecuredAdminUser;
 import play.libs.Comet;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
+import views.html.testProgressbar;
 
 public class ProgressController extends Controller {
 
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result getProgressHome() {
+        return ok(testProgressbar.render("0"));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result getProgress() {
 		Comet comet = new Comet("parent.cometMessage") {
 			public void onConnected() {

@@ -9,7 +9,7 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#overview" data-toggle="tab"><i class="icon-th"></i>Overview</a>
         </li>
-        <li><a href="#adventurers" data-toggle="tab"><i class="icon-th"></i>Adventurers</a></li>
+        <li><a href="@routes.AdventureController.get(adv.getId())#adventurers" data-toggle="tab"><i class="icon-th"></i>Adventurers</a></li>
         <li><a href="#time" data-toggle="tab"><i class="icon-search"></i>Date &amp; Time</a></li>
         <li><a href="#packing" data-toggle="tab"><i class="icon-search"></i>Packing List</a></li>
         <li><a href="#files" data-toggle="tab"><i class="icon-search"></i>Files</a></li>
@@ -69,10 +69,18 @@
             </table>
         </div>
         <div class="tab-pane" id="adventurers">
+            <div>
+                <div class="btn-group">
+                    <button class="btn btn-danger">Not Going</button>
+                    <button class="btn btn-warning">Undecided</button>
+                    <button class="btn btn-primary">Going</button>
+                    <button class="btn btn-success">Booked</button>
+                </div>
+            </div>
             <ul>
-            @adventurers.zipWithIndex.map { case(advr, i) =>
+                @adventurers.zipWithIndex.map { case(advr, i) =>
                 <li>@advr.getId(), @advr.getUserId(), @advr.getAdventureId(), @advr.getParticipationStatus()</li>
-            }
+                }
             </ul>
             <a href="@routes.AdventureController.participate(adv.getId())">Participate</a>
         </div>

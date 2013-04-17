@@ -12,6 +12,7 @@ import controllers.dao.InspirationDAO;
 import models.Category;
 import models.Inspiration;
 import play.Logger;
+import play.cache.Cached;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;

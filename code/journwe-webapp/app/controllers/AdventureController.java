@@ -115,7 +115,6 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result participate(String advId) {
-        Logger.info("u are user: " + PlayAuthenticate.getUser(Http.Context.current()).getId());
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
 
@@ -134,6 +133,22 @@ public class AdventureController extends Controller {
 
 
         return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
+    }
+
+    public static Result participateStatus(String advId, EAdventurerParticipation status) {
+        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventure adv = new AdventureDAO().get(advId);
+
+
+        Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(advId);
+        while (advrs.hasNext()) {
+            Adventurer advr = advrs.next();
+            if (usr.getId() != null && usr.getId().equals(advr.getUserId()))  {
+               advr.setParticipationStatus(status);
+            }
+        }
+        return ok(get.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId)));
+
     }
 
 }

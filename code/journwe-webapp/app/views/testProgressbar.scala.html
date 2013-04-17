@@ -1,8 +1,14 @@
 @(status: String)
 
+        @main("Hello World!") {
+
+<h2>Still the World!</h2>
+
 <div class="progress progress-striped active">
 	<div class="bar" id="myprogressbar" style="width: 0%;"></div>
 </div>
+
+
 
 <script type="text/javascript" charset="utf-8">
 	var cometMessage = function(status) {
@@ -15,3 +21,4 @@
 </script>
 
 <iframe src="/progress" style="display: none"></iframe>
+        }
