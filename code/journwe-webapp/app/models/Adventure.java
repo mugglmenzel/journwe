@@ -11,12 +11,14 @@ import com.amazonaws.services.dynamodb.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName="journwe-adventure")
 public class Adventure {
 
-	private String inspirationId;
-
 	private String id;
-	
-	@Required
+
+    private String inspirationId;
+
+    @Required
 	private String name;
+
+    private String description;
 
     private String image;
 
@@ -73,6 +75,15 @@ public class Adventure {
 	}
 
     @DynamoDBAttribute
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @DynamoDBAttribute
     public String getImage() {
         return image;
     }
@@ -126,7 +137,18 @@ public class Adventure {
 	public void setLimit(Integer limit) {
 		this.limit = limit;
 	}
-	
-	
-	
+
+    @Override
+    public String toString() {
+        return "Adventure{" +
+                "id='" + id + '\'' +
+                ", inspirationId='" + inspirationId + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", image='" + image + '\'' +
+                ", publish=" + publish +
+                ", limited=" + limited +
+                ", limit=" + limit +
+                '}';
+    }
 }
