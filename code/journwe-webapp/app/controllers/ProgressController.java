@@ -1,6 +1,7 @@
 package controllers;
 
 import controllers.auth.SecuredAdminUser;
+import play.Logger;
 import play.libs.Comet;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -11,6 +12,7 @@ public class ProgressController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getProgressHome() {
+        Logger.info("rendering progressbar view");
         return ok(testProgressbar.render("0"));
     }
 

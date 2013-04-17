@@ -2,6 +2,10 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+# Testing comet
+GET     /showProgress                                               controllers.ProgressController.getProgressHome()
+GET		/progress													controllers.ProgressController.getProgress()
+
 
 GET		/adventure/new											    controllers.AdventureController.create()
 GET		/adventure/:id/new											controllers.AdventureController.createFromInspiration(id:String)
@@ -39,11 +43,8 @@ GET     /authenticate/:provider     								com.feth.play.module.pa.controllers.
 GET     /authenticate/:provider/denied     							controllers.ApplicationController.oAuthDenied(provider: String)
 
 # Home page
-GET     /															controllers.ApplicationController.index()
 GET     /subscribe													controllers.ApplicationController.subscribe()
 GET     /imprint                                                    controllers.ApplicationController.imprint()
 GET     /:catId                   				 					controllers.ApplicationController.categoryIndex(catId:String)
+GET     /															controllers.ApplicationController.index()
 
-# Testing comet
-GET     /showProgress                                               controllers.ProgressController.getProgressHome()
-GET		/progress													controllers.ProgressController.getProgress()
