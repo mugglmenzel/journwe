@@ -5,7 +5,7 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
-@main("Start a new Group Adventure" + (if(advForm("inspirationId").value) " <small>from \"" + inspirations.get(advForm("inspirationId").value) + "\"</small>" else "")) {
+@main("Start a new Group Adventure"){Start a new Group Adventure @if(advForm("inspirationId").value){<small>from "@inspirations.get(advForm("inspirationId").value)"</small>}} {
     @form(routes.AdventureController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
     	<fieldset>
        		@inputText(advForm("name"), '_label -> "Adventure name")

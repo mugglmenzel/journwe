@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String)(header: Html = Html("Welcome"))(content: Html)
 
 @import play.mvc.Controller._
 @import com.feth.play.module.pa.views.html._
@@ -8,7 +8,7 @@
 
 <html lang="en">
 <head>
-	<title>@title</title>
+	<title>JournWe - @Html(title)</title>
 	<link rel="stylesheet" href="@routes.Assets.at("css/bootstrap.css")">
 	<link rel="stylesheet" href="@routes.Assets.at("css/bootstrap-responsive.css")">
 	<link rel="stylesheet" href="@routes.Assets.at("css/jasny-bootstrap.css")">
@@ -80,7 +80,7 @@
 	<div class="main" style="width=device-width;">
 		<div class="container">
 			<div class="page-header">
-				<h1>@Html(title)</h1>
+				<h1>@header</h1>
 			</div>
 			@if(flash("error")) {
 			<div class="alert alert-error">

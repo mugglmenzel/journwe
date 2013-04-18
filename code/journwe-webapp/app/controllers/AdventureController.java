@@ -125,7 +125,7 @@ public class AdventureController extends Controller {
     }
 
     public static Result saveEditable() {
-       DynamicForm advForm = form().bindFromRequest();
+        DynamicForm advForm = form().bindFromRequest();
         String advId = advForm.get("pk");
         if (advId != null && !"".equals(advId)) {
             Adventure adv = new AdventureDAO().get(advId);

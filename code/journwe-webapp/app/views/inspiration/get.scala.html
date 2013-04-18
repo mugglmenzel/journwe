@@ -1,6 +1,6 @@
 @(ins: Inspiration)(category: Category)(images: List[String])
 
-@main(ins.getName()+ " <small>"+category.getName()+"</small>") {
+@main(ins.getName()){@ins.getName() <small>@category.getName()</small>} {
 
 <div class="text-center">
     <a class="btn btn-primary btn-large text-center" href="@routes.AdventureController.createFromInspiration(ins.getId())">Start a

@@ -1,6 +1,6 @@
 @(adv: Adventure, ins: Inspiration, active: String)(content: Html)
 
-@main("<a href=\"#\" id=\"adventureName\" data-type=\"text\" data-pk=\"" + adv.getId() + "\" data-url=\"/adventure/save/editable\" data-original-title=\"Enter name\">" + adv.getName()+ "</a> <small>"+ins.getName()+"</small>") {
+@main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()" data-url="/adventure/save/editable" data-original-title="Enter name">@adv.getName()</a> <small>@ins.getName()</small>} {
 
 <div>
     <!-- Only required for left/right tabs -->
