@@ -1,6 +1,7 @@
 @(inspForm: Form[Inspiration])(categories: Map[String, String])(inspirations: List[Inspiration])
 
 @import helper._
+@import fieldConstructor._
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 

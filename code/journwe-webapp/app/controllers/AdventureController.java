@@ -45,7 +45,7 @@ public class AdventureController extends Controller {
         Adventure adv = new AdventureDAO().get(id);
         Adventurer advr = new AdventurerDAO().get(id, usr.getId());
 
-        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), advr == null ? null : advr.getParticipationStatus().name()));
+        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(id), advr == null ? null : advr.getParticipationStatus().name()));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -70,6 +70,7 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result save() {
         Form<Adventure> filledAdvForm = advForm.bindFromRequest();
+
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart image = body.getFile("image");
 
@@ -126,8 +127,6 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result participate(String advId) {
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        Adventure adv = new AdventureDAO().get(advId);
-
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
         if (advr == null) {
             advr = new Adventurer();
@@ -143,8 +142,6 @@ public class AdventureController extends Controller {
     public static Result participateStatus(String advId, String statusStr) {
         EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        Adventure adv = new AdventureDAO().get(advId);
-
 
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
         if (advr != null) {

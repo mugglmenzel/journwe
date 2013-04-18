@@ -1,11 +1,12 @@
 @(advForm: Form[Adventure])(inspirations: Map[String, String])
 
 @import helper._
+@import fieldConstructor._
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
 @main("Start a new Group Adventure" + (if(advForm("inspirationId").value) " <small>from \"" + inspirations.get(advForm("inspirationId").value) + "\"</small>" else "")) {
-    @form(routes.AdventureController.save(), args = 'class -> "form-horizontal") {
+    @form(routes.AdventureController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
     	<fieldset>
        		@inputText(advForm("name"), '_label -> "Adventure name")
     		@select(
@@ -15,7 +16,8 @@
     			'_label -> "Inspiration",
     			'_error -> advForm("inspirationId").error.map(_.withMessage("Please select an Inspiration to type your Adventure!"))
     		)
-    		@checkbox(advForm("publish"), '_label -> "Public?", '_wrapperclass -> "switch")
+            @inputFile(advForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
+            @checkbox(advForm("publish"), '_label -> "Public?", '_wrapperclass -> "switch")
     		@checkbox(advForm("limited"), '_label -> "Limited?", '_wrapperclass -> "switch pull-left")
     		@inputText(advForm("limit"), '_label -> "Max. # of Adventurers", 'type -> "number")
     		

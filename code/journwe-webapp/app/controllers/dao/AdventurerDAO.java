@@ -27,7 +27,7 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
         super(Adventurer.class);
     }
 
-    public Iterator<Adventurer> findByAdventureId(String advId) {
+    public Iterator<Adventurer> all(String advId) {
         DynamoDBQueryExpression query = new DynamoDBQueryExpression(new AttributeValue(advId)).withConsistentRead(true);
         return pm.query(Adventurer.class, query).iterator();
         //DynamoDBScanExpression scan = new DynamoDBScanExpression();
