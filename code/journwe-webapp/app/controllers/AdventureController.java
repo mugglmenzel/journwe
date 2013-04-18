@@ -12,7 +12,7 @@ import controllers.dao.AdventurerDAO;
 import controllers.dao.InspirationDAO;
 import models.*;
 import play.Logger;
-import play.api.mvc.Call;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -122,6 +122,22 @@ public class AdventureController extends Controller {
             }
         }
 
+    }
+
+    public static Result saveEditable() {
+       DynamicForm advForm = form().bindFromRequest();
+        String advId = advForm.get("pk");
+        if (advId != null && !"".equals(advId)) {
+            Adventure adv = new AdventureDAO().get(advId);
+            String name = advForm.get("name");
+            if ("adventureName".equals(name))
+                adv.setName(advForm.get("value"));
+            else if ("adventureDescription".equals(name))
+                adv.setDescription(advForm.get("value"));
+            new AdventureDAO().save(adv);
+        }
+
+        return ok();
     }
 
     @Security.Authenticated(SecuredAdminUser.class)

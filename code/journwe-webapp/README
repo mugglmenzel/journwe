@@ -9,7 +9,7 @@ $ play start
 Start App in Production Mode
 ===========
 
-$ play start -Dconfig.resource=application-prod.conf
+$ play -Dconfig.resource=application-prod.conf start
 
 Travel API credentials
 =====================================
