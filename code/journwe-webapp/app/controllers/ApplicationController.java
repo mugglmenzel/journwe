@@ -13,7 +13,6 @@ import controllers.dao.SubscriberDAO;
 import models.Category;
 import models.Subscriber;
 import models.helpers.CategoryCount;
-import play.Logger;
 import play.cache.Cached;
 import play.data.Form;
 import play.mvc.Controller;
@@ -77,7 +76,7 @@ public class ApplicationController extends Controller {
         return ok(subscribe.render(subForm));
     }
 
-    @Cached("imprint")
+    @Cached(key = "imprint")
     public static Result imprint() {
         return ok(imprint.render());
     }
@@ -96,7 +95,7 @@ public class ApplicationController extends Controller {
         return ok("oAuth went wrong");
     }
 
-    @Cached("ping")
+    @Cached(key = "ping")
     public static Result ping() {
         return ok("pong");
     }
