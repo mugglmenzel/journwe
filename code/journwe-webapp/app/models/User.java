@@ -95,7 +95,7 @@ public class User {
     }
 
     private static User getAuthUserFind(final AuthUserIdentity identity) {
-        UserSocial social = new UserSocialDAO().findBySocialId(identity.getId());
+        UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
         return social != null ? new UserDAO().get(social.getUserId()) : null;
     }
 
@@ -119,22 +119,23 @@ public class User {
         new UserDAO().save(user);
 
 
-        final UserEmail email = new UserEmail();
-        email.setUserId(user.getId());
         if (authUser instanceof EmailIdentity) {
+            final UserEmail email = new UserEmail();
+            email.setUserId(user.getId());
+
             final EmailIdentity identity = (EmailIdentity) authUser;
             // Remember, even when getting them from FB & Co., emails should be
             // verified within the application as a security breach there might
             // break your security as well!
             email.setEmail(identity.getEmail());
             email.setValidated(false);
+            new UserEmailDAO().save(email);
         }
-        new UserEmailDAO().save(email);
 
         final UserSocial social = new UserSocial();
-        social.setUserId(user.getId());
-        social.setSocialId(authUser.getId());
         social.setProvider(authUser.getProvider());
+        social.setSocialId(authUser.getId());
+        social.setUserId(user.getId());
         new UserSocialDAO().save(social);
 
         return user;

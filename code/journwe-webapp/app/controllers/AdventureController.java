@@ -12,6 +12,7 @@ import controllers.dao.AdventurerDAO;
 import controllers.dao.InspirationDAO;
 import models.*;
 import play.Logger;
+import play.api.mvc.Call;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -22,7 +23,6 @@ import views.html.adventure.getAdventurers;
 import views.html.adventure.getIndex;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.Map;
 
 import static play.data.Form.form;
@@ -43,15 +43,9 @@ public class AdventureController extends Controller {
     public static Result getAdventurers(String id) {
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(id);
+        Adventurer advr = new AdventurerDAO().get(id, usr.getId());
 
-        Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(id);
-        while (advrs.hasNext()) {
-            Adventurer advr = advrs.next();
-            if (usr.getId() != null && usr.getId().equals(advr.getUserId()))
-                return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), advr.getParticipationStatus().name()));
-        }
-
-        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), null));
+        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, id), advr == null ? null : advr.getParticipationStatus().name()));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -134,22 +128,16 @@ public class AdventureController extends Controller {
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
 
-        Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(advId);
-        while (advrs.hasNext()) {
-            Adventurer advr = advrs.next();
-            if (usr.getId() != null && usr.getId().equals(advr.getUserId()))
-                return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId), advr.getParticipationStatus().name()));
+        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+        if (advr == null) {
+            advr = new Adventurer();
+            advr.setUserId(usr.getId());
+            advr.setAdventureId(advId);
+            advr.setParticipationStatus(EAdventurerParticipation.GOING);
+            new AdventurerDAO().save(advr);
         }
 
-
-        Adventurer advr = new Adventurer();
-        advr.setUserId(usr.getId());
-        advr.setAdventureId(advId);
-        advr.setParticipationStatus(EAdventurerParticipation.GOING);
-        new AdventurerDAO().save(advr);
-
-
-        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId), advr.getParticipationStatus().name()));
+        return redirect(routes.AdventureController.getAdventurers(advId));
     }
 
     public static Result participateStatus(String advId, String statusStr) {
@@ -158,15 +146,12 @@ public class AdventureController extends Controller {
         Adventure adv = new AdventureDAO().get(advId);
 
 
-        Iterator<Adventurer> advrs = new AdventurerDAO().findByAdventureId(advId);
-        while (advrs.hasNext()) {
-            Adventurer advr = advrs.next();
-            if (usr.getId() != null && usr.getId().equals(advr.getUserId())) {
-                advr.setParticipationStatus(status);
-                new AdventurerDAO().save(advr);
-            }
+        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+        if (advr != null) {
+            advr.setParticipationStatus(status);
+            new AdventurerDAO().save(advr);
         }
-        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(50, advId), statusStr));
+        return redirect(routes.AdventureController.getAdventurers(advId));
 
     }
 

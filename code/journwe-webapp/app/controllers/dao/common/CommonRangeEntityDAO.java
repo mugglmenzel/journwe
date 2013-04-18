@@ -1,12 +1,16 @@
 package controllers.dao.common;
 
+import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig;
+
 public abstract class CommonRangeEntityDAO<T> extends CommonDAO<T> implements IChildDAO<T> {
 
     protected CommonRangeEntityDAO(Class<T> clazz) {
         super(clazz);
     }
 
-    public abstract T get(String parentId, String id);
+    public T get(String hashId, String rangeId) {
+        return pm.load(clazz, hashId, rangeId);
+    }
 
 	public boolean delete(String parentId, String id) {
 		try {
