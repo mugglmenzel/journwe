@@ -1,9 +1,9 @@
 package controllers.dao;
 
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodb.model.AttributeValue;
-import com.amazonaws.services.dynamodb.model.ComparisonOperator;
-import com.amazonaws.services.dynamodb.model.Condition;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
 import controllers.dao.common.CommonEntityDAO;
 import models.Category;
 import models.Inspiration;
@@ -19,8 +19,10 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     }
 
     public List<Category> all(int max) {
-        return pm.scanPage(Category.class,
-                new DynamoDBScanExpression().withLimit(max)).getResults();
+    	// TODO
+//        return pm.scanPage(Category.class,
+//                new DynamoDBScanExpression().withLimit(max)).getResults();
+    	return null;
     }
 
     public Map<String, String> allOptionsMap(int max) {

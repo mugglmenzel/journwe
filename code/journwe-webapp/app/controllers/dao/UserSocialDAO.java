@@ -1,13 +1,14 @@
 package controllers.dao;
 
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodb.datamodeling.PaginatedScanList;
-import com.amazonaws.services.dynamodb.model.AttributeValue;
-import com.amazonaws.services.dynamodb.model.ComparisonOperator;
-import com.amazonaws.services.dynamodb.model.Condition;
-import controllers.dao.common.CommonEntityDAO;
-import controllers.dao.common.CommonRangeEntityDAO;
 import models.UserSocial;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+
+import controllers.dao.common.CommonRangeEntityDAO;
 
 public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
 

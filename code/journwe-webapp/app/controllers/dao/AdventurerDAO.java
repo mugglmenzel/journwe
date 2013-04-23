@@ -1,10 +1,10 @@
 package controllers.dao;
 
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodb.model.AttributeValue;
-import com.amazonaws.services.dynamodb.model.ComparisonOperator;
-import com.amazonaws.services.dynamodb.model.Condition;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
 import controllers.dao.common.CommonEntityDAO;
 import controllers.dao.common.CommonRangeEntityDAO;
 import models.Adventurer;
@@ -28,16 +28,21 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
     }
 
     public Iterator<Adventurer> all(String advId) {
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression(new AttributeValue(advId)).withConsistentRead(true);
-        return pm.query(Adventurer.class, query).iterator();
+    	// TODO
+//        DynamoDBQueryExpression query = new DynamoDBQueryExpression(new AttributeValue(advId)).withConsistentRead(true);
+//        return pm.query(Adventurer.class, query).iterator();
+    	return null;
+        
         //DynamoDBScanExpression scan = new DynamoDBScanExpression();
         //scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
         //return pm.scan(Adventurer.class, scan).iterator();
     }
 
     public List<Adventurer> all(int max, String advId) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
-        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.scanPage(Adventurer.class, scan).getResults();
+    	// TODO
+//        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
+//        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
+//        return pm.scanPage(Adventurer.class, scan).getResults();
+    	return null;
     }
 }

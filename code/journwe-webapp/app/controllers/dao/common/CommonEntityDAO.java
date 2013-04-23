@@ -1,6 +1,5 @@
 package controllers.dao.common;
 
-import java.lang.reflect.ParameterizedType;
 
 public abstract class CommonEntityDAO<T> extends CommonDAO<T> implements IParentDAO<T> {
 

@@ -1,11 +1,7 @@
 package controllers.dao;
 
-import controllers.dao.common.CommonEntityDAO;
 import models.User;
-
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig;
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig.ConsistentReads;
-import com.amazonaws.services.dynamodb.model.ResourceNotFoundException;
+import controllers.dao.common.CommonEntityDAO;
 
 public class UserDAO extends CommonEntityDAO<User> {
 

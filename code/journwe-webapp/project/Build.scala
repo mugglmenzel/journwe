@@ -12,7 +12,7 @@ object ApplicationBuild extends Build {
     javaCore,
     // javaJdbc,
     javaEbean,
-    "com.amazonaws" % "aws-java-sdk" % "1.3.33",
+    "com.amazonaws" % "aws-java-sdk" % "1.4.2.1",
     "com.feth"    %% "play-authenticate" % "0.2.5-SNAPSHOT",
     "com.restfb" % "restfb" % "1.6.12",
     "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5"
@@ -27,7 +27,6 @@ object ApplicationBuild extends Build {
     // Repository for authenticate
     resolvers += Resolver.url("play-authenticate (release)", url("http://joscha.github.com/play-authenticate/repo/releases/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns)
-
   )
 
 }

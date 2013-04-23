@@ -1,7 +1,5 @@
 package controllers.dao.common;
 
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapperConfig;
-
 public abstract class CommonRangeEntityDAO<T> extends CommonDAO<T> implements IChildDAO<T> {
 
     protected CommonRangeEntityDAO(Class<T> clazz) {

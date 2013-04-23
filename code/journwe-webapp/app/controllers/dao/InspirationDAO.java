@@ -1,9 +1,9 @@
 package controllers.dao;
 
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodb.model.AttributeValue;
-import com.amazonaws.services.dynamodb.model.ComparisonOperator;
-import com.amazonaws.services.dynamodb.model.Condition;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
 import controllers.dao.common.CommonEntityDAO;
 import models.Inspiration;
 
@@ -13,22 +13,23 @@ import java.util.Map;
 
 public class InspirationDAO extends CommonEntityDAO<Inspiration> {
 
-    /**
-     *
-     */
     public InspirationDAO() {
         super(Inspiration.class);
     }
 
     public List<Inspiration> all(int max) {
-        return pm.scanPage(Inspiration.class,
-                new DynamoDBScanExpression().withLimit(max)).getResults();
+    	// TODO
+//        return pm.scanPage(Inspiration.class,
+//                new DynamoDBScanExpression().withLimit(max)).getResults();
+    	return null;
     }
 
     public List<Inspiration> all(int max, String catId) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
-        scan.addFilterCondition("inspirationCategoryId", new Condition().withAttributeValueList(new AttributeValue(catId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.scanPage(Inspiration.class, scan).getResults();
+    	// TODO
+//        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
+//        scan.addFilterCondition("inspirationCategoryId", new Condition().withAttributeValueList(new AttributeValue(catId)).withComparisonOperator(ComparisonOperator.EQ));
+//        return pm.scanPage(Inspiration.class, scan).getResults();
+    	return null;
     }
 
     public Map<String, String> allOptionsMap(int max) {

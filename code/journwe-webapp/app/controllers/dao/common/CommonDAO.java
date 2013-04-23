@@ -2,7 +2,7 @@ package controllers.dao.common;
 
 import play.Logger;
 
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 
 public abstract class CommonDAO<T> implements IDAO<T> {
