@@ -1,30 +1,29 @@
 package models;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import play.data.validation.Constraints.Email;
 
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBTable;
-
-@DynamoDBTable(tableName="journwe-subscriber")
+@DynamoDBTable(tableName = "journwe-subscriber")
 public class Subscriber {
-	
-	@Email
-	private String email;
 
-	/**
-	 * @return the email
-	 */
-	@DynamoDBHashKey
-	public String getEmail() {
-		return email;
-	}
+    @Email
+    private String email;
 
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    /**
+     * @return the email
+     */
+    @DynamoDBHashKey
+    public String getEmail() {
+        return email;
+    }
 
-	
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
 }

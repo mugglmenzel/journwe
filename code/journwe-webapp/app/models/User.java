@@ -1,6 +1,6 @@
 package models;
 
-import com.amazonaws.services.dynamodb.datamodeling.*;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 import com.feth.play.module.pa.user.EmailIdentity;

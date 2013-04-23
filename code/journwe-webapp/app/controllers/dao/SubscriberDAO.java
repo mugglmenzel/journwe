@@ -13,10 +13,4 @@ public class SubscriberDAO extends CommonEntityDAO<Subscriber> {
         super(Subscriber.class);
     }
 
-    @Override
-	public Subscriber get(String id) {
-		return pm.load(Subscriber.class, id, new DynamoDBMapperConfig(
-				ConsistentReads.EVENTUAL));
-	}
-
 }

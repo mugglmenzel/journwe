@@ -1,6 +1,9 @@
 package models;
 
-import com.amazonaws.services.dynamodb.datamodeling.*;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMarshalling;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import models.helpers.EnumMarshaller;
 
 /**
@@ -47,6 +50,6 @@ public class Adventurer {
     }
 
 
-
-    public static class ParticipationMarshaller extends EnumMarshaller<EAdventurerParticipation> {}
+    public static class ParticipationMarshaller extends EnumMarshaller<EAdventurerParticipation> {
+    }
 }

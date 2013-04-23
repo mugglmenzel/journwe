@@ -18,18 +18,14 @@ public class InspirationDAO extends CommonEntityDAO<Inspiration> {
     }
 
     public List<Inspiration> all(int max) {
-    	// TODO
-//        return pm.scanPage(Inspiration.class,
-//                new DynamoDBScanExpression().withLimit(max)).getResults();
-    	return null;
+        return pm.scan(Inspiration.class,
+               new DynamoDBScanExpression().withLimit(max));
     }
 
     public List<Inspiration> all(int max, String catId) {
-    	// TODO
-//        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
-//        scan.addFilterCondition("inspirationCategoryId", new Condition().withAttributeValueList(new AttributeValue(catId)).withComparisonOperator(ComparisonOperator.EQ));
-//        return pm.scanPage(Inspiration.class, scan).getResults();
-    	return null;
+        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
+        scan.addFilterCondition("inspirationCategoryId", new Condition().withAttributeValueList(new AttributeValue(catId)).withComparisonOperator(ComparisonOperator.EQ));
+        return pm.scan(Inspiration.class, scan);
     }
 
     public Map<String, String> allOptionsMap(int max) {

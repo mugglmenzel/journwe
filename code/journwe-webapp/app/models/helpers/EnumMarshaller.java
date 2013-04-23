@@ -1,6 +1,6 @@
 package models.helpers;
 
-import com.amazonaws.services.dynamodb.datamodeling.DynamoDBMarshaller;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMarshaller;
 import models.EAdventurerParticipation;
 import models.EUserRole;
 

@@ -5,14 +5,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
-import controllers.dao.common.CommonEntityDAO;
 import controllers.dao.common.CommonRangeEntityDAO;
 import models.Adventurer;
-import models.Inspiration;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,21 +25,17 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
     }
 
     public Iterator<Adventurer> all(String advId) {
-    	// TODO
-//        DynamoDBQueryExpression query = new DynamoDBQueryExpression(new AttributeValue(advId)).withConsistentRead(true);
-//        return pm.query(Adventurer.class, query).iterator();
-    	return null;
-        
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(new AttributeValue(advId)).withConsistentRead(true);
+        return pm.query(Adventurer.class, query).iterator();
+
         //DynamoDBScanExpression scan = new DynamoDBScanExpression();
         //scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
         //return pm.scan(Adventurer.class, scan).iterator();
     }
 
     public List<Adventurer> all(int max, String advId) {
-    	// TODO
-//        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
-//        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-//        return pm.scanPage(Adventurer.class, scan).getResults();
-    	return null;
+        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
+        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
+        return pm.scan(Adventurer.class, scan);
     }
 }
