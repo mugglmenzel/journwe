@@ -19,10 +19,8 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     }
 
     public List<Category> all(int max) {
-    	// TODO
-//        return pm.scanPage(Category.class,
-//                new DynamoDBScanExpression().withLimit(max)).getResults();
-    	return null;
+        return pm.scan(Category.class,
+                new DynamoDBScanExpression().withLimit(max));
     }
 
     public Map<String, String> allOptionsMap(int max) {
