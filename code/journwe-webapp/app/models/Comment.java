@@ -44,39 +44,39 @@ public class Comment {
 
     @DynamoDBRangeKey(attributeName = "commentThreadId")
     @DynamoDBAttribute
-    protected String getCommentThreadId() {
+    public String getCommentThreadId() {
         return commentThreadId;
     }
 
-    protected void setCommentThreadId(String commentThreadId) {
+    public void setCommentThreadId(String commentThreadId) {
         this.commentThreadId = commentThreadId;
     }
 
     @DynamoDBAttribute
-    protected String getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    protected void setUserId(String userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    @DynamoDBIndexRangeKey(attributeName = "timestamp")
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "timestamp-index", attributeName = "timestamp")
     @DynamoDBAttribute
-    protected Long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    protected void setTimestamp(Long time) {
+    public void setTimestamp(Long time) {
         this.timestamp = time;
     }
 
     @DynamoDBAttribute
-    protected String getText() {
+    public String getText() {
         return text;
     }
 
-    protected void setText(String text) {
+    public void setText(String text) {
         this.text = text;
     }
 

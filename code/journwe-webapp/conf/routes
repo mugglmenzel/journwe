@@ -32,6 +32,12 @@ GET		/adventure/:id			                                    controllers.AdventureC
 
 GET		/inspiration/:id	                						controllers.InspirationController.get(id:String)
 
+# Comments
+GET		/comment/new											    controllers.CommentController.create()
+POST	/comment/save												controllers.CommentController.save()
+GET		/comment/:id/delete											controllers.CommentController.delete(id:String)
+GET 	/comment/:id/edit											controllers.CommentController.edit(id:String)
+GET 	/comments													controllers.CommentController.index()
 
 # Facebook
 GET     /fbtest                                						controllers.FbController.test()

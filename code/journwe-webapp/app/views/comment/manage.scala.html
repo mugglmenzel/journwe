@@ -1,4 +1,4 @@
-@(commentForm: Form[Comment])(comments: List[Comment])
+@(commentForm: Form[Comment])(comments: Iterator[Comment])
 
 @import helper._
 @import fieldConstructor._
@@ -8,12 +8,16 @@
 @main("Manage Comments"){Manage Comments} {
   
 	<h2>Comments</h2>
-	<table class="table table-striped">
+	@if(comments != null) {
+		<table class="table table-striped">
 		
-	@for(comment <- comments) {
-		<tr><td>@comment.getId()</td><td>@comment.getText()</td><td><a href="@routes.CommentController.edit(ccomment.getId())"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.CommentController.delete(comment.getId())"><i class="icon-trash"></i>delete</a></td></tr>
+		while (comments.hasNext){
+		    @defining(comments.next) { comment =>
+			<tr><td>@comment.getId()</td><td>@comment.getText()</td><td><a href="@routes.CommentController.edit(comment.getId())"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.CommentController.delete(comment.getId())"><i class="icon-trash"></i>delete</a></td></tr>
+			}
+		}
+		</table>
 	}
-	</table>
 
 	<h2>Comment Form</h2>
 
