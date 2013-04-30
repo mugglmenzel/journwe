@@ -10,7 +10,9 @@ import controllers.auth.SecuredAdminUser;
 import controllers.dao.AdventureDAO;
 import controllers.dao.AdventurerDAO;
 import controllers.dao.InspirationDAO;
+import controllers.dao.TodoDAO;
 import models.*;
+import models.Todo;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -20,10 +22,12 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.adventure.create;
 import views.html.adventure.getAdventurers;
+import views.html.adventure.getTodos;
 import views.html.adventure.getIndex;
 
 import java.io.File;
 import java.util.Map;
+import play.libs.Json;
 
 import static play.data.Form.form;
 
@@ -46,6 +50,54 @@ public class AdventureController extends Controller {
         Adventurer advr = new AdventurerDAO().get(id, usr.getId());
 
         return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(id), advr == null ? null : advr.getParticipationStatus().name()));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result getTodos(String id) {
+        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventure adv = new AdventureDAO().get(id);
+
+        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), new TodoDAO().all(id), usr.getId()));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result addTodos(String id) {
+
+        DynamicForm requestData = form().bindFromRequest();
+
+        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+        models.Todo todo = new models.Todo();
+        todo.setAdventureId(id);
+        todo.setUserId(usr.getId());
+        todo.setTitle(requestData.get("title"));
+
+        new TodoDAO().save(todo);
+
+        return ok(Json.toJson(todo));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result setTodos(String id, String tid) {
+
+        DynamicForm requestData = form().bindFromRequest();
+
+        models.Todo todo = new TodoDAO().get(tid, id);
+
+        String status = requestData.get("status").toUpperCase();
+        todo.setStatus(EStatus.valueOf(status));
+
+        new TodoDAO().save(todo);
+
+        return ok(Json.toJson(todo)); //TODO: Error handling
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result deleteTodos(String id, String tid) {
+
+        new TodoDAO().delete(tid, id);
+
+        return ok(); //TODO: Error handling
     }
 
     @Security.Authenticated(SecuredAdminUser.class)

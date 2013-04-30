@@ -9,7 +9,7 @@
         <li @if(active == "adventurers"){class="active"}><a href="@routes.AdventureController.getAdventurers(adv.getId())"><i class="icon-th"></i>Adventurers</a></li>
         <li @if(active == "messages"){class="active"}><a href="#messages"><i class="icon-search"></i>Messages</a></li>
         <li @if(active == "time"){class="active"}><a href="#time"><i class="icon-search"></i>Date &amp; Time</a></li>
-        <li @if(active == "packing"){class="active"}><a href="#packing"><i class="icon-search"></i>Packing List</a></li>
+        <li @if(active == "todo"){class="active"}><a href="@routes.AdventureController.getTodos(adv.getId())"><i class="icon-th"></i>Packing List</a></li>
         <li @if(active == "files"){class="active"}><a href="#files"><i class="icon-search"></i>Files</a></li>
     </ul>
     <div>

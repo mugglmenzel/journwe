@@ -20,8 +20,8 @@
             @for(cat <- categories) {
             <li
             @if(cat.getCategory().getId() == catId) {class="active"}><a
-                href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())">@cat.getCategory().getName()
-            <span class="badge badge-info pull-right">@cat.getCount()</span></a></li>
+                href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())"><span class="badge badge-info pull-right">@cat.getCount()</span>@cat.getCategory().getName()
+            </a></li>
             }
         </ul>
     </div>

@@ -1,0 +1,110 @@
+@(adv: Adventure, ins: Inspiration)(list: Map[String, List[Todo]])(user: String)
+
+@import controllers.dao.UserDAO
+@import models.EStatus
+
+@get(adv, ins, "todo") {
+
+
+<h3>My Packing List</h3>
+<table class="table table-striped table-hover table-my-todos">
+    <thead>
+        <tr><th></th><th>Things to do</th><th></th></tr>
+    </thead>
+    <tbody>
+        @if(list.containsKey(user)){
+            @for(todo <- list.get(user)) {
+                <tr class="status-@todo.getStatus() todo-entry" data-id="@todo.getId()">
+                    <td>
+                        <input type="checkbox" class="input-status" @if(todo.getStatus()==EStatus.COMPLETE){checked}/>
+                    </td><td>@todo.getTitle()</td><td><a href="#" class="btn-delete"><i class="icon-trash"></i>Delete</a></td></tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="input-append">
+    <input type="text"/>
+    <button class="btn btn-add-todo" type="button"><i class="icon-plus"></i> Add </button>
+</div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+@for(usr <- list.keySet()) {
+    @if(usr != user){ 
+        <h3>Packing List for @{new UserDAO().get(usr).getName()}</h3>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr><th></th><th>Things to do</th><th></th></tr>
+            </thead>
+            <tbody>
+                @for(todo <- list.get(usr)) {
+                    <tr><td><input type="checkbox" disabled="true" @if(todo.getStatus()==EStatus.COMPLETE){checked}/></td><td>@todo.getTitle()</td><td><a href="#"><i class="icon-arrow-right"></i>Copy to my list</a></td></tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+<script type="text/javascript">
+    $(function(){
+
+        $('.btn-add-todo').on('click', function(){
+            var btn = $(this),
+                fld = btn.prev();
+
+            $.post(window.location.pathname, {
+                title: fld.val()
+            }, function(res){
+                $('.table-my-todos tbody').append($('<tr class="status-'+res.status+' todo-entry" data-id="'+res.id+'"><td><input  class="input-status" type="checkbox"/></td><td>'+res.title+'</td><td><a href="#" class="btn-delete"><i class="icon-trash"></i>Delete</a></td></tr>').fadeIn());
+
+                fld.val("");
+            });
+        });
+
+
+
+        $('table.table-my-todos').on('click', 'input.input-status', function(){
+
+            var input = $(this),
+                tr = input.parents('.todo-entry'),
+                id = tr.attr('data-id');
+
+            $.ajax({
+                url: window.location.pathname+'/'+id,
+                data: {
+                    status: input.is(':checked') ? "COMPLETE" : "NEW"
+                },
+                type: 'PUT',
+                success: function(res) {
+                    tr.get(0).className = 'status-'+res.status+' todo-entry';
+                }
+            });
+        });
+
+        $('table.table-my-todos').on('click', 'a.btn-delete', function(e){
+            e.preventDefault();
+
+            var a = $(this),
+                tr = a.parents('.todo-entry'),
+                id = tr.attr('data-id');
+
+            $.ajax({
+                url: window.location.pathname+'/'+id,
+                type: 'DELETE',
+                success: function(res) {
+                    tr.fadeOut(function(){
+                        tr.remove();
+                    });
+                }
+            });
+
+        });
+
+    });
+</script>
+
+}

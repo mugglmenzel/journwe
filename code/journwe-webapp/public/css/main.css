@@ -72,3 +72,13 @@ table.inspiration .images img {
 .tripadvisor .description {
 
 }
+
+.badge {
+	top: -2px;
+	position: relative;
+}
+
+
+.status-COMPLETE {
+	text-decoration: line-through;
+}
