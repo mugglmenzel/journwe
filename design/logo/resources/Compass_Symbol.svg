@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="150" height="150" id="svg2" version="1.1" inkscape:version="0.48.0 r9654" sodipodi:docname="New document 1">
+  <defs id="defs4"/>
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="2.8545365" inkscape:cx="32.005022" inkscape:cy="28.94934" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="false" inkscape:window-width="1280" inkscape:window-height="968" inkscape:window-x="-4" inkscape:window-y="-4" inkscape:window-maximized="1">
+    <inkscape:grid type="xygrid" id="grid3013" empspacing="5" visible="true" enabled="true" snapvisiblegridlinesonly="true"/>
+  </sodipodi:namedview>
+  <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" transform="translate(0,-902.36217)">
+    <path id="path3017" style="fill:#000000;fill-rule:evenodd;stroke:none" d="m 80.444149,988.84356 c -4.327871,-4.32788 -8.655744,-8.65576 -12.983616,-12.98363 -4.335478,8.66336 -8.670956,17.32672 -13.006434,25.99007 8.663348,-4.3355 17.326701,-8.67096 25.99005,-13.00644 z m 6.952937,0.54512 20.455654,-40.9113 -40.911299,20.45565 -20.455652,40.91127 z m -15.53364,-65.55904 c -33.538817,1.1165 -59.498961,40.3052 -46.152206,71.4064 9.365366,26.01156 41.403456,42.22596 67.373979,31.81796 24.476781,-8.378 41.215931,-36.21784 34.408111,-61.75213 -5.26446,-24.29769 -28.87626,-43.48793 -54.069892,-41.50166 l -0.941714,0.0178 -0.618278,0.0117 z m 71.899874,52.99801 c 0,37.62645 -30.50222,68.12865 -68.128617,68.12865 -37.626396,0 -68.1286167,-30.5022 -68.1286167,-68.12865 0,-37.6264 30.5022207,-68.12862 68.1286167,-68.12862 37.626397,0 68.128617,30.50222 68.128617,68.12862 z" inkscape:connector-curvature="0"/>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Open Clip Art Library</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Compass Symbol</dc:title>
+        <dc:date>2010-09-28T02:04:15</dc:date>
+        <dc:description>Compass Symbol for Cricut</dc:description>
+        <dc:source>http://openclipart.org/detail/87583/compass-symbol-by-jhnri4</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>jhnri4</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>black &amp; white</rdf:li>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>compass</rdf:li>
+            <rdf:li>navigation</rdf:li>
+            <rdf:li>symbol</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
