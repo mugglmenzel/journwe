@@ -37,11 +37,11 @@ GET		/adventure/:id			                                    controllers.AdventureC
 GET		/inspiration/:id	                						controllers.InspirationController.get(id:String)
 
 # Comments
-GET		/comment/new											    controllers.CommentController.create()
-POST	/comment/save												controllers.CommentController.save()
-GET		/comment/:id/delete											controllers.CommentController.delete(id:String)
-GET 	/comment/:id/edit											controllers.CommentController.edit(id:String)
-GET 	/comments													controllers.CommentController.index()
+GET		/thread/new/:advid/:topictype/:topicid						controllers.CommentController.createNewThreadAndFirstComment(advid:String, topictype:String, topicid:String)
+GET		/comment/new/:threadId										controllers.CommentController.createComment(threadId:String)
+GET		/comments/:threadId											controllers.CommentController.listComments(threadId:String)
+GET		/threads/:advid/:topictype/:topicid							controllers.CommentController.listCommentThreads(advid:String,topictype:String,topicid:String)
+POST	/comment/save												controllers.CommentController.saveComment()
 
 # Facebook
 GET     /fbtest                                						controllers.FbController.test()

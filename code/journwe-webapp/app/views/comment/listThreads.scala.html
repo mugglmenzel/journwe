@@ -1,0 +1,20 @@
+@(threads: List[CommentThread])
+
+@main("List of threads"){Listem} {
+<h2>Threads</h2>
+@if(threads != null) {
+<table class="table table-striped">
+
+	@for(thread <- threads){
+		<tr>
+			<td>@thread.getThreadId()</td>
+		</tr>
+	}
+</table>
+} else {
+
+<p>No threads here. Want to create the first comment thread?</p>
+
+}
+
+}

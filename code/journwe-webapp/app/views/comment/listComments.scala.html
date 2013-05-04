@@ -1,0 +1,22 @@
+@(comments: List[Comment])
+
+@main("List of comments"){Listem all} {
+<h2>Comments</h2>
+@if(comments != null) {
+<table class="table table-striped">
+	@for(comment <- comments){
+		<tr>
+			<td>@comment.getThreadId()</td>
+			<td>@comment.getUserId()</td>
+			<td>@comment.getTimestamp()</td>
+			<td>@comment.getText()</td>
+		</tr>
+	}
+</table>
+} else {
+
+<p>No comments here. Want to create a new comment?</p>
+
+}
+
+}
