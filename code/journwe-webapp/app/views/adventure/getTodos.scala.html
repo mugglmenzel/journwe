@@ -42,7 +42,7 @@
             </thead>
             <tbody>
                 @for(todo <- list.get(usr)) {
-                    <tr><td><input type="checkbox" disabled="true" @if(todo.getStatus()==EStatus.COMPLETE){checked}/></td><td>@todo.getTitle()</td><td><a href="#"><i class="icon-arrow-right"></i>Copy to my list</a></td></tr>
+                    <tr><td><input type="checkbox" disabled="true" @if(todo.getStatus()==EStatus.COMPLETE){checked}/></td><td>@todo.getTitle()</td><td><a href="#" class="btn-copy"><i class="icon-arrow-right"></i>Copy to my list</a></td></tr>
                 }
             </tbody>
         </table>
@@ -103,6 +103,23 @@
             });
 
         });
+
+        $('.btn-copy').on('click', function(e){
+            e.preventDefault();
+
+            var btn = $(this),
+                tr = btn.parents('tr'),
+                td = tr.find('td'),
+                title = $(td[1]).text();
+
+            $.post(window.location.pathname, {
+                title: title
+            }, function(res){
+                $('.table-my-todos tbody').append($('<tr class="status-'+res.status+' todo-entry" data-id="'+res.id+'"><td><input  class="input-status" type="checkbox"/></td><td>'+res.title+'</td><td><a href="#" class="btn-delete"><i class="icon-trash"></i>Delete</a></td></tr>').fadeIn());
+            });
+        });        
+
+        
 
     });
 </script>
