@@ -4,6 +4,14 @@
 
 <div class="row-fluid inspiration">
     <div class="span9">
+        <div class="weather-container">
+            @for(period <- ins.getWeather()){
+                <div class="weather">
+                    <img src="/assets/img/weather/@{period.getIcon()}.svg" title="@period.getDate() - @period.getCondition()"/>
+                    <span class="high-temperature">@period.getTemperature()°C</span><span class="low-temperature">@period.getLowTemperature()°C</span>
+                </div>
+            }
+        </div>
         <p>
             @Html(ins.getDescription())
         </p>

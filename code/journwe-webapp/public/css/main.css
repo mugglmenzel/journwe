@@ -82,3 +82,40 @@ table.inspiration .images img {
 .status-COMPLETE {
 	text-decoration: line-through;
 }
+
+
+.weather-container {
+	float: right;
+	margin: 0px 0px 20px 20px;
+}
+
+
+.weather-container h3 {
+	font-size: 16px;
+}
+
+.weather {
+	float: left;
+	text-align: center;
+	margin-right: 20px;
+}
+
+.weather:last-child {
+	margin-right: 0px;
+}
+
+
+
+.weather img {
+	width: 100px;
+	display: block;
+}
+
+.weather .high-temperature {
+	font-size: 24px;
+}
+
+.weather .low-temperature {
+	font-size: 14px;
+	margin-left: 5px;
+}
