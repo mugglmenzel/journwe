@@ -28,6 +28,7 @@ body {
 
 .navbar-inverse .brand, .hero-unit h1 {
 	color: #E97802;
+	vertical-align: text-bottom;
 }
 
 .spacer100 {
