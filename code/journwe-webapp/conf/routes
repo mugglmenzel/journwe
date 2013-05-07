@@ -37,10 +37,10 @@ GET		/adventure/:id			                                    controllers.AdventureC
 GET		/inspiration/:id	                						controllers.InspirationController.get(id:String)
 
 # Comments
-GET		/thread/new/:advid/:topictype/:topicid						controllers.CommentController.createNewThreadAndFirstComment(advid:String, topictype:String, topicid:String)
+GET		/thread/new/:advid/:topictype								controllers.CommentController.createNewThreadAndFirstComment(advid:String, topictype:String)
 GET		/comment/new/:threadId										controllers.CommentController.createComment(threadId:String)
 GET		/comments/:threadId											controllers.CommentController.listComments(threadId:String)
-GET		/threads/:advid/:topictype/:topicid							controllers.CommentController.listCommentThreads(advid:String,topictype:String,topicid:String)
+GET		/threads/:advid												controllers.CommentController.listCommentThreads(advid:String)
 POST	/comment/save												controllers.CommentController.saveComment()
 
 # Facebook
