@@ -22,6 +22,8 @@ public class Inspiration {
 
     private String pinterest;
 
+    private String weatherId;
+
     /**
      * @return the inspirationCategoryId
      */
@@ -133,7 +135,25 @@ public class Inspiration {
      */
     @DynamoDBIgnore
     public Weather getWeather() {
-        return WeatherFactory.getWeather("Tanzania/Kilimanjaro"); // Store in the db
+        if (this.weatherId == null){
+            return null;
+        }
+        return WeatherFactory.getWeather(this.weatherId);
+    }
+
+    /**
+     *
+     */
+    @DynamoDBAttribute
+    public String getWeatherId() {
+        return this.weatherId;
+    }
+
+    /**
+     *
+     */
+    public void setWeatherId(String weatherId) {
+        this.weatherId = weatherId;
     }
 
     /* (non-Javadoc)
