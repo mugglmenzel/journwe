@@ -1,15 +1,22 @@
 package models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.ecwid.mailchimp.MailChimpClient;
+import com.ecwid.mailchimp.MailChimpException;
+import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 import com.feth.play.module.pa.user.EmailIdentity;
 import com.feth.play.module.pa.user.NameIdentity;
+import controllers.dao.SubscriberDAO;
 import controllers.dao.UserDAO;
 import controllers.dao.UserEmailDAO;
 import controllers.dao.UserSocialDAO;
 import models.helpers.EnumMarshaller;
 import play.data.validation.Constraints.Required;
+import play.mvc.Controller;
+
+import java.io.IOException;
 
 @DynamoDBTable(tableName = "journwe-user")
 public class User {
@@ -130,6 +137,30 @@ public class User {
             email.setEmail(identity.getEmail());
             email.setValidated(false);
             new UserEmailDAO().save(email);
+
+            Subscriber sub = new Subscriber();
+            sub.setEmail(identity.getEmail());
+            if (new SubscriberDAO().save(sub))
+                Controller.flash("success", "You are subscribed now! We'll let you know.");
+            else
+                Controller.flash("error", "You could not be subscribed :(");
+
+            try {
+                ListSubscribeMethod listSubscribeMethod = new ListSubscribeMethod();
+                listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
+                listSubscribeMethod.id = "c18d5a32fb";
+                listSubscribeMethod.email_address = sub.getEmail();
+                listSubscribeMethod.double_optin = false;
+                listSubscribeMethod.update_existing = true;
+                listSubscribeMethod.send_welcome = true;
+
+                new MailChimpClient().execute(listSubscribeMethod);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (MailChimpException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
         }
 
         final UserSocial social = new UserSocial();
