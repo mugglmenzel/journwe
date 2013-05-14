@@ -20,8 +20,9 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
 import controllers.auth.SecuredUser;
-import models.dao.CommentDAO;
-import models.dao.CommentThreadDAO;
+import controllers.dao.CommentDAO;
+import controllers.dao.CommentThreadDAO;
+import play.libs.Json;
 
 public class CommentController extends Controller {
 
@@ -29,18 +30,18 @@ public class CommentController extends Controller {
 
 	@Security.Authenticated(SecuredUser.class)
 	public static Result createNewThreadAndFirstComment(String advId,
-			String topicType, String objectId) {
+			String topicType) {
 		CommentThread t = new CommentThread();
 		t.setAdventureId(advId);
-		t.setTopicId(topicType,objectId);
-		t.setThreadId(t.getAdventureId(),t.getTopicId());
+		t.setTopicType(topicType);
+		t.setThreadId(advId,topicType);
 		try {
 			if (new CommentThreadDAO().save(t)) {
 				return createComment(t.getThreadId());
 			} else {
 				throw new Exception(
 						"Creating a new comment thread with thread id "
-								+ t.getTopicId() + " has failed.");
+								+ t.getThreadId() + " has failed.");
 			}
 		} catch (Exception e) {
 			Logger.error(e.getMessage());
@@ -69,7 +70,7 @@ public class CommentController extends Controller {
 		Logger.debug("ts: "+comment.getTimestamp());
 			if (new CommentDAO().save(comment)) {
 				flash("Posted new comment.");
-				return created();
+				return created(Json.toJson(comment));
 			} else {
 				throw new Exception("Saving comment failed.");
 			}
@@ -82,12 +83,12 @@ public class CommentController extends Controller {
 	
 	@Security.Authenticated(SecuredUser.class)
 	public static Result listComments(String threadId) {
-		return ok(listComments.render(new CommentDAO().getComments(threadId)));
+		return ok(Json.toJson(new CommentDAO().getComments(threadId)));
 	}
 	
 	@Security.Authenticated(SecuredUser.class)
-	public static Result listCommentThreads(String adventureId, String topicType, String objectId) {
-		return ok(listThreads.render(new CommentThreadDAO().getCommentThreads(adventureId,topicType,objectId)));
+	public static Result listCommentThreads(String adventureId) {
+		return ok(listThreads.render(new CommentThreadDAO().getCommentThreads(adventureId)));
 	}
 
 }
