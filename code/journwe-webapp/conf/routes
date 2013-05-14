@@ -34,7 +34,7 @@ GET     /adventure/:id/participate                                  controllers.
 GET     /adventure/:id/participate/:status                          controllers.AdventureController.participateStatus(id:String, status:String)
 GET		/adventure/:id			                                    controllers.AdventureController.getIndex(id:String)
 
-GET     /adv/:hash                                             controllers.AdventureController.getIndexHash(hash:String)
+GET     /adv/:hash                                                   controllers.AdventureController.getIndexHash(hash:String)
 
 GET		/inspiration/:id	                						controllers.InspirationController.get(id:String)
 
