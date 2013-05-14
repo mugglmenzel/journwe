@@ -21,9 +21,8 @@ public class CommentThread {
 	@Required
 	private String adventureId;
 	
-	// this is the id of the object next to which the comment thread is shown
 	@Required
-	private String topicId;
+	private String topicType;
 	
 	private String threadId;
 
@@ -37,21 +36,16 @@ public class CommentThread {
 		this.adventureId = adventureId;
 	}
 
-	@DynamoDBRangeKey(attributeName = "topicId")
+	@DynamoDBRangeKey(attributeName = "topicType")
 	@DynamoDBAttribute
-	public String getTopicId() {
-		return topicId;
+	public String getTopicType() {
+		return topicType;
 	}
 
-	// the topic id is the original object id which is prefixed with the type of the topic/object
-	public void setTopicId(String topicType, String objectId) {
-		this.topicId = topicType+objectId;
+	public void setTopicType(String topicType) {
+		this.topicType = topicType;
 	}
 	
-	public void setTopicId(String topicId) {
-		this.topicId = topicId;
-	}
-
 	@DynamoDBAttribute
 	public String getThreadId() {
 		return threadId;
@@ -61,8 +55,8 @@ public class CommentThread {
 		this.threadId = threadId;
 	}
 
-	public void setThreadId(String advId, String topicId) {
-		this.threadId = advId+topicId;
+	public void setThreadId(String advId, String topicType) {
+		setThreadId(advId+topicType);
 	}
     
 }

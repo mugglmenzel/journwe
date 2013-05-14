@@ -3,6 +3,10 @@ package models;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import play.data.validation.Constraints.Required;
+import models.UserSocial;
+import models.User;
+import controllers.dao.UserSocialDAO;
+import controllers.dao.UserDAO;
 
 /**
  * The comment model with range key = threadId and secondary index = timestamp.
@@ -50,6 +54,16 @@ public class Comment {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @DynamoDBIgnore
+    public User getUser(){
+        UserSocial social = new UserSocialDAO().findBySocialId(this.getUserId());
+
+        if (social != null){
+            return new UserDAO().get(social.getUserId());
+        }
+        return null;
     }
 
 //    @DynamoDBIndexRangeKey(localSecondaryIndexName = "timestamp-index", attributeName = "timestamp")

@@ -29,6 +29,7 @@
     		@inputFile(inspForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
             @textarea(inspForm("tripAdvisor"), '_label -> "TripAdvisor Snipped (see http://www.tripadvisor.com/Widgets)", 'placeholder -> "Some text")
             @inputText(inspForm("pinterest"), '_label -> "Pinterest URL", 'placeholder -> "Pinterest")
+            @inputText(inspForm("weatherId"), '_label -> "Weather", 'placeholder -> "Country/City")
     		@select(
     			inspForm("inspirationCategoryId"), 
     			options(categories), 

@@ -1,0 +1,112 @@
+@(adv: Adventure, topic: String)
+
+<div class="comments">
+
+	<div class="comment-list">
+		<div class="empty"><i class="icon-refresh"></i> Loading...</div>
+	</div>	
+
+	<div class="input-append input-comment">
+	    <input type="text" placeholder="Say hello!"/>
+	    <button class="btn btn-add-comment" type="button"><i class="icon-plus"></i> Comment </button>
+	</div>
+
+
+	<script id="template-comment" type="text/template">
+		<div>
+			<div class="comment-text"><i class="icon-comment"></i> <%= text %></div>
+			<div class="comment-info"><%= user.name %> <small>-</small> <%= time %></div>
+		</div>
+	</script>
+
+	<script>
+
+		$(function(){
+
+			var adventureId = "@adv.getId()",
+				topic = ("@topic"+""),
+				threadId = adventureId+topic,
+				input = $(".input-comment input"),
+				btn = $(".btn-add-comment");
+
+			// A template for one comment entry
+			// Todo Use more appropriate templating (e.g. underscore, handlebar!)
+			var template = function(replace, obj){
+
+					return replace(function(foo, t){
+						t = t.trim();
+						var val = obj;
+						t.split(".").forEach(function(key){
+							val = val[key];
+						});
+						return val;
+					}).trim();
+
+				// A little hacky, but so its only initialized once, but used at the right time!
+				}.bind(this, "".replace.bind($("#template-comment").html(), /<%=(.*?)%>/g)); 
+
+
+			// Formats a date to hh:mm dd.MM.YYYY
+			var format = function(time){
+				time = new Date(parseInt(time, 10));
+
+				var two = function(r){ return (r < 10 ? "0" : "")+r };
+
+				// Todo Use better formating
+				return time.getHours()
+					+ ":"
+					+ two(time.getMinutes())
+					+ " "
+					+ two(time.getDate())
+					+ "."
+					+ two(time.getMonth()+1)
+					+ "."
+					+ two(time.getFullYear());
+			};
+
+
+			// The container for all comments
+			var list = $(".comment-list");
+
+
+			// Perform GET
+			$.get("/comments/"+threadId, function(res){
+				list.html("");
+				res.forEach(function(f){
+					f.time = format(f.timestamp); // Append
+					list.append(template(f));
+				});
+
+				if (!res.length){
+					list.append('<div class="empty"><i class="icon-envelope"></i> Write a first comment!</div>');
+				}
+			});
+
+			// Perform POST
+			btn.click(function(){
+				var val;
+
+				// Check if there is a value
+				if (val = (input.val()||"").trim()){
+
+					input.val(""); // Reset
+
+					$.post("/comment/save", {text: val, threadId: threadId}, function(f){
+						list.find(".empty").remove();
+
+						f.time = format(f.timestamp); // Append
+						list.append($(template(f)).fadeIn());
+					});
+				}
+			});
+
+			input.keyup(function(e) {
+				if(e.keyCode == 13) {
+					btn.click();
+				}
+			});
+
+
+		});
+	</script>
+</div>

@@ -80,10 +80,9 @@ public class InspirationController extends Controller {
             File file = image.getFile();
 
             try {
-                if (!new InspirationDAO().save(ins))
+                if (ins.getId() == null && !new InspirationDAO().save(ins))
                     throw new Exception();
 
-                ins = new InspirationDAO().get(ins.getId());
 
                 Logger.info("got image file " + image.getFilename());
                 if (image.getFilename() != null
@@ -96,7 +95,8 @@ public class InspirationController extends Controller {
                             .withCannedAcl(CannedAccessControlList.PublicRead));
                     ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                             ins.getId() + "/title"));
-                }
+                }  else
+                    ins.setImage(new InspirationDAO().get(ins.getId()).getImage());
 
 
                 if (new InspirationDAO().save(ins)) {

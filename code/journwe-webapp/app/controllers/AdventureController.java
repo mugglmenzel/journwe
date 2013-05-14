@@ -9,6 +9,7 @@ import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
 import models.dao.*;
 import models.*;
+import models.helpers.Hashids;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -41,7 +42,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getIndexHash(String hash) {
-        Adventure adv = new AdventureDAO().get(new AdventureHashDAO().get(0L).getAdventureId());
+        Adventure adv = new AdventureDAO().get(new AdventureHashDAO().get(new Hashids().decrypt(hash)[0]).getAdventureId());
         return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId())));
     }
 
