@@ -24,14 +24,11 @@
 </table>
 
 <div class="input-append">
-    <input type="text"/>
-    <button class="btn btn-add-todo" type="button"><i class="icon-plus"></i> Add </button>
+    <input id="todo-title" type="text"/>
+    <button id="btn-add-todo" class="btn btn-primary" type="button"><i class="icon-plus"></i> Add </button>
 </div>
 
-<br/>
-<br/>
-<br/>
-<br/>
+<div class="spacer30"></div>
 
 @for(usr <- list.keySet()) {
     @if(usr != user){ 
@@ -52,9 +49,9 @@
 <script type="text/javascript">
     $(function(){
 
-        $('.btn-add-todo').on('click', function(){
+        $('#btn-add-todo').on('click', function(){
             var btn = $(this),
-                fld = btn.prev();
+                fld = $('#todo-title');
 
             $.post(window.location.pathname, {
                 title: fld.val()
