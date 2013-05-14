@@ -18,8 +18,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName = "journwe-comment")
 public class Comment {
 
-	@Required
-	private String threadId;
+    @Required
+    private String threadId;
 
     private Long timestamp;
 
@@ -27,18 +27,18 @@ public class Comment {
 
     @Required
     private String text;
-    
 
-	@DynamoDBHashKey(attributeName = "threadId")
-	@DynamoDBAttribute
-	public String getThreadId() {
-		return threadId;
-	}
 
-	public void setThreadId(String threadId) {
-		this.threadId = threadId;
-	}
-	
+    @DynamoDBHashKey(attributeName = "threadId")
+    @DynamoDBAttribute
+    public String getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(String threadId) {
+        this.threadId = threadId;
+    }
+
     @DynamoDBRangeKey(attributeName = "timestamp")
     @DynamoDBAttribute
     public Long getTimestamp() {
@@ -59,10 +59,10 @@ public class Comment {
     }
 
     @DynamoDBIgnore
-    public User getUser(){
+    public User getUser() {
         UserSocial social = new UserSocialDAO().findBySocialId(this.getUserId());
 
-        if (social != null){
+        if (social != null) {
             return new UserDAO().get(social.getUserId());
         }
         return null;
