@@ -120,3 +120,30 @@ table.inspiration .images img {
 	font-size: 14px;
 	margin-left: 5px;
 }
+
+.comments {
+	border-right: 1px solid #ddd;
+}
+
+.comments .empty{
+	color: #999;
+	font-style: italic;
+}
+
+.comment-list > * {
+	margin-bottom: 10px;
+}
+
+.comment-info {
+	color: #999;
+	font-size: 12px;
+}
+
+.comment-info small {
+	color: #BBB;
+}
+
+.input-comment input {
+	width: 120px !important;
+}
+

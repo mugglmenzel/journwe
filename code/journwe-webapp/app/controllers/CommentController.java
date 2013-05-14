@@ -22,6 +22,7 @@ import com.feth.play.module.pa.user.AuthUser;
 import controllers.auth.SecuredUser;
 import controllers.dao.CommentDAO;
 import controllers.dao.CommentThreadDAO;
+import play.libs.Json;
 
 public class CommentController extends Controller {
 
@@ -69,7 +70,7 @@ public class CommentController extends Controller {
 		Logger.debug("ts: "+comment.getTimestamp());
 			if (new CommentDAO().save(comment)) {
 				flash("Posted new comment.");
-				return created();
+				return created(Json.toJson(comment));
 			} else {
 				throw new Exception("Saving comment failed.");
 			}
@@ -82,7 +83,7 @@ public class CommentController extends Controller {
 	
 	@Security.Authenticated(SecuredUser.class)
 	public static Result listComments(String threadId) {
-		return ok(listComments.render(new CommentDAO().getComments(threadId)));
+		return ok(Json.toJson(new CommentDAO().getComments(threadId)));
 	}
 	
 	@Security.Authenticated(SecuredUser.class)
