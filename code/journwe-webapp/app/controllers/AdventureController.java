@@ -42,8 +42,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getIndexHash(String hash) {
-        Adventure adv = new AdventureDAO().get(new AdventureHashDAO().get(new Hashids().decrypt(hash)[0]).getAdventureId());
-        return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+        return getIndex(new AdventureHashDAO().get(new Hashids().decrypt(hash)[0]).getAdventureId());
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -161,6 +160,7 @@ public class AdventureController extends Controller {
 
 
                 if (new AdventureDAO().save(adv)) {
+                    new AdventureHashDAO().save(new AdventureHash(adv.getId()));
 
                     flash("success",
                             "Saved Adventure with image " + adv.getImage()

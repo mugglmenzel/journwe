@@ -1,12 +1,9 @@
 package models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-
+import models.dao.UserDAO;
+import models.dao.UserSocialDAO;
 import play.data.validation.Constraints.Required;
-import models.UserSocial;
-import models.User;
-import controllers.dao.UserSocialDAO;
-import controllers.dao.UserDAO;
 
 /**
  * The comment model with range key = threadId and secondary index = timestamp.
@@ -16,8 +13,8 @@ import controllers.dao.UserDAO;
 @DynamoDBTable(tableName = "journwe-comment")
 public class Comment {
 
-	@Required
-	private String threadId;
+    @Required
+    private String threadId;
 
     private Long timestamp;
 
@@ -25,18 +22,18 @@ public class Comment {
 
     @Required
     private String text;
-    
 
-	@DynamoDBHashKey(attributeName = "threadId")
-	@DynamoDBAttribute
-	public String getThreadId() {
-		return threadId;
-	}
 
-	public void setThreadId(String threadId) {
-		this.threadId = threadId;
-	}
-	
+    @DynamoDBHashKey(attributeName = "threadId")
+    @DynamoDBAttribute
+    public String getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(String threadId) {
+        this.threadId = threadId;
+    }
+
     @DynamoDBRangeKey(attributeName = "timestamp")
     @DynamoDBAttribute
     public Long getTimestamp() {
@@ -57,10 +54,10 @@ public class Comment {
     }
 
     @DynamoDBIgnore
-    public User getUser(){
+    public User getUser() {
         UserSocial social = new UserSocialDAO().findBySocialId(this.getUserId());
 
-        if (social != null){
+        if (social != null) {
             return new UserDAO().get(social.getUserId());
         }
         return null;
