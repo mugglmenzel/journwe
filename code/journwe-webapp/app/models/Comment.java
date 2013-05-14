@@ -1,12 +1,14 @@
 package models;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
-
+import models.dao.UserDAO;
+import models.dao.UserSocialDAO;
 import play.data.validation.Constraints.Required;
-import models.UserSocial;
-import models.User;
-import controllers.dao.UserSocialDAO;
-import controllers.dao.UserDAO;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 /**
  * The comment model with range key = threadId and secondary index = timestamp.

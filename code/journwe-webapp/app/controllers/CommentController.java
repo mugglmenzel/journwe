@@ -3,26 +3,25 @@ package controllers;
 import static play.data.Form.form;
 import models.Comment;
 import models.CommentThread;
+import models.dao.CommentDAO;
+import models.dao.CommentThreadDAO;
 
 import org.joda.time.DateTime;
 
 import play.Logger;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.comment.createComment;
-import views.html.comment.listComments;
 import views.html.comment.listThreads;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
 import controllers.auth.SecuredUser;
-import controllers.dao.CommentDAO;
-import controllers.dao.CommentThreadDAO;
-import play.libs.Json;
 
 public class CommentController extends Controller {
 
