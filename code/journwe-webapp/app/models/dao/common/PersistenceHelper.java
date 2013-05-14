@@ -1,4 +1,4 @@
-package controllers.dao.common;
+package models.dao.common;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;

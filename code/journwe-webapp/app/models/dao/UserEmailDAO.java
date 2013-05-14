@@ -1,7 +1,7 @@
-package controllers.dao;
+package models.dao;
 
 import models.UserEmail;
-import controllers.dao.common.CommonRangeEntityDAO;
+import models.dao.common.CommonRangeEntityDAO;
 
 public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
 

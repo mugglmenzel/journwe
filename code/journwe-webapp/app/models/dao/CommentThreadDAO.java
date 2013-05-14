@@ -1,4 +1,4 @@
-package controllers.dao;
+package models.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 
-import controllers.dao.common.CommonRangeEntityDAO;
+import models.dao.common.CommonRangeEntityDAO;
 
 public class CommentThreadDAO<T> extends CommonRangeEntityDAO<Thread> {
 	

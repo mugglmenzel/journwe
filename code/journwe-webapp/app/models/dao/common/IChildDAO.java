@@ -1,4 +1,4 @@
-package controllers.dao.common;
+package models.dao.common;
 
 public interface IChildDAO<T> extends IDAO<T> {
 

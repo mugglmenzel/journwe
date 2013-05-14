@@ -5,9 +5,9 @@ import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 import com.feth.play.module.pa.user.EmailIdentity;
 import com.feth.play.module.pa.user.NameIdentity;
-import controllers.dao.UserDAO;
-import controllers.dao.UserEmailDAO;
-import controllers.dao.UserSocialDAO;
+import models.dao.UserDAO;
+import models.dao.UserEmailDAO;
+import models.dao.UserSocialDAO;
 import models.helpers.EnumMarshaller;
 import play.data.validation.Constraints.Required;
 

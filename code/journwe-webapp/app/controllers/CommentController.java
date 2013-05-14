@@ -20,8 +20,8 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
 import controllers.auth.SecuredUser;
-import controllers.dao.CommentDAO;
-import controllers.dao.CommentThreadDAO;
+import models.dao.CommentDAO;
+import models.dao.CommentThreadDAO;
 
 public class CommentController extends Controller {
 

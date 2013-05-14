@@ -1,7 +1,7 @@
-package controllers.dao;
+package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import controllers.dao.common.CommonEntityDAO;
+import models.dao.common.CommonEntityDAO;
 import models.Adventure;
 
 import java.util.List;

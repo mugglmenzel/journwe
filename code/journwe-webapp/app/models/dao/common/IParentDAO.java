@@ -1,4 +1,4 @@
-package controllers.dao.common;
+package models.dao.common;
 
 public interface IParentDAO<T> extends IDAO<T> {
 

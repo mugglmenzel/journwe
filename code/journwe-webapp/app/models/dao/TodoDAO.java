@@ -1,11 +1,10 @@
-package controllers.dao;
+package models.dao;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
-import controllers.dao.common.CommonRangeEntityDAO;
+import models.dao.common.CommonRangeEntityDAO;
 import models.Todo;
 
 import java.util.List;

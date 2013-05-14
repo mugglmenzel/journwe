@@ -1,4 +1,4 @@
-package controllers.dao.common;
+package models.dao.common;
 
 public abstract class CommonRangeEntityDAO<T> extends CommonDAO<T> implements IChildDAO<T> {
 

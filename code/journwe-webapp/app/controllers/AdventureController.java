@@ -7,12 +7,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
-import controllers.dao.AdventureDAO;
-import controllers.dao.AdventurerDAO;
-import controllers.dao.InspirationDAO;
-import controllers.dao.TodoDAO;
+import models.dao.*;
 import models.*;
-import models.Todo;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -40,6 +36,12 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getIndex(String id) {
         Adventure adv = new AdventureDAO().get(id);
+        return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result getIndexHash(String hash) {
+        Adventure adv = new AdventureDAO().get(new AdventureHashDAO().get(0L).getAdventureId());
         return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId())));
     }
 

@@ -8,7 +8,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.category.manage;
 import controllers.auth.SecuredAdminUser;
-import controllers.dao.CategoryDAO;
+import models.dao.CategoryDAO;
 
 public class CategoryController extends Controller {
 

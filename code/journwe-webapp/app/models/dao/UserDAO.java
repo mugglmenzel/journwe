@@ -1,7 +1,7 @@
-package controllers.dao;
+package models.dao;
 
 import models.User;
-import controllers.dao.common.CommonEntityDAO;
+import models.dao.common.CommonEntityDAO;
 
 public class UserDAO extends CommonEntityDAO<User> {
 

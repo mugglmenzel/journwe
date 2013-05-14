@@ -1,4 +1,4 @@
-package controllers.dao;
+package models.dao;
 
 import models.UserSocial;
 
@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 
-import controllers.dao.common.CommonRangeEntityDAO;
+import models.dao.common.CommonRangeEntityDAO;
 
 public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
 

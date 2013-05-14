@@ -1,6 +1,6 @@
 @(adv: Adventure, ins: Inspiration)(adventurers: Iterator[Adventurer])(status: String)
 
-@import controllers.dao.UserDAO
+@import models.dao.UserDAO
 
 @cssForStatus(status:String) = {
     @status match {
