@@ -9,7 +9,12 @@
     @form(routes.AdventureController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
     	<fieldset>
        		@inputText(advForm("name"), '_label -> "Adventure name")
-            @inputText(advForm("shortname"), '_label -> "Shortname")
+            @helper.input(advForm("shortname"), '_label -> "Shortname") { (id, name, value, args) =>
+            <div class="input-append">
+                <input type="text" name="@name" id="@id" @toHtmlArgs(args)>
+                <span class="add-on">@@journwe.com</span>
+            </div>
+            }
     		@select(
     			advForm("inspirationId"), 
     			options(inspirations), 

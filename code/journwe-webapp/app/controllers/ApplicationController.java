@@ -19,9 +19,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.imprint;
-import views.html.index;
-import views.html.subscribe;
+import views.html.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,10 +74,6 @@ public class ApplicationController extends Controller {
         return ok(subscribe.render(subForm));
     }
 
-    @Cached(key = "imprint")
-    public static Result imprint() {
-        return ok(imprint.render());
-    }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result categoryIndex(String catId) {
@@ -90,6 +84,22 @@ public class ApplicationController extends Controller {
         return ok(index.render(catCounts, new InspirationDAO().all(50, catId), new AdventureDAO().all(50),
                 catId));
     }
+
+    @Cached(key = "imprint")
+    public static Result imprint() {
+        return ok(imprint.render());
+    }
+
+    @Cached(key = "about")
+    public static Result about() {
+        return ok(about.render());
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result admin() {
+        return ok(admin.render());
+    }
+
 
     public static Result oAuthDenied(String provider) {
         return ok("oAuth went wrong");

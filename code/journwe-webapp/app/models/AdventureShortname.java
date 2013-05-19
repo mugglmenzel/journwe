@@ -19,6 +19,9 @@ public class AdventureShortname {
 
     private String adventureId;
 
+    public AdventureShortname() {
+    }
+
     public AdventureShortname(String shortname, String adventureId) {
         this.shortname = shortname;
         this.adventureId = adventureId;

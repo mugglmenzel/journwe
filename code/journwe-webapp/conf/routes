@@ -63,6 +63,9 @@ GET     /authenticate/:provider/denied     							controllers.ApplicationControl
 # Home page
 GET     /subscribe													controllers.ApplicationController.subscribe()
 GET     /imprint                                                    controllers.ApplicationController.imprint()
+GET     /about                                                      controllers.ApplicationController.about()
+GET     /admin                                                      controllers.ApplicationController.admin()
+
 GET     /category/:catId                   				 			controllers.ApplicationController.categoryIndex(catId:String)
 
 GET     /															controllers.ApplicationController.index()
