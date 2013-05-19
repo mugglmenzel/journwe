@@ -1,0 +1,20 @@
+@(adv: Adventure, ins: Inspiration, shortURL: String, shortname: String)
+
+
+@main(adv.getName()){@adv.getName()
+<small>@ins.getName()</small>} {
+<h2>We created the new Adventure "@adv.getName()" for you!</h2>
+
+<p>Start motivating friends to join your Adventure</p>
+<p>(Facebook, Email, if(public): Twitter)</p>
+
+<p>You can find your Adventure under this URL:</p>
+<p><a class="btn btn-link" href="@routes.AdventureController.getIndexShortname(shortname)">@routes.AdventureController.getIndexShortname(shortname).absoluteURL(request())</a></p>
+
+
+<p>Your shortened URL:</p>
+<p><a class="btn btn-link" href="@shortURL">@shortURL</a></p>
+
+<p><a class="btn btn-link" href="@routes.AdventureController.getIndexShortname(shortname)">Manage your Adventure</a></p>
+
+}

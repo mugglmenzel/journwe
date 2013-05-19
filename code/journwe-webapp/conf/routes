@@ -34,7 +34,7 @@ GET     /adventure/:id/participate                                  controllers.
 GET     /adventure/:id/participate/:status                          controllers.AdventureController.participateStatus(id:String, status:String)
 GET		/adventure/:id			                                    controllers.AdventureController.getIndex(id:String)
 
-GET     /adv/:hash                                                   controllers.AdventureController.getIndexHash(hash:String)
+GET     /adv/:shortname                                             controllers.AdventureController.getIndexShortname(shortname:String)
 
 GET		/inspiration/:id	                						controllers.InspirationController.get(id:String)
 
@@ -65,6 +65,5 @@ GET     /subscribe													controllers.ApplicationController.subscribe()
 GET     /imprint                                                    controllers.ApplicationController.imprint()
 GET     /category/:catId                   				 			controllers.ApplicationController.categoryIndex(catId:String)
 
-GET     /:hash                                                      controllers.AdventureController.getIndexHash(hash:String)
 GET     /															controllers.ApplicationController.index()
 

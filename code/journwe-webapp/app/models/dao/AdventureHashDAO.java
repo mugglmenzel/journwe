@@ -5,6 +5,7 @@ import models.Adventure;
 import models.AdventureHash;
 import models.dao.common.CommonEntityDAO;
 import models.dao.common.CommonNumberedEntityDAO;
+import models.helpers.Hashids;
 
 import java.util.List;
 
@@ -14,5 +15,8 @@ public class AdventureHashDAO extends CommonNumberedEntityDAO<AdventureHash> {
         super(AdventureHash.class);
     }
 
+    public Adventure getAdventureByHash(String hashid) {
+        return new AdventureDAO().get(get(new Hashids().decrypt(hashid)[0]).getAdventureId());
+    }
 
 }

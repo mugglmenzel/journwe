@@ -5,27 +5,25 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
-import models.dao.*;
 import models.*;
-import models.helpers.Hashids;
+import models.dao.*;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.adventure.create;
-import views.html.adventure.getAdventurers;
-import views.html.adventure.getTodos;
-import views.html.adventure.getIndex;
+import views.html.adventure.*;
 
 import java.io.File;
 import java.util.Map;
-import play.libs.Json;
 
+import static com.rosaloves.bitlyj.Bitly.shorten;
 import static play.data.Form.form;
 
 public class AdventureController extends Controller {
@@ -37,13 +35,19 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getIndex(String id) {
         Adventure adv = new AdventureDAO().get(id);
-        return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventurer advr = new AdventurerDAO().get(id, usr.getId());
+        if (advr == null)
+            return ok(getPublic.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+        else
+            return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId())));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result getIndexHash(String hash) {
-        return getIndex(new AdventureHashDAO().get(new Hashids().decrypt(hash)[0]).getAdventureId());
+    public static Result getIndexShortname(String shortname) {
+        return getIndex(new AdventureShortnameDAO().get(shortname).getAdventureId());
     }
+
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getAdventurers(String id) {
@@ -160,17 +164,31 @@ public class AdventureController extends Controller {
 
 
                 if (new AdventureDAO().save(adv)) {
-                    new AdventureHashDAO().save(new AdventureHash(adv.getId()));
+                    AdventureShortname shortname = new AdventureShortname(filledAdvForm.data().get("shortname"), adv.getId());
+                    new AdventureShortnameDAO().save(shortname);
+
+                    Logger.info("host: " + request().host());
+                    String shortURL = request().host().contains("localhost") ?
+                            routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()) :
+                            Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()))).getShortUrl();
 
                     flash("success",
                             "Saved Adventure with image " + adv.getImage()
                                     + ".");
-                    return ok(getIndex.render(new AdventureDAO().get(adv.getId()), ins));
+                    return ok(created.render(new AdventureDAO().get(adv.getId()), ins, shortURL, shortname.getShortname()));
 
                 } else
                     throw new Exception();
             } catch (Exception e) {
+                new AdventureDAO().delete(adv);
+                AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+                        ConfigFactory.load().getString("aws.accessKey"),
+                        ConfigFactory.load().getString("aws.secretKey")));
+                s3.deleteObject(S3_BUCKET_ADVENTURE_IMAGES, adv.getId());
+                new AdventureShortnameDAO().delete(filledAdvForm.data().get("shortname"));
+
                 flash("error", "Something went wrong during saving :(");
+                e.printStackTrace();
                 return internalServerError(create.render(filledAdvForm,
                         new InspirationDAO()
                                 .allOptionsMap(50)));
