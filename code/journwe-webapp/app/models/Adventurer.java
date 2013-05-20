@@ -20,7 +20,7 @@ public class Adventurer {
 
     private String userId;
 
-    private EAdventurerParticipation participationStatus = EAdventurerParticipation.UNDECIDED;
+    private EAdventurerParticipation participationStatus = EAdventurerParticipation.APPLICANT;
 
     @DynamoDBHashKey
     public String getAdventureId() {

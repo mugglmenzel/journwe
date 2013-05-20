@@ -17,4 +17,7 @@ public class AdventureShortnameDAO extends CommonEntityDAO<AdventureShortname> {
         return new AdventureDAO().get(get(shortname).getAdventureId());
     }
 
+    public boolean exists(String shortname) {
+        return get(shortname) != null;
+    }
 }

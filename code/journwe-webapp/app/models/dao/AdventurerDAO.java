@@ -23,13 +23,17 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
         super(Adventurer.class);
     }
 
-    public Iterator<Adventurer> all(String advId) {
+    public Adventurer getAdventurerByUserId(String userId) {
+        return null;
+    }
+
+    public List<Adventurer> all(String advId) {
         //DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(new AttributeValue(advId)).withConsistentRead(true);
         //return pm.query(Adventurer.class, query).iterator();
 
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.scan(Adventurer.class, scan).iterator();
+        return pm.scan(Adventurer.class, scan);
     }
 
     public List<Adventurer> all(int max, String advId) {

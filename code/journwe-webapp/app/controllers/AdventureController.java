@@ -55,7 +55,7 @@ public class AdventureController extends Controller {
         Adventure adv = new AdventureDAO().get(id);
         Adventurer advr = new AdventurerDAO().get(id, usr.getId());
 
-        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(id), advr == null ? null : advr.getParticipationStatus().name()));
+        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(id), advr == null ? null : advr.getParticipationStatus()));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -67,7 +67,7 @@ public class AdventureController extends Controller {
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result addTodos(String id) {
+    public static Result addTodo(String id) {
 
         DynamicForm requestData = form().bindFromRequest();
 
@@ -84,7 +84,7 @@ public class AdventureController extends Controller {
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result setTodos(String id, String tid) {
+    public static Result setTodo(String id, String tid) {
 
         DynamicForm requestData = form().bindFromRequest();
 
@@ -99,7 +99,7 @@ public class AdventureController extends Controller {
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result deleteTodos(String id, String tid) {
+    public static Result deleteTodo(String id, String tid) {
 
         new TodoDAO().delete(tid, id);
 
@@ -213,6 +213,10 @@ public class AdventureController extends Controller {
         return ok();
     }
 
+    public static Result checkShortname(String shortname) {
+        return ok(Json.toJson(new AdventureShortnameDAO().exists(shortname)));
+    }
+
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result participate(String advId) {
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -221,12 +225,29 @@ public class AdventureController extends Controller {
             advr = new Adventurer();
             advr.setUserId(usr.getId());
             advr.setAdventureId(advId);
-            advr.setParticipationStatus(EAdventurerParticipation.GOING);
+            advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
             new AdventurerDAO().save(advr);
         }
 
         return redirect(routes.AdventureController.getAdventurers(advId));
     }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result adopt(String advId, String userId) {
+        User usr = new UserDAO().get(userId);
+        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+        if (advr == null) {
+            advr = new Adventurer();
+            advr.setUserId(usr.getId());
+            advr.setAdventureId(advId);
+        }
+        advr.setParticipationStatus(EAdventurerParticipation.GOING);
+        new AdventurerDAO().save(advr);
+
+
+        return redirect(routes.AdventureController.getAdventurers(advId));
+    }
+
 
     public static Result participateStatus(String advId, String statusStr) {
         EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);

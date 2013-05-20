@@ -9,11 +9,12 @@
     @form(routes.AdventureController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
     	<fieldset>
        		@inputText(advForm("name"), '_label -> "Adventure name")
-            @helper.input(advForm("shortname"), '_label -> "Shortname") { (id, name, value, args) =>
+            @helper.input(advForm("shortname"), '_label -> "Shortname", 'required -> "required") { (id, name, value, args) =>
             <div class="input-append">
                 <input type="text" name="@name" id="@id" @toHtmlArgs(args)>
                 <span class="add-on">@@journwe.com</span>
             </div>
+            <div id="shortname-available">shortname available?</div>
             }
     		@select(
     			advForm("inspirationId"), 
@@ -32,5 +33,15 @@
     	  <input type="submit" value="Create Group Adventure!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
     	</div>
     }
-    
+
+        <script>
+            $('#shortname').change(
+            function () {
+                $.get('@routes.AdventureController.checkShortname("")' + $('#shortname').val(),
+                    function(exists) {
+                        $('#shortname-available').html(exists ? '<span class="text-error"><i class="icon-warning-sign"></i> not available!</span>' : '<span class="text-success"><i class="icon-ok"></i> available.</span>' );
+                    });
+            }
+            );
+        </script>
 }

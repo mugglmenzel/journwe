@@ -8,5 +8,5 @@ package models;
  * To change this template use File | Settings | File Templates.
  */
 public enum EAdventurerParticipation {
-    NOTGOING, GOING, UNDECIDED, BOOKED;
+    APPLICANT, NOTGOING, GOING, UNDECIDED, BOOKED;
 }
