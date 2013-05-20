@@ -131,13 +131,21 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result save() {
         Form<Adventure> filledAdvForm = form(Adventure.class).bindFromRequest();
+        DynamicForm filledForm = advForm.bindFromRequest();
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart image = body.getFile("image");
 
-        if (advForm.bindFromRequest().hasErrors()) {
-            return badRequest(create.render(advForm.bindFromRequest(),
-                    new InspirationDAO().allOptionsMap(50)));
+        String shortname = filledForm.data().get("shortname");
+
+        if (filledAdvForm.hasErrors()) {
+            flash("error", "Please complete the form.");
+
+        } else if (shortname.length() < 3) {
+            flash("error", "Shortname must be at least 3 letters.");
+
+        } else if (new AdventureShortnameDAO().exists(shortname)) {
+            flash("error", "Shortname already exists.");
 
         } else {
             Adventure adv = filledAdvForm.get();
@@ -167,14 +175,14 @@ public class AdventureController extends Controller {
 
 
                 if (new AdventureDAO().save(adv)) {
-                    AdventureShortname shortname = new AdventureShortname(filledAdvForm.data().get("shortname"), adv.getId());
-                    new AdventureShortnameDAO().save(shortname);
+                    AdventureShortname advShortname = new AdventureShortname(shortname, adv.getId());
+                    new AdventureShortnameDAO().save(advShortname);
 
-                    String shortURL = routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request());
+                    String shortURL = routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request());
                     try {
                         shortURL = request().host().contains("localhost") ?
-                                routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()) :
-                                Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()))).getShortUrl();
+                                routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()) :
+                                Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()))).getShortUrl();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -191,17 +199,19 @@ public class AdventureController extends Controller {
                     new AdventurerDAO().save(advr);
 
                     try {
-                        AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
-                                ConfigFactory.load().getString("aws.accessKey"),
-                                ConfigFactory.load().getString("aws.secretKey")));
-                        String primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId()).getEmail();
-                        Logger.info("got primary email: " + primaryEmail);
-                        ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail)).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + shortname.getShortname() + "@journwe.com.")))).withSource(shortname.getShortname() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                        UserEmail primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId());
+                        if (primaryEmail != null) {
+                            AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
+                                    ConfigFactory.load().getString("aws.accessKey"),
+                                    ConfigFactory.load().getString("aws.secretKey")));
+                            Logger.info("got primary email: " + primaryEmail);
+                            ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + advShortname.getShortname() + "@journwe.com.")))).withSource(advShortname.getShortname() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    return ok(created.render(new AdventureDAO().get(adv.getId()), ins, shortURL, shortname.getShortname()));
+                    return ok(created.render(new AdventureDAO().get(adv.getId()), ins, shortURL, advShortname.getShortname()));
 
                 } else
                     throw new Exception();
@@ -215,11 +225,14 @@ public class AdventureController extends Controller {
 
                 flash("error", "Something went wrong during saving :(");
                 e.printStackTrace();
-                return internalServerError(create.render(advForm.bindFromRequest(),
+                return internalServerError(create.render(filledForm,
                         new InspirationDAO()
                                 .allOptionsMap(50)));
             }
         }
+        return badRequest(create.render(filledForm,
+                new InspirationDAO().allOptionsMap(50)));
+
 
     }
 
