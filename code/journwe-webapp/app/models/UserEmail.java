@@ -21,6 +21,8 @@ public class UserEmail {
     @Constraints.Required
     private String email;
 
+    private boolean primary;
+
     private boolean validated;
 
 
@@ -40,6 +42,15 @@ public class UserEmail {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @DynamoDBAttribute
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(boolean primary) {
+        this.primary = primary;
     }
 
     @DynamoDBAttribute

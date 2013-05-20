@@ -129,6 +129,7 @@ public class User {
             // break your security as well!
             email.setEmail(identity.getEmail());
             email.setValidated(false);
+            email.setPrimary(true);
             new UserEmailDAO().save(email);
         }
 

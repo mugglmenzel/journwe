@@ -641,8 +641,9 @@
             validator.lastFinished = false;
             $.ajax({
               url: validator.url,
-              data: "value=" + value + "&field=" + $this.attr("name"),
+              data: {value: value, field: $this.attr("name")},
               dataType: "json",
+              type: "POST",
               success: function (data) {
                 if (""+validator.lastValue === ""+data.value) {
                   validator.lastValid = !!(data.valid);

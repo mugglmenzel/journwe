@@ -4,12 +4,15 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
+import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
 import models.*;
 import models.dao.*;
+import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -30,7 +33,7 @@ public class AdventureController extends Controller {
 
     private static final String S3_BUCKET_ADVENTURE_IMAGES = "journwe-adventure-images";
 
-    private static Form<Adventure> advForm = form(Adventure.class);
+    private static DynamicForm advForm = form();
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getIndex(String id) {
@@ -115,25 +118,25 @@ public class AdventureController extends Controller {
     public static Result createFromInspiration(String insId) {
         Map<String, String> inspireOptions = new InspirationDAO()
                 .allOptionsMap(50);
-        Form<Adventure> advFilledForm = advForm;
+        Form<Adventure> advFilledForm = form(Adventure.class);
         if (insId != null && !"".equals(insId)) {
             Adventure adv = new Adventure();
             adv.setInspirationId(insId);
-            advFilledForm = advForm.fill(adv);
-        } else advFilledForm = advForm.fill(new Adventure());
-        return ok(create.render(advFilledForm, inspireOptions));
+            advFilledForm = advFilledForm.fill(adv);
+        } else advFilledForm = advFilledForm.fill(new Adventure());
+        return ok(create.render(form().fill(advFilledForm.data()), inspireOptions));
 
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result save() {
-        Form<Adventure> filledAdvForm = advForm.bindFromRequest();
+        Form<Adventure> filledAdvForm = form(Adventure.class).bindFromRequest();
 
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart image = body.getFile("image");
 
-        if (filledAdvForm.hasErrors()) {
-            return badRequest(create.render(filledAdvForm,
+        if (advForm.bindFromRequest().hasErrors()) {
+            return badRequest(create.render(advForm.bindFromRequest(),
                     new InspirationDAO().allOptionsMap(50)));
 
         } else {
@@ -167,14 +170,37 @@ public class AdventureController extends Controller {
                     AdventureShortname shortname = new AdventureShortname(filledAdvForm.data().get("shortname"), adv.getId());
                     new AdventureShortnameDAO().save(shortname);
 
-                    Logger.info("host: " + request().host());
-                    String shortURL = request().host().contains("localhost") ?
-                            routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()) :
-                            Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()))).getShortUrl();
-
+                    String shortURL = routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request());
+                    try {
+                        shortURL = request().host().contains("localhost") ?
+                                routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()) :
+                                Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()))).getShortUrl();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     flash("success",
                             "Saved Adventure with image " + adv.getImage()
                                     + ".");
+
+                    User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+                    Adventurer advr = new Adventurer();
+                    advr.setAdventureId(adv.getId());
+                    advr.setUserId(usr.getId());
+                    advr.setParticipationStatus(EAdventurerParticipation.GOING);
+                    new AdventurerDAO().save(advr);
+
+                    try {
+                        AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
+                                ConfigFactory.load().getString("aws.accessKey"),
+                                ConfigFactory.load().getString("aws.secretKey")));
+                        String primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId()).getEmail();
+                        Logger.info("got primary email: " + primaryEmail);
+                        ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail)).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + shortname.getShortname() + "@journwe.com.")))).withSource(shortname.getShortname() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     return ok(created.render(new AdventureDAO().get(adv.getId()), ins, shortURL, shortname.getShortname()));
 
                 } else
@@ -189,7 +215,7 @@ public class AdventureController extends Controller {
 
                 flash("error", "Something went wrong during saving :(");
                 e.printStackTrace();
-                return internalServerError(create.render(filledAdvForm,
+                return internalServerError(create.render(advForm.bindFromRequest(),
                         new InspirationDAO()
                                 .allOptionsMap(50)));
             }
@@ -213,8 +239,15 @@ public class AdventureController extends Controller {
         return ok();
     }
 
-    public static Result checkShortname(String shortname) {
-        return ok(Json.toJson(new AdventureShortnameDAO().exists(shortname)));
+    public static Result checkShortname() {
+        DynamicForm requestData = form().bindFromRequest();
+
+        ObjectNode node = Json.newObject();
+        node.put("value", requestData.get("value"));
+        node.put("valid", new AdventureShortnameDAO().exists(requestData.get("value")) ? 0 : 1);
+        node.put("message", "Shortname already exists!");
+        Logger.info(node.toString());
+        return ok(Json.toJson(node));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
