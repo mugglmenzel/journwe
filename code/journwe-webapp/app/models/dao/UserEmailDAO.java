@@ -18,7 +18,7 @@ public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
     public UserEmail getPrimaryEmailOfUser(String userId) {
        DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("userId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(userId)));
-        scan.addFilterCondition("primary", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue("true")));
+        scan.addFilterCondition("primary", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withN("1")));
 
         List<UserEmail> result = pm.scan(clazz, scan);
 

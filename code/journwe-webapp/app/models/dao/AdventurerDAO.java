@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.dao.common.CommonRangeEntityDAO;
 import models.Adventurer;
+import play.Logger;
 
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +26,21 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
 
     public Adventurer getAdventurerByUserId(String userId) {
         return null;
+    }
+
+    public boolean isAdventurer(String userId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("userId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(userId)));
+        int count =  pm.count(clazz, scan);
+        Logger.info("checked for " + userId + ", count is " + count);
+        return count > 0;
+
+    }
+
+    public List<Adventurer> allOfUserId(String userId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("userId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(userId)));
+        return pm.scan(clazz, scan);
     }
 
     public List<Adventurer> all(String advId) {
