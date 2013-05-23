@@ -1,15 +1,21 @@
 package models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.ecwid.mailchimp.MailChimpClient;
+import com.ecwid.mailchimp.MailChimpException;
+import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 import com.feth.play.module.pa.user.EmailIdentity;
 import com.feth.play.module.pa.user.NameIdentity;
+import models.dao.SubscriberDAO;
 import models.dao.UserDAO;
 import models.dao.UserEmailDAO;
 import models.dao.UserSocialDAO;
 import models.helpers.EnumMarshaller;
 import play.data.validation.Constraints.Required;
+
+import java.io.IOException;
 
 @DynamoDBTable(tableName = "journwe-user")
 public class User {
@@ -131,6 +137,26 @@ public class User {
             email.setValidated(false);
             email.setPrimary(true);
             new UserEmailDAO().save(email);
+
+            Subscriber sub = new Subscriber();
+            sub.setEmail(email.getEmail());
+            new SubscriberDAO().save(sub);
+            try {
+                ListSubscribeMethod listSubscribeMethod = new ListSubscribeMethod();
+                listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
+                listSubscribeMethod.id = "c18d5a32fb";
+                listSubscribeMethod.email_address = sub.getEmail();
+                listSubscribeMethod.double_optin = false;
+                listSubscribeMethod.update_existing = true;
+                listSubscribeMethod.send_welcome = true;
+
+                new MailChimpClient().execute(listSubscribeMethod);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (MailChimpException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
         }
 
         final UserSocial social = new UserSocial();
