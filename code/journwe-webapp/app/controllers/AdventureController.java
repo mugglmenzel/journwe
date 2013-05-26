@@ -268,7 +268,12 @@ public class AdventureController extends Controller {
         // keep shortname to tell visitors it has been deleted
         //new AdventureShortnameDAO().delete(new AdventureShortnameDAO().getShortname(advId));
 
-
+        //delete s3 objects
+        AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+                ConfigFactory.load().getString("aws.accessKey"),
+                ConfigFactory.load().getString("aws.secretKey")));
+        s3.deleteObject(
+                S3_BUCKET_ADVENTURE_IMAGES, advId);
 
         flash("success", "We deleted your adventure " + new AdventureDAO().get(advId).getName());
 
