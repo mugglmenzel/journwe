@@ -4,7 +4,7 @@
 @import models.dao._
 @import com.feth.play.module.pa.PlayAuthenticate;
 
-@main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()" data-url="/adventure/save/editable" data-original-title="Enter name">@adv.getName()</a> <small>@ins.getName()</small>} {
+@main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()" data-url="/adventure/save/editable" data-original-title="Enter name">@adv.getName()</a> <small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#delete').modal();">Delete</a>} {
 
 <div>
     @if(new AdventurerDAO().get(adv.getId(), User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
@@ -25,6 +25,16 @@
 
     </div>
 </div>
+
+<div id="delete" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-header">
+        <h3>Sure, you want to delete @adv.getName()?</h3>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-danger" href="@routes.AdventureController.delete(adv.getId())">Delete</a> <a class="btn"  data-dismiss="modal">Cancel</a>
+    </div>
+</div>
+
 <script>
     $.fn.editable.defaults.mode = 'inline';
     $('#adventureName').editable();

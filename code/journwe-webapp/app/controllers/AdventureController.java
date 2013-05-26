@@ -62,11 +62,11 @@ public class AdventureController extends Controller {
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result getTodos(String id) {
+    public static Result getTodos(String advId) {
         User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        Adventure adv = new AdventureDAO().get(id);
+        Adventure adv = new AdventureDAO().get(advId);
 
-        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), new TodoDAO().all(id), usr.getId()));
+        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), new TodoDAO().allByUser(advId), usr.getId()));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -250,6 +250,31 @@ public class AdventureController extends Controller {
         }
 
         return ok();
+    }
+
+    public static Result delete(String advId) {
+        for (Adventurer advr : new AdventurerDAO().all(advId))
+            new AdventurerDAO().delete(advr);
+
+        for (models.Todo todo : new TodoDAO().all(advId))
+            new TodoDAO().delete(todo);
+
+        for (CommentThread ct : new CommentThreadDAO<Adventure>().getCommentThreads(advId)) {
+            for (Comment c : new CommentDAO().getComments(ct.getThreadId()))
+                new CommentDAO().delete(c);
+            new CommentThreadDAO<Adventure>().delete(ct);
+        }
+
+        // keep shortname to tell visitors it has been deleted
+        //new AdventureShortnameDAO().delete(new AdventureShortnameDAO().getShortname(advId));
+
+
+
+        flash("success", "We deleted your adventure " + new AdventureDAO().get(advId).getName());
+
+        new AdventureDAO().delete(advId);
+
+        return redirect(routes.ApplicationController.index());
     }
 
     public static Result checkShortname() {

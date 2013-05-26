@@ -12,6 +12,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
  * Time: 21:20
  * To change this template use File | Settings | File Templates.
  */
+@Deprecated
 @DynamoDBTable(tableName = "journwe-adventurehash")
 public class AdventureHash {
 

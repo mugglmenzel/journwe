@@ -12,7 +12,7 @@
             @helper.input(advForm("shortname"), '_label -> "Shortname", 'required -> "required", 'minlength -> "3", Symbol("data-validation-ajax-ajax") -> routes.AdventureController.checkShortname()) { (id, name, value, args) =>
             <div class="input-append">
                 <input type="text" name="@name" id="@id" @toHtmlArgs(args)>
-                <span class="add-on">@@journwe.com</span>
+                <span class="add-on">@@adventure.journwe.com</span>
             </div>
             <div id="shortname-available">shortname available?</div>
             }
