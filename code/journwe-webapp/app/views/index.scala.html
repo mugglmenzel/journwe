@@ -1,6 +1,7 @@
 @(categories: List[models.helpers.CategoryCount])(inspirations: List[Inspiration])(adventures: List[Adventure])(catId: String = null)
 
-@main("Where Adventurers meet."){Welcome to JournWe <small>Where Adventurers meet.</small>} {
+@main("Where Adventurers meet."){Welcome to JournWe
+<small>Where Adventurers meet.</small>} {
 
 
 <div class="text-center">
@@ -12,30 +13,35 @@
     <p class="lead">Get Inspired...</p>
 </div>
 
-<div class="row-fluid">
-    <div class="span2">
-        <ul class="nav nav-pills nav-stacked">
-            <li
-            @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()">All</a></li>
-            @for(cat <- categories) {
-            <li
-            @if(cat.getCategory().getId() == catId) {class="active"}><a
-                href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())"><span class="badge badge-info pull-right">@cat.getCount()</span>@cat.getCategory().getName()
-            </a></li>
-            }
-        </ul>
-    </div>
-    <div class="span10">
-        <div>
-            <!-- Only required for left/right tabs -->
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#inspirations" data-toggle="tab"><i class="icon-th"></i>Inspirations</a>
-                </li>
-                <li><a href="#adventures" data-toggle="tab"><i class="icon-th"></i>Public Adventures</a></li>
-                <li><a href="#search" data-toggle="tab"><i class="icon-search"></i>Search</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="inspirations">
+
+<div>
+    <!-- Only required for left/right tabs -->
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#inspirations" data-toggle="tab"><i class="icon-th"></i>Inspirations</a>
+        </li>
+        <li><a href="#adventures" data-toggle="tab"><i class="icon-th"></i>Public Adventures</a></li>
+        <li><a href="#search" data-toggle="tab"><i class="icon-search"></i>Search</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="inspirations">
+            <div class="row-fluid">
+                <div class="span2">
+
+
+                    <ul class="nav nav-pills nav-stacked">
+                        <li
+                        @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()">All</a></li>
+                        @for(cat <- categories) {
+                        <li
+                        @if(cat.getCategory().getId() == catId) {class="active"}><a
+                            href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())"><span
+                            class="badge badge-info pull-right">@cat.getCount()</span>@cat.getCategory().getName()
+                    </a></li>
+                        }
+                    </ul>
+
+                </div>
+                <div class="span10">
                     <ul class="thumbnails">
                         @inspirations.zipWithIndex.map { case(ins, i) =>
                         <li class="span3">
@@ -52,27 +58,29 @@
                         }
                     </ul>
                 </div>
-                <div class="tab-pane" id="adventures">
-                    <ul class="thumbnails">
-                        @adventures.zipWithIndex.map { case(adv, i) =>
-                        <li class="span3">
-                            <a class="thumbnail" href="@routes.AdventureController.getIndex(adv.getId())">
-                                <img src="http://i.embed.ly/1/image/resize?width=300&url=@adv.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
-                            </a>
-                            <h4>@adv.getName()</h4>
-                        </li>
-                        @if((i+1) % 3 == 0) {
-                    </ul>
-                    <ul class="thumbnails">
-                        }
-                        }
-                    </ul>
-                </div>
-                <div class="tab-pane" id="search">
-                </div>
             </div>
         </div>
+        <div class="tab-pane" id="adventures">
+            <ul class="thumbnails">
+                @adventures.zipWithIndex.map { case(adv, i) =>
+                <li class="span3">
+                    <a class="thumbnail" href="@routes.AdventureController.getIndex(adv.getId())">
+                        <img src="http://i.embed.ly/1/image/resize?width=300&url=@adv.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
+                    </a>
+                    <h4>@adv.getName()</h4>
+                </li>
+                @if((i+1) % 3 == 0) {
+            </ul>
+            <ul class="thumbnails">
+                }
+                }
+            </ul>
+        </div>
+        <div class="tab-pane" id="search">
+        </div>
     </div>
+
+
 </div>
 
 }

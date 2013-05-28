@@ -9,6 +9,7 @@ import models.helpers.Hashids;
 
 import java.util.List;
 
+@Deprecated
 public class AdventureHashDAO extends CommonNumberedEntityDAO<AdventureHash> {
 
     public AdventureHashDAO() {

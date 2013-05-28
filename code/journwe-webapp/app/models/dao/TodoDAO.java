@@ -4,12 +4,12 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
-import models.dao.common.CommonRangeEntityDAO;
 import models.Todo;
+import models.dao.common.CommonRangeEntityDAO;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,17 +25,23 @@ public class TodoDAO extends CommonRangeEntityDAO<Todo> {
         super(Todo.class);
     }
 
-    public Map<String, List<Todo>> all(String advId) {
+    public List<Todo> all(String advId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
+        return pm.scan(Todo.class, scan);
+    }
+
+    public Map<String, List<Todo>> allByUser(String advId) {
 
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-        
+
 
         Map<String, List<Todo>> userTodos = new HashMap<String, List<Todo>>();
 
-        for (Todo todo : pm.scan(Todo.class, scan)){
+        for (Todo todo : pm.scan(Todo.class, scan)) {
             String user = todo.getUserId();
-            if (!userTodos.containsKey(user)){
+            if (!userTodos.containsKey(user)) {
                 userTodos.put(user, new ArrayList<Todo>());
             }
             userTodos.get(user).add(todo);

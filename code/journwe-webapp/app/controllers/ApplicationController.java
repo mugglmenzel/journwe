@@ -35,13 +35,15 @@ public class ApplicationController extends Controller {
                 && SecuredAdminUser.isAdmin(usr)) {
 
             String userId = User.findByAuthUserIdentity(usr).getId();
+            List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
+            for (Category cat : new CategoryDAO().all(10))
+                catCounts.add(new CategoryCount(cat, new CategoryDAO()
+                        .countInspirations(cat.getId())));
+
             if (new AdventurerDAO().isAdventurer(userId))
-                return ok(indexVet.render(new AdventureDAO().allOfUserId(userId)));
+                return ok(indexVet.render(catCounts, new InspirationDAO().all(50), new AdventureDAO().allOfUserId(userId), null));
             else {
-                List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
-                for (Category cat : new CategoryDAO().all(10))
-                    catCounts.add(new CategoryCount(cat, new CategoryDAO()
-                            .countInspirations(cat.getId())));
+
                 return ok(index.render(catCounts, new InspirationDAO().all(50), new AdventureDAO().all(50),
                         null));
             }
