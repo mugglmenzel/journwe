@@ -1,13 +1,14 @@
 #!/bin/sh
 
 [ $# -lt 1 ] && { echo "Usage: $0 <Load Balancer Name>"; exit 1; }
-
+[ "x$JAVA_HOME" == "x" ] && { echo "Need to set JAVA_HOME"; exit 1; }
+#: ${JAVA_HOME:?"JAVA_HOME needs to be set!"}
 
 #cd $(dirname $0)
 current_path=$(pwd)
 
-ssh_opts_background=`echo -f -q -i $current_path/journwe.pem`
-ssh_opts_terminal=`echo -t -q -i $current_path/journwe.pem`
+ssh_opts_background=`echo -f -q -o "StrictHostKeyChecking no" -i $current_path/journwe.pem`
+ssh_opts_terminal=`echo -t -q -o "StrictHostKeyChecking no" -i $current_path/journwe.pem`
 scp_opts=`echo -i $current_path/journwe.pem`
 
 #scp $scp_opts ./update_webapp_remote_from_git.sh $ssh_host:/home/ec2-user/ 
