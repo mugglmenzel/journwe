@@ -5,10 +5,9 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.dao.common.CommonRangeEntityDAO;
-import models.Adventurer;
+import models.adventure.Adventurer;
 import play.Logger;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**

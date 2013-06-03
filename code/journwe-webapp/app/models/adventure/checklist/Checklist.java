@@ -1,4 +1,4 @@
-package models;
+package models.adventure.checklist;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 

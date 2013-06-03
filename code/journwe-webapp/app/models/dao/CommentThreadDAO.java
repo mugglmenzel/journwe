@@ -3,7 +3,7 @@ package models.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.CommentThread;
+import models.adventure.CommentThread;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;

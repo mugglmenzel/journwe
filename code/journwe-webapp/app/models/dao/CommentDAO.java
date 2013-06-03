@@ -2,7 +2,7 @@ package models.dao;
 
 import java.util.List;
 
-import models.Comment;
+import models.adventure.Comment;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;

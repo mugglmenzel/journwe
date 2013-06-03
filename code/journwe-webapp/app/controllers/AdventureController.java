@@ -11,7 +11,11 @@ import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
 import models.*;
+import models.adventure.*;
+import models.adventure.checklist.EStatus;
 import models.dao.*;
+import models.user.User;
+import models.user.UserEmail;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
@@ -38,7 +42,7 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getIndex(String id) {
         Adventure adv = new AdventureDAO().get(id);
-        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventurer advr = new AdventurerDAO().get(id, usr.getId());
         if (advr == null)
             return ok(getPublic.render(adv, new InspirationDAO().get(adv.getInspirationId())));
@@ -54,7 +58,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getAdventurers(String id) {
-        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(id);
         Adventurer advr = new AdventurerDAO().get(id, usr.getId());
 
@@ -63,7 +67,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getTodos(String advId) {
-        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
 
         return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), new TodoDAO().allByUser(advId), usr.getId()));
@@ -74,9 +78,9 @@ public class AdventureController extends Controller {
 
         DynamicForm requestData = form().bindFromRequest();
 
-        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
-        models.Todo todo = new models.Todo();
+        models.adventure.checklist.Todo todo = new models.adventure.checklist.Todo();
         todo.setAdventureId(id);
         todo.setUserId(usr.getId());
         todo.setTitle(requestData.get("title"));
@@ -91,7 +95,7 @@ public class AdventureController extends Controller {
 
         DynamicForm requestData = form().bindFromRequest();
 
-        models.Todo todo = new TodoDAO().get(tid, id);
+        models.adventure.checklist.Todo todo = new TodoDAO().get(tid, id);
 
         String status = requestData.get("status").toUpperCase();
         todo.setStatus(EStatus.valueOf(status));
@@ -190,7 +194,7 @@ public class AdventureController extends Controller {
                             "Saved Adventure with image " + adv.getImage()
                                     + ".");
 
-                    User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+                    User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
                     Adventurer advr = new Adventurer();
                     advr.setAdventureId(adv.getId());
@@ -256,7 +260,7 @@ public class AdventureController extends Controller {
         for (Adventurer advr : new AdventurerDAO().all(advId))
             new AdventurerDAO().delete(advr);
 
-        for (models.Todo todo : new TodoDAO().all(advId))
+        for (models.adventure.checklist.Todo todo : new TodoDAO().all(advId))
             new TodoDAO().delete(todo);
 
         for (CommentThread ct : new CommentThreadDAO<Adventure>().getCommentThreads(advId)) {
@@ -295,7 +299,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result participate(String advId) {
-        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
         if (advr == null) {
             advr = new Adventurer();
@@ -327,7 +331,7 @@ public class AdventureController extends Controller {
 
     public static Result participateStatus(String advId, String statusStr) {
         EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);
-        User usr = User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
         if (advr != null) {

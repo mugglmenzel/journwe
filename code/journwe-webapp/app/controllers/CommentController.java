@@ -1,8 +1,8 @@
 package controllers;
 
 import static play.data.Form.form;
-import models.Comment;
-import models.CommentThread;
+import models.adventure.Comment;
+import models.adventure.CommentThread;
 import models.dao.CommentDAO;
 import models.dao.CommentThreadDAO;
 

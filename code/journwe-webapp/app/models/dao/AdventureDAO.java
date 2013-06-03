@@ -1,9 +1,9 @@
 package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import models.Adventurer;
+import models.adventure.Adventurer;
 import models.dao.common.CommonEntityDAO;
-import models.Adventure;
+import models.adventure.Adventure;
 
 import java.util.ArrayList;
 import java.util.List;

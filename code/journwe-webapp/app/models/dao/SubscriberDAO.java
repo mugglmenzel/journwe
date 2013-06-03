@@ -1,6 +1,6 @@
 package models.dao;
 
-import models.Subscriber;
+import models.user.Subscriber;
 
 import models.dao.common.CommonEntityDAO;
 

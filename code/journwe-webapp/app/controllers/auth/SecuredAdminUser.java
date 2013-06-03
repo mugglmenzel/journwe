@@ -1,7 +1,7 @@
 package controllers.auth;
 
-import models.EUserRole;
-import models.User;
+import models.user.EUserRole;
+import models.user.User;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;

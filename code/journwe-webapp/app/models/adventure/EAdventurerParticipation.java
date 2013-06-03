@@ -1,4 +1,4 @@
-package models;
+package models.adventure;
 
 /**
  * Created with IntelliJ IDEA.

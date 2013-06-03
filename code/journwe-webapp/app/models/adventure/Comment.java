@@ -1,5 +1,7 @@
-package models;
+package models.adventure;
 
+import models.user.User;
+import models.user.UserSocial;
 import models.dao.UserDAO;
 import models.dao.UserSocialDAO;
 import play.data.validation.Constraints.Required;

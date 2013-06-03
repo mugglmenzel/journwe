@@ -5,7 +5,7 @@ import java.util.Map;
 
 import play.Logger;
 
-import models.UserSocial;
+import models.user.UserSocial;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -36,7 +36,7 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
         hashKeyValues.setProvider(provider);
 		queryExpression.setHashKeyValues(hashKeyValues);
 		Map<String, Condition> rangeKeyConditions = new HashMap<String, Condition>();
-		Logger.debug("Range key kondition: socialId == "+socialId);
+		Logger.debug("Range key kondition: socialId == " + socialId);
 		rangeKeyConditions.put("socialId", new Condition().withAttributeValueList(new AttributeValue().withS(socialId)).withComparisonOperator(ComparisonOperator.EQ.toString()));
 		queryExpression.setRangeKeyConditions(rangeKeyConditions);
 		PaginatedQueryList<UserSocial> result = pm.query(UserSocial.class, queryExpression);

@@ -4,8 +4,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
-import models.Adventure;
-import models.AdventureShortname;
+import models.adventure.Adventure;
+import models.adventure.AdventureShortname;
 import models.dao.common.CommonEntityDAO;
 
 public class AdventureShortnameDAO extends CommonEntityDAO<AdventureShortname> {

@@ -1,7 +1,7 @@
 @(adv: Adventure, ins: Inspiration)(adventurers: List[Adventurer])(status: EAdventurerParticipation)
 
 @import models.dao.UserDAO
-@import models.EAdventurerParticipation
+@import models.adventure.EAdventurerParticipation
 
 @cssForStatus(status:EAdventurerParticipation) = {
 @status match {
