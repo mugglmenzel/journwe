@@ -20,6 +20,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class ApplicationController extends Controller {
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
                 && SecuredAdminUser.isAdmin(usr)) {
 
-            String userId = User.findByAuthUserIdentity(usr).getId();
+            String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
             List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
             for (Category cat : new CategoryDAO().all(10))
                 catCounts.add(new CategoryCount(cat, new CategoryDAO()

@@ -1,5 +1,6 @@
-@(categories: List[models.helpers.CategoryCount])(inspirations: List[Inspiration])(adventures: List[Adventure])(catId: String = null)
+@(categories: List[models.helpers.CategoryCount])(inspirations: List[Inspiration])(adventures: List[models.adventure.Adventure])(catId: String = null)
 
+@import models.dao._
 @import com.feth.play.module.pa.views.html._
 
 
@@ -7,9 +8,9 @@
 <small>Where Adventurers meet.</small>} {
 
 @currentAuth() { auth =>
-@if(auth != null && User.findByAuthUserIdentity(auth) != null) {
+@if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
 <div class="text-center">
-    Welcome back, @User.findByAuthUserIdentity(auth).getName()! You have some adventures before you.
+    Welcome back, @{new UserDAO().findByAuthUserIdentity(auth).getName()}! You have some adventures before you.
 </div>
 }
 }

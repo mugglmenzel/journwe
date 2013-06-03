@@ -1,5 +1,6 @@
 package controllers.auth;
 
+import models.dao.UserDAO;
 import models.user.EUserRole;
 import models.user.User;
 import play.mvc.Http.Context;
@@ -42,7 +43,7 @@ public class SecuredAdminUser extends Security.Authenticator {
 	}
 
 	public static boolean isAdmin(AuthUser u) {
-		return User.findByAuthUserIdentity(u) != null && EUserRole.ADMIN.equals(User.findByAuthUserIdentity(u).getRole());
+		return new UserDAO().findByAuthUserIdentity(u) != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(u).getRole());
 	}
 
 }

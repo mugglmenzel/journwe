@@ -1,14 +1,13 @@
-@(adv: Adventure, ins: Inspiration, active: String)(content: Html)
+@(adv: models.adventure.Adventure, ins: Inspiration, active: String)(content: Html)
 
 @import models._
-@import models.adventure._
 @import models.dao._
 @import com.feth.play.module.pa.PlayAuthenticate;
 
 @main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()" data-url="/adventure/save/editable" data-original-title="Enter name">@adv.getName()</a> <small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#delete').modal();">Delete</a>} {
 
 <div>
-    @if(new AdventurerDAO().get(adv.getId(), User.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
+    @if(new AdventurerDAO().get(adv.getId(), new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
         <li @if(active == "index"){class="active"}><a href="@routes.AdventureController.getIndex(adv.getId())"><i class="icon-th"></i>Overview</a></li>

@@ -22,24 +22,24 @@ public class UserDAO extends CommonEntityDAO<User> {
     }
 
 
-    public static boolean existsByAuthUserIdentity(
+    public boolean existsByAuthUserIdentity(
             final AuthUserIdentity identity) {
         return getAuthUserFind(identity) != null;
     }
 
-    private static User getAuthUserFind(final AuthUserIdentity identity) {
+    private User getAuthUserFind(final AuthUserIdentity identity) {
         UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
         return social != null ? new UserDAO().get(social.getUserId()) : null;
     }
 
-    public static User findByAuthUserIdentity(final AuthUserIdentity identity) {
+    public User findByAuthUserIdentity(final AuthUserIdentity identity) {
         if (identity == null)
             return null;
 
         return getAuthUserFind(identity);
     }
 
-    public static User create(final AuthUser authUser) {
+    public User create(final AuthUser authUser) {
         final User user = new User();
         user.setActive(true);
         if (authUser instanceof NameIdentity) {
