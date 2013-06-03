@@ -54,7 +54,7 @@ public class FacebookAuthProvider extends
 				.setQueryParameter(FIELDS, fields)
 				.get().get(PlayAuthenticate.TIMEOUT);
 		// @markusklems Modification of default plugin: Save access token
-		final String facebookId = r.asJson().get("id").toString();
+		final String facebookId = r.asJson().get("id").getTextValue();
 		final String accessToken = info.getAccessToken();
 		Logger.debug("Facebook ID: "+facebookId);	
 		Logger.debug("access_token: "+accessToken);

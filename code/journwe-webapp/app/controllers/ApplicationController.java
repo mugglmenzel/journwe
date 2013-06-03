@@ -100,6 +100,7 @@ public class ApplicationController extends Controller {
     	UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
     	final String accessToken = us.getAccessToken();
     	Logger.debug("+++ START TESTING FACEBOOK FEATURES +++");
+    	Logger.debug("usr.getId() -> "+usr.getId());
     	Logger.debug("Access Token: "+accessToken);
     	JournweFacebookClient fb = JournweFacebookClient.create(accessToken);
     	// Test #1 get my facebook user
@@ -109,7 +110,7 @@ public class ApplicationController extends Controller {
     	// Test #3 get my friends
 //    	fb.getMyFriends();
     	// Test #4 publish something on my feed
-    	fb.publishOnMyFeed("Testing RestFB...");
+//    	fb.publishOnMyFeed("Testing RestFB...");
     	// ...
         Logger.debug("+++ END TESTING FACEBOOK FEATURES +++");
         return ok();
