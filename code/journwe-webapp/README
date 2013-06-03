@@ -11,23 +11,7 @@ Start App in Production Mode
 
 $ play -Dconfig.resource=application-prod.conf start
 
-Travel API credentials
-=====================================
-
-Hotwire API
+Developer Notes
 ===========
-* Proxy API Key: 9cusk4pmus4zjm6fzfcutsk5
-* QuickConnect API Key: erudyj8bq6bxv4a4vxshc3kx
-
-Expedia EAN
-===========
-* Application: journwe 
-* Key: 2m65983vhjy9hzmcdjqtsk2y 
-* Shared Secret: hrAA3KD9 
-* Sandbox CID: 55505
-
-Travelport
-===========
-* Universal API User ID:  Universal API/uAPI8314073635
-* Universal API Password: TbdrPpPQM9pGaGMF5hEpD3Aay
-* Branch Code for 1G: P105354
+* Facebook oAuth Hack: We use a slight modification of FacebookAuthProvider because we need to save the access_token, a feature which seems not to be supported in the oAuth plugin that we use. MUST add this line to conf/play.plugins:
+10010:controllers.auth.oauth2.fb.FacebookAuthProvider

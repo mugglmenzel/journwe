@@ -21,6 +21,8 @@ public class UserSocial {
     private String provider;
 
     private String socialId;
+    
+    private String accessToken;
 
 
     @DynamoDBHashKey
@@ -50,5 +52,13 @@ public class UserSocial {
         this.userId = userId;
     }
 
+    @DynamoDBAttribute
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
 
 }

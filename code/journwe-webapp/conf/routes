@@ -49,7 +49,7 @@ GET		/threads/:advid												controllers.CommentController.listCommentThreads
 POST	/comment/save												controllers.CommentController.saveComment()
 
 # Facebook
-GET     /fbtest                                						controllers.FbController.test()
+GET     /fbtest                                						controllers.ApplicationController.testFacebookFeatures()
 
 # Load Balancing
 GET		/ping														controllers.ApplicationController.ping()

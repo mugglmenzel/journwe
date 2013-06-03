@@ -9,8 +9,11 @@ import controllers.auth.SecuredAdminUser;
 import models.Category;
 import models.Subscriber;
 import models.User;
+import models.UserSocial;
 import models.dao.*;
 import models.helpers.CategoryCount;
+import models.helpers.JournweFacebookClient;
+import play.Logger;
 import play.cache.Cached;
 import play.data.Form;
 import play.mvc.Controller;
@@ -91,6 +94,27 @@ public class ApplicationController extends Controller {
                 catId));
     }
 
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result testFacebookFeatures() {
+    	AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+    	UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
+    	final String accessToken = us.getAccessToken();
+    	Logger.debug("+++ START TESTING FACEBOOK FEATURES +++");
+    	Logger.debug("Access Token: "+accessToken);
+    	JournweFacebookClient fb = JournweFacebookClient.create(accessToken);
+    	// Test #1 get my facebook user
+    	fb.getMyFacebookUser();
+    	// Test #2 get other user
+    	fb.getFacebookUser("ohaibrause");
+    	// Test #3 get my friends
+//    	fb.getMyFriends();
+    	// Test #4 publish something on my feed
+    	fb.publishOnMyFeed("Testing RestFB...");
+    	// ...
+        Logger.debug("+++ END TESTING FACEBOOK FEATURES +++");
+        return ok();
+    }
+    
     @Cached(key = "imprint")
     public static Result imprint() {
         return ok(imprint.render());

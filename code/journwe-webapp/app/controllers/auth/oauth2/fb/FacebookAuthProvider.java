@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.dao.UserSocialDAO;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.codehaus.jackson.JsonNode;
@@ -51,6 +53,12 @@ public class FacebookAuthProvider extends
 						info.getAccessToken())
 				.setQueryParameter(FIELDS, fields)
 				.get().get(PlayAuthenticate.TIMEOUT);
+		// @markusklems Modification of default plugin: Save access token
+		final String facebookId = r.asJson().get("id").toString();
+		final String accessToken = info.getAccessToken();
+		Logger.debug("Facebook ID: "+facebookId);	
+		Logger.debug("access_token: "+accessToken);
+		new UserSocialDAO().saveFacebookAccessToken(facebookId,accessToken);
 
 		final JsonNode result = r.asJson();
 		if (result.get(OAuth2AuthProvider.Constants.ERROR) != null) {
@@ -84,10 +92,6 @@ public class FacebookAuthProvider extends
 			for (final NameValuePair nameValuePair : pairs) {
 				String name = nameValuePair.getName();
 				String value = nameValuePair.getValue();
-				// Save the access_token
-				if(name.equals("access_token")) {
-					ACCESS_TOKEN = value;
-				}
 				m.put(name, value);
 			}
 
