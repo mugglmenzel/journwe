@@ -108,9 +108,9 @@ public class ApplicationController extends Controller {
     	// Test #2 get other user
     	fb.getFacebookUser("ohaibrause");
     	// Test #3 get my friends
-//    	fb.getMyFriends();
+    	fb.getMyFriends();
     	// Test #4 publish something on my feed
-//    	fb.publishOnMyFeed("Testing RestFB...");
+    	fb.publishOnMyFeed("Testing RestFB...");
     	// ...
         Logger.debug("+++ END TESTING FACEBOOK FEATURES +++");
         return ok();
