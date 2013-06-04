@@ -1,2 +1,1 @@
 10005:services.OAuthUserServicePlugin
-10010:controllers.auth.oauth2.fb.FacebookAuthProvider
