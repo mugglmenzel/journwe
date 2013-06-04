@@ -4,7 +4,7 @@
 @import models.dao._
 @import com.feth.play.module.pa.PlayAuthenticate;
 
-@main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()" data-url="/adventure/save/editable" data-original-title="Enter name">@adv.getName()</a> <small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#delete').modal();">Delete</a>} {
+@main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()" data-url="@routes.AdventureController.saveEditable()" data-original-title="Enter name">@adv.getName()</a> <small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#delete').modal();">Delete</a>} {
 
 <div>
     @if(new AdventurerDAO().get(adv.getId(), new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
