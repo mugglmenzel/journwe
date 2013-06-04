@@ -5,6 +5,8 @@ import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
+import com.restfb.types.User;
+
 import controllers.auth.SecuredAdminUser;
 import models.Category;
 import models.dao.*;
@@ -23,7 +25,9 @@ import views.html.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import static play.data.Form.form;
 
@@ -103,14 +107,35 @@ public class ApplicationController extends Controller {
         Logger.debug("Access Token: " + accessToken);
         JournweFacebookClient fb = JournweFacebookClient.create(accessToken);
         // Test #1 get my facebook user
-        fb.getMyFacebookUser();
-        // Test #2 get other user
-        //fb.getFacebookUser("ohaibrause");
+        Logger.debug("My name: "+fb.getMyFacebookUser().getName());
+        // Test #2 get my facebook user as json
+        Logger.debug("My user as JSON: "+fb.getMyFacebookUserAsJson());
         // Test #3 get my friends
-        fb.getMyFriends();
+        Logger.debug("Some of my friends: ");
+        List<User> friends = fb.getMyFriends();
+        if(friends.size()>0) {
+        	Logger.debug("Friend #1: "+friends.get(0));
+            if(friends.size()>1)
+            	Logger.debug("Friend #2: "+friends.get(1));
+        } else {
+        	Logger.debug("Wow, dude. You have no friends.");
+        }
         // Test #4 publish something on my feed
-        fb.publishOnMyFeed("Testing RestFB...");
-        // ...
+        Logger.debug("I'm going to post something on your wall now... Muahahahaha!!1");
+        fb.publishOnMyFeed("Here is a random number for you: "+(new Random()).nextDouble());
+        // Test #5 create an event
+        Logger.debug("I will create an awesome event now.");
+        String eventId = fb.createNewEvent("Würstl grillen",
+    			"Innen kalt, außen schwarz - so muss das Würstchen aussehen.", "Auf dem Dach, Englerstr 11, Karlsruhe.",
+    			new Date(1372968900), new Date(1373015100));
+        // Test #6 invite people to the event
+        if(friends.size()>1) {
+        	Logger.debug("Inviting Friend #1: "+friends.get(0)+" and Friend #2: "+friends.get(1)+" to event "+eventId);
+        	List<String> theyAreInvited = new ArrayList<String>();
+        	theyAreInvited.add(friends.get(0).getId());
+        	theyAreInvited.add(friends.get(1).getId());
+        	fb.inviteFriends(eventId, theyAreInvited);
+        }
         Logger.debug("+++ END TESTING FACEBOOK FEATURES +++");
         return ok();
     }
