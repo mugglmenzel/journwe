@@ -1,5 +1,6 @@
 package models.adventure.time;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.adventure.EAdventurerParticipation;
 import models.helpers.EnumMarshaller;
 
@@ -10,23 +11,26 @@ import models.helpers.EnumMarshaller;
  * Time: 23:41
  * To change this template use File | Settings | File Templates.
  */
+@DynamoDBTable(tableName = "journwe-timepreference")
 public class TimeAdventurerPreference {
 
-    private String adventureId;
+    private String timeOptionId;
 
     private String adventurerId;
 
     private ETimePreferenceVote vote;
 
 
-    public String getAdventureId() {
-        return adventureId;
+    @DynamoDBHashKey
+    public String getTimeOptionId() {
+        return timeOptionId;
     }
 
-    public void setAdventureId(String adventureId) {
-        this.adventureId = adventureId;
+    public void setTimeOptionId(String timeOptionId) {
+        this.timeOptionId = timeOptionId;
     }
 
+    @DynamoDBRangeKey
     public String getAdventurerId() {
         return adventurerId;
     }
@@ -35,6 +39,7 @@ public class TimeAdventurerPreference {
         this.adventurerId = adventurerId;
     }
 
+    @DynamoDBMarshalling(marshallerClass = VoteMarshaller.class)
     public ETimePreferenceVote getVote() {
         return vote;
     }

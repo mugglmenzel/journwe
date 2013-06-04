@@ -13,6 +13,7 @@ import controllers.auth.SecuredAdminUser;
 import models.*;
 import models.adventure.*;
 import models.adventure.checklist.EStatus;
+import models.adventure.time.TimeOption;
 import models.dao.*;
 import models.user.User;
 import models.user.UserEmail;
@@ -340,6 +341,19 @@ public class AdventureController extends Controller {
         }
         return redirect(routes.AdventureController.getAdventurers(advId));
 
+    }
+
+    public static Result getTime(String advId) {
+                                                  Adventure adv =new AdventureDAO().get(advId);
+        Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
+        return ok(getTime.render(adv, ins, new TimeOptionDAO().all(advId), form(TimeOption.class)));
+    }
+
+    public static Result saveTime(String advId) {
+        TimeOption opt = form(TimeOption.class).bindFromRequest().get();
+        opt.setAdventureId(advId);
+        new TimeOptionDAO().save(opt);
+        return getTime(advId);
     }
 
 }

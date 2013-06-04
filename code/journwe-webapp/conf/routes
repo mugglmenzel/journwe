@@ -32,10 +32,13 @@ GET     /adventure/:id/todos                                 		controllers.Adven
 POST    /adventure/:id/todos                                 		controllers.AdventureController.addTodo(id:String)
 PUT     /adventure/:id/todos/:tid                              		controllers.AdventureController.setTodo(id:String, tid: String)
 DELETE  /adventure/:id/todos/:tid                              		controllers.AdventureController.deleteTodo(id:String, tid: String)
+GET     /adventure/:id/time                                 		controllers.AdventureController.getTime(id:String)
+POST    /adventure/:id/time                                 		controllers.AdventureController.saveTime(id:String)
 GET     /adventure/:id/participate                                  controllers.AdventureController.participate(id:String)
 GET     /adventure/:id/participate/:status                          controllers.AdventureController.participateStatus(id:String, status:String)
 GET     /adventure/:id/adopt/:user                                  controllers.AdventureController.adopt(id:String, user:String)
 GET		/adventure/:id			                                    controllers.AdventureController.getIndex(id:String)
+
 
 GET     /adv/:shortname                                             controllers.AdventureController.getIndexShortname(shortname:String)
 

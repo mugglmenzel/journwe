@@ -1,0 +1,38 @@
+@(adv: models.adventure.Adventure, ins: Inspiration, timeOptions: List[models.adventure.time.TimeOption], timeForm: Form[models.adventure.time.TimeOption])
+
+@import helper._
+@import fieldConstructor._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@get(adv, null, "time") {
+
+
+<h3>Date &amp; Time</h3>
+<table class="table table-striped table-hover table-my-todos">
+    <thead>
+        <tr><th>Time Options</th><th></th><th></th><th></th></tr>
+    </thead>
+    <tbody>
+            @timeOptions.map { timeOption =>
+                <tr>
+                    <td>@timeOption.getName()</td>
+                    <td>@timeOption.getStartDate()</td>
+                    <td>@timeOption.getEndDate()</td>
+                    <td><a href="#" class="btn-delete"><i class="icon-trash"></i>Delete</a></td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="spacer30"></div>
+
+    @form(action = routes.AdventureController.saveTime(adv.getId())) {
+        @inputText(timeForm("name"), '_label -> "Time Option name", 'required -> "required")
+        @inputDate(timeForm("startDate"), '_label -> "Start Date", 'required -> "required")
+        @inputDate(timeForm("endDate"), '_label -> "Start Date", 'required -> "required")
+
+    }
+
+}
