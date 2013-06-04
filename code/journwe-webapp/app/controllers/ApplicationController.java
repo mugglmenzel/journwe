@@ -127,7 +127,7 @@ public class ApplicationController extends Controller {
         Logger.debug("I will create an awesome event now.");
         String eventId = fb.createNewEvent("Würstl grillen",
     			"Innen kalt, außen schwarz - so muss das Würstchen aussehen.", "Auf dem Dach, Englerstr 11, Karlsruhe.",
-    			new Date(1372968900), new Date(1373015100));
+    			new Date(new Date().getTime()+100000000), new Date(new Date().getTime()+120000000));
         // Test #6 invite people to the event
         if(friends.size()>1) {
         	Logger.debug("Inviting Friend #1: "+friends.get(0)+" and Friend #2: "+friends.get(1)+" to event "+eventId);

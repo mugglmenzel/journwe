@@ -68,7 +68,8 @@ public class JournweFacebookClient {
 	public String createNewEvent(final String eventName,
 			final String eventDescription, final String eventLocation,
 			final Date startDate, final Date endDate) {
-		Logger.debug("Date format: "+formatDateAsISO8601String(startDate));
+		Logger.debug("Date format of start Date: "+formatDateAsISO8601String(startDate));
+		Logger.debug("Date format of end Date: "+formatDateAsISO8601String(endDate));
 		FacebookType newEvent = facebookClient.publish("me/events",
 				FacebookType.class, Parameter.with("name", eventName),
 				Parameter.with("start_time",
@@ -102,7 +103,7 @@ public class JournweFacebookClient {
 	// +++ Helper Methods +++ //
 
 	private static String formatDateAsISO8601String(final Date date) {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		String dateAsString = df.format(date);
 		return dateAsString;
 	}
