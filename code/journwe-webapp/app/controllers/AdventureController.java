@@ -317,6 +317,22 @@ public class AdventureController extends Controller {
         return ok();
     }
 
+    /*
+    public static Result postOnMyTwitterStream(String advId) {
+        Adventure adv = new AdventureDAO().get(advId);
+        Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
+        AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
+
+        DynamicForm f = form().bindFromRequest();
+
+        ObjectNode node = Json.newObject();
+        node.put("url", routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()));
+
+        return ok(Json.toJson(node));
+    }
+    */
+
+
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result participate(String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));

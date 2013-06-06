@@ -8,17 +8,32 @@
 
 <p>Start motivating friends to join your Adventure</p>
 <p>(Facebook, Email, if(public): Twitter)</p>
-<form id="postOnMyFacebookWallForm">
-    <fieldset>
-        <textarea name="posttext" placeholder="Invitation text to your friends"></textarea>
-    </fieldset>
-    <div class="form-actions">
-        <a class="btn btn-primary"
-                onclick="$.post('@routes.AdventureController.postOnMyFacebookWall(adv.getId())', $('#postOnMyFacebookWallForm').serialize(), function (data) {alert('Posted!');});">
-            Post on my Facebook Wall
-        </a>
-    </div>
-</form>
+
+<div>
+    <a class="btn btn-primary"
+       onclick="$('#facebookForm').slideDown()"><!---->
+        <i class="icon-facebook"></i> Post on my Facebook Wall
+    </a>
+    @if(adv.isPublish()){
+    <a class="btn btn-primary"
+       href="https://twitter.com/intent/tweet?original_referer=@routes.ApplicationController.index().absoluteURL(request())&related=JournWe&text=Join+my+adventure+@adv.getName()+on+Journwe.com+@shortURL&tw_p=tweetbutton&url=@shortURL"
+       target="_blank">
+        <i class="icon-twitter"></i> Tweet on Twitter
+    </a>
+    }
+</div>
+
+<div id="facebookForm" class="hide">
+    <form id="publishFacebookPostForm">
+        <fieldset>
+            <textarea id="posttext" name="posttext">Hey guys! Join my adventure on JournWe.com.</textarea>
+        </fieldset>
+        <div class="form-actions">
+            <a class="btn btn-primary" onclick="$.post('@routes.AdventureController.postOnMyFacebookWall(adv.getId())', $('#publishFacebookPostForm').serialize(), function (data) {alert('Posted!');});">Post on Facebook</a>
+        </div>
+    </form>
+</div>
+
 
 <p>You can find your Adventure under this URL:</p>
 <p><a class="btn btn-link" href="@routes.AdventureController.getIndexShortname(shortname)">@routes.AdventureController.getIndexShortname(shortname).absoluteURL(request())</a>
