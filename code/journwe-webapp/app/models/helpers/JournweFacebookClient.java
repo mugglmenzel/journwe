@@ -44,12 +44,32 @@ public class JournweFacebookClient {
 		return getMyFriends(JsonObject.class);
 	}
 
-	public void publishOnMyFeed(final String text) {
+	public void publishOnMyFeed(final String textMessage) {
 		try {
 			// Not sure if we need the "publishMessageResponse"
 			FacebookType publishMessageResponse = facebookClient.publish(
 					"me/feed", FacebookType.class,
-					Parameter.with("message", text));
+					Parameter.with("message", textMessage));
+		} catch (Exception e) {
+			// For example: cannot post duplicate messages.
+			Logger.warn(e.getMessage());
+		}
+	}
+	
+	public void publishOnMyFeed(final String link, String caption, String description) {
+		try {
+			FacebookType publishMessageResponse = facebookClient.publish(
+					"me/feed", FacebookType.class, Parameter.with("link", link), Parameter.with("caption",caption), Parameter.with("description",description)); 
+		} catch (Exception e) {
+			// For example: cannot post duplicate messages.
+			Logger.warn(e.getMessage());
+		}
+	}
+	
+	public void publishOnMyFeed(final String link, String caption, String description, String pictureLink) {
+		try {
+			FacebookType publishMessageResponse = facebookClient.publish(
+					"me/feed", FacebookType.class, Parameter.with("link", link), Parameter.with("caption",caption), Parameter.with("description",description), Parameter.with("picture", pictureLink)); 
 		} catch (Exception e) {
 			// For example: cannot post duplicate messages.
 			Logger.warn(e.getMessage());
