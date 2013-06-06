@@ -4,8 +4,9 @@
 [ "x$JAVA_HOME" == "x" ] && { echo "Need to set JAVA_HOME"; exit 1; }
 #: ${JAVA_HOME:?"JAVA_HOME needs to be set!"}
 
-#cd $(dirname $0)
+cd $(dirname $0)
 current_path=$(pwd)
+#cd $current_path
 
 ssh_opts_background=`echo -f -q -o "StrictHostKeyChecking=no" -i $current_path/journwe.pem`
 ssh_opts_terminal=`echo -t -q -o "StrictHostKeyChecking=no" -i $current_path/journwe.pem`

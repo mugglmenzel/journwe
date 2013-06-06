@@ -214,7 +214,7 @@ public class AdventureController extends Controller {
                                     ConfigFactory.load().getString("aws.accessKey"),
                                     ConfigFactory.load().getString("aws.secretKey")));
                             Logger.info("got primary email: " + primaryEmail);
-                            ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + advShortname.getShortname() + "@journwe.com.")))).withSource(advShortname.getShortname() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                            ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.")))).withSource(advShortname.getShortname() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -331,6 +331,26 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(node));
     }
     */
+
+    public static Result inviteViaEmail(String advId) {
+        Adventure adv = new AdventureDAO().get(advId);
+        AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
+
+        DynamicForm f = form().bindFromRequest();
+        for(String email : f.get("email").split(",")) {
+            try {
+                AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
+                        ConfigFactory.load().getString("aws.accessKey"),
+                        ConfigFactory.load().getString("aws.secretKey")));
+                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message().withSubject(new Content().withData("Invitation to join my Adventure " + adv.getName() + " on JournWe.com")).withBody(new Body().withText(new Content().withData(f.get("emailtext"))))).withSource(shortname.getShortname() + "@adventure.journwe.com").withReplyToAddresses(shortname.getShortname() + "@adventure.journwe.com"));
+
+            }  catch (Exception e) {
+                e.printStackTrace();
+
+            }
+        }
+        return ok();
+    }
 
 
     @Security.Authenticated(SecuredAdminUser.class)

@@ -10,12 +10,16 @@
 <p>(Facebook, Email, if(public): Twitter)</p>
 
 <div>
-    <a class="btn btn-primary"
+    <a class="btn"
+       onclick="$('#emailForm').slideDown()"><!---->
+        <i class="icon-envelope"></i> Invite with an Email
+    </a>
+    <a class="btn"
        onclick="$('#facebookForm').slideDown()"><!---->
         <i class="icon-facebook"></i> Post on my Facebook Wall
     </a>
     @if(adv.isPublish()){
-    <a class="btn btn-primary"
+    <a class="btn"
        href="https://twitter.com/intent/tweet?original_referer=@routes.ApplicationController.index().absoluteURL(request())&related=JournWe&text=Join+my+adventure+@adv.getName()+on+Journwe.com+@shortURL&tw_p=tweetbutton&url=@shortURL"
        target="_blank">
         <i class="icon-twitter"></i> Tweet on Twitter
@@ -34,6 +38,17 @@
     </form>
 </div>
 
+<div id="emailForm" class="hide">
+    <form id="publishEmailForm">
+        <fieldset>
+            <input type="email" name="email" placeholder="friend@@example.com">
+            <textarea id="emailtext" name="emailtext">Hey guys! Join my adventure on JournWe.com. Discover what we could experience together: @shortURL</textarea>
+        </fieldset>
+        <div class="form-actions">
+            <a class="btn btn-primary" onclick="$.post('@routes.AdventureController.inviteViaEmail(adv.getId())', $('#publishEmailForm').serialize(), function (data) {alert('Email sent!');});">Send Email</a>
+        </div>
+    </form>
+</div>
 
 <p>You can find your Adventure under this URL:</p>
 <p><a class="btn btn-link" href="@routes.AdventureController.getIndexShortname(shortname)">@routes.AdventureController.getIndexShortname(shortname).absoluteURL(request())</a>
