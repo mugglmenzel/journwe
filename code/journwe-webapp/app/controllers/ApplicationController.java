@@ -137,9 +137,11 @@ public class ApplicationController extends Controller {
 //        	fb.inviteFriends(eventId, theyAreInvited);
 //        }
 //        // Test #7 post a link with caption, description and text message on the wall
-//        fb.publishOnMyFeed("Ich bin total begeistert von diesem Produkt. Mein Mann findet es auch super. Hat er mir zumindest immer wieder versichert.", "http://www.faz.net", "Das Urwald-Dschungelmesser", "Schlangen, Giraffen, Mäuse - kein Problem. Mit dem Dschungel-Nahkampfmesser machen Sie dem Gekreuch den Garaus!", "http://www.thebushcraftstore.co.uk/ekmps/shops/bduimportsltd/images/swedish-forest-bushcraft-knife-choice-of-handles-on-sale--[2]-10816-p.jpg");
+        fb.publishLinkOnMyFeed("Message #1", "http://www.faz.net", "www.url-1.de", "Description #1", "http://www.thebushcraftstore.co.uk/ekmps/shops/bduimportsltd/images/swedish-forest-bushcraft-knife-choice-of-handles-on-sale--[2]-10816-p.jpg");
         // Test #8 Post only a link
         fb.publishLinkOnMyFeed("http://www.spiegel.de");
+        // Test #9 Post only a text message
+        fb.publishMessageOnMyFeed("Message #2");
         Logger.debug("+++ END TESTING FACEBOOK FEATURES +++");
         return ok();
     }

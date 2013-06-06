@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import play.Logger;
 
@@ -43,53 +45,91 @@ public class JournweFacebookClient {
 	public List<JsonObject> getMyFriendsAsJson() {
 		return getMyFriends(JsonObject.class);
 	}
+	
+	/**
+	 * 
+	 * @param message
+	 */
+	public void publishMessageOnMyFeed(final String message) {
+		final HashMap<String,String> paramsMap = new HashMap<String,String>();
+		paramsMap.put("message", message);
+		publishOnMyFeed(paramsMap);
+	}
+	
+	/**
+	 * 
+	 * @param link
+	 */
+	public void publishLinkOnMyFeed(final String link) {
+		final HashMap<String,String> paramsMap = new HashMap<String,String>();
+		paramsMap.put("link", link);
+		publishOnMyFeed(paramsMap);
+	}
 
-	public void publishOnMyFeed(final String textMessage) {
+	/**
+	 * 
+	 * @param link
+	 * @param caption
+	 * @param description
+	 */
+	public void publishLinkOnMyFeed(final String link, String caption, String description) {
+		final HashMap<String,String> paramsMap = new HashMap<String,String>();
+		paramsMap.put("link", link);
+		paramsMap.put("caption", caption);
+		paramsMap.put("description", description);
+		publishOnMyFeed(paramsMap);
+	}
+	
+	/**
+	 * 
+	 * @param link
+	 * @param caption
+	 * @param description
+	 * @param picture
+	 */
+	public void publishLinkOnMyFeed(final String link, String caption, String description, String picture) {
+		final HashMap<String,String> paramsMap = new HashMap<String,String>();
+		paramsMap.put("link", link);
+		paramsMap.put("caption", caption);
+		paramsMap.put("description", description);
+		paramsMap.put("picture", picture);
+		publishOnMyFeed(paramsMap);
+	}
+
+	/**
+	 * 
+	 * @param message
+	 * @param link
+	 * @param caption
+	 * @param description
+	 * @param picture
+	 */
+	public void publishLinkOnMyFeed(final String message, final String link, String caption, String description, String picture) {
+		final HashMap<String,String> paramsMap = new HashMap<String,String>();
+		paramsMap.put("message", message);
+		paramsMap.put("link", link);
+		paramsMap.put("caption", caption);
+		paramsMap.put("description", description);
+		paramsMap.put("picture", picture);
+		publishOnMyFeed(paramsMap);
+	}
+	
+	/**
+	 * Generic method for posting content on the own feed. See e.g. here: https://developers.facebook.com/docs/reference/api/link/
+	 * 
+	 * @param paramsMap The first String is the key, the second string is the value.
+	 */
+	public void publishOnMyFeed(final HashMap<String,String> paramsMap) {
 		try {
+			Parameter[] params = new Parameter[paramsMap.size()];
+			int i=0;
+			for(Entry<String,String> e : paramsMap.entrySet()) {
+				params[i++] = Parameter.with(e.getKey(), e.getValue());
+			}
+				
 			// Not sure if we need the "publishMessageResponse"
 			FacebookType publishMessageResponse = facebookClient.publish(
-					"me/feed", FacebookType.class,
-					Parameter.with("message", textMessage));
-		} catch (Exception e) {
-			// For example: cannot post duplicate messages.
-			Logger.warn(e.getMessage());
-		}
-	}
-	
-	public void publishLinkOnMyFeed(final String link) {
-		try {
-			FacebookType publishMessageResponse = facebookClient.publish(
-					"me/feed", FacebookType.class, Parameter.with("link", link)); 
-		} catch (Exception e) {
-			// For example: cannot post duplicate messages.
-			Logger.warn(e.getMessage());
-		}
-	}	
-	
-	public void publishOnMyFeed(final String link, String caption, String description) {
-		try {
-			FacebookType publishMessageResponse = facebookClient.publish(
-					"me/feed", FacebookType.class, Parameter.with("link", link), Parameter.with("caption",caption), Parameter.with("description",description)); 
-		} catch (Exception e) {
-			// For example: cannot post duplicate messages.
-			Logger.warn(e.getMessage());
-		}
-	}
-	
-	public void publishOnMyFeed(final String link, String caption, String description, String pictureLink) {
-		try {
-			FacebookType publishMessageResponse = facebookClient.publish(
-					"me/feed", FacebookType.class, Parameter.with("link", link), Parameter.with("caption",caption), Parameter.with("description",description), Parameter.with("picture", pictureLink)); 
-		} catch (Exception e) {
-			// For example: cannot post duplicate messages.
-			Logger.warn(e.getMessage());
-		}
-	}
-
-	public void publishOnMyFeed(final String textMessage, final String link, String caption, String description, String pictureLink) {
-		try {
-			FacebookType publishMessageResponse = facebookClient.publish(
-					"me/feed", FacebookType.class, Parameter.with("message", textMessage), Parameter.with("link", link), Parameter.with("caption",caption), Parameter.with("description",description), Parameter.with("picture", pictureLink)); 
+					"me/feed", FacebookType.class, params);
 		} catch (Exception e) {
 			// For example: cannot post duplicate messages.
 			Logger.warn(e.getMessage());
