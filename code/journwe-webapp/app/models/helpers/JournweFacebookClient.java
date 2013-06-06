@@ -56,6 +56,16 @@ public class JournweFacebookClient {
 		}
 	}
 	
+	public void publishLinkOnMyFeed(final String link) {
+		try {
+			FacebookType publishMessageResponse = facebookClient.publish(
+					"me/feed", FacebookType.class, Parameter.with("link", link)); 
+		} catch (Exception e) {
+			// For example: cannot post duplicate messages.
+			Logger.warn(e.getMessage());
+		}
+	}	
+	
 	public void publishOnMyFeed(final String link, String caption, String description) {
 		try {
 			FacebookType publishMessageResponse = facebookClient.publish(
@@ -76,6 +86,16 @@ public class JournweFacebookClient {
 		}
 	}
 
+	public void publishOnMyFeed(final String textMessage, final String link, String caption, String description, String pictureLink) {
+		try {
+			FacebookType publishMessageResponse = facebookClient.publish(
+					"me/feed", FacebookType.class, Parameter.with("message", textMessage), Parameter.with("link", link), Parameter.with("caption",caption), Parameter.with("description",description), Parameter.with("picture", pictureLink)); 
+		} catch (Exception e) {
+			// For example: cannot post duplicate messages.
+			Logger.warn(e.getMessage());
+		}
+	}
+	
 	/**
 	 * 
 	 * @param eventName Name of the event as String
