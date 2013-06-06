@@ -23,6 +23,7 @@ GET		/inspiration/:id/delete			                			controllers.InspirationControl
 GET		/adventure/new											    controllers.AdventureController.create()
 POST	/adventure/save												controllers.AdventureController.save()
 POST    /adventure/save/editable                                    controllers.AdventureController.saveEditable()
+POST    /adventure/:id/postFacebookWall                             controllers.AdventureController.postOnMyFacebookWall(id:String)
 GET		/adventure/:id/new											controllers.AdventureController.createFromInspiration(id:String)
 GET     /adventure/:id/delete                                       controllers.AdventureController.delete(id:String)
 POST    /adventure/check/shortname                                  controllers.AdventureController.checkShortname()

@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.user.AuthUser;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
@@ -15,10 +16,13 @@ import models.adventure.*;
 import models.adventure.checklist.EStatus;
 import models.adventure.time.TimeOption;
 import models.dao.*;
+import models.helpers.JournweFacebookClient;
 import models.user.User;
 import models.user.UserEmail;
+import models.user.UserSocial;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
+import play.api.templates.Html;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -296,6 +300,21 @@ public class AdventureController extends Controller {
         node.put("message", "Shortname already exists!");
         Logger.info(node.toString());
         return ok(Json.toJson(node));
+    }
+
+    public static Result postOnMyFacebookWall(String advId) {
+        Adventure adv = new AdventureDAO().get(advId);
+        Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
+        AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
+
+        DynamicForm f = form().bindFromRequest();
+
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
+        JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
+        fb.publishLinkOnMyFeed(f.get("posttext"), routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()), "JournWe  Adventure: " + adv.getName(), "" + (adv.getDescription() == null ? ins.getDescription() : adv.getDescription()), "" + adv.getImage());
+
+        return ok();
     }
 
     @Security.Authenticated(SecuredAdminUser.class)

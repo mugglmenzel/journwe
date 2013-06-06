@@ -1,5 +1,6 @@
 @(adv: models.adventure.Adventure, ins: Inspiration, shortURL: String, shortname: String)
 
+@import helper._
 
 @main(adv.getName()){@adv.getName()
 <small>@ins.getName()</small>} {
@@ -7,9 +8,21 @@
 
 <p>Start motivating friends to join your Adventure</p>
 <p>(Facebook, Email, if(public): Twitter)</p>
+<form id="postOnMyFacebookWallForm">
+    <fieldset>
+        <textarea name="posttext" placeholder="Invitation text to your friends"></textarea>
+    </fieldset>
+    <div class="form-actions">
+        <a class="btn btn-primary"
+                onclick="$.post('@routes.AdventureController.postOnMyFacebookWall(adv.getId())', $('#postOnMyFacebookWallForm').serialize(), function (data) {alert('Posted!');});">
+            Post on my Facebook Wall
+        </a>
+    </div>
+</form>
 
 <p>You can find your Adventure under this URL:</p>
-<p><a class="btn btn-link" href="@routes.AdventureController.getIndexShortname(shortname)">@routes.AdventureController.getIndexShortname(shortname).absoluteURL(request())</a></p>
+<p><a class="btn btn-link" href="@routes.AdventureController.getIndexShortname(shortname)">@routes.AdventureController.getIndexShortname(shortname).absoluteURL(request())</a>
+</p>
 
 
 <p>Your shortened URL:</p>
