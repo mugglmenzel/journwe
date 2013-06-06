@@ -7,8 +7,8 @@
 #cd $(dirname $0)
 current_path=$(pwd)
 
-ssh_opts_background=`echo -f -q -o "StrictHostKeyChecking no" -i $current_path/journwe.pem`
-ssh_opts_terminal=`echo -t -q -o "StrictHostKeyChecking no" -i $current_path/journwe.pem`
+ssh_opts_background=`echo -f -q -o "StrictHostKeyChecking=no" -i $current_path/journwe.pem`
+ssh_opts_terminal=`echo -t -q -o "StrictHostKeyChecking=no" -i $current_path/journwe.pem`
 scp_opts=`echo -i $current_path/journwe.pem`
 
 #scp $scp_opts ./update_webapp_remote_from_git.sh $ssh_host:/home/ec2-user/ 
