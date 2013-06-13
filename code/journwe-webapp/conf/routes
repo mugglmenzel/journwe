@@ -3,8 +3,8 @@
 # ~~~~
 
 # Testing comet
-GET     /showProgress                                               controllers.ProgressController.getProgressHome()
-GET		/progress													controllers.ProgressController.getProgress()
+# GET     /showProgress                                               controllers.ProgressController.getProgressHome()
+# GET		/progress													controllers.ProgressController.getProgress()
 
 
 GET		/inspiration/new											controllers.InspirationController.create()
