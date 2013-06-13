@@ -1,29 +1,112 @@
-@(adv: models.adventure.Adventure, ins: Inspiration, active: String)(content: Html)
+@(adv: models.adventure.Adventure, ins: Inspiration, advr: models.adventure.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption])(description: Html)
 
-@import models._
-@import models.dao._
-@import com.feth.play.module.pa.PlayAuthenticate;
+@import models.dao.AdventurerDAO
+@import models.dao.UserDAO
+@import com.feth.play.module.pa.PlayAuthenticate
 
-@main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()" data-url="@routes.AdventureController.saveEditable()" data-original-title="Enter name">@adv.getName()</a> <small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#delete').modal();">Delete</a>} {
+
+@main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+                        data-url="@routes.AdventureController.saveEditable()"
+                        data-original-title="Enter adventure name">@adv.getName()</a><span id="index"></span>
+<small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#delete').modal();">Delete</a>} {
 
 <div>
-    @if(new AdventurerDAO().get(adv.getId(), new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
+    @if(new AdventurerDAO().get(adv.getId(), new
+    UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
-    <ul class="nav nav-tabs">
-        <li @if(active == "index"){class="active"}><a href="@routes.AdventureController.getIndex(adv.getId())"><i class="icon-th"></i>Overview</a></li>
-        <li @if(active == "adventurers"){class="active"}><a href="@routes.AdventureController.getAdventurers(adv.getId())"><i class="icon-th"></i>Adventurers</a></li>
-        <li @if(active == "messages"){class="active"}><a href="#messages"><i class="icon-search"></i>Messages</a></li>
-        <li @if(active == "time"){class="active"}><a href="@routes.AdventureController.getTime(adv.getId())"><i class="icon-search"></i>Date &amp; Time</a></li>
-        <li @if(active == "todo"){class="active"}><a href="@routes.AdventureController.getTodos(adv.getId())"><i class="icon-th"></i>Packing List</a></li>
-        <li @if(active == "files"){class="active"}><a href="#files"><i class="icon-search"></i>Files</a></li>
-    </ul>
-    }
-    <div class="row">
-
-        <div class="span3">@views.html.comment.widget_comment.render(adv, active)</div>
-        <div class="span9">@content</div>
-
+    <div style="position: fixed; right: 0px; top: 50%; background-color: rgba(255,255,255,0.9)">
+        <ul class="nav nav-pills nav-stacked">
+            <li
+            @if(active == "index"){class="active"}><a href="@routes.AdventureController.getIndex(adv.getId())"><i
+                class="icon-star"></i>Overview</a></li>
+            <li
+            @if(active == "adventurers"){class="active"}><a
+                href="@routes.AdventureController.getAdventurers(adv.getId())"><i
+                class="icon-group"></i>Adventurers</a></li>
+            <li
+            @if(active == "messages"){class="active"}><a href="#messages"><i class="icon-envelope"></i>Messages</a></li>
+            <li
+            @if(active == "time"){class="active"}><a href="@routes.AdventureController.getTime(adv.getId())"><i
+                class="icon-time"></i>Date &amp; Time</a></li>
+            <li
+            @if(active == "todos"){class="active"}><a href="@routes.AdventureController.getTodos(adv.getId())"><i
+                class="icon-list-ol"></i>Packing List</a></li>
+            <li
+            @if(active == "files"){class="active"}><a href="#files"><i class="icon-cloud"></i>Files</a></li>
+        </ul>
     </div>
+    }
+    <div class="row-fluid">
+
+        <div class="span3">@{views.html.comment.widget_comment.render(adv, "index")}</div>
+        <div class="span9">
+            @description
+
+
+            <h2>Adventure</h2>
+
+            @index(adv, ins)
+
+        </div>
+    </div>
+
+    <hr/>
+    <div class="row-fluid">
+        <div class="span3">@{views.html.comment.widget_comment.render(adv, "adventurers")}</div>
+        <div class="span9">
+
+            <h2 id="adventurers">Adventurers</h2>
+
+            @adventurers(adv, advr)
+        </div>
+    </div>
+
+    <hr/>
+    <div class="row-fluid">
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "messages")</div>
+        <div class="span9">
+
+            <h2 id="messages">Messages</h2>
+
+
+        </div>
+    </div>
+
+    <hr/>
+    <div class="row-fluid">
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "time")</div>
+        <div class="span9">
+
+            <h2 id="time">Date &amp; Time</h2>
+
+            @time(adv, timeForm)
+
+        </div>
+    </div>
+    <hr/>
+    <div class="row-fluid">
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "todos")</div>
+        <div class="span9">
+
+
+            <h2 id="todos">Packing List</h2>
+
+            @todos(adv, advr)
+
+        </div>
+    </div>
+    <hr/>
+    <div class="row-fluid">
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "files")</div>
+        <div class="span9">
+
+            <h2 id="files">Files</h2>
+
+
+        </div>
+    </div>
+
+</div>
 </div>
 
 <div id="delete" class="modal hide fade" tabindex="-1" role="dialog">
@@ -31,13 +114,17 @@
         <h3>Sure, you want to delete @adv.getName()?</h3>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-danger" href="@routes.AdventureController.delete(adv.getId())">Delete</a> <a class="btn"  data-dismiss="modal">Cancel</a>
+        <a class="btn btn-danger" href="@routes.AdventureController.delete(adv.getId())">Delete</a> <a class="btn"
+                                                                                                       data-dismiss="modal">Cancel</a>
     </div>
 </div>
 
 <script>
     $.fn.editable.defaults.mode = 'inline';
     $('#adventureName').editable();
+    $('html, body').animate({
+    scrollTop : $('#@active').offset().top
+    }, 'slow');
 </script>
 
 }

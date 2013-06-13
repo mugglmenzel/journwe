@@ -1,7 +1,4 @@
-@(adv: models.adventure.Adventure, ins: Inspiration)
+@(adv: models.adventure.Adventure, ins: Inspiration, advr: models.adventure.Adventurer, timeForm: Form[models.adventure.time.TimeOption])
 
-@get(adv, ins, "index") {
 
-      @content.render(adv, ins)
-
-}
+@get(adv, ins, advr, "index", timeForm){<span></span>}

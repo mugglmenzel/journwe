@@ -43,6 +43,7 @@ public class AdventureController extends Controller {
     private static final String S3_BUCKET_ADVENTURE_IMAGES = "journwe-adventure-images";
 
     private static DynamicForm advForm = form();
+    private static Form<TimeOption> timeForm = form(TimeOption.class);
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getIndex(String id) {
@@ -52,7 +53,7 @@ public class AdventureController extends Controller {
         if (advr == null)
             return ok(getPublic.render(adv, new InspirationDAO().get(adv.getInspirationId())));
         else
-            return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+            return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, timeForm));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -67,15 +68,16 @@ public class AdventureController extends Controller {
         Adventure adv = new AdventureDAO().get(id);
         Adventurer advr = new AdventurerDAO().get(id, usr.getId());
 
-        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), new AdventurerDAO().all(id), advr == null ? null : advr.getParticipationStatus()));
+        return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, timeForm));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getTodos(String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
+        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
 
-        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), new TodoDAO().allByUser(advId), usr.getId()));
+        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, timeForm));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -401,7 +403,9 @@ public class AdventureController extends Controller {
     public static Result getTime(String advId) {
                                                   Adventure adv =new AdventureDAO().get(advId);
         Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
-        return ok(getTime.render(adv, ins, new TimeOptionDAO().all(advId), form(TimeOption.class)));
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+        return ok(getTime.render(adv, ins, advr, timeForm));
     }
 
     public static Result saveTime(String advId) {
