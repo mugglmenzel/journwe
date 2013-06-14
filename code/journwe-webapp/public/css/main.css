@@ -36,7 +36,11 @@ hr {
 	box-shadow: 0 0 10px -1px black;
 }
 
-.navbar-inverse .brand, .hero-unit h1 {
+.navbar-fixed-top .navbar-inner {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.navbar-fixed-top .navbar-inner .brand, .hero-unit h1 {
 	color: #E97802;
 	vertical-align: text-bottom;
 }

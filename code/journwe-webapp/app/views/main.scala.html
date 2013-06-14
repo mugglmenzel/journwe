@@ -1,4 +1,4 @@
-@(title: String)(header: Html = Html("Welcome"))(content: Html)
+@(title: String)(header: Html = Html("Welcome"))(content: Html)(implicit active: String = "home")
 
 @import models.dao._
 @import play.mvc.Controller._
@@ -42,7 +42,7 @@
 	</script>
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar  navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
 				<button type="button" class="btn btn-navbar" data-toggle="collapse"
@@ -57,10 +57,10 @@
 				
 				<div class="nav-collapse collapse">
 					<ul class="nav">
-						<li class="active"><a href="@routes.ApplicationController.index">Home</a></li>
-						<li><a href="@routes.ApplicationController.about">About</a></li>
-						<li><a href="#contact">Contact</a></li>
-                        <li><a href="@routes.ApplicationController.admin">Admin</a></li>
+						<li @if(active == "home"){class="active"}><a href="@routes.ApplicationController.index">Home</a></li>
+						<li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
+						<li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
+                        <li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>
 					</ul>
 				</div>
 
