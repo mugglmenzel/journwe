@@ -4,7 +4,11 @@ body {
 	background-position: left top;
 	background-attachment: fixed;
 	background-size: cover;
-	font-family: 'Advent Pro', sans-serif;
+	font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4 {
+
 }
 
 hr {
