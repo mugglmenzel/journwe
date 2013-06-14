@@ -11,7 +11,7 @@
 @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
 <p class="lead">
     Welcome back, @{new UserDAO().findByAuthUserIdentity(auth).getName()}! You have some adventures before
-        you.
+    you.
 </p>
 }
 }
@@ -39,7 +39,9 @@
 
 }
 
-<div>Get Inspired from...</div>
+<div class="spacer30"></div>
+
+<p class="lead">Get Inspired from...</p>
 <div style="background-color: rgba(245,245,245,0.7); padding: 5px; margin-bottom: 20px;"><h3>Public Adventures</h3>
 </div>
 <div>tbd</div>

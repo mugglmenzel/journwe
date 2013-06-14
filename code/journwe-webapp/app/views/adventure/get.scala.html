@@ -14,7 +14,7 @@
     @if(new AdventurerDAO().get(adv.getId(), new
     UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
-    <div style="position: fixed; right: 0px; top: 50%; background-color: rgba(255,255,255,0.9)">
+    <div style="position: fixed; right: 0px; top: 50%; background-color: rgba(255,255,255,0.9); box-shadow: 0 0 10px 0px black;">
         <ul class="nav nav-pills nav-stacked">
             <li
             @if(active == "index"){class="active"}><a href="@routes.AdventureController.getIndex(adv.getId())"><i
