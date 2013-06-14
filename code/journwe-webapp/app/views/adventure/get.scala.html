@@ -18,21 +18,21 @@
         <ul class="nav nav-pills nav-stacked">
             <li
             @if(active == "index"){class="active"}><a href="@routes.AdventureController.getIndex(adv.getId())"><i
-                class="icon-star"></i>Overview</a></li>
+                class="icon-star"></i> Overview</a></li>
             <li
             @if(active == "adventurers"){class="active"}><a
                 href="@routes.AdventureController.getAdventurers(adv.getId())"><i
-                class="icon-group"></i>Adventurers</a></li>
+                class="icon-group"></i> Adventurers</a></li>
             <li
-            @if(active == "messages"){class="active"}><a href="#messages"><i class="icon-envelope"></i>Messages</a></li>
+            @if(active == "messages"){class="active"}><a href="#messages"><i class="icon-envelope"></i> Messages</a></li>
             <li
             @if(active == "time"){class="active"}><a href="@routes.AdventureController.getTime(adv.getId())"><i
-                class="icon-time"></i>Date &amp; Time</a></li>
+                class="icon-time"></i> Date &amp; Time</a></li>
             <li
             @if(active == "todos"){class="active"}><a href="@routes.AdventureController.getTodos(adv.getId())"><i
-                class="icon-list-ol"></i>Packing List</a></li>
+                class="icon-list-ol"></i> Packing List</a></li>
             <li
-            @if(active == "files"){class="active"}><a href="#files"><i class="icon-cloud"></i>Files</a></li>
+            @if(active == "files"){class="active"}><a href="#files"><i class="icon-cloud"></i> Files</a></li>
         </ul>
     </div>
     }
