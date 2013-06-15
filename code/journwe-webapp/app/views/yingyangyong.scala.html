@@ -1,99 +1,128 @@
 @(categories: List[models.helpers.CategoryCount])
 
-<div class="row-fluid">
-    <div class="span2 offset1">
-        <div style="min-height: 185">
+<form action="@routes.AdventureController.save()">
+    <div class="row-fluid">
+        <div class="span2 offset1 text-center">
             <a href="#" onclick="switchMode();"><img id="yingyangyong" src='@routes.Assets.at("img/yingyangyong_green.png")'></a>
         </div>
-
-        <div class="spacer30"></div>
-        <a href="@routes.AdventureController.create()" class="btn btn-large">Start Adventure</a>
-    </div>
-    <!--<a href="@routes.AdventureController.create()" class="btn btn-primary btn-large text-center">Start
-        a new Group Adventure!</a> -->
-    <div class="span8" style="min-height: 800px">
-        <div class="input-append">
-            <input type="text" placeholder="Name your adventure" required="required" class="input input-xxl">
-
-            <div class="btn-group">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                    Choose Category
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    @for(cat <- categories) {
-                    <li><a><span
-                            class="badge badge-info pull-right">@cat.getCount()</span>@cat.getCategory().getName()</a>
-                    </li>
-                    }
-                </ul>
-            </div>
-        </div>
-
-        <div id="where-dialog" style="border: solid 5px #78a942; padding: 10px; margin-bottom: 20px">
-            <h1>Where do you want to go?</h1>
-
-            <ul id="places-list"></ul>
-
+        <!--<a href="@routes.AdventureController.create()" class="btn btn-primary btn-large text-center">Start
+            a new Group Adventure!</a> -->
+        <div class="span8" style="min-height: 600px">
             <div class="input-append">
-                <input type="text" placeholder="A decent place name" id="inputPlace" onchange="searchPlace();">
-                <button class="btn btn-primary"><i class="icon-plus"></i></button>
-            </div>
-            <div style="height: 500px;">
-                <div id="where-map" style="width: 100%; height: 100%"></div>
-            </div>
-        </div>
+                <input type="text" placeholder="Name your adventure" required="required" class="input input-xxl">
 
-        <div id="who-dialog" style="border: solid 5px #eb3d00; padding: 10px; margin-bottom: 20px; display: none;">
-            <h1>Who's gonna join your adventure?</h1>
-
-            <ul id="people-list"></ul>
-
-            <div class="input-append">
                 <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="icon-group"></i>
+                        Choose Category
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><i class="icon-facebook"></i> Facebook</li>
-                        <li><i class="icon-envelope"></i> Email</li>
+                        @for(cat <- categories) {
+                        <li><a><span
+                                class="badge badge-info pull-right">@cat.getCount()</span>@cat.getCategory().getName()</a>
+                        </li>
+                        }
                     </ul>
                 </div>
-                <input type="text" placeholder="A good ol' friend" id="inputPeople">
-                <button class="btn btn-primary"><i class="icon-plus"></i></button>
             </div>
-            <div>Is your Adventure public?
-                <div class="switch"><input type="checkbox" id="publish" name="publish" value="true"></div>
+            <div class="pull-right">
+                <button type="submit" style="backround-color: #00cc00;" class="btn">Start Adventure <i class="icon-angle-right"></i></button>
+            </div>
+
+
+
+            <div id="where-dialog" style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-bottom: 20px">
+                <div style="background-color: rgba(255, 255, 255, 0.3); padding: 15px; ">
+                    <h1><i class="icon-map-marker"></i> Where do you want to go?</h1>
+
+                    <ul id="places-list" class="unstyled inline">
+                    </ul>
+
+                    <div class="input-append">
+                        <input type="text" placeholder="A decent place name" id="place-add-input" onchange="searchPlace();">
+                        <a class="btn btn-add"><i class="icon-plus"></i></a>
+                    </div>
+                    <div style="height: 400px;">
+                        <div id="where-map" style="width: 100%; height: 100%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="who-dialog" style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-bottom: 20px; display: none;">
+                <div style="background-color: rgba(255, 255, 255, 0.2); padding: 15px; ">
+                    <h1><i class="icon-group"></i> Who's gonna join your adventure?</h1>
+
+                    <ul id="people-list" class="unstyled inline"></ul>
+
+                    <div class="input-append">
+                        <div class="btn-group">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i id="people-add-type" class="icon-facebook"></i>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i> Facebook</a></li>
+                                <li><a href="#" onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i> Email</a></li>
+                            </ul>
+                        </div>
+                        <input id="people-add-input" type="text" placeholder="A good ol' friend" onchange="addFriend();">
+                        <a class="btn btn-add"><i class="icon-plus"></i></a>
+                    </div>
+                    <div class="spacer20"></div>
+                    <div>Is your Adventure public? &nbsp;
+                        <div class="switch"><input type="checkbox" id="publish" name="publish" value="true"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="when-dialog" style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-bottom: 20px; display: none;">
+                <div style="background-color: rgba(255, 255, 255, 0.5); padding: 15px; ">
+                    <h1><i class="icon-calendar"></i> When do you want to go?</h1>
+
+                    <ul id="time-list" class="unstyled inline"></ul>
+
+                    <div class="form-inline">
+
+
+                            <div class="input-prepend">
+                                <span class="add-on">Start Date</span>
+                                <input id="time-add-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;" onload="$('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));"/>
+                            </div>
+                            <div class="input-prepend">
+                                <span class="add-on">End Date</span>
+                                <input id="time-add-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;"/>
+                            </div>
+
+                            <a class="btn btn-add" onclick="addTime();"><i class="icon-plus"></i></a>
+
+                    </div>
+
+                </div>
             </div>
         </div>
 
-        <div id="when-dialog" style="border: solid 5px #00d1fb; padding: 10px; margin-bottom: 20px; display: none;">
-            <h1>When do you want to go?</h1>
-        </div>
     </div>
-
-</div>
+</form>
 
 <script>
     function switchMode() {
     switch ($('#yingyangyong').attr('src')) {
     case '@routes.Assets.at("img/yingyangyong_green.png")':
-    $('#yingyangyong').fadeOut(800, function(){
+    $('#yingyangyong').fadeOut(500, function(){
     $('#yingyangyong').attr('src', '@routes.Assets.at("img/yingyangyong_red.png")');
-    $('#yingyangyong').fadeIn(800);});
+    $('#yingyangyong').fadeIn(500);});
     showDialog('who-dialog');
     break;
     case '@routes.Assets.at("img/yingyangyong_blue.png")':
-    $('#yingyangyong').fadeOut(800, function(){
+    $('#yingyangyong').fadeOut(500, function(){
     $('#yingyangyong').attr('src', '@routes.Assets.at("img/yingyangyong_green.png")');
-    $('#yingyangyong').fadeIn(800);
+    $('#yingyangyong').fadeIn(500);
     });
     showDialog('where-dialog');
     break;
     case '@routes.Assets.at("img/yingyangyong_red.png")':
-    $('#yingyangyong').fadeOut(800, function(){
-    $('#yingyangyong').load(function() { $('#yingyangyong').fadeIn(800); });
+    $('#yingyangyong').fadeOut(500, function(){
+    $('#yingyangyong').load(function() { $('#yingyangyong').fadeIn(500); });
     $('#yingyangyong').attr('src', '@routes.Assets.at("img/yingyangyong_blue.png")');
     });
     showDialog('when-dialog');
@@ -105,7 +134,7 @@
     var dialogs = { 'where-dialog' : 'when-dialog',
     'when-dialog': 'who-dialog',
     'who-dialog': 'where-dialog' };
-    $('#' + dialogs[dialog]).fadeOut(800, function () {$('#' + dialog).fadeIn(800);});
+    $('#' + dialogs[dialog]).fadeOut(500, function () {$('#' + dialog).fadeIn(500);});
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
@@ -127,23 +156,55 @@
     google.maps.event.addDomListener(window, 'load', initialize);
 
 
-    var bounds = new google.maps.LatLngBounds();
+
+    var markers = [];
 
     function searchPlace() {
-    new google.maps.Geocoder().geocode({'address': $('#inputPlace').val()}, function (results, status) {
-    $('#places-list').append('<li>' + results[0].formatted_address + '</li>');
+    new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
+    var id = 'places-item-' + results[0].geometry.location.lat().toString().replace('.', '_') + '-' + results[0].geometry.location.lng().toString().replace('.', '_');
+    $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\')">&times;</a></span> <span class="divider"></span></li>');
     map.setCenter(results[0].geometry.location);
     var marker = new google.maps.Marker({
     map: map,
     position: results[0].geometry.location
     });
-    bounds.extend(results[0].geometry.location);
-    map.fitBounds(bounds);
+    markers[id] = marker;
+
+    resetBounds();
+    $('#place-add-input').val('');
     });
     }
+
+    function resetBounds() {
+    var bounds = new google.maps.LatLngBounds();
+    for(var i in markers) {
+        bounds.extend(markers[i].getPosition());
+    }
+    map.fitBounds(bounds);
+    }
+
+    function removeMarker(id) {
+        markers[id].setMap(null);
+        delete markers[id];
+        resetBounds();
+    }
+
 </script>
 <script>
+    var peopleCounter = 0;
     function addFriend() {
-    $('#people-list').append('<li>' + $('#inputPeople').val() + '</li>');
+        var id = 'people-item-' + peopleCounter++;
+        $('#people-list').append('<li id="' + id +'"><span class="label"><i class="' + $('#people-add-type').attr('class') + '"></i> ' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#people-add-input').val('');
+    }
+</script>
+
+<script>
+    function addTime() {
+        var id = 'time-item-' + $('#time-add-input-start').val() + '-' +  $('#time-add-input-end').val();
+        $('#time-list').append('<li id="' + id +'"><span class="label"><i class="icon-time"></i> ' + $('#time-add-input-start').val() + ' to ' + $('#time-add-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#time-add-input-start').val('');
+        $('#time-add-input-end').val('');
+
     }
 </script>

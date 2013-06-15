@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ $# -lt 1 ] && { echo "Usage: $0 <Load Balancer Name>"; exit 1; }
+[ $# -lt 1 ] && { echo "Usage: $0 <Load Balancer Name> [<first play cmd>]"; exit 1; }
 [ "x$JAVA_HOME" == "x" ] && { echo "Need to set JAVA_HOME"; exit 1; }
 #: ${JAVA_HOME:?"JAVA_HOME needs to be set!"}
 
@@ -23,7 +23,7 @@ echo ""
 echo "-- compiling JournWe web app"
 echo "compiling staged play web app..."
 cd $current_path/../../code/journwe-webapp/
-play -Dconfig.file=conf/application-prod.conf clean compile dist
+play -Dconfig.file=conf/application-prod.conf $2 compile dist
 
 echo "-- preparing EC2 access"
 export AWS_ELB_HOME=$current_path/../elastic-load-balancing
@@ -42,6 +42,7 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
 	echo "----- preparing software on machine..."
 	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq update"
 	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq install unzip"
+	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq install rsync"
 	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq install openjdk-6-jre"
 #	echo "--- setting user rights"
 #	ssh $ssh_opts_terminal $ssh_host "sudo addgroup www-data"
@@ -55,7 +56,7 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
 
 	echo "---- installing JournWe web app on $ipaddress"
 	echo "----- copying play web app distribution to $ipaddress..."
-	scp $scp_opts dist/journwe-*.zip $ssh_host:/home/ubuntu/ 
+	rsync -avz -e "ssh $scp_opts" dist/journwe-*.zip $ssh_host:/home/ubuntu/ 
 	echo "----- unzipping..."
 	ssh $ssh_opts_terminal $ssh_host "unzip -q -o journwe-*.zip -d journwe"
 	echo "----- chmoding..."

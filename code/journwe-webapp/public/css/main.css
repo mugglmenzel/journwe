@@ -1,5 +1,5 @@
 body {
-	background-image: url("http://i.embed.ly/1/image/resize?width=1600&url=http%3A%2F%2Fwww.journwe.com%2Fassets%2Fimg%2Fkilimanjaro.jpg&key=2c8ef5b200c6468f9f863bc75c46009f");
+	background-image: url("http://i.embed.ly/1/image/resize?width=1600&url=http%3A%2F%2Fwww.journwe.com%2Fassets%2Fimg%2Fprekestollen.JPG&key=2c8ef5b200c6468f9f863bc75c46009f");
 	background-repeat: no-repeat;
 	background-position: left top;
 	background-attachment: fixed;
@@ -10,6 +10,7 @@ body {
 
 h1, h2, h3, h4, h1 small, h2 small, h3 small, h4 small {
    font-weight:100;
+   margin-bottom: 20px;
 }
 
 hr {
@@ -48,6 +49,8 @@ hr {
 .navbar-fixed-top .navbar-inner .brand, .hero-unit h1 {
 	color: #E97802;
 	vertical-align: text-bottom;
+	line-height: 20px;
+
 }
 
 .spacer100 {
@@ -57,6 +60,11 @@ hr {
 
 .spacer30 {
 	height: 30px;
+	width: 100%;
+}
+
+.spacer20 {
+	height: 20px;
 	width: 100%;
 }
 
@@ -105,7 +113,6 @@ table.inspiration .images img {
 
 
 .weather-container {
-	float: right;
 	margin: 0px 0px 20px 20px;
 }
 
@@ -141,7 +148,8 @@ table.inspiration .images img {
 }
 
 .comments {
-	border-right: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	padding-left: 10px;
 }
 
 .comments .empty{
@@ -167,4 +175,26 @@ table.inspiration .images img {
 }
 
 
+.btn-add {
+    background-color: rgb(153, 153, 153);
+    border-color:  rgb(153, 153, 153);
+}
+
 #where-map img { max-width: none; }
+
+.icon-for-adventure-title {
+    font-size: 60px;
+    color:  rgb(153, 153, 153);
+}
+
+.nav-adventure {
+       position: fixed;
+       right: 0px;
+       top: 50%;
+       background-color: rgba(255,255,255,0.9);
+       box-shadow: 0 0 10px 0px black;
+}
+
+.nav-adventure a {
+       color:  rgb(153, 153, 153);
+}

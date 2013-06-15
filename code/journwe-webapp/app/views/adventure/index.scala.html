@@ -1,9 +1,9 @@
 @(adv: models.adventure.Adventure, ins: Inspiration)
 
 <div class="row-fluid inspiration">
-    <div class="span7">
+    <div class="span8">
         @if(ins.getWeatherId() != null){
-        <div class="weather-container">
+        <div class="weather-container text-center">
             @for(period <- ins.getWeather()){
             <div class="weather">
                 <img src="/assets/img/weather/@{period.getIcon()}.svg"
@@ -45,14 +45,17 @@
             </li>
         </ul>
     </div>
-    <div class="span5">
+    <div class="span4 text-center">
         @if(ins.getTripAdvisor()){
-        <div class="tripadvisor">
+        <span class="tripadvisor">
             @Html(ins.getTripAdvisor())
-        </div>
+        </span>
         }
-
+        @if(ins.getTripAdvisor() && ins.getPinterest()) {
+        <div class="spacer20"></div>
+        }
         @if(ins.getPinterest()){
+
         <div class="pinterest">
             <a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110"
                data-pin-scale-height="300" data-pin-board-width="240"></a>

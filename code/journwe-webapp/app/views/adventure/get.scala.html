@@ -10,36 +10,39 @@
                         data-original-title="Enter adventure name">@adv.getName()</a><span id="index"></span>
 <small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#delete').modal();">Delete</a>} {
 
-<div>
+<div id="adventure-container">
     @if(new AdventurerDAO().get(adv.getId(), new
     UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
-    <div style="position: fixed; right: 0px; top: 50%; background-color: rgba(255,255,255,0.9); box-shadow: 0 0 10px 0px black;">
-        <ul class="nav nav-pills nav-stacked">
-            <li
-            @if(active == "index"){class="active"}><a href="@routes.AdventureController.getIndex(adv.getId())"><i
-                class="icon-star"></i> Overview</a></li>
-            <li
+    <div class="nav-adventure">
+        <ul id="nav-adventure-list" class="nav nav-pills nav-stacked">
+            <li  id="nav-adventure-index"
+            @if(active == "index"){class="active"}><a href="#" onclick="jumpToSection('index');"><i
+                class="icon-info"></i> Overview</a></li>
+            <li id="nav-adventure-places"
+            @if(active == "places"){class="active"}><a href="#" onclick="jumpToSection('places');"><i class="icon-map-marker"></i> Place</a></li>
+            <li id="nav-adventure-adventurers"
             @if(active == "adventurers"){class="active"}><a
-                href="@routes.AdventureController.getAdventurers(adv.getId())"><i
+                onclick="jumpToSection('adventurers');"><i
                 class="icon-group"></i> Adventurers</a></li>
-            <li
-            @if(active == "messages"){class="active"}><a href="#messages"><i class="icon-envelope"></i> Messages</a></li>
-            <li
-            @if(active == "time"){class="active"}><a href="@routes.AdventureController.getTime(adv.getId())"><i
+            <li id="nav-adventure-messages"
+            @if(active == "messages"){class="active"}><a href="#" onclick="jumpToSection('messages');"><i class="icon-envelope"></i> Messages</a></li>
+            <li  id="nav-adventure-time"
+            @if(active == "time"){class="active"}><a href="#" onclick="jumpToSection('time');"><i
                 class="icon-time"></i> Date &amp; Time</a></li>
-            <li
-            @if(active == "todos"){class="active"}><a href="@routes.AdventureController.getTodos(adv.getId())"><i
+            <li   id="nav-adventure-todos"
+            @if(active == "todos"){class="active"}><a href="#" onclick="jumpToSection('todos');"><i
                 class="icon-list-ol"></i> Packing List</a></li>
-            <li
-            @if(active == "files"){class="active"}><a href="#files"><i class="icon-cloud"></i> Files</a></li>
+            <li   id="nav-adventure-files"
+            @if(active == "files"){class="active"}><a href="#" onclick="jumpToSection('files');"><i class="icon-cloud"></i> Files</a></li>
         </ul>
     </div>
     }
     <div class="row-fluid">
 
-        <div class="span3">@{views.html.comment.widget_comment.render(adv, "index")}</div>
-        <div class="span9">
+        <div class="span1"><i class="icon-info icon-for-adventure-title"></i></div>
+
+        <div class="span8">
             @description
 
 
@@ -48,45 +51,70 @@
             @index(adv, ins)
 
         </div>
+        <div class="span3">@{views.html.comment.widget_comment.render(adv, "index")}</div>
     </div>
 
     <hr/>
     <div class="row-fluid">
-        <div class="span3">@{views.html.comment.widget_comment.render(adv, "adventurers")}</div>
-        <div class="span9">
+
+        <div class="span1"><i class="icon-map-marker icon-for-adventure-title"></i></div>
+
+        <div class="span8">
+
+            <h2 id="places">Place</h2>
+
+
+        </div>
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "places")</div>
+    </div>
+
+    <hr/>
+    <div class="row-fluid">
+
+        <div class="span1"><i class="icon-group icon-for-adventure-title"></i></div>
+
+        <div class="span8">
 
             <h2 id="adventurers">Adventurers</h2>
 
             @adventurers(adv, advr)
         </div>
+        <div class="span3">@{views.html.comment.widget_comment.render(adv, "adventurers")}</div>
     </div>
 
     <hr/>
     <div class="row-fluid">
-        <div class="span3">@views.html.comment.widget_comment.render(adv, "messages")</div>
-        <div class="span9">
+
+        <div class="span1"><i class="icon-envelope icon-for-adventure-title"></i></div>
+        <div class="span8">
 
             <h2 id="messages">Messages</h2>
 
 
         </div>
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "messages")</div>
     </div>
 
     <hr/>
     <div class="row-fluid">
-        <div class="span3">@views.html.comment.widget_comment.render(adv, "time")</div>
-        <div class="span9">
+        <div class="span1"><i class="icon-calendar icon-for-adventure-title"></i></div>
+
+        <div class="span8">
 
             <h2 id="time">Date &amp; Time</h2>
 
             @time(adv, timeForm)
 
         </div>
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "time")</div>
+
     </div>
     <hr/>
     <div class="row-fluid">
-        <div class="span3">@views.html.comment.widget_comment.render(adv, "todos")</div>
-        <div class="span9">
+
+        <div class="span1"><i class="icon-list-ol icon-for-adventure-title"></i></div>
+
+        <div class="span8">
 
 
             <h2 id="todos">Packing List</h2>
@@ -94,16 +122,20 @@
             @todos(adv, advr)
 
         </div>
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "todos")</div>
     </div>
     <hr/>
     <div class="row-fluid">
-        <div class="span3">@views.html.comment.widget_comment.render(adv, "files")</div>
-        <div class="span9">
+
+        <div class="span1"><i class="icon-cloud icon-for-adventure-title"></i></div>
+
+        <div class="span8">
 
             <h2 id="files">Files</h2>
 
 
         </div>
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "files")</div>
     </div>
 
 </div>
@@ -122,9 +154,19 @@
 <script>
     $.fn.editable.defaults.mode = 'inline';
     $('#adventureName').editable();
-    $('html, body').animate({
-    scrollTop : $('#@active').offset().top
-    }, 'slow');
+    $('window').ready(function () {
+        $('#adventure-container').animate({
+        scrollTop : $('#@active').offset().top
+        }, 'slow');
+    });
+
+    function jumpToSection(section) {
+            $('#nav-adventure-list').find('li').removeClass('active');
+        $('#nav-adventure-' + section).addClass('active');
+        $('body').animate({
+        scrollTop : $('#' + section).offset().top - 100
+        }, 'slow');
+    }
 </script>
 
 }

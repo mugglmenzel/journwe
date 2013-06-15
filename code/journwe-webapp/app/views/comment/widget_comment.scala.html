@@ -2,13 +2,13 @@
 
 <div class="comments">
 
-	<div class="comment-list">
+	<div id="comments-list-@topic" class="comment-list">
 		<div class="empty"><i class="icon-refresh"></i> Loading...</div>
 	</div>	
 
-	<div class="input-append input-comment">
+	<div id="input-comment-@topic" class="input-append input-comment">
 	    <input type="text" placeholder="Say hello!"/>
-	    <button class="btn btn-add-comment" type="button"><i class="icon-plus"></i> Comment </button>
+	    <button id="btn-add-comment-@topic" class="btn btn-add-comment" type="button"><i class="icon-plus"></i> Comment </button>
 	</div>
 
 
@@ -26,8 +26,8 @@
 			var adventureId = "@adv.getId()",
 				topic = ("@topic"+""),
 				threadId = adventureId+topic,
-				input = $(".input-comment input"),
-				btn = $(".btn-add-comment");
+				input = $("#input-comment-@topic input"),
+				btn = $("#btn-add-comment-@topic");
 
 			// A template for one comment entry
 			// Todo Use more appropriate templating (e.g. underscore, handlebar!)
@@ -66,7 +66,7 @@
 
 
 			// The container for all comments
-			var list = $(".comment-list");
+			var list = $("#comments-list-@topic");
 
 
 			// Perform GET

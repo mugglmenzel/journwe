@@ -19,7 +19,7 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="@routes.Assets.at("css/main.css")">
-	<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/favicon.png")">
+	<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/yingyangyong_green.png")">
 	<script src="@routes.Assets.at("js/jquery-1.9.0.min.js")" type="text/javascript"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 	<script src="@routes.Assets.at("js/jasny-bootstrap.js")" type="text/javascript"></script>
@@ -51,10 +51,11 @@
 						class="icon-bar"></span>
 				</button>
 				
-				<a href="@routes.ApplicationController.index" class="brand" style="vertical-align:bottom;"><i class="iconic-compass"></i>
-					JournWe</a>
+				<a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
+                    <span><img src="@routes.Assets.at("img/yingyangyong_green.png")" alt="JournWe logo" style="height: 20px;">
+					Journ<strong>We</strong></a>
 					<!--<img src="@routes.Assets.at("img/suitcase_brand.png")" style="height: 14px">-->
-				
+                    </span>
 				<div class="nav-collapse collapse">
 					<ul class="nav">
 						<li @if(active == "home"){class="active"}><a href="@routes.ApplicationController.index">Home</a></li>
