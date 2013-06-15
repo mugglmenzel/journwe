@@ -7,6 +7,20 @@
 @main("Where Adventurers meet."){JournWe
 <small>Where Adventurers meet.</small>} {
 
+<div id="yingyangyong-starter" class="text-center">
+    <a href="#" onclick="$('#yingyangyong-starter').fadeOut(800, function(){$('#yingyangyong-container').fadeIn(800); google.maps.event.trigger(map, 'resize');}); ">
+        <img src='@routes.Assets.at("img/yingyangyong_green.png")' width="200">
+        <br>
+
+        <p class="lead">Create New*</p>
+    </a>
+</div>
+<div id="yingyangyong-container" style="display: none;">
+    @yingyangyong(categories)
+</div>
+
+<hr>
+
 @currentAuth() { auth =>
 @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
 <p class="lead">

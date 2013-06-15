@@ -5,8 +5,6 @@ import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
-import com.restfb.types.User;
-
 import controllers.auth.SecuredAdminUser;
 import models.Category;
 import models.dao.*;
@@ -25,9 +23,7 @@ import views.html.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import static play.data.Form.form;
 
@@ -56,6 +52,16 @@ public class ApplicationController extends Controller {
         } else {
             return ok(subscribe.render(subForm));
         }
+    }
+
+    public static Result indexPublic() {
+        List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
+        for (Category cat : new CategoryDAO().all(10))
+            catCounts.add(new CategoryCount(cat, new CategoryDAO()
+                    .countInspirations(cat.getId())));
+
+        return ok(index.render(catCounts, new InspirationDAO().all(50), new AdventureDAO().all(50),
+                null));
     }
 
     public static Result subscribe() {
@@ -107,9 +113,9 @@ public class ApplicationController extends Controller {
         Logger.debug("Access Token: " + accessToken);
         JournweFacebookClient fb = JournweFacebookClient.create(accessToken);
         // Test #1 get my facebook user
-        Logger.debug("My name: "+fb.getMyFacebookUser().getName());
+        Logger.debug("My name: " + fb.getMyFacebookUser().getName());
         // Test #2 get my facebook user as json
-        Logger.debug("My user as JSON: "+fb.getMyFacebookUserAsJson());
+        Logger.debug("My user as JSON: " + fb.getMyFacebookUserAsJson());
 //        // Test #3 get my friends
 //        Logger.debug("Some of my friends: ");
 //        List<User> friends = fb.getMyFriends();
