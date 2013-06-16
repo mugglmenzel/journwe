@@ -5,6 +5,8 @@ import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
+import com.restfb.json.JsonObject;
+
 import controllers.auth.SecuredAdminUser;
 import models.Category;
 import models.dao.*;
@@ -150,6 +152,28 @@ public class ApplicationController extends Controller {
         fb.publishMessageOnMyFeed("Message #2");
         Logger.debug("+++ END TESTING FACEBOOK FEATURES +++");
         return ok();
+    }
+    
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result testInvite() {
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
+        final String accessToken = us.getAccessToken();
+        JournweFacebookClient fb = JournweFacebookClient.create(accessToken);
+    	List<JsonObject> friends = fb.getMyFriendsAsJson();
+    	Logger.debug("Friends as JSON: "+friends.toString());
+    	StringBuffer friendNames = new StringBuffer("[");
+    	int i = 0;
+    	for(JsonObject jo : friends) {
+    		friendNames.append("\"");
+    		friendNames.append(jo.get("name"));
+    		friendNames.append("\"");
+    		if(i<friends.size()-1)
+    			friendNames.append(",");
+    	}
+    	friendNames.append("]");
+    	Logger.debug("Friend names as JSON: "+friendNames);
+        return ok(test_invite.render(friendNames.toString()));
     }
 
     @Cached(key = "imprint")
