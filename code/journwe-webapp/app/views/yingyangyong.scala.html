@@ -181,6 +181,7 @@
         bounds.extend(markers[i].getPosition());
     }
     map.fitBounds(bounds);
+    google.maps.event.trigger(map, 'resize');
     }
 
     function removeMarker(id) {

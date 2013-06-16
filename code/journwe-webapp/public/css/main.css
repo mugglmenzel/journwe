@@ -13,6 +13,10 @@ h1, h2, h3, h4, h1 small, h2 small, h3 small, h4 small {
    margin-bottom: 20px;
 }
 
+a {
+	cursor: pointer;
+}
+
 hr {
     min-height: 10px;
     color: rgba(200, 200, 200, 0.9);

@@ -18,26 +18,27 @@ case EAdventurerParticipation.APPLICANT => {}
 
 @defining((advr.getParticipationStatus())) { (status) =>
 
+<h3>What kind of adventurer are you?</h3>
 @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)){
 <div>
     <strong>You are...</strong>
 
     <div class="btn-group">
         <a class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING){active}"
-           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())">Not
-            Going</a>
+           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="icon-frown"></i> Not
+            In</a>
         <a class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED){active}"
-           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())">Undecided</a>
+           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="icon-question"></i> Undecided</a>
         <a class="btn btn-primary @if(status == EAdventurerParticipation.GOING){active}"
-           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())">Going</a>
+           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="icon-smile"></i> So In</a>
         <a class="btn btn-success @if(status == EAdventurerParticipation.BOOKED){active}"
-           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())">Booked</a>
+           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="icon-ok"></i> Booked</a>
     </div>
 </div>
 } else {
 @if(EAdventurerParticipation.APPLICANT.equals(status)) {
 <div>
-    You are an Applicant.
+    <strong>You are an Applicant.</strong>
 </div>
 } else {
 <div>
@@ -46,9 +47,9 @@ case EAdventurerParticipation.APPLICANT => {}
 }
 }
 
-
+<h3>Who's in the group of Adventurers?</h3>
 <table class="table table-striped table-hover">
-    <caption>List of Adventurers</caption>
+
     <thead>
     <tr>
         <th>Name</th>
@@ -68,8 +69,8 @@ case EAdventurerParticipation.APPLICANT => {}
 </table>
 @defining(new AdventurerDAO().all(adv.getId())) { applicants =>
 @if(applicants != null && applicants.size() >= 0) {
+<h3>Some guys want to join!</h3>
 <table class="table table-striped table-hover">
-    <caption>List of Applicants</caption>
     <thead>
     <tr>
         <th>Name</th>

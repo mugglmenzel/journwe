@@ -17,26 +17,25 @@
     <div class="nav-adventure">
         <ul id="nav-adventure-list" class="nav nav-pills nav-stacked">
             <li  id="nav-adventure-index"
-            @if(active == "index"){class="active"}><a href="#" onclick="jumpToSection('index');"><i
+            @if(active == "index"){class="active"}><a href="#index" onclick="return jumpToSection('index');"><i
                 class="icon-info"></i> Overview</a></li>
             <li id="nav-adventure-places"
-            @if(active == "places"){class="active"}><a href="#" onclick="jumpToSection('places');"><i class="icon-globe"></i> Place</a></li>
+            @if(active == "places"){class="active"}><a href="#places" onclick="return jumpToSection('places');"><i class="icon-globe"></i> Place</a></li>
             <li id="nav-adventure-adventurers"
-            @if(active == "adventurers"){class="active"}><a
-                onclick="jumpToSection('adventurers');"><i
-                class="icon-group"></i> Adventurers</a></li>
-            <li id="nav-adventure-messages"
-            @if(active == "messages"){class="active"}><a href="#" onclick="jumpToSection('messages');"><i class="icon-envelope"></i> Messages</a></li>
+            @if(active == "adventurers"){class="active"}><a href="#adventurers" onclick="return jumpToSection('adventurers');"><i class="icon-group"></i> Adventurers</a></li>
             <li  id="nav-adventure-time"
-            @if(active == "time"){class="active"}><a href="#" onclick="jumpToSection('time');"><i
+            @if(active == "times"){class="active"}><a href="#times" onclick="return jumpToSection('times');"><i
                 class="icon-time"></i> Date &amp; Time</a></li>
+
+            <li id="nav-adventure-messages"
+            @if(active == "messages"){class="active"}><a href="#messages" onclick="return jumpToSection('messages');"><i class="icon-envelope"></i> Messages</a></li>
             <li   id="nav-adventure-todos"
-            @if(active == "todos"){class="active"}><a href="#" onclick="jumpToSection('todos');"><i
+            @if(active == "todos"){class="active"}><a href="#todos" onclick="return jumpToSection('todos');"><i
                 class="icon-list-ol"></i> Packing List</a></li>
             <li   id="nav-adventure-files"
-            @if(active == "files"){class="active"}><a href="#" onclick="jumpToSection('files');"><i class="icon-cloud"></i> Files</a></li>
+            @if(active == "files"){class="active"}><a href="#files" onclick="return jumpToSection('files');"><i class="icon-cloud"></i> Files</a></li>
             <li   id="nav-adventure-offers"
-            @if(active == "files"){class="active"}><a href="#" onclick="jumpToSection('files');"><i class="icon-cloud"></i> Files</a></li>
+            @if(active == "offers"){class="active"}><a href="#offers" onclick="return jumpToSection('offers');"><i class="icon-sun"></i> Offers</a></li>
         </ul>
     </div>
     }
@@ -48,7 +47,7 @@
             @description
 
 
-            <h2>Adventure</h2>
+            <h2 id="index">Adventure</h2>
 
             @index(adv, ins)
 
@@ -64,7 +63,9 @@
         <div class="span8">
 
             <h2 id="places">Place</h2>
+            <p class="lead">Find a special place where your adventure takes place. Make it a beautiful spot worth exploring.</p>
 
+            @places()
 
         </div>
         <div class="span3">@views.html.comment.widget_comment.render(adv, "places")</div>
@@ -78,10 +79,26 @@
         <div class="span8">
 
             <h2 id="adventurers">Adventurers</h2>
+            <p class="lead">Experience your adventure with great people, real adventurers. Invite the greatest and book together.</p>
 
             @adventurers(adv, advr)
         </div>
         <div class="span3">@{views.html.comment.widget_comment.render(adv, "adventurers")}</div>
+    </div>
+
+    <hr/>
+    <div class="row-fluid">
+        <div class="span1"><i class="icon-calendar icon-for-adventure-title"></i></div>
+
+        <div class="span8">
+
+            <h2 id="times">Date &amp; Time</h2>
+
+            @time(adv, timeForm)
+
+        </div>
+        <div class="span3">@views.html.comment.widget_comment.render(adv, "times")</div>
+
     </div>
 
     <hr/>
@@ -91,26 +108,14 @@
         <div class="span8">
 
             <h2 id="messages">Messages</h2>
+            <p class="lead">Communicate with agencies and assistants with only one email address and all adventurers stay up-to-date.</p>
 
 
         </div>
         <div class="span3">@views.html.comment.widget_comment.render(adv, "messages")</div>
     </div>
 
-    <hr/>
-    <div class="row-fluid">
-        <div class="span1"><i class="icon-calendar icon-for-adventure-title"></i></div>
 
-        <div class="span8">
-
-            <h2 id="time">Date &amp; Time</h2>
-
-            @time(adv, timeForm)
-
-        </div>
-        <div class="span3">@views.html.comment.widget_comment.render(adv, "time")</div>
-
-    </div>
 
     <hr/>
     <div class="row-fluid">
@@ -121,6 +126,7 @@
 
 
             <h2 id="todos">Todo List</h2>
+            <p class="lead">Don't forget utilities at home or miss important errands. Sync with your co-adventurers.</p>
 
             @todos(adv, advr)
 
@@ -131,11 +137,12 @@
     <hr/>
     <div class="row-fluid">
 
-        <div class="span1"><i class="icon-cloud icon-for-adventure-title"></i></div>
+        <div class="span1"><i class="icon-cloud-upload icon-for-adventure-title"></i></div>
 
         <div class="span8">
 
             <h2 id="files">Files</h2>
+            <p class="lead">There is sure some information need to be shared packed in pdfs, docs, xls, ...</p>
 
 
         </div>
@@ -150,6 +157,7 @@
         <div class="span8">
 
             <h2 id="offers">Offers</h2>
+            <p class="lead">Check offers for your dates and places. There might be just the right sweet spot for you.</p>
 
             <table class="table table-striped table-hover">
                 <thead>
@@ -182,19 +190,20 @@
 <script>
     $.fn.editable.defaults.mode = 'inline';
     $('#adventureName').editable();
-    $('window').ready(function () {
-        $('#adventure-container').animate({
-        scrollTop : $('#@active').offset().top
-        }, 'slow');
-    });
+
 
     function jumpToSection(section) {
-            $('#nav-adventure-list').find('li').removeClass('active');
+        /*
+        $('#nav-adventure-list').find('li').removeClass('active');
         $('#nav-adventure-' + section).addClass('active');
-        $('body').animate({
+        */
+        $('html, body').animate({
         scrollTop : $('#' + section).offset().top - 100
         }, 'slow');
+        return false;
     }
+	$('body').scrollspy({offset: 100});
+    jumpToSection('@active');
 </script>
 
 }
