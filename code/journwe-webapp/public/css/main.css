@@ -4,6 +4,9 @@ body {
 	background-position: left top;
 	background-attachment: fixed;
 	background-size: cover;
+}
+
+body, body * {
 	font-family: 'Lato', sans-serif;
 	font-weight:300;
 }
@@ -18,7 +21,7 @@ a {
 }
 
 hr {
-    min-height: 10px;
+    min-height: 0px;
     color: rgba(200, 200, 200, 0.9);
     background-color: rgba(255, 255, 255, 0.5);
     border: 0px;
@@ -33,28 +36,50 @@ hr {
 
 
 .main > .container {
-	top: -100px;
-	display: block;
-	background: rgba(255, 255, 255, 0.9);
-	position: relative;
-	padding: 20px 50px;
-	box-shadow: 0 0 50px -5px black;
-	border-radius: 3px;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
+    display: block;
+    padding: 20px 50px;
+    position: relative;
+    top: -50px;
 }
 
 .navbar {
-	box-shadow: 0 0 10px -1px black;
+	box-shadow: 0 0 3px -2px black;
 }
 
 .navbar-fixed-top .navbar-inner {
-    background: rgba(255, 255, 255, 0.9);
+    background: white;
+    border: none;
 }
 
 .navbar-fixed-top .navbar-inner .brand, .hero-unit h1 {
 	color: #E97802;
 	vertical-align: text-bottom;
 	line-height: 20px;
+}
 
+.navbar .brand {
+    padding: 18px 40px 18px 20px;
+}
+
+.navbar .brand span {
+	font-weight: 100;
+}
+
+.navbar .nav > li > a {
+    padding: 20px;
+}
+
+.navbar .nav > .active > a, 
+.navbar .nav > .active > a:hover, 
+.navbar .nav > .active > a:focus {
+    color: #E97802;
+    text-decoration: none;
+    background: none;
+}
+
+.navbar-inner p {
+    padding: 10px 0;
 }
 
 .spacer100 {
@@ -201,4 +226,10 @@ table.inspiration .images img {
 
 .nav-adventure a {
        color:  rgb(153, 153, 153);
+}
+
+h3 {
+	background-color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 10px;
+    padding: 0 20px;
 }
