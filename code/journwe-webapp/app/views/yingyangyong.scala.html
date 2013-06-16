@@ -3,11 +3,11 @@
 <form action="@routes.AdventureController.save()">
     <div class="row-fluid">
         <div class="span2 offset1 text-center">
-            <a href="#" onclick="switchMode();"><img id="yingyangyong" src='@routes.Assets.at("img/yingyangyong_green.png")'></a>
+            <a href="#" onclick="switchMode();"><img id="yingyangyong" src='@routes.Assets.at("img/yingyangyong_green.png")' class="where"></a>
         </div>
         <!--<a href="@routes.AdventureController.create()" class="btn btn-primary btn-large text-center">Start
             a new Group Adventure!</a> -->
-        <div class="span8" style="min-height: 600px">
+        <div class="span8" style="min-height: 600px; position: relative;">
             <div class="input-append">
                 <input type="text" placeholder="Name your adventure" required="required" class="input input-xxl">
 
@@ -54,7 +54,7 @@
 
                     <ul id="people-list" class="unstyled inline"></ul>
 
-                    <div class="input-append">
+                    <div class="input-append input-prepend">
                         <div class="btn-group">
                             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                                 <i id="people-add-type" class="icon-facebook"></i>
@@ -106,35 +106,25 @@
 
 <script>
     function switchMode() {
-    switch ($('#yingyangyong').attr('src')) {
-    case '@routes.Assets.at("img/yingyangyong_green.png")':
-    $('#yingyangyong').fadeOut(500, function(){
-    $('#yingyangyong').attr('src', '@routes.Assets.at("img/yingyangyong_red.png")');
-    $('#yingyangyong').fadeIn(500);});
-    showDialog('who-dialog');
-    break;
-    case '@routes.Assets.at("img/yingyangyong_blue.png")':
-    $('#yingyangyong').fadeOut(500, function(){
-    $('#yingyangyong').attr('src', '@routes.Assets.at("img/yingyangyong_green.png")');
-    $('#yingyangyong').fadeIn(500);
-    });
-    showDialog('where-dialog');
-    break;
-    case '@routes.Assets.at("img/yingyangyong_red.png")':
-    $('#yingyangyong').fadeOut(500, function(){
-    $('#yingyangyong').load(function() { $('#yingyangyong').fadeIn(500); });
-    $('#yingyangyong').attr('src', '@routes.Assets.at("img/yingyangyong_blue.png")');
-    });
-    showDialog('when-dialog');
-    break;
-    }
-    }
+        var icon = $('#yingyangyong');
+        if (icon.is('.where')){
+            icon.removeClass('where').addClass('who');
+            showDialog('who-dialog');
+        } else if(icon.is('.who')){
+            icon.removeClass('who').addClass('when');
+            showDialog('when-dialog');
+        } else if (icon.is('.when')){
+            icon.removeClass('when').addClass('where');
+            showDialog('where-dialog');
+        }
+    };
 
     function showDialog(dialog) {
     var dialogs = { 'where-dialog' : 'when-dialog',
     'when-dialog': 'who-dialog',
     'who-dialog': 'where-dialog' };
-    $('#' + dialogs[dialog]).fadeOut(500, function () {$('#' + dialog).fadeIn(500);});
+    $('#' + dialogs[dialog]).fadeOut(500, function () {});
+    $('#' + dialog).fadeIn(500);
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
