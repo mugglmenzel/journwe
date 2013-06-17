@@ -233,3 +233,62 @@ h3 {
     margin-bottom: 10px;
     padding: 0 20px;
 }
+
+#where-dialog, 
+#who-dialog, 
+#when-dialog {
+	border-left: 20px solid silver !important;
+	border-radius: 0 !important;
+	background: white !important;
+	position: absolute;
+	width: 100%;
+}
+
+#where-dialog {
+	border-left-color: #79a848 !important;
+}
+
+#who-dialog {
+	border-left-color: #e83f1a !important;
+}
+
+#when-dialog {
+	border-left-color: #24d1f9 !important;
+}
+
+#yingyangyong {
+	-webkit-transition: transform 2s ease 0s ;
+	-moz-transition: transform 2s ease 0s ;
+	-ms-transition: transform 2s ease 0s ;
+	-o-transition: transform 2s ease 0s ;
+	transition: transform 2s ease 0s ;
+}
+
+
+#yingyangyong.where {
+	-webkit-transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotate(0deg);
+}
+
+
+#yingyangyong.who {
+	-webkit-transform: translate(-20px, 0px) rotate(125deg);
+	-moz-transform: translate(-20px, 0px) rotate(125deg);
+	-ms-transform: translate(-20px, 0px) rotate(125deg);
+	-o-transform: translate(-20px, 0px) rotate(125deg);
+	transform: translate(-20px, 0px) rotate(125deg);
+}
+
+
+#yingyangyong.when {
+	-webkit-transform: translate(-20px, -20px) rotate(243deg);
+	-moz-transform: translate(-20px, -20px) rotate(243deg);
+	-ms-transform: translate(-20px, -20px) rotate(243deg);
+	-o-transform: translate(-20px, -20px) rotate(243deg);
+	transform: translate(-20px, -20px) rotate(243deg);
+}
+
+
