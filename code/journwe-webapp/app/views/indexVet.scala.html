@@ -9,9 +9,7 @@
 
 <div id="yingyangyong-starter" class="text-center">
     <a href="#" onclick="$('#yingyangyong-starter').fadeOut(500, function(){$('#yingyangyong-container').fadeIn(500); google.maps.event.trigger(map, 'resize');}); ">
-        <img src='@routes.Assets.at("img/yingyangyong_green.png")' width="170">
-        <br>
-
+        <img src='@routes.Assets.at("img/yingyangyong_green.png")' width="170"><br>
         <p class="lead">Create New*</p>
     </a>
 </div>
@@ -31,7 +29,7 @@
 }
 
 
-<h3>My adventures</h3>
+<h3><i class="icon-bookmark"></i> My JournWes</h3>
 
 @adventures.zipWithIndex.map { case(adv, i) =>
 
@@ -57,10 +55,10 @@
 
 <p class="lead">Get inspired from...</p>
 
-<h3>Public adventures</h3>
+<h3><i class="icon-bullhorn"></i> Public JournWes</h3>
 <div>tbd</div>
 
-<h3>Adventure ideas</h3>
+<h3><i class="icon-star"></i> JournWe ideas</h3>
 <div class="row-fluid">
     <div class="span2">
 

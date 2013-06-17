@@ -28,6 +28,7 @@ POST    /adventure/:id/postFacebookWall                             controllers.
 POST    /adventure/:id/inviteViaEmail                               controllers.AdventureController.inviteViaEmail(id:String)
 GET		/adventure/:id/new											controllers.AdventureController.createFromInspiration(id:String)
 GET     /adventure/:id/delete                                       controllers.AdventureController.delete(id:String)
+GET     /adventure/:id/leave                                        controllers.AdventureController.leave(id:String)
 POST    /adventure/check/shortname                                  controllers.AdventureController.checkShortname()
 GET		/adventure/:id/index	                                    controllers.AdventureController.getIndex(id:String)
 GET     /adventure/:id/adventurers                                  controllers.AdventureController.getAdventurers(id:String)

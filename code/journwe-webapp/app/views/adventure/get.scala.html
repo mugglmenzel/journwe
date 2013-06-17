@@ -8,7 +8,7 @@
 @main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
                         data-url="@routes.AdventureController.saveEditable()"
                         data-original-title="Enter adventure name">@adv.getName()</a><span id="index"></span>
-<small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#delete').modal();">Delete</a>} {
+<small>@ins.getName()</small> <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> Leave</a>} {
 
 <div id="adventure-container">
     @if(new AdventurerDAO().get(adv.getId(), new
@@ -177,12 +177,12 @@
 </div>
 </div>
 
-<div id="delete" class="modal hide fade" tabindex="-1" role="dialog">
+<div id="leave" class="modal hide fade" tabindex="-1" role="dialog">
     <div class="modal-header">
-        <h3>Sure, you want to delete @adv.getName()?</h3>
+        <h3>Sure, you want to leave @adv.getName()?</h3>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-danger" href="@routes.AdventureController.delete(adv.getId())">Delete</a> <a class="btn"
+        <a class="btn btn-danger" href="@routes.AdventureController.leave(adv.getId())">Delete</a> <a class="btn"
                                                                                                        data-dismiss="modal">Cancel</a>
     </div>
 </div>

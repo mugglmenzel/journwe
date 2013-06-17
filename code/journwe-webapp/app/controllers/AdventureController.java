@@ -11,7 +11,7 @@ import com.feth.play.module.pa.user.AuthUser;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
-import models.*;
+import models.Inspiration;
 import models.adventure.*;
 import models.adventure.checklist.EStatus;
 import models.adventure.time.TimeOption;
@@ -22,7 +22,6 @@ import models.user.UserEmail;
 import models.user.UserSocial;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
-import play.api.templates.Html;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -263,6 +262,19 @@ public class AdventureController extends Controller {
         return ok();
     }
 
+
+    public static Result leave(String advId) {
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+
+        new AdventurerDAO().delete(advr);
+
+        flash("success", "You left the adventure " + new AdventureDAO().get(advId).getName());
+
+        return redirect(routes.ApplicationController.index());
+    }
+
+
     public static Result delete(String advId) {
         for (Adventurer advr : new AdventurerDAO().all(advId))
             new AdventurerDAO().delete(advr);
@@ -339,14 +351,14 @@ public class AdventureController extends Controller {
         AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
 
         DynamicForm f = form().bindFromRequest();
-        for(String email : f.get("email").split(",")) {
+        for (String email : f.get("email").split(",")) {
             try {
                 AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
                         ConfigFactory.load().getString("aws.accessKey"),
                         ConfigFactory.load().getString("aws.secretKey")));
                 ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message().withSubject(new Content().withData("Invitation to join my Adventure " + adv.getName() + " on JournWe.com")).withBody(new Body().withText(new Content().withData(f.get("emailtext"))))).withSource(shortname.getShortname() + "@adventure.journwe.com").withReplyToAddresses(shortname.getShortname() + "@adventure.journwe.com"));
 
-            }  catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
 
             }
@@ -401,7 +413,7 @@ public class AdventureController extends Controller {
     }
 
     public static Result getTime(String advId) {
-                                                  Adventure adv =new AdventureDAO().get(advId);
+        Adventure adv = new AdventureDAO().get(advId);
         Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());

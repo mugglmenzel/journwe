@@ -50,8 +50,7 @@
 			<div class="container">
 				<button type="button" class="btn btn-navbar" data-toggle="collapse"
 					data-target=".nav-collapse">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+					<span class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
 				<a class="brand" href="@routes.ApplicationController.index">JournWe</a>
 				<div class="nav-collapse collapse">
@@ -62,22 +61,25 @@
 				</div>
 
                 @currentAuth() { auth =>
-                    @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
-                        <p class="navbar-text pull-right">Hello @{new UserDAO().findByAuthUserIdentity(auth).getName()} (<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>)</p>
+                @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
+                <div class="pull-right">
+                    <a class="btn" href="#"><i class="icon-cog"></i> @{new UserDAO().findByAuthUserIdentity(auth).getName()}</a>
+                    <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
+                </div>
 
-                    } else {
-                   		<div class="btn-group pull-right">
-							<a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-user icon-white"></i> Login</a>
-							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-								<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu">
-	                    @forProviders() { p =>
-								<li><a href="@p.getUrl()"><i class="icon-lock"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
-		                }
-		                	</ul>
-						</div>
-	                }
+                } else {
+                <div class="btn-group pull-right">
+                    <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        @forProviders() { p =>
+                        <li><a href="@p.getUrl()"><i class="icon-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                        }
+                    </ul>
+                </div>
+                }
                 }
 			</div>
 		</div>
