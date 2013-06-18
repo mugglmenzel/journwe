@@ -257,20 +257,92 @@ h3 {
 }
 
 #yingyangyong {
-	-webkit-transition: all 1s ease-in-out;
-	-moz-transition: all 1s ease-in-out;
-	-ms-transition: all 1s ease-in-out;
-	-o-transition: all 1s ease-in-out;
-	transition: all 1s ease-in-out;
+/*	-webkit-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-ms-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	transition: all 1s ease; */
 }
 
 
-#yingyangyong.where {
-	-webkit-transform: rotate(3600deg);
-	-moz-transform: rotate(3600deg);
+@-webkit-keyframes spinWhere {
+0% { -webkit-transform: rotate(240deg);}
+100% { -webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes spinWhere {
+0% { -moz-transform: rotate(240deg);}
+100% { -moz-transform: rotate(360deg);}
+}
+@-o-keyframes spinWhere {
+0% { -o-transform: rotate(240deg);}
+100% { -o-transform: rotate(360deg);}
+}
+@-ms-keyframes spinWhere {
+0% { -ms-transform: rotate(240deg);}
+100% { -ms-transform: rotate(360deg);}
+}
+
+
+
+@-webkit-keyframes spinWho {
+0% { -webkit-transform: rotate(0deg);}
+100% { -webkit-transform: rotate(120deg);}
+}
+@-moz-keyframes spinWho {
+0% { -moz-transform: rotate(0deg);}
+100% { -moz-transform: rotate(120deg);}
+}
+@-o-keyframes spinWho {
+0% { -o-transform: rotate(0deg);}
+100% { -o-transform: rotate(120deg);}
+}
+@-ms-keyframes spinWho {
+0% { -ms-transform: rotate(0deg);}
+100% { -ms-transform: rotate(120deg);}
+}
+
+
+@-webkit-keyframes spinWhen {
+0% { -webkit-transform: rotate(120deg);}
+100% { -webkit-transform: rotate(240deg);}
+}
+@-moz-keyframes spinWhen {
+0% { -moz-transform: rotate(120deg);}
+100% { -moz-transform: rotate(240deg);}
+}
+@-o-keyframes spinWhen {
+0% { -o-transform: rotate(120deg);}
+100% { -o-transform: rotate(240deg);}
+}
+@-ms-keyframes spinWhen {
+0% { -ms-transform: rotate(120deg);}
+100% { -ms-transform: rotate(240deg);}
+}
+
+/*
+#yingyangyong.where360 {
+	-webkit-transform: rotate(360deg);
+	-moz-transform: rotate(360deg);
 	-ms-transform: rotate(360deg);
 	-o-transform: rotate(360deg);
 	transform: rotate(360deg);
+
+}
+*/
+
+#yingyangyong.where {
+	-webkit-transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotate(0deg);
+	
+	-webkit-animation: spinWhere 1s 1 ease;
+	-moz-animation: spinWhere 1s 1 ease;
+	-o-animation: spinWhere 1s 1 ease;
+	-ms-animation: spinWhere 1s 1 ease;
+	animation: spinWhere 1s ease 1;
+
 }
 
 
@@ -280,6 +352,13 @@ h3 {
 	-ms-transform: rotate(120deg);
 	-o-transform: rotate(120deg);
 	transform: rotate(120deg);
+	
+	-webkit-animation: spinWho 1s 1 ease;
+	-moz-animation: spinWho 1s 1 ease;
+	-o-animation: spinWho 1s 1 ease;
+	-ms-animation: spinWho 1s 1 ease;
+	animation: spinWho 1s ease 1;
+
 }
 
 
@@ -289,6 +368,14 @@ h3 {
 	-ms-transform: rotate(240deg);
 	-o-transform: rotate(240deg);
 	transform: rotate(240deg);
+	
+	-webkit-animation: spinWhen 1s ease 1;
+	-moz-animation: spinWhen 1s ease 1;
+	-o-animation: spinWhen 1s ease 1;
+	-ms-animation: spinWhen 1s ease 1;
+	animation: spinWhen 1s ease 1;
+	
+	
 }
 
 
