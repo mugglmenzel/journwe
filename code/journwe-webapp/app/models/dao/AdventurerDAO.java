@@ -31,9 +31,7 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("userId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(userId)));
         int count =  pm.count(clazz, scan);
-        Logger.info("checked for " + userId + ", count is " + count);
         return count > 0;
-
     }
 
     public List<Adventurer> allOfUserId(String userId) {
