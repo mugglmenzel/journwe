@@ -344,7 +344,7 @@ public class AdventureController extends Controller {
                 AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
                         ConfigFactory.load().getString("aws.accessKey"),
                         ConfigFactory.load().getString("aws.secretKey")));
-                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.")))).withSource(advShortname.getShortname() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.")))).withSource(advShortname.getShortname() + "@adventure.journwe.com").withReplyToAddresses("no-reply@journwe.com"));
             }
         } catch (Exception e) {
             e.printStackTrace();
