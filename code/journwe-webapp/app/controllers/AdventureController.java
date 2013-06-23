@@ -14,6 +14,7 @@ import controllers.auth.SecuredAdminUser;
 import models.Inspiration;
 import models.adventure.*;
 import models.adventure.checklist.EStatus;
+import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.dao.*;
 import models.helpers.JournweFacebookClient;
@@ -32,6 +33,7 @@ import play.mvc.Security;
 import views.html.adventure.*;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import static com.rosaloves.bitlyj.Bitly.shorten;
@@ -139,7 +141,7 @@ public class AdventureController extends Controller {
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result save() {
+    public static Result saveOld() {
         Form<Adventure> filledAdvForm = form(Adventure.class).bindFromRequest();
         DynamicForm filledForm = advForm.bindFromRequest();
 
@@ -243,6 +245,95 @@ public class AdventureController extends Controller {
         return badRequest(create.render(filledForm,
                 new InspirationDAO().allOptionsMap(50)));
 
+
+    }
+
+
+    public static Result save() {
+        DynamicForm filledForm = advForm.bindFromRequest();
+
+
+        Adventure adv = new Adventure();
+        adv.setName(filledForm.get("name"));
+        new AdventureDAO().save(adv);
+
+        //List<PlaceOption> placeOptions = new ArrayList<PlaceOption>();
+        //List<TimeOption> timeOptions = new ArrayList<TimeOption>();
+        int placeI = 1;
+        int timeI = 1;
+        for (String key : filledForm.data().keySet()) {
+            if (key.startsWith("place[")) {
+                PlaceOption po = new PlaceOption();
+                po.setAdventureId(adv.getId());
+                po.setName("Option " + placeI);
+                placeI++;
+                po.setGoogleMapsAddress(filledForm.data().get(key));
+                new PlaceOptionDAO().save(po);
+                //placeOptions.add(po);
+            }
+            if (key.startsWith("time[")) {
+                try {
+                    TimeOption to = new TimeOption();
+                    to.setAdventureId(adv.getId());
+                    to.setName("Option " + timeI);
+                    timeI++;
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    System.out.println("parsing date from " + filledForm.data().get(key));
+                    System.out.println("start date: " + filledForm.data().get(key).split(",")[0]);
+                    System.out.println("end date: " + filledForm.data().get(key).split(",")[1]);
+                    System.out.println("parsed start: " + sdf.parse(filledForm.data().get(key).split(",")[0]));
+                    System.out.println("parsed end: " + sdf.parse(filledForm.data().get(key).split(",")[1]));
+
+                    to.setStartDate(sdf.parse(filledForm.data().get(key).split(",")[0]));
+                    to.setEndDate(sdf.parse(filledForm.data().get(key).split(",")[1]));
+
+                    new TimeOptionDAO().save(to);
+                    //timeOptions.add(to);
+
+                } catch (Exception e) {
+                    timeI--;
+                }
+            }
+        }
+
+
+        String shortname = filledForm.get("shortname");
+        AdventureShortname advShortname = new AdventureShortname(shortname, adv.getId());
+        new AdventureShortnameDAO().save(advShortname);
+
+        String shortURL = routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request());
+        try {
+            shortURL = request().host().contains("localhost") ?
+                    routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()) :
+                    Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()))).getShortUrl();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+        Adventurer advr = new Adventurer();
+        advr.setAdventureId(adv.getId());
+        advr.setUserId(usr.getId());
+        advr.setParticipationStatus(EAdventurerParticipation.GOING);
+        new AdventurerDAO().save(advr);
+
+        try {
+            UserEmail primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId());
+            if (primaryEmail != null) {
+                AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
+                        ConfigFactory.load().getString("aws.accessKey"),
+                        ConfigFactory.load().getString("aws.secretKey")));
+                Logger.info("got primary email: " + primaryEmail);
+                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.")))).withSource(advShortname.getShortname() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa!<br>The shortURL is " + shortURL);
+
+        return getIndex(adv.getId());
 
     }
 

@@ -1,6 +1,6 @@
 @(categories: List[models.helpers.CategoryCount])
 
-<form action="@routes.AdventureController.save()">
+<form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
     <div id="yingyangyong-click-info" class="row-fluid">
         <div class="span2 offset1 text-center">
             <i class="icon-chevron-down"></i>
@@ -13,9 +13,10 @@
         </div>
             <!--<a href="@routes.AdventureController.create()" class="btn btn-primary btn-large text-center">Start
             a new Group Adventure!</a> -->
-        <div class="span8" style="min-height: 600px; position: relative;">
+        <div class="span8" style="min-height: 650px; position: relative;">
             <div class="input-append">
-                <input type="text" placeholder="Name your JournWe" required="required" class="input input-xxl">
+                <input type="text" name="name" placeholder="Name your JournWe" required="required" class="input input-xxl">
+
 
                 <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -33,8 +34,16 @@
                 </div>
             </div>
             <div class="pull-right">
-                <button type="submit" style="backround-color: #00cc00;" class="btn">
+                <button style="backround-color: #00cc00;" class="btn btn-large" onclick="">
                     Start JournWe <i class="icon-angle-right"></i></button>
+            </div>
+            <div>
+                <div class="input-append">
+                    <input type="text" name="shortname" placeholder="Shortname" id="shortname" minlength="3" required="required" onchange="checkShortname();">
+                    <span class="add-on">@@adventure.journwe.com</span>
+                    <a class="add-on btn" onclick="checkShortname();">check</a>
+                </div>
+                <div id="shortname-available">shortname available?</div>
             </div>
 
 
@@ -46,8 +55,8 @@
                     </ul>
 
                     <div class="input-append">
-                        <input type="text" placeholder="A decent place name" id="place-add-input" onchange="searchPlace();">
-                        <a class="btn btn-add"><i class="icon-plus"></i></a>
+                        <input type="text" placeholder="A decent place name" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;">
+                        <a class="btn btn-add" onclick="searchPlace();"><i class="icon-plus"></i></a>
                     </div>
                     <div style="height: 400px;">
                         <div id="where-map" style="width: 100%; height: 100%"></div>
@@ -74,8 +83,8 @@
                                     Email</a></li>
                             </ul>
                         </div>
-                        <input id="people-add-input" type="text" placeholder="A good ol' friend" onchange="addFriend();">
-                        <a class="btn btn-add"><i class="icon-plus"></i></a>
+                        <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;">
+                        <a class="btn btn-add" onclick="addFriend();"><i class="icon-plus"></i></a>
                     </div>
                     <div class="spacer20"></div>
                     <div>Is your Adventure public? &nbsp;
@@ -139,6 +148,33 @@
         $('#' + dialogs[dialog]).fadeOut(500, function () {});
         $('#' + dialog).fadeIn(500);
     }
+
+    function checkShortname() {
+        $.post('@routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
+            function(check) {
+                $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="icon-ok"></i> available.</span>' : '<span class="text-error"><i class="icon-warning-sign"></i> not available!</span>' );
+                $('#shortname').attr('aria-invalid', !check.valid);
+                if(!check.valid)
+                    $('#shortname').parents(".control-group").first().addClass('error');
+                else
+                    $('#shortname').parents(".control-group").first().removeClass('error');
+        });
+    }
+
+        function validateYingYangYong() {
+            if($('input[name="name"]').val() == null ||  $('input[name="name"]').val() == '') {
+                $('input[name="name"]').focus();
+                return false;
+            }
+            if($('input[name="shortname"]').val() == null ||  $('input[name="shortname"]').val() == '') {
+                $('input[name="shortname"]').focus();
+                return false;
+            }
+
+            return true;
+        }
+
+
 
     var map;
     google.maps.visualRefresh = true;
@@ -207,7 +243,7 @@
 
     function addTime() {
         var id = 'time-item-' + $('#time-add-input-start').val() + '-' +  $('#time-add-input-end').val();
-        $('#time-list').append('<li id="' + id +'"><span class="label"><i class="icon-time"></i>' + $('#time-add-input-start').val() + ' to ' + $('#time-add-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + $('#time-add-input-start').val() + ',' + $('#time-add-input-end').val() + '"><span class="label"><i class="icon-time"></i>' + $('#time-add-input-start').val() + ' to ' + $('#time-add-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
         $('#time-add-input-start').val('');
         $('#time-add-input-end').val('');
     }

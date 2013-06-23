@@ -1,7 +1,28 @@
+@(adv: models.adventure.Adventure)
 
+@import models.dao.PlaceOptionDAO
 
 <ul id="places-list" class="unstyled inline">
 </ul>
+
+<table class="table table-striped table-hover table-my-todos">
+    <thead>
+        <tr>
+            <th>Place Options</th>
+            <th>Location</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @{new PlaceOptionDAO().all(adv.getId()).map { placeOption =>
+        <tr>
+            <td>{placeOption.getName()}</td>
+            <td>{placeOption.getGoogleMapsAddress()}</td>
+            <td><a href="#" class="btn btn-alert"><i class="icon-trash"></i></a></td>
+        </tr>
+    } }
+    </tbody>
+</table>
 
 <div class="input-append">
     <input type="text" placeholder="A decent place name" id="place-add-input" onchange="searchPlace();">

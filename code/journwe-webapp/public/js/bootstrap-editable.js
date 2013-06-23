@@ -243,18 +243,18 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                 this.value = newValue;
                 /**        
                 Fired when form is submitted
-                @event save 
+                @event saveOld
                 @param {Object} event event object
                 @param {Object} params additional params
                 @param {mixed} params.newValue submitted value
                 @param {Object} params.response ajax response
 
                 @example
-                $('#form-div').on('save'), function(e, params){
+                $('#form-div').on('saveOld'), function(e, params){
                     if(params.newValue === 'username') {...}
                 });                    
                 **/                
-                this.$div.triggerHandler('save', {newValue: newValue, response: response});
+                this.$div.triggerHandler('saveOld', {newValue: newValue, response: response});
             }, this))
             .fail($.proxy(function(xhr) {
                 this.error(typeof xhr === 'string' ? xhr : xhr.responseText || xhr.statusText || 'Unknown error!'); 
@@ -530,7 +530,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
         **/            
         scope: null,
         /**
-        Whether to save or cancel value when it was not changed but form was submitted
+        Whether to saveOld or cancel value when it was not changed but form was submitted
 
         @property savenochange 
         @type boolean
@@ -784,7 +784,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
 
 /**
 Attaches stand-alone container with editable-form to HTML element. Element is used only for positioning, value is not stored anywhere.<br>
-This method applied internally in <code>$().editable()</code>. You should subscribe on it's events (save / cancel) to get profit of it.<br>
+This method applied internally in <code>$().editable()</code>. You should subscribe on it's events (saveOld / cancel) to get profit of it.<br>
 Final realization can be different: bootstrap-popover, jqueryui-tooltip, poshytip, inline-div. It depends on which js file you include.<br>
 Applied as jQuery method.
 
@@ -969,7 +969,7 @@ Applied as jQuery method.
         /**
         Hides container with form
         @method hide()
-        @param {string} reason Reason caused hiding. Can be <code>save|cancel|onblur|nochange|undefined (=manual)</code>
+        @param {string} reason Reason caused hiding. Can be <code>saveOld|cancel|onblur|nochange|undefined (=manual)</code>
         **/         
         hide: function(reason) {  
             if(!this.tip() || !this.tip().is(':visible') || !this.$element.hasClass('editable-open')) {
@@ -980,14 +980,14 @@ Applied as jQuery method.
             this.innerHide();
             
             /**        
-            Fired when container was hidden. It occurs on both save or cancel.
+            Fired when container was hidden. It occurs on both saveOld or cancel.
 
             @event hidden 
             @param {object} event event object
-            @param {string} reason Reason caused hiding. Can be <code>save|cancel|onblur|nochange|undefined (=manual)</code>
+            @param {string} reason Reason caused hiding. Can be <code>saveOld|cancel|onblur|nochange|undefined (=manual)</code>
             @example
             $('#username').on('hidden', function(e, reason) {
-                if(reason === 'save' || reason === 'cancel') {
+                if(reason === 'saveOld' || reason === 'cancel') {
                     //auto-open next editable
                     $(this).closest('tr').next().find('.editable').editable('show');
                 } 
@@ -1031,13 +1031,13 @@ Applied as jQuery method.
             /**        
             Fired when new value was submitted. You can use <code>$(this).data('editableContainer')</code> inside handler to access to editableContainer instance
             
-            @event save 
+            @event saveOld
             @param {Object} event event object
             @param {Object} params additional params
             @param {mixed} params.newValue submitted value
             @param {Object} params.response ajax response
             @example
-            $('#username').on('save', function(e, params) {
+            $('#username').on('saveOld', function(e, params) {
                 //assuming server response: '{success: true}'
                 var pk = $(this).data('editableContainer').options.pk;
                 if(params.response && params.response.success) {
@@ -1047,10 +1047,10 @@ Applied as jQuery method.
                 } 
             });
             **/             
-            this.$element.triggerHandler('save', params);
+            this.$element.triggerHandler('saveOld', params);
             
             //hide must be after trigger, as saving value may require methods od plugin, applied to input
-            this.hide('save');
+            this.hide('saveOld');
         },
 
         /**
@@ -1189,7 +1189,7 @@ Applied as jQuery method.
         **/        
         placement: 'top',
         /**
-        Whether to hide container on save/cancel.
+        Whether to hide container on saveOld/cancel.
 
         @property autohide 
         @type boolean
@@ -1589,8 +1589,8 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                     input: this.input //pass input to form (as it is already created)
                 });
                 this.$element.editableContainer(containerOptions);
-                //listen `save` event 
-                this.$element.on("save.internal", $.proxy(this.save, this));
+                //listen `saveOld` event
+                this.$element.on("saveOld.internal", $.proxy(this.save, this));
                 this.container = this.$element.data('editableContainer'); 
             } else if(this.container.tip().is(':visible')) {
                 return;
@@ -1655,13 +1655,13 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             /**        
             Fired when new value was submitted. You can use <code>$(this).data('editable')</code> to access to editable instance
             
-            @event save 
+            @event saveOld
             @param {Object} event event object
             @param {Object} params additional params
             @param {mixed} params.newValue submitted value
             @param {Object} params.response ajax response
             @example
-            $('#username').on('save', function(e, params) {
+            $('#username').on('saveOld', function(e, params) {
                 alert('Saved value: ' + params.newValue);
             });
             **/
@@ -1719,7 +1719,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
                 this.$element.off(this.options.toggle + '.editable');
             } 
             
-            this.$element.off("save.internal");
+            this.$element.off("saveOld.internal");
             
             this.$element.removeClass('editable');
             this.$element.removeClass('editable-open');

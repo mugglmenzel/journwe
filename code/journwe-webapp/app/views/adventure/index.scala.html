@@ -1,5 +1,6 @@
 @(adv: models.adventure.Adventure, ins: Inspiration)
 
+@if(ins != null){
 <div class="row-fluid inspiration">
     <div class="span8">
         @if(ins.getWeatherId() != null){
@@ -8,7 +9,7 @@
             <div class="weather">
                 <img src="/assets/img/weather/@{period.getIcon()}.svg"
                      title="@period.getDate() - @period.getCondition()"/>
-                <span class="high-temperature">@period.getTemperature()°C</span><span
+                <span>@period.getDate()</span><span class="high-temperature">@period.getTemperature()°C</span><span
                     class="low-temperature">@period.getLowTemperature()°C</span>
             </div>
             }
@@ -65,3 +66,4 @@
 
     </div>
 </div>
+}

@@ -45,7 +45,7 @@
         </a>
     </div>
     <div class="span2 pull-right">
-        <a href="#"><i class="icon-trash"></i> Delete</a>
+        <a class="btn btn-danger" onclick="$('#leave').data('leave-link', '@routes.AdventureController.leave(adv.getId())'); $('#leave').data('adventure-name', '@adv.getName()'); $('#leave').modal();"><i class="icon-unlink"></i> Leave</a>
     </div>
 </div>
 
@@ -94,5 +94,15 @@
         </ul>
     </div>
 </div>
+
+    <div id="leave" class="modal hide fade" tabindex="-1" role="dialog" onfocus="$('#leave-question').html('Sure, you want to leave ' + $('#leave').data('adventure-name') + '?')">
+        <div class="modal-header">
+            <h3 id="leave-question">Sure, you want to leave?</h3>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-danger" onclick="window.location.href = $('#leave').data('leave-link')">Leave</a> <a class="btn"
+        data-dismiss="modal">Cancel</a>
+        </div>
+    </div>
 
 }
