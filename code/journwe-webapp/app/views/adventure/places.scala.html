@@ -14,10 +14,10 @@
         </tr>
     </thead>
     <tbody>
-    @{new PlaceOptionDAO().all(adv.getId()).map { placeOption =>
+    @defining(new PlaceOptionDAO()) { placeDAO => placeDAO.all(adv.getId()).map { placeOption =>
         <tr>
-            <td>{placeOption.getName()}</td>
-            <td>{placeOption.getGoogleMapsAddress()}</td>
+            <td>@placeOption.getName()</td>
+            <td>@placeOption.getGoogleMapsAddress()</td>
             <td><a href="#" class="btn btn-alert"><i class="icon-trash"></i></a></td>
         </tr>
     } }

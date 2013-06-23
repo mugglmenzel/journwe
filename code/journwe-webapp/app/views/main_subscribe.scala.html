@@ -60,10 +60,11 @@
 					</ul>
 				</div>
 
+                @defining(new UserDAO()){userDAO =>
                 @currentAuth() { auth =>
                 @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
                 <div class="pull-right">
-                    <a class="btn" href="#"><i class="icon-cog"></i> @{new UserDAO().findByAuthUserIdentity(auth).getName()}</a>
+                    <a class="btn" href="#"><i class="icon-cog"></i> @userDAO.findByAuthUserIdentity(auth).getName()</a>
                     <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
                 </div>
 
@@ -79,6 +80,7 @@
                         }
                     </ul>
                 </div>
+                }
                 }
                 }
 			</div>
