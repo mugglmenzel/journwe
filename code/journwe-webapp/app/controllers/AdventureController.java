@@ -72,54 +72,6 @@ public class AdventureController extends Controller {
         return ok(getAdventurers.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, timeForm));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
-    public static Result getTodos(String advId) {
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        Adventure adv = new AdventureDAO().get(advId);
-        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
-
-        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, timeForm));
-    }
-
-    @Security.Authenticated(SecuredAdminUser.class)
-    public static Result addTodo(String id) {
-
-        DynamicForm requestData = form().bindFromRequest();
-
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-
-        models.adventure.checklist.Todo todo = new models.adventure.checklist.Todo();
-        todo.setAdventureId(id);
-        todo.setUserId(usr.getId());
-        todo.setTitle(requestData.get("title"));
-
-        new TodoDAO().save(todo);
-
-        return ok(Json.toJson(todo));
-    }
-
-    @Security.Authenticated(SecuredAdminUser.class)
-    public static Result setTodo(String id, String tid) {
-
-        DynamicForm requestData = form().bindFromRequest();
-
-        models.adventure.checklist.Todo todo = new TodoDAO().get(tid, id);
-
-        String status = requestData.get("status").toUpperCase();
-        todo.setStatus(EStatus.valueOf(status));
-
-        new TodoDAO().save(todo);
-
-        return ok(Json.toJson(todo)); //TODO: Error handling
-    }
-
-    @Security.Authenticated(SecuredAdminUser.class)
-    public static Result deleteTodo(String id, String tid) {
-
-        new TodoDAO().delete(tid, id);
-
-        return ok(); //TODO: Error handling
-    }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
@@ -352,7 +304,7 @@ public class AdventureController extends Controller {
 
         flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa!<br>The shortURL is " + shortURL);
 
-        return getIndex(adv.getId());
+        return redirect(routes.AdventureController.getIndex(adv.getId()));
 
     }
 
@@ -522,6 +474,62 @@ public class AdventureController extends Controller {
 
     }
 
+
+    /*
+
+     */
+
+
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result getTodos(String advId) {
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Adventure adv = new AdventureDAO().get(advId);
+        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+
+        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, timeForm));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result addTodo(String id) {
+
+        DynamicForm requestData = form().bindFromRequest();
+
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+        models.adventure.checklist.Todo todo = new models.adventure.checklist.Todo();
+        todo.setAdventureId(id);
+        todo.setUserId(usr.getId());
+        todo.setTitle(requestData.get("title"));
+
+        new TodoDAO().save(todo);
+
+        return ok(Json.toJson(todo));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result setTodo(String id, String tid) {
+
+        DynamicForm requestData = form().bindFromRequest();
+
+        models.adventure.checklist.Todo todo = new TodoDAO().get(tid, id);
+
+        String status = requestData.get("status").toUpperCase();
+        todo.setStatus(EStatus.valueOf(status));
+
+        new TodoDAO().save(todo);
+
+        return ok(Json.toJson(todo)); //TODO: Error handling
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result deleteTodo(String id, String tid) {
+
+        new TodoDAO().delete(tid, id);
+
+        return ok(); //TODO: Error handling
+    }
+
     public static Result getTime(String advId) {
         Adventure adv = new AdventureDAO().get(advId);
         Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
@@ -535,6 +543,21 @@ public class AdventureController extends Controller {
         opt.setAdventureId(advId);
         new TimeOptionDAO().save(opt);
         return getTime(advId);
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result addPlace(String id) {
+
+        DynamicForm requestData = form().bindFromRequest();
+
+        PlaceOption place = new PlaceOption();
+        place.setAdventureId(id);
+        place.setGoogleMapsAddress(requestData.get("googleMapsAddress"));
+        place.setName(requestData.get("name"));
+
+        new PlaceOptionDAO().save(place);
+
+        return ok(Json.toJson(place));
     }
 
 }

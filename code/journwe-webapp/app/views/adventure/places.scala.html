@@ -2,6 +2,9 @@
 
 @import models.dao.PlaceOptionDAO
 
+
+
+
 <ul id="places-list" class="unstyled inline">
 </ul>
 
@@ -13,15 +16,32 @@
             <th></th>
         </tr>
     </thead>
+
+    @defining(new PlaceOptionDAO()) { placeDAO =>
     <tbody>
-    @defining(new PlaceOptionDAO()) { placeDAO => placeDAO.all(adv.getId()).map { placeOption =>
+        @placeDAO.all(adv.getId()).map { placeOption =>
         <tr>
             <td>@placeOption.getName()</td>
             <td>@placeOption.getGoogleMapsAddress()</td>
             <td><a href="#" class="btn btn-alert"><i class="icon-trash"></i></a></td>
+            <script>
+
+                $('body').ready(function(){
+                new google.maps.Geocoder().geocode({address: '@placeOption.getGoogleMapsAddress()'}, function (results, status) {
+                var marker = new google.maps.Marker({map: map,
+                position: results[0].geometry.location});
+                markers['@placeOption.getId()'] = marker;
+                resetBounds();
+                });
+                });
+
+            </script>
         </tr>
-    } }
+
+        }
     </tbody>
+    }
+
 </table>
 
 <div class="input-append">
@@ -39,23 +59,25 @@
 <script>
 
     var map;
+    var markers = [];
     google.maps.visualRefresh = true;
 
     function initialize() {
     var mapOptions = {
     zoom: 19,
     center: new google.maps.LatLng(52.467541, 13.324957),
-    mapTypeId: google.maps.MapTypeId.SATELLITE
+    mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById('where-map'),
     mapOptions);
+
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    $('body').ready(function (){initialize();});
 
 
 
-    var markers = [];
+
 
     function searchPlace() {
     new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
@@ -88,4 +110,20 @@
     resetBounds();
     }
 
-</script>
+    $('#place-add-button')
+    .on('click', function() {
+
+    new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
+    $.post('@routes.AdventureController.addPlace(adv.getId)', { name: results[0].formatted_address, googleMapsAddress: results[0].formatted_address },
+    function(res) {
+    $('.table-places  tbody').append($('<tr class="place-entry" data-id="' + res.id + '">  <td><input class="input-status" type="checkbox"/></td>   <td>' + res.name + '</td> <td>' + res.googleMapAddress + '</td>  <td><a href="#" class="btn-delete"><i class="icon-trash"></i>Delete</a></td> </tr>').fadeIn());
+
+    $('#place-add-input').val("");
+    });
+    });
+    });
+
+    </script>
+
+
+
