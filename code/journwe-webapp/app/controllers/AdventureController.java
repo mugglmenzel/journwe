@@ -256,6 +256,26 @@ public class AdventureController extends Controller {
         Adventure adv = new Adventure();
         adv.setName(filledForm.get("name"));
         new AdventureDAO().save(adv);
+        String shortname = filledForm.get("shortname");
+        AdventureShortname advShortname = new AdventureShortname(shortname, adv.getId());
+        new AdventureShortnameDAO().save(advShortname);
+
+        String shortURL = routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request());
+        try {
+            shortURL = request().host().contains("localhost") ?
+                    routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()) :
+                    Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()))).getShortUrl();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+        Adventurer advr = new Adventurer();
+        advr.setAdventureId(adv.getId());
+        advr.setUserId(usr.getId());
+        advr.setParticipationStatus(EAdventurerParticipation.GOING);
+        new AdventurerDAO().save(advr);
 
         //List<PlaceOption> placeOptions = new ArrayList<PlaceOption>();
         //List<TimeOption> timeOptions = new ArrayList<TimeOption>();
@@ -294,29 +314,29 @@ public class AdventureController extends Controller {
                     timeI--;
                 }
             }
+            if (key.startsWith("email[")) {
+                try {
+                    String email = filledForm.data().get(key);
+                    if (email != null) {
+                        AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
+                                ConfigFactory.load().getString("aws.accessKey"),
+                                ConfigFactory.load().getString("aws.secretKey")));
+                        ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message().withSubject(new Content().withData("You have been invited to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, Your friend " + usr.getName()  + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.")))).withSource(advShortname.getShortname() + "@adventure.journwe.com").withReplyToAddresses(advShortname.getShortname() + "@adventure.journwe.com"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (key.startsWith("facebook[")) {
+
+            }
         }
 
 
-        String shortname = filledForm.get("shortname");
-        AdventureShortname advShortname = new AdventureShortname(shortname, adv.getId());
-        new AdventureShortnameDAO().save(advShortname);
 
-        String shortURL = routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request());
-        try {
-            shortURL = request().host().contains("localhost") ?
-                    routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()) :
-                    Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()))).getShortUrl();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
-        Adventurer advr = new Adventurer();
-        advr.setAdventureId(adv.getId());
-        advr.setUserId(usr.getId());
-        advr.setParticipationStatus(EAdventurerParticipation.GOING);
-        new AdventurerDAO().save(advr);
+
 
         try {
             UserEmail primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId());
@@ -324,7 +344,6 @@ public class AdventureController extends Controller {
                 AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
                         ConfigFactory.load().getString("aws.accessKey"),
                         ConfigFactory.load().getString("aws.secretKey")));
-                Logger.info("got primary email: " + primaryEmail);
                 ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.")))).withSource(advShortname.getShortname() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
             }
         } catch (Exception e) {
