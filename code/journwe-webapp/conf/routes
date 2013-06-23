@@ -34,6 +34,7 @@ GET     /adventure/:id/leave                                        controllers.
 POST    /adventure/check/shortname                                  controllers.AdventureController.checkShortname()
 GET		/adventure/:id/index	                                    controllers.AdventureController.getIndex(id:String)
 GET     /adventure/:id/adventurers                                  controllers.AdventureController.getAdventurers(id:String)
+POST    /adventure/:id/places                                 		controllers.AdventureController.addPlace(id:String)
 GET     /adventure/:id/todos                                 		controllers.AdventureController.getTodos(id:String)
 POST    /adventure/:id/todos                                 		controllers.AdventureController.addTodo(id:String)
 PUT     /adventure/:id/todos/:tid                              		controllers.AdventureController.setTodo(id:String, tid: String)
