@@ -28,7 +28,6 @@ public class AdventurePlaceController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result getPlaces(String advId) {
-        System.out.println(Json.toJson(new PlaceOptionDAO().all(advId)).toString());
         return ok(Json.toJson(new PlaceOptionDAO().all(advId)));
     }
 
