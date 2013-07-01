@@ -8,14 +8,18 @@
 <small>Where Adventurers meet.</small>} {
 
 <div id="yingyangyong-starter" class="text-center">
-    <a href="#" onclick="$('#yingyangyong-starter').fadeOut(500, function(){$('#yingyangyong-container').fadeIn(500); google.maps.event.trigger(map, 'resize');}); ">
+    <a href="#" onclick="$('#yingyangyong-starter').fadeOut(500, function(){$('#yingyangyong-container').slideDown(); google.maps.event.trigger(map, 'resize');}); ">
         <img src='@routes.Assets.at("img/yingyangyong_green.png")' width="170"><br>
         <p class="lead">Create New*</p>
     </a>
 </div>
 <div id="yingyangyong-container" style="display: none;">
     @yingyangyong(categories)
+    <div>
+        <button class="btn btn-block" onclick="$('#yingyangyong-container').slideUp(500, function(){$('#yingyangyong-starter').fadeIn(500);});"><i class="icon-chevron-up"></i></button>
+    </div>
 </div>
+
 
 <hr>
 
@@ -45,7 +49,7 @@
         </a>
     </div>
     <div class="span2 pull-right">
-        <a class="btn btn-danger" onclick="$('#leave').data('leave-link', '@routes.AdventureController.leave(adv.getId())'); $('#leave').data('adventure-name', '@adv.getName()'); $('#leave').modal();"><i class="icon-unlink"></i> Leave</a>
+        <a class="btn btn-danger" onclick="$('#leave').data('leave-link', '@routes.AdventurePeopleController.leave(adv.getId())'); $('#leave').data('adventure-name', '@adv.getName()'); $('#leave').modal();"><i class="icon-unlink"></i> Leave</a>
     </div>
 </div>
 

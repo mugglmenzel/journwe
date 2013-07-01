@@ -33,7 +33,7 @@
             <textarea id="posttext" name="posttext">Hey guys! Join my adventure on JournWe.com.</textarea>
         </fieldset>
         <div class="form-actions">
-            <a class="btn btn-primary" onclick="$.post('@routes.AdventureController.postOnMyFacebookWall(adv.getId())', $('#publishFacebookPostForm').serialize(), function (data) {alert('Posted!');});">Post on Facebook</a>
+            <a class="btn btn-primary" onclick="$.post('@routes.AdventurePeopleController.postOnMyFacebookWall(adv.getId())', $('#publishFacebookPostForm').serialize(), function (data) {alert('Posted!');});">Post on Facebook</a>
         </div>
     </form>
 </div>
@@ -45,7 +45,7 @@
             <textarea id="emailtext" name="emailtext">Hey guys! Join my adventure on JournWe.com. Discover what we could experience together: @shortURL</textarea>
         </fieldset>
         <div class="form-actions">
-            <a class="btn btn-primary" onclick="$.post('@routes.AdventureController.inviteViaEmail(adv.getId())', $('#publishEmailForm').serialize(), function (data) {alert('Email sent!');});">Send Email</a>
+            <a class="btn btn-primary" onclick="$.post('@routes.AdventurePeopleController.inviteViaEmail(adv.getId())', $('#publishEmailForm').serialize(), function (data) {alert('Email sent!');});">Send Email</a>
         </div>
     </form>
 </div>

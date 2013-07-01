@@ -25,14 +25,14 @@ case EAdventurerParticipation.APPLICANT => {}
 
     <div class="btn-group">
         <a class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING){active}"
-           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="icon-frown"></i> Not
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="icon-frown"></i> Not
             In</a>
         <a class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED){active}"
-           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="icon-question"></i> Undecided</a>
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="icon-question"></i> Undecided</a>
         <a class="btn btn-primary @if(status == EAdventurerParticipation.GOING){active}"
-           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="icon-smile"></i> So In</a>
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="icon-smile"></i> So In</a>
         <a class="btn btn-success @if(status == EAdventurerParticipation.BOOKED){active}"
-           href="@routes.AdventureController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="icon-ok"></i> Booked</a>
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="icon-ok"></i> Booked</a>
     </div>
 </div>
 } else {
@@ -42,7 +42,7 @@ case EAdventurerParticipation.APPLICANT => {}
 </div>
 } else {
 <div>
-    <a class="btn btn-primary" href="@routes.AdventureController.participate(adv.getId())">Participate</a>
+    <a class="btn btn-primary" href="@routes.AdventurePeopleController.participate(adv.getId())">Participate</a>
 </div>
 }
 }
@@ -85,7 +85,7 @@ case EAdventurerParticipation.APPLICANT => {}
         <td>{new UserDAO().get(appl.getUserId()).getName()}</td>
         <td>{appl.getParticipationStatus()}</td>
         <td>{if(!status.equals(EAdventurerParticipation.APPLICANT)){<a class="btn btn-primary"
-                                                                       href="@{routes.AdventureController.adopt(adv.getId(), appl.getUserId())}">Adopt</a>
+                                                                       href="@{routes.AdventurePeopleController.adopt(adv.getId(), appl.getUserId())}">Adopt</a>
             }}
         </td>
     </tr>

@@ -70,7 +70,7 @@
     var btn = $(this),
     fld = $('#todo-title');
 
-    $.post('@routes.AdventureController.addTodo(adv.getId)', { title: fld.val() }, function(res) { $('.table-my-todos  tbody') .append($('<tr class="status-' + res.status + ' todo-entry" data-id="' + res.id + '">  <td><input class="input-status"  type="checkbox"/></td>   <td>' + res.title + '</td>  <td><a   href="#"  class="btn-delete"><i class="icon-trash"></i>Delete</a></td> </tr>').fadeIn());
+    $.post('@routes.AdventureTodoController.addTodo(adv.getId)', { title: fld.val() }, function(res) { $('.table-my-todos  tbody') .append($('<tr class="status-' + res.status + ' todo-entry" data-id="' + res.id + '">  <td><input class="input-status"  type="checkbox"/></td>   <td>' + res.title + '</td>  <td><a   href="#"  class="btn-delete"><i class="icon-trash"></i>Delete</a></td> </tr>').fadeIn());
 
     fld.val("");
     });
@@ -85,7 +85,7 @@
     id = tr.attr('data-id');
 
     $.ajax({
-    url: '@routes.AdventureController.setTodo(adv.getId(), "")' + id,
+    url: '@routes.AdventureTodoController.setTodo(adv.getId(), "")' + id,
     data: {
     status: input.is(':checked') ? "COMPLETE" : "NEW"
     },
@@ -106,7 +106,7 @@
     id = tr.attr('data-id');
 
     $.ajax({
-    url: '@routes.AdventureController.deleteTodo(adv.getId(), "")' + id,
+    url: '@routes.AdventureTodoController.deleteTodo(adv.getId(), "")' + id,
     type: 'DELETE',
     success: function(res) {
     tr.fadeOut(function() {
@@ -124,10 +124,9 @@
     var btn = $(this),
     tr = btn.parents('tr'),
     td = tr.find('td'),
-    title = $(td[1])
-    .text();
+    title = $(td[1]).text();
 
-    $.post('@routes.AdventureController.addTodo(adv.getId)', {
+    $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {
     title: title
     }, function(res) {
     $('.table-my-todos tbody')

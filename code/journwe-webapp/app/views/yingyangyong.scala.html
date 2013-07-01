@@ -1,12 +1,12 @@
 @(categories: List[models.helpers.CategoryCount])
 
-<form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
-    <div id="yingyangyong-click-info" class="row-fluid">
-        <div class="span2 offset1 text-center">
-            <i class="icon-chevron-down"></i>
-            click on <img src='@routes.Assets.at("img/yingyangyong_green.png")' style="height: 20px;">
-        </div>
+<div id="yingyangyong-click-info" class="row-fluid">
+    <div class="span2 offset1 text-center">
+        <i class="icon-chevron-down"></i>
+        click on <img src='@routes.Assets.at("img/yingyangyong_green.png")' style="height: 20px;">
     </div>
+</div>
+<form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
     <div class="row-fluid">
         <div class="span2 offset1 text-center">
             <a href="#" onclick="switchMode(); $('#yingyangyong-click-info').fadeOut();"><img id="yingyangyong" src='@routes.Assets.at("img/yingyangyong_green.png")' class="where"></a>
