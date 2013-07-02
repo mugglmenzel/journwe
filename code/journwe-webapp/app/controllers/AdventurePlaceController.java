@@ -4,6 +4,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import controllers.auth.SecuredAdminUser;
 import models.adventure.Adventure;
 import models.adventure.Adventurer;
+import models.adventure.EPreferenceVote;
 import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.place.PlaceOption;
 import models.dao.*;
@@ -41,7 +42,7 @@ public class AdventurePlaceController extends Controller {
             node.put("id", po.getId());
             node.put("address", po.getGoogleMapsAddress());
             PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getId(), usr.getId());
-            if(pref != null) node.put("vote", pref.getVote().toString());
+            node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             places.add(node);
         }
         return ok(Json.toJson(places));
