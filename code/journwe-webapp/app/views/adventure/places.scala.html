@@ -5,9 +5,9 @@
 <table id="places-list" class="table table-striped table-hover table-my-todos">
     <thead>
         <tr>
-            <th>Place Options</th>
             <th>Location</th>
-            <th></th>
+            <th>Preference</th>
+            <th>Actions</th>
         </tr>
     </thead>
 
@@ -28,14 +28,27 @@
 
 <script type="text/x-tmpl" id="place-template">
     <tr>
-        <td><input class="input-status" type="checkbox"/></td>
-        <td>{%=o.name%}</td>
-        <td>{%=o.googleMapsAddress%}</td>
-        <td><a href="#" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+        <!--<td><input class="input-status" type="checkbox"/></td>-->
+        <!--<td>{%=o.name%}</td>-->
+        <td>{%=o.address%}</td>
+        <td>
+            <div class="btn-group">
+                <button class="btn"><i class="icon-question"></i>{%=o.vote%}</button>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a><i class="icon-thumbs-up"></i> Yes</a></li>
+                    <li><a><i class="icon-question"></i> Maybe</a></li>
+                    <li><a><i class="icon-thumbs-down"></i> No</a></li>
+                </ul>
+            </div>
+        </td>
+        <td><a href="#" onclick="deletePlace({%=o.id%});" class="btn btn-danger"><i class="icon-trash"></i></a></td>
         {%
 
         $('body').ready(function(){
-        new google.maps.Geocoder().geocode({address: o.googleMapsAddress}, function (results, status) {
+        new google.maps.Geocoder().geocode({address: o.address}, function (results, status) {
         var marker = new google.maps.Marker({map: map,
         position: results[0].geometry.location});
         markers[o.id] = marker;
@@ -101,7 +114,7 @@
     $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (places) {
     $('#places-list tbody').empty();
     for(var id in places) {
-    $('#places-list tbody').append(tmpl('place-template', places[id]));
+        $('#places-list tbody').append(tmpl('place-template', places[id]));
     }
 
     });

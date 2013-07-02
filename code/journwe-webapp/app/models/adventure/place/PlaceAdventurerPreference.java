@@ -1,4 +1,4 @@
-package models.adventure.time;
+package models.adventure.place;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.adventure.EPreferenceVote;
@@ -7,27 +7,26 @@ import models.helpers.EnumMarshaller;
 /**
  * Created with IntelliJ IDEA.
  * User: mugglmenzel
- * Date: 03.06.13
- * Time: 23:41
+ * Date: 02.07.13
+ * Time: 12:29
  * To change this template use File | Settings | File Templates.
  */
-@DynamoDBTable(tableName = "journwe-timepreference")
-public class TimeAdventurerPreference {
+@DynamoDBTable(tableName = "journwe-placepreference")
+public class PlaceAdventurerPreference {
 
-    private String timeOptionId;
+    private String placeOptionId;
 
     private String adventurerId;
 
     private EPreferenceVote vote = EPreferenceVote.MAYBE;
 
-
-    @DynamoDBHashKey(attributeName = "timeoptionid")
-    public String getTimeOptionId() {
-        return timeOptionId;
+    @DynamoDBHashKey(attributeName = "placeoptionid")
+    public String getPlaceOptionId() {
+        return placeOptionId;
     }
 
-    public void setTimeOptionId(String timeOptionId) {
-        this.timeOptionId = timeOptionId;
+    public void setPlaceOptionId(String placeOptionId) {
+        this.placeOptionId = placeOptionId;
     }
 
     @DynamoDBRangeKey(attributeName = "adventurerid")
@@ -50,4 +49,5 @@ public class TimeAdventurerPreference {
 
     public static class VoteMarshaller extends EnumMarshaller<EPreferenceVote> {
     }
+
 }
