@@ -30,8 +30,8 @@ export AWS_ELB_HOME=$current_path/../elastic-load-balancing
 export EC2_HOME=$current_path/../ec2-api-tools
 export PATH=$PATH:$AWS_ELB_HOME/bin:$EC2_HOME/bin
 export AWS_CREDENTIAL_FILE=$AWS_ELB_HOME/credentials.properties
-export AWS_ACCESS_KEY=AKIAIPB6HBIM6TMNFRXA 
-export AWS_SECRET_KEY=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  
+export AWS_ACCESS_KEY=AKIAJRJVMMAPP44IO3OA 
+export AWS_SECRET_KEY=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  
 
 echo "-- checking for available servers in load balancer $1 ..."
 for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do

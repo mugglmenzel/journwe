@@ -2,24 +2,25 @@ package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import controllers.auth.SecuredAdminUser;
-import models.adventure.Adventure;
-import models.adventure.Adventurer;
 import models.adventure.EPreferenceVote;
 import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.place.PlaceOption;
-import models.dao.*;
+import models.dao.PlaceAdventurerPreferenceDAO;
+import models.dao.PlaceOptionDAO;
+import models.dao.UserDAO;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
+import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.adventure.getTodos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static play.data.Form.form;
 
@@ -37,12 +38,14 @@ public class AdventurePlaceController extends Controller {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         List<ObjectNode> places = new ArrayList<ObjectNode>();
-        for(PlaceOption po : new PlaceOptionDAO().all(advId)){
+        for (PlaceOption po : new PlaceOptionDAO().all(advId)) {
             ObjectNode node = Json.newObject();
             node.put("id", po.getId());
             node.put("address", po.getGoogleMapsAddress());
             PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
+            node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getId())));
+
             places.add(node);
         }
         return ok(Json.toJson(places));
@@ -61,6 +64,29 @@ public class AdventurePlaceController extends Controller {
         new PlaceOptionDAO().save(place);
 
         return ok(Json.toJson(place));
+    }
+
+    public static Result vote(String optId) {
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+        String vote = form().bindFromRequest().get("vote").toUpperCase();
+
+        PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(optId, usr.getId());
+        if (pref == null) {
+            pref = new PlaceAdventurerPreference();
+            pref.setPlaceOptionId(optId);
+            pref.setAdventurerId(usr.getId());
+        }
+
+        try {
+            pref.setVote(EPreferenceVote.valueOf(vote));
+        } catch (IllegalArgumentException e) {
+            Logger.error("Got unknown value for vote! value: " + vote);
+        }
+
+        new PlaceAdventurerPreferenceDAO().save(pref);
+
+        return ok(Json.toJson(pref));
     }
 
 }
