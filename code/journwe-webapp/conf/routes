@@ -48,8 +48,9 @@ POST          /adventure/:id/todos                      controllers.AdventureTod
 PUT           /adventure/:id/todos/:tid                 controllers.AdventureTodoController.setTodo(id:String, tid: String)
 DELETE        /adventure/:id/todos/:tid                 controllers.AdventureTodoController.deleteTodo(id:String, tid: String)
 
-GET           /adventure/:id/times                      controllers.AdventureTimeController.getTime(id:String)
-POST          /adventure/:id/times                      controllers.AdventureTimeController.saveTime(id:String)
+GET           /adventure/:id/times                      controllers.AdventureTimeController.getTimes(id:String)
+POST          /adventure/:id/times                      controllers.AdventureTimeController.addTime(id:String)
+PUT           /adventure/timeoption/:optId              controllers.AdventureTimeController.vote(optId:String)
 
 
 GET           /adv/:shortname                           controllers.AdventureController.getIndexShortname(shortname:String)

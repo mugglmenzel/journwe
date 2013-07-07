@@ -9,24 +9,19 @@
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
 
-<table class="table table-striped table-hover table-my-todos">
+<table id="times-list" class="table table-striped table-hover">
     <thead>
     <tr>
-        <th>Time Options</th>
-        <th>From</th>
-        <th>To</th>
-        <th></th>
+        <th>Vote</th>
+        <th>Time Option</th>
+        <th>YES</th>
+        <th>NO</th>
+        <th>MAYBE</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
-    @{new TimeOptionDAO().all(adv.getId()).map { timeOption =>
-    <tr>
-        <td>{timeOption.getName()}</td>
-        <td>{timeOption.getStartDate()}</td>
-        <td>{timeOption.getEndDate()}</td>
-        <td><a href="#" class="btn btn-alert"><i class="icon-trash"></i></a></td>
-    </tr>
-    } }
+
     </tbody>
 </table>
 
@@ -34,8 +29,7 @@
 <div class="spacer30"></div>
 
 <div class="inline">
-    @form(action = routes.AdventureTimeController.saveTime(adv.getId()), 'class -> "form-inline form-horizontal") {
-    <fieldset>
+
         <input type="text" name="name" placeholder="Name of Option" required="required"/>
         <div class="input-prepend">
             <span class="add-on">Start Date</span>
@@ -46,8 +40,87 @@
             <input type="date" name="endDate" placeholder="End Date" style="max-width: 150px;" required="required"/>
         </div>
 
-        <button type="submit" class="btn btn-primary"><i class="icon-plus"></i> Add</button>
-    </fieldset>
+        <button id="time-add-button" type="submit" class="btn btn-primary"><i class="icon-plus"></i> Add</button>
 
-    }
 </div>
+
+
+    <script type="text/x-tmpl" id="time-template">
+        <tr>
+            <td>
+                <div class="btn-group">
+                    <button id="timeoption-status-{%=o.id%}" class="btn" style="width: 90px"><i id="timeoption-status-icon-{%=o.id%}"></i> {%=o.vote%}</button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-pencil"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a onclick="voteTime('YES', '{%=o.id%}');"><i class="icon-thumbs-up"></i> Yes</a></li>
+                        <li><a onclick="voteTime('MAYBE', '{%=o.id%}');"><i class="icon-question"></i> Maybe</a></li>
+                        <li><a onclick="voteTime('NO', '{%=o.id%}');"><i class="icon-thumbs-down"></i> No</a></li>
+                    </ul>
+                </div>
+            </td>
+                <!--<td>{%=o.name%}</td>-->
+            <td>{%=o.name%}: {%=o.startDate%} to {%=o.endDate%} </td>
+            <td>{%=o.voteCount.YES%}</td>
+            <td>{%=o.voteCount.NO%}</td>
+            <td>{%=o.voteCount.MAYBE%}</td>
+            <td><a href="#" onclick="deleteTime({%=o.id%});" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+            {%
+
+
+
+            %}
+        </tr>
+    </script>
+
+    <script>
+
+
+        $('#time-add-button').on('click', function() {
+
+
+        $.post('@routes.AdventureTimeController.addTime(adv.getId)', { name: 'Option ' + ($('#times-list tbody').children().length+1)}, function(res) {
+        renderTimeOption(res);
+        $('#time-add-input').val("");
+        });
+        });
+
+        $('#times-list').ready(function (){
+        $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (times) {
+        $('#times-list tbody').empty();
+        for(var id in times) {
+        renderTimeOption(times[id])
+        }
+
+        });
+        });
+
+        function renderTimeOption(data) {
+        $('#times-list tbody').append(tmpl('time-template', data));
+
+
+        $('#timeoption-status-icon-' + data.id).addClass(voteTimeIconCSSClassMap[data.vote]);
+        $('#timeoption-status-' + data.id).addClass(voteTimeButtonCSSClassMap[data.vote]);
+        }
+
+
+        var voteTimeIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
+        var voteTimeButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
+
+        function voteTime(vote, optId) {
+        $.ajax({
+        url: '@routes.AdventureTimeController.vote("")' + optId,
+        data: {
+        vote: vote
+        },
+        type: 'PUT',
+        success: function(res) {
+        $('#timeoption-status-' + res.timeOptionId).html('<i class="' + voteTimeIconCSSClassMap[res.vote] + '"></i> ' + res.vote);
+        for(var i in voteButtonCSSClassMap) $('#timeoption-status-' + res.timeOptionId).removeClass(voteTimeButtonCSSClassMap[i]);
+        $('#timeoption-status-' + res.timeOptionId).addClass(voteTimeButtonCSSClassMap[res.vote]);
+        }
+        });
+        }
+
+</script>
