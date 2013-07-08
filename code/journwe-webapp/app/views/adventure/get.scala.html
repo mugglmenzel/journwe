@@ -49,9 +49,9 @@
 
             <div class="pull-right"><a onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');"><i class="icon-pencil"></i> Edit</a></div>
 
-            <xmp href="#" id="adventureDescription" data-type="textarea" data-pk="@adv.getId()"
+            <div id="adventureDescription" data-type="textarea" data-pk="@adv.getId()"
             data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-xxlarge"
-            data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@adv.getDescription</xmp>
+            data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@adv.getDescription</div>
 
             @index(adv, ins)
 
@@ -194,7 +194,7 @@
     $.fn.editable.defaults.mode = 'inline';
     $('document').ready(function () {
     $('#adventureName').editable();
-    $('#adventureDescription').editable();
+    $('#adventureDescription').editable({display: function (value, response) {$(this).html(replaceURLWithHTMLLinks(value));} });
     //{display: function (value, response) {$(this).html(replaceURLWithHTMLLinks(replaceLineBreaksWithBR(value)));} }
     });
 

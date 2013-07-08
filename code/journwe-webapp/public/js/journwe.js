@@ -37,9 +37,6 @@ function formatDate(time){
 };
 
 
-function replaceLineBreaksWithBR(text) {
-    return text.replace(/\n/g, '<br />');
-}
 
 function replaceURLWithHTMLLinks(text) {
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
