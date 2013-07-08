@@ -24,15 +24,16 @@
 	<link rel="stylesheet" href="@routes.Assets.at("css/bootstrapSwitch.css")">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.0/css/font-awesome.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="@routes.Assets.at("css/main.css")">
+    <link rel="stylesheet" href="@routes.Assets.at("css/journwe.css")">
 	<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/yingyangyong_green.png")">
 	<script src="@routes.Assets.at("js/jquery-1.9.0.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("js/tmpl.min.js")" type="text/javascript"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 	<script src="@routes.Assets.at("js/jasny-bootstrap.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("js/bootstrap-editable.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("js/bootstrap-editable.min.js")" type="text/javascript"></script>
 	<script src="@routes.Assets.at("js/bootstrapSwitch.js")" type="text/javascript"></script>
 	<script src="@routes.Assets.at("js/ckeditor/ckeditor.js")" type="text/javascript"></script>
-
+    <script src="@routes.Assets.at("js/journwe.js")" type="text/javascript"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script type="text/javascript">
 	  var _gaq = _gaq || [];
@@ -48,46 +49,53 @@
 	</script>
 </head>
 <body>
-	<div class="navbar  navbar-fixed-top">
+	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
 				<button type="button" class="btn btn-navbar" data-toggle="collapse"
 					data-target=".nav-collapse">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+						class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
 				
 				<a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
                     <span><img src="@routes.Assets.at("img/yingyangyong_green.png")" alt="JournWe logo" style="height: 20px;">
-					Journ<strong>We</strong></a>
+					Journ<strong>We</strong>
 					<!--<img src="@routes.Assets.at("img/suitcase_brand.png")" style="height: 14px">-->
                     </span>
+                </a>
 				<div class="nav-collapse collapse">
 					<ul class="nav">
 						<li @if(active == "home"){class="active"}><a href="@routes.ApplicationController.index">Home</a></li>
 						<li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
 						<li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
+						<li @if(active == "imprint"){class="active"}><a href="@routes.ApplicationController.imprint">Imprint</a> </li>
                         <li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>
 					</ul>
 				</div>
 
+                @defining(new UserDAO()) { userDAO =>
                 @currentAuth() { auth =>
                     @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
-                        <p class="navbar-text pull-right">Hello @{new UserDAO().findByAuthUserIdentity(auth).getName()} (<a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout">Logout</a>)</p>
+                        <div class="pull-right">
+                            <a class="btn" href="#"><i class="icon-cog"></i> @userDAO.findByAuthUserIdentity(auth).getName()</a>
+                            <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
+                        </div>
                         
                     } else {
                    		<div class="btn-group pull-right">
-							<a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-user icon-white"></i> Login</a>
+							<a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
 							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu">
 	                    @forProviders() { p =>
-								<li><a href="@p.getUrl()"><i class="icon-lock"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+								<li><a href="@p.getUrl()"><i class="icon-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
 		                }
 		                	</ul>
 						</div>
 	                }
+                }
                 }
 			</div>
 		</div>

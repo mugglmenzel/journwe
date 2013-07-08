@@ -1,7 +1,7 @@
 package models.adventure.time;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import models.adventure.EAdventurerParticipation;
+import models.adventure.EPreferenceVote;
 import models.helpers.EnumMarshaller;
 
 /**
@@ -18,10 +18,10 @@ public class TimeAdventurerPreference {
 
     private String adventurerId;
 
-    private ETimePreferenceVote vote;
+    private EPreferenceVote vote = EPreferenceVote.MAYBE;
 
 
-    @DynamoDBHashKey
+    @DynamoDBHashKey(attributeName = "timeoptionid")
     public String getTimeOptionId() {
         return timeOptionId;
     }
@@ -30,7 +30,7 @@ public class TimeAdventurerPreference {
         this.timeOptionId = timeOptionId;
     }
 
-    @DynamoDBRangeKey
+    @DynamoDBRangeKey(attributeName = "adventurerid")
     public String getAdventurerId() {
         return adventurerId;
     }
@@ -40,14 +40,14 @@ public class TimeAdventurerPreference {
     }
 
     @DynamoDBMarshalling(marshallerClass = VoteMarshaller.class)
-    public ETimePreferenceVote getVote() {
+    public EPreferenceVote getVote() {
         return vote;
     }
 
-    public void setVote(ETimePreferenceVote vote) {
+    public void setVote(EPreferenceVote vote) {
         this.vote = vote;
     }
 
-    public static class VoteMarshaller extends EnumMarshaller<ETimePreferenceVote> {
+    public static class VoteMarshaller extends EnumMarshaller<EPreferenceVote> {
     }
 }

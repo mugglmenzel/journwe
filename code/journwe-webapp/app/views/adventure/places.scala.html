@@ -1,0 +1,172 @@
+@(adv: models.adventure.Adventure)
+
+
+
+<table id="places-list" class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Vote</th>
+            <th>Location</th>
+            <th>YES</th>
+            <th>NO</th>
+            <th>MAYBE</th>
+            <th>Adventurers' Votes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+
+</table>
+
+<div class="input-append">
+    <input type="text" placeholder="A decent place name" id="place-add-input">
+    <a id="place-add-button" class="btn btn-add"><i class="icon-plus"></i></a>
+</div>
+
+<div style="height: 400px;">
+    <div id="where-map" style="width: 100%; height: 100%"></div>
+</div>
+
+<script type="text/x-tmpl" id="place-template">
+    <tr id="placeoption-item-{%=o.id%}">
+        <td>
+            <div class="btn-group">
+                <button id="placeoption-status-{%=o.id%}" class="btn" style="width: 90px"><i id="placeoption-status-icon-{%=o.id%}"></i> {%=o.vote%}</button>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-pencil"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a onclick="votePlace('YES', '{%=o.id%}');"><i class="icon-thumbs-up"></i> Yes</a></li>
+                    <li><a onclick="votePlace('MAYBE', '{%=o.id%}');"><i class="icon-question"></i> Maybe</a></li>
+                    <li><a onclick="votePlace('NO', '{%=o.id%}');"><i class="icon-thumbs-down"></i> No</a></li>
+                </ul>
+            </div>
+        </td>
+            <!--<td>{%=o.name%}</td>-->
+        <td>{%=o.address%}</td>
+        <td>{%=o.voteCount.YES%}</td>
+        <td>{%=o.voteCount.NO%}</td>
+        <td>{%=o.voteCount.MAYBE%}</td>
+        <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}">{%=o.voteAdventurers[i][j]%}</span> {% }} %}</td>
+        <td><a onclick="deletePlace('{%=o.id%}');" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+        {%
+
+
+
+        %}
+    </tr>
+</script>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
+<script>
+
+    var map;
+    var markers = [];
+    google.maps.visualRefresh = true;
+
+    function initialize() {
+    var mapOptions = {
+    zoom: 19,
+    center: new google.maps.LatLng(52.467541, 13.324957),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById('where-map'), mapOptions);
+
+    }
+
+
+    function resetBounds() {
+        var bounds = new google.maps.LatLngBounds();
+        for(var i in markers) {
+           bounds.extend(markers[i].getPosition());
+        }
+        map.fitBounds(bounds);
+        google.maps.event.trigger(map, 'resize');
+    }
+
+    function removeMarker(id) {
+        markers[id].setMap(null);
+        delete markers[id];
+        resetBounds();
+    }
+
+
+    $('body').ready(function (){initialize();});
+
+
+
+
+    function renderPlaceOption(data, replace) {
+    if(replace)
+        replace.replaceWith(tmpl('place-template', data)).fadeIn();
+    else
+        $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
+
+    new google.maps.Geocoder().geocode({address: data.address}, function (results, status) {
+    var marker = new google.maps.Marker({map: map, position: results[0].geometry.location});
+    markers[data.id] = marker;
+    map.setCenter(results[0].geometry.location);
+    resetBounds();
+    });
+    $('#placeoption-status-icon-' + data.id).addClass(votePlaceIconCSSClassMap[data.vote]);
+    $('#placeoption-status-' + data.id).addClass(votePlaceButtonCSSClassMap[data.vote]);
+    }
+
+
+    var votePlaceIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
+    var votePlaceButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
+    var votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-important', 'MAYBE': 'label-warning'};
+
+
+
+    $('#places-list').ready(function (){
+        $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (places) {
+            $('#places-list tbody').empty();
+            for(var id in places) {
+                renderPlaceOption(places[id])
+            }
+
+        });
+    });
+
+
+    $('#place-add-button').on('click', function() {
+
+        new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
+            $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { name: 'Option ' + ($('#places-list tbody').children().length+1), googleMapsAddress: results[0].formatted_address }, function(res) {
+                renderPlaceOption(res);
+                $('#place-add-input').val("");
+            });
+        });
+    });
+
+
+    function votePlace(vote, optId) {
+        $.ajax({
+        url: '@routes.AdventurePlaceController.vote("")' + optId,
+        data: {
+            vote: vote
+        },
+        type: 'PUT',
+        success: function(res) {
+            renderPlaceOption(res, $('#placeoption-item-' + res.id));
+        }
+        });
+    }
+
+
+    function deletePlace(optId) {
+        $.ajax({url: '@routes.AdventurePlaceController.deletePlace("")' + optId, type: 'DELETE', success: function () {
+            removeMarker(optId);
+            $('#placeoption-item-' + optId).fadeOut(function () {$('#placeoption-item-' + optId).remove();});
+        }
+        });
+    }
+
+</script>
+
+
+

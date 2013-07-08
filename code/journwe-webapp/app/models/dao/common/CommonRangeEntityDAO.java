@@ -7,7 +7,7 @@ public abstract class CommonRangeEntityDAO<T> extends CommonDAO<T> implements IC
     }
 
     public T get(String hashId, String rangeId) {
-        return pm.load(clazz, hashId, rangeId);
+        return hashId != null && rangeId != null ? pm.load(clazz, hashId, rangeId) : null;
     }
 
 	public boolean delete(String parentId, String id) {

@@ -8,7 +8,7 @@ public abstract class CommonNumberedEntityDAO<T> extends CommonDAO<T> implements
     }
 
     public T get(Long id) {
-        return pm.load(clazz, id);
+        return id != null ? pm.load(clazz, id) : null;
     }
 
     public boolean delete(Long id) {

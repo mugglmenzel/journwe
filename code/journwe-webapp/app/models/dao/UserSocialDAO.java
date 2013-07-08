@@ -57,7 +57,7 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
 			userSocial.setAccessToken(accessToken);
 			save(userSocial);
 		} else {
-			throw new Exception("Fuck it, something went wrong. Wanted to save a Facebook access token in our database. But: UserSocial object is null.");
+			throw new Exception("Fuck it, something went wrong. Wanted to saveOld a Facebook access token in our database. But: UserSocial object is null.");
 		} }
 		catch(Exception e) {
 			Logger.error(e.getLocalizedMessage());

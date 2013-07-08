@@ -12,7 +12,7 @@
 	</div>
 
 
-	<script id="template-comment" type="text/template">
+	<script id="template-comment" type="text/x-tmpl">
 		<div>
 			<div class="comment-text"><i class="icon-comment"></i> <%= text %></div>
 			<div class="comment-info"><%= user.name %> <small>-</small> <%= time %></div>
@@ -46,24 +46,6 @@
 				}.bind(this, "".replace.bind($("#template-comment").html(), /<%=(.*?)%>/g)); 
 
 
-			// Formats a date to hh:mm dd.MM.YYYY
-			var format = function(time){
-				time = new Date(parseInt(time, 10));
-
-				var two = function(r){ return (r < 10 ? "0" : "")+r };
-
-				// Todo Use better formating
-				return time.getHours()
-					+ ":"
-					+ two(time.getMinutes())
-					+ " "
-					+ two(time.getDate())
-					+ "."
-					+ two(time.getMonth()+1)
-					+ "."
-					+ two(time.getFullYear());
-			};
-
 
 			// The container for all comments
 			var list = $("#comments-list-@topic");
@@ -73,7 +55,7 @@
 			$.get("/comments/"+threadId, function(res){
 				list.html("");
 				res.forEach(function(f){
-					f.time = format(f.timestamp); // Append
+					f.time = formatTime(f.timestamp); // Append
 					list.append(template(f));
 				});
 
@@ -94,7 +76,7 @@
 					$.post("/comment/save", {text: val, threadId: threadId}, function(f){
 						list.find(".empty").remove();
 
-						f.time = format(f.timestamp); // Append
+						f.time = formatTime(f.timestamp); // Append
 						list.append($(template(f)).fadeIn());
 					});
 				}

@@ -1,4 +1,4 @@
-package models.adventure.time;
+package models.adventure;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,6 +7,6 @@ package models.adventure.time;
  * Time: 23:44
  * To change this template use File | Settings | File Templates.
  */
-public enum ETimePreferenceVote {
+public enum EPreferenceVote {
     YES, NO, MAYBE;
 }
