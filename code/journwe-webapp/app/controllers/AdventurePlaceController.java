@@ -89,4 +89,9 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(pref));
     }
 
+    public static Result deletePlace(String optId) {
+        new PlaceOptionDAO().delete(optId);
+        return ok();
+    }
+
 }

@@ -98,5 +98,9 @@ public class AdventureTimeController extends Controller {
         return ok(Json.toJson(pref));
     }
 
+    public static Result deleteTime(String optId) {
+        new TimeOptionDAO().delete(optId);
+        return ok();
+    }
 
 }

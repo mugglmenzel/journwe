@@ -46,7 +46,7 @@
 
 
     <script type="text/x-tmpl" id="time-template">
-        <tr>
+        <tr id="timeoption-item-{%=o.id%}">
             <td>
                 <div class="btn-group">
                     <button id="timeoption-status-{%=o.id%}" class="btn" style="width: 90px"><i id="timeoption-status-icon-{%=o.id%}"></i> {%=o.vote%}</button>
@@ -65,7 +65,7 @@
             <td>{%=o.voteCount.YES%}</td>
             <td>{%=o.voteCount.NO%}</td>
             <td>{%=o.voteCount.MAYBE%}</td>
-            <td><a href="#" onclick="deleteTime({%=o.id%});" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+            <td><a onclick="deleteTime('{%=o.id%}');" class="btn btn-danger"><i class="icon-trash"></i></a></td>
             {%
 
 
@@ -119,6 +119,13 @@
         $('#timeoption-status-' + res.timeOptionId).html('<i class="' + voteTimeIconCSSClassMap[res.vote] + '"></i> ' + res.vote);
         for(var i in voteButtonCSSClassMap) $('#timeoption-status-' + res.timeOptionId).removeClass(voteTimeButtonCSSClassMap[i]);
         $('#timeoption-status-' + res.timeOptionId).addClass(voteTimeButtonCSSClassMap[res.vote]);
+        }
+        });
+        }
+
+        function deleteTime(optId) {
+        $.ajax({url: '@routes.AdventureTimeController.deleteTime("")' + optId, type: 'DELETE', success: function () {
+        $('#timeoption-item-' + optId).fadeOut(function () {$('#timeoption-item-' + optId).remove();});
         }
         });
         }

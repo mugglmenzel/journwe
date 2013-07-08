@@ -42,15 +42,18 @@ GET           /adventure/:id/leave                      controllers.AdventurePeo
 GET           /adventure/:id/places                     controllers.AdventurePlaceController.getPlaces(id:String)
 POST          /adventure/:id/places                     controllers.AdventurePlaceController.addPlace(id:String)
 PUT           /adventure/placeoption/:optId             controllers.AdventurePlaceController.vote(optId:String)
+DELETE        /adventure/placeoption/:optId             controllers.AdventurePlaceController.deletePlace(optId:String)
+
+GET           /adventure/:id/times                      controllers.AdventureTimeController.getTimes(id:String)
+POST          /adventure/:id/times                      controllers.AdventureTimeController.addTime(id:String)
+PUT           /adventure/timeoption/:optId              controllers.AdventureTimeController.vote(optId:String)
+DELETE        /adventure/timeoption/:optId              controllers.AdventureTimeController.deleteTime(optId:String)
+
 
 GET           /adventure/:id/todos                      controllers.AdventureTodoController.getTodos(id:String)
 POST          /adventure/:id/todos                      controllers.AdventureTodoController.addTodo(id:String)
 PUT           /adventure/:id/todos/:tid                 controllers.AdventureTodoController.setTodo(id:String, tid: String)
 DELETE        /adventure/:id/todos/:tid                 controllers.AdventureTodoController.deleteTodo(id:String, tid: String)
-
-GET           /adventure/:id/times                      controllers.AdventureTimeController.getTimes(id:String)
-POST          /adventure/:id/times                      controllers.AdventureTimeController.addTime(id:String)
-PUT           /adventure/timeoption/:optId              controllers.AdventureTimeController.vote(optId:String)
 
 
 GET           /adv/:shortname                           controllers.AdventureController.getIndexShortname(shortname:String)

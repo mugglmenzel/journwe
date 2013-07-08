@@ -29,7 +29,7 @@
 </div>
 
 <script type="text/x-tmpl" id="place-template">
-    <tr>
+    <tr id="placeoption-item-{%=o.id%}">
         <td>
             <div class="btn-group">
                 <button id="placeoption-status-{%=o.id%}" class="btn" style="width: 90px"><i id="placeoption-status-icon-{%=o.id%}"></i> {%=o.vote%}</button>
@@ -37,9 +37,9 @@
                     <i class="icon-pencil"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a onclick="vote('YES', '{%=o.id%}');"><i class="icon-thumbs-up"></i> Yes</a></li>
-                    <li><a onclick="vote('MAYBE', '{%=o.id%}');"><i class="icon-question"></i> Maybe</a></li>
-                    <li><a onclick="vote('NO', '{%=o.id%}');"><i class="icon-thumbs-down"></i> No</a></li>
+                    <li><a onclick="votePlace('YES', '{%=o.id%}');"><i class="icon-thumbs-up"></i> Yes</a></li>
+                    <li><a onclick="votePlace('MAYBE', '{%=o.id%}');"><i class="icon-question"></i> Maybe</a></li>
+                    <li><a onclick="votePlace('NO', '{%=o.id%}');"><i class="icon-thumbs-down"></i> No</a></li>
                 </ul>
             </div>
         </td>
@@ -48,7 +48,7 @@
         <td>{%=o.voteCount.YES%}</td>
         <td>{%=o.voteCount.NO%}</td>
         <td>{%=o.voteCount.MAYBE%}</td>
-        <td><a href="#" onclick="deletePlace({%=o.id%});" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+        <td><a onclick="deletePlace('{%=o.id%}');" class="btn btn-danger"><i class="icon-trash"></i></a></td>
         {%
 
 
@@ -92,6 +92,39 @@
     }
 
 
+    $('body').ready(function (){initialize();});
+
+
+
+
+    function renderPlaceOption(data) {
+    $('#places-list tbody').append(tmpl('place-template', data));
+
+    new google.maps.Geocoder().geocode({address: data.address}, function (results, status) {
+    var marker = new google.maps.Marker({map: map, position: results[0].geometry.location});
+    markers[data.id] = marker;
+    map.setCenter(results[0].geometry.location);
+    resetBounds();
+    });
+    $('#placeoption-status-icon-' + data.id).addClass(votePlaceIconCSSClassMap[data.vote]);
+    $('#placeoption-status-' + data.id).addClass(votePlaceButtonCSSClassMap[data.vote]);
+    }
+
+
+    var votePlaceIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
+    var votePlaceButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
+
+
+
+    $('#places-list').ready(function (){
+        $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (places) {
+            $('#places-list tbody').empty();
+            for(var id in places) {
+                renderPlaceOption(places[id])
+            }
+
+        });
+    });
 
 
     $('#place-add-button').on('click', function() {
@@ -104,36 +137,8 @@
         });
     });
 
-    $('body').ready(function (){initialize();});
 
-    $('#places-list').ready(function (){
-        $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (places) {
-            $('#places-list tbody').empty();
-            for(var id in places) {
-                renderPlaceOption(places[id])
-            }
-
-        });
-    });
-
-    function renderPlaceOption(data) {
-        $('#places-list tbody').append(tmpl('place-template', data));
-
-        new google.maps.Geocoder().geocode({address: data.address}, function (results, status) {
-            var marker = new google.maps.Marker({map: map, position: results[0].geometry.location});
-            markers[data.id] = marker;
-            map.setCenter(results[0].geometry.location);
-            resetBounds();
-        });
-        $('#placeoption-status-icon-' + data.id).addClass(voteIconCSSClassMap[data.vote]);
-        $('#placeoption-status-' + data.id).addClass(voteButtonCSSClassMap[data.vote]);
-   }
-
-
-    var voteIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
-    var voteButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
-
-    function vote(vote, optId) {
+    function votePlace(vote, optId) {
         $.ajax({
         url: '@routes.AdventurePlaceController.vote("")' + optId,
         data: {
@@ -141,9 +146,17 @@
         },
         type: 'PUT',
         success: function(res) {
-            $('#placeoption-status-' + res.placeOptionId).html('<i class="' + voteIconCSSClassMap[res.vote] + '"></i> ' + res.vote);
-            for(var i in voteButtonCSSClassMap) $('#placeoption-status-' + res.placeOptionId).removeClass(voteButtonCSSClassMap[i]);
-            $('#placeoption-status-' + res.placeOptionId).addClass(voteButtonCSSClassMap[res.vote]);
+            $('#placeoption-status-' + res.placeOptionId).html('<i class="' + votePlaceIconCSSClassMap[res.vote] + '"></i> ' + res.vote);
+            for(var i in votePlaceButtonCSSClassMap) $('#placeoption-status-' + res.placeOptionId).removeClass(votePlaceButtonCSSClassMap[i]);
+            $('#placeoption-status-' + res.placeOptionId).addClass(votePlaceButtonCSSClassMap[res.vote]);
+        }
+        });
+    }
+
+
+    function deletePlace(optId) {
+        $.ajax({url: '@routes.AdventurePlaceController.deletePlace("")' + optId, type: 'DELETE', success: function () {
+            $('#placeoption-item-' + optId).fadeOut(function () {$('#placeoption-item-' + optId).remove();});
         }
         });
     }
