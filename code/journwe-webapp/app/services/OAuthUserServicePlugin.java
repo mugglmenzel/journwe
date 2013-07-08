@@ -3,6 +3,7 @@ package services;
 import models.dao.UserDAO;
 import models.user.User;
 import play.Application;
+import play.Logger;
 
 import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;

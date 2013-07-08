@@ -51,9 +51,9 @@
 
             <div id="adventureDescription" data-type="textarea" data-pk="@adv.getId()"
             data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-xxlarge"
-            data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@adv.getDescription</div>
+            data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@Html(adv.getHTMLDescription())</div>
 
-            @index(adv, ins)
+            @*@index(adv, ins)*@
 
         </div>
         <div class="span3">@{views.html.comment.widget_comment.render(adv, "index")}</div>
@@ -194,7 +194,7 @@
     $.fn.editable.defaults.mode = 'inline';
     $('document').ready(function () {
     $('#adventureName').editable();
-    $('#adventureDescription').editable({display: function (value, response) {$(this).html(replaceURLWithHTMLLinks(value));} });
+    //$('#adventureDescription').editable({display: function (value, response) {$(this).html(replaceURLWithHTMLLinks(value));} });
     //{display: function (value, response) {$(this).html(replaceURLWithHTMLLinks(replaceLineBreaksWithBR(value)));} }
     });
 

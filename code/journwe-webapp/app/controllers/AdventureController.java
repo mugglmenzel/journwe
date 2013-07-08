@@ -305,7 +305,7 @@ public class AdventureController extends Controller {
             if ("adventureName".equals(name))
                 adv.setName(advForm.get("value"));
             else if ("adventureDescription".equals(name)) {
-                adv.setDescription(advForm.get("value").replace("\n", "<br />\n"));
+                adv.setDescription(advForm.get("value"));
             }
             new AdventureDAO().save(adv);
         }
