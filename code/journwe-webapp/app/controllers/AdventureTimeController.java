@@ -2,18 +2,16 @@ package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import controllers.auth.SecuredAdminUser;
-import models.Inspiration;
-import models.adventure.Adventure;
-import models.adventure.Adventurer;
 import models.adventure.EPreferenceVote;
-import models.adventure.place.PlaceAdventurerPreference;
-import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
-import models.dao.*;
+import models.dao.TimeAdventurerPreferenceDAO;
+import models.dao.TimeOptionDAO;
+import models.dao.UserDAO;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -21,9 +19,13 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static play.data.Form.form;
 
@@ -46,8 +48,9 @@ public class AdventureTimeController extends Controller {
         for (TimeOption to : new TimeOptionDAO().all(advId)) {
             ObjectNode node = Json.newObject();
             node.put("id", to.getId());
-            node.put("startDate", to.getStartDate() != null  ? new SimpleDateFormat().format(to.getStartDate()) : "");
-            node.put("endDate", to.getEndDate() != null ? new SimpleDateFormat().format(to.getEndDate()): "");
+            node.put("name", to.getName());
+            node.put("startDate", to.getStartDate() != null ? to.getStartDate().getTime() : new Date().getTime());
+            node.put("endDate", to.getEndDate() != null ? to.getEndDate().getTime() : new Date().getTime());
             TimeAdventurerPreference pref = new TimeAdventurerPreferenceDAO().get(to.getId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(to.getId())));
@@ -69,10 +72,36 @@ public class AdventureTimeController extends Controller {
     */
 
     public static Result addTime(String advId) {
-        TimeOption opt = form(TimeOption.class).bindFromRequest().get();
-        opt.setAdventureId(advId);
-        new TimeOptionDAO().save(opt);
-        return ok(Json.toJson(opt));
+
+        DynamicForm requestData = form().bindFromRequest();
+        Logger.info(requestData.data().toString());
+
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
+
+        try {
+            TimeOption time = new TimeOption();
+            time.setAdventureId(advId);
+            time.setStartDate(df.parse(requestData.get("startDate")));
+            time.setEndDate(df.parse(requestData.get("endDate")));
+            time.setName(requestData.get("name"));
+            new TimeOptionDAO().save(time);
+
+            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+            ObjectNode node = Json.newObject();
+            node.put("id", time.getId());
+            node.put("name", time.getName());
+            node.put("startDate", time.getStartDate() != null ? new SimpleDateFormat().format(time.getStartDate()) : "");
+            node.put("endDate", time.getEndDate() != null ? new SimpleDateFormat().format(time.getEndDate()) : "");
+            TimeAdventurerPreference pref = new TimeAdventurerPreferenceDAO().get(time.getId(), usr.getId());
+            node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
+            node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getId())));
+
+            return ok(Json.toJson(node));
+        } catch (ParseException pe) {
+            Logger.error("Got a parse exception for date parsing: " + pe.getLocalizedMessage());
+            return badRequest();
+        }
     }
 
     public static Result vote(String optId) {

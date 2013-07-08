@@ -63,7 +63,16 @@ public class AdventurePlaceController extends Controller {
 
         new PlaceOptionDAO().save(place);
 
-        return ok(Json.toJson(place));
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+        ObjectNode node = Json.newObject();
+        node.put("id", place.getId());
+        node.put("address", place.getGoogleMapsAddress());
+        PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(place.getId(), usr.getId());
+        node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
+        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getId())));
+
+        return ok(Json.toJson(node));
     }
 
     public static Result vote(String optId) {

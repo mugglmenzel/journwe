@@ -28,7 +28,7 @@
 
 <div class="spacer30"></div>
 
-<div class="inline">
+<div id="time-add-form" class="inline input-append">
 
         <input type="text" name="name" placeholder="Name of Option" required="required"/>
         <div class="input-prepend">
@@ -40,7 +40,7 @@
             <input type="date" name="endDate" placeholder="End Date" style="max-width: 150px;" required="required"/>
         </div>
 
-        <button id="time-add-button" type="submit" class="btn btn-primary"><i class="icon-plus"></i> Add</button>
+        <button id="time-add-button" class="btn btn-primary"><i class="icon-plus"></i> Add</button>
 
 </div>
 
@@ -61,7 +61,7 @@
                 </div>
             </td>
                 <!--<td>{%=o.name%}</td>-->
-            <td>{%=o.name%}: {%=o.startDate%} to {%=o.endDate%} </td>
+            <td>{%=o.name%}: {%=formatDate(o.startDate)%} to {%=formatDate(o.endDate)%} </td>
             <td>{%=o.voteCount.YES%}</td>
             <td>{%=o.voteCount.NO%}</td>
             <td>{%=o.voteCount.MAYBE%}</td>
@@ -78,11 +78,13 @@
 
 
         $('#time-add-button').on('click', function() {
+        alert("value" + $('#time-add-form input[name=startDate]').val())
 
-
-        $.post('@routes.AdventureTimeController.addTime(adv.getId)', { name: 'Option ' + ($('#times-list tbody').children().length+1)}, function(res) {
+        $.post('@routes.AdventureTimeController.addTime(adv.getId)', { name: $('#time-add-form input[name=name]').val(), startDate: $('#time-add-form input[name=startDate]').val(), endDate: $('#time-add-form input[name=endDate]').val()}, function(res) {
         renderTimeOption(res);
-        $('#time-add-input').val("");
+        $('#time-add-form input[name=name]').val("");
+        $('#time-add-form input[name=startDate]').val("");
+        $('#time-add-form input[name=endDate]').val("");
         });
         });
 

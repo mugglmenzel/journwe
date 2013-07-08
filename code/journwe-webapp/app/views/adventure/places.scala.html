@@ -98,7 +98,7 @@
 
 
     function renderPlaceOption(data) {
-    $('#places-list tbody').append(tmpl('place-template', data));
+    $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
 
     new google.maps.Geocoder().geocode({address: data.address}, function (results, status) {
     var marker = new google.maps.Marker({map: map, position: results[0].geometry.location});
@@ -156,6 +156,7 @@
 
     function deletePlace(optId) {
         $.ajax({url: '@routes.AdventurePlaceController.deletePlace("")' + optId, type: 'DELETE', success: function () {
+            removeMarker(optId);
             $('#placeoption-item-' + optId).fadeOut(function () {$('#placeoption-item-' + optId).remove();});
         }
         });
