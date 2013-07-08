@@ -16,7 +16,9 @@ object ApplicationBuild extends Build {
     "com.feth"    %% "play-authenticate" % "0.2.5-SNAPSHOT",
     "com.restfb" % "restfb" % "1.6.12",
     "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5",
-    "com.rosaloves" % "bitlyj" % "2.0.0"
+    "com.rosaloves" % "bitlyj" % "2.0.0",
+    "org.igniterealtime.smack" % "smack" % "3.2.1",
+    "org.igniterealtime.smack" % "smackx" % "3.2.1"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
