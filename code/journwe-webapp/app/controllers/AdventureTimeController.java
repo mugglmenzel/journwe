@@ -3,8 +3,10 @@ package controllers;
 import com.feth.play.module.pa.PlayAuthenticate;
 import controllers.auth.SecuredAdminUser;
 import models.adventure.EPreferenceVote;
+import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
+import models.dao.PlaceAdventurerPreferenceDAO;
 import models.dao.TimeAdventurerPreferenceDAO;
 import models.dao.TimeOptionDAO;
 import models.dao.UserDAO;
@@ -54,6 +56,7 @@ public class AdventureTimeController extends Controller {
             TimeAdventurerPreference pref = new TimeAdventurerPreferenceDAO().get(to.getId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(to.getId())));
+            node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(to.getId())));
 
             times.add(node);
         }
@@ -88,14 +91,20 @@ public class AdventureTimeController extends Controller {
 
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
+            TimeAdventurerPreference pref = new TimeAdventurerPreference();
+            pref.setTimeOptionId(time.getId());
+            pref.setAdventurerId(usr.getId());
+            new TimeAdventurerPreferenceDAO().save(pref);
+
+
             ObjectNode node = Json.newObject();
             node.put("id", time.getId());
             node.put("name", time.getName());
             node.put("startDate", time.getStartDate() != null ? new SimpleDateFormat().format(time.getStartDate()) : "");
             node.put("endDate", time.getEndDate() != null ? new SimpleDateFormat().format(time.getEndDate()) : "");
-            TimeAdventurerPreference pref = new TimeAdventurerPreferenceDAO().get(time.getId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getId())));
+            node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getId())));
 
             return ok(Json.toJson(node));
         } catch (ParseException pe) {
@@ -124,7 +133,18 @@ public class AdventureTimeController extends Controller {
 
         new TimeAdventurerPreferenceDAO().save(pref);
 
-        return ok(Json.toJson(pref));
+        TimeOption time = new TimeOptionDAO().get(pref.getTimeOptionId());
+
+        ObjectNode node = Json.newObject();
+        node.put("id", time.getId());
+        node.put("name", time.getName());
+        node.put("startDate", time.getStartDate() != null ? new SimpleDateFormat().format(time.getStartDate()) : "");
+        node.put("endDate", time.getEndDate() != null ? new SimpleDateFormat().format(time.getEndDate()) : "");
+        node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
+        node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getId())));
+        node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getId())));
+
+        return ok(Json.toJson(node));
     }
 
     public static Result deleteTime(String optId) {

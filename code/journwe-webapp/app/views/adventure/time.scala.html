@@ -17,6 +17,7 @@
         <th>YES</th>
         <th>NO</th>
         <th>MAYBE</th>
+        <th>Adventurers' Votes</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -65,6 +66,7 @@
             <td>{%=o.voteCount.YES%}</td>
             <td>{%=o.voteCount.NO%}</td>
             <td>{%=o.voteCount.MAYBE%}</td>
+            <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=voteTimeLabelCSSClassMap[i]%}">{%=o.voteAdventurers[i][j]%}</span> {% }} %}</td>
             <td><a onclick="deleteTime('{%=o.id%}');" class="btn btn-danger"><i class="icon-trash"></i></a></td>
             {%
 
@@ -78,7 +80,6 @@
 
 
         $('#time-add-button').on('click', function() {
-        alert("value" + $('#time-add-form input[name=startDate]').val())
 
         $.post('@routes.AdventureTimeController.addTime(adv.getId)', { name: $('#time-add-form input[name=name]').val(), startDate: $('#time-add-form input[name=startDate]').val(), endDate: $('#time-add-form input[name=endDate]').val()}, function(res) {
         renderTimeOption(res);
@@ -98,8 +99,11 @@
         });
         });
 
-        function renderTimeOption(data) {
-        $('#times-list tbody').append(tmpl('time-template', data));
+        function renderTimeOption(data, replace) {
+        if(replace)
+            replace.replaceWith(tmpl('time-template', data)).fadeIn();
+        else
+            $('#times-list tbody').append(tmpl('time-template', data));
 
 
         $('#timeoption-status-icon-' + data.id).addClass(voteTimeIconCSSClassMap[data.vote]);
@@ -109,6 +113,7 @@
 
         var voteTimeIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
         var voteTimeButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
+        var voteTimeLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-important', 'MAYBE': 'label-warning'};
 
         function voteTime(vote, optId) {
         $.ajax({
@@ -118,16 +123,14 @@
         },
         type: 'PUT',
         success: function(res) {
-        $('#timeoption-status-' + res.timeOptionId).html('<i class="' + voteTimeIconCSSClassMap[res.vote] + '"></i> ' + res.vote);
-        for(var i in voteButtonCSSClassMap) $('#timeoption-status-' + res.timeOptionId).removeClass(voteTimeButtonCSSClassMap[i]);
-        $('#timeoption-status-' + res.timeOptionId).addClass(voteTimeButtonCSSClassMap[res.vote]);
+            renderTimeOption(res, $('#timeoption-item-' + res.id));
         }
         });
         }
 
         function deleteTime(optId) {
         $.ajax({url: '@routes.AdventureTimeController.deleteTime("")' + optId, type: 'DELETE', success: function () {
-        $('#timeoption-item-' + optId).fadeOut(function () {$('#timeoption-item-' + optId).remove();});
+            $('#timeoption-item-' + optId).fadeOut(function () {$('#timeoption-item-' + optId).remove();});
         }
         });
         }

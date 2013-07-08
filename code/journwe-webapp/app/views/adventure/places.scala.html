@@ -10,6 +10,7 @@
             <th>YES</th>
             <th>NO</th>
             <th>MAYBE</th>
+            <th>Adventurers' Votes</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -48,6 +49,7 @@
         <td>{%=o.voteCount.YES%}</td>
         <td>{%=o.voteCount.NO%}</td>
         <td>{%=o.voteCount.MAYBE%}</td>
+        <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}">{%=o.voteAdventurers[i][j]%}</span> {% }} %}</td>
         <td><a onclick="deletePlace('{%=o.id%}');" class="btn btn-danger"><i class="icon-trash"></i></a></td>
         {%
 
@@ -97,8 +99,11 @@
 
 
 
-    function renderPlaceOption(data) {
-    $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
+    function renderPlaceOption(data, replace) {
+    if(replace)
+        replace.replaceWith(tmpl('place-template', data)).fadeIn();
+    else
+        $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
 
     new google.maps.Geocoder().geocode({address: data.address}, function (results, status) {
     var marker = new google.maps.Marker({map: map, position: results[0].geometry.location});
@@ -113,6 +118,7 @@
 
     var votePlaceIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
     var votePlaceButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
+    var votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-important', 'MAYBE': 'label-warning'};
 
 
 
@@ -146,9 +152,7 @@
         },
         type: 'PUT',
         success: function(res) {
-            $('#placeoption-status-' + res.placeOptionId).html('<i class="' + votePlaceIconCSSClassMap[res.vote] + '"></i> ' + res.vote);
-            for(var i in votePlaceButtonCSSClassMap) $('#placeoption-status-' + res.placeOptionId).removeClass(votePlaceButtonCSSClassMap[i]);
-            $('#placeoption-status-' + res.placeOptionId).addClass(votePlaceButtonCSSClassMap[res.vote]);
+            renderPlaceOption(res, $('#placeoption-item-' + res.id));
         }
         });
     }

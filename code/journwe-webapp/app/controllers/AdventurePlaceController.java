@@ -45,9 +45,11 @@ public class AdventurePlaceController extends Controller {
             PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getId())));
+            node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(po.getId())));
 
             places.add(node);
         }
+
         return ok(Json.toJson(places));
     }
 
@@ -65,12 +67,18 @@ public class AdventurePlaceController extends Controller {
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
+        PlaceAdventurerPreference pref = new PlaceAdventurerPreference();
+        pref.setPlaceOptionId(place.getId());
+        pref.setAdventurerId(usr.getId());
+        new PlaceAdventurerPreferenceDAO().save(pref);
+
+
         ObjectNode node = Json.newObject();
         node.put("id", place.getId());
         node.put("address", place.getGoogleMapsAddress());
-        PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(place.getId(), usr.getId());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getId())));
+        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getId())));
 
         return ok(Json.toJson(node));
     }
@@ -95,7 +103,16 @@ public class AdventurePlaceController extends Controller {
 
         new PlaceAdventurerPreferenceDAO().save(pref);
 
-        return ok(Json.toJson(pref));
+        PlaceOption place = new PlaceOptionDAO().get(pref.getPlaceOptionId());
+
+        ObjectNode node = Json.newObject();
+        node.put("id", place.getId());
+        node.put("address", place.getGoogleMapsAddress());
+        node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
+        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getId())));
+        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getId())));
+
+        return ok(Json.toJson(node));
     }
 
     public static Result deletePlace(String optId) {
