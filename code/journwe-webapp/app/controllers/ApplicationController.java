@@ -6,14 +6,18 @@ import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
-
+import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
 import models.Category;
 import models.dao.*;
 import models.helpers.CategoryCount;
+import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.user.Subscriber;
 import models.user.UserSocial;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import play.Logger;
 import play.cache.Cached;
 import play.data.Form;
@@ -21,11 +25,12 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import views.html.*;
 
 import static play.data.Form.form;
 
@@ -94,7 +99,6 @@ public class ApplicationController extends Controller {
         return ok(subscribe.render(subForm));
     }
 
-
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result categoryIndex(String catId) {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
@@ -153,26 +157,60 @@ public class ApplicationController extends Controller {
         Logger.debug("+++ END TESTING FACEBOOK FEATURES +++");
         return ok();
     }
-    
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result testFacebookChat() {
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
+        final String accessToken = us.getAccessToken();
+        Logger.debug("+++ START TESTING FACEBOOK CHAT FEATURES +++");
+        Logger.debug("usr.getId() -> " + usr.getId());
+        Logger.debug("Access Token: " + accessToken);
+
+        XMPPConnection connection = JournweFacebookChatClient.createXMPPConnection();
+        try {
+//            Logger.debug("#1: "+ConfigFactory.load().getString("play-authenticate/clientId"));
+//            Logger.debug("#2: "+ConfigFactory.load("play-authenticate").getString("clientId"));
+            connection.connect();
+            connection.login("333105976811510", accessToken);
+
+            String to = "100006056794571@chat.facebook.com";
+            Chat chat = connection.getChatManager().createChat(to, null);
+            chat.sendMessage("Message to "+to);
+            to = "100006056794571@facebook.com";
+            chat = connection.getChatManager().createChat(to, null);
+            chat.sendMessage("Message to "+to);
+
+            to = "100006080790124@chat.facebook.com";
+            chat = connection.getChatManager().createChat(to, null);
+            chat.sendMessage("Message to "+to);
+        } catch (XMPPException e) {
+            throw new RuntimeException(e);
+        } finally {
+            connection.disconnect();
+        }
+        return ok();
+    }
+
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result testInvite() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
         final String accessToken = us.getAccessToken();
         JournweFacebookClient fb = JournweFacebookClient.create(accessToken);
-    	List<JsonObject> friends = fb.getMyFriendsAsJson();
-    	Logger.debug("Friends as JSON: "+friends.toString());
-    	StringBuffer friendNames = new StringBuffer("[");
-    	int i = 0;
-    	for(JsonObject jo : friends) {
-    		friendNames.append("\"");
-    		friendNames.append(jo.get("name"));
-    		friendNames.append("\"");
-    		if(i<friends.size()-1)
-    			friendNames.append(",");
-    	}
-    	friendNames.append("]");
-    	Logger.debug("Friend names as JSON: "+friendNames);
+        List<JsonObject> friends = fb.getMyFriendsAsJson();
+        Logger.debug("Friends as JSON: " + friends.toString());
+        StringBuffer friendNames = new StringBuffer("[");
+        int i = 0;
+        for (JsonObject jo : friends) {
+            friendNames.append("\"");
+            friendNames.append(jo.get("name"));
+            friendNames.append("\"");
+            if (i < friends.size() - 1)
+                friendNames.append(",");
+        }
+        friendNames.append("]");
+        Logger.debug("Friend names as JSON: " + friendNames);
         return ok(test_invite.render(friendNames.toString()));
     }
 
@@ -190,7 +228,6 @@ public class ApplicationController extends Controller {
     public static Result admin() {
         return ok(admin.render());
     }
-
 
     public static Result oAuthDenied(String provider) {
         return ok("oAuth went wrong");

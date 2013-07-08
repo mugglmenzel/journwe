@@ -70,6 +70,7 @@ POST          /comment/save                             controllers.CommentContr
 # Facebook
 GET     /fbtest                                						controllers.ApplicationController.testFacebookFeatures()
 GET     /fbinvite                                					controllers.ApplicationController.testInvite()
+GET     /fbchat                               					    controllers.ApplicationController.testFacebookChat()
 
 # Load Balancing
 GET           /ping                                     controllers.ApplicationController.ping()
