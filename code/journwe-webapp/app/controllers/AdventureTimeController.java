@@ -100,8 +100,8 @@ public class AdventureTimeController extends Controller {
             ObjectNode node = Json.newObject();
             node.put("id", time.getId());
             node.put("name", time.getName());
-            node.put("startDate", time.getStartDate() != null ? new SimpleDateFormat().format(time.getStartDate()) : "");
-            node.put("endDate", time.getEndDate() != null ? new SimpleDateFormat().format(time.getEndDate()) : "");
+            node.put("startDate", time.getStartDate() != null ? time.getStartDate().getTime() : new Date().getTime());
+            node.put("endDate", time.getEndDate() != null ? time.getEndDate().getTime() : new Date().getTime());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getId())));
             node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getId())));
@@ -138,8 +138,8 @@ public class AdventureTimeController extends Controller {
         ObjectNode node = Json.newObject();
         node.put("id", time.getId());
         node.put("name", time.getName());
-        node.put("startDate", time.getStartDate() != null ? new SimpleDateFormat().format(time.getStartDate()) : "");
-        node.put("endDate", time.getEndDate() != null ? new SimpleDateFormat().format(time.getEndDate()) : "");
+        node.put("startDate", time.getStartDate() != null ? time.getStartDate().getTime() : new Date().getTime());
+        node.put("endDate", time.getEndDate() != null ? time.getEndDate().getTime() : new Date().getTime());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getId())));
         node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getId())));
