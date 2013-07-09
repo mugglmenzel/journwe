@@ -27,6 +27,21 @@ hr {
     border: 0px;
 }
 
+h1 .editable-input input {
+	font-size: 38.5px;
+	line-height: 40px;
+	height: 40px;
+	margin: -8px;
+	display: inline-block;
+	margin-top: -10px;
+	margin-right: 0px;
+	margin-bottom: -10px;
+}
+
+h1 .editableform {
+	margin-top: -10px;
+}
+
 
 .main {
 /*	background-color: rgba(255,255,255,0.8);
@@ -68,6 +83,10 @@ hr {
 
 .navbar .nav > li > a {
     padding: 20px;
+}
+
+.navbar .user-login {
+	padding: 10px 0;
 }
 
 .navbar .nav > .active > a, 
@@ -185,9 +204,19 @@ table.inspiration .images img {
 	color: #999;
 	font-style: italic;
 }
+	
+.comment-list {
+	max-height: 300px;
+	overflow: auto;
+}
 
 .comment-list > * {
 	margin-bottom: 10px;
+	padding-left: 5px;
+}
+
+.comment-list > *:last-child {
+	margin-bottom: 0;
 }
 
 .comment-info {
@@ -199,14 +228,17 @@ table.inspiration .images img {
 	color: #BBB;
 }
 
+.input-comment {
+	margin-top: 10px;
+}
+
 .input-comment input {
-	width: 120px !important;
+
 }
 
 
 .btn-add {
-    background-color: rgb(153, 153, 153);
-    border-color:  rgb(153, 153, 153);
+	
 }
 
 #where-map img { max-width: none; }
@@ -376,8 +408,15 @@ h3 {
 	-o-animation: spinWhen 1s ease 1;
 	-ms-animation: spinWhen 1s ease 1;
 	animation: spinWhen 1s ease 1;
-	
-	
+}
+
+#adventure-container .table td {
+	vertical-align: middle;
+}
+
+.table td.text-center,
+.table th.text-center {
+	text-align: center;
 }
 
 

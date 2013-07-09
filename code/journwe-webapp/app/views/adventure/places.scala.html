@@ -2,16 +2,16 @@
 
 
 
-<table id="places-list" class="table table-striped table-hover">
+<table id="places-list" class="table table-striped table-hover hide">
     <thead>
         <tr>
             <th>Vote</th>
             <th>Location</th>
-            <th>YES</th>
-            <th>NO</th>
-            <th>MAYBE</th>
+            <th class="text-center">YES</th>
+            <th class="text-center">NO</th>
+            <th class="text-center">MAYBE</th>
             <th>Adventurers' Votes</th>
-            <th>Actions</th>
+            <th class="text-center">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +21,7 @@
 </table>
 
 <div class="input-append">
-    <input type="text" placeholder="A decent place name" id="place-add-input">
+    <input type="text" placeholder="Add a decent place" id="place-add-input">
     <a id="place-add-button" class="btn btn-add"><i class="icon-plus"></i></a>
 </div>
 
@@ -46,11 +46,11 @@
         </td>
             <!--<td>{%=o.name%}</td>-->
         <td>{%=o.address%}</td>
-        <td>{%=o.voteCount.YES%}</td>
-        <td>{%=o.voteCount.NO%}</td>
-        <td>{%=o.voteCount.MAYBE%}</td>
-        <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}">{%=o.voteAdventurers[i][j]%}</span> {% }} %}</td>
-        <td><a onclick="deletePlace('{%=o.id%}');" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+        <td class="text-center">{%=o.voteCount.YES%}</td>
+        <td class="text-center">{%=o.voteCount.NO%}</td>
+        <td class="text-center">{%=o.voteCount.MAYBE%}</td>
+        <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).match(/\b(\w)/g).join('')%}</span> {% }} %}</td>
+        <td class="text-center"><a onclick="deletePlace('{%=o.id%}', event);" class="btn btn-danger"><i class="icon-trash"></i></a></td>
         {%
 
 
@@ -129,36 +129,57 @@
                 renderPlaceOption(places[id])
             }
 
+            if (places.length){
+                $('#places-list').show();
+            } else {
+                $('#places-list').hide();
+            }
+
         });
     });
 
 
-    $('#place-add-button').on('click', function() {
+    $('#place-add-input').on('keydown', function(e){
+        if (e.keyCode==13){
+            $('#place-add-button').click();
+        }
+    });
 
+    $('#place-add-button').on('click', function() {
+        $(this).html('<i class="icon-spin icon-spinner"></i>');
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
             $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { name: 'Option ' + ($('#places-list tbody').children().length+1), googleMapsAddress: results[0].formatted_address }, function(res) {
                 renderPlaceOption(res);
                 $('#place-add-input').val("");
+                $('#place-add-button').html('<i class="icon-plus"></i>');
             });
         });
     });
 
 
     function votePlace(vote, optId) {
+        
+        // Spin
+        $('#placeoption-item-'+optId+' .dropdown-toggle')
+            .html('<i class="icon-spin icon-spinner"></i>');
+
         $.ajax({
-        url: '@routes.AdventurePlaceController.vote("")' + optId,
-        data: {
-            vote: vote
-        },
-        type: 'PUT',
-        success: function(res) {
-            renderPlaceOption(res, $('#placeoption-item-' + res.id));
-        }
+            url: '@routes.AdventurePlaceController.vote("")' + optId,
+            data: {
+                vote: vote
+            },
+            type: 'PUT',
+            success: function(res) {
+                renderPlaceOption(res, $('#placeoption-item-' + res.id));
+                $('#placeoption-item-'+res.id+' .dropdown-toggle')
+                    .html('<i class="icon-pencil"></i>');
+            }
         });
     }
 
 
-    function deletePlace(optId) {
+    function deletePlace(optId, event) {
+        $(event.target).html('<i class="icon-spin icon-spinner"></i>');
         $.ajax({url: '@routes.AdventurePlaceController.deletePlace("")' + optId, type: 'DELETE', success: function () {
             removeMarker(optId);
             $('#placeoption-item-' + optId).fadeOut(function () {$('#placeoption-item-' + optId).remove();});

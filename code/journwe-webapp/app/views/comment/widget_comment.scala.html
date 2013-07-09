@@ -3,12 +3,12 @@
 <div class="comments">
 
 	<div id="comments-list-@topic" class="comment-list">
-		<div class="empty"><i class="icon-refresh"></i> Loading...</div>
+		<div class="empty"><i class="icon-spinner icon-spin"></i> Loading...</div>
 	</div>	
 
 	<div id="input-comment-@topic" class="input-append input-comment">
-	    <input type="text" placeholder="Say hello!"/>
-	    <button id="btn-add-comment-@topic" class="btn btn-add-comment" type="button"><i class="icon-plus"></i> Comment </button>
+	    <input type="text" placeholder="Say hello!" class="input-block-level"/>
+	    <button id="btn-add-comment-@topic" class="btn btn-add-comment" type="button"><i class="icon-plus"></i></button>
 	</div>
 
 
@@ -70,7 +70,7 @@
 
 				// Check if there is a value
 				if (val = (input.val()||"").trim()){
-
+					btn.html('<i class="icon-spin icon-spinner"></i>');
 					input.val(""); // Reset
 
 					$.post("/comment/save", {text: val, threadId: threadId}, function(f){
@@ -78,6 +78,7 @@
 
 						f.time = formatTime(f.timestamp); // Append
 						list.append($(template(f)).fadeIn());
+						btn.html('<i class="icon-plus"></i>');
 					});
 				}
 			});

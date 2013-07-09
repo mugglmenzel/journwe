@@ -77,13 +77,13 @@
                 @defining(new UserDAO()) { userDAO =>
                 @currentAuth() { auth =>
                     @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
-                        <div class="pull-right">
+                        <div class="pull-right user-login">
                             <a class="btn" href="#"><i class="icon-cog"></i> @userDAO.findByAuthUserIdentity(auth).getName()</a>
                             <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
                         </div>
                         
                     } else {
-                   		<div class="btn-group pull-right">
+                   		<div class="btn-group pull-right user-login">
 							<a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
 							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 								<span class="caret"></span>

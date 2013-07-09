@@ -6,25 +6,26 @@ $('body').ready(function(){
 
 // Formats a date to hh:mm dd.MM.YYYY
 function formatTime(time){
-    time = new Date(parseInt(time, 10));
+    time = time instanceof Date ? time : new Date(parseInt(time, 10));
 
-    var two = function(r){ return (r < 10 ? "0" : "")+r };
+    var two = function(r){ return (r < 10 ? "0" : "")+r },
+        now = new Date(),
+        today = now.getDate() == time.getDate()
+                && now.getMonth() == time.getMonth()
+                && now.getFullYear() == time.getFullYear();
 
-    // Todo Use better formating
-    return time.getHours()
-        + ":"
-        + two(time.getMinutes())
-        + " "
-        + two(time.getDate())
-        + "."
-        + two(time.getMonth()+1)
-        + "."
-        + two(time.getFullYear());
+    if (today){
+        return time.getHours()
+            + ":"
+            + two(time.getMinutes());
+    } else {
+        return formatDate(time);
+    }
 };
 
 // Formats a date to hh:mm dd.MM.YYYY
 function formatDate(time){
-    time = new Date(parseInt(time, 10));
+    time = time instanceof Date ? time : new Date(parseInt(time, 10));
 
     var two = function(r){ return (r < 10 ? "0" : "")+r };
 
