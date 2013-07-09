@@ -172,16 +172,20 @@ public class ApplicationController extends Controller {
 //            Logger.debug("#1: "+ConfigFactory.load().getString("play-authenticate/clientId"));
 //            Logger.debug("#2: "+ConfigFactory.load("play-authenticate").getString("clientId"));
             connection.connect();
-            connection.login("515340035175937", accessToken);
+            connection.login("333105976811510", accessToken);
+            //connection.login("100006080790124", "Raum247");
+            Logger.debug("Connected User: "+connection.getUser());
+            //Logger.debug("Connected Roaster: "+connection.getRoster());
+            //Logger.debug("Connected ConnectionID: "+connection.getConnectionID());
 
-            String to = "100006056794571@chat.facebook.com";
+            String to = "-100006056794571@chat.facebook.com";
             Chat chat = connection.getChatManager().createChat(to, null);
             chat.sendMessage("Message to "+to);
-            to = "100006056794571@facebook.com";
+            to = "-100006056794571@facebook.com";
             chat = connection.getChatManager().createChat(to, null);
             chat.sendMessage("Message to "+to);
 
-            to = "100006080790124@chat.facebook.com";
+            to = "-100006080790124@chat.facebook.com";
             chat = connection.getChatManager().createChat(to, null);
             chat.sendMessage("Message to "+to);
         } catch (XMPPException e) {
