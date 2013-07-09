@@ -172,7 +172,7 @@ public class ApplicationController extends Controller {
 //            Logger.debug("#1: "+ConfigFactory.load().getString("play-authenticate/clientId"));
 //            Logger.debug("#2: "+ConfigFactory.load("play-authenticate").getString("clientId"));
             connection.connect();
-            connection.login("333105976811510", accessToken);
+            connection.login("515340035175937", accessToken);
 
             String to = "100006056794571@chat.facebook.com";
             Chat chat = connection.getChatManager().createChat(to, null);
