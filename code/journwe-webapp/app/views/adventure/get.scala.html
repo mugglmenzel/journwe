@@ -3,7 +3,7 @@
 @import models.dao.AdventurerDAO
 @import models.dao.UserDAO
 @import com.feth.play.module.pa.PlayAuthenticate
-
+@import play.mvc.Http
 
 @main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
                         data-url="@routes.AdventureController.saveEditable()"
@@ -47,13 +47,20 @@
 
             <h2 id="index">Adventure</h2>
 
-            <div class="pull-right"><a onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');"><i class="icon-pencil"></i> Edit</a></div>
+            <p class="pull-left">
+                <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="@adv.getImage"}
+                    ondragleave="$('#adventure-title-image').removeClass('hover'); return false;" ondragenter="$('#adventure-title-image').addClass('hover'); return false;"
+                    ondrop="event.stopPropagation(); event.preventDefault(); return false;"/>
 
-            <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
-            data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-xxlarge"
-            data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@Html(adv.getHTMLDescription())</div>
+                <div class="pull-right"><a onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');"><i class="icon-pencil"></i> Edit</a></div>
 
-            @*@index(adv, ins)*@
+                <span id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
+                data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-xxlarge"
+                data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@Html(adv.getHTMLDescription())</span>
+
+             </p>
+
+            @*index(adv, ins)*@
 
         </div>
         <div class="span3">@{views.html.comment.widget_comment.render(adv, "index")}</div>
@@ -211,6 +218,7 @@
         });
 
     });
+    $(window).on('drop', function(event){event.stopPropagation(); event.preventDefault(); return false;});
 
 
     function jumpToSection(section) {

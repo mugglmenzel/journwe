@@ -419,4 +419,6 @@ h3 {
 	text-align: center;
 }
 
-
+#adventure-title-image.hover {
+    border: 1px solid #79a848;
+}

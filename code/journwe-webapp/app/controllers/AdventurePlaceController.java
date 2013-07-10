@@ -20,7 +20,6 @@ import play.mvc.Security;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static play.data.Form.form;
 
