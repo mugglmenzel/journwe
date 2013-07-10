@@ -4,101 +4,115 @@
 @import com.feth.play.module.pa.views.html._
 
 
-@main("Where Adventurers meet."){JournWe
-<small>Where Adventurers meet.</small>} {
+@main("Where Adventurers meet.") {JournWe
+    <small>Where Adventurers meet.</small>
+} {
 
-<div id="yingyangyong-starter" class="text-center">
-    <a href="#" onclick="$('#yingyangyong-starter').fadeOut(500, function(){$('#yingyangyong-container').slideDown(); google.maps.event.trigger(map, 'resize');}); ">
-        <img src='@routes.Assets.at("img/yingyangyong_green.png")' width="170"><br>
-        <p class="lead">Create New*</p>
-    </a>
-</div>
-<div id="yingyangyong-container" style="display: none;">
-    @yingyangyong(categories)
-    <div>
-        <button class="btn btn-block" onclick="$('#yingyangyong-container').slideUp(500, function(){$('#yingyangyong-starter').fadeIn(500);});"><i class="icon-chevron-up"></i></button>
+
+    <div id="yingyangyong-container" style="display: none;">
+        @yingyangyong(categories)
+        <div>
+            <button class="btn btn-block" onclick="$('#yingyangyong-container').slideUp(500, function(){$('#yingyangyong-starter').fadeIn(500);});"><i class="icon-chevron-up"></i></button>
+        </div>
     </div>
-</div>
 
 
-<hr>
+    <hr>
 
-@currentAuth() { auth =>
-@if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
-<p class="lead">
-    Welcome back, @{new UserDAO().findByAuthUserIdentity(auth).getName()}! You have some adventures before
-    you.
-</p>
-}
-}
+    @currentAuth() { auth =>
+        @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
+            <p class="lead">
+                Welcome back, @{new UserDAO().findByAuthUserIdentity(auth).getName()}! You have some adventures before
+                you.
+            </p>
+        }
+    }
 
 
-<h3><i class="icon-bookmark"></i> My JournWes</h3>
-
-@adventures.take(5).zipWithIndex.map { case(adv, i) =>
-
-<div class="row-fluid" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
-    <div class="span3 pull-left">
-        <a href="@routes.AdventureController.getIndex(adv.getId())">
-            <img src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
-        </a>
+    <h3><i class="icon-bookmark"></i> My JournWes</h3>
+    <div class="row-fluid">
+        <div class="span2">
+            <div id="yingyangyong-starter" class="text-center">
+                <a href="#" onclick="$('#yingyangyong-container').slideDown(); google.maps.event.trigger(map, 'resize');">
+                    <img src='@routes.Assets.at("img/yingyangyong_green.png")' width="170"><br>
+                    <p class="lead">Create New*</p>
+                </a>
+            </div>
+        </div>
+        <div class="span10">
+        @adventures.take(5).zipWithIndex.map { case (adv, i) =>
+            <div class="row-fluid" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
+                <div class="span3 pull-left">
+                    <a href="@routes.AdventureController.getIndex(adv.getId())" class="media-object">
+                        <img class="img-polaroid" height="50" @if(adv.getImage == null) {src="http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/resize?height=50&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}>
+                    </a>
+                </div>
+                <div class="span7 pull-left">
+                    <a href="@routes.AdventureController.getIndex(adv.getId())">
+                        <h4>@adv.getName()</h4>
+                    </a>
+                </div>
+                <div class="span2 pull-right">
+                    <a class="btn btn-danger" onclick="$('#leave').data('leave-link', '@routes.AdventurePeopleController.leave(adv.getId())'); $('#leave').data('adventure-name', '@adv.getName()'); $('#leave').modal();"><i class="icon-unlink"></i>
+                Leave</a>
+            </div>
+            </div>
+        }
+        </div>
     </div>
-    <div class="span7 pull-left">
-        <a href="@routes.AdventureController.getIndex(adv.getId())">
-            <h4>@adv.getName()</h4>
-        </a>
+
+
+
+    <div class="spacer30"></div>
+
+    <p class="lead">Get inspired from...</p>
+
+    <h3><i class="icon-bullhorn"></i> Public JournWes</h3>
+    <div class="inline" style="background-color: rgba(245,245,245,0.6);">
+    @defining(new AdventureDAO().allPublic()) { publicAdventures =>
+        @publicAdventures.take(20).zipWithIndex.map { case (adv, i) =>
+        <span>
+            <a href="@routes.AdventureController.getIndex(adv.getId())"><img class="img-polaroid" style="max-height: 100px; margin: 10px;" @if(adv.getImage == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}></a>
+        </span>
+    } }
     </div>
-    <div class="span2 pull-right">
-        <a class="btn btn-danger" onclick="$('#leave').data('leave-link', '@routes.AdventurePeopleController.leave(adv.getId())'); $('#leave').data('adventure-name', '@adv.getName()'); $('#leave').modal();"><i class="icon-unlink"></i> Leave</a>
-    </div>
-</div>
-
-}
-
-<div class="spacer30"></div>
-
-<p class="lead">Get inspired from...</p>
-
-<h3><i class="icon-bullhorn"></i> Public JournWes</h3>
-<div>tbd</div>
-
-<h3><i class="icon-star"></i> JournWe ideas</h3>
-<div class="row-fluid">
+    @*
+    <h3><i class="icon-star"></i> JournWe ideas</h3>
+    <div class="row-fluid">
     <div class="span2">
 
-
-        <ul class="nav nav-pills nav-stacked">
-            <li
-            @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()">All</a></li>
-            @for(cat <- categories) {
-            <li
-            @if(cat.getCategory().getId() == catId) {class="active"}><a
-                href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())"><span
-                class="badge badge-info pull-right">@cat.getCount()</span>@cat.getCategory().getName()
-        </a></li>
-            }
-        </ul>
+    <ul class="nav nav-pills nav-stacked">
+    <li
+    @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()">All</a></li>
+    @for(cat <- categories) {
+    <li
+    @if(cat.getCategory().getId() == catId) {class="active"}><a
+    href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())"><span
+    class="badge badge-info pull-right">@cat.getCount()</span>@cat.getCategory().getName()
+    </a></li>
+    }
+    </ul>
 
     </div>
     <div class="span10">
-        <ul class="thumbnails">
-            @inspirations.zipWithIndex.map { case(ins, i) =>
-            <li class="span3">
-                <a class="thumbnail"
-                   href="@routes.InspirationController.get(ins.getId())">
-                    <img src="http://i.embed.ly/1/image/resize?width=300&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
-                </a>
-                <h4>@ins.getName()</h4>
-            </li>
-            @if((i+1) % 3 == 0) {
-        </ul>
-        <ul class="thumbnails">
-            }
-            }
-        </ul>
+    <ul class="thumbnails">
+    @inspirations.zipWithIndex.map { case(ins, i) =>
+    <li class="span3">
+    <a class="thumbnail"
+    href="@routes.InspirationController.get(ins.getId())">
+    <img src="http://i.embed.ly/1/image/resize?width=300&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
+    </a>
+    <h4>@ins.getName()</h4>
+    </li>
+    @if((i+1) % 3 == 0) {
+    </ul>
+    <ul class="thumbnails">
+    }
+    }
+    </ul>
     </div>
-</div>
-
+    </div>
+    *@
     <div id="leave" class="modal hide fade" tabindex="-1" role="dialog" onfocus="$('#leave-question').html('Sure, you want to leave ' + $('#leave').data('adventure-name') + '?')">
         <div class="modal-header">
             <h3 id="leave-question">Sure, you want to leave?</h3>

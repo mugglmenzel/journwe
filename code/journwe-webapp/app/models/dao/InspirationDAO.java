@@ -17,20 +17,20 @@ public class InspirationDAO extends CommonEntityDAO<Inspiration> {
         super(Inspiration.class);
     }
 
-    public List<Inspiration> all(int max) {
+    public List<Inspiration> all() {
         return pm.scan(Inspiration.class,
-               new DynamoDBScanExpression().withLimit(max));
+               new DynamoDBScanExpression());
     }
 
-    public List<Inspiration> all(int max, String catId) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
+    public List<Inspiration> all(String catId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("inspirationCategoryId", new Condition().withAttributeValueList(new AttributeValue(catId)).withComparisonOperator(ComparisonOperator.EQ));
         return pm.scan(Inspiration.class, scan);
     }
 
-    public Map<String, String> allOptionsMap(int max) {
+    public Map<String, String> allOptionsMap() {
         Map<String, String> result = new HashMap<String, String>();
-        for (Inspiration in : all(max))
+        for (Inspiration in : all())
             result.put(in.getId(), in.getName());
         return result;
     }

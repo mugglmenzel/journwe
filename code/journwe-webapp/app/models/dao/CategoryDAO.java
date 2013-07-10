@@ -18,14 +18,14 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
         super(Category.class);
     }
 
-    public List<Category> all(int max) {
+    public List<Category> all() {
         return pm.scan(Category.class,
-                new DynamoDBScanExpression().withLimit(max));
+                new DynamoDBScanExpression());
     }
 
-    public Map<String, String> allOptionsMap(int max) {
+    public Map<String, String> allOptionsMap() {
         Map<String, String> result = new HashMap<String, String>();
-        for (Category in : all(max))
+        for (Category in : all())
             result.put(in.getId(), in.getName());
         return result;
     }

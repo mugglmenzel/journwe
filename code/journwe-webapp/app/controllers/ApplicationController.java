@@ -45,15 +45,15 @@ public class ApplicationController extends Controller {
 
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
             List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
-            for (Category cat : new CategoryDAO().all(10))
+            for (Category cat : new CategoryDAO().all())
                 catCounts.add(new CategoryCount(cat, new CategoryDAO()
                         .countInspirations(cat.getId())));
 
             if (new AdventurerDAO().isAdventurer(userId))
-                return ok(indexVet.render(catCounts, new InspirationDAO().all(50), new AdventureDAO().allOfUserId(userId), null));
+                return ok(indexVet.render(catCounts, new InspirationDAO().all(), new AdventureDAO().allOfUserId(userId), null));
             else {
 
-                return ok(index.render(catCounts, new InspirationDAO().all(50), new AdventureDAO().all(50),
+                return ok(index.render(catCounts, new InspirationDAO().all(), new AdventureDAO().all(),
                         null));
             }
         } else {
@@ -63,11 +63,11 @@ public class ApplicationController extends Controller {
 
     public static Result indexPublic() {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
-        for (Category cat : new CategoryDAO().all(10))
+        for (Category cat : new CategoryDAO().all())
             catCounts.add(new CategoryCount(cat, new CategoryDAO()
                     .countInspirations(cat.getId())));
 
-        return ok(index.render(catCounts, new InspirationDAO().all(50), new AdventureDAO().all(50),
+        return ok(index.render(catCounts, new InspirationDAO().all(), new AdventureDAO().all(),
                 null));
     }
 
@@ -102,10 +102,10 @@ public class ApplicationController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result categoryIndex(String catId) {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
-        for (Category cat : new CategoryDAO().all(10))
+        for (Category cat : new CategoryDAO().all())
             catCounts.add(new CategoryCount(cat, new CategoryDAO()
                     .countInspirations(cat.getId())));
-        return ok(index.render(catCounts, new InspirationDAO().all(50, catId), new AdventureDAO().all(50),
+        return ok(index.render(catCounts, new InspirationDAO().all(catId), new AdventureDAO().all(),
                 catId));
     }
 

@@ -69,7 +69,7 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result createFromInspiration(String insId) {
         Map<String, String> inspireOptions = new InspirationDAO()
-                .allOptionsMap(50);
+                .allOptionsMap();
         Form<Adventure> advFilledForm = form(Adventure.class);
         if (insId != null && !"".equals(insId)) {
             Adventure adv = new Adventure();
@@ -179,11 +179,11 @@ public class AdventureController extends Controller {
                 e.printStackTrace();
                 return internalServerError(create.render(filledForm,
                         new InspirationDAO()
-                                .allOptionsMap(50)));
+                                .allOptionsMap()));
             }
         }
         return badRequest(create.render(filledForm,
-                new InspirationDAO().allOptionsMap(50)));
+                new InspirationDAO().allOptionsMap()));
 
 
     }

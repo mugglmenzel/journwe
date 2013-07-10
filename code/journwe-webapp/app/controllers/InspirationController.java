@@ -50,16 +50,16 @@ public class InspirationController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
-        return ok(manage.render(insForm, new CategoryDAO().allOptionsMap(50),
-                new InspirationDAO().all(50)));
+        return ok(manage.render(insForm, new CategoryDAO().allOptionsMap(),
+                new InspirationDAO().all()));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result edit(String id) {
         Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(id));
         return ok(manage.render(editInsForm,
-                new CategoryDAO().allOptionsMap(50),
-                new InspirationDAO().all(50)));
+                new CategoryDAO().allOptionsMap(),
+                new InspirationDAO().all()));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -72,8 +72,8 @@ public class InspirationController extends Controller {
         if (filledInsForm.hasErrors()) {
             flash("error", "Please fill out the form correctly.");
             return badRequest(manage.render(filledInsForm,
-                    new CategoryDAO().allOptionsMap(50),
-                    new InspirationDAO().all(50)));
+                    new CategoryDAO().allOptionsMap(),
+                    new InspirationDAO().all()));
         } else {
             Inspiration ins = filledInsForm.get();
 
@@ -105,15 +105,15 @@ public class InspirationController extends Controller {
                             "Saved Inspiration with image " + ins.getImage()
                                     + ".");
                     return created(manage.render(insForm,
-                            new CategoryDAO().allOptionsMap(50),
-                            new InspirationDAO().all(50)));
+                            new CategoryDAO().allOptionsMap(),
+                            new InspirationDAO().all()));
                 } else
                     throw new Exception();
             } catch (Exception e) {
                 flash("error", "Something went wrong during saving :(");
                 return internalServerError(manage.render(filledInsForm,
-                        new CategoryDAO().allOptionsMap(50),
-                        new InspirationDAO().all(50)));
+                        new CategoryDAO().allOptionsMap(),
+                        new InspirationDAO().all()));
             }
         }
     }
@@ -128,15 +128,15 @@ public class InspirationController extends Controller {
             if (new InspirationDAO().delete(id)) {
                 flash("success", "Inspiration with id " + id + " deleted.");
                 return ok(manage.render(insForm,
-                        new CategoryDAO().allOptionsMap(50),
-                        new InspirationDAO().all(50)));
+                        new CategoryDAO().allOptionsMap(),
+                        new InspirationDAO().all()));
             } else
                 throw new Exception();
         } catch (Exception e) {
             flash("error", "Something went wrong during deletion :(");
             return internalServerError(manage.render(insForm,
-                    new CategoryDAO().allOptionsMap(50),
-                    new InspirationDAO().all(50)));
+                    new CategoryDAO().allOptionsMap(),
+                    new InspirationDAO().all()));
         }
     }
 }

@@ -48,7 +48,7 @@
             <h2 id="index">Adventure</h2>
 
             <p class="pull-left">
-                <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="@adv.getImage"}
+                <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}
                     ondragleave="$('#adventure-title-image').removeClass('hover'); return false;" ondragenter="$('#adventure-title-image').addClass('hover'); return false;"
                     ondrop="alert('dropped!'); $('#adventure-title-image').removeClass('hover'); event.stopPropagation(); event.preventDefault(); return false;"/>
 
