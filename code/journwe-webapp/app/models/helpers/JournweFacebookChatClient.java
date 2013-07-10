@@ -33,6 +33,7 @@ public class JournweFacebookChatClient {
             Logger.debug("Connected XMPP user: " + connection.getUser());
 
             String to = "-"+destinationUser+"@"+XMPP_HOST;
+            Logger.debug("Send XMPP message to: " + to);
             Chat chat = connection.getChatManager().createChat(to, null);
             chat.sendMessage(messageText);
 

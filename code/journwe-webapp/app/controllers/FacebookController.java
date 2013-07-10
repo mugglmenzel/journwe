@@ -84,10 +84,9 @@ public class FacebookController extends Controller {
         final String accessToken = us.getAccessToken();
 
         DynamicForm requestData = form().bindFromRequest();
-        String destinationUser = requestData.get("userDestination");
+        String destinationUser = requestData.get("destinationUser");
         String messageText = requestData.get("messageText");
 
-        Logger.debug("+++ START TESTING FACEBOOK CHAT FEATURES +++");
         JournweFacebookChatClient fbchat = new JournweFacebookChatClient();
         fbchat.sendMessage(accessToken,messageText,destinationUser);
         return ok();
