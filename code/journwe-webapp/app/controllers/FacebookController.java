@@ -104,6 +104,6 @@ public class FacebookController extends Controller {
         }
         friendNames.append("]");
         Logger.debug("Friend names as JSON: " + friendNames);
-        return ok(views.html.test_invite$.render(friendNames.toString()));
+        return ok(views.html.test_invite.render(friendNames.toString()));
     }
 }
