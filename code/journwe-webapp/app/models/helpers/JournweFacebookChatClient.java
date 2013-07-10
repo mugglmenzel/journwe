@@ -1,11 +1,9 @@
 package models.helpers;
 
 import com.typesafe.config.ConfigFactory;
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.SASLAuthentication;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.sasl.SASLMechanism;
+import play.Logger;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.sasl.Sasl;
@@ -24,12 +22,25 @@ import java.util.Map;
 public class JournweFacebookChatClient {
     public static final String XMPP_HOST = "chat.facebook.com";
     public static final int XMPP_PORT = 5222;
-    private final String appSecret;
-    private final String appKey;
+    private String clientId = ConfigFactory.load().getString("play-authenticate.facebook.clientId");
+    private XMPPConnection connection;
 
-    public JournweFacebookChatClient() {
-        this.appKey = ConfigFactory.load().getString("clientId");
-        this.appSecret = ConfigFactory.load().getString("clientSecret");
+    public void sendMessage(final String accessToken, final String messageText, final String destinationUser) {
+        connection = JournweFacebookChatClient.createXMPPConnection();
+        try {
+            connection.connect();
+            connection.login(clientId, accessToken);
+            Logger.debug("Connected XMPP user: " + connection.getUser());
+
+            String to = "-"+destinationUser+"@"+XMPP_HOST;
+            Chat chat = connection.getChatManager().createChat(to, null);
+            chat.sendMessage(messageText);
+
+        } catch (XMPPException e) {
+            throw new RuntimeException(e);
+        } finally {
+            connection.disconnect();
+        }
     }
 
     public static synchronized XMPPConnection createXMPPConnection() {
@@ -40,7 +51,7 @@ public class JournweFacebookChatClient {
                 SASLXFacebookPlatformMechanism.NAME, 0);
 
         ConnectionConfiguration configuration = new ConnectionConfiguration(
-                "chat.facebook.com", 5222);
+                XMPP_HOST, XMPP_PORT);
         configuration.setSASLAuthenticationEnabled(true);
 
         return new XMPPConnection(configuration);
