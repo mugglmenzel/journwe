@@ -50,7 +50,7 @@
             <p class="pull-left">
                 <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="@adv.getImage"}
                     ondragleave="$('#adventure-title-image').removeClass('hover'); return false;" ondragenter="$('#adventure-title-image').addClass('hover'); return false;"
-                    ondrop="event.stopPropagation(); event.preventDefault(); return false;"/>
+                    ondrop="alert('dropped!'); $('#adventure-title-image').removeClass('hover'); event.stopPropagation(); event.preventDefault(); return false;"/>
 
                 <div class="pull-right"><a onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');"><i class="icon-pencil"></i> Edit</a></div>
 
@@ -201,6 +201,11 @@
 
     $.fn.editable.defaults.mode = 'inline';
     $('document').ready(function () {
+
+        jQuery.event.props.push('dataTransfer');
+        $(window).bind('drop', function(event){event.stopPropagation(); event.preventDefault(); return false;});
+        $(window).bind('dragover', function(event){event.stopPropagation(); event.preventDefault(); return false;});
+
         $('#adventureName').editable();
 
         // Replace all links with html links for certain elements
@@ -218,7 +223,7 @@
         });
 
     });
-    $(window).on('drop', function(event){event.stopPropagation(); event.preventDefault(); return false;});
+
 
 
     function jumpToSection(section) {
