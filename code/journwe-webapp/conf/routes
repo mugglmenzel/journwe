@@ -69,8 +69,8 @@ POST          /comment/save                             controllers.CommentContr
 
 # Facebook
 GET     /fbtest                                			controllers.FacebookController.testFacebookFeatures()
-GET     /fbinvite                                		controllers.FacebookController.testInvite()
-POST     /fbchat                               			controllers.FacebookController.testFacebookChat(messageText: String, destinationUser: String)
+GET     /fb/message/create                              controllers.FacebookController.createMessage()
+POST    /fb/message/send                                controllers.FacebookController.sendMessage()
 
 # Load Balancing
 GET           /ping                                     controllers.ApplicationController.ping()

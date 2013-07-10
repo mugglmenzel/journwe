@@ -9,12 +9,15 @@ import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.user.UserSocial;
 import play.Logger;
+import play.data.DynamicForm;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
 import java.util.List;
+
+import static play.data.Form.form;
 
 /**
  * Created with IntelliJ IDEA.
@@ -75,10 +78,15 @@ public class FacebookController extends Controller {
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result testFacebookChat(String messageText, String destinationUser) {
+    public static Result sendMessage() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
         final String accessToken = us.getAccessToken();
+
+        DynamicForm requestData = form().bindFromRequest();
+        String destinationUser = requestData.get("userDestination");
+        String messageText = requestData.get("messageText");
+
         Logger.debug("+++ START TESTING FACEBOOK CHAT FEATURES +++");
         JournweFacebookChatClient fbchat = new JournweFacebookChatClient();
         fbchat.sendMessage(accessToken,messageText,destinationUser);
@@ -86,7 +94,7 @@ public class FacebookController extends Controller {
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result testInvite() {
+    public static Result createMessage() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
         final String accessToken = us.getAccessToken();
@@ -96,11 +104,17 @@ public class FacebookController extends Controller {
         StringBuffer friendNames = new StringBuffer("[");
         int i = 0;
         for (JsonObject jo : friends) {
-            friendNames.append("\"");
+            // append friend name to array
+            friendNames.append("{label: \"");
             friendNames.append(jo.get("name"));
             friendNames.append("\"");
-            if (i < friends.size() - 1)
+            friendNames.append(", value: \"");
+            friendNames.append(jo.get("id"));
+            friendNames.append("\"}");
+            if (i < (friends.size() - 1)) {
                 friendNames.append(",");
+            }
+            i++;
         }
         friendNames.append("]");
         Logger.debug("Friend names as JSON: " + friendNames);

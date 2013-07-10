@@ -5,26 +5,37 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>jQuery UI Autocomplete - Test FB friend invite</title>
+  <title>jQuery UI Autocomplete - Test FB send message to friend</title>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css" />
   <script>
   $(function() {
-    $( "#friends" ).autocomplete({
-      source: @Html(friends)
+    $( "#showDestinationUser" ).autocomplete({
+      source: @Html(friends),
+      select: function(event, ui) {
+      var selectedObj = ui.item;
+      $('#showDestinationUser').val(selectedObj.label);
+      $('#hiddenDestinationUser').val(selectedObj.value);
+      return false;
+      }
     });
-  });
+    });
   </script>
 </head>
 <body>
- 
-<div class="ui-widget">
-  <label for="friends">Friends: </label>
-  <input id="friends" />
-</div>
- 
- 
+
+
+    <div class="ui-widget">
+        <label for="showDestinationUser">Friends: </label><input id="showDestinationUser" />
+    </div>
+<form name="input" action="/fb/message/send" method="post">
+    <br />
+    <input type="hidden" id="hiddenDestinationUser" name="destinationUser" />
+    Message: <input type="text" name="messageText" />
+  <input type="submit" value="Send message" />
+</form>
+
 </body>
 </html>
