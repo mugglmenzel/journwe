@@ -68,9 +68,9 @@ GET           /threads/:advid                           controllers.CommentContr
 POST          /comment/save                             controllers.CommentController.saveComment()
 
 # Facebook
-GET     /fbtest                                						controllers.FacebookController.testFacebookFeatures()
-GET     /fbinvite                                					controllers.FacebookController.testInvite()
-POST     /fbchat                               					    controllers.FacebookController.testFacebookChat(messageText: String, destinationUser: String)
+GET     /fbtest                                			controllers.FacebookController.testFacebookFeatures()
+GET     /fbinvite                                		controllers.FacebookController.testInvite()
+POST     /fbchat                               			controllers.FacebookController.testFacebookChat(messageText: String, destinationUser: String)
 
 # Load Balancing
 GET           /ping                                     controllers.ApplicationController.ping()
