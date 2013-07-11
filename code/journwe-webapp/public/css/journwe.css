@@ -414,6 +414,10 @@ h3 {
 	vertical-align: middle;
 }
 
+#adventure-container .table th {
+	white-space: nowrap;
+}
+
 .table td.text-center,
 .table th.text-center {
 	text-align: center;
@@ -421,4 +425,20 @@ h3 {
 
 #adventure-title-image.hover {
     border: 1px solid #79a848;
+}
+
+.btn-edit-description {
+	margin-top: 10px;
+}
+
+.x-edit-loading {
+	font-size: 16px;
+}
+
+h1 .x-edit-loading {
+	font-size: 22px;
+}
+
+#todo-title {
+	width: 300px;
 }
