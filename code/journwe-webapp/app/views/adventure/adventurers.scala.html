@@ -18,12 +18,11 @@ case EAdventurerParticipation.APPLICANT => {}
 
 @defining((advr.getParticipationStatus())) { (status) =>
 
-<h3>What kind of adventurer are you?</h3>
 @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)){
 <div>
     <strong>You are...</strong>
 
-    <div class="btn-group">
+    <div class="btn-group btn-select-adventurer">
         <a class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING){active}"
            href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="icon-frown"></i> Not
             In</a>
@@ -47,22 +46,22 @@ case EAdventurerParticipation.APPLICANT => {}
 }
 }
 
-<h3>Who's in the group of Adventurers?</h3>
+
 <table class="table table-striped table-hover">
 
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Status</th>
+        <th style="width: 100%;">Name</th>
+        <th class="text-center">Status</th>
     </tr>
     </thead>
     <tbody>
     @{new
     AdventurerDAO().all(adv.getId()).filter(!_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).map{
     advr =>
-    <tr class={cssForStatus(advr.getParticipationStatus()).toString}>
+    <tr class={cssForStatus(advr.getParticipationStatus()).toString} id={"adventurer-state-"+advr.getUserId()}>
         <td>{new UserDAO().get(advr.getUserId()).getName()}</td>
-        <td>{advr.getParticipationStatus()}</td>
+        <td class="text-center">{advr.getParticipationStatus()}</td>
     </tr>
     }}
     </tbody>
@@ -92,6 +91,41 @@ case EAdventurerParticipation.APPLICANT => {}
     }}
     </tbody>
 </table>
+
+
+<script>
+
+    $(function(){
+
+        var conf = {
+            '@EAdventurerParticipation.NOTGOING' : 'error',
+            '@EAdventurerParticipation.UNDECIDED' : 'warning',
+            '@EAdventurerParticipation.GOING' : 'info',
+            '@EAdventurerParticipation.BOOKED' : 'success'
+        };
+
+        $('.btn-select-adventurer a').click(function(){
+            var el = $(this),
+                html = el.html();
+            
+            el.css({width:el.width()+"px"})
+                .html('<i class="icon-spin icon-spinner"></i>');
+
+            $.post(el.attr('href'), function(json){
+                var state = json.participationStatus;
+
+                el.css({width:""})
+                    .html(html);
+
+                $('#adventurer-state-'+json.userId).attr('class', conf[state])
+                    .find('td:last-child').html(state);
+            });
+            return false;
+        });
+    });
+
+</script>
+
 }
 }
 }
