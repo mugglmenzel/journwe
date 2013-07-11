@@ -11,7 +11,11 @@ Start App in Production Mode
 
 $ play -Dconfig.resource=application-prod.conf start
 
-Developer Notes
+Facebook Test Users
 ===========
-* Facebook oAuth Hack: We use a slight modification of FacebookAuthProvider because we need to save the access_token, a feature which seems not to be supported in the oAuth plugin that we use. MUST add this line to conf/play.plugins:
-10010:controllers.auth.oauth2.fb.FacebookAuthProvider
+
+Facebook Test users for Journwe-dev (Password: Raum247)
+
+Charlie Primary email: buhwrkg_bushakson_1370361895@tfbnw.net Facebook email: 100006080790124@facebook.com
+Linda Primary email: fappirp_warmanstein_1370361882@tfbnw.net Facebook email: 100006056794571@facebook.com
+...
