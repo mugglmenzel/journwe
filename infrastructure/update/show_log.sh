@@ -26,5 +26,5 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
 	ssh_host="ubuntu@$ipaddress"
 	
 	echo "----- show application log of machine $ipaddress"
-	ssh $ssh_opts_terminal $ssh_host "tail -n $numlines /home/ubuntu/journwe/journwe-webapp-1.0-SNAPSHOT/logs/application.log"
+	ssh $ssh_opts_terminal $ssh_host "tail -n $numlines /home/ubuntu/journwe/journwe-webapp-*/logs/application.log"
 done;
