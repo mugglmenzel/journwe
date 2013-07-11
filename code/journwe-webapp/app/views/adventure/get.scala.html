@@ -52,11 +52,11 @@
                     ondragleave="$('#adventure-title-image').removeClass('hover'); return false;" ondragenter="$('#adventure-title-image').addClass('hover'); return false;"
                     ondrop="alert('dropped!'); $('#adventure-title-image').removeClass('hover'); event.stopPropagation(); event.preventDefault(); return false;"/>
 
-                <div class="pull-right"><a onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');"><i class="icon-pencil"></i> Edit</a></div>
+                <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
+                data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-xxlarge" data-showbuttons="bottom" 
+                data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@Html(adv.getHTMLDescription())</div>
 
-                <span id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
-                data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-xxlarge"
-                data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@Html(adv.getHTMLDescription())</span>
+                <div class="btn-edit-description"><a class="btn btn-mini" onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');$(this).parent().hide()"><i class="icon-pencil"></i> Edit</a></div>
 
              </p>
 
@@ -104,6 +104,7 @@
         <div class="span8">
 
             <h2 id="times">Date &amp; Time</h2>
+            <p class="lead">Its all about the right time. Select the time you prefer most and get excited.</p>
 
             @time(adv, timeForm)
 
@@ -200,6 +201,8 @@
 <script>
 
     $.fn.editable.defaults.mode = 'inline';
+    $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-spinner icon-spin"></i></div>';
+
     $('document').ready(function () {
 
         jQuery.event.props.push('dataTransfer');
@@ -208,6 +211,9 @@
 
         $('#adventureName').editable();
 
+        $('#adventureDescription').on('hidden', function(){
+            $('.btn-edit-description').show();
+        });
         // Replace all links with html links for certain elements
         $('.replace-links').each(function(){
             $(this).html(replaceURLWithHTMLLinks($(this).html()));
