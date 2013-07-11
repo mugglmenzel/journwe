@@ -17,7 +17,6 @@
             <div class="input-append">
                 <input type="text" name="name" placeholder="Name your JournWe" required="required" class="input input-xxl">
 
-
                 <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         Choose Category
@@ -37,6 +36,8 @@
                 <button style="backround-color: #00cc00;" class="btn btn-large" onclick="">
                     Start JournWe <i class="icon-angle-right"></i></button>
             </div>
+            <div class="spacer20"></div>
+            @*
             <div>
                 <div class="input-append">
                     <input type="text" name="shortname" placeholder="Shortname" id="shortname" minlength="3" required="required" onchange="checkShortname();">
@@ -45,6 +46,7 @@
                 </div>
                 <div id="shortname-available">shortname available?</div>
             </div>
+            *@
 
 
             <div id="where-dialog" style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-bottom: 20px">
@@ -87,8 +89,12 @@
                         <a class="btn btn-add" onclick="addFriend();"><i class="icon-plus"></i></a>
                     </div>
                     <div class="spacer20"></div>
-                    <div>Is your Adventure public? &nbsp;
-                        <div class="switch"><input type="checkbox" id="publish" name="publish" value="true"></div>
+                    <div style="margin-bottom: 20px;">Is your Adventure public? &nbsp;
+                        <div class="switch"><input type="checkbox" id="publish" name="publish"></div>
+                    </div>
+                    <div style="margin-bottom: 20px;">Publish on my Facebook Wall &nbsp;
+                        <div class="switch"><input type="checkbox" id="facebookWall" name="facebookWall" checked="checked"></div>
+                        <div><textarea name="facebookWallPost">Hey friends! Become my fellow adventurer on this magnificent JournWe.</textarea></div>
                     </div>
                 </div>
             </div>
@@ -161,18 +167,20 @@
         });
     }
 
-        function validateYingYangYong() {
-            if($('input[name="name"]').val() == null ||  $('input[name="name"]').val() == '') {
-                $('input[name="name"]').focus();
-                return false;
-            }
-            if($('input[name="shortname"]').val() == null ||  $('input[name="shortname"]').val() == '') {
-                $('input[name="shortname"]').focus();
-                return false;
-            }
-
-            return true;
+    function validateYingYangYong() {
+        if($('input[name="name"]').val() == null ||  $('input[name="name"]').val() == '') {
+            $('input[name="name"]').focus();
+            return false;
         }
+        /*
+        if($('input[name="shortname"]').val() == null ||  $('input[name="shortname"]').val() == '') {
+            $('input[name="shortname"]').focus();
+            return false;
+        }
+        */
+
+        return true;
+    }
 
 
 

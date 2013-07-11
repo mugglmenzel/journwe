@@ -1,6 +1,7 @@
 package models.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import play.Logger;
@@ -23,6 +24,13 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
         super(UserSocial.class);
     }
 
+    public UserSocial findByUserId(String userId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("userId", new Condition().withAttributeValueList(new AttributeValue(userId)).withComparisonOperator(ComparisonOperator.EQ));
+        PaginatedScanList<UserSocial> result = pm.scan(UserSocial.class, scan);
+        return !result.isEmpty() ? result.get(0) : null;
+    }
+
     public UserSocial findBySocialId(String socialId) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("socialId", new Condition().withAttributeValueList(new AttributeValue(socialId)).withComparisonOperator(ComparisonOperator.EQ));
@@ -31,19 +39,10 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
     }
 
     public UserSocial findBySocialId(String provider, String socialId) {
-    	DynamoDBQueryExpression<UserSocial> queryExpression = new DynamoDBQueryExpression<UserSocial>();        
     	UserSocial hashKeyValues = new UserSocial();
         hashKeyValues.setProvider(provider);
-		queryExpression.setHashKeyValues(hashKeyValues);
-		Map<String, Condition> rangeKeyConditions = new HashMap<String, Condition>();
-		Logger.debug("Range key kondition: socialId == " + socialId);
-		rangeKeyConditions.put("socialId", new Condition().withAttributeValueList(new AttributeValue().withS(socialId)).withComparisonOperator(ComparisonOperator.EQ.toString()));
-		queryExpression.setRangeKeyConditions(rangeKeyConditions);
-		PaginatedQueryList<UserSocial> result = pm.query(UserSocial.class, queryExpression);
-        Logger.debug("UserSocialDAO.findBySocialId("+provider+", "+socialId+"). Found the following user(s):");
-        for(UserSocial us: result)
-        	Logger.debug("User with user id: "+us.getUserId());
-        return !result.isEmpty() ? result.get(0) : null;
+		List<UserSocial> result = pm.query(UserSocial.class, new DynamoDBQueryExpression<UserSocial>().withHashKeyValues(hashKeyValues).withRangeKeyCondition("socialId", new Condition().withAttributeValueList(new AttributeValue().withS(socialId)).withComparisonOperator(ComparisonOperator.EQ.toString())));
+         return !result.isEmpty() ? result.get(0) : null;
     }
     
 	public void saveFacebookAccessToken(final String facebookId,

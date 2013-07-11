@@ -12,7 +12,7 @@
     <div id="yingyangyong-container" style="display: none;">
         @yingyangyong(categories)
         <div>
-            <button class="btn btn-block" onclick="$('#yingyangyong-container').slideUp(500, function(){$('#yingyangyong-starter').fadeIn(500);});"><i class="icon-chevron-up"></i></button>
+            <button class="btn btn-block" onclick="$('#yingyangyong-container').slideUp(500); $('#yingyangyong-starter button').prop('disabled', false);"><i class="icon-chevron-up"></i></button>
         </div>
     </div>
 
@@ -33,10 +33,10 @@
     <div class="row-fluid">
         <div class="span2">
             <div id="yingyangyong-starter" class="text-center">
-                <a href="#" onclick="$('#yingyangyong-container').slideDown(); google.maps.event.trigger(map, 'resize');">
+                <button class="btn btn-link" href="#" onclick="$('#yingyangyong-container').slideDown(); $('#yingyangyong-starter button').prop('disabled', true); google.maps.event.trigger(map, 'resize');">
                     <img src='@routes.Assets.at("img/yingyangyong_green.png")' width="170"><br>
                     <p class="lead">Create New*</p>
-                </a>
+                </button>
             </div>
         </div>
         <div class="span10">

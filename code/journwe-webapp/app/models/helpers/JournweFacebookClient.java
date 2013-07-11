@@ -66,6 +66,18 @@ public class JournweFacebookClient {
 		publishOnMyFeed(paramsMap);
 	}
 
+    /**
+     *
+     * @param message
+     * @param link
+     */
+    public void publishLinkOnMyFeed(final String message, final String link) {
+        final HashMap<String,String> paramsMap = new HashMap<String,String>();
+        paramsMap.put("message", message);
+        paramsMap.put("link", link);
+        publishOnMyFeed(paramsMap);
+    }
+
 	/**
 	 * 
 	 * @param link
