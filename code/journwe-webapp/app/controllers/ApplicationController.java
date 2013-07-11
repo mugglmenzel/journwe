@@ -5,32 +5,22 @@ import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
-import com.restfb.json.JsonObject;
-import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
 import models.Category;
 import models.dao.*;
 import models.helpers.CategoryCount;
-import models.helpers.JournweFacebookChatClient;
-import models.helpers.JournweFacebookClient;
 import models.user.Subscriber;
-import models.user.UserSocial;
-import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
-import play.Logger;
 import play.cache.Cached;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import views.html.*;
 
 import static play.data.Form.form;
 

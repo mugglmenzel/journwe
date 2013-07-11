@@ -13,7 +13,6 @@ import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
 import models.Inspiration;
 import models.adventure.*;
-import models.adventure.checklist.EStatus;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.dao.*;
@@ -30,7 +29,10 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.adventure.*;
+import views.html.adventure.create;
+import views.html.adventure.created;
+import views.html.adventure.getIndex;
+import views.html.adventure.getPublic;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -192,19 +194,24 @@ public class AdventureController extends Controller {
     public static Result save() {
         DynamicForm filledForm = advForm.bindFromRequest();
 
-
         Adventure adv = new Adventure();
         adv.setName(filledForm.get("name"));
         new AdventureDAO().save(adv);
-        String shortname = filledForm.get("shortname");
-        AdventureShortname advShortname = new AdventureShortname(shortname, adv.getId());
-        new AdventureShortnameDAO().save(advShortname);
 
-        String shortURL = routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request());
+        String shortURL = routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
+
+        String shortname = filledForm.get("shortname");
+        if (shortname != null) {
+            AdventureShortname advShortname = new AdventureShortname(shortname, adv.getId());
+            new AdventureShortnameDAO().save(advShortname);
+            shortURL = routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request());
+        }
+
+
         try {
             shortURL = request().host().contains("localhost") ?
-                    routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()) :
-                    Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request()))).getShortUrl();
+                    shortURL :
+                    Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(shortURL)).getShortUrl();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -261,7 +268,8 @@ public class AdventureController extends Controller {
                         AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
                                 ConfigFactory.load().getString("aws.accessKey"),
                                 ConfigFactory.load().getString("aws.secretKey")));
-                        ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message().withSubject(new Content().withData("You have been invited to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, Your friend " + usr.getName()  + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.")))).withSource(advShortname.getShortname() + "@adventure.journwe.com").withReplyToAddresses(advShortname.getShortname() + "@adventure.journwe.com"));
+                        ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message().withSubject(new Content().withData("You have been invited to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                        //The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -273,21 +281,26 @@ public class AdventureController extends Controller {
         }
 
 
-
-
-
-
-
         try {
             UserEmail primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId());
             if (primaryEmail != null) {
                 AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
                         ConfigFactory.load().getString("aws.accessKey"),
                         ConfigFactory.load().getString("aws.secretKey")));
-                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.")))).withSource(advShortname.getShortname() + "@adventure.journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                //The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.
+                //advShortname.getShortname() + "@adventure.journwe.com"
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if("on".equals(filledForm.get("facebookWall"))) {
+            UserSocial us = new UserSocialDAO().findBySocialId("facebook", PlayAuthenticate.getUser(Http.Context.current()).getId());
+            JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
+            Logger.info(filledForm.get("facebookWallPost") + " " + shortURL);
+            fb.publishLinkOnMyFeed(filledForm.get("facebookWallPost"), shortURL);
+
         }
 
         flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa!<br>The shortURL is " + shortURL);
@@ -354,8 +367,6 @@ public class AdventureController extends Controller {
         Logger.info(node.toString());
         return ok(Json.toJson(node));
     }
-
-
 
 
 }

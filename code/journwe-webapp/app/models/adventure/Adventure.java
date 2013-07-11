@@ -81,8 +81,7 @@ public class Adventure {
 
     @DynamoDBIgnore
     public String getHTMLDescription(){
-        Logger.info(description);
-        return description.replaceAll("\n", "<br/>");
+        return description != null ? description.replaceAll("\n", "<br/>") : "";
     }
 
     public void setDescription(String description) {
