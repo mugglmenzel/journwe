@@ -241,13 +241,35 @@
         resetBounds();
     }
 
+    var facebookUsers = {};
+    var facebookUserNames = [];
+
     var peopleCounter = 0;
     function addFriend() {
         var id = 'people-item-' + peopleCounter++;
-        var input = ($('#people-add-input').attr('type') == 'text') ? '<input type="hidden" name="facebook[]" value="' + $('#people-add-input').val() + '">' : '<input type="hidden" name="email[]" value="' + $('#people-add-input').val() + '">';
+        var input = ($('#people-add-input').attr('type') == 'text') ? '<input type="hidden" name="facebook[]" value="' + facebookUsers[$('#people-add-input').val()] + '">' : '<input type="hidden" name="email[]" value="' + $('#people-add-input').val() + '">';
         $('#people-list').append('<li id="' + id +'">' + input + '<span class="label"><i class="' + $('#people-add-type').attr('class') + '"></i>' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
         $('#people-add-input').val('');
     }
+
+
+    $('#people-add-input').typeahead({
+        source: function (input, process) {
+        $.get('@routes.AdventurePeopleController.autocompleteFacebook', {input: input}, function (data) {
+            facebookUsers = {};
+            facebookUserNames = [];
+            $.each(data, function( ix, item ){
+                if ( $.inArray(item.name, facebookUserNames) > -1 ){
+                    item.name = item.name + ' #' + item.id;
+                }
+
+                facebookUserNames.push( item.name );
+                facebookUsers[item.name] = item.id;
+            });
+            process(facebookUserNames);
+        });
+        }
+        });
 
 
     $('#time-add-input-start').ready(function () {$('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));});

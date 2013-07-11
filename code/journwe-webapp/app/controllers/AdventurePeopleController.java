@@ -5,6 +5,7 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
+import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
 import controllers.auth.SecuredAdminUser;
 import models.Inspiration;
@@ -16,12 +17,17 @@ import models.dao.*;
 import models.helpers.JournweFacebookClient;
 import models.user.User;
 import models.user.UserSocial;
+import org.codehaus.jackson.node.ObjectNode;
+import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -148,6 +154,27 @@ public class AdventurePeopleController extends Controller {
             }
         }
         return ok();
+    }
+
+    public static Result autocompleteFacebook() {
+        DynamicForm form = form().bindFromRequest();
+        String input = form.get("input");
+        List<ObjectNode> results = new ArrayList<ObjectNode>();
+
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
+        JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
+        List<JsonObject> friends = fb.getMyFriendsAsJson();
+
+        for (JsonObject friend : friends)
+            if (friend.getString("name").contains(input))  {
+                ObjectNode node = Json.newObject();
+                node.put("id", friend.getString("id"));
+                node.put("name", friend.getString("name"));
+                results.add(node);
+            }
+
+        return ok(Json.toJson(results));
     }
 
 }

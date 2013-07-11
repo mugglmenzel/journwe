@@ -37,6 +37,7 @@ GET           /adventure/:id/participate/:status        controllers.AdventurePeo
 GET           /adventure/:id/adopt/:user                controllers.AdventurePeopleController.adopt(id:String, user:String)
 POST          /adventure/:id/postFacebookWall           controllers.AdventurePeopleController.postOnMyFacebookWall(id:String)
 POST          /adventure/:id/inviteViaEmail             controllers.AdventurePeopleController.inviteViaEmail(id:String)
+GET           /people/facebook/autocomplete             controllers.AdventurePeopleController.autocompleteFacebook()
 GET           /adventure/:id/leave                      controllers.AdventurePeopleController.leave(id:String)
 
 GET           /adventure/:id/places                     controllers.AdventurePlaceController.getPlaces(id:String)
@@ -68,9 +69,9 @@ GET           /threads/:advid                           controllers.CommentContr
 POST          /comment/save                             controllers.CommentController.saveComment()
 
 # Facebook
-GET     /fbtest                                			controllers.FacebookController.testFacebookFeatures()
-GET     /fb/message/create                              controllers.FacebookController.createMessage()
-POST    /fb/message/send                                controllers.FacebookController.sendMessage()
+GET           /fbtest                                   controllers.FacebookController.testFacebookFeatures()
+GET           /fb/message/create                        controllers.FacebookController.createMessage()
+POST          /fb/message/send                          controllers.FacebookController.sendMessage()
 
 # Load Balancing
 GET           /ping                                     controllers.ApplicationController.ping()
