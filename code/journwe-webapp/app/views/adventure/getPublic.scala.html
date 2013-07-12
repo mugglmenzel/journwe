@@ -6,7 +6,7 @@
 
 <div>
     <div>
-        <h2>You have been invited to join this Adventure! <a class="btn btn-primary"
+        <h2>You have been invited to join this Adventure! <a class="btn btn-primary btn-participate"
                                                              href="@routes.AdventurePeopleController.participate(adv.getId())">Join
             Now</a></h2>
     </div>
@@ -18,4 +18,23 @@
     </p>
 </div>
 
+
+<script>
+
+	$(function(){
+		$('.btn-participate').click(function(){
+            var el = $(this),
+                html = el.html();
+            
+            el.css({width:el.width()+"px"})
+                .html('<i class="icon-spin icon-spinner"></i>');
+
+            $.post(el.attr('href'), function(json){
+            	window.location.reload(); // Reload
+            });
+
+			return false;
+		})
+	});
+</script>
 }
