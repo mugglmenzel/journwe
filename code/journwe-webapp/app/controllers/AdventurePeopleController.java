@@ -72,6 +72,7 @@ public class AdventurePeopleController extends Controller {
             advr.setParticipationStatus(status);
             new AdventurerDAO().save(advr);
         }
+        
         return ok(Json.toJson(advr));
     }
 
@@ -99,7 +100,9 @@ public class AdventurePeopleController extends Controller {
         new AdventurerDAO().save(advr);
 
 
-        return redirect(routes.AdventurePeopleController.getAdventurers(advId));
+        ObjectNode result = (ObjectNode)Json.toJson(advr);
+        result.put("userName", usr.getName());
+        return ok(result);
     }
 
 
