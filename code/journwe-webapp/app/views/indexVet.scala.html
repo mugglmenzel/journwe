@@ -68,14 +68,33 @@
     <p class="lead">Get inspired from...</p>
 
     <h3><i class="icon-bullhorn"></i> Public JournWes</h3>
-    <div class="inline" style="background-color: rgba(245,245,245,0.6);">
+    <div style="background-color: rgba(245,245,245,0.6);">
     @defining(new AdventureDAO().allPublic()) { publicAdventures =>
         @publicAdventures.take(20).zipWithIndex.map { case (adv, i) =>
-        <span>
-            <a href="@routes.AdventureController.getIndex(adv.getId())"><img class="img-polaroid" style="max-height: 100px; margin: 10px;" @if(adv.getImage == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}></a>
-        </span>
+        <div class="polaroid" style="position: relative; float: left;">
+            <a href="@routes.AdventureController.getIndex(adv.getId())"><img class="img-polaroid" style="max-height: 150px; margin: 10px;" @if(adv.getImage == null) {src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/resize?height=150&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}></a>
+            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 10px; left: 10px; right: 10px;">
+                <div style="line-height: 20px;">@adv.getName</div>
+                <div class="overlay" style="display: none;">Me cool!</div>
+            </div>
+        </div>
     } }
     </div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $(".polaroid").hover(
+                function(){
+                    $(this).find("div.overlay").slideDown("fast");
+                },
+                function(){
+                    $(this).find("div.overlay").slideUp("fast");}
+            );
+
+
+        });
+    </script>
+
     @*
     <h3><i class="icon-star"></i> JournWe ideas</h3>
     <div class="row-fluid">
