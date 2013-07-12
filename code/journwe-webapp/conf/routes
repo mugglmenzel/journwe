@@ -32,9 +32,9 @@ POST          /adventure/check/shortname                controllers.AdventureCon
 
 # POST    /adventure/:id/postTwitterStream                            controllers.AdventureController.postOnMyTwitterStream(id:String)
 GET           /adventure/:id/adventurers                controllers.AdventurePeopleController.getAdventurers(id:String)
-GET           /adventure/:id/participate                controllers.AdventurePeopleController.participate(id:String)
+POST          /adventure/:id/participate                controllers.AdventurePeopleController.participate(id:String)
 POST          /adventure/:id/participate/:status        controllers.AdventurePeopleController.participateStatus(id:String, status:String)
-GET           /adventure/:id/adopt/:user                controllers.AdventurePeopleController.adopt(id:String, user:String)
+POST           /adventure/:id/adopt/:user                controllers.AdventurePeopleController.adopt(id:String, user:String)
 POST          /adventure/:id/postFacebookWall           controllers.AdventurePeopleController.postOnMyFacebookWall(id:String)
 POST          /adventure/:id/inviteViaEmail             controllers.AdventurePeopleController.inviteViaEmail(id:String)
 GET           /people/facebook/autocomplete             controllers.AdventurePeopleController.autocompleteFacebook()
