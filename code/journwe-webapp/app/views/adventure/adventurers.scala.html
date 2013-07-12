@@ -67,7 +67,7 @@ case EAdventurerParticipation.APPLICANT => {}
     </tbody>
 </table>
 @defining(new AdventurerDAO().all(adv.getId())) { applicants =>
-@if(applicants != null && applicants.size() >= 0) {
+@if(applicants != null && applicants.filter(_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).size() > 0) {
 
 <div class="spacer30"></div>
 <table class="table table-striped table-hover">
@@ -93,7 +93,7 @@ case EAdventurerParticipation.APPLICANT => {}
     }}
     </tbody>
 </table>
-
+}
 
 <script>
 
@@ -160,6 +160,5 @@ case EAdventurerParticipation.APPLICANT => {}
 
 </script>
 
-}
 }
 }

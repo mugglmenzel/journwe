@@ -59,7 +59,7 @@ public class AdventurePeopleController extends Controller {
             new AdventurerDAO().save(advr);
         }
 
-        return redirect(routes.AdventurePeopleController.getAdventurers(advId));
+        return ok(Json.toJson(advr));
     }
 
 
