@@ -277,15 +277,15 @@ h3 {
 }
 
 #where-dialog {
-	border-left-color: #79a848 !important;
+	border-left-color: rgba(184, 246, 145, 0.5) !important;
 }
 
 #who-dialog {
-	border-left-color: #e83f1a !important;
+	border-left-color: rgba(235, 114, 104, 0.5) !important;
 }
 
 #when-dialog {
-	border-left-color: #24d1f9 !important;
+	border-left-color: rgba(152, 229, 251, 0.5) !important;
 }
 
 #yingyangyong {

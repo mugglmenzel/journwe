@@ -3,13 +3,13 @@
 <div id="yingyangyong-click-info" class="row-fluid">
     <div class="span2 offset1 text-center">
         <i class="icon-chevron-down"></i>
-        click on <img src='@routes.Assets.at("img/yingyangyong_green.png")' style="height: 20px;">
+        click on <img src='http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' style="height: 20px;">
     </div>
 </div>
 <form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
     <div class="row-fluid">
         <div class="span2 offset1 text-center">
-            <a href="#" onclick="switchMode(); $('#yingyangyong-click-info').fadeOut();"><img id="yingyangyong" src='@routes.Assets.at("img/yingyangyong_green.png")' class="where"></a>
+            <a href="#" onclick="switchMode(); $('#yingyangyong-click-info').fadeOut();"><img id="yingyangyong" src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' class="where"></a>
         </div>
             <!--<a href="@routes.AdventureController.create()" class="btn btn-primary btn-large text-center">Start
             a new Group Adventure!</a> -->
@@ -85,7 +85,7 @@
                                     Email</a></li>
                             </ul>
                         </div>
-                        <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;">
+                        <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off">
                         <a class="btn btn-add" onclick="addFriend();"><i class="icon-plus"></i></a>
                     </div>
                     <div class="spacer20"></div>
@@ -253,23 +253,34 @@
     }
 
 
-    $('#people-add-input').typeahead({
-        source: function (input, process) {
-        $.get('@routes.AdventurePeopleController.autocompleteFacebook', {input: input}, function (data) {
-            facebookUsers = {};
-            facebookUserNames = [];
-            $.each(data, function( ix, item ){
-                if ( $.inArray(item.name, facebookUserNames) > -1 ){
-                    item.name = item.name + ' #' + item.id;
-                }
+    function bindPeopleAutocomplete() {
 
-                facebookUserNames.push( item.name );
-                facebookUsers[item.name] = item.id;
+        $('#people-add-input').typeahead({
+                source: function (input, process) {
+                    if($('#people-add-input').attr('type') == 'text') {
+                        $.get('@routes.AdventurePeopleController.autocompleteFacebook', {input: input}, function (data) {
+                            facebookUsers = {};
+                            facebookUserNames = [];
+                            $.each(data, function( ix, item ){
+                                if ( $.inArray(item.name, facebookUserNames) > -1 ){
+                                item.name = item.name + ' #' + item.id;
+                            }
+
+                            facebookUserNames.push( item.name );
+                            facebookUsers[item.name] = item.id;
+                            });
+
+                            process(facebookUserNames);
+
+                        });
+                    }
+                }
             });
-            process(facebookUserNames);
-        });
-        }
-        });
+
+
+    }
+    $('document').ready(function(){bindPeopleAutocomplete();});
+
 
 
     $('#time-add-input-start').ready(function () {$('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));});
