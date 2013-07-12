@@ -42,10 +42,17 @@
         <div class="span10">
         @adventures.take(5).zipWithIndex.map { case (adv, i) =>
             <div class="row-fluid" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
-                <div class="span3 pull-left">
+                <div class="span1 pull-left">
                     <a href="@routes.AdventureController.getIndex(adv.getId())" class="media-object">
                         <img class="img-polaroid" height="50" @if(adv.getImage == null) {src="http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=50&height=50&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}>
                     </a>
+                </div>
+                <div class="span2 text-center">
+                    <span class="label" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> ?</span>
+                    @defining(new AdventurerDAO().count(adv.getId)) { case (count) =>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="icon-group"></i> @count</span>
+                    }
+                    <span class="label" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> ?</span>
                 </div>
                 <div class="span7 pull-left">
                     <a href="@routes.AdventureController.getIndex(adv.getId())">
