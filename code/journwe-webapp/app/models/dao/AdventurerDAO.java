@@ -49,9 +49,9 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
         return pm.scan(Adventurer.class, scan);
     }
 
-    public List<Adventurer> all(int max, String advId) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(max);
+    public int count(String advId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.scan(Adventurer.class, scan);
+        return pm.count(Adventurer.class, scan);
     }
 }

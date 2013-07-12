@@ -44,7 +44,7 @@
             <div class="row-fluid" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
                 <div class="span3 pull-left">
                     <a href="@routes.AdventureController.getIndex(adv.getId())" class="media-object">
-                        <img class="img-polaroid" height="50" @if(adv.getImage == null) {src="http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/resize?height=50&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}>
+                        <img class="img-polaroid" height="50" @if(adv.getImage == null) {src="http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=50&height=50&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}>
                     </a>
                 </div>
                 <div class="span7 pull-left">
@@ -69,13 +69,20 @@
 
     <h3><i class="icon-bullhorn"></i> Public JournWes</h3>
     <div style="background-color: rgba(245,245,245,0.6);">
+
     @defining(new AdventureDAO().allPublic()) { publicAdventures =>
         @publicAdventures.take(20).zipWithIndex.map { case (adv, i) =>
         <div class="polaroid" style="position: relative; float: left;">
-            <a href="@routes.AdventureController.getIndex(adv.getId())"><img class="img-polaroid" style="max-height: 150px; margin: 10px;" @if(adv.getImage == null) {src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/resize?height=150&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}></a>
-            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 10px; left: 10px; right: 10px;">
-                <div style="line-height: 20px;">@adv.getName</div>
-                <div class="overlay" style="display: none;">Me cool!</div>
+            <a href="@routes.AdventureController.getIndex(adv.getId())"><img class="img-polaroid" style="margin: 10px;" @if(adv.getImage == null) {src="http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=204&height=204&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}></a>
+            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 14px; left: 14px; right: 14px; padding: 2px;">
+                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId())">@adv.getName</a></h4></div>
+                @defining(new AdventurerDAO().count(adv.getId)) { case (count) =>
+                <div class="overlay text-center" style="display: none;">
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ?</span>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> @count</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> ?</span>
+                </div>
+                }
             </div>
         </div>
     } }

@@ -28,6 +28,10 @@ public class Adventure {
 
     private Integer limit;
 
+    private String favoritePlaceId;
+
+    private String favoriteTimeId;
+
     /**
      * @return the inspirationId
      */
