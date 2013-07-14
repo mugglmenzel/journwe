@@ -39,7 +39,7 @@
                 </button>
             </div>
         </div>
-        <div class="span10">
+        <div class="span10 adventures-list-full">
         @adventures.take(5).zipWithIndex.map { case (adv, i) =>
             <div class="row-fluid" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
                 <div class="span1 pull-left">
@@ -59,7 +59,7 @@
                         <h4>@adv.getName()</h4>
                     </a>
                 </div>
-                <div class="span2 pull-right">
+                <div class="action pull-right">
                     <a class="btn btn-danger" onclick="$('#leave').data('leave-link', '@routes.AdventurePeopleController.leave(adv.getId())'); $('#leave').data('adventure-name', '@adv.getName()'); $('#leave').modal();"><i class="icon-unlink"></i>
                 Leave</a>
             </div>
