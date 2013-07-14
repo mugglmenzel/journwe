@@ -79,6 +79,7 @@ public class AdventureTimeController extends Controller {
         DynamicForm requestData = form().bindFromRequest();
         Logger.info(requestData.data().toString());
 
+        // DateFormat depends on Locale
         DateFormat df = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
 
         try {
