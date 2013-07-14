@@ -3,12 +3,11 @@
 @import play.mvc.Controller._
 
 @main_subscribe {
-<p>JournWe helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join
-    your travel adventures or convince your friends on facebook to join an adventure.</p>
+<p>@Messages("subscribe.welcometext")</p>
 <div class="spacer30"></div>
 <div class="text-center">
 
-    <p class="Lead"><strong>Subscribe with your email to get notified when we go online!</strong></p>
+    <p class="Lead"><strong>@Messages("subscribe.cta")</strong></p>
 
 
     <form action="@routes.ApplicationController.subscribe()" class="form-horizontal">
