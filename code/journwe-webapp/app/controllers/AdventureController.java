@@ -326,6 +326,35 @@ public class AdventureController extends Controller {
         return ok();
     }
 
+    public static Result updateImage(String advId) {
+        Adventure adv = new AdventureDAO().get(advId);
+        try {
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart image = body.getFiles().get(0);
+        File file = image.getFile();
+
+        if (image.getFilename() != null
+                && !"".equals(image.getFilename()) && file.length() > 0) {
+            AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+                    ConfigFactory.load().getString("aws.accessKey"),
+                    ConfigFactory.load().getString("aws.secretKey")));
+            s3.putObject(new PutObjectRequest(
+                    S3_BUCKET_ADVENTURE_IMAGES, adv.getId(), file)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            adv.setImage(s3.getResourceUrl(S3_BUCKET_ADVENTURE_IMAGES,
+                    adv.getId()));
+        }
+
+        new AdventureDAO().save(adv);
+        } catch (Exception e) {
+            return badRequest();
+        }
+
+        ObjectNode node = Json.newObject();
+        node.put("image", adv.getImage());
+        return ok(Json.toJson(node));
+    }
+
 
     public static Result delete(String advId) {
         for (Adventurer advr : new AdventurerDAO().all(advId))

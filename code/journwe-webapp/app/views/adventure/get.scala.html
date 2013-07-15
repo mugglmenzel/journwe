@@ -49,8 +49,7 @@
 
             <p class="pull-left">
                 <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}
-                    ondragleave="$('#adventure-title-image').removeClass('hover'); return false;" ondragenter="$('#adventure-title-image').addClass('hover'); return false;"
-                    ondrop="alert('dropped!'); $('#adventure-title-image').removeClass('hover'); event.stopPropagation(); event.preventDefault(); return false;"/>
+                    ondragleave="$('#adventure-title-image').removeClass('hover'); return false;" ondragenter="$('#adventure-title-image').addClass('hover'); return false;"/>
 
                 <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
                 data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-xxlarge" data-showbuttons="bottom" 
@@ -59,6 +58,31 @@
                 <div class="btn-edit-description"><a class="btn btn-mini" onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');$(this).parent().hide()"><i class="icon-pencil"></i> Edit</a></div>
 
              </p>
+            <script type="text/javascript">
+                jQuery.event.props.push('dataTransfer');
+
+                $('#adventure-title-image').on('drop', function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+
+                    var files = event.target.files || event.dataTransfer.files;
+                    var data = new FormData();
+                    data.append(files[0].name, files[0])
+                    $.ajax({
+                        url: '@routes.AdventureController.updateImage(adv.getId)',
+                        data: data,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: 'POST',
+                        success:  function (data) {
+                            $('#adventure-title-image').prop('src', 'http://i.embed.ly/1/image/resize?height=100&url=' + data.image + '&key=2c8ef5b200c6468f9f863bc75c46009f');
+                        }
+                    });
+                    $('#adventure-title-image').removeClass('hover');
+                    return false;
+                });
+            </script>
 
             @*index(adv, ins)*@
 
