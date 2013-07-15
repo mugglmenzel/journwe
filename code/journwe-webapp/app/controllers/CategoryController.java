@@ -1,31 +1,32 @@
 package controllers;
 
 import static play.data.Form.form;
+
+import models.auth.SecuredBetaUser;
 import models.Category;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.category.manage;
-import controllers.auth.SecuredAdminUser;
 import models.dao.CategoryDAO;
 
 public class CategoryController extends Controller {
 
 	private static Form<Category> catForm = form(Category.class);
 
-	@Security.Authenticated(SecuredAdminUser.class)
+	@Security.Authenticated(SecuredBetaUser.class)
 	public static Result create() {
 		return ok(manage.render(catForm, new CategoryDAO().all()));
 	}
 
-	@Security.Authenticated(SecuredAdminUser.class)
+	@Security.Authenticated(SecuredBetaUser.class)
 	public static Result edit(String id) {
 		Form<Category> editCatForm = catForm.fill(new CategoryDAO().get(id));
 		return ok(manage.render(editCatForm, new CategoryDAO().all()));
 	}
 
-	@Security.Authenticated(SecuredAdminUser.class)
+	@Security.Authenticated(SecuredBetaUser.class)
 	public static Result save() {
 		Form<Category> filledCatForm = catForm.bindFromRequest();
 		if (filledCatForm.hasErrors()) {
@@ -46,7 +47,7 @@ public class CategoryController extends Controller {
 		}
 	}
 
-	@Security.Authenticated(SecuredAdminUser.class)
+	@Security.Authenticated(SecuredBetaUser.class)
 	public static Result delete(String id) {
 
 		if (new CategoryDAO().delete(id)) {

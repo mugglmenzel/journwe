@@ -5,7 +5,7 @@ import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
-import controllers.auth.SecuredAdminUser;
+import models.auth.SecuredBetaUser;
 import models.Category;
 import models.adventure.Adventure;
 import models.dao.*;
@@ -36,7 +36,7 @@ public class ApplicationController extends Controller {
     public static Result index() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
-                && SecuredAdminUser.isAdmin(usr)) {
+                && SecuredBetaUser.isAdmin(usr)) {
 
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
             List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
@@ -66,6 +66,7 @@ public class ApplicationController extends Controller {
                 null));
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getPublicAdventures() {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
@@ -118,7 +119,7 @@ public class ApplicationController extends Controller {
         return ok(subscribe.render(subForm));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result categoryIndex(String catId) {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
         for (Category cat : new CategoryDAO().all())
@@ -138,7 +139,7 @@ public class ApplicationController extends Controller {
         return ok(about.render());
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result admin() {
         return ok(admin.render());
     }

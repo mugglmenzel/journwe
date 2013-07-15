@@ -1,4 +1,4 @@
-package controllers.auth;
+package models.auth;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;

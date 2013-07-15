@@ -1,12 +1,10 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import controllers.auth.SecuredAdminUser;
+import models.auth.SecuredBetaUser;
 import models.adventure.EPreferenceVote;
-import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
-import models.dao.PlaceAdventurerPreferenceDAO;
 import models.dao.TimeAdventurerPreferenceDAO;
 import models.dao.TimeOptionDAO;
 import models.dao.UserDAO;
@@ -42,7 +40,7 @@ public class AdventureTimeController extends Controller {
 
     public static Form<TimeOption> timeForm = form(TimeOption.class);
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getTimes(String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 

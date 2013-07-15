@@ -3,7 +3,7 @@ package controllers;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
-import controllers.auth.SecuredAdminUser;
+import models.auth.SecuredBetaUser;
 import models.dao.UserSocialDAO;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
@@ -28,7 +28,7 @@ import static play.data.Form.form;
  */
 public class FacebookController extends Controller {
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result testFacebookFeatures() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
@@ -77,7 +77,7 @@ public class FacebookController extends Controller {
         return ok();
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result sendMessage() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
@@ -92,7 +92,7 @@ public class FacebookController extends Controller {
         return ok();
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result createMessage() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());

@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.typesafe.config.ConfigFactory;
-import controllers.auth.SecuredAdminUser;
+import models.auth.SecuredBetaUser;
 import models.dao.CategoryDAO;
 import models.dao.InspirationDAO;
 import models.Category;
@@ -33,7 +33,7 @@ public class InspirationController extends Controller {
 
     private static Form<Inspiration> insForm = form(Inspiration.class);
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result get(String id) {
         Inspiration ins = new InspirationDAO().get(id);
         Category cat = new CategoryDAO().get(ins.getInspirationCategoryId());
@@ -48,13 +48,13 @@ public class InspirationController extends Controller {
         return ok(get.render(ins, cat, images));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result create() {
         return ok(manage.render(insForm, new CategoryDAO().allOptionsMap(),
                 new InspirationDAO().all()));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result edit(String id) {
         Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(id));
         return ok(manage.render(editInsForm,
@@ -62,7 +62,7 @@ public class InspirationController extends Controller {
                 new InspirationDAO().all()));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result save() {
 
         Form<Inspiration> filledInsForm = insForm.bindFromRequest();
@@ -118,7 +118,7 @@ public class InspirationController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result delete(String id) {
         try {
             AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(

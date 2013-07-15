@@ -1,16 +1,13 @@
-package controllers.auth;
-
-import models.dao.UserDAO;
-import models.user.EUserRole;
-import models.user.User;
-import play.mvc.Http.Context;
-import play.mvc.Result;
-import play.mvc.Security;
+package models.auth;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
-
 import controllers.routes;
+import models.dao.UserDAO;
+import models.user.EUserRole;
+import play.mvc.Http.Context;
+import play.mvc.Result;
+import play.mvc.Security;
 
 public class SecuredAdminUser extends Security.Authenticator {
 

@@ -21,7 +21,7 @@ import views.html.comment.listThreads;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
-import controllers.auth.SecuredUser;
+import models.auth.SecuredUser;
 
 public class CommentController extends Controller {
 

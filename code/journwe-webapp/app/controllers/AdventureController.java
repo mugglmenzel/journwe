@@ -7,10 +7,9 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.user.AuthUser;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
-import controllers.auth.SecuredAdminUser;
+import models.auth.SecuredBetaUser;
 import models.Inspiration;
 import models.adventure.*;
 import models.adventure.place.PlaceOption;
@@ -47,7 +46,7 @@ public class AdventureController extends Controller {
 
     private static DynamicForm advForm = form();
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getIndex(String id) {
         Adventure adv = new AdventureDAO().get(id);
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -58,17 +57,17 @@ public class AdventureController extends Controller {
             return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getIndexShortname(String shortname) {
         return getIndex(new AdventureShortnameDAO().get(shortname).getAdventureId());
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result create() {
         return createFromInspiration(null);
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result createFromInspiration(String insId) {
         Map<String, String> inspireOptions = new InspirationDAO()
                 .allOptionsMap();
@@ -82,7 +81,7 @@ public class AdventureController extends Controller {
 
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result saveOld() {
         Form<Adventure> filledAdvForm = form(Adventure.class).bindFromRequest();
         DynamicForm filledForm = advForm.bindFromRequest();

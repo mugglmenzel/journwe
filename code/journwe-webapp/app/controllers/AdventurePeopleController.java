@@ -7,7 +7,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
-import controllers.auth.SecuredAdminUser;
+import models.auth.SecuredBetaUser;
 import models.Inspiration;
 import models.adventure.Adventure;
 import models.adventure.AdventureShortname;
@@ -18,7 +18,6 @@ import models.helpers.JournweFacebookClient;
 import models.user.User;
 import models.user.UserSocial;
 import org.codehaus.jackson.node.ObjectNode;
-import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -41,13 +40,13 @@ import static play.data.Form.form;
 public class AdventurePeopleController extends Controller {
 
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getAdventurers(String advId) {
         return ok(Json.toJson(new AdventurerDAO().all(advId)));
     }
 
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result participate(String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
@@ -87,7 +86,7 @@ public class AdventurePeopleController extends Controller {
         return redirect(routes.ApplicationController.index());
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result adopt(String advId, String userId) {
         User usr = new UserDAO().get(userId);
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());

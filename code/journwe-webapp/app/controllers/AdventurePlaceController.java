@@ -1,7 +1,7 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import controllers.auth.SecuredAdminUser;
+import models.auth.SecuredBetaUser;
 import models.adventure.Adventure;
 import models.adventure.EPreferenceVote;
 import models.adventure.place.PlaceAdventurerPreference;
@@ -34,7 +34,7 @@ import static play.data.Form.form;
  */
 public class AdventurePlaceController extends Controller {
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getPlaces(String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
@@ -54,7 +54,7 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(places));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getFavoritePlace(String advId) {
         if (new PlaceOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
@@ -63,6 +63,7 @@ public class AdventurePlaceController extends Controller {
         return favId != null ? ok(Json.toJson(new PlaceOptionDAO().get(favId))) : ok(Json.toJson(""));
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result setFavoritePlace(String advId) {
         DynamicForm data = form().bindFromRequest();
         String favId = data.get("favoritePlaceId");
@@ -73,7 +74,7 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(new PlaceOptionDAO().get(favId)));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result addPlace(String advId) {
 
         DynamicForm requestData = form().bindFromRequest();
@@ -103,6 +104,7 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(node));
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result vote(String optId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
@@ -135,6 +137,7 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(node));
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result deletePlace(String optId) {
         new PlaceOptionDAO().delete(optId);
         return ok();

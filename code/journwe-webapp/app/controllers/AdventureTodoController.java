@@ -1,15 +1,13 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import controllers.auth.SecuredAdminUser;
+import models.auth.SecuredBetaUser;
 import models.adventure.Adventure;
 import models.adventure.Adventurer;
 import models.adventure.checklist.EStatus;
-import models.adventure.time.TimeOption;
 import models.dao.*;
 import models.user.User;
 import play.data.DynamicForm;
-import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -28,7 +26,7 @@ import static play.data.Form.form;
  */
 public class AdventureTodoController extends Controller {
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getTodos(String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
@@ -37,7 +35,7 @@ public class AdventureTodoController extends Controller {
         return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result addTodo(String id) {
 
         DynamicForm requestData = form().bindFromRequest();
@@ -54,7 +52,7 @@ public class AdventureTodoController extends Controller {
         return ok(Json.toJson(todo));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result setTodo(String id, String tid) {
 
         DynamicForm requestData = form().bindFromRequest();
@@ -69,7 +67,7 @@ public class AdventureTodoController extends Controller {
         return ok(Json.toJson(todo)); //TODO: Error handling
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result deleteTodo(String id, String tid) {
 
         new TodoDAO().delete(tid, id);
