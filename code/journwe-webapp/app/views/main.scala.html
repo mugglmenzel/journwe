@@ -1,6 +1,7 @@
 @(title: String)(header: Html = Html("Welcome"))(content: Html)(implicit active: String = "home")
 
 @import models.dao._
+@import models.user._
 @import play.mvc.Controller._
 @import com.feth.play.module.pa.views.html._
 @import com.feth.play.module.pa.providers.AuthProvider.Registry
@@ -71,7 +72,7 @@
 						<li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
 						<li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
 						<li @if(active == "imprint"){class="active"}><a href="@routes.ApplicationController.imprint">Imprint</a> </li>
-                        <li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>
+                        @currentAuth() { auth => @if(EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){<li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>}}
 					</ul>
 				</div>
 

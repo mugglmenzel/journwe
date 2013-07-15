@@ -71,7 +71,6 @@ public class ApplicationController extends Controller {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
         int count = new Integer(data.get("count")).intValue();
-        Logger.info("fetching " + count);
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
         for (Adventure adv : new AdventureDAO().allPublic(lastId, count)) {
