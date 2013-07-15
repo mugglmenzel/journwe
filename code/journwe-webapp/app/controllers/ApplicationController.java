@@ -7,11 +7,16 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import controllers.auth.SecuredAdminUser;
 import models.Category;
+import models.adventure.Adventure;
 import models.dao.*;
 import models.helpers.CategoryCount;
 import models.user.Subscriber;
+import org.codehaus.jackson.node.ObjectNode;
+import play.Logger;
 import play.cache.Cached;
+import play.data.DynamicForm;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -60,6 +65,30 @@ public class ApplicationController extends Controller {
         return ok(index.render(catCounts, new InspirationDAO().all(), new AdventureDAO().all(),
                 null));
     }
+
+    public static Result getPublicAdventures() {
+        DynamicForm data = form().bindFromRequest();
+        String lastId = data.get("lastId");
+        int count = new Integer(data.get("count")).intValue();
+        Logger.info("fetching " + count);
+
+        List<ObjectNode> result = new ArrayList<ObjectNode>();
+        for (Adventure adv : new AdventureDAO().allPublic(lastId, count)) {
+            ObjectNode node = Json.newObject();
+            node.put("id", adv.getId());
+            node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+            node.put("image", adv.getImage());
+            node.put("name", adv.getName());
+            node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getFavoritePlaceId())) : null);
+            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getFavoriteTimeId())) : null);
+
+            result.add(node);
+        }
+
+        return ok(Json.toJson(result));
+    }
+
 
     public static Result subscribe() {
         Form<Subscriber> filledSubForm = subForm.bindFromRequest();

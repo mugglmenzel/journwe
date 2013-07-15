@@ -51,11 +51,6 @@
         <td class="text-center">{%=o.voteCount.NO%}</td>
         <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
         <td class="text-center"><a onclick="deletePlace('{%=o.id%}', event);" class="btn btn-danger"><i class="icon-trash"></i></a></td>
-        {%
-
-
-
-        %}
     </tr>
 </script>
 

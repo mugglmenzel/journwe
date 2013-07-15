@@ -147,6 +147,22 @@ public class Adventure {
         this.limit = limit;
     }
 
+    public String getFavoritePlaceId() {
+        return favoritePlaceId;
+    }
+
+    public void setFavoritePlaceId(String favoritePlaceId) {
+        this.favoritePlaceId = favoritePlaceId;
+    }
+
+    public String getFavoriteTimeId() {
+        return favoriteTimeId;
+    }
+
+    public void setFavoriteTimeId(String favoriteTimeId) {
+        this.favoriteTimeId = favoriteTimeId;
+    }
+
     @Override
     public String toString() {
         return "Adventure{" +

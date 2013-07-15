@@ -19,8 +19,7 @@
 
     <hr>
 
-    @currentAuth() { auth =>
-        @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
+    @currentAuth() { auth => @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
             <p class="lead">
                 Welcome back, @{new UserDAO().findByAuthUserIdentity(auth).getName()}! You have some adventures before
                 you.
@@ -76,40 +75,52 @@
 
     <h3><i class="icon-bullhorn"></i> Public JournWes</h3>
     <div style="background-color: rgba(245,245,245,0.6);">
-
-    @defining(new AdventureDAO().allPublic()) { publicAdventures =>
-        @publicAdventures.take(20).zipWithIndex.map { case (adv, i) =>
-        <div class="polaroid" style="position: relative; float: left;">
-            <a href="@routes.AdventureController.getIndex(adv.getId())"><img class="img-polaroid" style="margin: 10px;" @if(adv.getImage == null) {src="http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=204&height=204&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}></a>
+        <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-spinner"></i></div>
+        <div class="text-center"><button class="btn btn-block" onclick="loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));">Show More</button></div>
+    </div>
+    <script type="text/x-tmpl" id="adventure-public-template">
+        <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left;">
+            <a href="{%=o.link%}"><img class="img-polaroid" style="margin: 10px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 14px; left: 14px; right: 14px; padding: 2px;">
-                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId())">@adv.getName</a></h4></div>
-                @defining(new AdventurerDAO().count(adv.getId)) { case (count) =>
+                <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                 <div class="overlay text-center" style="display: none;">
-                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ?</span>
-                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> @count</span>
-                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> ?</span>
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {%=o.favoritePlace%}</span>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {%=o.favoriteTime%}</span>
                 </div>
-                }
             </div>
         </div>
-    } }
-    </div>
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
 
-            $(".polaroid").hover(
-                function(){
-                    $(this).find("div.overlay").slideDown("fast");
-                },
-                function(){
-                    $(this).find("div.overlay").slideUp("fast");}
-            );
-
+            loadPublicAdventures(null, true);
 
         });
+
+        function loadPublicAdventures(lastId, clear) {
+            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 5} , function (advs) {
+                if (clear) $('#adventures-public-list').empty();
+                for(var i in advs) {
+                    var polaroid = tmpl('adventure-public-template', advs[i]);
+                    $('#adventures-public-list').append(polaroid);
+
+                    $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
+                        function(){
+                            $(this).find("div.overlay").slideDown("fast");
+                        },
+                        function(){
+                            $(this).find("div.overlay").slideUp("fast");
+                        }
+                    );
+                }
+            });
+        }
     </script>
 
     @*
+
+
     <h3><i class="icon-star"></i> JournWe ideas</h3>
     <div class="row-fluid">
     <div class="span2">
@@ -155,5 +166,4 @@
         data-dismiss="modal">Cancel</a>
         </div>
     </div>
-
 }
