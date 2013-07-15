@@ -30,4 +30,10 @@ public class PlaceOptionDAO extends CommonEntityDAO<PlaceOption> {
         return pm.scan(PlaceOption.class, scan);
     }
 
+    public int count(String advId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
+        return pm.count(PlaceOption.class, scan);
+    }
+
 }

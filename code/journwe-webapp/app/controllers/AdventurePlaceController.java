@@ -2,9 +2,11 @@ package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import controllers.auth.SecuredAdminUser;
+import models.adventure.Adventure;
 import models.adventure.EPreferenceVote;
 import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.place.PlaceOption;
+import models.dao.AdventureDAO;
 import models.dao.PlaceAdventurerPreferenceDAO;
 import models.dao.PlaceOptionDAO;
 import models.dao.UserDAO;
@@ -50,6 +52,25 @@ public class AdventurePlaceController extends Controller {
         }
 
         return ok(Json.toJson(places));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result getFavoritePlace(String advId) {
+        if (new PlaceOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
+
+        String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
+
+        return favId != null ? ok(Json.toJson(new PlaceOptionDAO().get(favId))) : ok(Json.toJson(""));
+    }
+
+    public static Result setFavoritePlace(String advId) {
+        DynamicForm data = form().bindFromRequest();
+        String favId = data.get("favoritePlaceId");
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setFavoritePlaceId(favId);
+        new AdventureDAO().save(adv);
+
+        return ok(Json.toJson(new PlaceOptionDAO().get(favId)));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)

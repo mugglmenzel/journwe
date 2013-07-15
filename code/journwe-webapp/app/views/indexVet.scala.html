@@ -99,7 +99,7 @@
         });
 
         function loadPublicAdventures(lastId, clear) {
-            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 5} , function (advs) {
+            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
                     var polaroid = tmpl('adventure-public-template', advs[i]);

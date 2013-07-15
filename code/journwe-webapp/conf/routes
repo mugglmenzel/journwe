@@ -29,6 +29,8 @@ GET           /adventure/:id/index                      controllers.AdventureCon
 GET           /adventure/:id/new                        controllers.AdventureController.createFromInspiration(id:String)
 GET           /adventure/:id/delete                     controllers.AdventureController.delete(id:String)
 POST          /adventure/check/shortname                controllers.AdventureController.checkShortname()
+POST          /adventure/:id/updateImage                controllers.AdventureController.updateImage(id:String)
+
 
 # POST    /adventure/:id/postTwitterStream                            controllers.AdventureController.postOnMyTwitterStream(id:String)
 GET           /adventure/:id/adventurers                controllers.AdventurePeopleController.getAdventurers(id:String)
@@ -38,11 +40,12 @@ POST          /adventure/:id/adopt/:user                controllers.AdventurePeo
 POST          /adventure/:id/postFacebookWall           controllers.AdventurePeopleController.postOnMyFacebookWall(id:String)
 POST          /adventure/:id/inviteViaEmail             controllers.AdventurePeopleController.inviteViaEmail(id:String)
 GET           /people/facebook/autocomplete             controllers.AdventurePeopleController.autocompleteFacebook()
-POST          /adventure/:id/updateImage                controllers.AdventureController.updateImage(id:String)
 GET           /adventure/:id/leave                      controllers.AdventurePeopleController.leave(id:String)
 
 GET           /adventure/:id/places                     controllers.AdventurePlaceController.getPlaces(id:String)
+GET           /adventure/:id/favorite                   controllers.AdventurePlaceController.getFavoritePlace(id:String)
 POST          /adventure/:id/places                     controllers.AdventurePlaceController.addPlace(id:String)
+POST          /adventure/:id/favorite                   controllers.AdventurePlaceController.setFavoritePlace(id:String)
 PUT           /adventure/placeoption/:optId             controllers.AdventurePlaceController.vote(optId:String)
 DELETE        /adventure/placeoption/:optId             controllers.AdventurePlaceController.deletePlace(optId:String)
 
