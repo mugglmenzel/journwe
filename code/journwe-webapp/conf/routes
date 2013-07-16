@@ -30,6 +30,7 @@ GET           /adventure/:id/new                        controllers.AdventureCon
 GET           /adventure/:id/delete                     controllers.AdventureController.delete(id:String)
 POST          /adventure/check/shortname                controllers.AdventureController.checkShortname()
 POST          /adventure/:id/updateImage                controllers.AdventureController.updateImage(id:String)
+POST          /adventure/:id/clone                      controllers.CloneController.cloneAndSaveAdventure(id:String)
 
 
 # POST    /adventure/:id/postTwitterStream                            controllers.AdventureController.postOnMyTwitterStream(id:String)

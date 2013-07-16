@@ -1050,7 +1050,7 @@
       this.$hidden.attr('name', this.name)
       this.$input.attr('name', '')
 
-      //ie8+ doesn't support changing the value of input with type=file so clone instead
+      //ie8+ doesn't support changing the value of input with type=file so cloneAdventure instead
       if (navigator.userAgent.match(/msie/i)){ 
           var inputClone = this.$input.clone(true);
           this.$input.after(inputClone);

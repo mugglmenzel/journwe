@@ -1,0 +1,28 @@
+@(adv: models.adventure.Adventure, cloneAdvForm: DynamicForm)
+
+@import helper._
+@import fieldConstructor._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+
+@form(routes.CloneController.cloneAndSaveAdventure(adv.getId()), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+    <fieldset>
+        @inputText(cloneAdvForm("name"), '_label -> "Adventure name", 'required -> "required")
+        @helper.input(cloneAdvForm("shortname"), '_label -> "Shortname", 'required -> "required", 'minlength -> "3", Symbol("data-validation-ajax-ajax") -> routes.AdventureController.checkShortname()) { (id, name, value, args) =>
+            <div class="input-append">
+                <input type="text" name="@name" id="@id" @toHtmlArgs(args)>
+                <span class="add-on">@@adventure.journwe.com</span>
+            </div>
+            <div id="shortname-available">shortname available?</div>
+        }
+        <p>Clone these parts of the original Adventure:</p>
+        <br />
+        @checkbox(cloneAdvForm("cloneAdventurers"), '_label -> "Clone Adventurers?", '_wrapperclass -> "switch")
+        @checkbox(cloneAdvForm("clonePlaceOptions"), '_label -> "Clone Place Options?", '_wrapperclass -> "switch pull-left")
+        @checkbox(cloneAdvForm("cloneTimeOptions"), '_label -> "Clone Time Options?", '_wrapperclass -> "switch pull-left")
+
+    </fieldset>
+    <div class="form-actions">
+        <input type="submit" value="Clone the Adventure!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+    </div>
+}
