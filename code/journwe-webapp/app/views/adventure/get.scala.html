@@ -8,7 +8,8 @@
 @main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
                         data-url="@routes.AdventureController.saveEditable()"
                         data-original-title="Enter adventure name" data-inputclass="input-xxlarge">@adv.getName()</a><span id="index"></span>
-@if(ins != null) {<small>@ins.getName()</small>} <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> Leave</a>} {
+@if(ins != null) {<small>@ins.getName()</small>} <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> Clone</a><br />
+<a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> Leave</a>} {
 
 <div id="adventure-container">
     @if(new AdventurerDAO().get(adv.getId(), new
@@ -210,6 +211,13 @@
 
 
 
+</div>
+
+<div id="cloneAdventure" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-header">
+        <h3><i class="icon-copy"></i> <strong>You can create a new Adventure based on "@adv.getName()".</strong></h3><br/>
+        @cloneAdventure(adv,new DynamicForm())
+    </div>
 </div>
 
 <div id="leave" class="modal hide fade" tabindex="-1" role="dialog">
