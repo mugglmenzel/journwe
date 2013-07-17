@@ -83,7 +83,10 @@ public class AdventurePeopleController extends Controller {
 
         flash("success", "You left the adventure " + new AdventureDAO().get(advId).getName());
 
-        return redirect(routes.ApplicationController.index());
+        if(new AdventurerDAO().count(advId) > 0)
+            return redirect(routes.ApplicationController.index());
+        else
+            return AdventureController.delete(advId);
     }
 
     @Security.Authenticated(SecuredBetaUser.class)

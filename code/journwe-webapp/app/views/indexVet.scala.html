@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="span10 adventures-list-full">
-        @adventures.take(5).zipWithIndex.map { case (adv, i) =>
+        @adventures.take(20).zipWithIndex.map { case (adv, i) =>
             <div class="row-fluid" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
                 <div class="span1 pull-left">
                     <a href="@routes.AdventureController.getIndex(adv.getId())" class="media-object">
