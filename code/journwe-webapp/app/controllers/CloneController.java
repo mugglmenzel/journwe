@@ -41,9 +41,11 @@ public class CloneController extends Controller {
         boolean cloneAdventurers = new Boolean(filledForm.get("cloneAdventurers"));
         boolean clonePlaceOptions = new Boolean(filledForm.get("clonePlaceOptions"));
         boolean cloneTimeOptions = new Boolean(filledForm.get("cloneTimeOptions"));
+        boolean cloneTodo = new Boolean(filledForm.get("cloneTodo"));
         Logger.debug("Clone adventurers: "+cloneAdventurers);
         Logger.debug("Clone place options: "+clonePlaceOptions);
         Logger.debug("Clone time options: "+cloneTimeOptions);
+        Logger.debug("Clone todo: "+cloneTodo);
         // create a new name and shortname
         String cloneAdvName = filledForm.get("name");
         String shortname = filledForm.get("shortname");
@@ -118,6 +120,15 @@ public class CloneController extends Controller {
         }
         }
 
+        if(cloneTodo) {
+            // Clone time options
+            for(models.adventure.checklist.Todo todo : new TodoDAO().all(originalAdvId)) {
+                new TodoDAO().save((models.adventure.checklist.Todo)cloneOf(cloneAdv,todo));
+            }
+        }
+
+
+
         flash("success", "We are the Borg. Resistance is futile. Your Adventure has been assimilated.");
 
         return redirect(routes.AdventureController.getIndex(cloneAdv.getId()));
@@ -149,6 +160,15 @@ public class CloneController extends Controller {
             toReturn.setEndDate(original.getEndDate());
             toReturn.setName(original.getName());
             toReturn.setStartDate(original.getStartDate());
+            return toReturn;
+        }
+        if(object instanceof models.adventure.checklist.Todo) {
+            models.adventure.checklist.Todo original = (models.adventure.checklist.Todo)object;
+            models.adventure.checklist.Todo toReturn = new models.adventure.checklist.Todo();
+            toReturn.setAdventureId(clone.getId());
+            toReturn.setStatus(original.getStatus());
+            toReturn.setTitle(original.getTitle());
+            toReturn.setUserId(original.getUserId());
             return toReturn;
         } else {
         try {
