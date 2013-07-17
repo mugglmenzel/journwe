@@ -1,24 +1,24 @@
 @(subForm: Form[models.user.Subscriber])
 
-@import play.mvc.Controller._
 
-@main_subscribe {
-<p>@Messages("subscribe.welcometext")</p>
-<div class="spacer30"></div>
-<div class="text-center">
+    @main_subscribe {
+        <p>@Messages("subscribe.welcometext")</p>
+        <div class="spacer30"></div>
+        <div class="text-center">
 
-    <p class="Lead"><strong>@Messages("subscribe.cta")</strong></p>
+            <p class="Lead"><strong>@Html(Messages("subscribe.cta"))</strong></p>
 
 
-    <form action="@routes.ApplicationController.subscribe()" class="form-horizontal">
-        <fieldset>
-            <div class="input-append">
-                <input style="font-size: 25px; padding: 11px 19px;" class="input-xlarge" name="email" type="email" required>
-                <input style="font-size: 25px;" class="btn btn-success btn-large" type="submit" value="Subscribe!"/>
-            </div>
-        </fieldset>
-    </form>
+            <form action="@routes.ApplicationController.subscribe()" class="form-horizontal">
+                <fieldset>
+                        <div class="input-append">
+                            <span style="font-size: 25px; padding: 11px 19px;" class="add-on"><i class="icon-envelope"></i></span>
+                            <input style="font-size: 25px; padding: 11px 19px;" class="input-xlarge" name="email" type="email" required>
+                            <input style="font-size: 25px;" class="btn btn-success btn-large" type="submit" value="Subscribe!"/>
+                        </div>
+                </fieldset>
+            </form>
 
-</div>
-<div class="spacer30"></div>
-}
+        </div>
+        <div class="spacer30"></div>
+    }
