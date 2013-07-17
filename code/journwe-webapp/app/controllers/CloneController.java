@@ -97,8 +97,6 @@ public class CloneController extends Controller {
             if(!addi.getUserId().equals(me.getUserId())) {
                 // Make the other guys applicants or something like that.
                 // Maybe they don't want to participate.
-
-                addi.setAdventureId(cloneAdv.getId());
                 new AdventurerDAO().save((Adventurer)cloneOf(cloneAdv,addi));
             }
         }
@@ -107,7 +105,6 @@ public class CloneController extends Controller {
         if(clonePlaceOptions) {
         // Clone place options
         for(PlaceOption po : new PlaceOptionDAO().all(originalAdvId)) {
-            po.setAdventureId(cloneAdv.getId());
             new PlaceOptionDAO().save((PlaceOption)cloneOf(cloneAdv,po));
         }
         }
@@ -115,7 +112,6 @@ public class CloneController extends Controller {
         if(cloneTimeOptions) {
         // Clone time options
         for(TimeOption to : new TimeOptionDAO().all(originalAdvId)) {
-            to.setAdventureId(cloneAdv.getId());
             new TimeOptionDAO().save((TimeOption)cloneOf(cloneAdv,to));
         }
         }
