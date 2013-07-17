@@ -1,4 +1,4 @@
-@(adv: models.adventure.Adventure, ins: Inspiration, advr: models.adventure.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption])(description: Html)
+@(adv: models.adventure.Adventure, ins: Inspiration, advr: models.adventure.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])(description: Html)
 
 @import models.dao.AdventurerDAO
 @import models.dao.UserDAO
@@ -184,8 +184,9 @@
         <div class="span8">
 
             <h2 id="files">Files</h2>
-            <p class="lead">There is sure some information need to be shared packed in pdfs, docs, xls, ...</p>
+            <p class="lead">You can upload and share files here, such as pdfs, docs, xls, ...</p>
 
+            @files(adv, fileForm)
 
         </div>
         <div class="span3">@views.html.comment.widget_comment.render(adv, "files")</div>

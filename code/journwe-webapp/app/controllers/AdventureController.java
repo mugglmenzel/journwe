@@ -54,7 +54,7 @@ public class AdventureController extends Controller {
         if (advr == null)
             return ok(getPublic.render(adv, new InspirationDAO().get(adv.getInspirationId())));
         else
-            return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm));
+            return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
@@ -111,7 +111,7 @@ public class AdventureController extends Controller {
                 adv = new AdventureDAO().get(adv.getId());
                 Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
 
-                Logger.info("got image file " + image.getFilename());
+                Logger.info("got image files " + image.getFilename());
 
                 if (image.getFilename() != null
                         && !"".equals(image.getFilename()) && file.length() > 0) {

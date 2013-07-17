@@ -84,7 +84,7 @@ public class InspirationController extends Controller {
                     throw new Exception();
 
 
-                Logger.info("got image file " + image.getFilename());
+                Logger.info("got image files " + image.getFilename());
                 if (image.getFilename() != null
                         && !"".equals(image.getFilename()) && file.length() > 0) {
                     AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(

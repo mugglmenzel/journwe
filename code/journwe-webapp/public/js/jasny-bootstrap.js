@@ -530,7 +530,7 @@
  * Copyright 2012 Jasny BV, Netherlands.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
+ * you may not use this files except in compliance with the License.
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -884,7 +884,7 @@
  * Copyright 2012 Jasny BV, Netherlands.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * you may not use this files except in compliance with the License.
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -955,7 +955,7 @@
  * Copyright 2012 Jasny BV, Netherlands.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
+ * you may not use this files except in compliance with the License.
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
@@ -1050,7 +1050,7 @@
       this.$hidden.attr('name', this.name)
       this.$input.attr('name', '')
 
-      //ie8+ doesn't support changing the value of input with type=file so cloneAdventure instead
+      //ie8+ doesn't support changing the value of input with type=files so cloneAdventure instead
       if (navigator.userAgent.match(/msie/i)){ 
           var inputClone = this.$input.clone(true);
           this.$input.after(inputClone);

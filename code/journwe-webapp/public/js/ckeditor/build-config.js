@@ -5,12 +5,12 @@
  */
 
 /**
- * This file was added automatically by CKEditor builder.
+ * This files was added automatically by CKEditor builder.
  * You may re-use it at any time at http://ckeditor.com/builder to build CKEditor again.
  * 
  * NOTE: 
- *    This file is not used by CKEditor, you may remove it.
- *    Changing this file will not change your CKEditor configuration.
+ *    This files is not used by CKEditor, you may remove it.
+ *    Changing this files will not change your CKEditor configuration.
  */
 
 var CKBUILDER_CONFIG = {

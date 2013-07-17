@@ -32,7 +32,7 @@ public class AdventureTodoController extends Controller {
         Adventure adv = new AdventureDAO().get(advId);
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
 
-        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm));
+        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)

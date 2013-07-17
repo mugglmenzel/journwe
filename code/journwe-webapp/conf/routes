@@ -1,5 +1,5 @@
 # Routes
-# This file defines all application routes (Higher priority routes first)
+# This files defines all application routes (Higher priority routes first)
 # ~~~~
 
 # Testing comet
@@ -60,6 +60,11 @@ GET           /adventure/:id/todos                      controllers.AdventureTod
 POST          /adventure/:id/todos                      controllers.AdventureTodoController.addTodo(id:String)
 PUT           /adventure/:id/todos/:tid                 controllers.AdventureTodoController.setTodo(id:String, tid: String)
 DELETE        /adventure/:id/todos/:tid                 controllers.AdventureTodoController.deleteTodo(id:String, tid: String)
+
+
+GET           /adventure/:id/files                      controllers.AdventureFileController.listFiles(id:String)
+POST          /adventure/:id/files                      controllers.AdventureFileController.uploadFile(id:String)
+DELETE        /adventure/:id/files/:fileName            controllers.AdventureFileController.deleteFile(id:String, fileName: String)
 
 
 GET           /adv/:shortname                           controllers.AdventureController.getIndexShortname(shortname:String)
