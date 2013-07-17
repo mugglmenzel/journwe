@@ -85,6 +85,11 @@
                 });
             </script>
 
+
+            <div>Public? <div class="switch"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div> | <button class="btn btn-primary">Publish on Facebook</button> </div>
+                @if(adv.isPublish){
+                    <div><button class="btn btn-primary">Tweet on Twitter</button> | <button class="btn btn-primary">Like on Facebook</button> </div>
+                }
             @*index(adv, ins)*@
 
         </div>
