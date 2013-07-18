@@ -1,4 +1,4 @@
-package models;
+package models.factory;
 
 import models.adventure.IAdventureComponentWithUser;
 

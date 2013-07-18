@@ -2,13 +2,8 @@ package models.dao.common;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
-import models.AdventureComponentFactory;
+import models.factory.AdventureComponentFactory;
 import models.adventure.IAdventureComponent;
-import models.dao.common.CommonDAO;
-import models.dao.common.CommonRangeEntityDAO;
-import models.dao.common.PersistenceHelper;
-import play.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
