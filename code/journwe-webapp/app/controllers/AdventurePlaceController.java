@@ -41,12 +41,14 @@ public class AdventurePlaceController extends Controller {
         List<ObjectNode> places = new ArrayList<ObjectNode>();
         for (PlaceOption po : new PlaceOptionDAO().all(advId)) {
             ObjectNode node = Json.newObject();
-            node.put("id", po.getId());
-            node.put("address", po.getGoogleMapsAddress());
-            PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getId(), usr.getId());
+            node.put("id", po.getOptionId());
+            node.put("placeId", po.getPlaceId());
+            node.put("advId", po.getAdventureId());
+            node.put("address", po.getAddress());
+            PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getOptionId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-            node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getId())));
-            node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(po.getId())));
+            node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getPlaceId(), po.getPlaceId())));
+            node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(po.getPlaceId(), po.getPlaceId())));
 
             places.add(node);
         }
@@ -60,7 +62,7 @@ public class AdventurePlaceController extends Controller {
 
         String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
 
-        return favId != null ? ok(Json.toJson(new PlaceOptionDAO().get(favId))) : ok(Json.toJson(""));
+        return favId != null ? ok(Json.toJson(new PlaceOptionDAO().get(advId, favId))) : ok(Json.toJson(""));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
@@ -71,7 +73,7 @@ public class AdventurePlaceController extends Controller {
         adv.setFavoritePlaceId(favId);
         new AdventureDAO().save(adv);
 
-        return ok(Json.toJson(new PlaceOptionDAO().get(favId)));
+        return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
@@ -81,39 +83,44 @@ public class AdventurePlaceController extends Controller {
 
         PlaceOption place = new PlaceOption();
         place.setAdventureId(advId);
-        place.setGoogleMapsAddress(requestData.get("googleMapsAddress"));
-        place.setName(requestData.get("name"));
+        place.setAddress(requestData.get("address"));
 
         new PlaceOptionDAO().save(place);
+        Logger.debug("saved placeoption");
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         PlaceAdventurerPreference pref = new PlaceAdventurerPreference();
-        pref.setPlaceOptionId(place.getId());
+        pref.setPlaceOptionId(place.getOptionId());
         pref.setAdventurerId(usr.getId());
         new PlaceAdventurerPreferenceDAO().save(pref);
+        Logger.debug("saved placeoptionpreference");
 
 
         ObjectNode node = Json.newObject();
-        node.put("id", place.getId());
-        node.put("address", place.getGoogleMapsAddress());
+        node.put("id", place.getOptionId());
+        node.put("placeId", place.getPlaceId());
+        node.put("advId", place.getAdventureId());
+        node.put("address", place.getAddress());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getId())));
-        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getId())));
+        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getPlaceId(), place.getPlaceId())));
+        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getPlaceId(), place.getPlaceId())));
+        Logger.debug("created json node");
 
         return ok(Json.toJson(node));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result vote(String optId) {
+    public static Result vote(String advId, String placeId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
+        PlaceOption place = new PlaceOptionDAO().get(advId, placeId);
         String vote = form().bindFromRequest().get("vote").toUpperCase();
 
-        PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(optId, usr.getId());
+        PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(place.getOptionId(), usr.getId());
         if (pref == null) {
             pref = new PlaceAdventurerPreference();
-            pref.setPlaceOptionId(optId);
+            pref.setPlaceOptionId(place.getOptionId());
             pref.setAdventurerId(usr.getId());
         }
 
@@ -125,21 +132,24 @@ public class AdventurePlaceController extends Controller {
 
         new PlaceAdventurerPreferenceDAO().save(pref);
 
-        PlaceOption place = new PlaceOptionDAO().get(pref.getPlaceOptionId());
+        //PlaceOption place = PlaceOption.fromId(pref.getPlaceOptionId());
+        //place = new PlaceOptionDAO().get(place.getAdventureId(), place.getAddress());
 
         ObjectNode node = Json.newObject();
-        node.put("id", place.getId());
-        node.put("address", place.getGoogleMapsAddress());
+        node.put("id", place.getOptionId());
+        node.put("advId", place.getAdventureId());
+        node.put("placeId", place.getPlaceId());
+        node.put("address", place.getAddress());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getId())));
-        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getId())));
+        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getAdventureId(), place.getPlaceId())));
+        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getPlaceId(), place.getPlaceId())));
 
         return ok(Json.toJson(node));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result deletePlace(String optId) {
-        new PlaceOptionDAO().delete(optId);
+    public static Result deletePlace(String advId, String placeId) {
+        new PlaceOptionDAO().delete(advId, placeId);
         return ok();
     }
 

@@ -231,9 +231,8 @@ public class AdventureController extends Controller {
             if (key.startsWith("place[")) {
                 PlaceOption po = new PlaceOption();
                 po.setAdventureId(adv.getId());
-                po.setName("Option " + placeI);
                 placeI++;
-                po.setGoogleMapsAddress(filledForm.data().get(key));
+                po.setAddress(filledForm.data().get(key));
                 new PlaceOptionDAO().save(po);
                 //placeOptions.add(po);
             }

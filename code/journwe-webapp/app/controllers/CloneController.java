@@ -1,13 +1,7 @@
 package controllers;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
-import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.rosaloves.bitlyj.Jmp;
-import com.typesafe.config.ConfigFactory;
 import models.adventure.Adventure;
-import models.adventure.AdventureShortname;
 import models.adventure.Adventurer;
 import models.adventure.EAdventurerParticipation;
 import models.adventure.place.PlaceOption;
@@ -22,10 +16,6 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import static com.rosaloves.bitlyj.Bitly.shorten;
 import static play.data.Form.form;
 
 public class CloneController extends Controller {
@@ -192,9 +182,7 @@ public class CloneController extends Controller {
                 PlaceOption original = (PlaceOption)object;
                 PlaceOption toReturn = new PlaceOption();
                 toReturn.setAdventureId(clone.getId());
-                toReturn.setDescription(original.getDescription());
-                toReturn.setGoogleMapsAddress(original.getGoogleMapsAddress());
-                toReturn.setName(original.getName());
+                toReturn.setAddress(original.getAddress());
                 return toReturn;
             }
             if(object instanceof TimeOption) {

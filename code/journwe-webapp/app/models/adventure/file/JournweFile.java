@@ -24,7 +24,6 @@ public class JournweFile {
     private String userId;
 
     @DynamoDBHashKey(attributeName = "adventureId")
-    @DynamoDBAttribute
     public String getAdventureId() {
         return adventureId;
     }
@@ -34,7 +33,6 @@ public class JournweFile {
     }
 
     @DynamoDBRangeKey(attributeName = "fileName")
-    @DynamoDBAttribute
     public String getFileName() {
         return fileName;
     }

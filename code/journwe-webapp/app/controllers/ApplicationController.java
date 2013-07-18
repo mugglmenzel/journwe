@@ -84,7 +84,7 @@ public class ApplicationController extends Controller {
             node.put("image", adv.getImage());
             node.put("name", adv.getName());
             node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
-            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getFavoritePlaceId())) : null);
+            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
             node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getFavoriteTimeId())) : null);
 
             result.add(node);
@@ -107,7 +107,7 @@ public class ApplicationController extends Controller {
             node.put("image", adv.getImage());
             node.put("name", adv.getName());
             node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
-            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getFavoritePlaceId())) : null);
+            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
             node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getFavoriteTimeId())) : null);
 
             result.add(node);

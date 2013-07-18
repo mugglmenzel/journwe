@@ -47,8 +47,8 @@ GET           /adventure/:id/places                     controllers.AdventurePla
 GET           /adventure/:id/favorite                   controllers.AdventurePlaceController.getFavoritePlace(id:String)
 POST          /adventure/:id/places                     controllers.AdventurePlaceController.addPlace(id:String)
 POST          /adventure/:id/favorite                   controllers.AdventurePlaceController.setFavoritePlace(id:String)
-PUT           /adventure/placeoption/:optId             controllers.AdventurePlaceController.vote(optId:String)
-DELETE        /adventure/placeoption/:optId             controllers.AdventurePlaceController.deletePlace(optId:String)
+PUT           /adventure/:id/place/:placeId             controllers.AdventurePlaceController.vote(id:String, placeId:String)
+DELETE        /adventure/:id/place/:placeId             controllers.AdventurePlaceController.deletePlace(id:String, placeId:String)
 
 GET           /adventure/:id/times                      controllers.AdventureTimeController.getTimes(id:String)
 POST          /adventure/:id/times                      controllers.AdventureTimeController.addTime(id:String)

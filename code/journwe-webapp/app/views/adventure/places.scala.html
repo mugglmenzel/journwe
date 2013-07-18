@@ -35,18 +35,18 @@
 </div>
 
 <script type="text/x-tmpl" id="place-template">
-    <tr id="placeoption-item-{%=o.id%}">
-        <td><button class="btn" onclick="setFavoritePlaceOption('{%=o.id%}')"><i class="icon-star"></i></button></td>
+    <tr id="placeoption-item-{%=o.placeId%}">
+        <td><button class="btn" onclick="setFavoritePlaceOption('{%=o.address%}')"><i class="icon-star"></i></button></td>
         <td>
             <div class="btn-group">
-                <button id="placeoption-status-{%=o.id%}" class="btn" style="width: 90px"><i id="placeoption-status-icon-{%=o.id%}"></i> {%=o.vote%}</button>
+                <button id="placeoption-status-{%=o.placeId%}" class="btn" style="width: 90px"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-pencil"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a onclick="votePlace('YES', '{%=o.id%}');"><i class="icon-thumbs-up"></i> Yes</a></li>
-                    <li><a onclick="votePlace('MAYBE', '{%=o.id%}');"><i class="icon-question"></i> Maybe</a></li>
-                    <li><a onclick="votePlace('NO', '{%=o.id%}');"><i class="icon-thumbs-down"></i> No</a></li>
+                    <li><a onclick="votePlace('YES', '{%=o.placeId%}');"><i class="icon-thumbs-up"></i> Yes</a></li>
+                    <li><a onclick="votePlace('MAYBE', '{%=o.placeId%}');"><i class="icon-question"></i> Maybe</a></li>
+                    <li><a onclick="votePlace('NO', '{%=o.placeId%}');"><i class="icon-thumbs-down"></i> No</a></li>
                 </ul>
             </div>
         </td>
@@ -56,7 +56,7 @@
         <td class="text-center">{%=o.voteCount.MAYBE%}</td>
         <td class="text-center">{%=o.voteCount.NO%}</td>
         <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
-        <td class="text-center"><a onclick="deletePlace('{%=o.id%}', event);" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+        <td class="text-center"><a onclick="deletePlace('{%=o.placeId%}', event);" class="btn btn-danger"><i class="icon-trash"></i></a></td>
     </tr>
 </script>
 
@@ -102,7 +102,7 @@
     $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
     $.get('@routes.AdventurePlaceController.getFavoritePlace(adv.getId)', function (data) {
     $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
-    $('#places-favorite-place-name').html(data != "" ? data.googleMapsAddress : "No favorite yet");
+    $('#places-favorite-place-name').html(data != "" ? data.address : "No favorite yet");
     });
     });
 
@@ -111,7 +111,7 @@
     $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
     $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
     $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
-    $('#places-favorite-place-name').html(data.googleMapsAddress);
+    $('#places-favorite-place-name').html(data.address);
     });
     }
 
@@ -123,12 +123,12 @@
 
     new google.maps.Geocoder().geocode({address: data.address}, function (results, status) {
     var marker = new google.maps.Marker({map: map, position: results[0].geometry.location});
-    markers[data.id] = marker;
+    markers[data.placeId] = marker;
     map.setCenter(results[0].geometry.location);
     resetBounds();
     });
-    $('#placeoption-status-icon-' + data.id).addClass(votePlaceIconCSSClassMap[data.vote]);
-    $('#placeoption-status-' + data.id).addClass(votePlaceButtonCSSClassMap[data.vote]);
+    $('#placeoption-status-icon-' + data.placeId).addClass(votePlaceIconCSSClassMap[data.vote]);
+    $('#placeoption-status-' + data.placeId).addClass(votePlaceButtonCSSClassMap[data.vote]);
     }
 
 
@@ -165,7 +165,7 @@
     $('#place-add-button').on('click', function() {
         $(this).html('<i class="icon-spin icon-spinner"></i>');
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-            $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { name: 'Option ' + ($('#places-list tbody').children().length+1), googleMapsAddress: results[0].formatted_address }, function(res) {
+            $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { address: results[0].formatted_address }, function(res) {
                 renderPlaceOption(res);
                 $('#place-add-input').val("");
                 $('#place-add-button').html('<i class="icon-plus"></i>');
@@ -182,14 +182,14 @@
             .html('<i class="icon-spin icon-spinner"></i>');
 
         $.ajax({
-            url: '@routes.AdventurePlaceController.vote("")' + optId,
+            url: '@routes.AdventurePlaceController.vote(adv.getId, "")' + optId,
             data: {
                 vote: vote
             },
             type: 'PUT',
             success: function(res) {
-                renderPlaceOption(res, $('#placeoption-item-' + res.id));
-                $('#placeoption-item-'+res.id+' .dropdown-toggle')
+                renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
+                $('#placeoption-item-'+res.placeId+' .dropdown-toggle')
                     .html('<i class="icon-pencil"></i>');
             }
         });
@@ -198,7 +198,7 @@
 
     function deletePlace(optId, event) {
         $(event.target).html('<i class="icon-spin icon-spinner"></i>');
-        $.ajax({url: '@routes.AdventurePlaceController.deletePlace("")' + optId, type: 'DELETE', success: function () {
+        $.ajax({url: '@routes.AdventurePlaceController.deletePlace(adv.getId, "")' + optId, type: 'DELETE', success: function () {
             removeMarker(optId);
             $('#placeoption-item-' + optId).fadeOut(function () {$('#placeoption-item-' + optId).remove();});
         }
