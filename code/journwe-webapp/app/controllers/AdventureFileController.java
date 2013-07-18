@@ -75,7 +75,7 @@ public class AdventureFileController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result listFiles(String adventureId) {
         Logger.debug("Listing files from DynamoDB ...");
-        List<JournweFile> files = new JournweFileDAO().getFiles(adventureId);
+        List<JournweFile> files = new JournweFileDAO().all(adventureId);
         for(JournweFile file : files)
             Logger.debug(file.getFileName());
         return ok(Json.toJson(files));
