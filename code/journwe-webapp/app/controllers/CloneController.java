@@ -189,9 +189,7 @@ public class CloneController extends Controller {
                 TimeOption original = (TimeOption)object;
                 TimeOption toReturn = new TimeOption();
                 toReturn.setAdventureId(clone.getId());
-                toReturn.setDescription(original.getDescription());
                 toReturn.setEndDate(original.getEndDate());
-                toReturn.setName(original.getName());
                 toReturn.setStartDate(original.getStartDate());
                 return toReturn;
             }

@@ -44,16 +44,18 @@ GET           /people/facebook/autocomplete             controllers.AdventurePeo
 GET           /adventure/:id/leave                      controllers.AdventurePeopleController.leave(id:String)
 
 GET           /adventure/:id/places                     controllers.AdventurePlaceController.getPlaces(id:String)
-GET           /adventure/:id/favorite                   controllers.AdventurePlaceController.getFavoritePlace(id:String)
 POST          /adventure/:id/places                     controllers.AdventurePlaceController.addPlace(id:String)
-POST          /adventure/:id/favorite                   controllers.AdventurePlaceController.setFavoritePlace(id:String)
+GET           /adventure/:id/place/favorite             controllers.AdventurePlaceController.getFavoritePlace(id:String)
+POST          /adventure/:id/place/favorite             controllers.AdventurePlaceController.setFavoritePlace(id:String)
 PUT           /adventure/:id/place/:placeId             controllers.AdventurePlaceController.vote(id:String, placeId:String)
 DELETE        /adventure/:id/place/:placeId             controllers.AdventurePlaceController.deletePlace(id:String, placeId:String)
 
 GET           /adventure/:id/times                      controllers.AdventureTimeController.getTimes(id:String)
 POST          /adventure/:id/times                      controllers.AdventureTimeController.addTime(id:String)
-PUT           /adventure/timeoption/:optId              controllers.AdventureTimeController.vote(optId:String)
-DELETE        /adventure/timeoption/:optId              controllers.AdventureTimeController.deleteTime(optId:String)
+GET           /adventure/:id/time/favorite              controllers.AdventureTimeController.getFavoriteTime(id:String)
+POST          /adventure/:id/time/favorite              controllers.AdventureTimeController.setFavoriteTime(id:String)
+PUT           /adventure/:id/time/:timeId               controllers.AdventureTimeController.vote(id:String,timeId:String)
+DELETE        /adventure/:id/time/:timeId               controllers.AdventureTimeController.deleteTime(id:String,timeId:String)
 
 
 GET           /adventure/:id/todos                      controllers.AdventureTodoController.getTodos(id:String)

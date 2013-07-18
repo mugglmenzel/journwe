@@ -1,13 +1,12 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import models.adventure.Adventure;
 import models.auth.SecuredBetaUser;
 import models.adventure.EPreferenceVote;
 import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
-import models.dao.TimeAdventurerPreferenceDAO;
-import models.dao.TimeOptionDAO;
-import models.dao.UserDAO;
+import models.dao.*;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
@@ -47,14 +46,15 @@ public class AdventureTimeController extends Controller {
         List<ObjectNode> times = new ArrayList<ObjectNode>();
         for (TimeOption to : new TimeOptionDAO().all(advId)) {
             ObjectNode node = Json.newObject();
-            node.put("id", to.getId());
-            node.put("name", to.getName());
+            node.put("id", to.getOptionId());
+            node.put("advId", to.getAdventureId());
+            node.put("timeId", to.getTimeId());
             node.put("startDate", to.getStartDate() != null ? to.getStartDate().getTime() : new Date().getTime());
             node.put("endDate", to.getEndDate() != null ? to.getEndDate().getTime() : new Date().getTime());
-            TimeAdventurerPreference pref = new TimeAdventurerPreferenceDAO().get(to.getId(), usr.getId());
+            TimeAdventurerPreference pref = new TimeAdventurerPreferenceDAO().get(to.getOptionId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-            node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(to.getId())));
-            node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(to.getId())));
+            node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(to.getOptionId())));
+            node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(to.getOptionId())));
 
             times.add(node);
         }
@@ -62,16 +62,25 @@ public class AdventureTimeController extends Controller {
         return ok(Json.toJson(times));
     }
 
-    /*
-    public static Result getTime(String advId) {
-        Adventure adv = new AdventureDAO().get(advId);
-        Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
-        return ok(getTime.render(adv, ins, advr, timeForm));
-    }
-    */
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result getFavoriteTime(String advId) {
+        if (new TimeOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
+        String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
+
+        return favId != null ? ok(Json.toJson(new TimeOptionDAO().get(advId, favId))) : ok(Json.toJson(""));
+    }
+
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result setFavoriteTime(String advId) {
+        DynamicForm data = form().bindFromRequest();
+        String favId = data.get("favoriteTimeId");
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setFavoriteTimeId(favId);
+        new AdventureDAO().save(adv);
+
+        return ok(Json.toJson(new TimeOptionDAO().get(advId, favId)));
+    }
     public static Result addTime(String advId) {
 
         DynamicForm requestData = form().bindFromRequest();
@@ -85,25 +94,25 @@ public class AdventureTimeController extends Controller {
             time.setAdventureId(advId);
             time.setStartDate(df.parse(requestData.get("startDate")));
             time.setEndDate(df.parse(requestData.get("endDate")));
-            time.setName(requestData.get("name"));
             new TimeOptionDAO().save(time);
 
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
             TimeAdventurerPreference pref = new TimeAdventurerPreference();
-            pref.setTimeOptionId(time.getId());
+            pref.setTimeOptionId(time.getOptionId());
             pref.setAdventurerId(usr.getId());
             new TimeAdventurerPreferenceDAO().save(pref);
 
 
             ObjectNode node = Json.newObject();
-            node.put("id", time.getId());
-            node.put("name", time.getName());
+            node.put("id", time.getOptionId());
+            node.put("advId", time.getAdventureId());
+            node.put("timeId", time.getTimeId());
             node.put("startDate", time.getStartDate() != null ? time.getStartDate().getTime() : new Date().getTime());
             node.put("endDate", time.getEndDate() != null ? time.getEndDate().getTime() : new Date().getTime());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-            node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getId())));
-            node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getId())));
+            node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getOptionId())));
+            node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getOptionId())));
 
             return ok(Json.toJson(node));
         } catch (ParseException pe) {
@@ -112,15 +121,16 @@ public class AdventureTimeController extends Controller {
         }
     }
 
-    public static Result vote(String optId) {
+    public static Result vote(String advId, String timeId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
+        TimeOption time = new TimeOptionDAO().get(advId, timeId);
         String vote = form().bindFromRequest().get("vote").toUpperCase();
 
-        TimeAdventurerPreference pref = new TimeAdventurerPreferenceDAO().get(optId, usr.getId());
+        TimeAdventurerPreference pref = new TimeAdventurerPreferenceDAO().get(time.getOptionId(), usr.getId());
         if (pref == null) {
             pref = new TimeAdventurerPreference();
-            pref.setTimeOptionId(optId);
+            pref.setTimeOptionId(time.getOptionId());
             pref.setAdventurerId(usr.getId());
         }
 
@@ -132,22 +142,21 @@ public class AdventureTimeController extends Controller {
 
         new TimeAdventurerPreferenceDAO().save(pref);
 
-        TimeOption time = new TimeOptionDAO().get(pref.getTimeOptionId());
-
         ObjectNode node = Json.newObject();
-        node.put("id", time.getId());
-        node.put("name", time.getName());
+        node.put("id", time.getOptionId());
+        node.put("advId", time.getAdventureId());
+        node.put("timeId", time.getTimeId());
         node.put("startDate", time.getStartDate() != null ? time.getStartDate().getTime() : new Date().getTime());
         node.put("endDate", time.getEndDate() != null ? time.getEndDate().getTime() : new Date().getTime());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-        node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getId())));
-        node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getId())));
+        node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getOptionId())));
+        node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getOptionId())));
 
         return ok(Json.toJson(node));
     }
 
-    public static Result deleteTime(String optId) {
-        new TimeOptionDAO().delete(optId);
+    public static Result deleteTime(String advId, String timeId) {
+        new TimeOptionDAO().delete(advId, timeId);
         return ok();
     }
 

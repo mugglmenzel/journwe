@@ -1,6 +1,6 @@
 @(adv: models.adventure.Adventure)
 
-<div id="places-favorite-place" style="font-size: 20px;">
+<div id="places-favorite-place" style="font-size: 20px; margin-bottom: 10px;">
     <i id="places-favorite-place-icon" class="icon-spin icon-spinner"></i> Favorite Place: <em><span id="places-favorite-place-name"></span></em>
 </div>
 
@@ -8,8 +8,8 @@
     <thead>
         <tr>
             <th>Favorite</th>
-            <th>Your Vote</th>
             <th>Location</th>
+            <th>Your Vote</th>
             <th class="text-center">YES</th>
             <th class="text-center">MAYBE</th>
             <th class="text-center">NO</th>
@@ -37,9 +37,10 @@
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
         <td><button class="btn" onclick="setFavoritePlaceOption('{%=o.placeId%}')"><i class="icon-star"></i></button></td>
+        <td><em>{%=o.address%}</em></td>
         <td>
             <div class="btn-group">
-                <button id="placeoption-status-{%=o.placeId%}" class="btn" style="width: 90px"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
+                <button id="placeoption-status-{%=o.placeId%}" class="btn" style="width: 90px" disabled="disabled"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-pencil"></i>
                 </button>
@@ -50,8 +51,6 @@
                 </ul>
             </div>
         </td>
-            <!--<td>{%=o.name%}</td>-->
-        <td>{%=o.address%}</td>
         <td class="text-center">{%=o.voteCount.YES%}</td>
         <td class="text-center">{%=o.voteCount.MAYBE%}</td>
         <td class="text-center">{%=o.voteCount.NO%}</td>

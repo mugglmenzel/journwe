@@ -49,9 +49,9 @@
                         </a>
                     </div>
                     <div class="span3 text-center">
-                        <span class="label" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> {%=o.favoritePlace%}</span>
+                        <span class="label" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
                         <span class="label" style="background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                        <span class="label" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> {%=o.favoriteTime%}</span>
+                        <span class="label" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                     </div>
                     <div class="span6 pull-left">
                         <a href="{%=o.link%}">
@@ -100,9 +100,9 @@
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 14px; left: 14px; right: 14px; padding: 2px;">
                 <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                 <div class="overlay text-center" style="display: none;">
-                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {%=o.favoritePlace%}</span>
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
                     <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {%=o.favoriteTime%}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                 </div>
             </div>
         </div>

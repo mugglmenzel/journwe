@@ -34,10 +34,21 @@ function formatDate(time){
         + "."
         + two(time.getMonth()+1)
         + "."
-        + two(time.getFullYear());
+        + time.getFullYear();
 };
 
+function formatDateShort(time){
+    time = time instanceof Date ? time : new Date(parseInt(time, 10));
 
+    var two = function(r){ return (r < 10 ? "0" : "")+r };
+
+    // Todo Use better formating
+    return two(time.getDate())
+        + "."
+        + two(time.getMonth()+1)
+        + "."
+        + (""+time.getYear()).substr(1,2);
+};
 
 function replaceURLWithHTMLLinks(text) {
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;

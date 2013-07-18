@@ -42,8 +42,8 @@ public class AdventurePlaceController extends Controller {
         for (PlaceOption po : new PlaceOptionDAO().all(advId)) {
             ObjectNode node = Json.newObject();
             node.put("id", po.getOptionId());
-            node.put("placeId", po.getPlaceId());
             node.put("advId", po.getAdventureId());
+            node.put("placeId", po.getPlaceId());
             node.put("address", po.getAddress());
             PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getOptionId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());

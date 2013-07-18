@@ -1,6 +1,7 @@
 package models.adventure.place;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import models.adventure.IAdventureComponent;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +11,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
  * To change this template use File | Settings | File Templates.
  */
 @DynamoDBTable(tableName = "journwe-placeoption")
-public class PlaceOption {
+public class PlaceOption implements IAdventureComponent {
 
     private String adventureId;
 

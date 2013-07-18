@@ -5,10 +5,13 @@
 @import com.feth.play.module.pa.PlayAuthenticate
 @import play.mvc.Http
 
-@main(adv.getName()){<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-                        data-url="@routes.AdventureController.saveEditable()"
-                        data-original-title="Enter adventure name" data-inputclass="input-xxlarge">@adv.getName()</a><span id="index"></span>
-@if(ins != null) {<small>@ins.getName()</small>} <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> Clone</a><br />
+@main(adv.getName()){
+<a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+    data-url="@routes.AdventureController.saveEditable()"
+    data-original-title="Enter adventure name" data-inputclass="input-xxlarge">@adv.getName()</a> <i class="icon-pencil muted"></i> <span id="index"></span>
+@if(ins != null) {<small>@ins.getName()</small>}
+
+<a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> Clone</a><br />
 <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> Leave</a>} {
 
 <div id="adventure-container">
@@ -86,14 +89,18 @@
             </script>
 
 
-            <div>Public? <div class="switch"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div> | <button class="btn btn-primary">Publish on Facebook</button> </div>
-                @if(adv.isPublish){
-                    <div><button class="btn btn-primary">Tweet on Twitter</button> | <button class="btn btn-primary">Like on Facebook</button> </div>
-                }
             @*index(adv, ins)*@
 
         </div>
         <div class="span3">@{views.html.comment.widget_comment.render(adv, "index")}</div>
+    </div>
+
+    <hr/>
+    <div class="row-fluid">
+        <div class="span1"><i class="icon-cogs icon-for-adventure-title"></i></div>
+
+        <div class="span8">@options(adv)</div>
+        <div class="span3"></div>
     </div>
 
     <hr/>
