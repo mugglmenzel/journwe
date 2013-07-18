@@ -240,14 +240,8 @@ public class AdventureController extends Controller {
                 try {
                     TimeOption to = new TimeOption();
                     to.setAdventureId(adv.getId());
-                    to.setName("Option " + timeI);
                     timeI++;
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    System.out.println("parsing date from " + filledForm.data().get(key));
-                    System.out.println("start date: " + filledForm.data().get(key).split(",")[0]);
-                    System.out.println("end date: " + filledForm.data().get(key).split(",")[1]);
-                    System.out.println("parsed start: " + sdf.parse(filledForm.data().get(key).split(",")[0]));
-                    System.out.println("parsed end: " + sdf.parse(filledForm.data().get(key).split(",")[1]));
 
                     to.setStartDate(sdf.parse(filledForm.data().get(key).split(",")[0]));
                     to.setEndDate(sdf.parse(filledForm.data().get(key).split(",")[1]));
