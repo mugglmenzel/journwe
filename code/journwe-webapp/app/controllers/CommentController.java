@@ -87,7 +87,7 @@ public class CommentController extends Controller {
 	
 	@Security.Authenticated(SecuredUser.class)
 	public static Result listCommentThreads(String adventureId) {
-		return ok(listThreads.render(new CommentThreadDAO().getCommentThreads(adventureId)));
+		return ok(listThreads.render(new CommentThreadDAO().all(adventureId)));
 	}
 
 }

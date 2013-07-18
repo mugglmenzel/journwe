@@ -20,16 +20,16 @@ public class AdventureComponentWithUserDAO<T extends IAdventureComponentWithUser
         DynamoDBQueryExpression<T> qe = getQueryExpression(advId);
         List<T> result = pm.query(clazz, qe);
 
-        Map<String, List<T>> userTodos = new HashMap<String, List<T>>();
+        Map<String, List<T>> userAndObjects = new HashMap<String, List<T>>();
 
         for (T obj : result) {
             String user = obj.getUserId();
-            if (!userTodos.containsKey(user)) {
-                userTodos.put(user, new ArrayList<T>());
+            if (!userAndObjects.containsKey(user)) {
+                userAndObjects.put(user, new ArrayList<T>());
             }
-            userTodos.get(user).add(obj);
+            userAndObjects.get(user).add(obj);
         }
 
-        return userTodos;
+        return userAndObjects;
     }
 }

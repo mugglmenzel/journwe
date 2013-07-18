@@ -361,7 +361,7 @@ public class AdventureController extends Controller {
         for (models.adventure.checklist.Todo todo : new TodoDAO().all(advId))
             new TodoDAO().delete(todo);
 
-        for (CommentThread ct : new CommentThreadDAO<Adventure>().getCommentThreads(advId)) {
+        for (CommentThread ct : new CommentThreadDAO<Adventure>().all(advId)) {
             for (Comment c : new CommentDAO().getComments(ct.getThreadId()))
                 new CommentDAO().delete(c);
             new CommentThreadDAO<Adventure>().delete(ct);

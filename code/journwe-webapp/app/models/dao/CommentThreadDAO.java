@@ -16,32 +16,4 @@ public class CommentThreadDAO<T>  extends AdventureComponentDAO<CommentThread> {
 	public CommentThreadDAO() {
 		super(CommentThread.class);
 	}
-
-//	/**
-//	 * Get the list of comment threads that belong to the adventure.
-//	 */
-//	public List<CommentThread> getCommentThreads(final String adventureId) {
-//		CommentThread commentThreadKey = new CommentThread();
-//		commentThreadKey.setAdventureId(adventureId);
-//		// Hash key = adventure id
-//		DynamoDBQueryExpression<CommentThread> qe = new DynamoDBQueryExpression<CommentThread>().withHashKeyValues(commentThreadKey);
-////		Map<String, Condition> rangeKeyConditions = new HashMap<String,Condition>();
-////		// Range key = topic type + object id
-////		rangeKeyConditions.put("topicId", new Condition().withComparisonOperator(
-////				ComparisonOperator.EQ).withAttributeValueList(
-////				new AttributeValue().withS(topicType+objectId)));
-////		qe.setRangeKeyConditions(rangeKeyConditions );
-//		List<CommentThread> result = pm.query(CommentThread.class, qe);
-//
-//			// return the results
-//			return (result != null) ? result : new ArrayList<CommentThread>();
-//	}
-
-    /**
-     * Get the list of comment threads that belong to the adventure.
-     */
-    public List<CommentThread> getCommentThreads(final String adventureId) {
-        return all(adventureId);
-    }
-
 }
