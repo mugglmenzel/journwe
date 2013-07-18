@@ -66,6 +66,33 @@ public class ApplicationController extends Controller {
                 null));
     }
 
+
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result getMyAdventures() {
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
+
+        DynamicForm data = form().bindFromRequest();
+        String lastId = data.get("lastId");
+        int count = new Integer(data.get("count")).intValue();
+
+        List<ObjectNode> result = new ArrayList<ObjectNode>();
+        for (Adventure adv : new AdventureDAO().allOfUserId(userId, lastId, count)) {
+            ObjectNode node = Json.newObject();
+            node.put("id", adv.getId());
+            node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+            node.put("image", adv.getImage());
+            node.put("name", adv.getName());
+            node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getFavoritePlaceId())) : null);
+            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getFavoriteTimeId())) : null);
+
+            result.add(node);
+        }
+
+        return ok(Json.toJson(result));
+    }
+
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getPublicAdventures() {
         DynamicForm data = form().bindFromRequest();

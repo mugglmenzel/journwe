@@ -1,14 +1,18 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import models.adventure.Adventure;
 import models.dao.common.CommonRangeEntityDAO;
 import models.adventure.Adventurer;
 import play.Logger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,18 +44,33 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
         return pm.scan(clazz, scan);
     }
 
-    public List<Adventurer> all(String advId) {
-        //DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(new AttributeValue(advId)).withConsistentRead(true);
-        //return pm.query(Adventurer.class, query).iterator();
+    public List<Adventurer> allOfUserId(String userId, String lastKey, int limit) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(limit);
+        if (lastKey != null && !"".equals(lastKey)) {
+            Map<String, AttributeValue> startkey = new HashMap<String, AttributeValue>();
+            startkey.put("adventureId", new AttributeValue(lastKey));
+            startkey.put("userId", new AttributeValue(userId));
+            scan.setExclusiveStartKey(startkey);
+        }
+        scan.addFilterCondition("userId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(userId)));
 
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.scan(Adventurer.class, scan);
+        List<Adventurer> results = pm.scan(clazz, scan);
+        return results.subList(0, results.size() >= limit ? limit : results.size());
+    }
+
+    public List<Adventurer> all(String advId) {
+        Adventurer hashKeyObj = new Adventurer();
+        hashKeyObj.setAdventureId(advId);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(hashKeyObj);
+
+        return pm.query(Adventurer.class, query);
     }
 
     public int count(String advId) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.count(Adventurer.class, scan);
+        Adventurer hashKeyObj = new Adventurer();
+        hashKeyObj.setAdventureId(advId);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(hashKeyObj);
+
+        return pm.count(Adventurer.class, query);
     }
 }

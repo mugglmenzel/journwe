@@ -30,14 +30,10 @@ public class CommentThreadDAO<T> extends CommonRangeEntityDAO<CommentThread> {
 //				ComparisonOperator.EQ).withAttributeValueList(
 //				new AttributeValue().withS(topicType+objectId)));
 //		qe.setRangeKeyConditions(rangeKeyConditions );
-		PaginatedQueryList<CommentThread> result = pm.query(CommentThread.class, qe);
-		if(result != null)	{
+		List<CommentThread> result = pm.query(CommentThread.class, qe);
+
 			// return the results
-			return result;
-		} else {
-			// ... else: return an empty list
-			return new ArrayList<CommentThread>();
-		}
+			return (result != null) ? result : new ArrayList<CommentThread>();
 	}
 
 }

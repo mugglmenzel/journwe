@@ -105,6 +105,7 @@ GET           /category/:catId                          controllers.ApplicationC
 
 
 GET           /pub                                      controllers.ApplicationController.indexPublic()
+GET           /adventures/my                            controllers.ApplicationController.getMyAdventures()
 GET           /adventures/public                        controllers.ApplicationController.getPublicAdventures()
 GET           /                                         controllers.ApplicationController.index()
 

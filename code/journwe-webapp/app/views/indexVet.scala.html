@@ -38,32 +38,48 @@
                 </button>
             </div>
         </div>
-        <div class="span10 adventures-list-full">
-        @adventures.take(20).zipWithIndex.map { case (adv, i) =>
-            <div class="row-fluid" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
-                <div class="span1 pull-left">
-                    <a href="@routes.AdventureController.getIndex(adv.getId())" class="media-object">
-                        <img class="img-polaroid" height="50" @if(adv.getImage == null) {src="http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=50&height=50&url=@adv.getImage() &key=2c8ef5b200c6468f9f863bc75c46009f"}>
-                    </a>
+        <div class="span10">
+            <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-spinner"></i></div>
+            <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-block" onclick="loadMyAdventures($('#adventures-my-list .adventure-entry').last().data('id'));">Show More</button></div>
+            <script type="text/x-tmpl" id="adventure-my-template">
+                <div class="adventure-entry row-fluid" data-id="{%=o.id%}" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
+                    <div class="span1 pull-left">
+                        <a href="{%=o.link%}" class="media-object">
+                            <img class="img-polaroid" height="50" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
+                        </a>
+                    </div>
+                    <div class="span3 text-center">
+                        <span class="label" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> {%=o.favoritePlace%}</span>
+                        <span class="label" style="background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
+                        <span class="label" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> {%=o.favoriteTime%}</span>
+                    </div>
+                    <div class="span6 pull-left">
+                        <a href="{%=o.link%}">
+                            <h4>{%=o.name%}</h4>
+                        </a>
+                    </div>
+                    <div class="span2">Actions</div>
                 </div>
-                <div class="span2 text-center">
-                    <span class="label" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> ?</span>
-                    @defining(new AdventurerDAO().count(adv.getId)) { case (count) =>
-                    <span class="label" style="background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="icon-group"></i> @count</span>
-                    }
-                    <span class="label" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> ?</span>
-                </div>
-                <div class="span7 pull-left">
-                    <a href="@routes.AdventureController.getIndex(adv.getId())">
-                        <h4>@adv.getName()</h4>
-                    </a>
-                </div>
-                <div class="action pull-right">
-                    <a class="btn btn-danger" onclick="$('#leave').data('leave-link', '@routes.AdventurePeopleController.leave(adv.getId())'); $('#leave').data('adventure-name', '@adv.getName()'); $('#leave').modal();"><i class="icon-unlink"></i>
-                Leave</a>
-            </div>
-            </div>
-        }
+            </script>
+            <script type="text/javascript">
+                $(document).ready(function(){
+
+                    loadMyAdventures(null, true);
+
+                });
+
+                function loadMyAdventures(lastId, clear) {
+                    $('#adventures-my-load-more-button').html('<i class="icon-spin icon-spinner"></i>');
+                    $.get('@routes.ApplicationController.getMyAdventures()', {lastId: lastId, count: 10} , function (advs) {
+                        if (clear) $('#adventures-my-list').empty();
+                        for(var i in advs) {
+                            var adventure = tmpl('adventure-my-template', advs[i]);
+                            $('#adventures-my-list').append(adventure);
+                        }
+                        $('#adventures-my-load-more-button').html('Show More');
+                    });
+                }
+            </script>
         </div>
     </div>
 
@@ -76,7 +92,7 @@
     <h3><i class="icon-bullhorn"></i> Public JournWes</h3>
     <div style="background-color: rgba(245,245,245,0.6);">
         <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-spinner"></i></div>
-        <div class="text-center"><button class="btn btn-block" onclick="loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));">Show More</button></div>
+        <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-block" onclick="loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));">Show More</button></div>
     </div>
     <script type="text/x-tmpl" id="adventure-public-template">
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left;">
@@ -99,6 +115,7 @@
         });
 
         function loadPublicAdventures(lastId, clear) {
+            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-spinner"></i>');
             $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
@@ -113,7 +130,9 @@
                             $(this).find("div.overlay").slideUp("fast");
                         }
                     );
+
                 }
+                $('#adventures-public-load-more-button').html('Show More');
             });
         }
     </script>

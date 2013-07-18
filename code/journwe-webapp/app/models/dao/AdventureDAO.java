@@ -20,15 +20,23 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
     }
 
     public List<Adventure> allOfUserId(String userId) {
-        List<Adventure> result = new ArrayList<Adventure>();
+        List<Adventure> results = new ArrayList<Adventure>();
         for (Adventurer avr : new AdventurerDAO().allOfUserId(userId)) {
-            result.add(get(avr.getAdventureId()));
+            results.add(get(avr.getAdventureId()));
         }
-        return result;
+        return results;
+    }
+
+    public List<Adventure> allOfUserId(String userId, String lastKey, int limit) {
+        List<Adventure> results = new ArrayList<Adventure>();
+        for (Adventurer avr : new AdventurerDAO().allOfUserId(userId, lastKey, limit)) {
+            results.add(get(avr.getAdventureId()));
+        }
+        return results.subList(0, results.size() >= limit ? limit : results.size());
     }
 
     public List<Adventure> all() {
-        return pm.scan(Adventure.class,
+        return pm.scan(clazz,
                 new DynamoDBScanExpression());
     }
 
@@ -36,7 +44,7 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
     public List<Adventure> allPublic() {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("publish", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withN("1")));
-        return pm.scan(Adventure.class,
+        return pm.scan(clazz,
                 scan);
     }
 
@@ -48,7 +56,7 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
             scan.setExclusiveStartKey(startkey);
         }
         scan.addFilterCondition("publish", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withN("1")));
-        List<Adventure> results = pm.scan(Adventure.class,
+        List<Adventure> results = pm.scan(clazz,
                 scan);
         return results.subList(0, results.size() >= limit ? limit : results.size());
     }
