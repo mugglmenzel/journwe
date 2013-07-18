@@ -10,13 +10,10 @@ public class DeleteDynamoDbData {
     public static void main(String[] args) {
         String tableName = args[1];
         String keyName = args[2];
-        String keyValueString = args[3];
         String rangeKeyName = "";
-        String rangeKeyValueString = "";
 
         if(args[0].equals("range")) {
-            rangeKeyName = args[4];
-            rangeKeyValueString = args[5];
+            rangeKeyName = args[3];
         }
 
         BasicAWSCredentials credentials = new BasicAWSCredentials("AKIAJRJVMMAPP44IO3OA", "DlKBHrrhJb79Dwybx3vJEFAMXdV4aMoerHWb22o7");
@@ -31,11 +28,11 @@ public class DeleteDynamoDbData {
 
             HashMap key = new HashMap<String, AttributeValue>();
             AttributeValue keyValue;
-            keyValue = item.get(keyValueString);
+            keyValue = item.get(keyName);
             key = new HashMap<String, AttributeValue>();
             key.put(keyName, keyValue);
             if(rangeKeyName!="") {
-                keyValue = item.get(rangeKeyValueString);
+                keyValue = item.get(rangeKeyName);
                 key.put(rangeKeyName, keyValue);
             }
             DeleteItemRequest request = new DeleteItemRequest(tableName, key) {

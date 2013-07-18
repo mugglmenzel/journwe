@@ -47,8 +47,8 @@ public class AdventurePlaceController extends Controller {
             node.put("address", po.getAddress());
             PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getOptionId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-            node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getPlaceId(), po.getPlaceId())));
-            node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(po.getPlaceId(), po.getPlaceId())));
+            node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getOptionId())));
+            node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(po.getOptionId())));
 
             places.add(node);
         }
@@ -86,7 +86,6 @@ public class AdventurePlaceController extends Controller {
         place.setAddress(requestData.get("address"));
 
         new PlaceOptionDAO().save(place);
-        Logger.debug("saved placeoption");
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
@@ -94,8 +93,6 @@ public class AdventurePlaceController extends Controller {
         pref.setPlaceOptionId(place.getOptionId());
         pref.setAdventurerId(usr.getId());
         new PlaceAdventurerPreferenceDAO().save(pref);
-        Logger.debug("saved placeoptionpreference");
-
 
         ObjectNode node = Json.newObject();
         node.put("id", place.getOptionId());
@@ -103,9 +100,8 @@ public class AdventurePlaceController extends Controller {
         node.put("advId", place.getAdventureId());
         node.put("address", place.getAddress());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getPlaceId(), place.getPlaceId())));
-        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getPlaceId(), place.getPlaceId())));
-        Logger.debug("created json node");
+        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
+        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));
 
         return ok(Json.toJson(node));
     }
@@ -141,8 +137,8 @@ public class AdventurePlaceController extends Controller {
         node.put("placeId", place.getPlaceId());
         node.put("address", place.getAddress());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getAdventureId(), place.getPlaceId())));
-        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getPlaceId(), place.getPlaceId())));
+        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
+        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));
 
         return ok(Json.toJson(node));
     }

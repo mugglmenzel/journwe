@@ -25,57 +25,47 @@ public class PlaceAdventurerPreferenceDAO extends CommonRangeEntityDAO<PlaceAdve
         super(PlaceAdventurerPreference.class);
     }
 
-    public List<PlaceAdventurerPreference> all(String advId, String placeId) {
-        PlaceOption po = new PlaceOption();
-        po.setAdventureId(advId);
-        po.setPlaceId(placeId);
-        return all(advId);
-    }
-
     public List<PlaceAdventurerPreference> all(String placeOptionId) {
         PlaceAdventurerPreference pap = new PlaceAdventurerPreference();
         pap.setPlaceOptionId(placeOptionId);
         DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(pap);
-        return pm.query(PlaceAdventurerPreference.class, query);
+        return pm.query(clazz, query);
     }
 
-    public Map<EPreferenceVote, Long> counts(String advId, String placeId) {
+    public Map<EPreferenceVote, Long> counts(String placeOptionId) {
         Map<EPreferenceVote, Long> counts = new HashMap<EPreferenceVote, Long>();
         for (EPreferenceVote vote : EPreferenceVote.values())
             counts.put(vote, 0L);
 
-        List<PlaceAdventurerPreference> prefs = all(advId, placeId);
+        List<PlaceAdventurerPreference> prefs = all(placeOptionId);
         for (PlaceAdventurerPreference pref : prefs)
             if (pref != null) counts.put(pref.getVote(), counts.get(pref.getVote()) + 1);
 
         return counts;
     }
 
-    public Map<EPreferenceVote, List<Adventurer>> adventurers(String placeOptionId) {
-        PlaceOption po = PlaceOption.fromId(placeOptionId);
-        return adventurers(po.getAdventureId(), po.getPlaceId());
-    }
 
-    public Map<EPreferenceVote, List<Adventurer>> adventurers(String advId, String placeId) {
+
+    public Map<EPreferenceVote, List<Adventurer>> adventurers(String placeOptionId) {
 
         Map<EPreferenceVote, List<Adventurer>> adventurers = new HashMap<EPreferenceVote, List<Adventurer>>();
         for (EPreferenceVote vote : EPreferenceVote.values())
             adventurers.put(vote, new ArrayList<Adventurer>());
 
-        List<PlaceAdventurerPreference> prefs = all(advId, placeId);
+        List<PlaceAdventurerPreference> prefs = all(placeOptionId);
         for (PlaceAdventurerPreference pref : prefs)
             if (pref != null)
-                adventurers.get(pref.getVote()).add(new AdventurerDAO().get(advId, pref.getAdventurerId()));
+                adventurers.get(pref.getVote()).add(new AdventurerDAO().get(PlaceOption.fromId(placeOptionId).getAdventureId(), pref.getAdventurerId()));
 
         return adventurers;
     }
 
-    public Map<EPreferenceVote, List<String>> adventurersNames(String advId, String placeId) {
+    public Map<EPreferenceVote, List<String>> adventurersNames(String placeOptionId) {
         Map<EPreferenceVote, List<String>> adventurersNames = new HashMap<EPreferenceVote, List<String>>();
         for (EPreferenceVote vote : EPreferenceVote.values())
             adventurersNames.put(vote, new ArrayList<String>());
 
-        Map<EPreferenceVote, List<Adventurer>> adventurers = adventurers(advId, placeId);
+        Map<EPreferenceVote, List<Adventurer>> adventurers = adventurers(placeOptionId);
 
         for (EPreferenceVote vote : EPreferenceVote.values())
             for (Adventurer advr : adventurers.get(vote))
