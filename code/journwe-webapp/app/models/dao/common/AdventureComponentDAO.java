@@ -8,6 +8,7 @@ import models.adventure.IAdventureComponent;
 import models.dao.common.CommonDAO;
 import models.dao.common.CommonRangeEntityDAO;
 import models.dao.common.PersistenceHelper;
+import play.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,12 @@ public abstract class AdventureComponentDAO<T extends IAdventureComponent> exten
 
 	protected static DynamoDBMapper pm = PersistenceHelper.getManager();
 
-    protected Class<T> clazz;
-
     protected AdventureComponentDAO(Class<T> clazz) {
         super(clazz);
     }
 
     public List<T> all(final String adventureId) {
-        T key = AdventureComponentFactory.newAdventureComponent(clazz);
+        T key = AdventureComponentFactory.newAdventureComponent(this.clazz);
         key.setAdventureId(adventureId);
         // Hash key = adventure id
         DynamoDBQueryExpression<T> qe = new DynamoDBQueryExpression<T>().withHashKeyValues(key);
