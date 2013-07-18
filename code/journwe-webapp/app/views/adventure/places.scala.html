@@ -36,7 +36,7 @@
 
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
-        <td><button class="btn" onclick="setFavoritePlaceOption('{%=o.address%}')"><i class="icon-star"></i></button></td>
+        <td><button class="btn" onclick="setFavoritePlaceOption('{%=o.placeId%}')"><i class="icon-star"></i></button></td>
         <td>
             <div class="btn-group">
                 <button id="placeoption-status-{%=o.placeId%}" class="btn" style="width: 90px"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
