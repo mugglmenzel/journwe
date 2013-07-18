@@ -8,9 +8,9 @@ $('body').ready(function(){
     $(window).scroll(function(event){
         var st = $(this).scrollTop();
         if (st > 200 && st > lastScrollTop){
-            $('.navbar').slideUp('fast');
+            $('.navbar-fixed-top').slideUp('fast');
         } else {
-            $('.navbar').slideDown('fast');
+            $('.navbar-fixed-top').slideDown('fast');
         }
         lastScrollTop = st;
     });
