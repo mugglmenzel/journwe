@@ -1,8 +1,15 @@
 package models.dao.common;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
+import models.adventure.IAdventureComponent;
+import models.adventure.file.JournweFile;
 import play.Logger;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class CommonDAO<T> implements IDAO<T> {

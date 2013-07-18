@@ -1,6 +1,7 @@
 package models.adventure.file;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import models.adventure.IAdventureComponent;
 import models.dao.UserDAO;
 import models.dao.UserSocialDAO;
 import models.user.User;
@@ -8,7 +9,7 @@ import models.user.UserSocial;
 import play.data.validation.Constraints.Required;
 
 @DynamoDBTable(tableName = "journwe-file")
-public class JournweFile {
+public class JournweFile implements IAdventureComponent {
 
     private String adventureId;
 

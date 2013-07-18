@@ -16,7 +16,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
  * @author markus
  */
 @DynamoDBTable(tableName = "journwe-commentthread")
-public class CommentThread {
+public class CommentThread implements IAdventureComponent {
 
 	@Required
 	private String adventureId;
