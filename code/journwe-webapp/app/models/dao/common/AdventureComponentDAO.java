@@ -22,12 +22,9 @@ public abstract class AdventureComponentDAO<T extends IAdventureComponent> exten
         super(clazz);
     }
 
-    public List<T> all(final String adventureId) {
-        T key = AdventureComponentFactory.newAdventureComponent(this.clazz);
-        key.setAdventureId(adventureId);
-        // Hash key = adventure id
-        DynamoDBQueryExpression<T> qe = new DynamoDBQueryExpression<T>().withHashKeyValues(key);
-        PaginatedQueryList<T> result = pm.query(clazz, qe);
+    public List<T> all(final String advId) {
+        DynamoDBQueryExpression<T> qe = getQueryExpression(advId);
+        List<T> result = pm.query(clazz, qe);
         if(result != null)	{
             // return the results
             return result;
@@ -35,6 +32,25 @@ public abstract class AdventureComponentDAO<T extends IAdventureComponent> exten
             // ... else: return an empty list
             return new ArrayList<T>();
         }
+    }
+
+    public int count(final String advId) {
+        DynamoDBQueryExpression<T> qe = getQueryExpression(advId);
+        return pm.count(clazz, qe);
+    }
+
+    /**
+     * Helper method that prepares the QueryExpression.
+     *
+     * @param advId
+     * @return
+     */
+    protected DynamoDBQueryExpression<T> getQueryExpression(final String advId) {
+        T key = AdventureComponentFactory.newAdventureComponent(this.clazz);
+        key.setAdventureId(advId);
+        // Hash key = adventure id
+        DynamoDBQueryExpression<T> qe = new DynamoDBQueryExpression<T>().withHashKeyValues(key);
+        return qe;
     }
 
 }
