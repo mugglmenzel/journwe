@@ -7,6 +7,15 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
+<script type="text/x-tmpl" id="files-template">
+    <tr>
+        <td>{%=o.fileName%}</td>
+        <td>{%=o.user.name%}</td>
+        <td><a href="{%=o.url%}" target="_blank">{%=o.url%}</a></td>
+        <td><a onclick="deleteFile('{%=o.fileName%}', this);" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+    </tr>
+</script>
+
 <div class="times-loading"><i class="icon-spin icon-spinner"></i> Loading</div>
 
     <table id="files-list" class="table table-striped table-hover hide">
@@ -15,6 +24,7 @@
                 <th>File name</th>
                 <th>Uploaded by</th>
                 <th>Download URL</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -22,49 +32,101 @@
         </tbody>
     </table>
 
-@form(routes.AdventureFileController.uploadFile(adv.getId()), args = 'class -> "form-horizontal",  'enctype -> "multipart/form-data") {
+@form(routes.AdventureFileController.uploadFile(adv.getId()), args = 'class -> "form-horizontal form-file",  'enctype -> "multipart/form-data") {
     <fieldset>
         @inputText(fileForm("fileName"), '_label -> "File name", 'required -> "required")
         @inputText(fileForm("fileDescription"), '_label -> "Description")
         @inputFile(fileForm("uploadFile"), '_label -> "File")(FieldConstructor(twitterBootstrapInputFileUpload.render), Lang.apply("en-US"))
     </fieldset>
     <div class="form-actions">
-        <input type="submit" value="Upload File" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+        <button class="btn btn-primary">Upload file</button> | <a href="#" class="btn btn-link">Reset</a>
     </div>
 }
 
 <script>
 
-    $('#files-list').ready(function (){
-    $.get('@routes.AdventureFileController.listFiles(adv.getId)', function (files) {
-    $('#files-list tbody').empty();
-    for(var fileName in files) {
-    renderFile(files[fileName])
-    }
-    if (files.length){
-    $('#files-list').show();
-    } else {
-    $('#files-list').hide();
-    }
+    $(function(){
 
-    $('.files-loading').hide();
+        $('form.form-file').on('submit', function(){
+
+            var data = new FormData(),
+                form = $(this),
+                btn = form.find('button');
+            
+            form.find('input').each(function(){
+                if (this.name){
+                    data.append(this.name, this.files ? this.files[0] : this.value);
+                }
+            });
+
+            btn.css({width:btn.css('width')})
+                .html('<i class="icon-spin icon-spinner"></i>');
+
+            $.ajax({
+                url: '@routes.AdventureFileController.uploadFile(adv.getId())',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success:  function (data) {
+                    btn.css({width:""})
+                        .html('Upload file');
+                    form[0].reset();
+                }
+            });
+
+            return false;
+        }).find('button').click(function(){
+            $(this).parents('form').submit();
+            return false;
+        });
+
+        $('form.form-file a').click(function(){
+            $(this).parents('form')[0].reset();
+            return false;
+        });
+
+        $.get('@routes.AdventureFileController.listFiles(adv.getId)', function (files) {
+            $('#files-list tbody').empty();
+
+            for (var fileName in files) {
+                renderFile(files[fileName])
+            }
+            if (files.length){
+                $('#files-list').show();
+            } else {
+                $('#files-list').hide();
+            }
+
+            $('.files-loading').hide();
+        });
+
+
     });
-    });
+
+
 
     function renderFile(data, replace) {
-    if(replace)
-    replace.replaceWith(tmpl('files-template', data)).fadeIn();
-    else
-    $('#files-list tbody').append(tmpl('files-template', data));
+        if(replace)
+            replace.replaceWith(tmpl('files-template', data)).fadeIn();
+        else
+            $('#files-list tbody').append(tmpl('files-template', data));
 
     }
 
     function deleteFile(fileName, el) {
-    $(el).html('<i class="icon-spin icon-spinner"></i>');
-    $.ajax({url: '@routes.AdventureFileController.deleteFile(adv.getId(), "")' + fileId, type: 'DELETE', success: function () {
-    $('#files-item-' + fileName).fadeOut(function () {$('#files-item-' + fileId).remove();});
-    }
-    });
+        
+        $(el).html('<i class="icon-spin icon-spinner"></i>');
+
+        $.ajax({
+            url: '@routes.AdventureFileController.deleteFile(adv.getId(), "")' + fileName, 
+            type: 'DELETE', 
+            success: function () {
+                var tr = $(el).parents('tr');
+                tr.fadeOut(function (){tr.remove();});
+            }
+        });
     }
 
 </script>
