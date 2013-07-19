@@ -66,15 +66,15 @@
 					<!--<img src="@routes.Assets.at("img/suitcase_brand.png")" style="height: 14px">-->
                     </span>
                 </a>
-				<div class="nav-collapse collapse">
-					<ul class="nav">
-						<li @if(active == "home"){class="active"}><a href="@routes.ApplicationController.index">Home</a></li>
-						<li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
-						<li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
-						<li @if(active == "imprint"){class="active"}><a href="@routes.ApplicationController.imprint">Imprint</a> </li>
-                        @currentAuth() { auth => @if(EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){<li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>}}
-					</ul>
-				</div>
+                <div class="nav-collapse collapse">
+                    <div class="navbar-search">
+                        <div class="input-append">
+                            <input type="text" class="input-xlarge search-query" placeholder="Find Places, People and Inspirations">
+                            <button class="btn"><i class="icon-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+
 
                 @defining(new UserDAO()) { userDAO =>
                 @currentAuth() { auth =>
@@ -132,6 +132,21 @@
         </div>
         <div class="spacer20"></div>
         <div class="container">
+            <div class="row-fluid">
+                <div class="span2">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li @if(active == "home"){class="active"}><a href="@routes.ApplicationController.index">Home</a></li>
+                        <li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
+                        <li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
+                        <li @if(active == "imprint"){class="active"}><a href="@routes.ApplicationController.imprint">Imprint</a> </li>
+                        @currentAuth() { auth => @if(EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){<li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>}}
+                    </ul>
+               </div>
+                <div class="span2 offset1">
+                    Find us on Social Networks
+                </div>
+                <div class="span7"></div>
+            </div>
             <div class="text-center">&copy; 2013 JournWe</div>
         </div>
 	</div>

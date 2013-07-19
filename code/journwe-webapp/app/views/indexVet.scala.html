@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="span10">
-            <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-spinner"></i></div>
+            <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-block" onclick="loadMyAdventures($('#adventures-my-list .adventure-entry').last().data('id'));">Show More</button></div>
             <script type="text/x-tmpl" id="adventure-my-template">
                 <div class="adventure-entry row-fluid" data-id="{%=o.id%}" style="background-color: rgba(245,245,245,0.6); margin: 3px;">
@@ -91,7 +91,7 @@
 
     <h3><i class="icon-bullhorn"></i> Public JournWes</h3>
     <div style="background-color: rgba(245,245,245,0.6);">
-        <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-spinner"></i></div>
+        <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
         <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-block" onclick="loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));">Show More</button></div>
     </div>
     <script type="text/x-tmpl" id="adventure-public-template">
