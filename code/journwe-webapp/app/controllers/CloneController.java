@@ -210,8 +210,16 @@ public class CloneController extends Controller {
                     if(userId!=null && !userId.isEmpty())
                         ((IAdventureComponentWithUser)toReturn).setUserId(userId);
                     else
-                        Logger.warn("Curing cloning of an adventure component, this happened: The user ID of an adventure component is null. The probable cause of this problem is that the adventure component does not implement IAdventureComponentWithUser.4");
+                        Logger.warn("During cloning of an adventure component, this happened: The user ID of an adventure component is null. The probable cause of this problem is that the adventure component does not implement IAdventureComponentWithUser.4");
                 }
+//                if(object instanceof PlaceOption) {
+//                    PlaceOption po = (PlaceOption)object;
+//                    po.setPlaceId(...);
+//                }
+//                if(object instanceof TimeOption) {
+//                    TimeOption to = (TimeOption)object;
+//                    to.setTimeId(...);
+//                }
 
                 return toReturn;
             } catch (Exception e) {

@@ -2,6 +2,7 @@ package models.adventure.time;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.adventure.IAdventureComponent;
+import models.adventure.JournweCloneable;
 
 import java.util.Date;
 
@@ -17,10 +18,13 @@ public class TimeOption implements IAdventureComponent {
 
     private String adventureId;
 
+    @JournweCloneable
     private String timeId;
 
+    @JournweCloneable
     private Date startDate;
 
+    @JournweCloneable
     private Date endDate;
 
 
