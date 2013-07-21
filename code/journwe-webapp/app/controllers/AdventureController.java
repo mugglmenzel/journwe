@@ -347,6 +347,15 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(node));
     }
 
+    public static Result updatePlaceVoteOpen(String advId) {
+        DynamicForm data = form().bindFromRequest();
+        Boolean openVote = new Boolean(data.get("voteOpen"));
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setPlaceVoteOpen(openVote);
+        new AdventureDAO().save(adv);
+        return ok(Json.toJson(adv.getPlaceVoteOpen()));
+    }
+
 
     public static Result delete(String advId) {
         for (Adventurer advr : new AdventurerDAO().all(advId))

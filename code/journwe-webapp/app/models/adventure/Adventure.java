@@ -28,7 +28,11 @@ public class Adventure {
 
     private Integer limit;
 
+    private Boolean placeVoteOpen = true;
+
     private String favoritePlaceId;
+
+    private Boolean timeVoteOpen = true;
 
     private String favoriteTimeId;
 
@@ -161,6 +165,22 @@ public class Adventure {
 
     public void setFavoriteTimeId(String favoriteTimeId) {
         this.favoriteTimeId = favoriteTimeId;
+    }
+
+    public Boolean getPlaceVoteOpen() {
+        return placeVoteOpen;
+    }
+
+    public void setPlaceVoteOpen(Boolean placeVoteOpen) {
+        this.placeVoteOpen = placeVoteOpen;
+    }
+
+    public Boolean getTimeVoteOpen() {
+        return timeVoteOpen;
+    }
+
+    public void setTimeVoteOpen(Boolean timeVoteOpen) {
+        this.timeVoteOpen = timeVoteOpen;
     }
 
     @Override

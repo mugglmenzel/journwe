@@ -1,7 +1,14 @@
 @(adv: models.adventure.Adventure)
 
 <div id="places-favorite-place" style="font-size: 20px; margin-bottom: 10px;">
-    <i id="places-favorite-place-icon" class="icon-spin icon-spinner"></i> Favorite Place: <em><span id="places-favorite-place-name"></span></em>
+    <i id="places-favorite-place-icon" class="icon-spin icon-spinner"></i> Place Choice: <em><span id="places-favorite-place-name"></span></em>
+</div>
+
+<div>
+    Open Voting:
+    <div class="switch">
+        <input id="places-voting-active-switch" type="checkbox" @if(adv.getPlaceVoteOpen){checked="checked"}>
+    </div>
 </div>
 
 <table id="places-list" class="table table-striped table-hover hide">
@@ -25,13 +32,15 @@
 
 <div class="places-loading"><i class="icon-spin icon-spinner"></i> Loading</div>
 
-<div class="input-append">
-    <input type="text" placeholder="Add a decent place" id="place-add-input">
-    <a id="place-add-button" class="btn btn-add"><i class="icon-plus"></i></a>
-</div>
+<div id="place-add">
+    <div class="input-append">
+        <input type="text" placeholder="Add a decent place" id="place-add-input">
+        <a id="place-add-button" class="btn btn-add"><i class="icon-plus"></i></a>
+    </div>
 
-<div style="height: 400px;">
-    <div id="where-map" style="width: 100%; height: 100%"></div>
+    <div style="height: 400px;">
+        <div id="place-add-map" style="width: 100%; height: 100%"></div>
+    </div>
 </div>
 
 <script type="text/x-tmpl" id="place-template">
@@ -55,7 +64,7 @@
         <td class="text-center">{%=o.voteCount.MAYBE%}</td>
         <td class="text-center">{%=o.voteCount.NO%}</td>
         <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
-        <td class="text-center"><a onclick="deletePlace('{%=o.placeId%}', event);" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+        <td class="text-center"><button onclick="deletePlace('{%=o.placeId%}', event);" class="btn btn-danger"><i class="icon-trash"></i></button></td>
     </tr>
 </script>
 
@@ -75,7 +84,7 @@
     center: new google.maps.LatLng(52.467541, 13.324957),
     mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    map = new google.maps.Map(document.getElementById('where-map'), mapOptions);
+    map = new google.maps.Map(document.getElementById('place-add-map'), mapOptions);
 
     }
 
@@ -173,6 +182,24 @@
         });
     });
 
+    $('#places-voting-active-switch').on('change', function () {
+        $.post('@routes.AdventureController.updatePlaceVoteOpen(adv.getId)', {voteOpen: $('#places-voting-active-switch').prop('checked')}, updatePlaceVoteOpen);
+    });
+    $('document').ready(updatePlaceVoteOpen(@adv.getPlaceVoteOpen));
+
+    function updatePlaceVoteOpen(data) {
+
+        if(data) {
+            $('#places-list button').prop('disabled', false);
+            $('#place-add').fadeIn();
+            resetBounds();
+        } else {
+            $('#places-list button').prop('disabled', true);
+            $('#place-add').fadeOut();
+            resetBounds();
+        }
+
+    }
 
     function votePlace(vote, optId) {
         
