@@ -1,9 +1,7 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import models.adventure.Adventure;
-import models.adventure.Adventurer;
-import models.adventure.EAdventurerParticipation;
+import models.adventure.*;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredBetaUser;
@@ -15,6 +13,11 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static play.data.Form.form;
 
@@ -170,52 +173,98 @@ public class CloneController extends Controller {
          * @return The Adventure clone with an additional object (e.g. PlaceOption).
          */
         protected Object cloneOf(Object object) {
-            if(object instanceof Adventurer) {
-                Adventurer original = (Adventurer)object;
-                Adventurer toReturn = new Adventurer();
-                toReturn.setAdventureId(clone.getId());
-                toReturn.setParticipationStatus(EAdventurerParticipation.APPLICANT);
-                toReturn.setUserId(original.getUserId());
-                return toReturn;
-            }
-            if(object instanceof PlaceOption) {
-                PlaceOption original = (PlaceOption)object;
-                PlaceOption toReturn = new PlaceOption();
-                toReturn.setAdventureId(clone.getId());
-                toReturn.setAddress(original.getAddress());
-                return toReturn;
-            }
-            if(object instanceof TimeOption) {
-                TimeOption original = (TimeOption)object;
-                TimeOption toReturn = new TimeOption();
-                toReturn.setAdventureId(clone.getId());
-                toReturn.setEndDate(original.getEndDate());
-                toReturn.setStartDate(original.getStartDate());
-                return toReturn;
-            }
-            if(object instanceof models.adventure.checklist.Todo) {
-                models.adventure.checklist.Todo original = (models.adventure.checklist.Todo)object;
-                models.adventure.checklist.Todo toReturn = new models.adventure.checklist.Todo();
-                // If the other adventurers are not copied, only clone my own todo list.
-                if(!cloneAdventurers && !original.getUserId().equals(me.getUserId())) {
-                    toReturn.setAdventureId(clone.getId());
-                    toReturn.setStatus(original.getStatus());
-                    toReturn.setTitle(original.getTitle());
-                    toReturn.setUserId(original.getUserId());
-                    return toReturn;
+            try {
+                Class clazz = object.getClass();
+                Object toReturn = clazz.newInstance();
+                Field fieldList[] = clazz.getDeclaredFields();
+                for(Field field : fieldList) {
+                    Logger.debug("field: "+field.getName());
+                    JournweCloneable cloneableAnno = field.getAnnotation(JournweCloneable.class);
+                    // Only clone fields that are annotated with JournweCloneable
+                    if (cloneableAnno != null) {
+                        String fieldName = field.getName();
+                        Logger.debug("CLONE THIS FIELD");
+                        // Getter method
+                        Method getterMethod = clazz.getMethod("get"
+                                + fieldName.substring(0, 1).toUpperCase()
+                                + fieldName.substring(1));
+                        Logger.debug("getterMethod: "+getterMethod.toString());
+                        // Setter method
+                        String setterMethodName = "set" + fieldName.substring(0, 1).toUpperCase()
+                                + fieldName.substring(1);
+                        Logger.debug("setterMethodName: "+setterMethodName);
+                        for (Method method : clazz.getDeclaredMethods()) {
+                            if (method.getName().equals(setterMethodName)) {
+                                method.invoke(toReturn,
+                                        getterMethod.invoke(object));
+                            }
+                        }
+                    }
                 }
-                return null;
-            } else {
-                try {
-                    throw new Exception("cloneOf Method failed because the object type did not match");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
+                if(object instanceof IAdventureComponent) {
+                    ((IAdventureComponent)toReturn).setAdventureId(clone.getId());
                 }
+                // Copy user ID
+                if(object instanceof IAdventureComponentWithUser) {
+                    String userId = ((IAdventureComponentWithUser)object).getUserId();
+                    if(userId!=null && !userId.isEmpty())
+                        ((IAdventureComponentWithUser)toReturn).setUserId(userId);
+                    else
+                        Logger.warn("During cloning of an adventure component, this happened: The user ID of an adventure component is null. The probable cause of this problem is that the adventure component does not implement IAdventureComponentWithUser.4");
+                }
+//                if(object instanceof PlaceOption) {
+//                    PlaceOption po = (PlaceOption)object;
+//                    po.setPlaceId(...);
+//                }
+//                if(object instanceof TimeOption) {
+//                    TimeOption to = (TimeOption)object;
+//                    to.setTimeId(...);
+//                }
+
+                return toReturn;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Logger.error("Cloning an object failed.");
             }
+
+//            if(object instanceof PlaceOption) {
+//                PlaceOption original = (PlaceOption)object;
+//                toReturn = new PlaceOption();
+//                (PlaceOption)toReturn.setAddress(original.getAddress());
+//                return toReturn;
+//            }
+//            if(object instanceof TimeOption) {
+//                TimeOption original = (TimeOption)object;
+//                TimeOption toReturn = new TimeOption();
+//                toReturn.setAdventureId(clone.getId());
+//                toReturn.setEndDate(original.getEndDate());
+//                toReturn.setStartDate(original.getStartDate());
+//                return toReturn;
+//            }
+//            if(object instanceof models.adventure.checklist.Todo) {
+//                models.adventure.checklist.Todo original = (models.adventure.checklist.Todo)object;
+//                models.adventure.checklist.Todo toReturn = new models.adventure.checklist.Todo();
+//                // If the other adventurers are not copied, only clone my own todo list.
+//                if(!cloneAdventurers && !original.getUserId().equals(me.getUserId())) {
+//                    toReturn.setAdventureId(clone.getId());
+//                    toReturn.setStatus(original.getStatus());
+//                    toReturn.setTitle(original.getTitle());
+//                    toReturn.setUserId(original.getUserId());
+//                    return toReturn;
+//                }
+//                return null;
+//            } else {
+//                try {
+//                    throw new Exception("cloneOf Method failed because the object type did not match");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    return null;
+//                }
+//            }
+            // Use adventure ID of the adventure clone
+        return null;
         }
-
-
     }
+
 }
 

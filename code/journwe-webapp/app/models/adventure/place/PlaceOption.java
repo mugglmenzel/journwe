@@ -2,6 +2,7 @@ package models.adventure.place;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.adventure.IAdventureComponent;
+import models.adventure.JournweCloneable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,8 +16,10 @@ public class PlaceOption implements IAdventureComponent {
 
     private String adventureId;
 
+    @JournweCloneable
     private String placeId;
 
+    @JournweCloneable
     private String address;
 
     public static PlaceOption fromId(String id) {

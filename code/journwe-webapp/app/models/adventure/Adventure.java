@@ -6,18 +6,19 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import play.data.validation.Constraints.Required;
-import play.Logger;
 
 @DynamoDBTable(tableName = "journwe-adventure")
 public class Adventure {
 
     private String id;
 
+    @JournweCloneable
     private String inspirationId;
 
     @Required
     private String name;
 
+    @JournweCloneable
     private String description;
 
     private String image;
@@ -28,7 +29,11 @@ public class Adventure {
 
     private Integer limit;
 
+    private Boolean placeVoteOpen = true;
+
     private String favoritePlaceId;
+
+    private Boolean timeVoteOpen = true;
 
     private String favoriteTimeId;
 
@@ -161,6 +166,22 @@ public class Adventure {
 
     public void setFavoriteTimeId(String favoriteTimeId) {
         this.favoriteTimeId = favoriteTimeId;
+    }
+
+    public Boolean getPlaceVoteOpen() {
+        return placeVoteOpen;
+    }
+
+    public void setPlaceVoteOpen(Boolean placeVoteOpen) {
+        this.placeVoteOpen = placeVoteOpen;
+    }
+
+    public Boolean getTimeVoteOpen() {
+        return timeVoteOpen;
+    }
+
+    public void setTimeVoteOpen(Boolean timeVoteOpen) {
+        this.timeVoteOpen = timeVoteOpen;
     }
 
     @Override

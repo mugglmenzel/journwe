@@ -14,7 +14,7 @@ import models.helpers.EnumMarshaller;
  * To change this template use File | Settings | File Templates.
  */
 @DynamoDBTable(tableName = "journwe-adventurer")
-public class Adventurer {
+public class Adventurer implements IAdventureComponentWithUser {
 
     private String adventureId;
 

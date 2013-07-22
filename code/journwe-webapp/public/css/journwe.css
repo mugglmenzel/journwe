@@ -85,6 +85,10 @@ h1 .editableform {
     padding: 20px;
 }
 
+.navbar .navbar-search {
+    padding: 10px 0;
+}
+
 .navbar .user-login {
 	padding: 10px 0;
 }

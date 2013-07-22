@@ -2,6 +2,8 @@ package models.adventure.file;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.adventure.IAdventureComponent;
+import models.adventure.IAdventureComponentWithUser;
+import models.adventure.JournweCloneable;
 import models.dao.UserDAO;
 import models.dao.UserSocialDAO;
 import models.user.User;
@@ -9,17 +11,21 @@ import models.user.UserSocial;
 import play.data.validation.Constraints.Required;
 
 @DynamoDBTable(tableName = "journwe-file")
-public class JournweFile implements IAdventureComponent {
+public class JournweFile implements IAdventureComponentWithUser {
 
     private String adventureId;
 
+    @JournweCloneable
     @Required
     private String fileName;
 
+    @JournweCloneable
     private String fileDescription;
 
+    @JournweCloneable
     private String url;
 
+    @JournweCloneable
     private String storageProvider;
 
     private String userId;
