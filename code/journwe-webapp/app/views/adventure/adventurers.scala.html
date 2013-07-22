@@ -23,15 +23,15 @@ case EAdventurerParticipation.APPLICANT => {}
     <strong style="vertical-align:middle;">You are... </strong>
 
     <div class="btn-group btn-select-adventurer">
-        <a class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING){active}"
+        <button class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING){active}"
            href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="icon-frown"></i> Not
-            In</a>
-        <a class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="icon-question"></i> Undecided</a>
-        <a class="btn btn-primary @if(status == EAdventurerParticipation.GOING){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="icon-smile"></i> So In</a>
-        <a class="btn btn-success @if(status == EAdventurerParticipation.BOOKED){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="icon-ok"></i> Booked</a>
+            In</button>
+        <button class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED){active}"
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="icon-question"></i> Undecided</button>
+        <button class="btn btn-primary @if(status == EAdventurerParticipation.GOING){active}"
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="icon-smile"></i> So In</button>
+        <button class="btn btn-success @if(status == EAdventurerParticipation.BOOKED){active}"
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="icon-ok"></i> Booked</button>
     </div>
 </div>
 } else {
@@ -66,6 +66,26 @@ case EAdventurerParticipation.APPLICANT => {}
     }}
     </tbody>
 </table>
+
+
+<div class="input-append input-prepend">
+    <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            <i id="people-add-type" class="icon-facebook"></i>
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="#" onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i>
+                Facebook</a></li>
+            <li><a href="#" onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i>
+                Email</a></li>
+        </ul>
+    </div>
+    <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off">
+    <button class="btn btn-add" onclick="addFriend();"><i class="icon-plus"></i></button>
+</div>
+
+
 @defining(new AdventurerDAO().all(adv.getId())) { applicants =>
 @if(applicants != null && applicants.filter(_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).size() > 0) {
 
@@ -96,6 +116,40 @@ case EAdventurerParticipation.APPLICANT => {}
 }
 
 <script>
+
+    var facebookUsers = {};
+    var facebookUserNames = [];
+
+    function addFriend() {
+        $.post('@routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
+            $('#people-add-input').val('');
+        });
+    }
+
+    $('document').ready(function () {
+        $('#people-add-input').typeahead({
+        source: function (input, process) {
+        if($('#people-add-input').attr('type') == 'text') {
+        $.get('@routes.AdventurePeopleController.autocompleteFacebook', {input: input}, function (data) {
+        facebookUsers = {};
+        facebookUserNames = [];
+        $.each(data, function( ix, item ){
+        if ( $.inArray(item.name, facebookUserNames) > -1 ){
+        item.name = item.name + ' #' + item.id;
+        }
+
+        facebookUserNames.push( item.name );
+        facebookUsers[item.name] = item.id;
+        });
+
+        process(facebookUserNames);
+
+        });
+        }
+        }
+        });
+    });
+
 
     $(function(){
 

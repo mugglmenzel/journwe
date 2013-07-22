@@ -7,17 +7,19 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
-import models.auth.SecuredBetaUser;
 import models.Inspiration;
 import models.adventure.Adventure;
 import models.adventure.AdventureShortname;
 import models.adventure.Adventurer;
 import models.adventure.EAdventurerParticipation;
+import models.auth.SecuredBetaUser;
 import models.dao.*;
+import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.user.User;
 import models.user.UserSocial;
 import org.codehaus.jackson.node.ObjectNode;
+import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -71,7 +73,7 @@ public class AdventurePeopleController extends Controller {
             advr.setParticipationStatus(status);
             new AdventurerDAO().save(advr);
         }
-        
+
         return ok(Json.toJson(advr));
     }
 
@@ -83,7 +85,7 @@ public class AdventurePeopleController extends Controller {
 
         flash("success", "You left the adventure " + new AdventureDAO().get(advId).getName());
 
-        if(new AdventurerDAO().count(advId) > 0)
+        if (new AdventurerDAO().count(advId) > 0)
             return redirect(routes.ApplicationController.index());
         else
             return AdventureController.delete(advId);
@@ -102,7 +104,7 @@ public class AdventurePeopleController extends Controller {
         new AdventurerDAO().save(advr);
 
 
-        ObjectNode result = (ObjectNode)Json.toJson(advr);
+        ObjectNode result = (ObjectNode) Json.toJson(advr);
         result.put("userName", usr.getName());
         return ok(result);
     }
@@ -160,6 +162,34 @@ public class AdventurePeopleController extends Controller {
         return ok();
     }
 
+
+    public static Result invite(String advId) {
+        Adventure adv = new AdventureDAO().get(advId);
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        String shortURL = routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
+
+        DynamicForm f = form().bindFromRequest();
+        try {
+            if ("email".equals(f.get("type"))) {
+                AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
+                        ConfigFactory.load().getString("aws.accessKey"),
+                        ConfigFactory.load().getString("aws.secretKey")));
+                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(f.get("value"))).withMessage(new Message().withSubject(new Content().withData("You are invited to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+
+                return ok();
+            } else if ("facebook".equals(f.get("type"))) {
+                UserSocial us = new UserSocialDAO().findByUserId("facebook", usr.getId());
+                new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", f.get("value"));
+
+                return ok();
+            }
+        } catch (Exception e) {
+            Logger.error("Couldn't invite adventurer.", e);
+        }
+
+        return badRequest();
+    }
+
     public static Result autocompleteFacebook() {
         DynamicForm form = form().bindFromRequest();
         String input = form.get("input");
@@ -171,7 +201,7 @@ public class AdventurePeopleController extends Controller {
         List<JsonObject> friends = fb.getMyFriendsAsJson();
 
         for (JsonObject friend : friends)
-            if (friend.getString("name").contains(input))  {
+            if (friend.getString("name").contains(input)) {
                 ObjectNode node = Json.newObject();
                 node.put("id", friend.getString("id"));
                 node.put("name", friend.getString("name"));
