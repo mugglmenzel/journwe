@@ -478,30 +478,7 @@ h1 .x-edit-loading {
 	margin: 10px 0px;
 }
 
-div:nth-child(odd).polaroid {
-	-webkit-transform: rotate(3deg);
-	-moz-transform: rotate(3deg);
-	-ie-transform: rotate(3deg);
-	transform: rotate(3deg);
+.todo-entry .btn-check {
+	width: 16px;
 }
 
-div:nth-child(even).polaroid {
-	-webkit-transform: rotate(-3deg);
-	-moz-transform: rotate(-3deg);
-	-ie-transform: rotate(-3deg);
-	transform: rotate(-3deg);
-}
-
-div:nth-child(3n+0).polaroid {
-	-webkit-transform: rotate(1deg);
-	-moz-transform: rotate(1deg);
-	-ie-transform: rotate(1deg);
-	transform: rotate(1deg);
-}
-
-div:nth-child(4n+1).polaroid {
-	-webkit-transform: rotate(-1deg);
-	-moz-transform: rotate(-1deg);
-	-ie-transform: rotate(-1deg);
-	transform: rotate(-1deg);
-}
