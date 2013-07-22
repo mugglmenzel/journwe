@@ -31,6 +31,15 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
         return !result.isEmpty() ? result.get(0) : null;
     }
 
+    public UserSocial findByUserId(String provider, String userId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("provider", new Condition().withAttributeValueList(new AttributeValue(provider)).withComparisonOperator(ComparisonOperator.EQ));
+        scan.addFilterCondition("userId", new Condition().withAttributeValueList(new AttributeValue(userId)).withComparisonOperator(ComparisonOperator.EQ));
+        PaginatedScanList<UserSocial> result = pm.scan(UserSocial.class, scan);
+        return !result.isEmpty() ? result.get(0) : null;
+    }
+
+
     public UserSocial findBySocialId(String socialId) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("socialId", new Condition().withAttributeValueList(new AttributeValue(socialId)).withComparisonOperator(ComparisonOperator.EQ));

@@ -15,6 +15,7 @@ import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredBetaUser;
 import models.dao.*;
+import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.user.User;
 import models.user.UserEmail;
@@ -216,6 +217,7 @@ public class AdventureController extends Controller {
         }
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        UserSocial us = new UserSocialDAO().findByUserId("facebook", usr.getId());
 
         Adventurer advr = new Adventurer();
         advr.setAdventureId(adv.getId());
@@ -225,8 +227,10 @@ public class AdventureController extends Controller {
 
         //List<PlaceOption> placeOptions = new ArrayList<PlaceOption>();
         //List<TimeOption> timeOptions = new ArrayList<TimeOption>();
-        int placeI = 1;
-        int timeI = 1;
+        int placeI = 0;
+        String lastPlaceId = null;
+        int timeI = 0;
+        String lastTimeId = null;
         for (String key : filledForm.data().keySet()) {
             if (key.startsWith("place[")) {
                 PlaceOption po = new PlaceOption();
@@ -234,6 +238,7 @@ public class AdventureController extends Controller {
                 placeI++;
                 po.setAddress(filledForm.data().get(key));
                 new PlaceOptionDAO().save(po);
+                lastPlaceId = po.getPlaceId();
                 //placeOptions.add(po);
             }
             if (key.startsWith("time[")) {
@@ -247,6 +252,7 @@ public class AdventureController extends Controller {
                     to.setEndDate(sdf.parse(filledForm.data().get(key).split(",")[1]));
 
                     new TimeOptionDAO().save(to);
+                    lastTimeId = to.getTimeId();
                     //timeOptions.add(to);
 
                 } catch (Exception e) {
@@ -260,7 +266,7 @@ public class AdventureController extends Controller {
                         AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
                                 ConfigFactory.load().getString("aws.accessKey"),
                                 ConfigFactory.load().getString("aws.secretKey")));
-                        ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message().withSubject(new Content().withData("You have been invited to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                        ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message().withSubject(new Content().withData("You are invited to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
                         //The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.
                     }
                 } catch (Exception e) {
@@ -268,8 +274,23 @@ public class AdventureController extends Controller {
                 }
             }
             if (key.startsWith("facebook[")) {
-
+                if (us != null) {
+                    String fbUser = filledForm.data().get(key);
+                    new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", fbUser);
+                }
             }
+        }
+
+        if(placeI == 1) {
+            adv.setFavoritePlaceId(lastPlaceId);
+            adv.setPlaceVoteOpen(false);
+            new AdventureDAO().save(adv);
+        }
+
+        if(timeI == 1) {
+            adv.setFavoriteTimeId(lastTimeId);
+            adv.setTimeVoteOpen(false);
+            new AdventureDAO().save(adv);
         }
 
 
@@ -288,14 +309,13 @@ public class AdventureController extends Controller {
         }
 
         if ("on".equals(filledForm.get("facebookWall"))) {
-            UserSocial us = new UserSocialDAO().findBySocialId("facebook", PlayAuthenticate.getUser(Http.Context.current()).getId());
             JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
             Logger.info(filledForm.get("facebookWallPost") + " " + shortURL);
             fb.publishLinkOnMyFeed(filledForm.get("facebookWallPost"), shortURL);
 
         }
 
-        flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa!<br>The shortURL is " + shortURL);
+        flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa! The shortURL is " + shortURL);
 
         return redirect(routes.AdventureController.getIndex(adv.getId()));
 
