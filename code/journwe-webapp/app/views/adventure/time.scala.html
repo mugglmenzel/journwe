@@ -126,6 +126,7 @@
         }
 
         $('.times-loading').hide();
+        updateTimeVoteOpen(@adv.getTimeVoteOpen)
         });
         });
 
@@ -149,7 +150,6 @@
         $('#times-voting-active-switch').on('change', function () {
         $.post('@routes.AdventureController.updateTimeVoteOpen(adv.getId)', {voteOpen: $('#times-voting-active-switch').prop('checked')}, updateTimeVoteOpen);
         });
-        $('document').ready(updateTimeVoteOpen(@adv.getPlaceVoteOpen));
 
         function updateTimeVoteOpen(data) {
 

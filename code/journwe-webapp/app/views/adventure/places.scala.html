@@ -158,8 +158,9 @@
             } else {
                 $('#places-list').hide();
             }
-            $('.places-loading').hide();
 
+            $('.places-loading').hide();
+            updatePlaceVoteOpen(@adv.getPlaceVoteOpen)
         });
     });
 
@@ -185,7 +186,6 @@
     $('#places-voting-active-switch').on('change', function () {
         $.post('@routes.AdventureController.updatePlaceVoteOpen(adv.getId)', {voteOpen: $('#places-voting-active-switch').prop('checked')}, updatePlaceVoteOpen);
     });
-    $('document').ready(updatePlaceVoteOpen(@adv.getPlaceVoteOpen));
 
     function updatePlaceVoteOpen(data) {
 
