@@ -32,7 +32,7 @@
 
 <div class="places-loading"><i class="icon-spin icon-spinner"></i> Loading</div>
 
-<div id="place-add">
+<div id="place-add-form">
     <div class="input-append">
         <input type="text" placeholder="Add a decent place" id="place-add-input">
         <a id="place-add-button" class="btn btn-add"><i class="icon-plus"></i></a>
@@ -191,11 +191,11 @@
 
         if(data) {
             $('#places-list button').prop('disabled', false);
-            $('#place-add').fadeIn();
+            $('#place-add-form').fadeIn();
             resetBounds();
         } else {
             $('#places-list button').prop('disabled', true);
-            $('#place-add').fadeOut();
+            $('#place-add-form').fadeOut();
             resetBounds();
         }
 

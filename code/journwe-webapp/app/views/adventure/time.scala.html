@@ -12,6 +12,14 @@
     <i id="times-favorite-time-icon" class="icon-spin icon-spinner"></i> Favorite Time: <em><span id="times-favorite-time-name"></span></em>
 </div>
 
+<div>
+    Open Voting:
+    <div class="switch">
+        <input id="times-voting-active-switch" type="checkbox" @if(adv.getTimeVoteOpen){checked="checked"}>
+    </div>
+</div>
+
+
 <table id="times-list" class="table table-striped table-hover hide">
     <thead>
     <tr>
@@ -70,7 +78,7 @@
             <td class="text-center">{%=o.voteCount.MAYBE%}</td>
             <td class="text-center">{%=o.voteCount.NO%}</td>
             <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=voteTimeLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=o.voteAdventurers[i][j].split(/\s/)[0]%}</span> {% }} %}</td>
-            <td class="text-center"><a onclick="deleteTime('{%=o.timeId%}', this);" class="btn btn-danger"><i class="icon-trash"></i></a></td>
+            <td class="text-center"><button onclick="deleteTime('{%=o.timeId%}', this);" class="btn btn-danger"><i class="icon-trash"></i></button></td>
         </tr>
     </script>
 
@@ -137,7 +145,26 @@
         var voteTimeButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
         var voteTimeLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-important', 'MAYBE': 'label-warning'};
 
-        function voteTime(vote, optId) {
+
+        $('#times-voting-active-switch').on('change', function () {
+        $.post('@routes.AdventureController.updateTimeVoteOpen(adv.getId)', {voteOpen: $('#times-voting-active-switch').prop('checked')}, updateTimeVoteOpen);
+        });
+        $('document').ready(updateTimeVoteOpen(@adv.getPlaceVoteOpen));
+
+        function updateTimeVoteOpen(data) {
+
+        if(data) {
+        $('#times-list button').prop('disabled', false);
+        $('#time-add-form').fadeIn();
+        } else {
+        $('#times-list button').prop('disabled', true);
+        $('#time-add-form').fadeOut();
+        }
+
+        }
+
+
+            function voteTime(vote, optId) {
 
         $('#timeoption-item-'+optId+' .dropdown-toggle')
             .html('<i class="icon-spin icon-spinner"></i>');

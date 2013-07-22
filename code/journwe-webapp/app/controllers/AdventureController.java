@@ -9,11 +9,11 @@ import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
-import models.auth.SecuredBetaUser;
 import models.Inspiration;
 import models.adventure.*;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
+import models.auth.SecuredBetaUser;
 import models.dao.*;
 import models.helpers.JournweFacebookClient;
 import models.user.User;
@@ -287,7 +287,7 @@ public class AdventureController extends Controller {
             e.printStackTrace();
         }
 
-        if("on".equals(filledForm.get("facebookWall"))) {
+        if ("on".equals(filledForm.get("facebookWall"))) {
             UserSocial us = new UserSocialDAO().findBySocialId("facebook", PlayAuthenticate.getUser(Http.Context.current()).getId());
             JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
             Logger.info(filledForm.get("facebookWallPost") + " " + shortURL);
@@ -321,23 +321,23 @@ public class AdventureController extends Controller {
     public static Result updateImage(String advId) {
         Adventure adv = new AdventureDAO().get(advId);
         try {
-        Http.MultipartFormData body = request().body().asMultipartFormData();
-        Http.MultipartFormData.FilePart image = body.getFiles().get(0);
-        File file = image.getFile();
+            Http.MultipartFormData body = request().body().asMultipartFormData();
+            Http.MultipartFormData.FilePart image = body.getFiles().get(0);
+            File file = image.getFile();
 
-        if (image.getFilename() != null
-                && !"".equals(image.getFilename()) && file.length() > 0) {
-            AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
-                    ConfigFactory.load().getString("aws.accessKey"),
-                    ConfigFactory.load().getString("aws.secretKey")));
-            s3.putObject(new PutObjectRequest(
-                    S3_BUCKET_ADVENTURE_IMAGES, adv.getId(), file)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            adv.setImage(s3.getResourceUrl(S3_BUCKET_ADVENTURE_IMAGES,
-                    adv.getId()));
-        }
+            if (image.getFilename() != null
+                    && !"".equals(image.getFilename()) && file.length() > 0) {
+                AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+                        ConfigFactory.load().getString("aws.accessKey"),
+                        ConfigFactory.load().getString("aws.secretKey")));
+                s3.putObject(new PutObjectRequest(
+                        S3_BUCKET_ADVENTURE_IMAGES, adv.getId(), file)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+                adv.setImage(s3.getResourceUrl(S3_BUCKET_ADVENTURE_IMAGES,
+                        adv.getId()));
+            }
 
-        new AdventureDAO().save(adv);
+            new AdventureDAO().save(adv);
         } catch (Exception e) {
             return badRequest();
         }
@@ -354,6 +354,15 @@ public class AdventureController extends Controller {
         adv.setPlaceVoteOpen(openVote);
         new AdventureDAO().save(adv);
         return ok(Json.toJson(adv.getPlaceVoteOpen()));
+    }
+
+    public static Result updateTimeVoteOpen(String advId) {
+        DynamicForm data = form().bindFromRequest();
+        Boolean openVote = new Boolean(data.get("voteOpen"));
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setTimeVoteOpen(openVote);
+        new AdventureDAO().save(adv);
+        return ok(Json.toJson(adv.getTimeVoteOpen()));
     }
 
 
