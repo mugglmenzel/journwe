@@ -14,35 +14,38 @@
 <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> Clone</a><br />
 <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> Leave</a>} {
 
-<div id="adventure-container">
+<div id="adventure-container" class="row-fluid">
+    <div class="span1">
     @if(new AdventurerDAO().get(adv.getId(), new
     UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
-    <div class="nav-adventure">
+    <div class="nav-adventure" style=""> <!---->
         <ul id="nav-adventure-list" class="nav nav-pills nav-stacked">
             <li  id="nav-adventure-index"
             @if(active == "index"){class="active"}><a href="#index" onclick="return jumpToSection('index');"><i
-                class="icon-info"></i> Overview</a></li>
+                class="icon-info" title="Overview"></i></a></li>
             <li id="nav-adventure-places"
-            @if(active == "places"){class="active"}><a href="#places" onclick="return jumpToSection('places');"><i class="icon-globe"></i> Place</a></li>
+            @if(active == "places"){class="active"}><a href="#places" onclick="return jumpToSection('places');"><i class="icon-globe" title="Place"></i></a></li>
             <li id="nav-adventure-adventurers"
-            @if(active == "adventurers"){class="active"}><a href="#adventurers" onclick="return jumpToSection('adventurers');"><i class="icon-group"></i> Adventurers</a></li>
+            @if(active == "adventurers"){class="active"}><a href="#adventurers" onclick="return jumpToSection('adventurers');"><i class="icon-group" title="Adventurers"></i></a></li>
             <li  id="nav-adventure-time"
             @if(active == "times"){class="active"}><a href="#times" onclick="return jumpToSection('times');"><i
-                class="icon-time"></i> Date &amp; Time</a></li>
+                class="icon-time" title="Date &amp; Time"></i></a></li>
 
-            <li id="nav-adventure-messages"
-            @if(active == "messages"){class="active"}><a href="#messages" onclick="return jumpToSection('messages');"><i class="icon-envelope"></i> Messages</a></li>
+            @*<li id="nav-adventure-messages"
+            @if(active == "messages"){class="active"}><a href="#messages" onclick="return jumpToSection('messages');"><i class="icon-envelope" title="Messages"></i></a></li>*@
             <li   id="nav-adventure-todos"
             @if(active == "todos"){class="active"}><a href="#todos" onclick="return jumpToSection('todos');"><i
-                class="icon-list-ol"></i> Packing List</a></li>
+                class="icon-list-ol" title="Todos"></i></a></li>
             <li   id="nav-adventure-files"
-            @if(active == "files"){class="active"}><a href="#files" onclick="return jumpToSection('files');"><i class="icon-cloud"></i> Files</a></li>
+            @if(active == "files"){class="active"}><a href="#files" onclick="return jumpToSection('files');"><i class="icon-cloud" title="Files"></i></a></li>
             <li   id="nav-adventure-offers"
-            @if(active == "offers"){class="active"}><a href="#offers" onclick="return jumpToSection('offers');"><i class="icon-sun"></i> Offers</a></li>
+            @if(active == "offers"){class="active"}><a href="#offers" onclick="return jumpToSection('offers');"><i class="icon-sun" title="Offers"></i></a></li>
         </ul>
     </div>
     }
+    </div>
+    <div class="span11">
     <div class="row-fluid">
 
         <div class="span1"><i class="icon-info icon-for-adventure-title"></i></div>
@@ -150,6 +153,7 @@
 
     </div>
 
+@*
     <hr/>
     <div class="row-fluid">
 
@@ -163,7 +167,7 @@
         </div>
         <div class="span3">@views.html.comment.widget_comment.render(adv, "messages")</div>
     </div>
-
+*@
 
 
     <hr/>
@@ -224,6 +228,7 @@
 
 
 
+</div>
 </div>
 
 <div id="cloneAdventure" class="modal hide fade" tabindex="-1" role="dialog">
