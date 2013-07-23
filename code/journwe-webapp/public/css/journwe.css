@@ -75,7 +75,7 @@ body > .row-fluid > div.span8 h2 {
 }
 
 .navbar {
-	box-shadow: 0 0 3px -2px black;
+
 }
 
 .navbar-fixed-top .navbar-inner {
@@ -544,3 +544,12 @@ h1 .x-edit-loading {
 	margin-left: 5px;
 }
 
+.navbar-inner {
+	background-color: rgba(255,255,255,0.1);
+	border: none;
+}
+
+.nav-pills>.active>a, .nav-pills>.active>a:hover, .nav-pills>.active>a:focus {
+	color: gray;
+	background-color: white;
+}
