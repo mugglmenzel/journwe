@@ -48,9 +48,9 @@
             @if(active == "todos"){class="active"}><a href="#todos" onclick="return jumpToSection('todos');"><i
                 class="icon-list-ol" title="Todos"></i></a></li>
             <li   id="nav-adventure-files"
-            @if(active == "files"){class="active"}><a href="#files" onclick="return jumpToSection('files');"><i class="icon-cloud" title="Files"></i></a></li>
+            @if(active == "files"){class="active"}><a href="#files" onclick="return jumpToSection('files');"><i class="icon-file" title="Files"></i></a></li>
             <li   id="nav-adventure-offers"
-            @if(active == "offers"){class="active"}><a href="#offers" onclick="return jumpToSection('offers');"><i class="icon-sun" title="Offers"></i></a></li>
+            @if(active == "offers"){class="active"}><a href="#offers" onclick="return jumpToSection('offers');"><i class="icon-suitcase" title="Offers"></i></a></li>
         </ul>
     </div>
     }
@@ -177,9 +177,9 @@
 
     <hr/>
     <div class="row-fluid">
-        <h2 id="files"><i class="icon-cloud-upload icon-for-adventure-title"></i> Files</h2>
+        <h2 id="files"><i class="icon-file icon-for-adventure-title"></i> Files</h2>
         <div class="span11">
-            <p class="lead">You can upload and share files here, such as pdfs, docs, xls, ...</p>
+            <p class="lead">You can upload and share files here. Store pdfs, docs, xls, ...</p>
 
             @files(adv, fileForm)
 
@@ -189,7 +189,7 @@
 
     <hr/>
     <div class="row-fluid">
-        <h2 id="offers"><i class="icon-sun icon-for-adventure-title"></i> Offers</h2>
+        <h2 id="offers"><i class="icon-suitcase icon-for-adventure-title"></i> Offers</h2>
         <div class="span11">
             <p class="lead">Check offers for your dates and places. There might be just the right sweet spot for you.</p>
 
