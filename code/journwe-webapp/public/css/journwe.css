@@ -268,8 +268,8 @@ table.inspiration .images img {
     color:  rgb(153, 153, 153);
 }
 
-.icon-for-adventure-title.icon-cog {
-	font-style: 24px;
+.icon-for-adventure-title.icon-cogs {
+	font-size: 24px;
 }
 
 .nav-adventure {
@@ -523,6 +523,11 @@ h1 .x-edit-loading {
 
 .page-header .title-name a {
 	border: none;
+	color: white;
+}
+
+.page-header .title-name i {
+	font-size: 24px;
 	color: white;
 }
 
