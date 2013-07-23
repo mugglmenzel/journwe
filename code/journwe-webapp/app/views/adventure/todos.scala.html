@@ -10,7 +10,7 @@
 <table class="table table-striped table-hover table-my-todos">
     <thead>
     <tr>
-        <th colspan="2">Things to do</th>
+        <th colspan="2">My things to do</th>
         <th class="text-center">Actions</th>
     </tr>
     </thead>
@@ -37,11 +37,10 @@
 
 @for(usr <- list.keySet()) {
 @if(usr != user){
-<h3>Packing List for @{new UserDAO().get(usr).getName()}</h3>
 <table class="table table-striped table-hover">
     <thead>
     <tr>
-        <th colspan="2">Things to do</th>
+        <th colspan="2">@{new UserDAO().get(usr).getName()}</th>
         <th class="text-center">Actions</th>
     </tr>
     </thead>

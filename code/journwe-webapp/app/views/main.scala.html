@@ -51,59 +51,61 @@
 	</script>
 </head>
 <body>
-	<div class="navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<button type="button" class="btn btn-navbar" data-toggle="collapse"
-					data-target=".nav-collapse">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-				</button>
-				
-				<a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
-                    <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 20px;">
-					Journ<strong>We</strong>
-					<!--<img src="@routes.Assets.at("img/suitcase_brand.png")" style="height: 14px">-->
-                    </span>
-                </a>
-                <div class="nav-collapse collapse">
-                    <div class="navbar-search">
-                        <div class="input-append">
-                            <input type="text" class="input-xlarge search-query" placeholder="Find Places, People and Inspirations">
-                            <button class="btn"><i class="icon-search"></i></button>
-                        </div>
-                    </div>
-                </div>
+	<div class="row-fluid">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container offset2">
+					<button type="button" class="btn btn-navbar" data-toggle="collapse"
+						data-target=".nav-collapse">
+						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					
+					<a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
+	                    <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 20px;">
+						Journ<strong>We</strong>
+						<!--<img src="@routes.Assets.at("img/suitcase_brand.png")" style="height: 14px">-->
+	                    </span>
+	                </a>
+	                <div class="nav-collapse collapse">
+	                    <div class="navbar-search">
+	                        <div class="input-append">
+	                            <input type="text" class="input-xlarge search-query" placeholder="Find Places, People and Inspirations">
+	                            <button class="btn"><i class="icon-search"></i></button>
+	                        </div>
+	                    </div>
+	                </div>
 
 
-                @defining(new UserDAO()) { userDAO =>
-                @currentAuth() { auth =>
-                    @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
-                        <div class="pull-right user-login">
-                            <a class="btn" href="#"><i class="icon-cog"></i> @userDAO.findByAuthUserIdentity(auth).getName()</a>
-                            <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
-                        </div>
-                        
-                    } else {
-                   		<div class="btn-group pull-right user-login">
-							<a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
-							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-								<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu">
-	                    @forProviders() { p =>
-								<li><a href="@p.getUrl()"><i class="icon-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+	                @defining(new UserDAO()) { userDAO =>
+	                @currentAuth() { auth =>
+	                    @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
+	                        <div class="pull-right user-login">
+	                            <a class="btn" href="#"><i class="icon-cog"></i> @userDAO.findByAuthUserIdentity(auth).getName()</a>
+	                            <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
+	                        </div>
+	                        
+	                    } else {
+	                   		<div class="btn-group pull-right user-login">
+								<a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
+								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+		                    @forProviders() { p =>
+									<li><a href="@p.getUrl()"><i class="icon-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+			                }
+			                	</ul>
+							</div>
 		                }
-		                	</ul>
-						</div>
 	                }
-                }
-                }
+	                }
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="main" style="width=device-width;">
-		<div class="container">
+	<div class="main row-fluid" style="width=device-width;">
+		<div class="offset2 span8">
 			<div class="page-header">
 				<h1>@header</h1>
 			</div>
@@ -127,11 +129,15 @@
 			}
 			@content
 		</div>
-        <div class="container">
+	</div>
+	<div class="row-fluid">
+        <div class="offset2 span8">
             <div class="pull-right"><a onclick="$('html, body').animate({ scrollTop: 0 }, 600); return false;"><i class="icon-chevron-up"></i> Top</a></div>
         </div>
-        <div class="spacer20"></div>
-        <div class="container">
+    </div>
+    <div class="spacer20"></div>
+	<div class="row-fluid">
+        <div class="offset2 span8">
             <div class="row-fluid">
                 <div class="span2">
                     <ul class="nav nav-pills nav-stacked">
