@@ -12,10 +12,12 @@ public class PersistenceHelper {
 
 	public static DynamoDBMapper getManager() {
 
-		if (db == null)
+		if (db == null) {
 			db = new AmazonDynamoDBClient(new BasicAWSCredentials(ConfigFactory
 					.load().getString("aws.accessKey"), ConfigFactory.load()
 					.getString("aws.secretKey")));
+            db.setEndpoint(ConfigFactory.load().getString("aws.endpoint"));
+        }
 		return new DynamoDBMapper(db);
 
 	}
