@@ -32,6 +32,7 @@
         </tbody>
     </table>
 
+@*
 @form(routes.AdventureFileController.uploadFile(adv.getId()), args = 'class -> "form-horizontal form-file",  'enctype -> "multipart/form-data") {
     <fieldset>
         @inputText(fileForm("fileName"), '_label -> "File name", 'required -> "required")
@@ -42,8 +43,58 @@
         <button class="btn btn-primary">Upload file</button> | <a href="#" class="btn btn-link">Reset</a>
     </div>
 }
+*@
 
-<script>
+    <div id="files-upload-dropzone" style="" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
+        <div class="text-center"><p class="lead">Drop file here or
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+                <div class="input-append">
+                    <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span><input type="file" name="uploadFile" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+                    <button class="btn btn-upload"><i class="icon-cloud-upload"></i> Upload file</button>
+                </div>
+            </div>
+            </p>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    jQuery.event.props.push('dataTransfer');
+
+    $('#files-upload-dropzone .fileupload').fileupload();
+
+    $('#files-upload-dropzone').on('drop', function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        uploadFile(event.target.files || event.dataTransfer.files);
+
+        $('#files-upload-dropzone').removeClass('hover');
+        return false;
+    }).find('.btn-upload').click(function () {
+        uploadFile($('#files-upload-dropzone input:file')[0].files);
+    });
+
+    function uploadFile(files) {
+        var data = new FormData(),
+            btn = $('#files-upload-dropzone .btn-upload');
+        data.append('uploadFile', files[0]);
+        data.append('fileName', files[0].name);
+        btn.css({width:btn.css('width')})
+            .html('<i class="icon-spin icon-spinner"></i>');
+        $.ajax({
+            url: '@routes.AdventureFileController.uploadFile(adv.getId())',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success:  function (data) {
+                btn.css({width:""})
+                    .html('<i class="icon-cloud-upload"></i> Upload file');
+                $('#files-upload-dropzone .fileupload').fileupload('reset');
+            }
+        });
+    }
 
     $(function(){
 
