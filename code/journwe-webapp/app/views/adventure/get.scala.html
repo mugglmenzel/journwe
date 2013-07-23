@@ -6,6 +6,13 @@
 @import play.mvc.Http
 
 @main(adv.getName()){
+
+<div style="width: 100%">
+    @if(adv.getImage != null) {
+    <img style="width: 100%; height: 200; margin-bottom: 20px;" src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"/>
+    }
+</div>
+
 <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
     data-url="@routes.AdventureController.saveEditable()"
     data-original-title="Enter adventure name" data-inputclass="input-xxlarge">@adv.getName()</a> <i class="icon-pencil muted"></i> <span id="index"></span>
