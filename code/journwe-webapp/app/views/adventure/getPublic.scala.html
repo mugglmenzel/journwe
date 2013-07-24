@@ -1,43 +1,58 @@
 @(adv: models.adventure.Adventure, ins: Inspiration)
 
 
-@main(adv.getName()){@adv.getName()
-<small>@if(ins != null){@ins.getName()}</small>} {
+@main(adv.getName()){
 
-<div>
+    <div style="width: 100%">
+    @if(adv.getImage != null) {
+        <img style="width: 100%; height: 200; margin-bottom: 20px;" src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"/>
+    }
+    </div>
+
+    <div class="title-name">
+        @adv.getName() @if(ins != null) {<small>@ins.getName()</small>}
+    </div>
+
+    <div class="toolbar">
+        <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> Clone</a>
+        <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="icon-plus"></i> Join</a>
+    </div>
+} {
     <div>
-        <h2>You have been invited to join this Adventure! <a class="btn btn-primary btn-participate"
-                                                             href="@routes.AdventurePeopleController.participate(adv.getId())">Join
-            Now</a></h2>
+        <div>
+            <h2>You have been invited to join this Adventure!</h2>
+        </div>
+        <p class="pull-left">
+            <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
+
+            <div>@Html(adv.getHTMLDescription())</div>
+
+        </p>
     </div>
-    <p class="pull-left">
-        <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
 
-        <div>@Html(adv.getHTMLDescription())</div>
-
-    </p>
-    <div class="pull-right">
-        <button>Copy To Own JournWe</button>
+    <div id="cloneAdventure" class="modal hide fade" tabindex="-1" role="dialog">
+        <div class="modal-header">
+            <h3><i class="icon-copy"></i> <strong>You can create a new Adventure based on "@adv.getName()".</strong></h3><br/>
+            @cloneAdventure(adv,new DynamicForm())
+        </div>
     </div>
-</div>
 
+    <script>
 
-<script>
+        $(function(){
+            $('.btn-participate').click(function(){
+                var el = $(this),
+                    html = el.html();
 
-	$(function(){
-		$('.btn-participate').click(function(){
-            var el = $(this),
-                html = el.html();
-            
-            el.css({width:el.width()+"px"})
-                .html('<i class="icon-spin icon-spinner"></i>');
+                el.css({width:el.width()+"px"})
+                    .html('<i class="icon-spin icon-spinner"></i>');
 
-            $.post(el.attr('href'), function(json){
-            	window.location.reload(); // Reload
-            });
+                $.post(el.attr('href'), function(json){
+                    window.location.reload(); // Reload
+                });
 
-			return false;
-		})
-	});
-</script>
+                return false;
+            })
+        });
+    </script>
 }

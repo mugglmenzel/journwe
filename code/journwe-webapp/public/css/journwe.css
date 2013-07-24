@@ -529,6 +529,7 @@ h1 .x-edit-loading {
 	position: absolute;
 	bottom: 60px;
 	left: 20px;
+    color: white;
 }
 
 .page-header .title-name a {
