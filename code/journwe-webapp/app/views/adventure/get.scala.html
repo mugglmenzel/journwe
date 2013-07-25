@@ -16,7 +16,7 @@
 <div class="title-name">
     <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
     data-url="@routes.AdventureController.saveEditable()"
-    data-original-title="Enter adventure name" data-inputclass="input-xxlarge">@adv.getName()</a> <i class="icon-pencil muted"></i> <span id="index"></span>
+    data-original-title="Enter adventure name" data-inputclass="input-xxlarge">@adv.getName()</a> <i class="icon-pencil muted"></i> <span></span>
     @if(ins != null) {<small>@ins.getName()</small>}
 </div>
 <div class="toolbar">
@@ -25,7 +25,7 @@
 </div>
 } {
 
-<div id="adventure-container" class="row-fluid">
+<div id="adventure-container" class="row">
     @if(new AdventurerDAO().get(adv.getId(), new
     UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
@@ -55,7 +55,7 @@
     </div>
     }
 
-    <div class="row-fluid">
+    <div class="row">
         <h2 id="index"><i class="icon-info icon-for-adventure-title"></i> Adventure</h2>
 
         <div class="span11">
@@ -100,18 +100,17 @@
             @*index(adv, ins)*@
         </div>
         @{views.html.comment.widget_comment.render(adv, "index")}
+
+        <div class="row">
+            <div class="span1"><i class="icon-cogs icon-for-adventure-title"></i></div>
+
+            <div class="span8">@options(adv)</div>
+            <div class="span3"></div>
+        </div>
     </div>
 
     <hr/>
-    <div class="row-fluid">
-        <div class="span1"><i class="icon-cogs icon-for-adventure-title"></i></div>
-
-        <div class="span8">@options(adv)</div>
-        <div class="span3"></div>
-    </div>
-
-    <hr/>
-    <div class="row-fluid">
+    <div class="row">
 
         <h2 id="places"><i class="icon-globe icon-for-adventure-title"></i> Place</h2>
 
@@ -125,7 +124,7 @@
     </div>
 
     <hr/>
-    <div class="row-fluid">
+    <div class="row">
 
         <h2 id="adventurers"><i class="icon-group icon-for-adventure-title"></i> Adventurers</h2>
 
@@ -137,7 +136,7 @@
     </div>
 
     <hr/>
-    <div class="row-fluid">
+    <div class="row">
         <h2 id="times"><i class="icon-calendar icon-for-adventure-title"></i> Date &amp; Time</h2>
         <div class="span11">
             <p class="lead">Its all about the right time. Select the time you prefer most and get excited.</p>
@@ -151,7 +150,7 @@
 
 @*
     <hr/>
-    <div class="row-fluid">
+    <div class="row">
         <h2 id="messages"><i class="icon-envelope icon-for-adventure-title"></i> Messages</h2>
         <div class="span11">
             <p class="lead">Communicate with agencies and assistants with only one email address and all adventurers stay up-to-date.</p>
@@ -164,7 +163,7 @@
 
 
     <hr/>
-    <div class="row-fluid">
+    <div class="row">
         <h2 id="todos"><i class="icon-list-ol icon-for-adventure-title"></i> Todo List</h2>
         <div class="span11">
             <p class="lead">Don't forget utilities at home or miss important errands. Sync with your co-adventurers.</p>
@@ -176,7 +175,7 @@
     </div>
 
     <hr/>
-    <div class="row-fluid">
+    <div class="row">
         <h2 id="files"><i class="icon-file icon-for-adventure-title"></i> Files</h2>
         <div class="span11">
             <p class="lead">You can upload and share files here. Store pdfs, docs, xls, ...</p>
@@ -188,7 +187,7 @@
     </div>
 
     <hr/>
-    <div class="row-fluid">
+    <div class="row">
         <h2 id="offers"><i class="icon-suitcase icon-for-adventure-title"></i> Offers</h2>
         <div class="span11">
             <p class="lead">Check offers for your dates and places. There might be just the right sweet spot for you.</p>
@@ -272,7 +271,11 @@
         }, 'slow');
         return false;
     }
-	$('body').scrollspy({offset: 100});
+	$('body').scrollspy({offset: 100}).on('activate', function(evt){
+        $('.row.active').removeClass('active');
+        console.log($($(evt.target).find('a').attr('href')).parent('.row'))
+        $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
+    })
     jumpToSection('@active');
 </script>
 
