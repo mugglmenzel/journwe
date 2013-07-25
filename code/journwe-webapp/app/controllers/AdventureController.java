@@ -14,6 +14,7 @@ import models.adventure.*;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredBetaUser;
+import models.authorization.JournweAuthorization;
 import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
@@ -315,6 +316,13 @@ public class AdventureController extends Controller {
 
         }
 
+        // Save the creator as default owner of the adventure
+        AdventureAuthorization authorization = new AdventureAuthorization();
+        authorization.setAdventureId(adv.getId());
+        authorization.setUserId(usr.getId());
+        authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_OWNER);
+        new AdventureAuthorizationDAO().save(authorization);
+
         flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa! The shortURL is " + shortURL);
 
         return redirect(routes.AdventureController.getIndex(adv.getId()));
@@ -325,6 +333,8 @@ public class AdventureController extends Controller {
         DynamicForm advForm = form().bindFromRequest();
         String advId = advForm.get("pk");
         if (advId != null && !"".equals(advId)) {
+            if(!JournweAuthorization.canEditAdventureTitle(advId))
+                return badRequest("You are not authorized to do this.");
             Adventure adv = new AdventureDAO().get(advId);
             String name = advForm.get("name");
             if ("adventureName".equals(name))
@@ -339,6 +349,8 @@ public class AdventureController extends Controller {
     }
 
     public static Result updateImage(String advId) {
+        if(!JournweAuthorization.canEditAdventureImage(advId))
+            return badRequest("You are not authorized to do this.");
         Adventure adv = new AdventureDAO().get(advId);
         try {
             Http.MultipartFormData body = request().body().asMultipartFormData();
