@@ -1,0 +1,13 @@
+@(user: models.user.User)
+
+@main("User Profile"){<h1>User Profile of @user.getName</h1>}{
+
+  <table>
+      <tbody>
+          <tr><th>Name</th><td>@user.getName</td></tr>
+          <tr><th>Status</th><td>@user.getRole</td></tr>
+          <tr><th>Adventures</th><td>???</td></tr>
+      </tbody>
+  </table>
+
+}

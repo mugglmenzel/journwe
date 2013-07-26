@@ -83,6 +83,10 @@ GET           /comments/:threadId                        controllers.CommentCont
 GET           /threads/:advid                            controllers.CommentController.listCommentThreads(advid:String)
 POST          /comment/save                              controllers.CommentController.saveComment()
 
+
+# User
+GET           /user/:id                                  controllers.UserController.getProfile(id:String)
+
 # Facebook
 GET           /fbtest                                    controllers.FacebookController.testFacebookFeatures()
 GET           /fb/message/create                         controllers.FacebookController.createMessage()
