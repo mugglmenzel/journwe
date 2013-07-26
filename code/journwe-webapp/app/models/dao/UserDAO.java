@@ -27,21 +27,8 @@ public class UserDAO extends CommonEntityDAO<User> {
 
     private User getAuthUserFind(final AuthUserIdentity identity) {
         UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
-        if (social != null) {
-            if (identity instanceof FacebookAuthUser) {
-                social.setAccessToken(((FacebookAuthUser) identity).getOAuth2AuthInfo().getAccessToken());
-                new UserSocialDAO().save(social);
-            }
 
-            User user = new UserDAO().get(social.getUserId());
-            if (identity instanceof PicturedIdentity && user.getImage() != null && !user.getImage().equals(((PicturedIdentity) identity).getPicture())) {
-                user.setImage(((PicturedIdentity) identity).getPicture());
-                new UserDAO().save(user);
-            }
-
-            return user;
-        }
-        return null;
+        return social != null ? new UserDAO().get(social.getUserId()) : null;
     }
 
     public User findByAuthUserIdentity(final AuthUserIdentity identity) {
