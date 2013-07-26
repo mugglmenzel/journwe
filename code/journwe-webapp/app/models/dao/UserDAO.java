@@ -4,10 +4,7 @@ import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
-import com.feth.play.module.pa.user.AuthUser;
-import com.feth.play.module.pa.user.AuthUserIdentity;
-import com.feth.play.module.pa.user.EmailIdentity;
-import com.feth.play.module.pa.user.NameIdentity;
+import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
 import models.user.Subscriber;
 import models.user.User;
@@ -30,7 +27,21 @@ public class UserDAO extends CommonEntityDAO<User> {
 
     private User getAuthUserFind(final AuthUserIdentity identity) {
         UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
-        return social != null ? new UserDAO().get(social.getUserId()) : null;
+        if (social != null) {
+            if (identity instanceof FacebookAuthUser) {
+                social.setAccessToken(((FacebookAuthUser) identity).getOAuth2AuthInfo().getAccessToken());
+                new UserSocialDAO().save(social);
+            }
+
+            User user = new UserDAO().get(social.getUserId());
+            if (identity instanceof PicturedIdentity && user.getImage() != null && !user.getImage().equals(((PicturedIdentity) identity).getPicture())) {
+                user.setImage(((PicturedIdentity) identity).getPicture());
+                new UserDAO().save(user);
+            }
+
+            return user;
+        }
+        return null;
     }
 
     public User findByAuthUserIdentity(final AuthUserIdentity identity) {
@@ -49,6 +60,9 @@ public class UserDAO extends CommonEntityDAO<User> {
             if (name != null) {
                 user.setName(name);
             }
+        }
+        if (authUser instanceof PicturedIdentity) {
+            user.setImage(((PicturedIdentity) authUser).getPicture());
         }
         new UserDAO().save(user);
 
@@ -86,6 +100,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             }
 
         }
+
 
         final UserSocial social = new UserSocial();
         social.setProvider(authUser.getProvider());
