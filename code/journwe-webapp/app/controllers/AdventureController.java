@@ -11,6 +11,7 @@ import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import models.Inspiration;
 import models.adventure.*;
+import models.adventure.group.AdventurerGroup;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredBetaUser;
@@ -220,11 +221,18 @@ public class AdventureController extends Controller {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         UserSocial us = new UserSocialDAO().findByUserId("facebook", usr.getId());
 
+        // ADVENTURER
         Adventurer advr = new Adventurer();
         advr.setAdventureId(adv.getId());
         advr.setUserId(usr.getId());
         advr.setParticipationStatus(EAdventurerParticipation.GOING);
         new AdventurerDAO().save(advr);
+
+        // ADVENTURER GROUP
+        AdventurerGroup group = AdventurerGroupController.createEmptyGroup(adv.getId());
+        new AdventurerGroupDAO().save(group);
+
+        // PLACE AND TIME
 
         //List<PlaceOption> placeOptions = new ArrayList<PlaceOption>();
         //List<TimeOption> timeOptions = new ArrayList<TimeOption>();

@@ -9,7 +9,10 @@ import models.adventure.route.RouteOption;
 import models.auth.SecuredBetaUser;
 import models.dao.*;
 import models.user.User;
+import org.codehaus.jackson.node.ObjectNode;
+import play.Logger;
 import play.data.DynamicForm;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -37,6 +40,22 @@ public class AdventurerGroupController extends Controller {
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
+    public static Result getAdventurersOfGroup(String advId, String groupId) {
+        List<ObjectNode> adventurersNodes = new ArrayList<ObjectNode>();
+        List<Adventurer> adventurers = new AdventurerGroupDAO().getAdventurersOfGroup(advId,groupId);
+        for (Adventurer adventurer : adventurers) {
+            ObjectNode node = Json.newObject();
+            String userId = adventurer.getUserId();
+//            node.put("userId", userId);
+            String userName = new UserDAO().get(userId).getName();
+//            Logger.debug("userName: "+userName);
+            node.put("userName", userName);
+            adventurersNodes.add(node);
+        }
+        return ok(Json.toJson(adventurersNodes));
+    }
+
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result createGroup(String advId) {
         AdventurerGroup group = createEmptyGroup(advId);
         new AdventurerGroupDAO().save(group);
@@ -44,37 +63,27 @@ public class AdventurerGroupController extends Controller {
         return ok("New group created!");
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
-    public static Result addGroup(String advId) {
-
-        DynamicForm requestData = form().bindFromRequest();
-
-        AdventurerGroup group = new AdventurerGroup();
-        group.setAdventureId(advId);
-        group.setGroupName(requestData.get("groupName"));
-        group.setGroupDescription(requestData.get("groupDescription"));
-        group.setRouteIds(Arrays.asList(requestData.get("routeIds").split(":")));
-
-        new AdventurerGroupDAO().save(group);
-
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-
-        PlaceAdventurerPreference pref = new PlaceAdventurerPreference();
-        pref.setPlaceOptionId(place.getOptionId());
-        pref.setAdventurerId(usr.getId());
-        new PlaceAdventurerPreferenceDAO().save(pref);
-
-        ObjectNode node = Json.newObject();
-        node.put("id", place.getOptionId());
-        node.put("placeId", place.getPlaceId());
-        node.put("advId", place.getAdventureId());
-        node.put("address", place.getAddress());
-        node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
-        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));
-
-        return ok(Json.toJson(node));
-    }
+//    @Security.Authenticated(SecuredBetaUser.class)
+//    public static Result addGroup(String advId) {
+//
+//        DynamicForm requestData = form().bindFromRequest();
+//
+//        AdventurerGroup group = new AdventurerGroup();
+//        group.setAdventureId(advId);
+//        group.setGroupName(requestData.get("groupName"));
+//        group.setGroupDescription(requestData.get("groupDescription"));
+//        group.setRouteIds(Arrays.asList(requestData.get("routeIds").split(":")));
+//
+//        new AdventurerGroupDAO().save(group);
+//
+//        ObjectNode node = Json.newObject();
+//        node.put("groupId", group.getGroupId());
+//        node.put("advId", group.getAdventureId());
+//        node.put();
+//
+//
+//        return ok(Json.toJson(node));
+//    }
 
     protected static AdventurerGroup createEmptyGroup(String advId) {
         Adventure adv = new AdventureDAO().get(advId);
@@ -82,6 +91,7 @@ public class AdventurerGroupController extends Controller {
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
         // Create and save an empty route
         RouteOption route = new RouteOption();
+        route.setAdventureId(advId);
         new RouteOptionDAO().save(route);
 
         AdventurerGroup group = new AdventurerGroup();
