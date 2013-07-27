@@ -32,6 +32,10 @@ POST          /adventure/check/shortname                 controllers.AdventureCo
 POST          /adventure/:id/updateImage                 controllers.AdventureController.updateImage(id:String)
 POST          /adventure/:id/clone                       controllers.CloneController.cloneAndSaveAdventure(id:String)
 
+# Adventurer Groups
+POST          /adventure/:id/groups/new                  controllers.AdventurerGroupController.createGroup(id:String)
+GET           /adventure/:id/group/:gid/advrs.json       controllers.AdventurerGroupController.getAdventurersOfGroup(id:String,gid:String)
+GET           /adventure/:id/groups                      controllers.AdventurerGroupController.getGroups(id:String)
 
 # POST    /adventure/:id/postTwitterStream                            controllers.AdventureController.postOnMyTwitterStream(id:String)
 GET           /adventure/:id/adventurers                 controllers.AdventurePeopleController.getAdventurers(id:String)
