@@ -6,10 +6,7 @@ import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
-import models.user.Subscriber;
-import models.user.User;
-import models.user.UserEmail;
-import models.user.UserSocial;
+import models.user.*;
 
 import java.io.IOException;
 
@@ -38,9 +35,10 @@ public class UserDAO extends CommonEntityDAO<User> {
         return getAuthUserFind(identity);
     }
 
-    public User create(final AuthUser authUser) {
+    public User create(final AuthUser authUser, final EUserRole role) {
         final User user = new User();
         user.setActive(true);
+        user.setRole(role);
         if (authUser instanceof NameIdentity) {
             final NameIdentity identity = (NameIdentity) authUser;
             final String name = identity.getName();

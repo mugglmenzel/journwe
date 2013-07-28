@@ -498,7 +498,7 @@ h3 {
 }
 
 #files-upload-dropzone {
-    min-height: 100px;
+    min-height: 200px;
     border: dashed 3px gray;
 }
 
