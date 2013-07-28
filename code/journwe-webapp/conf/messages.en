@@ -57,6 +57,16 @@ adventure.files.fileSelect=Select file
 adventure.files.fileChange=Change
 adventure.files.fileRemove=Remove
 
+adventure.created.button.emailInvite=Invite by Email
+adventure.created.facebookMessage=Hey guys! Join my adventure on JournWe.com
+adventure.general.button.facebookPost=Post on Facebook
+adventure.created.emailMessage=Hey guys! Join my adventure on JournWe.com. Discover what we could experience together: 
+adventure.created.button.emailSend=Send Email
+adventure.created.url=You can find your Adventure under this URL:
+adventure.created.urlShort=Your shortened URL:
+adventure.created.manageAdv=Manage your Adventure
+
+
 journwe.subtitle=where adventurers meet...
 
 
