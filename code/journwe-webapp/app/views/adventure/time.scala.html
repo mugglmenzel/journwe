@@ -9,11 +9,11 @@
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
 <div id="times-favorite-time" style="font-size: 20px; margin-bottom: 10px;">
-    <i id="times-favorite-time-icon" class="icon-spin icon-spinner"></i> Favorite Time: <em><span id="times-favorite-time-name"></span></em>
+    <i id="times-favorite-time-icon" class="icon-spin icon-spinner"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name"></span></em>
 </div>
 
 <div>
-    Open Voting:
+    @Messages("adventure.general.voting")
     <div class="switch">
         <input id="times-voting-active-switch" type="checkbox" @if(adv.getTimeVoteOpen){checked="checked"}>
     </div>
@@ -23,14 +23,14 @@
 <table id="times-list" class="table table-striped table-hover hide">
     <thead>
     <tr>
-        <th>Favorite</th>
-        <th>Time Option</th>
-        <th>Your Vote</th>
-        <th class="text-center">YES</th>
-        <th class="text-center">MAYBE</th>
-        <th class="text-center">NO</th>
-        <th>Adventurers' Votes</th>
-        <th class="text-center">Actions</th>
+        <th>@Messages("adventure.general.favourite")</th>
+        <th>@Messages("adventure.time.option")</th>
+        <th>@Messages("adventure.general.yourvote")</th>
+        <th class="text-center">@Messages("adventure.general.yes")</th>
+        <th class="text-center">@Messages("adventure.general.maybe")</th>
+        <th class="text-center">@Messages("adventure.general.no")</th>
+        <th>@Messages("adventure.general.advvotes")</th>
+        <th class="text-center">@Messages("adventure.general.listactions")</th>
     </tr>
     </thead>
     <tbody>
@@ -39,7 +39,7 @@
 </table>
 
 
-<div class="times-loading"><i class="icon-spin icon-spinner"></i> Loading</div>
+<div class="times-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
 
 <div id="time-add-form" class="inline input-append">
 
@@ -68,9 +68,9 @@
                         <i class="icon-pencil"></i>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a onclick="voteTime('YES', '{%=o.timeId%}');"><i class="icon-thumbs-up"></i> Yes</a></li>
-                        <li><a onclick="voteTime('MAYBE', '{%=o.timeId%}');"><i class="icon-question"></i> Maybe</a></li>
-                        <li><a onclick="voteTime('NO', '{%=o.timeId%}');"><i class="icon-thumbs-down"></i> No</a></li>
+                        <li><a onclick="voteTime('YES', '{%=o.timeId%}');"><i class="icon-thumbs-up"></i> @Messages("adventure.general.YES")</a></li>
+                        <li><a onclick="voteTime('MAYBE', '{%=o.timeId%}');"><i class="icon-question"></i> @Messages("adventure.general.maybe")</a></li>
+                        <li><a onclick="voteTime('NO', '{%=o.timeId%}');"><i class="icon-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
                     </ul>
                 </div>
             </td>

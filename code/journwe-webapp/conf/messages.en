@@ -3,6 +3,19 @@ adventure.todos.listaction=Actions
 adventure.time.start=Start Date
 adventure.time.end=End Date
 
+adventure.time.favourite=Favourite Time:
+adventure.general.voting=Open Voting:
+adventure.general.favourite=Favourite
+adventure.time.option=Time Option 
+adventure.general.yourvote=Your Vote 
+adventure.general.yes=YES 
+adventure.general.maybe=MAYBE
+adventure.general.no=NO
+adventure.general.advvotes=Adventurers' Votes
+adventure.general.listactions=Actions
+adventure.general.loading=Loading
+
+
 journwe.subtitle=where adventurers meet...
 
 
