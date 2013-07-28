@@ -10,8 +10,8 @@
 <table class="table table-striped table-hover table-my-todos">
     <thead>
     <tr>
-        <th colspan="2">My things to do</th>
-        <th class="text-center">Actions</th>
+        <th colspan="2">@Messages("adventure.todos.listheading")</th>
+        <th class="text-center">@Messages("adventure.todos.listaction")</th>
     </tr>
     </thead>
     <tbody>
@@ -41,7 +41,7 @@
     <thead>
     <tr>
         <th colspan="2">@{new UserDAO().get(usr).getName()}</th>
-        <th class="text-center">Actions</th>
+        <th class="text-center">@Messages("adventure.todos.listaction")</th>
     </tr>
     </thead>
     <tbody>
