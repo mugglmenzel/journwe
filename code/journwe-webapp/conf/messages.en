@@ -22,6 +22,11 @@ adventure.options.facebookpublish=Publish on Facebook
 adventure.options.facebooklike=Like on Facebook
 adventure.options.twitter=Tweet on Twitter
 
+adventure.general.button.join=Join
+adventure.general.button.clone=Clone
+adventure.general.cloneby=You can create a new Adventure based on
+adventure.general.invitation=You have been invited to join this Adventure!
+
 
 journwe.subtitle=where adventurers meet...
 

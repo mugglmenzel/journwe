@@ -14,13 +14,13 @@
     </div>
 
     <div class="toolbar">
-        <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> Clone</a>
-        <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="icon-plus"></i> Join</a>
+        <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
+        <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="icon-plus"></i> @Messages("adventure.general.button.join")</a>
     </div>
 } {
     <div>
         <div>
-            <h2>You have been invited to join this Adventure!</h2>
+            <h2>@Messages("adventure.general.invitation")</h2>
         </div>
         <p class="pull-left">
             <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
@@ -32,7 +32,7 @@
 
     <div id="cloneAdventure" class="modal hide fade" tabindex="-1" role="dialog">
         <div class="modal-header">
-            <h3><i class="icon-copy"></i> <strong>You can create a new Adventure based on "@adv.getName()".</strong></h3><br/>
+            <h3><i class="icon-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
             @cloneAdventure(adv,new DynamicForm())
         </div>
     </div>
