@@ -18,6 +18,10 @@ adventure.general.loading=Loading
 adventure.places.location=Location
 adventure.places.favourite=Favourite Place:
 
+adventure.options.facebookpublish=Publish on Facebook
+adventure.options.facebooklike=Like on Facebook
+adventure.options.twitter=Tweet on Twitter
+
 
 journwe.subtitle=where adventurers meet...
 
