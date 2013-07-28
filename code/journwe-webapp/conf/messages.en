@@ -15,6 +15,9 @@ adventure.general.advvotes=Adventurers' Votes
 adventure.general.listactions=Actions
 adventure.general.loading=Loading
 
+adventure.places.location=Location
+adventure.places.favourite=Favourite Place:
+
 
 journwe.subtitle=where adventurers meet...
 
