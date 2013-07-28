@@ -1,35 +1,44 @@
-adventure.todos.listheading=My things to do
-adventure.todos.listaction=Actions
-adventure.time.start=Start Date
-adventure.time.end=End Date
+#journwe
+journwe.subtitle=where adventurers meet...
+subscribe.welcometext=JournWe helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join an adventure.
+subscribe.cta=Subscribe with your email to get notified when we go online!
 
-adventure.time.favourite=Favourite Time:
-adventure.general.voting=Open Voting:
+#Adventure.general.buttons
+adventure.general.button.join=Join
+adventure.general.button.clone=Clone
+adventure.general.button.cancel=Cancel
+adventure.general.button.leave=Leave
+adventure.general.button.reset=Reset
+adventure.general.button.facebookPost=Post on Facebook
+
+#Adventure.general.created
+adventure.created.button.emailInvite=Invite by Email
+adventure.created.facebookMessage=Hey guys! Join my adventure on JournWe.com
+adventure.created.emailMessage=Hey guys! Join my adventure on JournWe.com. Discover what we could experience together: 
+adventure.created.button.emailSend=Send Email
+adventure.created.url=You can find your Adventure under this URL:
+adventure.created.urlShort=Your shortened URL:
+adventure.created.manageAdv=Manage your Adventure
+adventure.create.shortURLavail=shortname available?
+adventure.create.startAdv=Start a new Group Adventure
+
+#Adventure.general.voting
 adventure.general.favourite=Favourite
-adventure.time.option=Time Option 
+adventure.general.advvotes=Adventurers' Votes
+adventure.general.voting=Open Voting:
 adventure.general.yourvote=Your Vote 
 adventure.general.yes=YES 
 adventure.general.maybe=MAYBE
 adventure.general.no=NO
-adventure.general.advvotes=Adventurers' Votes
+
+#Adventure.general
 adventure.general.listactions=Actions
 adventure.general.loading=Loading
-
-adventure.places.location=Location
-adventure.places.favourite=Favourite Place:
-
-adventure.options.facebookpublish=Publish on Facebook
-adventure.options.facebooklike=Like on Facebook
-adventure.options.twitter=Tweet on Twitter
-
-adventure.general.button.join=Join
-adventure.general.button.clone=Clone
 adventure.general.cloneby=You can create a new Adventure based on
 adventure.general.invitation=You have been invited to join this Adventure!
-
-adventure.general.button.cancel=Cancel
-adventure.general.button.leave=Leave
 adventure.general.leaveconfirm=Are you sure, you want to leave
+
+#Adventure.getScala
 adventure.getScala.adventure.title=Adventure
 adventure.getScala.place.title=Place
 adventure.getScala.place.subtitle=Find a special place where your adventure takes place. Make it a beautiful spot worth exploring.
@@ -46,29 +55,23 @@ adventure.getScala.offers.subtitle=Check offers for your dates and places. There
 adventure.getScala.adventurers.title=Adventurers
 adventure.getScala.adventurers.subtitle=Experience your adventure with great people, real adventurers. Invite the greatest and book together.
 
+#Adventure.options
+adventure.options.facebookpublish=Publish on Facebook
+adventure.options.facebooklike=Like on Facebook
+adventure.options.twitter=Tweet on Twitter
 
-adventure.files.fileName=File name
-adventure.files.uploadedBy=Uploaded by
-adventure.files.downloadBy=Download URL
-adventure.files.fileUpload=Upload file
-adventure.general.button.reset=Reset
-adventure.files.fileDrop=Drop file here or
-adventure.files.fileSelect=Select file
-adventure.files.fileChange=Change
-adventure.files.fileRemove=Remove
+#Adventure.location
+adventure.places.location=Location
+adventure.places.favourite=Favourite Place:
 
-adventure.created.button.emailInvite=Invite by Email
-adventure.created.facebookMessage=Hey guys! Join my adventure on JournWe.com
-adventure.general.button.facebookPost=Post on Facebook
-adventure.created.emailMessage=Hey guys! Join my adventure on JournWe.com. Discover what we could experience together: 
-adventure.created.button.emailSend=Send Email
-adventure.created.url=You can find your Adventure under this URL:
-adventure.created.urlShort=Your shortened URL:
-adventure.created.manageAdv=Manage your Adventure
+#Adventure.time
+adventure.time.start=Start Date
+adventure.time.end=End Date
+adventure.time.favourite=Favourite Time:
+adventure.time.option=Time Option 
 
-adventure.create.shortURLavail=shortname available?
-adventure.create.startAdv=Start a new Group Adventure
-
+#Adventure.adventurers
+adventure.adventurers.name=Name
 adventure.adventurers.myStat=You are...
 adventure.adventurers.status.notIn=Not In
 adventure.adventurers.status.undecided=Undecided
@@ -76,14 +79,20 @@ adventure.adventurers.status.soIn=So In
 adventure.adventurers.status.booked=Booked
 adventure.adventurers.applicant=You are an Applicant.
 adventure.adventurers.button.participate=Participate
-adventure.adventurers.name=Name
 adventure.adventurers.status=Status
 adventure.adventurers.applicants=Applicants
 adventure.adventurers.adopt=Adopt
 
+#Adventure.todo
+adventure.todos.listaction=Actions
+adventure.todos.listheading=My things to do
 
-journwe.subtitle=where adventurers meet...
-
-
-subscribe.welcometext=JournWe helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join an adventure.
-subscribe.cta=Subscribe with your email to get notified when we go online!
+#Adventure.files
+adventure.files.fileName=File name
+adventure.files.uploadedBy=Uploaded by
+adventure.files.downloadBy=Download URL
+adventure.files.fileUpload=Upload file
+adventure.files.fileDrop=Drop file here or
+adventure.files.fileSelect=Select file
+adventure.files.fileChange=Change
+adventure.files.fileRemove=Remove
