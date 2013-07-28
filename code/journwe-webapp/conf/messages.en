@@ -27,6 +27,23 @@ adventure.general.button.clone=Clone
 adventure.general.cloneby=You can create a new Adventure based on
 adventure.general.invitation=You have been invited to join this Adventure!
 
+adventure.general.button.cancel=Cancel
+adventure.general.button.leave=Leave
+adventure.general.leaveconfirm=Are you sure, you want to leave
+adventure.getScala.adventure.title=Adventure
+adventure.getScala.place.title=Place
+adventure.getScala.place.subtitle=Find a special place where your adventure takes place. Make it a beautiful spot worth exploring.
+adventure.getScala.time.title=Date & Time
+adventure.getScala.time.subtitle=Its all about the right time. Select the time you prefer most and get excited.
+adventure.getScala.messages.title=Messages
+adventure.getScala.messages.subtitle=Communicate with agencies and assistants with only one email address and all adventurers stay up-to-date.
+adventure.getScala.todo.title=Todo List
+adventure.getScala.todo.subtitle=Don't forget utilities at home or miss important errands. Sync with your co-adventurers.
+adventure.getScala.files.title=Files
+adventure.getScala.files.subtitle=You can upload and share files here. Store pdfs, docs, xls, ...
+adventure.getScala.offers.title=Offers
+adventure.getScala.offers.subtitle=Check offers for your dates and places. There might be just the right sweet spot for you.
+
 
 journwe.subtitle=where adventurers meet...
 

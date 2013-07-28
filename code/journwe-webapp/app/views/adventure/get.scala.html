@@ -20,8 +20,8 @@
     @if(ins != null) {<small>@ins.getName()</small>}
 </div>
 <div class="toolbar">
-    <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> Clone</a>
-    <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> Leave</a>
+    <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
+    <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> @Messages("adventure.general.button.leave")</a>
 </div>
 } {
 
@@ -56,7 +56,7 @@
     }
 
     <div class="row">
-        <h2 id="index"><i class="icon-info icon-for-adventure-title"></i> Adventure</h2>
+        <h2 id="index"><i class="icon-info icon-for-adventure-title"></i> @Messages("adventure.getScala.adventure.title")</h2>
 
         <div class="span11">
             <p class="pull-left">
@@ -112,10 +112,10 @@
     <hr/>
     <div class="row">
 
-        <h2 id="places"><i class="icon-globe icon-for-adventure-title"></i> Place</h2>
+        <h2 id="places"><i class="icon-globe icon-for-adventure-title"></i> @Messages("adventure.getScala.place.title")</h2>
 
         <div class="span11">
-            <p class="lead">Find a special place where your adventure takes place. Make it a beautiful spot worth exploring.</p>
+            <p class="lead">@Messages("adventure.getScala.place.subtitle")</p>
 
             @places(adv)
 
@@ -126,10 +126,10 @@
     <hr/>
     <div class="row">
 
-        <h2 id="adventurers"><i class="icon-group icon-for-adventure-title"></i> Adventurers</h2>
+        <h2 id="adventurers"><i class="icon-group icon-for-adventure-title"></i> @Messages("adventure.getScala.adventurers.title")</h2>
 
         <div class="span11">
-            <p class="lead">Experience your adventure with great people, real adventurers. Invite the greatest and book together.</p>
+            <p class="lead">@Messages("adventure.getScala.adventurers.subtitle")</p>
             @adventurers(adv, advr)
         </div>
         @{views.html.comment.widget_comment.render(adv, "adventurers")}
@@ -137,9 +137,9 @@
 
     <hr/>
     <div class="row">
-        <h2 id="times"><i class="icon-calendar icon-for-adventure-title"></i> Date &amp; Time</h2>
+        <h2 id="times"><i class="icon-calendar icon-for-adventure-title"></i> @Messages("adventure.getScala.time.title")</h2>
         <div class="span11">
-            <p class="lead">Its all about the right time. Select the time you prefer most and get excited.</p>
+            <p class="lead">@Messages("adventure.getScala.time.subtitle")</p>
 
             @time(adv, timeForm)
 
@@ -151,9 +151,9 @@
 @*
     <hr/>
     <div class="row">
-        <h2 id="messages"><i class="icon-envelope icon-for-adventure-title"></i> Messages</h2>
+        <h2 id="messages"><i class="icon-envelope icon-for-adventure-title"></i> @Messages("adventure.getScala.messages.title")</h2>
         <div class="span11">
-            <p class="lead">Communicate with agencies and assistants with only one email address and all adventurers stay up-to-date.</p>
+            <p class="lead">@Messages("adventure.getScala.messages.subtitle")</p>
 
 
         </div>
@@ -164,9 +164,9 @@
 
     <hr/>
     <div class="row">
-        <h2 id="todos"><i class="icon-list-ol icon-for-adventure-title"></i> Todo List</h2>
+        <h2 id="todos"><i class="icon-list-ol icon-for-adventure-title"></i> @Messages("adventure.getScala.todo.title")</h2>
         <div class="span11">
-            <p class="lead">Don't forget utilities at home or miss important errands. Sync with your co-adventurers.</p>
+            <p class="lead">@Messages("adventure.getScala.todo.subtitle")</p>
 
             @todos(adv, advr)
 
@@ -176,9 +176,9 @@
 
     <hr/>
     <div class="row">
-        <h2 id="files"><i class="icon-file icon-for-adventure-title"></i> Files</h2>
+        <h2 id="files"><i class="icon-file icon-for-adventure-title"></i> @Messages("adventure.getScala.files.title")</h2>
         <div class="span11">
-            <p class="lead">You can upload and share files here. Store pdfs, docs, xls, ...</p>
+            <p class="lead">@Messages("adventure.getScala.files.subtitle")</p>
 
             @files(adv, fileForm)
 
@@ -188,9 +188,9 @@
 
     <hr/>
     <div class="row">
-        <h2 id="offers"><i class="icon-suitcase icon-for-adventure-title"></i> Offers</h2>
+        <h2 id="offers"><i class="icon-suitcase icon-for-adventure-title"></i> @Messages("adventure.getScala.offers.title")</h2>
         <div class="span11">
-            <p class="lead">Check offers for your dates and places. There might be just the right sweet spot for you.</p>
+            <p class="lead">@Messages("adventure.getScala.offers.subtitle")</p>
 
             <table class="table table-striped table-hover">
                 <thead>
@@ -212,18 +212,18 @@
 
 <div id="cloneAdventure" class="modal hide fade" tabindex="-1" role="dialog">
     <div class="modal-header">
-        <h3><i class="icon-copy"></i> <strong>You can create a new Adventure based on "@adv.getName()".</strong></h3><br/>
+        <h3><i class="icon-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
         @cloneAdventure(adv,new DynamicForm())
     </div>
 </div>
 
 <div id="leave" class="modal hide fade" tabindex="-1" role="dialog">
     <div class="modal-header">
-        <h3>Sure, you want to leave @adv.getName()?</h3>
+        <h3>@Messages("adventure.general.leaveconfirm") @adv.getName()?</h3>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-danger" href="@routes.AdventurePeopleController.leave(adv.getId())">Leave</a> <a class="btn"
-                                                                                                       data-dismiss="modal">Cancel</a>
+        <a class="btn btn-danger" href="@routes.AdventurePeopleController.leave(adv.getId())">@Messages("adventure.general.button.leave")</a> <a class="btn"
+                                                                                                       data-dismiss="modal">@Messages("adventure.general.button.cancel")</a>
     </div>
 </div>
 
