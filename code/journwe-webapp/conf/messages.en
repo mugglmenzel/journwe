@@ -43,7 +43,19 @@ adventure.getScala.files.title=Files
 adventure.getScala.files.subtitle=You can upload and share files here. Store pdfs, docs, xls, ...
 adventure.getScala.offers.title=Offers
 adventure.getScala.offers.subtitle=Check offers for your dates and places. There might be just the right sweet spot for you.
+adventure.getScala.adventurers.title=Adventurers
+adventure.getScala.adventurers.subtitle=Experience your adventure with great people, real adventurers. Invite the greatest and book together.
 
+
+adventure.files.fileName=File name
+adventure.files.uploadedBy=Uploaded by
+adventure.files.downloadBy=Download URL
+adventure.files.fileUpload=Upload file
+adventure.general.button.reset=Reset
+adventure.files.fileDrop=Drop file here or
+adventure.files.fileSelect=Select file
+adventure.files.fileChange=Change
+adventure.files.fileRemove=Remove
 
 journwe.subtitle=where adventurers meet...
 

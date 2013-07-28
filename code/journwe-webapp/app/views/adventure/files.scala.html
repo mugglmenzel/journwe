@@ -16,15 +16,16 @@
     </tr>
 </script>
 
-<div class="times-loading"><i class="icon-spin icon-spinner"></i> Loading</div>
+<div class="times-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
 
     <table id="files-list" class="table table-striped table-hover hide">
         <thead>
             <tr>
-                <th>File name</th>
-                <th>Uploaded by</th>
-                <th>Download URL</th>
-                <th>Actions</th>
+                <th>@Messages("adventure.files.fileName")</th>
+                <th>@Messages("adventure.files.uploadedBy")</th>
+                <th>
+@Messages("adventure.files.downloadBy")</th>
+                <th>@Messages("adventure.general.listactions")</th>
             </tr>
         </thead>
         <tbody>
@@ -40,17 +41,17 @@
         @inputFile(fileForm("uploadFile"), '_label -> "File")(FieldConstructor(twitterBootstrapInputFileUpload.render), Lang.apply("en-US"))
     </fieldset>
     <div class="form-actions">
-        <button class="btn btn-primary">Upload file</button> | <a href="#" class="btn btn-link">Reset</a>
+        <button class="btn btn-primary">@Messages("adventure.files.fileUpload")</button> | <a href="#" class="btn btn-link">@Messages("adventure.general.button.reset")</a>
     </div>
 }
 *@
 
     <div id="files-upload-dropzone" style="" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
-        <div class="text-center"><p class="lead">Drop file here or
+        <div class="text-center"><p class="lead">@Messages("adventure.files.fileDrop")
             <div class="fileupload fileupload-new" data-provides="fileupload">
                 <div class="input-append">
-                    <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span><input type="file" name="uploadFile" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-                    <button class="btn btn-upload"><i class="icon-cloud-upload"></i> Upload file</button>
+                    <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">@Messages("adventure.files.fileSelect")</span><span class="fileupload-exists">@Messages("adventure.files.fileChange")</span><input type="file" name="uploadFile" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">@Messages("adventure.files.fileRemove")</a>
+                    <button class="btn btn-upload"><i class="icon-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
                 </div>
             </div>
             </p>
