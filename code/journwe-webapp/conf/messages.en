@@ -69,6 +69,17 @@ adventure.created.manageAdv=Manage your Adventure
 adventure.create.shortURLavail=shortname available?
 adventure.create.startAdv=Start a new Group Adventure
 
+adventure.adventurers.myStat=You are...
+adventure.adventurers.status.notIn=Not In
+adventure.adventurers.status.undecided=Undecided
+adventure.adventurers.status.soIn=So In
+adventure.adventurers.status.booked=Booked
+adventure.adventurers.applicant=You are an Applicant.
+adventure.adventurers.button.participate=Participate
+adventure.adventurers.name=Name
+adventure.adventurers.status=Status
+adventure.adventurers.applicants=Applicants
+adventure.adventurers.adopt=Adopt
 
 
 journwe.subtitle=where adventurers meet...

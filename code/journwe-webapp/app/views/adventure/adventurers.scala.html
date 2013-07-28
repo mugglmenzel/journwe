@@ -20,28 +20,27 @@ case EAdventurerParticipation.APPLICANT => {}
 
 @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)){
 <div>
-    <strong style="vertical-align:middle;">You are... </strong>
+    <strong style="vertical-align:middle;">@Messages("adventure.adventurers.myStat")</strong>
 
     <div class="btn-group btn-select-adventurer">
         <button class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="icon-frown"></i> Not
-            In</button>
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="icon-frown"></i> @Messages("adventure.adventurers.status.notIn")</button>
         <button class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="icon-question"></i> Undecided</button>
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="icon-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
         <button class="btn btn-primary @if(status == EAdventurerParticipation.GOING){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="icon-smile"></i> So In</button>
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="icon-smile"></i> @Messages("adventure.adventurers.status.soIn")</button>
         <button class="btn btn-success @if(status == EAdventurerParticipation.BOOKED){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="icon-ok"></i> Booked</button>
+           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="icon-ok"></i> @Messages("adventure.adventurers.status.booked")</button>
     </div>
 </div>
 } else {
 @if(EAdventurerParticipation.APPLICANT.equals(status)) {
 <div>
-    <strong>You are an Applicant.</strong>
+    <strong>@Messages("adventure.adventurers.applicant")</strong>
 </div>
 } else {
 <div>
-    <a class="btn btn-primary" href="@routes.AdventurePeopleController.participate(adv.getId())">Participate</a>
+    <a class="btn btn-primary" href="@routes.AdventurePeopleController.participate(adv.getId())">@Messages("adventure.adventurers.button.participate")</a>
 </div>
 }
 }
@@ -51,8 +50,8 @@ case EAdventurerParticipation.APPLICANT => {}
 
     <thead>
     <tr>
-        <th style="width: 100%;">Name</th>
-        <th class="text-center">Status</th>
+        <th style="width: 100%;">@Messages("adventure.adventurers.name")</th>
+        <th class="text-center">@Messages("adventure.adventurers.status")</th>
     </tr>
     </thead>
     <tbody>
@@ -109,9 +108,9 @@ case EAdventurerParticipation.APPLICANT => {}
 <table class="table table-striped table-hover">
     <thead>
     <tr>
-        <th style="width: 100%;">Applicants</th>
-        <th class="text-center">Status</th>
-        <th class="text-center">Adopt</th>
+        <th style="width: 100%;">@Messages("adventure.adventurers.applicants")</th>
+        <th class="text-center">@Messages("adventure.adventurers.status")</th>
+        <th class="text-center">@Messages("adventure.adventurers.adopt")</th>
     </tr>
     </thead>
     <tbody>
