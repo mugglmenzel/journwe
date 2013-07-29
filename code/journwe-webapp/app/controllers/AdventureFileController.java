@@ -16,7 +16,6 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.index;
 
 import java.io.File;
 import java.util.List;

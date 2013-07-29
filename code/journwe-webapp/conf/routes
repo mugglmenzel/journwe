@@ -6,18 +6,22 @@
 # GET     /showProgress                                               controllers.ProgressController.getProgressHome()
 # GET		/progress													controllers.ProgressController.getProgress()
 
+GET           /category/:id/inspirations.json             controllers.ApplicationController.getInspirations(id:String)
+GET           /adventures/my.json                         controllers.ApplicationController.getMyAdventures()
+GET           /adventures/public.json                     controllers.ApplicationController.getPublicAdventures()
 
-GET           /inspiration/new                            controllers.InspirationController.create()
+
 GET           /category/new                               controllers.CategoryController.create()
-
 GET           /category/:id/edit                          controllers.CategoryController.edit(id:String)
-GET           /inspiration/:id/edit                       controllers.InspirationController.edit(id:String)
-
-POST          /inspiration/save                           controllers.InspirationController.save()
 POST          /category/save                              controllers.CategoryController.save()
-
 GET           /category/:id/delete                        controllers.CategoryController.delete(id:String)
+
+GET           /inspiration/:id                            controllers.InspirationController.get(id:String)
+GET           /inspiration/new                            controllers.InspirationController.create()
+GET           /inspiration/:id/edit                       controllers.InspirationController.edit(id:String)
+POST          /inspiration/save                           controllers.InspirationController.save()
 GET           /inspiration/:id/delete                     controllers.InspirationController.delete(id:String)
+
 
 POST          /feedback                                   controllers.FeedbackController.createFeedback()
 
@@ -80,7 +84,6 @@ DELETE        /adventure/:id/files/:fileName              controllers.AdventureF
 
 GET           /adv/:shortname                             controllers.AdventureController.getIndexShortname(shortname:String)
 
-GET           /inspiration/:id                            controllers.InspirationController.get(id:String)
 
 # Comments
 GET           /thread/new/:advid/:topictype               controllers.CommentController.createNewThreadAndFirstComment(advid:String, topictype:String)
@@ -117,10 +120,6 @@ GET           /about                                      controllers.Applicatio
 GET           /admin                                      controllers.ApplicationController.admin()
 
 GET           /category/:catId                            controllers.ApplicationController.categoryIndex(catId:String)
-
-
 GET           /new                                        controllers.ApplicationController.indexNew()
-GET           /adventures/my                              controllers.ApplicationController.getMyAdventures()
-GET           /adventures/public                          controllers.ApplicationController.getPublicAdventures()
 GET           /                                           controllers.ApplicationController.index()
 

@@ -5,6 +5,7 @@ import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
+import models.Inspiration;
 import models.auth.SecuredBetaUser;
 import models.Category;
 import models.adventure.Adventure;
@@ -21,6 +22,8 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+
+import views.html.index.*;
 import views.html.*;
 
 import java.io.IOException;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static play.data.Form.form;
+
 
 public class ApplicationController extends Controller {
 
@@ -39,33 +43,34 @@ public class ApplicationController extends Controller {
                 && (SecuredBetaUser.isBeta(usr) || SecuredBetaUser.isAdmin(usr))) {
 
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
-            List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
-            for (Category cat : new CategoryDAO().all())
-                catCounts.add(new CategoryCount(cat, new CategoryDAO()
-                        .countInspirations(cat.getId())));
 
             if (new AdventurerDAO().isAdventurer(userId))
-                return ok(indexVet.render(catCounts, new InspirationDAO().all(), new AdventureDAO().allOfUserId(userId), null));
+                return ok(indexVet.render());
             else {
 
-                return ok(index.render(catCounts, new InspirationDAO().all(), new AdventureDAO().all(),
-                        null));
+                return ok(index.render());
             }
         } else {
             return ok(subscribe.render(subForm));
         }
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result indexNew() {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
         for (Category cat : new CategoryDAO().all())
             catCounts.add(new CategoryCount(cat, new CategoryDAO()
                     .countInspirations(cat.getId())));
 
-        return ok(index.render(catCounts, new InspirationDAO().all(), new AdventureDAO().all(),
-                null));
+        return ok(index.render());
     }
 
+
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result categoryIndex(String catId) {
+
+        return ok(indexCat.render(new CategoryDAO().get(catId)));
+    }
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getMyAdventures() {
@@ -117,6 +122,27 @@ public class ApplicationController extends Controller {
     }
 
 
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result getInspirations(String catId) {
+        DynamicForm data = form().bindFromRequest();
+        String lastId = data.get("lastId");
+        int count = new Integer(data.get("count")).intValue();
+
+        List<ObjectNode> result = new ArrayList<ObjectNode>();
+        for (Inspiration ins : new InspirationDAO().all(catId, lastId, count)) {
+            ObjectNode node = Json.newObject();
+            node.put("id", ins.getInspirationId());
+            node.put("link", routes.InspirationController.get(ins.getInspirationId()).absoluteURL(request()));
+            node.put("image", ins.getImage());
+            node.put("name", ins.getName());
+
+            result.add(node);
+        }
+
+        return ok(Json.toJson(result));
+    }
+
+
     public static Result subscribe() {
         Form<Subscriber> filledSubForm = subForm.bindFromRequest();
         Subscriber sub = filledSubForm.get();
@@ -145,15 +171,7 @@ public class ApplicationController extends Controller {
         return ok(subscribe.render(subForm));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
-    public static Result categoryIndex(String catId) {
-        List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
-        for (Category cat : new CategoryDAO().all())
-            catCounts.add(new CategoryCount(cat, new CategoryDAO()
-                    .countInspirations(cat.getId())));
-        return ok(index.render(catCounts, new InspirationDAO().all(catId), new AdventureDAO().all(),
-                catId));
-    }
+
 
     @Cached(key = "imprint")
     public static Result imprint() {

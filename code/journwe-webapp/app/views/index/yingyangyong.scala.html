@@ -1,4 +1,4 @@
-@(categories: List[models.helpers.CategoryCount])
+@import models.dao._
 
 <div id="yingyangyong-click-info" class="row-fluid">
     <div class="span2 offset1 text-center">
@@ -23,11 +23,12 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                    @for(cat <- categories) {
-                        <li><a><span
-                        class="badge badge-info pull-right">@cat.getCount()</span> @cat.getCategory().getName()
-                        </a>
-                        </li>
+                    @defining(new CategoryDAO()){catDAO =>
+                        @defining(catDAO.all()){ categories =>
+                            @for(cat <- categories) {
+                                <li><a><span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span>@cat.getName()</a></li>
+                            }
+                        }
                     }
                     </ul>
                 </div>

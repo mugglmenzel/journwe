@@ -1,4 +1,3 @@
-@(categories: List[models.helpers.CategoryCount])(inspirations: List[Inspiration])(adventures: List[models.adventure.Adventure])(catId: String = null)
 
 @import models.dao._
 @import com.feth.play.module.pa.views.html._
@@ -10,7 +9,7 @@
 
 
     <div id="yingyangyong-container" style="display: none;">
-        @yingyangyong(categories)
+        @yingyangyong
         <div>
             <button class="btn btn-block" onclick="$('#yingyangyong-container').slideUp(500); $('#yingyangyong-starter button').prop('disabled', false);"><i class="icon-chevron-up"></i></button>
         </div>
