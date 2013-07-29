@@ -56,7 +56,7 @@ public class ApplicationController extends Controller {
         }
     }
 
-    public static Result indexPublic() {
+    public static Result indexNew() {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
         for (Category cat : new CategoryDAO().all())
             catCounts.add(new CategoryCount(cat, new CategoryDAO()

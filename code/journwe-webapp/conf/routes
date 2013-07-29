@@ -117,7 +117,7 @@ GET           /admin                                      controllers.Applicatio
 GET           /category/:catId                            controllers.ApplicationController.categoryIndex(catId:String)
 
 
-GET           /pub                                        controllers.ApplicationController.indexPublic()
+GET           /new                                        controllers.ApplicationController.indexNew()
 GET           /adventures/my                              controllers.ApplicationController.getMyAdventures()
 GET           /adventures/public                          controllers.ApplicationController.getPublicAdventures()
 GET           /                                           controllers.ApplicationController.index()
