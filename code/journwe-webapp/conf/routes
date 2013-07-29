@@ -19,6 +19,8 @@ POST          /category/save                              controllers.CategoryCo
 GET           /category/:id/delete                        controllers.CategoryController.delete(id:String)
 GET           /inspiration/:id/delete                     controllers.InspirationController.delete(id:String)
 
+POST          /feedback                                   controllers.FeedbackController.createFeedback()
+
 # Adventure
 GET           /adventure/new                              controllers.AdventureController.create()
 #POST	/adventure/saveOld											controllers.AdventureController.saveOld()
