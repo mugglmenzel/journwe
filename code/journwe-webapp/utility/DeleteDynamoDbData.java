@@ -19,7 +19,7 @@ public class DeleteDynamoDbData {
         String keyName = "";
         String rangeKeyName = "";
 
-        BasicAWSCredentials credentials = new BasicAWSCredentials("AKIAJRJVMMAPP44IO3OA", "DlKBHrrhJb79Dwybx3vJEFAMXdV4aMoerHWb22o7");
+        BasicAWSCredentials credentials = new BasicAWSCredentials("XXX", "YYY");
         AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(credentials);
 
         for (String tableName : new String[]{"journwe-adventure", "journwe-adventurehash", "journwe-adventurepart",
