@@ -16,6 +16,7 @@ import models.auth.SecuredBetaUser;
 import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
+import models.user.EUserRole;
 import models.user.User;
 import models.user.UserSocial;
 import org.codehaus.jackson.node.ObjectNode;
@@ -26,6 +27,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import services.OAuthUserServicePlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,19 +50,27 @@ public class AdventurePeopleController extends Controller {
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result participate(String advId) {
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
-        if (advr == null) {
-            advr = new Adventurer();
-            advr.setUserId(usr.getId());
-            advr.setAdventureId(advId);
-            advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
-            new AdventurerDAO().save(advr);
-        }
 
-        return ok(Json.toJson(advr));
+        //BETA activation
+        if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
+            PlayAuthenticate.storeOriginalUrl(Http.Context.current());
+            response().setCookie(OAuthUserServicePlugin.USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
+            return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
+        } else {
+            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+            Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+            if (advr == null) {
+                advr = new Adventurer();
+                advr.setUserId(usr.getId());
+                advr.setAdventureId(advId);
+                advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
+                new AdventurerDAO().save(advr);
+            }
+
+            return AdventureController.getIndex(advId);
+        }
     }
 
 

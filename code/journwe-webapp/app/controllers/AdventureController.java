@@ -58,11 +58,7 @@ public class AdventureController extends Controller {
         if (adv == null) return badRequest();
         else {
 
-            //BETA activation
-            if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
-                PlayAuthenticate.storeOriginalUrl(Http.Context.current());
-                response().setCookie(OAuthUserServicePlugin.USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
-            }
+
 
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
