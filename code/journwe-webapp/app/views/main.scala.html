@@ -51,30 +51,36 @@
 	</script>
 </head>
 <body>
-	<div class="row-fluid">
+	<div class="header row-fluid" style="width=device-width;">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="container offset2">
-					<button type="button" class="btn btn-navbar" data-toggle="collapse"
+				<div class="row-fluid">
+					<!--<button type="button" class="btn btn-navbar" data-toggle="collapse"
 						data-target=".nav-collapse">
 						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-					</button>
-					
-					<a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
-	                    <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 20px;">
-						Journ<strong>We</strong>
-						<!--<img src="@routes.Assets.at("img/suitcase_brand.png")" style="height: 14px">-->
-	                    </span>
-	                </a>
-	                <div class="nav-collapse collapse">
-	                    <div class="navbar-search">
-	                        <div class="input-append">
-	                            <input type="text" class="input-xlarge search-query" placeholder="Find Places, People and Inspirations">
-	                            <button class="btn"><i class="icon-search"></i></button>
-	                        </div>
-	                    </div>
-	                </div>
+					</button>-->
+
+                    <div class="span3 offset2 pull-left">
+                        <div class="nav-collapse collapse">
+                            <ul class="nav nav-list">
+                                <li><a href="#navbar-inspiration-categories" data-toggle="tab"><i class="icon-lightbulb"></i> Inspirations</a></li>
+                                <li><a href="#navbar-general-search" data-toggle="tab"><i class="icon-search"></i> Search</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="span2">
+                        <div class="text-center" id="navbar-journwe-logo">
+                            <a href="@routes.ApplicationController.index" onmouseover="$('#navbar-journwe-logo a[data-toggle=tab]').tab('show');" class="brand" style="float: none;vertical-align: bottom;">
+                                <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 20px;">
+                                Journ<strong>We</strong>
+                                <!--<img src="@routes.Assets.at("img/suitcase_brand.png")" style="height: 14px">-->
+                                </span><a data-target="#navbar-journwe-home-select" data-toggle="tab"></a>
+                            </a>
+                        </div>
+                    </div>
 
 
 
@@ -83,14 +89,14 @@
                         @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
 	                    @if(auth != null && user != null) {
 
-	                        <div class="pull-right user-login">
+	                        <div class="span2 pull-right user-login">
                                 <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px;">
 	                            <a class="btn" href="@routes.UserController.getProfile(user.getId())"><i class="icon-user"></i> @user.getName()</a>
 	                            <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
 	                        </div>
 
 	                    } else {
-	                   		<div class="btn-group pull-right user-login">
+	                   		<div class="span2 btn-group pull-right user-login">
 								<a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
 								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
@@ -105,6 +111,39 @@
                         }}
 	                }
 				</div>
+                <div class="row-fluid">
+                    <div class="span8 offset2 tab-content">
+                        <div class="tab-pane fade" id="navbar-inspiration-categories">
+
+                                <h4>Categories of Inspirations</h4>
+                                <ul class="nav nav-pills nav-stacked">
+                                    @defining(new CategoryDAO()){catDAO =>
+                                        @defining(catDAO.all()){ categories =>
+                                            @for(cat <- categories) {
+                                                <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
+                                                    <span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span>@cat.getName()</a>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+
+                        </div>
+                        <div class="tab-pane fade" id="navbar-general-search">
+                            <div class="text-center">
+                                <div class="input-append">
+                                    <input type="text" class="input-xlarge search-query" placeholder="Find Places, People and Inspirations">
+                                    <button class="btn"><i class="icon-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="navbar-journwe-home-select">
+                            <div class="text-center" style="margin: 10px 0px; line-height: 70px;">
+                                <span><a href="@routes.ApplicationController.index()"><i class="icon-home" style="font-size: 70px;"></i></a> or <a href="@routes.ApplicationController.indexPublic()"><img src="http://i.embed.ly/1/image/resize?height=50&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 50px; vertical-align: text-bottom;"></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</div>
@@ -132,33 +171,35 @@
 			</div>
 			}
 			@content
-			<div class="row">
-		        <div class="offset2 span8">
-		            <div class="pull-right"><a onclick="$('html, body').animate({ scrollTop: 0 }, 600); return false;"><i class="icon-chevron-up"></i> Top</a></div>
-		        </div>
-		    </div>
-		    <div class="spacer20"></div>
-			<div class="row">
-		        <div class="offset2 span8">
-		            <div class="row">
-		                <div class="span2">
-		                    <ul class="nav nav-pills nav-stacked">
-		                        <li @if(active == "home"){class="active"}><a href="@routes.ApplicationController.index">Home</a></li>
-		                        <li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
-		                        <li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
-		                        <li @if(active == "imprint"){class="active"}><a href="@routes.ApplicationController.imprint">Imprint</a> </li>
-		                        @currentAuth() { auth => @if(auth != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){<li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>}}
-		                    </ul>
-		               </div>
-		                <div class="span2 offset1">
-		                    Find us on Social Networks
-		                </div>
-		                <div class="span7"></div>
-		            </div>
-		            <div class="text-center">&copy; 2013 JournWe</div>
-		        </div>
-			</div>
 		</div>
 	</div>
+    <div class="spacer20"></div>
+    <div class="row-fluid" style="width=device-width;">
+        <div class="offset2 span8">
+            <div class="pull-right"><a onclick="$('html, body').animate({ scrollTop: 0 }, 600); return false;"><i class="icon-chevron-up"></i> Top</a></div>
+        </div>
+    </div>
+    <div class="spacer20"></div>
+    <div class="footer row-fluid" style="width=device-width;">
+        <div class="offset2 span8">
+            <div class="row-fluid">
+                <div class="span2">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li @if(active == "home"){class="active"}><a href="@routes.ApplicationController.index">Home</a></li>
+                        <li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
+                        <li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
+                        <li @if(active == "imprint"){class="active"}><a href="@routes.ApplicationController.imprint">Imprint</a> </li>
+                        @currentAuth() { auth => @if(auth != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){<li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>}}
+                    </ul>
+                </div>
+                <div class="span2 offset1">
+                    Find us on Social Networks
+                </div>
+                <div class="span7"></div>
+            </div>
+            <div class="text-center">&copy; 2013 JournWe</div>
+        </div>
+    </div>
+
 </body>
 </html>

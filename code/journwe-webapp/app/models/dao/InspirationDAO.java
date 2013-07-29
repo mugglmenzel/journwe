@@ -31,7 +31,7 @@ public class InspirationDAO extends CommonEntityDAO<Inspiration> {
     public Map<String, String> allOptionsMap() {
         Map<String, String> result = new HashMap<String, String>();
         for (Inspiration in : all())
-            result.put(in.getId(), in.getName());
+            result.put(in.getInspirationId(), in.getName());
         return result;
     }
 }

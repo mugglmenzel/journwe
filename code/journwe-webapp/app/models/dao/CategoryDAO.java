@@ -1,5 +1,6 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -31,8 +32,10 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     }
 
     public Integer countInspirations(String id) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("inspirationCategoryId", new Condition().withAttributeValueList(new AttributeValue(id)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.count(Inspiration.class, scan);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        Inspiration ins = new Inspiration();
+        ins.setCategoryId(id);
+        query.setHashKeyValues(ins);
+        return pm.count(Inspiration.class, query);
     }
 }
