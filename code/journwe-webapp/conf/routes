@@ -19,8 +19,6 @@ POST          /category/save                              controllers.CategoryCo
 GET           /category/:id/delete                        controllers.CategoryController.delete(id:String)
 GET           /inspiration/:id/delete                     controllers.InspirationController.delete(id:String)
 
-POST          /feedback                                   controllers.FeedbackController.createFeedback()
-
 # Adventure
 GET           /adventure/new                              controllers.AdventureController.create()
 #POST	/adventure/saveOld											controllers.AdventureController.saveOld()
@@ -41,7 +39,7 @@ GET           /adventure/:id/groups                       controllers.Adventurer
 
 # POST    /adventure/:id/postTwitterStream                            controllers.AdventureController.postOnMyTwitterStream(id:String)
 GET           /adventure/:id/adventurers                  controllers.AdventurePeopleController.getAdventurers(id:String)
-POST          /adventure/:id/participate                  controllers.AdventurePeopleController.participate(id:String)
+GET           /adventure/:id/participate                  controllers.AdventurePeopleController.participate(id:String)
 POST          /adventure/:id/participate/:status          controllers.AdventurePeopleController.participateStatus(id:String, status:String)
 POST          /adventure/:id/adopt/:user                  controllers.AdventurePeopleController.adopt(id:String, user:String)
 POST          /adventure/:id/postFacebookWall             controllers.AdventurePeopleController.postOnMyFacebookWall(id:String)
@@ -119,7 +117,7 @@ GET           /admin                                      controllers.Applicatio
 GET           /category/:catId                            controllers.ApplicationController.categoryIndex(catId:String)
 
 
-GET           /pub                                        controllers.ApplicationController.indexPublic()
+GET           /new                                        controllers.ApplicationController.indexNew()
 GET           /adventures/my                              controllers.ApplicationController.getMyAdventures()
 GET           /adventures/public                          controllers.ApplicationController.getPublicAdventures()
 GET           /                                           controllers.ApplicationController.index()
