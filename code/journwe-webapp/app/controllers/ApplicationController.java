@@ -36,7 +36,7 @@ public class ApplicationController extends Controller {
     public static Result index() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
-                && SecuredBetaUser.isAdmin(usr)) {
+                && (SecuredBetaUser.isBeta(usr) || SecuredBetaUser.isAdmin(usr))) {
 
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
             List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
@@ -56,7 +56,7 @@ public class ApplicationController extends Controller {
         }
     }
 
-    public static Result indexPublic() {
+    public static Result indexNew() {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
         for (Category cat : new CategoryDAO().all())
             catCounts.add(new CategoryCount(cat, new CategoryDAO()

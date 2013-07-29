@@ -36,7 +36,7 @@ public class InspirationController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result get(String id) {
         Inspiration ins = new InspirationDAO().get(id);
-        Category cat = new CategoryDAO().get(ins.getInspirationCategoryId());
+        Category cat = new CategoryDAO().get(ins.getCategoryId());
         AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
                 ConfigFactory.load().getString("aws.accessKey"),
                 ConfigFactory.load().getString("aws.secretKey")));
@@ -80,7 +80,7 @@ public class InspirationController extends Controller {
             File file = image.getFile();
 
             try {
-                if (ins.getId() == null && !new InspirationDAO().save(ins))
+                if (ins.getInspirationId() == null && !new InspirationDAO().save(ins))
                     throw new Exception();
 
 
@@ -91,12 +91,12 @@ public class InspirationController extends Controller {
                             ConfigFactory.load().getString("aws.accessKey"),
                             ConfigFactory.load().getString("aws.secretKey")));
                     s3.putObject(new PutObjectRequest(
-                            S3_BUCKET_INSPIRATION_IMAGES, ins.getId() + "/title", file)
+                            S3_BUCKET_INSPIRATION_IMAGES, ins.getInspirationId() + "/title", file)
                             .withCannedAcl(CannedAccessControlList.PublicRead));
                     ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
-                            ins.getId() + "/title"));
+                            ins.getInspirationId() + "/title"));
                 }  else
-                    ins.setImage(new InspirationDAO().get(ins.getId()).getImage());
+                    ins.setImage(new InspirationDAO().get(ins.getInspirationId()).getImage());
 
 
                 if (new InspirationDAO().save(ins)) {

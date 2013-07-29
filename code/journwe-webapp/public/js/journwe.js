@@ -14,6 +14,10 @@ $('body').ready(function(){
         }
         lastScrollTop = st;
     });
+
+    $('#navbar-secondlevel-collapsable .collapse').collapse({
+        toggle: false
+    });
 });
 
 // Formats a date to hh:mm dd.MM.YYYY

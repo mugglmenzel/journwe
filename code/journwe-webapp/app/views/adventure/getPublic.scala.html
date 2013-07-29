@@ -1,5 +1,9 @@
 @(adv: models.adventure.Adventure, ins: Inspiration)
 
+@import models.dao._
+@import models.adventure.EAdventurerParticipation
+@import com.feth.play.module.pa.PlayAuthenticate
+@import com.feth.play.module.pa.views.html._
 
 @main(adv.getName()){
 
@@ -14,8 +18,30 @@
     </div>
 
     <div class="toolbar">
-        <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
+
         <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="icon-plus"></i> @Messages("adventure.general.button.join")</a>
+        <script>
+
+            $(function(){
+            $('.btn-participate').click(function(){
+            var el = $(this),
+            html = el.html();
+
+            el.css({width:el.width()+"px"})
+            .html('<i class="icon-spin icon-spinner"></i>');
+
+            return true;
+            })
+            });
+
+        </script>
+
+        @currentAuth() { auth =>
+            @if(auth != null) {
+                <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
+            }
+        }
+
     </div>
 } {
     <div>
@@ -28,6 +54,16 @@
             <div>@Html(adv.getHTMLDescription())</div>
 
         </p>
+            <div style="display: block;">
+            @defining(new AdventurerDAO()){ advrDAO =>
+                    <p>@advrDAO.count(adv.getId) Adventurers participate.</p>
+                @advrDAO.all(adv.getId()).filter(!_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).map{ advr =>
+                    @defining(new UserDAO().get(advr.getUserId())) { user =>
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <img style="margin: 0px;" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
+                        </div>
+                    }}}
+            </div>
     </div>
 
     <div id="cloneAdventure" class="modal hide fade" tabindex="-1" role="dialog">
@@ -37,22 +73,5 @@
         </div>
     </div>
 
-    <script>
 
-        $(function(){
-            $('.btn-participate').click(function(){
-                var el = $(this),
-                    html = el.html();
-
-                el.css({width:el.width()+"px"})
-                    .html('<i class="icon-spin icon-spinner"></i>');
-
-                $.post(el.attr('href'), function(json){
-                    window.location.reload(); // Reload
-                });
-
-                return false;
-            })
-        });
-    </script>
 }

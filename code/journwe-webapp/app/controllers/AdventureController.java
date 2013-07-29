@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.user.AuthUser;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import models.Inspiration;
@@ -19,6 +20,7 @@ import models.authorization.JournweAuthorization;
 import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
+import models.user.EUserRole;
 import models.user.User;
 import models.user.UserEmail;
 import models.user.UserSocial;
@@ -31,6 +33,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import services.OAuthUserServicePlugin;
 import views.html.adventure.create;
 import views.html.adventure.created;
 import views.html.adventure.getIndex;
@@ -49,15 +52,21 @@ public class AdventureController extends Controller {
 
     private static DynamicForm advForm = form();
 
-    @Security.Authenticated(SecuredBetaUser.class)
+
     public static Result getIndex(String id) {
         Adventure adv = new AdventureDAO().get(id);
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        Adventurer advr = new AdventurerDAO().get(id, usr.getId());
-        if (advr == null)
-            return ok(getPublic.render(adv, new InspirationDAO().get(adv.getInspirationId())));
-        else
-            return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
+        if (adv == null) return badRequest();
+        else {
+
+
+
+            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
+            if (advr == null)
+                return ok(getPublic.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+            else
+                return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
+        }
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
@@ -290,13 +299,13 @@ public class AdventureController extends Controller {
             }
         }
 
-        if(placeI == 1) {
+        if (placeI == 1) {
             adv.setFavoritePlaceId(lastPlaceId);
             adv.setPlaceVoteOpen(false);
             new AdventureDAO().save(adv);
         }
 
-        if(timeI == 1) {
+        if (timeI == 1) {
             adv.setFavoriteTimeId(lastTimeId);
             adv.setTimeVoteOpen(false);
             new AdventureDAO().save(adv);
@@ -341,7 +350,7 @@ public class AdventureController extends Controller {
         DynamicForm advForm = form().bindFromRequest();
         String advId = advForm.get("pk");
         if (advId != null && !"".equals(advId)) {
-            if(!JournweAuthorization.canEditAdventureTitle(advId))
+            if (!JournweAuthorization.canEditAdventureTitle(advId))
                 return badRequest("You are not authorized to do this.");
             Adventure adv = new AdventureDAO().get(advId);
             String name = advForm.get("name");
@@ -357,7 +366,7 @@ public class AdventureController extends Controller {
     }
 
     public static Result updateImage(String advId) {
-        if(!JournweAuthorization.canEditAdventureImage(advId))
+        if (!JournweAuthorization.canEditAdventureImage(advId))
             return badRequest("You are not authorized to do this.");
         Adventure adv = new AdventureDAO().get(advId);
         try {

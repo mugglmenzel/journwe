@@ -1,6 +1,7 @@
 package services;
 
 import models.dao.UserDAO;
+import models.user.EUserRole;
 import models.user.User;
 import play.Application;
 import play.Logger;
@@ -8,8 +9,12 @@ import play.Logger;
 import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
+import play.mvc.Controller;
 
 public class OAuthUserServicePlugin extends UserServicePlugin {
+
+    public static final String USER_ROLE_ON_REGISTER = "play-authenticate-user-role-on-register";
+    private static final EUserRole DEFAULT_USER_ROLE = EUserRole.USER;
 
 	public OAuthUserServicePlugin(final Application app) {
 		super(app);
@@ -19,7 +24,7 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
 	public Object save(final AuthUser authUser) {
 		final boolean isLinked = new UserDAO().existsByAuthUserIdentity(authUser);
 		if (!isLinked) {
-			return new UserDAO().create(authUser).getId();
+			return new UserDAO().create(authUser, Controller.request().cookie(USER_ROLE_ON_REGISTER) != null ? EUserRole.valueOf(Controller.request().cookie(USER_ROLE_ON_REGISTER).value()) : DEFAULT_USER_ROLE).getId();
 		} else {
 			// we have this user already, so return null
 			return null;
