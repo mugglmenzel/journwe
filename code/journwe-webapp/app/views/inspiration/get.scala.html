@@ -21,8 +21,9 @@
             }
 
             <p>
-                @Html(ins.getDescription())
+                @if(ins.getDescription != null){@Html(ins.getDescription())}
             </p>
+            <div class="fb-like" data-href="http://developers.facebook.com/docs/reference/plugins/like" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="arial"></div>
             <ul class="thumbnails">
                 <li class="span4">
                     <a class="thumbnail" href="#">
