@@ -138,7 +138,8 @@ public class AdventurePeopleController extends Controller {
 
     public static Result postOnMyFacebookWall(String advId) {
         Adventure adv = new AdventureDAO().get(advId);
-        Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
+        Inspiration ins = Inspiration.fromId(adv.getInspirationId());
+        ins = ins != null ? new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()) : ins;
         AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
 
         DynamicForm f = form().bindFromRequest();

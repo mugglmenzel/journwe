@@ -24,6 +24,21 @@ public class Inspiration {
 
     private String weatherId;
 
+
+    @DynamoDBIgnore
+    public static Inspiration fromId(String id) {
+        if(id == null || !id.contains(":")) return null;
+        Inspiration po = new Inspiration();
+        po.setCategoryId(id.split(":")[0]);
+        po.setInspirationId(id.split(":")[1]);
+        return po;
+    }
+
+    @DynamoDBIgnore
+    public String getId() {
+        return categoryId + ":" + inspirationId;
+    }
+
     /**
      * @return the categoryId
      */

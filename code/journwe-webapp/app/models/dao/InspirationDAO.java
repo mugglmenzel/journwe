@@ -7,12 +7,13 @@ import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.dao.common.CommonEntityDAO;
 import models.Inspiration;
+import models.dao.common.CommonRangeEntityDAO;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InspirationDAO extends CommonEntityDAO<Inspiration> {
+public class InspirationDAO extends CommonRangeEntityDAO<Inspiration> {
 
     public InspirationDAO() {
         super(Inspiration.class);

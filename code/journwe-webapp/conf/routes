@@ -16,11 +16,11 @@ GET           /category/:id/edit                          controllers.CategoryCo
 POST          /category/save                              controllers.CategoryController.save()
 GET           /category/:id/delete                        controllers.CategoryController.delete(id:String)
 
-GET           /inspiration/:id                            controllers.InspirationController.get(id:String)
+GET           /category/:catId/inspiration/:id                            controllers.InspirationController.get(catId:String, id:String)
 GET           /inspiration/new                            controllers.InspirationController.create()
-GET           /inspiration/:id/edit                       controllers.InspirationController.edit(id:String)
+GET           /category/:catId/inspiration/:id/edit                       controllers.InspirationController.edit(catId:String, id:String)
 POST          /inspiration/save                           controllers.InspirationController.save()
-GET           /inspiration/:id/delete                     controllers.InspirationController.delete(id:String)
+GET           /category/:catId/inspiration/:id/delete                     controllers.InspirationController.delete(catId:String, id:String)
 
 
 POST          /feedback                                   controllers.FeedbackController.createFeedback()

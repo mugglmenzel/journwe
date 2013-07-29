@@ -57,15 +57,14 @@ public class AdventureController extends Controller {
         Adventure adv = new AdventureDAO().get(id);
         if (adv == null) return badRequest();
         else {
-
-
-
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
+            Inspiration ins = Inspiration.fromId(adv.getInspirationId());
+            ins = ins != null ? new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()) : ins;
             if (advr == null)
-                return ok(getPublic.render(adv, new InspirationDAO().get(adv.getInspirationId())));
+                return ok(getPublic.render(adv, ins));
             else
-                return ok(getIndex.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
+                return ok(getIndex.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
         }
     }
 
@@ -79,6 +78,7 @@ public class AdventureController extends Controller {
         return createFromInspiration(null);
     }
 
+    //TODO: adapt to composite inspiration id
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result createFromInspiration(String insId) {
         Map<String, String> inspireOptions = new InspirationDAO()
@@ -121,7 +121,8 @@ public class AdventureController extends Controller {
                     throw new Exception();
 
                 adv = new AdventureDAO().get(adv.getId());
-                Inspiration ins = new InspirationDAO().get(adv.getInspirationId());
+                Inspiration ins = Inspiration.fromId(adv.getInspirationId());
+                ins = ins != null ? new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()) : ins;
 
                 Logger.info("got image files " + image.getFilename());
 

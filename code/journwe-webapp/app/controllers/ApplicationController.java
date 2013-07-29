@@ -132,7 +132,7 @@ public class ApplicationController extends Controller {
         for (Inspiration ins : new InspirationDAO().all(catId, lastId, count)) {
             ObjectNode node = Json.newObject();
             node.put("id", ins.getInspirationId());
-            node.put("link", routes.InspirationController.get(ins.getInspirationId()).absoluteURL(request()));
+            node.put("link", routes.InspirationController.get(ins.getCategoryId(), ins.getInspirationId()).absoluteURL(request()));
             node.put("image", ins.getImage());
             node.put("name", ins.getName());
 

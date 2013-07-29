@@ -34,8 +34,8 @@ public class InspirationController extends Controller {
     private static Form<Inspiration> insForm = form(Inspiration.class);
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result get(String id) {
-        Inspiration ins = new InspirationDAO().get(id);
+    public static Result get(String catId, String id) {
+        Inspiration ins = new InspirationDAO().get(catId, id);
         Category cat = new CategoryDAO().get(ins.getCategoryId());
         AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
                 ConfigFactory.load().getString("aws.accessKey"),
@@ -55,8 +55,8 @@ public class InspirationController extends Controller {
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result edit(String id) {
-        Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(id));
+    public static Result edit(String catId, String id) {
+        Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(catId, id));
         return ok(manage.render(editInsForm,
                 new CategoryDAO().allOptionsMap(),
                 new InspirationDAO().all()));
@@ -96,7 +96,7 @@ public class InspirationController extends Controller {
                     ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                             ins.getInspirationId() + "/title"));
                 }  else
-                    ins.setImage(new InspirationDAO().get(ins.getInspirationId()).getImage());
+                    ins.setImage(new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()).getImage());
 
 
                 if (new InspirationDAO().save(ins)) {
@@ -119,13 +119,13 @@ public class InspirationController extends Controller {
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result delete(String id) {
+    public static Result delete(String catId, String id) {
         try {
             AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
                     ConfigFactory.load().getString("aws.accessKey"),
                     ConfigFactory.load().getString("aws.secretKey")));
             s3.deleteObject(S3_BUCKET_INSPIRATION_IMAGES, id);
-            if (new InspirationDAO().delete(id)) {
+            if (new InspirationDAO().delete(catId, id)) {
                 flash("success", "Inspiration with id " + id + " deleted.");
                 return ok(manage.render(insForm,
                         new CategoryDAO().allOptionsMap(),

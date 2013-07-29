@@ -3,12 +3,11 @@ package models.dao;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
-import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
 import models.user.*;
-import play.mvc.Http;
+import play.Logger;
 
 import java.io.IOException;
 
@@ -24,22 +23,9 @@ public class UserDAO extends CommonEntityDAO<User> {
         return getAuthUserFind(identity) != null;
     }
 
+
     private User getAuthUserFind(final AuthUserIdentity identity) {
         UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
-        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        if (social != null && usr != null) {
-            if (usr instanceof PicturedIdentity) {
-                User user = new UserDAO().get(social.getUserId());
-                user.setImage(((PicturedIdentity) usr).getPicture());
-                new UserDAO().save(user);
-            }
-
-            if (usr instanceof FacebookAuthUser) {
-                social.setAccessToken(((FacebookAuthUser) usr).getOAuth2AuthInfo().getAccessToken());
-                new UserSocialDAO().save(social);
-            }
-        }
-
         return social != null ? new UserDAO().get(social.getUserId()) : null;
     }
 
@@ -48,6 +34,28 @@ public class UserDAO extends CommonEntityDAO<User> {
             return null;
 
         return getAuthUserFind(identity);
+    }
+
+    public void update(final AuthUser authUser, final AuthUserIdentity identity) {
+        UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
+        if (social != null && authUser != null) {
+            if (authUser instanceof PicturedIdentity) {
+                Logger.debug("updating picture");
+                User user = new UserDAO().get(social.getUserId());
+                if (!((PicturedIdentity) authUser).getPicture().equals(user.getImage())) {
+                    user.setImage(((PicturedIdentity) authUser).getPicture());
+                    new UserDAO().save(user);
+                }
+            }
+
+            if (authUser instanceof FacebookAuthUser) {
+                Logger.debug("updating access token");
+                if (!((FacebookAuthUser) authUser).getOAuth2AuthInfo().getAccessToken().equals(social.getAccessToken())) {
+                    social.setAccessToken(((FacebookAuthUser) authUser).getOAuth2AuthInfo().getAccessToken());
+                    new UserSocialDAO().save(social);
+                }
+            }
+        }
     }
 
     public User create(final AuthUser authUser, final EUserRole role) {

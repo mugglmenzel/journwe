@@ -1,6 +1,7 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import models.Inspiration;
 import models.auth.SecuredBetaUser;
 import models.adventure.Adventure;
 import models.adventure.Adventurer;
@@ -31,8 +32,10 @@ public class AdventureTodoController extends Controller {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventure adv = new AdventureDAO().get(advId);
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+        Inspiration ins = Inspiration.fromId(adv.getInspirationId());
+        ins = ins != null ? new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()) : ins;
 
-        return ok(getTodos.render(adv, new InspirationDAO().get(adv.getInspirationId()), advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
+        return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
