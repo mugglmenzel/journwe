@@ -1,0 +1,2 @@
+MAILTO=ohai@journwe.com
+45 3 * * * /home/ubuntu/tools/journwe-utility.sh

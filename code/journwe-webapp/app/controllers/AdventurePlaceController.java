@@ -10,6 +10,7 @@ import models.dao.AdventureDAO;
 import models.dao.PlaceAdventurerPreferenceDAO;
 import models.dao.PlaceOptionDAO;
 import models.dao.UserDAO;
+import models.notifications.AdventurerNotifier;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
@@ -72,6 +73,8 @@ public class AdventurePlaceController extends Controller {
         Adventure adv = new AdventureDAO().get(advId);
         adv.setFavoritePlaceId(favId);
         new AdventureDAO().save(adv);
+
+        new AdventurerNotifier().notifyAdventurers(advId, "Favorite Place is now " + new PlaceOptionDAO().get(advId, adv.getFavoritePlaceId()).getAddress() + ".", "Favorite Place");
 
         return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));
     }

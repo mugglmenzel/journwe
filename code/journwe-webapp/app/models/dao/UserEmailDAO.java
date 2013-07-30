@@ -1,5 +1,6 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -7,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.user.UserEmail;
 import models.dao.common.CommonRangeEntityDAO;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
@@ -16,13 +18,18 @@ public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
     }
 
     public UserEmail getPrimaryEmailOfUser(String userId) {
-       DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("userId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(userId)));
-        scan.addFilterCondition("primary", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withN("1")));
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        UserEmail ue = new UserEmail();
+        ue.setUserId(userId);
+        ue.setPrimary(true);
+        query.setHashKeyValues(ue);
 
-        List<UserEmail> result = pm.scan(clazz, scan);
-
-        return result.size() > 0 ? result.get(0) : null;
-
+        Iterator<UserEmail> results = pm.query(clazz, query).iterator();
+        UserEmail result = null;
+        while(results.hasNext()) {
+            result = results.next();
+            if(result.isPrimary()) return result;
+        }
+        return result;
     }
 }
