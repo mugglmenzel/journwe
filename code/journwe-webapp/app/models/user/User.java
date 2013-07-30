@@ -13,9 +13,11 @@ import models.dao.UserDAO;
 import models.dao.UserEmailDAO;
 import models.dao.UserSocialDAO;
 import models.helpers.EnumMarshaller;
+import models.notifications.ENotificationFrequency;
 import play.data.validation.Constraints.Required;
 
 import java.io.IOException;
+import java.util.Date;
 
 @DynamoDBTable(tableName = "journwe-user")
 public class User {
@@ -30,6 +32,10 @@ public class User {
     private boolean active;
 
     private EUserRole role = EUserRole.USER;
+
+    private ENotificationFrequency notificationDigest = ENotificationFrequency.IMMEDIATELY;
+
+    private Date lastDigest = new Date();
 
     /**
      * @return the id
@@ -101,7 +107,28 @@ public class User {
         this.role = role;
     }
 
+    @DynamoDBMarshalling(marshallerClass = NotificationFrequencyMarshaller.class)
+    public ENotificationFrequency getNotificationDigest() {
+        return notificationDigest;
+    }
+
+    public void setNotificationDigest(ENotificationFrequency notificationDigest) {
+        this.notificationDigest = notificationDigest;
+    }
+
+    @DynamoDBAttribute
+    public Date getLastDigest() {
+        return lastDigest;
+    }
+
+    public void setLastDigest(Date lastDigest) {
+        this.lastDigest = lastDigest;
+    }
+
     public static class UserRoleMarshaller extends EnumMarshaller<EUserRole> {
+    }
+
+    public static class NotificationFrequencyMarshaller extends EnumMarshaller<ENotificationFrequency> {
     }
 
 }

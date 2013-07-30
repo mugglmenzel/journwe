@@ -20,6 +20,7 @@ import models.authorization.JournweAuthorization;
 import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
+import models.notifications.AdventurerNotifier;
 import models.user.EUserRole;
 import models.user.User;
 import models.user.UserEmail;
@@ -403,6 +404,9 @@ public class AdventureController extends Controller {
         Adventure adv = new AdventureDAO().get(advId);
         adv.setPlaceVoteOpen(openVote);
         new AdventureDAO().save(adv);
+
+        new AdventurerNotifier().notifyAdventurers(advId, "The Place Vote is now " + (adv.getPlaceVoteOpen() ? "open" : "closed") + ".", "Place Vote");
+
         return ok(Json.toJson(adv.getPlaceVoteOpen()));
     }
 
