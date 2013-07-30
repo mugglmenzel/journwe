@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "upload-github-issues\nexit" | java -jar /home/ubuntu/tools/journwe-utility.jar
+echo "upload-github-issues" | java -jar /home/ubuntu/tools/journwe-utility.jar

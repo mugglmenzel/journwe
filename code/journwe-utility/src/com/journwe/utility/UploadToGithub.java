@@ -59,8 +59,7 @@ public class UploadToGithub extends Command<JournweCLIContext> {
 
                 // Send item to github
                 // store your credentials like this in /.github
-                // login = username
-                // password = yourpasswd
+                // oauth = ...
                 GitHub github = GitHub.connect();
                 System.out.println("You are connected with github as user " + github.getMyself());
                 GHRepository repo = github.getRepository("mugglmenzel/journwe");
