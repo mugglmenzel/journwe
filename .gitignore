@@ -6,3 +6,5 @@
 # IntelliJ 
 .idea
 *.iml
+
+code/journwe-utility/target/*
