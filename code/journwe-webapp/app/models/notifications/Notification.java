@@ -27,6 +27,8 @@ public class Notification {
 
     private boolean read = false;
 
+    private boolean sent = false;
+
     @DynamoDBHashKey
     public String getUserId() {
         return userId;
@@ -81,6 +83,14 @@ public class Notification {
         this.read = read;
     }
 
+    @DynamoDBAttribute
+    public boolean isSent() {
+        return sent;
+    }
+
+    public void setSent(boolean sent) {
+        this.sent = sent;
+    }
 
     public static class NotificationTopicMarshaller extends EnumMarshaller<ENotificationTopics> {
     }
