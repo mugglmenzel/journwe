@@ -55,6 +55,8 @@ public class UploadToGithub extends Command<JournweCLIContext> {
                         .getItems().get(i);
                 String feedbackText = item.get("text").getS();
                 String feedbackType = item.get("feedbackType").getS();
+                String userName = item.get("userName").getS();
+                String userId = item.get("userId").getS();
                 System.out.println("New Feedback: "+feedbackText+" ("+feedbackType+")");
 
                 // Send item to github
@@ -64,8 +66,8 @@ public class UploadToGithub extends Command<JournweCLIContext> {
                 System.out.println("You are connected with github as user " + github.getMyself());
                 GHRepository repo = github.getRepository("mugglmenzel/journwe");
                 System.out.println("Repo :"+repo);
-                GHIssueBuilder issuebuilder = repo.createIssue("JournWe Website Feedback");
-                issuebuilder.body(feedbackText);
+                GHIssueBuilder issuebuilder = repo.createIssue(userName+": "+feedbackText.substring(0, 10)+"...");
+                issuebuilder.body(feedbackText+" (by user "+userName+" with id "+userId+")");
                 issuebuilder.label(feedbackType);
                 issuebuilder.create();
                 System.out.println("Sent feedback as an issue to Github.");
