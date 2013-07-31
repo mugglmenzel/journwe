@@ -1,7 +1,7 @@
 package models.notifications;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import models.helpers.EnumMarshaller;
+import models.dao.helpers.EnumMarshaller;
 
 import java.util.Date;
 

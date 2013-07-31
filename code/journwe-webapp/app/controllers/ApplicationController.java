@@ -55,7 +55,6 @@ public class ApplicationController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result indexNew() {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
         for (Category cat : new CategoryDAO().all())
@@ -66,7 +65,6 @@ public class ApplicationController extends Controller {
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result categoryIndex(String catId) {
 
         return ok(indexCat.render(new CategoryDAO().get(catId)));
@@ -98,7 +96,7 @@ public class ApplicationController extends Controller {
         return ok(Json.toJson(result));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+
     public static Result getPublicAdventures() {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");

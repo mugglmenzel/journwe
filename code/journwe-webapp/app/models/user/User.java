@@ -1,22 +1,10 @@
 package models.user;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.ecwid.mailchimp.MailChimpClient;
-import com.ecwid.mailchimp.MailChimpException;
-import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
-import com.feth.play.module.pa.user.AuthUser;
-import com.feth.play.module.pa.user.AuthUserIdentity;
-import com.feth.play.module.pa.user.EmailIdentity;
-import com.feth.play.module.pa.user.NameIdentity;
-import models.dao.SubscriberDAO;
-import models.dao.UserDAO;
-import models.dao.UserEmailDAO;
-import models.dao.UserSocialDAO;
-import models.helpers.EnumMarshaller;
+import models.dao.helpers.EnumMarshaller;
 import models.notifications.ENotificationFrequency;
 import play.data.validation.Constraints.Required;
 
-import java.io.IOException;
 import java.util.Date;
 
 @DynamoDBTable(tableName = "journwe-user")

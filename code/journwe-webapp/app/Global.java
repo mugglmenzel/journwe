@@ -5,7 +5,8 @@ import com.feth.play.module.pa.exceptions.AuthException;
 import controllers.routes;
 import models.dao.NotificationDAO;
 import models.dao.UserDAO;
-import models.notifications.UserNotifier;
+import models.notifications.ENotificationFrequency;
+import models.notifications.helper.UserNotifier;
 import models.user.User;
 import play.Application;
 import play.GlobalSettings;
@@ -81,13 +82,7 @@ public class Global extends GlobalSettings {
             @Override
             public void run() {
                 Logger.debug("Checking for daily digests to send");
-                for (User user : new NotificationDAO().getDailyDigestUsers()) {
-                    if (new Date().getTime() > user.getLastDigest().getTime() + 23 * 60 * 60 * 1000) {
-                        new UserNotifier().notifyUserViaEmailDigest(new NotificationDAO().all(user.getId()), "Daily");
-                        user.setLastDigest(new Date());
-                        new UserDAO().save(user);
-                    }
-                }
+                new UserNotifier().notifyUsersDigest(ENotificationFrequency.DAILY, 23 * 60 * 60 * 1000);
             }
         }, Akka.system().dispatcher());
 
@@ -96,13 +91,7 @@ public class Global extends GlobalSettings {
             @Override
             public void run() {
                 Logger.debug("Checking for weekly digests to send");
-                for (User user : new NotificationDAO().getDailyDigestUsers()) {
-                    if (new Date().getTime() > user.getLastDigest().getTime() + 6 * 24 * 60 * 60 * 1000) {
-                        new UserNotifier().notifyUserViaEmailDigest(new NotificationDAO().all(user.getId()), "Weekly");
-                        user.setLastDigest(new Date());
-                        new UserDAO().save(user);
-                    }
-                }
+                new UserNotifier().notifyUsersDigest(ENotificationFrequency.WEEKLY, 6 * 24 * 60 * 60 * 1000);
             }
         }, Akka.system().dispatcher());
 

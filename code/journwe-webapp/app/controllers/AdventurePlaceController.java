@@ -10,7 +10,7 @@ import models.dao.AdventureDAO;
 import models.dao.PlaceAdventurerPreferenceDAO;
 import models.dao.PlaceOptionDAO;
 import models.dao.UserDAO;
-import models.notifications.AdventurerNotifier;
+import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;

@@ -8,8 +8,10 @@ import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.dao.common.CommonRangeEntityDAO;
 import models.notifications.ENotificationFrequency;
 import models.notifications.Notification;
+import models.notifications.NotificationDigestQueueItem;
 import models.user.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,16 +43,30 @@ public class NotificationDAO extends CommonRangeEntityDAO<Notification> {
         return pm.count(clazz, query);
     }
 
-    public List<User> getDailyDigestUsers() {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("notificationDigest", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(new User.NotificationFrequencyMarshaller().marshall(ENotificationFrequency.DAILY))));
-        return pm.scan(User.class, scan);
+    public List<Notification> unsent(String userId) {
+        List<Notification> result = new ArrayList<Notification>();
+        for (Notification notification : all(userId))
+            if (!notification.isSent()) result.add(notification);
+        return result;
     }
 
-    public List<User> getWeeklyDigestUsers() {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("notificationDigest", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(new User.NotificationFrequencyMarshaller().marshall(ENotificationFrequency.WEEKLY))));
-        return pm.scan(User.class, scan);
+    public List<Notification> sent(String userId) {
+        List<Notification> result = new ArrayList<Notification>();
+        for (Notification notification : all(userId))
+            if (notification.isSent()) result.add(notification);
+        return result;
     }
 
+
+
+
+    @Override
+    public boolean save(Notification obj) {
+        NotificationDigestQueueItem item = new NotificationDigestQueueItem();
+        item.setDigestQueueName(new UserDAO().get(obj.getUserId()).getNotificationDigest().getDigestName());
+        item.setUserId(obj.getUserId());
+        pm.save(item);
+
+        return super.save(obj);
+    }
 }

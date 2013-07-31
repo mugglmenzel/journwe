@@ -45,6 +45,7 @@ public class InspirationController extends Controller {
             images.add(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                     os.getKey()));
         }
+
         return ok(get.render(ins, cat, images));
     }
 

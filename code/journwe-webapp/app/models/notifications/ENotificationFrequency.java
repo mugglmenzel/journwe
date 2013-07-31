@@ -1,5 +1,11 @@
 package models.notifications;
 
+import models.dao.NotificationDAO;
+import models.user.User;
+import play.i18n.Messages;
+
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: mugglmenzel
@@ -9,6 +15,11 @@ package models.notifications;
  */
 public enum ENotificationFrequency {
 
-    IMMEDIATELY, DAILY, WEEKLY;
+    NONE, IMMEDIATELY, DAILY, WEEKLY;
+
+    public String getDigestName() {
+        return Messages.get("notifications.digest.name." + toString());
+    }
+
 
 }

@@ -96,3 +96,9 @@ adventure.files.fileDrop=Drop file here or
 adventure.files.fileSelect=Select file
 adventure.files.fileChange=Change
 adventure.files.fileRemove=Remove
+
+
+#Notifications
+notifications.digest.name.IMMEDIATELY=Immediately
+notifications.digest.name.DAILY=Daily
+notifications.digest.name.WEEKLY=Weekly

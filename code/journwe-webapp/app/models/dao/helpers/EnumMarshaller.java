@@ -1,4 +1,4 @@
-package models.helpers;
+package models.dao.helpers;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMarshaller;
 

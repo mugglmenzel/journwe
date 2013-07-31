@@ -2,7 +2,7 @@ package models.adventure.place;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.adventure.EPreferenceVote;
-import models.helpers.EnumMarshaller;
+import models.dao.helpers.EnumMarshaller;
 
 /**
  * Created with IntelliJ IDEA.
