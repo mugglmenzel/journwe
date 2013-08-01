@@ -1,68 +1,73 @@
 @(ins: Inspiration)(category: Category)(images: List[String])
 
-@main(ins.getName()){@ins.getName() <small>@category.getName()</small>} {
+@main(ins.getName()){<h1>@ins.getName() <small>@category.getName()</small></h1>} {
 
-<div class="text-center">
-    <a class="btn btn-primary btn-large text-center" href="@routes.AdventureController.createFromInspiration(ins.getInspirationId())">Start a
-        "@ins.getName()" Adventure</a>
-</div>
-<table class="inspiration">
-    <tr>
-        <td>
-            @if(ins.getWeatherId!=null){
-                <div class="weather-container">
-                    @for(period <- ins.getWeather()){
-                        <div class="weather">
-                            <img src="/assets/img/weather/@{period.getIcon()}.svg" title="@period.getDate() - @period.getCondition()"/>
-                            <span class="high-temperature">@period.getTemperature()°C</span><span class="low-temperature">@period.getLowTemperature()°C</span>
-                        </div>
-                    }
-                </div>
-            }
 
-            <p>
-                @if(ins.getDescription != null){@Html(ins.getDescription())}
-            </p>
-            <div class="fb-like" data-href="http://developers.facebook.com/docs/reference/plugins/like" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="arial"></div>
-            <ul class="thumbnails">
-                <li class="span4">
-                    <a class="thumbnail" href="#">
-                        <img src="http://i.embed.ly/1/image/resize?height=400&width=800&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-                    </a>
-                </li>
-                @images.map { img =>
-                <li class="span2">
-                    <a class="thumbnail" href="#"><img
-                            src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@img&key=2c8ef5b200c6468f9f863bc75c46009f"/>
-                    </a>
-                </li>
+<div class="jrn-container">
+    <div class="text-center">
+        <a class="btn btn-primary btn-large text-center" href="@routes.AdventureController.createFromInspiration(ins.getInspirationId())">Start a
+            "@ins.getName()" Adventure</a>
+    </div>
+    <table class="inspiration">
+        <tr>
+            <td>
+                @if(ins.getWeatherId!=null){
+                    <div class="weather-container">
+                        @for(period <- ins.getWeather()){
+                            <div class="weather">
+                                <img src="/assets/img/weather/@{period.getIcon()}.svg" title="@period.getDate() - @period.getCondition()"/>
+                                <span class="high-temperature">@period.getTemperature()°C</span><span class="low-temperature">@period.getLowTemperature()°C</span>
+                            </div>
+                        }
+                    </div>
                 }
-            </ul>
-        </td>
-        <td class="fixed-width">
-            @if(ins.getTripAdvisor()){
-            <div class="tripadvisor">
-                @Html(ins.getTripAdvisor())
-            </div>
-            }
 
-            @if(ins.getPinterest()){
-            <div class="pinterest">
-                <a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110"
-                   data-pin-scale-height="300" data-pin-board-width="240"></a>
-                <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
-            </div>
-            }
-        </td>
-    </tr>
-</table>
+                <p>
+                    @if(ins.getDescription != null){@Html(ins.getDescription())}
+                </p>
+                <div class="fb-like" data-href="http://developers.facebook.com/docs/reference/plugins/like" data-send="false" data-layout="box_count" data-width="450" data-show-faces="false" data-font="arial"></div>
+                <ul class="thumbnails">
+                    <li class="span4">
+                        <a class="thumbnail" href="#">
+                            <img src="http://i.embed.ly/1/image/resize?height=400&width=800&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"/>
+                        </a>
+                    </li>
+                    @images.map { img =>
+                    <li class="span2">
+                        <a class="thumbnail" href="#"><img
+                                src="http://i.embed.ly/1/image/resize?height=200&width=400&url=@img&key=2c8ef5b200c6468f9f863bc75c46009f"/>
+                        </a>
+                    </li>
+                    }
+                </ul>
+            </td>
+            <td class="fixed-width">
+                @if(ins.getTripAdvisor()){
+                <div class="tripadvisor">
+                    @Html(ins.getTripAdvisor())
+                </div>
+                }
+
+                @if(ins.getPinterest()){
+                <div class="pinterest">
+                    <a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110"
+                       data-pin-scale-height="300" data-pin-board-width="240"></a>
+                    <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+                </div>
+                }
+            </td>
+        </tr>
+    </table>
+
 
 
     <div>
         <iframe
-        src="http://www.panoramio.com/wapi/template/list.html?tag=@ins.getName&amp;width=1170&amp;height=100&amp;columns=10&amp;rows=1&amp;orientation=horizontal"
-        frameborder="0" width="1170" height="100" scrolling="no" marginwidth="0" marginheight="0">
+        src="http://www.panoramio.com/wapi/template/list.html?tag=@ins.getName&amp;width=900&amp;height=100&amp;columns=15&amp;rows=1&amp;orientation=horizontal"
+        frameborder="0" width="900" height="100" scrolling="no" marginwidth="0" marginheight="0">
         </iframe>
     </div>
+
+</div>
 
 }
