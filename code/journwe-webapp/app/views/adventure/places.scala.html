@@ -108,16 +108,6 @@
     }
 
 
-    $('document').ready(function () {
-    initialize();
-    $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
-    $.get('@routes.AdventurePlaceController.getFavoritePlace(adv.getId)', function (data) {
-    $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
-    $('#places-favorite-place-name').html(data != "" ? data.address : "No favorite yet");
-    });
-    });
-
-
     function setFavoritePlaceOption(optionId) {
     $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
     $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
@@ -145,24 +135,33 @@
 
     var votePlaceIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
     var votePlaceButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
-    var votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-important', 'MAYBE': 'label-warning'};
+    var votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
 
 
 
-    $('#places-list').ready(function (){
-        $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (places) {
+    $('document').ready(function (){
+        initialize();
+        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
+        $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (result) {
+
+
+            $('#places-favorite-place-name').html(result.favoritePlace != "" ? result.favoritePlace.address : "No favorite yet");
+
+
             $('#places-list tbody').empty();
-            for(var id in places) {
-                renderPlaceOption(places[id])
+            for(var id in result.places) {
+                renderPlaceOption(result.places[id])
             }
 
-            if (places.length){
+            if (result.places.length){
                 $('#places-list').show();
             } else {
                 $('#places-list').hide();
             }
 
             $('.places-loading').hide();
+            $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
+
             updatePlaceVoteOpen(@adv.getPlaceVoteOpen)
         });
     });

@@ -54,7 +54,13 @@ public class AdventurePlaceController extends Controller {
             places.add(node);
         }
 
-        return ok(Json.toJson(places));
+        String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
+
+        ObjectNode result = Json.newObject();
+        result.put("places", Json.toJson(places));
+        result.put("favoritePlace", favId != null ? Json.toJson(new PlaceOptionDAO().get(advId, favId)) : Json.toJson(""));
+
+        return ok(Json.toJson(result));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
