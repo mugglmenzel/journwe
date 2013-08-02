@@ -86,11 +86,8 @@
         $(".journwe-date").datepicker();
 
         $('document').ready(function () {
-        $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
         $.get('@routes.AdventureTimeController.getFavoriteTime(adv.getId)', function (data) {
-            $('#times-favorite-time-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
-            $('#times-favorite-time-name').html(data != "" ? formatDate(data.startDate) + " - " + formatDate(data.endDate) : "No favorite yet");
-        });
+       });
         });
 
         function setFavoriteTimeOption(optionId) {
@@ -113,21 +110,27 @@
         });
         });
 
-        $('#times-list').ready(function (){
-        $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (times) {
-        $('#times-list tbody').empty();
-        for(var id in times) {
-            renderTimeOption(times[id])
-        }
-        if (times.length){
-            $('#times-list').show();
-        } else {
-            $('#times-list').hide();
-        }
+        $('document').ready(function (){
+            $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
+            $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (result) {
+            $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "No favorite yet");
 
-        $('.times-loading').hide();
-        updateTimeVoteOpen(@adv.getTimeVoteOpen)
-        });
+
+            $('#times-list tbody').empty();
+            for(var id in result.times) {
+                renderTimeOption(result.times[id])
+            }
+            if (result.times.length){
+                $('#times-list').show();
+            } else {
+                $('#times-list').hide();
+            }
+
+            $('.times-loading').hide();
+            $('#times-favorite-time-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
+
+            updateTimeVoteOpen(@adv.getTimeVoteOpen)
+            });
         });
 
         function renderTimeOption(data, replace) {
