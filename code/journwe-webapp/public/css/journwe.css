@@ -46,12 +46,15 @@ h1 .editableform {
 	margin-top: -10px;
 }
 
+.stash {display: none;}
+.reveal {display: block;}
 
 .main {
 /*	background-color: rgba(255,255,255,0.8);
 	box-shadow: 0 0 10px 0px black;     */
 	margin-top: 50px;
 }
+
 
 
 .main > .container {
@@ -79,6 +82,8 @@ h1 .editableform {
 	padding: 20px;
 	position: relative;
 }
+
+
 
 
 .jrn-container h2 {
