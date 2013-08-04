@@ -52,7 +52,6 @@ h1 .editableform {
 .main {
 /*	background-color: rgba(255,255,255,0.8);
 	box-shadow: 0 0 10px 0px black;     */
-	margin-top: 50px;
 }
 
 
@@ -688,4 +687,15 @@ h1 .x-edit-loading {
 .nav-pills>.active>a, .nav-pills>.active>a:hover, .nav-pills>.active>a:focus {
 	color: gray;
 	background-color: white;
+}
+
+#success-stories .polaroid {
+	width: 100%;
+	margin-top: 20px;
+	position: relative;
+}
+
+
+#success-stories .polaroid img {
+	width: 100%;
 }
