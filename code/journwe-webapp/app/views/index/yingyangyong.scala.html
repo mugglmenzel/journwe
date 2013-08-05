@@ -1,43 +1,45 @@
 @import models.dao._
 
-<div id="yingyangyong-click-info" class="row-fluid">
-    <div class="span2 offset1 text-center">
+<div id="yingyangyong-click-info" class="row">
+    <div class="col-2 col-lg-offset-1 text-center">
         <i class="icon-chevron-down"></i>
         click on <img src='http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' style="height: 20px;">
     </div>
 </div>
 <form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
-    <div class="row-fluid">
-        <div class="span2 offset1 text-center">
+    <div class="row">
+        <div class="col-2 col-lg-offset-1 text-center">
             <a href="#" onclick="switchMode(); $('#yingyangyong-click-info').fadeOut();"><img id="yingyangyong" src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' class="where"></a>
         </div>
             <!--<a href="@routes.AdventureController.create()" class="btn btn-primary btn-large text-center">Start
             a new Group Adventure!</a> -->
-        <div class="span8" style="min-height: 650px; position: relative;">
-            <div class="input-append">
-                <input type="text" name="name" placeholder="Name your JournWe" required="required" class="input input-xxl">
+        <div class="col-8" style="min-height: 650px; position: relative;">
+            <div class="row">
+                <div class="col-7 input-append">
+                    <input type="text" name="name" placeholder="Name your JournWe" required="required" class="input input-xxl">
 
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        Choose Category
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                    @defining(new CategoryDAO()){catDAO =>
-                        @defining(catDAO.all()){ categories =>
-                            @for(cat <- categories) {
-                                <li><a><span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span>@cat.getName()</a></li>
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            Choose Category
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                        @defining(new CategoryDAO()){catDAO =>
+                            @defining(catDAO.all()){ categories =>
+                                @for(cat <- categories) {
+                                    <li><a><span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span>@cat.getName()</a></li>
+                                }
                             }
                         }
-                    }
-                    </ul>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <button style="backround-color: #00cc00;" class="btn btn-large pull-right" onclick="">
+                        Start JournWe <i class="icon-angle-right"></i></button>
                 </div>
             </div>
-            <div class="pull-right">
-                <button style="backround-color: #00cc00;" class="btn btn-large" onclick="">
-                    Start JournWe <i class="icon-angle-right"></i></button>
-            </div>
-            <div class="spacer20"></div>
+
             @*
             <div>
                 <div class="input-append">
@@ -50,7 +52,7 @@
             *@
 
 
-            <div id="where-dialog" style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-bottom: 20px">
+            <div id="where-dialog" style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-top: 20px; margin-bottom: 20px">
                 <div style="background-color: rgba(255, 255, 255, 0.3); padding: 15px; ">
                     <h1><i class="icon-globe"></i> Where do you want to go?</h1>
 
@@ -67,7 +69,7 @@
                 </div>
             </div>
 
-            <div id="who-dialog" style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-bottom: 20px; display: none;">
+            <div id="who-dialog" style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-top: 20px; margin-bottom: 20px; display: none;">
                 <div style="background-color: rgba(255, 255, 255, 0.2); padding: 15px; ">
                     <h1><i class="icon-group"></i> Who's gonna join your JournWe?</h1>
 
@@ -100,7 +102,7 @@
                 </div>
             </div>
 
-            <div id="when-dialog" style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-bottom: 20px; display: none;">
+            <div id="when-dialog" style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-top: 20px; margin-bottom: 20px; display: none;">
                 <div style="background-color: rgba(255, 255, 255, 0.5); padding: 15px; ">
                     <h1><i class="icon-calendar"></i> When do you want to set off?</h1>
 
