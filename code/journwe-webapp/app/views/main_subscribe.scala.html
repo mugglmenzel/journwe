@@ -52,10 +52,17 @@
             <div class="col-offset-2 col-8">
                 <div>
                     <div>
+                            <!--<button type="button" class="btn btn-navbar" data-toggle="collapse"
+    						data-target=".nav-collapse">
+    						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+    							class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+    					</button>-->
+
                         <ul class="nav nav-pills col-5">
                             <li><a onclick="$('#navbar-secondlevel-collapsable .collapse').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="icon-lightbulb"></i> Inspirations</a></li>
                             <li><a onclick="$('#navbar-secondlevel-collapsable .collapse').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="icon-search"></i> Search</a></li>
                         </ul>
+
 
                         <div class="col-2">
                             <div class="text-center navbar-text">
@@ -67,19 +74,19 @@
                                 </a>
                             </div>
                         </div>
-
-                        <div class="col-5 clearfix">
+                    </div>
 
                         @currentAuth() { auth =>
                             @defining(new UserDAO()) { userDAO =>
                                 @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
                                     @if(auth != null && user != null) {
-                                        <div class="text-right">
+
+                                        <div class="text-right user-login">
                                             @defining(new NotificationDAO()) { notiDAO =>
-                                                <i class="icon-bell" title="Notifications"> @notiDAO.count(user.getId)</i>
+                                                <span class="label label-info" title="Notifications">@notiDAO.count(user.getId)</span>
                                             }
                                             <a class="btn btn-link" href="@routes.UserController.getProfile(user.getId())">
-                                                <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
+                                                <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px;">
                                                 @user.getName()
                                             </a>
                                             <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
@@ -100,10 +107,7 @@
                                     }
                                 }}
                         }
-                        </div>
                     </div>
-
-
                     <div class="row" id="navbar-secondlevel-collapsable">
                         <div class="accordion-body collapse" id="navbar-secondlevel-journwe-home-select">
                             <div class="text-center" style="margin: 10px 0px; line-height: 70px;">
@@ -141,34 +145,35 @@
                 </div>
             </div>
         </div>
-
-
-        <div class="main row">
-            <div class="col-8 col-offset-2">
-                <div class="page-header">
-                <h1>JournWe <small>@Messages("journwe.subtitle")</small></h1>
-                </div>
-                @if(flash("error")) {
-                <div class="alert alert-error">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    @flash("error")
-                </div>
-                }
-                @if(flash("success")) {
-                <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    @flash("success")
-                </div>
-                }
-                @if(flash("info")) {
-                <div class="alert alert-info">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    @flash("info")
-                </div>
-                }
-                @content
-            </div>
-        </div>
     </div>
+	<!--<div class="row-fluid">
+	<div class="hero-unit span8 offset2">  -->
+
+    <div class="main row">
+        <div class="col-8 col-offset-2">
+    		<div class="page-header">
+    			<h1>JournWe <small>@Messages("journwe.subtitle")</small></h1>
+    		</div>
+    		@if(flash("error")) {
+    		<div class="alert alert-error">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			@flash("error")
+    		</div>
+    		}
+    		@if(flash("success")) {
+    		<div class="alert alert-success">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			@flash("success")
+    		</div>
+    		}
+    		@if(flash("info")) {
+    		<div class="alert alert-info">
+    			<button type="button" class="close" data-dismiss="alert">&times;</button>
+    			@flash("info")
+    		</div>
+    		}
+            @content
+    	</div>
+	</div>
 </body>
 </html>

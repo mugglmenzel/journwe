@@ -3,9 +3,11 @@
 @import models.dao._
 
     @main_subscribe {
-        <p>@Messages("subscribe.welcometext")</p>
-        <div class="spacer30"></div>
-        <div class="text-center">
+        <div class="jrn-container" style="margin-top: -20px;">
+            <p>@Messages("subscribe.welcometext")</p>
+        </div>
+
+        <div class="text-center jrn-container">
 
             <p class="Lead"><strong>@Html(Messages("subscribe.cta"))</strong></p>
 
@@ -23,32 +25,34 @@
         </div>
         <div class="spacer30"></div>
 
-        <div><h1>People love JournWe</h1></div>
-        <div id="success-stories">
-            <div class="row">
-                <div class="col-7">
-                    <h2>Markus always wanted to visit ancient Temples</h2>
-                    <blockquote><p class="lead">
-                        Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".</p>
-                        <small><cite>
-                            Markus Klems, a JournWe adventurer</cite></small></blockquote>
-                </div>
-                <div class="col-5 text-center">
-                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv => @if(adv != null) {
-                    <div class="polaroid" style="position: relative; float: left;">
-                        <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                        <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                            <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                            <div class="overlay text-center" style="display: none;">
-                                <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
-                                <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
-                                <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+        <div class="jrn-container">
+            <h2>People love JournWe</h2>
+
+            <div id="success-stories">
+                <div class="row">
+                    <div class="col-7">
+                        <h3>Markus always wanted to visit ancient Temples</h3>
+                        <blockquote><p class="lead">
+                            Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".</p>
+                            <small><cite>
+                                Markus Klems, a JournWe adventurer</cite></small></blockquote>
+                    </div>
+                    <div class="col-5 text-center">
+                        @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>
+                        <div class="polaroid" style="">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
                             </div>
                         </div>
+                        }
                     </div>
-                    }  }
                 </div>
-            </div>
 
             <div class="row">
                 <div class="col-5 text-center">
@@ -64,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                }  }
+                }
                 </div>
                 <div class="col-7">
                     <h2>Jozsef found the right place to meet friends</h2>
@@ -198,60 +202,61 @@
         </div>
 
 
-        @*
-        <div><h1>Some Inspirations</h1></div>
-        <div>
-            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-        </div>
+        <div class="jrn-container">
+            <h2>Some Inspirations</h2>
 
-        <script type="text/x-tmpl" id="adventure-public-template">
-            <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left;">
-                <a href="{%=o.link%}"><img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
-                <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                    <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
-                    <div class="overlay text-center" style="display: none;">
-                        <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                        <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                        <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+            <div class="clearfix">
+                <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            </div>
+
+            <script type="text/x-tmpl" id="adventure-public-template">
+                <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left;">
+                    <a href="{%=o.link%}"><img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
+                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                        <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
+                        <div class="overlay text-center" style="display: none;">
+                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
+                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </script>
-        <script type="text/javascript">
-            $(document).ready(function(){
+            </script>
+            <script type="text/javascript">
+                $(document).ready(function(){
 
-            loadPublicAdventures(null, true);
+                loadPublicAdventures(null, true);
 
-            $('#success-stories div.polaroid').hover(
+                $('#success-stories div.polaroid').hover(
+                    function(){
+                        $(this).find("div.overlay").slideDown("fast");
+                    },
+                    function(){
+                        $(this).find("div.overlay").slideUp("fast");
+                    }
+                );
+
+                });
+
+                function loadPublicAdventures(lastId, clear) {
+                $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
+                if (clear) $('#adventures-public-list').empty();
+                for(var i in advs) {
+                var polaroid = tmpl('adventure-public-template', advs[i]);
+                $('#adventures-public-list').append(polaroid);
+
+                $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
                 function(){
-                    $(this).find("div.overlay").slideDown("fast");
+                $(this).find("div.overlay").slideDown("fast");
                 },
                 function(){
-                    $(this).find("div.overlay").slideUp("fast");
+                $(this).find("div.overlay").slideUp("fast");
                 }
-            );
+                );
 
-            });
-
-            function loadPublicAdventures(lastId, clear) {
-            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
-            if (clear) $('#adventures-public-list').empty();
-            for(var i in advs) {
-            var polaroid = tmpl('adventure-public-template', advs[i]);
-            $('#adventures-public-list').append(polaroid);
-
-            $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
-            function(){
-            $(this).find("div.overlay").slideDown("fast");
-            },
-            function(){
-            $(this).find("div.overlay").slideUp("fast");
-            }
-            );
-
-            }
-            });
-            }
-        </script>
-        *@
+                }
+                });
+                }
+            </script>
+        </div>  
     }
