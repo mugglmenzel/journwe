@@ -75,7 +75,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="col-5 clearfix">
                         @currentAuth() { auth =>
                             @defining(new UserDAO()) { userDAO =>
                                 @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>

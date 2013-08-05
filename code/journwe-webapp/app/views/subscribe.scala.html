@@ -23,7 +23,6 @@
             </form>
 
         </div>
-        <div class="spacer30"></div>
 
         <div class="jrn-container">
             <h2>People love JournWe</h2>
@@ -54,153 +53,152 @@
                     </div>
                 </div>
 
-            <div class="row">
-                <div class="col-5 text-center">
-                @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv => @if(adv != null) {
-                    <div class="polaroid" style="position: relative; float: left;">
-                        <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                        <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                            <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                            <div class="overlay text-center" style="display: none;">
-                                <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
-                                <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
-                                <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                <div class="row">
+                    <div class="col-5 text-center">
+                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv => @if(adv != null) {
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
                             </div>
                         </div>
+                    }    }
                     </div>
-                }    }
+                    <div class="col-7">
+                        <h3>Jozsef found the right place to meet friends</h3>
+                        <blockquote><p class="lead">
+                            Every year Jozsef meets with friends at the exact same weekend. But where to go is always trouble! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks JournWe."</p>
+                            <small><cite>
+                                Jozsef, construction worker at JournWe</cite></small>  </blockquote>
+                    </div>
                 </div>
-                <div class="col-7">
-                    <h2>Jozsef found the right place to meet friends</h2>
-                    <blockquote><p class="lead">
-                        Every year Jozsef meets with friends at the exact same weekend. But where to go is always trouble! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks JournWe."</p>
-                        <small><cite>
-                            Jozsef, construction worker at JournWe</cite></small>  </blockquote>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-7">
-                    <h2>Markus always wanted to visit ancient Temples</h2>
-                    <blockquote><p class="lead">
-                        Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".</p>
-                        <small><cite>
-                            Markus Klems, a JournWe adventurer</cite></small></blockquote>
-                </div>
-                <div class="col-5 text-center">
-                @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>  @if(adv != null) {
-                    <div class="polaroid" style="position: relative; float: left;">
-                        <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                        <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                            <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                            <div class="overlay text-center" style="display: none;">
-                                <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
-                                <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
-                                <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                <div class="row">
+                    <div class="col-7">
+                        <h3>Markus always wanted to visit ancient Temples</h3>
+                        <blockquote><p class="lead">
+                            Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".</p>
+                            <small><cite>
+                                Markus Klems, a JournWe adventurer</cite></small></blockquote>
+                    </div>
+                    <div class="col-5 text-center">
+                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>  @if(adv != null) {
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
                             </div>
                         </div>
+                    } }
                     </div>
-                } }
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-5 text-center">
-                @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv => @if(adv != null) {
-                    <div class="polaroid" style="position: relative; float: left;">
-                        <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                        <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                            <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                            <div class="overlay text-center" style="display: none;">
-                                <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
-                                <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
-                                <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                <div class="row">
+                    <div class="col-5 text-center">
+                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv => @if(adv != null) {
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
                             </div>
                         </div>
+                    }   }
                     </div>
-                }   }
+                    <div class="col-7">
+                        <h3>Jozsef found the right place to meet friends</h3>
+                        <blockquote><p class="lead">
+                            Every year Jozsef meets with friends at the exact same weekend. But where to go is always trouble! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks JournWe."</p>
+                            <small><cite>
+                                Jozsef, construction worker at JournWe</cite></small>  </blockquote>
+                    </div>
                 </div>
-                <div class="col-7">
-                    <h2>Jozsef found the right place to meet friends</h2>
-                    <blockquote><p class="lead">
-                        Every year Jozsef meets with friends at the exact same weekend. But where to go is always trouble! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks JournWe."</p>
-                        <small><cite>
-                            Jozsef, construction worker at JournWe</cite></small>  </blockquote>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-7">
-                    <h2>Markus always wanted to visit ancient Temples</h2>
-                    <blockquote><p class="lead">
-                        Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".</p>
-                        <small><cite>
-                            Markus Klems, a JournWe adventurer</cite></small></blockquote>
-                </div>
-                <div class="col-5 text-center">
-                @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>  @if(adv != null) {
-                    <div class="polaroid" style="position: relative; float: left;">
-                        <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                        <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                            <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                            <div class="overlay text-center" style="display: none;">
-                                <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
-                                <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
-                                <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                <div class="row">
+                    <div class="col-7">
+                        <h3>Markus always wanted to visit ancient Temples</h3>
+                        <blockquote><p class="lead">
+                            Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".</p>
+                            <small><cite>
+                                Markus Klems, a JournWe adventurer</cite></small></blockquote>
+                    </div>
+                    <div class="col-5 text-center">
+                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>  @if(adv != null) {
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
                             </div>
                         </div>
+                    }  }
                     </div>
-                }  }
                 </div>
             </div>
-
-
         </div>
 
-        <div class="spacer30"></div>
 
-        <div><h1>Features at a Glance</h1></div>
+        <div class="jrn-container">
+            <h2>Features at a Glance</h2>
 
-        <div class="row">
-            <div class="col-4">
-              <h4><img style="height: 20px;" alt="JournWe logo" src="/assets/img/yingyangyong_green.png"></img> Get Your Trip Started</h4>
-              <ul style="list-style-type:none">
-              <li> Where do you want to go? </li>
-              <li> When do you want to go? </li>
-              <li> With whom do you want to go? </li>
-              </ul>
-              You're sure, then start. <br> You haven't decided yet? - Doesn't matter, start anyway and discuss later.
+            <div class="row">
+                <div class="col-4">
+                  <h4><img style="height: 20px;" alt="JournWe logo" src="/assets/img/yingyangyong_green.png"></img> Get Your Trip Started</h4>
+                  <ul style="list-style-type:none">
+                  <li> Where do you want to go? </li>
+                  <li> When do you want to go? </li>
+                  <li> With whom do you want to go? </li>
+                  </ul>
+                  You're sure, then start. <br> You haven't decided yet? - Doesn't matter, start anyway and discuss later.
+                </div>
+                <div class="col-4">
+                  <h4><i class="icon-bullhorn"></i> Involve Your Friends</h4>
+                  Use JournWe to motivate friends to join an adventure. Sharing information from JournWe is a cool way for having all your friends convinced to join your trip! Or announce it to the public and fiend new friends.
+                </div>
+                <div class="col-4">
+                  <h4><i class="icon-comments"></i> Keep it all in One Place</h4>
+                  Don't bother with emails from travel operators that only reach one or few people in your travel group. JournWe gives you an email address (your-adventure@@journwe.com) and provides you with a single communication point. All of it is kept centrally in your adventure visible for all travel mates.
+                </div>
+    		</div>
+    		<div class="row">
+                <div class="col-4">
+                  <h4><i class="icon-lightbulb"></i> Get Inspired</h4>
+                  Is there anything out there? Find the hottest current adventures you may join. We have great inspirations for you to find your next adventure! Activate a notifier and get news on adventures in your area, a certain category or on where you always wanted to go.
+                </div>
+                <div class="col-4">
+                  <h4><i class="icon-plane"></i> Find the Cheapest Prices</h4>
+                  Use reference booking systems to find cheapest flights, hotels, buses, trains, homestays, tents, backseats,tickets... matching your trip.
+                </div><div class="col-4">
+                  <h4><i class="icon-camera-retro"></i> And when it's Over</h4>
+                  Share your pictures, write a blog, keep in touch...
+                </div>
+    		</div>
+            <div class="row">
+                <ul>
+                    <li> <i class="icon-phone"></i> Notifications </li>
+                    <li> <i class="icon-heart-empty"></i> Most wanted list </li>
+                    <li> <i class="icon-trophy"></i> Rewards from travel agents </li>
+                </ul>
             </div>
-            <div class="col-4">
-              <h4><i class="icon-bullhorn"></i> Involve Your Friends</h4>
-              Use JournWe to motivate friends to join an adventure. Sharing information from JournWe is a cool way for having all your friends convinced to join your trip! Or announce it to the public and fiend new friends.
-            </div>
-            <div class="col-4">
-              <h4><i class="icon-comments"></i> Keep it all in One Place</h4>
-              Don't bother with emails from travel operators that only reach one or few people in your travel group. JournWe gives you an email address (your-adventure@@journwe.com) and provides you with a single communication point. All of it is kept centrally in your adventure visible for all travel mates.
-            </div>
-		</div>
-		<div class="row">
-            <div class="col-4">
-              <h4><i class="icon-lightbulb"></i> Get Inspired</h4>
-              Is there anything out there? Find the hottest current adventures you may join. We have great inspirations for you to find your next adventure! Activate a notifier and get news on adventures in your area, a certain category or on where you always wanted to go.
-            </div>
-            <div class="col-4">
-              <h4><i class="icon-plane"></i> Find the Cheapest Prices</h4>
-              Use reference booking systems to find cheapest flights, hotels, buses, trains, homestays, tents, backseats,tickets... matching your trip.
-            </div><div class="col-4">
-              <h4><i class="icon-camera-retro"></i> And when it's Over</h4>
-              Share your pictures, write a blog, keep in touch...
-            </div>
-		</div>
-        <div class="row">
-            <ul>
-                <li> <i class="icon-phone"></i> Notifications </li>
-                <li> <i class="icon-heart-empty"></i> Most wanted list </li>
-                <li> <i class="icon-trophy"></i> Rewards from travel agents </li>
-            </ul>
         </div>
-
 
         <div class="jrn-container">
             <h2>Some Inspirations</h2>
