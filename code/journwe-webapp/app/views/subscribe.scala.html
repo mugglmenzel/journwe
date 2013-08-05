@@ -4,12 +4,12 @@
 
     @main_subscribe {
         <div class="jrn-container" style="margin-top: -20px;">
-            <p>@Messages("subscribe.welcometext")</p>
+            <p class="lead">@Messages("subscribe.welcometext")</p>
         </div>
 
         <div class="text-center jrn-container">
 
-            <p class="Lead"><strong>@Html(Messages("subscribe.cta"))</strong></p>
+            <p class="lead"><strong>@Html(Messages("subscribe.cta"))</strong></p>
 
 
             <form action="@routes.ApplicationController.subscribe()" class="form-horizontal">
@@ -38,7 +38,7 @@
                                 Markus Klems, a JournWe adventurer</cite></small></blockquote>
                     </div>
                     <div class="col-5 text-center">
-                        @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>
+                        @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>   @if(adv != null) {
                         <div class="polaroid" style="">
                             <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
                             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                         </div>
-                        }
+                        } }
                     </div>
                 </div>
 
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                }
+                }    }
                 </div>
                 <div class="col-7">
                     <h2>Jozsef found the right place to meet friends</h2>
