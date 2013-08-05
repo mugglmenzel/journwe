@@ -543,8 +543,16 @@ h3 {
 #adventure-container .comments {
 	position: absolute;
 	left: 100%;
+    min-width: 220px;
 	color: white;
 	top: 0px;
+}
+
+#adventure-container .comments-wall {
+    position: relative;
+    min-width: 300px;
+    color: white;
+    top: 0px;
 }
 
 #adventure-container .table td {

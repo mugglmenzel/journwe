@@ -40,6 +40,7 @@ adventure.general.leaveconfirm=Are you sure, you want to leave
 
 #Adventure.getScala
 adventure.getScala.adventure.title=Adventure
+adventure.getScala.discussion.title=Discussion
 adventure.getScala.place.title=Place
 adventure.getScala.place.subtitle=Find a special place where your adventure takes place. Make it a beautiful spot worth exploring.
 adventure.getScala.time.title=Date & Time
