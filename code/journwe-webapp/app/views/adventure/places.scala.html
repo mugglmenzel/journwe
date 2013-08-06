@@ -26,7 +26,7 @@
 <div class="places-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
 
 
-<div class="pull-right">
+<div class="pull-right" style="position: relative; top: 9px;">
     @Messages("adventure.general.voting")
     <div class="switch">
         <input id="places-voting-active-switch" type="checkbox" @if(adv.getPlaceVoteOpen){checked="checked"}>
@@ -34,10 +34,12 @@
 </div>
 
 <div id="place-add-form">
-    <div class="input-append" style="margin-bottom: 10px;">
-        <input type="text" placeholder="Add a decent place" id="place-add-input" class="input-xlarge">
-        <input id="place-add-comment-input" class="input-xlarge stash" type="text" placeholder="Comment ...">
-        <button id="place-add-button" class="btn btn-add"><i class="icon-plus"></i></button>
+    <div class="input-group row col-8" style="margin-bottom: 10px;">
+        <input type="text" placeholder="Add a decent place" id="place-add-input" style="width: 100%;" class="form-control col-6">
+        <input id="place-add-comment-input" class="form-control col-6 stash" style="display: none; width: 50%;" type="text" placeholder="Comment ...">
+        <div class="input-group-btn">
+            <button id="place-add-button" class="btn btn-add btn-primary"><i class="icon-plus"></i></button>
+        </div>
     </div>
 
 
@@ -174,12 +176,17 @@
     });
 
     $('#place-add-input').on('focus', function(e){
+        $(this).css("width", "50%");
         $('#place-add-comment-input').fadeIn();
     });
 
     $('#place-add-input').on('blur', function(e){
-        if($(this).val() == '')
-            $('#place-add-comment-input').fadeOut();
+        if($(this).val() == ''){
+            var el = $(this);
+            $('#place-add-comment-input').fadeOut(function(){
+                el.css("width", "100%"); 
+            });
+        }
     });
 
     $('#place-add-button').on('click', function() {
