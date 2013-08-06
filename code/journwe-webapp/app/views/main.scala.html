@@ -1,5 +1,7 @@
 @(title: String)(header: Html = Html("Welcome"))(content: Html)(implicit active: String = "home")
 
+@import play.api.Play.current
+@import play.mvc.Http
 @import models.dao._
 @import models.user._
 @import play.mvc.Controller._
@@ -71,7 +73,7 @@
 		                </div>
 		            </div>
 
-					<div class="col-5 clearfix">
+					<div class="col-4 clearfix">
 
 		                @currentAuth() { auth =>
 		                    @defining(new UserDAO()) { userDAO =>
@@ -114,6 +116,20 @@
 		                    }}
 		                }
 					</div>
+                        <div class="col-1">
+                            <div class="btn-group">
+                                <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                    @Http.Context.current().lang().language() <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @for(lang <- Lang.availables) {
+                                    <li><a href="@routes.ApplicationController.changeLanguage(lang.language.toString)">@lang.language</a></li>
+                                    }
+                                </ul>
+                            </div>
+
+
+                        </div>
 					</div>
 					
 			                 

@@ -17,6 +17,7 @@ import play.Logger;
 import play.cache.Cached;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Lang;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -184,6 +185,12 @@ public class ApplicationController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result admin() {
         return ok(admin.render());
+    }
+
+    public static Result changeLanguage(String lang) {
+        changeLang(lang);
+
+        return redirect(request().getHeader(REFERER) != null ? request().getHeader(REFERER) : "/");
     }
 
     public static Result oAuthDenied(String provider) {

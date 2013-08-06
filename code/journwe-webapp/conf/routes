@@ -119,6 +119,7 @@ GET           /subscribe                                     controllers.Applica
 GET           /imprint                                       controllers.ApplicationController.imprint()
 GET           /about                                         controllers.ApplicationController.about()
 GET           /admin                                         controllers.ApplicationController.admin()
+GET           /lang/:id                                      controllers.ApplicationController.changeLanguage(id:String)
 
 GET           /category/:catId                               controllers.ApplicationController.categoryIndex(catId:String)
 GET           /new                                           controllers.ApplicationController.indexNew()
