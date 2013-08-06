@@ -711,3 +711,16 @@ h1 .x-edit-loading {
 #success-stories .polaroid img {
 	width: 100%;
 }
+
+.search-query {
+	padding: 8px 12px;
+	border: none;
+	width: 300px;
+	position: relative;
+	top: 2px;
+	color: #333;
+}
+
+.alert {
+	margin-top: 50px;
+}

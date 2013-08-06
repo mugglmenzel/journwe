@@ -8,18 +8,18 @@
 </div>
 <form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
     <div class="row">
-        <div class="col-2 col-lg-offset-1 text-center">
+        <div class="col-3 text-center">
             <a href="#" onclick="switchMode(); $('#yingyangyong-click-info').fadeOut();"><img id="yingyangyong" src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' class="where"></a>
         </div>
             <!--<a href="@routes.AdventureController.create()" class="btn btn-primary btn-large text-center">Start
             a new Group Adventure!</a> -->
-        <div class="col-8" style="min-height: 650px; position: relative;">
+        <div class="col-9" style="min-height: 650px; position: relative;">
             <div class="row">
-                <div class="col-7 input-append">
-                    <input type="text" name="name" placeholder="Name your JournWe" required="required" class="input input-xxl">
+                <div class="col-8 input-group">
+                    <input type="text" name="name" placeholder="Name your JournWe" required="required" class="input input-large form-control">
 
-                    <div class="btn-group">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    <div class="input-group-btn">
+                        <a class="btn btn-primary btn-large dropdown-toggle" data-toggle="dropdown" href="#">
                             Choose Category
                             <span class="caret"></span>
                         </a>
@@ -34,7 +34,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-5">
+                <div class="col-4">
                     <button style="backround-color: #00cc00;" class="btn btn-large pull-right" onclick="">
                         Start JournWe <i class="icon-angle-right"></i></button>
                 </div>
@@ -51,79 +51,80 @@
             </div>
             *@
 
+            <div class="row col-12">
+                <div id="where-dialog" style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-top: 20px; margin-bottom: 20px">
+                    <div style="background-color: rgba(255, 255, 255, 0.3); padding: 15px; ">
+                        <h1><i class="icon-globe"></i> Where do you want to go?</h1>
 
-            <div id="where-dialog" style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-top: 20px; margin-bottom: 20px">
-                <div style="background-color: rgba(255, 255, 255, 0.3); padding: 15px; ">
-                    <h1><i class="icon-globe"></i> Where do you want to go?</h1>
+                        <ul id="places-list" class="unstyled inline">
+                        </ul>
 
-                    <ul id="places-list" class="unstyled inline">
-                    </ul>
-
-                    <div class="input-append">
-                        <input type="text" placeholder="A decent place name" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;">
-                        <a class="btn btn-add" onclick="searchPlace();"><i class="icon-plus"></i></a>
-                    </div>
-                    <div style="height: 400px;">
-                        <div id="where-map" style="width: 100%; height: 100%"></div>
+                        <div class="input-append">
+                            <input type="text" placeholder="A decent place name" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;">
+                            <a class="btn btn-add" onclick="searchPlace();"><i class="icon-plus"></i></a>
+                        </div>
+                        <div style="height: 400px;">
+                            <div id="where-map" style="width: 100%; height: 100%"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="who-dialog" style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-top: 20px; margin-bottom: 20px; display: none;">
-                <div style="background-color: rgba(255, 255, 255, 0.2); padding: 15px; ">
-                    <h1><i class="icon-group"></i> Who's gonna join your JournWe?</h1>
+                <div id="who-dialog" style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-top: 20px; margin-bottom: 20px; display: none;">
+                    <div style="background-color: rgba(255, 255, 255, 0.2); padding: 15px; ">
+                        <h1><i class="icon-group"></i> Who's gonna join your JournWe?</h1>
 
-                    <ul id="people-list" class="unstyled inline"></ul>
+                        <ul id="people-list" class="unstyled inline"></ul>
 
-                    <div class="input-append input-prepend">
-                        <div class="btn-group">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i id="people-add-type" class="icon-facebook"></i>
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i>
-                                    Facebook</a></li>
-                                <li><a onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i>
-                                    Email</a></li>
-                            </ul>
+                        <div class="input-append input-prepend">
+                            <div class="btn-group">
+                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i id="people-add-type" class="icon-facebook"></i>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i>
+                                        Facebook</a></li>
+                                    <li><a onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i>
+                                        Email</a></li>
+                                </ul>
+                            </div>
+                            <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off">
+                            <a class="btn btn-add" onclick="addFriend();"><i class="icon-plus"></i></a>
                         </div>
-                        <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off">
-                        <a class="btn btn-add" onclick="addFriend();"><i class="icon-plus"></i></a>
-                    </div>
-                    <div class="spacer20"></div>
-                    <div style="margin-bottom: 20px;">Is your Adventure public? &nbsp;
-                        <div class="switch"><input type="checkbox" id="publish" name="publish"></div>
-                    </div>
-                    <div style="margin-bottom: 20px;">Publish on my Facebook Wall &nbsp;
-                        <div class="switch"><input type="checkbox" id="facebookWall" name="facebookWall"></div>
-                        <div><i class="icon-facebook"></i> <textarea name="facebookWallPost" style="border: 3px solid #0000aa">Hey friends! Become my fellow adventurer on this magnificent JournWe.</textarea></div>
+                        <div class="spacer20"></div>
+                        <div style="margin-bottom: 20px;">Is your Adventure public? &nbsp;
+                            <div class="switch"><input type="checkbox" id="publish" name="publish"></div>
+                        </div>
+                        <div style="margin-bottom: 20px;">Publish on my Facebook Wall &nbsp;
+                            <div class="switch"><input type="checkbox" id="facebookWall" name="facebookWall"></div>
+                            <div><i class="icon-facebook"></i> <textarea name="facebookWallPost" style="border: 3px solid #0000aa">Hey friends! Become my fellow adventurer on this magnificent JournWe.</textarea></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="when-dialog" style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-top: 20px; margin-bottom: 20px; display: none;">
-                <div style="background-color: rgba(255, 255, 255, 0.5); padding: 15px; ">
-                    <h1><i class="icon-calendar"></i> When do you want to set off?</h1>
+                <div id="when-dialog" style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-top: 20px; margin-bottom: 20px; display: none;">
+                    <div style="background-color: rgba(255, 255, 255, 0.5); padding: 15px; ">
+                        <h1><i class="icon-calendar"></i> When do you want to set off?</h1>
 
-                    <ul id="time-list" class="unstyled inline"></ul>
+                        <ul id="time-list" class="unstyled inline"></ul>
 
-                    <div class="form-inline">
+                        <div class="form-inline">
 
 
-                        <div class="input-prepend">
-                            <span class="add-on">Start Date</span>
-                            <input id="time-add-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;"/>
+                            <div class="input-prepend">
+                                <span class="add-on">Start Date</span>
+                                <input id="time-add-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;"/>
+                            </div>
+                            <div class="input-prepend">
+                                <span class="add-on">End Date</span>
+                                <input id="time-add-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;"/>
+                            </div>
+
+                            <a class="btn btn-add" onclick="addTime();"><i class="icon-plus"></i></a>
+
                         </div>
-                        <div class="input-prepend">
-                            <span class="add-on">End Date</span>
-                            <input id="time-add-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;"/>
-                        </div>
-
-                        <a class="btn btn-add" onclick="addTime();"><i class="icon-plus"></i></a>
 
                     </div>
-
                 </div>
             </div>
         </div>
