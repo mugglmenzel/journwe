@@ -2,7 +2,7 @@
 
 <div id="yingyangyong-click-info" class="row">
     <div class="col-2 col-lg-offset-1 text-center">
-        <i class="icon-chevron-down"></i>
+        <i class="icon-chevron-down"></i> 
         click on <img src='http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' style="height: 20px;">
     </div>
 </div>
@@ -13,7 +13,7 @@
         </div>
             <!--<a href="@routes.AdventureController.create()" class="btn btn-primary btn-large text-center">Start
             a new Group Adventure!</a> -->
-        <div class="col-9" style="min-height: 650px; position: relative;">
+        <div class="col-9" style="min-height: 680px; position: relative;">
             <div class="row">
                 <div class="col-8 input-group">
                     <input type="text" name="name" placeholder="Name your JournWe" required="required" class="input input-large form-control">
@@ -56,14 +56,14 @@
                     <div style="background-color: rgba(255, 255, 255, 0.3); padding: 15px; ">
                         <h1><i class="icon-globe"></i> Where do you want to go?</h1>
 
-                        <ul id="places-list" class="unstyled inline">
+                        <ul id="places-list" class="list-unstyled list-inline">
                         </ul>
 
-                        <div class="input-append">
-                            <input type="text" placeholder="A decent place name" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;">
-                            <a class="btn btn-add" onclick="searchPlace();"><i class="icon-plus"></i></a>
+                        <div class="input-group">
+                            <input type="text" placeholder="A decent place name" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
+                            <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="icon-plus"></i></a></div>
                         </div>
-                        <div style="height: 400px;">
+                        <div style="height: 400px; margin-top: 10px;">
                             <div id="where-map" style="width: 100%; height: 100%"></div>
                         </div>
                     </div>
@@ -73,31 +73,36 @@
                     <div style="background-color: rgba(255, 255, 255, 0.2); padding: 15px; ">
                         <h1><i class="icon-group"></i> Who's gonna join your JournWe?</h1>
 
-                        <ul id="people-list" class="unstyled inline"></ul>
+                        <ul id="people-list" class="list-unstyled list-inline"></ul>
 
-                        <div class="input-append input-prepend">
-                            <div class="btn-group">
-                                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i id="people-add-type" class="icon-facebook"></i>
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
+                                    <i id="people-add-type" class="icon-facebook"></i> 
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i>
+                                    <li><a onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i> 
                                         Facebook</a></li>
-                                    <li><a onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i>
+                                    <li><a onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i> 
                                         Email</a></li>
                                 </ul>
                             </div>
-                            <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off">
-                            <a class="btn btn-add" onclick="addFriend();"><i class="icon-plus"></i></a>
+                            <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
+                            <div class="input-group-btn">
+                                <a class="btn btn-add btn-primary" onclick="addFriend();"><i class="icon-plus"></i></a>
+                            </div>
                         </div>
                         <div class="spacer20"></div>
-                        <div style="margin-bottom: 20px;">Is your Adventure public? &nbsp;
+                        <div style="margin-bottom: 20px;"><span style="min-width: 200px; display: inline-block;">Is your Adventure public? </span>
                             <div class="switch"><input type="checkbox" id="publish" name="publish"></div>
                         </div>
-                        <div style="margin-bottom: 20px;">Publish on my Facebook Wall &nbsp;
-                            <div class="switch"><input type="checkbox" id="facebookWall" name="facebookWall"></div>
-                            <div><i class="icon-facebook"></i> <textarea name="facebookWallPost" style="border: 3px solid #0000aa">Hey friends! Become my fellow adventurer on this magnificent JournWe.</textarea></div>
+                        <div style="margin-bottom: 20px;"><span style="min-width: 200px; display: inline-block;">Publish on my Facebook Wall</span>
+                            <div class="switch"><input type="checkbox" id="facebookWall" name="facebookWall" onchange="$('.post-on-facebook').toggle(this.checked)"></div>
+                            <div class="form-group post-on-facebook" style="display: none; margin-top: 10px;">
+                                <label for="facebookWallPost"><i class="icon-facebook"></i> Facebook Message</label>
+                                <textarea name="facebookWallPost" style="width: 100%; height: 100px;">Hey friends! Become my fellow adventurer on this magnificent JournWe.</textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,21 +111,21 @@
                     <div style="background-color: rgba(255, 255, 255, 0.5); padding: 15px; ">
                         <h1><i class="icon-calendar"></i> When do you want to set off?</h1>
 
-                        <ul id="time-list" class="unstyled inline"></ul>
+                        <ul id="time-list" class="list-unstyled list-inline"></ul>
 
-                        <div class="form-inline">
+                        <div class="row">
 
 
-                            <div class="input-prepend">
-                                <span class="add-on">Start Date</span>
-                                <input id="time-add-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;"/>
+                            <div class="input-group col-5">
+                                <span class="input-group-addon"><i class="icon-calendar"></i> Start Date</span>
+                                <input id="time-add-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;" class="form-control"/>
                             </div>
-                            <div class="input-prepend">
-                                <span class="add-on">End Date</span>
-                                <input id="time-add-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;"/>
+                            <div class="input-group col-5">
+                                <span class="input-group-addon"><i class="icon-calendar"></i> End Date</span>
+                                <input id="time-add-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;" class="form-control"/>
                             </div>
 
-                            <a class="btn btn-add" onclick="addTime();"><i class="icon-plus"></i></a>
+                            <a class="btn btn-add btn-primary col-1" onclick="addTime();"><i class="icon-plus"></i></a>
 
                         </div>
 
@@ -217,7 +222,7 @@
     function searchPlace() {
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
             var id = 'places-item-' + results[0].geometry.location.lat().toString().replace('.', '_') + '-' + results[0].geometry.location.lng().toString().replace('.', '_');
-            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '"><span class="label"><i class="icon-map-marker"></i>' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\')">&times;</a></span> <span class="divider"></span></li>');
+            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
             map.setCenter(results[0].geometry.location);
             var marker = new google.maps.Marker({
                 map: map,
@@ -243,6 +248,7 @@
         markers[id].setMap(null);
         delete markers[id];
         resetBounds();
+        return false;
     }
 
     var facebookUsers = {};
@@ -252,7 +258,7 @@
     function addFriend() {
         var id = 'people-item-' + peopleCounter++;
         var input = ($('#people-add-input').attr('type') == 'text') ? '<input type="hidden" name="facebook[]" value="' + facebookUsers[$('#people-add-input').val()] + '">' : '<input type="hidden" name="email[]" value="' + $('#people-add-input').val() + '">';
-        $('#people-list').append('<li id="' + id +'">' + input + '<span class="label"><i class="' + $('#people-add-type').attr('class') + '"></i>' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#people-list').append('<li id="' + id +'">' + input + '<span class="label"><i class="' + $('#people-add-type').attr('class') + '"></i> ' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
         $('#people-add-input').val('');
     }
 
@@ -291,7 +297,7 @@
 
     function addTime() {
         var id = 'time-item-' + $('#time-add-input-start').val() + '-' +  $('#time-add-input-end').val();
-        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + $('#time-add-input-start').val() + ',' + $('#time-add-input-end').val() + '"><span class="label"><i class="icon-time"></i>' + $('#time-add-input-start').val() + ' to ' + $('#time-add-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + $('#time-add-input-start').val() + ',' + $('#time-add-input-end').val() + '"><span class="label"><i class="icon-time"></i> ' + $('#time-add-input-start').val() + ' to ' + $('#time-add-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
         $('#time-add-input-start').val('');
         $('#time-add-input-end').val('');
     }
