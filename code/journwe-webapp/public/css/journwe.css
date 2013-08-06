@@ -353,6 +353,7 @@ table.inspiration .images img {
 .nav-adventure {
 	background-color: gray;
 	font-size: 40px;
+	margin-top: 50px;
 }
 
 .nav-adventure li a {
