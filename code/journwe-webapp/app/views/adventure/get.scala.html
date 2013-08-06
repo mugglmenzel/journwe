@@ -60,7 +60,7 @@
         <div class="row">
         <div class="col-12">
             <p class="pull-left">
-                <img id="adventure-title-image" class="img-polaroid" style="border: solid 1px rgba(0, 0, 0, 0); margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=Drop+image"}else{src="http://i.embed.ly/1/image/crop?width=150&height=200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
+                <img id="adventure-title-image" class="img-polaroid" style="border: solid 1px rgba(0, 0, 0, 0); margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=Drop+image"}else{src="http://i.embed.ly/1/image/crop?height=200&width=150&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
                 <i id="adventure-title-image-loading" class="icon-spin icon-spinner stash"></i>
 
                 <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
@@ -98,8 +98,8 @@
                         success:  function (data) {
                             $('#adventure-title-image-loading').hide();
                             $('#adventure-prime-image-loading').hide();
-                            $('#adventure-title-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=150&url=' + data.image + '&key=2c8ef5b200c6468f9f863bc75c46009f');
-                            $('#adventure-prime-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + data.image + '&key=2c8ef5b200c6468f9f863bc75c46009f');
+                            $('#adventure-title-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=150&url=' + data.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime());
+                            $('#adventure-prime-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + data.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime());
                             $('#adventure-title-image').show();
                             $('#adventure-prime-image').show();
                         }
