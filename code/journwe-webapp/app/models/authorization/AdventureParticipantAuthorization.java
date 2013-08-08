@@ -1,6 +1,6 @@
 package models.authorization;
 
-public class AdventureOwnerAuthorization extends AbstractAuthorization {
+public class AdventureParticipantAuthorization extends AbstractAuthorization {
 
     // ADVENTURE
 
@@ -218,4 +218,5 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     boolean canViewFilesComments() {
         return true;
     }
+
 }
