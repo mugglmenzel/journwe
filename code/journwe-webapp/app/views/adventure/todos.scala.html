@@ -19,7 +19,7 @@
     @if(list.containsKey(user)){
     @for(todo <- list.get(user)) {
         <tr class="status-@todo.getStatus() todo-entry" data-id="@todo.getId()">
-            <td><a href="#" class="btn btn-check"><i class="icon-check@if(todo.getStatus()!=EStatus.COMPLETE){-empty}"></i></a></td>
+            <td><a href="#" class="btn btn-primary btn-check"><i class="icon-check@if(todo.getStatus()!=EStatus.COMPLETE){-empty}"></i></a></td>
             <td style="width:100%;">@todo.getTitle()</td>
             <td class="text-center"><a href="#" class="btn btn-danger btn-delete"><i class="icon-trash"></i></td>
         </tr>
@@ -29,9 +29,13 @@
 </table>
 
 
-<div class="input-append">
-    <input id="todo-title" type="text" placeholder="Add an important thing"/>
-    <button id="btn-add-todo" class="btn" type="button"><i class="icon-plus"></i></button>
+<div class="row">
+    <div class="input-group col-6">
+        <input id="todo-title" type="text" placeholder="Add an important thing" class="form-control"/>
+        <div class="input-group-btn">
+            <button id="btn-add-todo" class="btn" type="button"><i class="icon-plus"></i></button>
+        </div>
+    </div>
 </div>
 
 <div class="spacer30"></div>
@@ -50,9 +54,9 @@
     <tbody>
     @for(todo <- list.get(usr)) {
         <tr>
-            <td><i class="icon-check@if(todo.getStatus()!=EStatus.COMPLETE){-empty}"></i></td>
+            <td><i class="icon-check@if(todo.getStatus()!=EStatus.COMPLETE){-empty}" style="margin: 13px;"></i></td>
             <td style="width:100%;">@todo.getTitle()</td>
-            <td class="text-center"><a href="#" class="btn btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></a></td>
+            <td class="text-center"><a href="#" class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></a></td>
         </tr>
     }
     </tbody>
@@ -64,7 +68,7 @@
 
 <script type="text/x-tmpl" id="todo-template">
     <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}"> 
-        <td><a href="#" class="btn btn-check"><i class="icon-check-empty"></i></a></td>
+        <td><a href="#" class="btn btn-primary btn-check"><i class="icon-check-empty"></i></a></td>
         <td style="width:100%;">{%=o.title%}</td>
         <td class="text-center"><a href="#" class="btn btn-danger btn-delete"><i class="icon-trash"></i></a></td>
     </tr>
