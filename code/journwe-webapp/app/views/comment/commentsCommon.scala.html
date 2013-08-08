@@ -1,0 +1,39 @@
+
+<script id="template-comment" type="text/x-tmpl">
+    <div>
+        <div class="comment-text"><i class="icon-comment"></i> {%=o.comment.text%}</div>
+        <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.time%}</div>
+    </div>
+</script>
+
+
+<script>
+
+    function refreshComments(threadId, list) {
+        $.get('@routes.CommentController.listComments("")'+threadId, function(res) {
+            list.html("");
+            res.forEach(function(f) {
+                f.time = formatTime(f.comment.timestamp); // Append
+                list.append(tmpl('template-comment', f)).fadeIn();
+            });
+
+            if (!res.length) {
+                list.append('<div class="empty"><i class="icon-envelope"></i> Write a first comment!</div>');
+            }
+        });
+    }
+
+    function addComment(threadId, list, val, btn){
+
+        btn.html('<i class="icon-spin icon-spinner"></i>');
+
+        $.post("@routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f) {
+            list.find(".empty").remove();
+
+            f.time = formatTime(f.comment.timestamp); // Append
+            list.append(tmpl('template-comment', f)).fadeIn();
+            btn.html('<i class="icon-plus"></i>');
+        });
+    }
+
+</script>
