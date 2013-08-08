@@ -66,7 +66,7 @@ public class UploadToGithub extends Command<JournweCLIContext> {
                 System.out.println("You are connected with github as user " + github.getMyself());
                 GHRepository repo = github.getRepository("mugglmenzel/journwe");
                 System.out.println("Repo :"+repo);
-                GHIssueBuilder issuebuilder = repo.createIssue(userName+": "+feedbackText.substring(0, 10)+"...");
+                GHIssueBuilder issuebuilder = repo.createIssue(userName+": "+feedbackText.substring(0, 20)+"...");
                 issuebuilder.body(feedbackText+" (by user "+userName+" with id "+userId+")");
                 issuebuilder.label(feedbackType);
                 issuebuilder.create();
