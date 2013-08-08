@@ -1,24 +1,250 @@
 @(subForm: Form[models.user.Subscriber])
 
+@import models.dao._
 
     @main_subscribe {
-        <p>@Messages("subscribe.welcometext")</p>
-        <div class="spacer30"></div>
-        <div class="text-center">
+        <div class="jrn-container" style="margin-top: -20px;">
+            <p class="lead">@Messages("subscribe.welcometext")</p>
+        </div>
 
-            <p class="Lead"><strong>@Html(Messages("subscribe.cta"))</strong></p>
+        <div class="text-center jrn-container">
+
+            <p class="lead"><strong>@Html(Messages("subscribe.cta"))</strong></p>
 
 
             <form action="@routes.ApplicationController.subscribe()" class="form-horizontal">
                 <fieldset>
-                        <div class="input-append">
-                            <span style="font-size: 25px; padding: 11px 19px;" class="add-on"><i class="icon-envelope"></i></span>
-                            <input style="font-size: 25px; padding: 11px 19px;" class="input-xlarge" name="email" type="email" required>
-                            <input style="font-size: 25px;" class="btn btn-success btn-large" type="submit" value="Subscribe!"/>
-                        </div>
+                    <div class="input-append">
+                        <span style="font-size: 25px; padding: 11px 19px;" class="add-on"><i class="icon-envelope"></i></span>
+                        <input style="font-size: 25px; padding: 11px 19px;" class="input-xlarge" name="email" type="email" required>
+                        <input style="font-size: 25px; margin-top: -10px;" class="btn btn-success btn-large" type="submit" value="Subscribe!"/>
+                    </div>
                 </fieldset>
             </form>
 
         </div>
-        <div class="spacer30"></div>
+
+        <div class="jrn-container">
+            <h2>@Messages("subscribe.story")</h2>
+
+            <div id="success-stories">
+                <div class="row">
+                    <div class="col-7">
+                        <h3>@Messages("subscribe.story1.header")</h3>
+                        <blockquote><p class="lead">@Messages("subscribe.story1.content")</p>
+                            <small><cite>@Messages("subscribe.story1.cite")</cite></small></blockquote>
+                    </div>
+                    <div class="col-5 text-center">
+                        @defining(new AdventureDAO().get("5fb8c20d-ce5e-40c8-999b-efcceb52f9c3")){ adv =>   @if(adv != null) {
+                        <div class="polaroid" style="">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
+                            </div>
+                        </div>
+                        } }
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-5 text-center">
+                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv => @if(adv != null) {
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> Mexico</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 2</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 1-2013</span>
+                                </div>
+                            </div>
+                        </div>
+                    }    }
+                    </div>
+                    <div class="col-7">
+                        <h3>@Messages("subscribe.story2.header")</h3>
+                        <blockquote><p class="lead">@Messages("subscribe.story2.content")</p>
+                            <small><cite>@Messages("subscribe.story2.cite")</cite></small>  </blockquote>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-7">
+                        <h3>@Messages("subscribe.story3.header")</h3>
+                        <blockquote><p class="lead">@Messages("subscribe.story3.content")</p>
+                            <small><cite>@Messages("subscribe.story3.cite")</cite></small></blockquote>
+                    </div>
+                    <div class="col-5 text-center">
+                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>  @if(adv != null) {
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
+                            </div>
+                        </div>
+                    } }
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-5 text-center">
+                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv => @if(adv != null) {
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
+                            </div>
+                        </div>
+                    }   }
+                    </div>
+                    <div class="col-7">
+                        <h3>@Messages("subscribe.story4.header")</h3>
+                        <blockquote><p class="lead">@Messages("subscribe.story4.content")</p>
+                            <small><cite>@Messages("subscribe.story4.cite")</cite></small>  </blockquote>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-7">
+                        <h3>@Messages("subscribe.story5.header")</h3>
+                        <blockquote><p class="lead">@Messages("subscribe.story5.content")</p>
+                            <small><cite>@Messages("subscribe.story5.cite")</cite></small></blockquote>
+                    </div>
+                    <div class="col-5 text-center">
+                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>  @if(adv != null) {
+                        <div class="polaroid" style="position: relative; float: left;">
+                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div class="overlay text-center" style="display: none;">
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
+                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                </div>
+                            </div>
+                        </div>
+                    }  }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="jrn-container">
+            <h2>Features at a Glance</h2>
+
+            <div class="row">
+                <div class="col-4">
+                  <h4><img style="height: 20px;" alt="JournWe logo" src="/assets/img/yingyangyong_green.png"></img> Get Your Trip Started</h4>
+                  <ul style="list-style-type:none">
+                  <li> Where do you want to go? </li>
+                  <li> When do you want to go? </li>
+                  <li> With whom do you want to go? </li>
+                  </ul>
+                  You're sure, then start. <br> You haven't decided yet? - Doesn't matter, start anyway and discuss later.
+                </div>
+                <div class="col-4">
+                  <h4><i class="icon-bullhorn"></i> Involve Your Friends</h4>
+                  Use JournWe to motivate friends to join an adventure. Sharing information from JournWe is a cool way for having all your friends convinced to join your trip! Or announce it to the public and fiend new friends.
+                </div>
+                <div class="col-4">
+                  <h4><i class="icon-comments"></i> Keep it all in One Place</h4>
+                  Don't bother with emails from travel operators that only reach one or few people in your travel group. JournWe gives you an email address (your-adventure@@journwe.com) and provides you with a single communication point. All of it is kept centrally in your adventure visible for all travel mates.
+                </div>
+    		</div>
+    		<div class="row">
+                <div class="col-4">
+                  <h4><i class="icon-lightbulb"></i> Get Inspired</h4>
+                  Is there anything out there? Find the hottest current adventures you may join. We have great inspirations for you to find your next adventure! Activate a notifier and get news on adventures in your area, a certain category or on where you always wanted to go.
+                </div>
+                <div class="col-4">
+                  <h4><i class="icon-plane"></i> Find the Cheapest Prices</h4>
+                  Use reference booking systems to find cheapest flights, hotels, buses, trains, homestays, tents, backseats,tickets... matching your trip.
+                </div><div class="col-4">
+                  <h4><i class="icon-camera-retro"></i> And when it's Over</h4>
+                  Share your pictures, write a blog, keep in touch...
+                </div>
+    		</div>
+            <div class="row">
+                <ul>
+                    <li> <i class="icon-phone"></i> Notifications </li>
+                    <li> <i class="icon-heart-empty"></i> Most wanted list </li>
+                    <li> <i class="icon-trophy"></i> Rewards from travel agents </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="jrn-container">
+            <h2>Some Inspirations</h2>
+
+            <div class="clearfix">
+                <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            </div>
+
+            <script type="text/x-tmpl" id="adventure-public-template">
+                <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left;">
+                    <a href="{%=o.link%}"><img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
+                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                        <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
+                        <div class="overlay text-center" style="display: none;">
+                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
+                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                        </div>
+                    </div>
+                </div>
+            </script>
+            <script type="text/javascript">
+                $(document).ready(function(){
+
+                loadPublicAdventures(null, true);
+
+                $('#success-stories div.polaroid').hover(
+                    function(){
+                        $(this).find("div.overlay").slideDown("fast");
+                    },
+                    function(){
+                        $(this).find("div.overlay").slideUp("fast");
+                    }
+                );
+
+                });
+
+                function loadPublicAdventures(lastId, clear) {
+                $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
+                if (clear) $('#adventures-public-list').empty();
+                for(var i in advs) {
+                var polaroid = tmpl('adventure-public-template', advs[i]);
+                $('#adventures-public-list').append(polaroid);
+
+                $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
+                function(){
+                $(this).find("div.overlay").slideDown("fast");
+                },
+                function(){
+                $(this).find("div.overlay").slideUp("fast");
+                }
+                );
+
+                }
+                });
+                }
+            </script>
+        </div>  
     }

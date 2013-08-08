@@ -59,7 +59,14 @@ public class AdventureTimeController extends Controller {
             times.add(node);
         }
 
-        return ok(Json.toJson(times));
+        String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
+
+        ObjectNode result = Json.newObject();
+        result.put("times", Json.toJson(times));
+        result.put("favoriteTime", favId != null ? Json.toJson(new TimeOptionDAO().get(advId, favId)) : Json.toJson(""));
+
+
+        return ok(Json.toJson(result));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)

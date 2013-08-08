@@ -1,21 +1,11 @@
 package models.user;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.ecwid.mailchimp.MailChimpClient;
-import com.ecwid.mailchimp.MailChimpException;
-import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
-import com.feth.play.module.pa.user.AuthUser;
-import com.feth.play.module.pa.user.AuthUserIdentity;
-import com.feth.play.module.pa.user.EmailIdentity;
-import com.feth.play.module.pa.user.NameIdentity;
-import models.dao.SubscriberDAO;
-import models.dao.UserDAO;
-import models.dao.UserEmailDAO;
-import models.dao.UserSocialDAO;
-import models.helpers.EnumMarshaller;
+import models.dao.helpers.EnumMarshaller;
+import models.notifications.ENotificationFrequency;
 import play.data.validation.Constraints.Required;
 
-import java.io.IOException;
+import java.util.Date;
 
 @DynamoDBTable(tableName = "journwe-user")
 public class User {
@@ -30,6 +20,10 @@ public class User {
     private boolean active;
 
     private EUserRole role = EUserRole.USER;
+
+    private ENotificationFrequency notificationDigest = ENotificationFrequency.IMMEDIATELY;
+
+    private Date lastDigest = new Date();
 
     /**
      * @return the id
@@ -101,7 +95,28 @@ public class User {
         this.role = role;
     }
 
+    @DynamoDBMarshalling(marshallerClass = NotificationFrequencyMarshaller.class)
+    public ENotificationFrequency getNotificationDigest() {
+        return notificationDigest;
+    }
+
+    public void setNotificationDigest(ENotificationFrequency notificationDigest) {
+        this.notificationDigest = notificationDigest;
+    }
+
+    @DynamoDBAttribute
+    public Date getLastDigest() {
+        return lastDigest;
+    }
+
+    public void setLastDigest(Date lastDigest) {
+        this.lastDigest = lastDigest;
+    }
+
     public static class UserRoleMarshaller extends EnumMarshaller<EUserRole> {
+    }
+
+    public static class NotificationFrequencyMarshaller extends EnumMarshaller<ENotificationFrequency> {
     }
 
 }

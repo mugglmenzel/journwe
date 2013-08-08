@@ -4,7 +4,7 @@
     <i id="places-favorite-place-icon" class="icon-spin icon-spinner"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
 </div>
 
-<table id="places-list" class="table table-striped table-hover hide">
+<table id="places-list" class="table table-striped table-hover stash">
     <thead>
         <tr>
             <th>@Messages("adventure.general.favourite")</th>
@@ -26,7 +26,7 @@
 <div class="places-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
 
 
-<div class="pull-right">
+<div class="pull-right" style="position: relative; top: 9px;">
     @Messages("adventure.general.voting")
     <div class="switch">
         <input id="places-voting-active-switch" type="checkbox" @if(adv.getPlaceVoteOpen){checked="checked"}>
@@ -34,10 +34,16 @@
 </div>
 
 <div id="place-add-form">
-    <div class="input-append">
-        <input type="text" placeholder="Add a decent place" id="place-add-input">
-        <a id="place-add-button" class="btn btn-add"><i class="icon-plus"></i></a>
+    <div class="row">
+        <div class="input-group col-9" style="margin-bottom: 10px;">
+            <input type="text" placeholder="Add a decent place" id="place-add-input" style="" class="form-control">
+            <input id="place-add-comment-input" class="form-control stash" style="display: none; width: 50%;" type="text" placeholder="Comment ...">
+            <div class="input-group-btn">
+                <button id="place-add-button" class="btn btn-add btn-primary"><i class="icon-plus"></i></button>
+            </div>
+        </div>
     </div>
+
 
     <div style="height: 400px;">
         <div id="place-add-map" style="width: 100%; height: 100%"></div>
@@ -106,16 +112,6 @@
     }
 
 
-    $('document').ready(function () {
-    initialize();
-    $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
-    $.get('@routes.AdventurePlaceController.getFavoritePlace(adv.getId)', function (data) {
-    $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
-    $('#places-favorite-place-name').html(data != "" ? data.address : "No favorite yet");
-    });
-    });
-
-
     function setFavoritePlaceOption(optionId) {
     $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
     $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
@@ -143,24 +139,33 @@
 
     var votePlaceIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
     var votePlaceButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
-    var votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-important', 'MAYBE': 'label-warning'};
+    var votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
 
 
 
-    $('#places-list').ready(function (){
-        $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (places) {
+    $('document').ready(function (){
+        initialize();
+        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
+        $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (result) {
+
+
+            $('#places-favorite-place-name').html(result.favoritePlace != "" ? result.favoritePlace.address : "No favorite yet");
+
+
             $('#places-list tbody').empty();
-            for(var id in places) {
-                renderPlaceOption(places[id])
+            for(var id in result.places) {
+                renderPlaceOption(result.places[id])
             }
 
-            if (places.length){
+            if (result.places.length){
                 $('#places-list').show();
             } else {
                 $('#places-list').hide();
             }
 
             $('.places-loading').hide();
+            $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
+
             updatePlaceVoteOpen(@adv.getPlaceVoteOpen)
         });
     });
@@ -169,6 +174,20 @@
     $('#place-add-input').on('keydown', function(e){
         if (e.keyCode==13){
             $('#place-add-button').click();
+        }
+    });
+
+    $('#place-add-input').on('focus', function(e){
+        $(this).css("width", "50%");
+        $('#place-add-comment-input').fadeIn();
+    });
+
+    $('#place-add-input').on('blur', function(e){
+        if($(this).val() == ''){
+            var el = $(this);
+            $('#place-add-comment-input').fadeOut(function(){
+                el.css("width", "100%"); 
+            });
         }
     });
 

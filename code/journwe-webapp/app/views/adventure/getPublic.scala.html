@@ -54,7 +54,7 @@
             <div>@Html(adv.getHTMLDescription())</div>
 
         </p>
-            <div style="display: block;">
+            <div style="overflow: hidden;">
             @defining(new AdventurerDAO()){ advrDAO =>
                     <p>@advrDAO.count(adv.getId) Adventurers participate.</p>
                 @advrDAO.all(adv.getId()).filter(!_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).map{ advr =>

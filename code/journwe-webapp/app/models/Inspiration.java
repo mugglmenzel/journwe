@@ -1,6 +1,7 @@
 package models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import models.adventure.place.PlaceOption;
 import models.helpers.WeatherFactory;
 import play.data.validation.Constraints.Required;
 
@@ -17,6 +18,12 @@ public class Inspiration {
     private String description;
 
     private String image;
+
+    private String placeAddress;
+
+
+
+    // Tools
 
     private String tripAdvisor;
 

@@ -17,6 +17,7 @@ import play.Logger;
 import play.cache.Cached;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Lang;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -55,7 +56,6 @@ public class ApplicationController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result indexNew() {
         List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
         for (Category cat : new CategoryDAO().all())
@@ -66,7 +66,6 @@ public class ApplicationController extends Controller {
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result categoryIndex(String catId) {
 
         return ok(indexCat.render(new CategoryDAO().get(catId)));
@@ -98,7 +97,7 @@ public class ApplicationController extends Controller {
         return ok(Json.toJson(result));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+
     public static Result getPublicAdventures() {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
@@ -186,6 +185,12 @@ public class ApplicationController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result admin() {
         return ok(admin.render());
+    }
+
+    public static Result changeLanguage(String lang) {
+        changeLang(lang);
+
+        return redirect(request().getHeader(REFERER) != null ? request().getHeader(REFERER) : "/");
     }
 
     public static Result oAuthDenied(String provider) {
