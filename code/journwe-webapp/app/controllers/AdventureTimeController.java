@@ -2,11 +2,14 @@ package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.Adventure;
-import models.auth.SecuredBetaUser;
 import models.adventure.EPreferenceVote;
 import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
-import models.dao.*;
+import models.auth.SecuredBetaUser;
+import models.dao.AdventureDAO;
+import models.dao.TimeAdventurerPreferenceDAO;
+import models.dao.TimeOptionDAO;
+import models.dao.UserDAO;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
@@ -88,13 +91,14 @@ public class AdventureTimeController extends Controller {
 
         return ok(Json.toJson(new TimeOptionDAO().get(advId, favId)));
     }
+
     public static Result addTime(String advId) {
 
         DynamicForm requestData = form().bindFromRequest();
         Logger.info(requestData.data().toString());
 
         // DateFormat depends on Locale
-        DateFormat df = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
         try {
             TimeOption time = new TimeOption();
@@ -110,7 +114,7 @@ public class AdventureTimeController extends Controller {
             pref.setAdventurerId(usr.getId());
             new TimeAdventurerPreferenceDAO().save(pref);
 
-
+            Logger.info("returning start date " + time.getStartDate().toString() + ", " + df.format(time.getStartDate()));
             ObjectNode node = Json.newObject();
             node.put("id", time.getOptionId());
             node.put("advId", time.getAdventureId());

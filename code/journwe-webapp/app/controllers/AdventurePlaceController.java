@@ -46,6 +46,8 @@ public class AdventurePlaceController extends Controller {
             node.put("advId", po.getAdventureId());
             node.put("placeId", po.getPlaceId());
             node.put("address", po.getAddress());
+            node.put("lat", po.getLatitude().doubleValue());
+            node.put("lng", po.getLongitude().doubleValue());
             PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getOptionId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getOptionId())));
@@ -93,7 +95,12 @@ public class AdventurePlaceController extends Controller {
         PlaceOption place = new PlaceOption();
         place.setAdventureId(advId);
         place.setAddress(requestData.get("address"));
-
+        try {
+            place.setLatitude(new Double(requestData.get("lat")));
+            place.setLongitude(new Double(requestData.get("lng")));
+        } catch (Exception e) {
+            return badRequest();
+        }
         new PlaceOptionDAO().save(place);
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -108,6 +115,8 @@ public class AdventurePlaceController extends Controller {
         node.put("placeId", place.getPlaceId());
         node.put("advId", place.getAdventureId());
         node.put("address", place.getAddress());
+        node.put("lat", place.getLatitude().doubleValue());
+        node.put("lng", place.getLongitude().doubleValue());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));
@@ -145,6 +154,8 @@ public class AdventurePlaceController extends Controller {
         node.put("advId", place.getAdventureId());
         node.put("placeId", place.getPlaceId());
         node.put("address", place.getAddress());
+        node.put("lat", place.getLatitude().doubleValue());
+        node.put("lng", place.getLongitude().doubleValue());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));

@@ -119,19 +119,19 @@
     }
 
     function renderPlaceOption(data, replace) {
-    if(replace)
-        replace.replaceWith(tmpl('place-template', data)).fadeIn();
-    else
-        $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
+        if(replace)
+            replace.replaceWith(tmpl('place-template', data)).fadeIn();
+        else
+            $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
 
-    new google.maps.Geocoder().geocode({address: data.address}, function (results, status) {
-    var marker = new google.maps.Marker({map: map, position: results[0].geometry.location});
-    markers[data.placeId] = marker;
-    map.setCenter(results[0].geometry.location);
-    resetBounds();
-    });
-    $('#placeoption-status-icon-' + data.placeId).addClass(votePlaceIconCSSClassMap[data.vote]);
-    $('#placeoption-status-' + data.placeId).addClass(votePlaceButtonCSSClassMap[data.vote]);
+
+        var marker = new google.maps.Marker({map: map, position: new google.maps.LatLng(data.lat, data.lng)});
+        markers[data.placeId] = marker;
+        map.setCenter(new google.maps.LatLng(data.lat, data.lng));
+        resetBounds();
+
+        $('#placeoption-status-icon-' + data.placeId).addClass(votePlaceIconCSSClassMap[data.vote]);
+        $('#placeoption-status-' + data.placeId).addClass(votePlaceButtonCSSClassMap[data.vote]);
     }
 
 
@@ -192,7 +192,7 @@
     $('#place-add-button').on('click', function() {
         $(this).html('<i class="icon-spin icon-spinner"></i>');
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-            $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { address: results[0].formatted_address }, function(res) {
+            $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()}, function(res) {
                 renderPlaceOption(res);
                 $('#place-add-input').val("");
                 $('#place-add-button').html('<i class="icon-plus"></i>');
