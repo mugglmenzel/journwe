@@ -723,3 +723,24 @@ h1 .x-edit-loading {
 .btn-group {
 	white-space: nowrap;
 }
+
+.has-switch {
+	border: none;
+	overflow: hidden;
+	min-width: 125px;
+}
+
+.has-switch span.switch-primary, 
+.has-switch span.switch-left {
+	background: #428bca;
+}
+
+.has-switch span, 
+.has-switch label {
+	padding-bottom: 8px;
+	padding-top: 8px;
+}
+
+.has-switch span.switch-right {
+	background: none;
+}
