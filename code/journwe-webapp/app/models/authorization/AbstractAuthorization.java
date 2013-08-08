@@ -130,6 +130,9 @@ public abstract class AbstractAuthorization {
     boolean canViewAndDownloadFiles() {
         return false;
     }
+    boolean canDeleteFiles() {
+        return false;
+    }
     boolean canEditFilesComments() {
         return false;
     }

@@ -210,6 +210,11 @@ public class AdventureParticipantAuthorization extends AbstractAuthorization {
     }
 
     @Override
+    boolean canDeleteFiles() {
+        return true;
+    }
+
+    @Override
     boolean canEditFilesComments() {
         return true;
     }

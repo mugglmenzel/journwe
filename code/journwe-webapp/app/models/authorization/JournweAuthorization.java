@@ -178,6 +178,10 @@ public class JournweAuthorization {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canViewAndDownloadFiles() : false;
     }
+    public static boolean canDeleteFiles(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canDeleteFiles() : false;
+    }
     public static boolean canEditFilesComments(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canEditFilesComments() : false;
