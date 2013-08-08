@@ -724,3 +724,7 @@ h1 .x-edit-loading {
 .alert {
 	margin-top: 50px;
 }
+
+.btn-group {
+	white-space: nowrap;
+}
