@@ -1,5 +1,6 @@
 @(adv: models.adventure.Adventure, advr: models.adventure.Adventurer)
 
+@import models.authorization.JournweAuthorization
 @import models.adventure.EAdventurerParticipation
 @import models.dao.AdventurerDAO
 @import models.dao.UserDAO
@@ -18,6 +19,7 @@ case EAdventurerParticipation.APPLICANT => {}
 
 @defining((advr.getParticipationStatus())) { (status) =>
 
+@if(JournweAuthorization.canEditAdventurerParticipationStatus(adv.getId) {
 @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)){
 <div>
     <strong style="vertical-align:middle;">@Messages("adventure.adventurers.myStat")</strong>
@@ -42,6 +44,7 @@ case EAdventurerParticipation.APPLICANT => {}
 <div>
     <a class="btn btn-primary" href="@routes.AdventurePeopleController.participate(adv.getId())">@Messages("adventure.adventurers.button.participate")</a>
 </div>
+}
 }
 }
 
@@ -87,6 +90,7 @@ case EAdventurerParticipation.APPLICANT => {}
 
 <div class="spacer20"></div>
 
+@if(JournweAuthorization.canInviteAdventurerParticipants(adv.getId)) {
 <div class="row">
     <div class="input-group col-6">
         <div class="input-group-btn">
@@ -107,10 +111,10 @@ case EAdventurerParticipation.APPLICANT => {}
         </div>
     </div>
 </div>
-
+}
 
 @defining(new AdventurerDAO().all(adv.getId())) { applicants =>
-@if(applicants != null && applicants.filter(_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).size() > 0) {
+@if(applicants != null && JournweAuthorization.canViewAdventurerParticipants(adv.getId) && applicants.filter(_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).size() > 0) {
 
 <div class="spacer20"></div>
 <table class="table table-striped table-hover">
@@ -127,7 +131,7 @@ case EAdventurerParticipation.APPLICANT => {}
     <tr class={cssForStatus(appl.getParticipationStatus()).toString}>
         <td>{new UserDAO().get(appl.getUserId()).getName()}</td>
         <td class="text-center">{appl.getParticipationStatus()}</td>
-        <td class="text-center">{if(!status.equals(EAdventurerParticipation.APPLICANT)){
+        <td class="text-center">{if(!status.equals(EAdventurerParticipation.APPLICANT) && JournweAuthorization.canAcceptAdventurerApplicants(adv.getId)){
                 <a class="btn btn-primary btn-adopt"
                     href={routes.AdventurePeopleController.adopt(adv.getId(),appl.getUserId()).toString()}>Adopt</a>
             }}

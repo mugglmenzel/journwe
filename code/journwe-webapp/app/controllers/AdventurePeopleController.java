@@ -13,6 +13,8 @@ import models.adventure.AdventureShortname;
 import models.adventure.Adventurer;
 import models.adventure.EAdventurerParticipation;
 import models.auth.SecuredBetaUser;
+import models.authorization.AuthorizationMessage;
+import models.authorization.JournweAuthorization;
 import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
@@ -46,6 +48,8 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getAdventurers(String advId) {
+        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         return ok(Json.toJson(new AdventurerDAO().all(advId)));
     }
 
@@ -75,6 +79,9 @@ public class AdventurePeopleController extends Controller {
 
 
     public static Result participateStatus(String advId, String statusStr) {
+        if (!JournweAuthorization.canEditAdventurerParticipationStatus(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+
         EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
@@ -103,6 +110,8 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result adopt(String advId, String userId) {
+        if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         User usr = new UserDAO().get(userId);
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
         if (advr == null) {
@@ -154,6 +163,8 @@ public class AdventurePeopleController extends Controller {
 
 
     public static Result inviteViaEmail(String advId) {
+        if (!JournweAuthorization.canInviteAdventurerParticipants(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
 
@@ -175,6 +186,8 @@ public class AdventurePeopleController extends Controller {
 
 
     public static Result invite(String advId) {
+        if (!JournweAuthorization.canInviteAdventurerParticipants(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         String shortURL = routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
