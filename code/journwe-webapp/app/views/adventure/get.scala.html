@@ -221,7 +221,9 @@
                 @files(adv, fileForm)
 
             </div>
+            @if(JournweAuthorization.canViewFilesComments(adv.getId)) {
             @views.html.comment.widget_comment.render(adv, "files")
+            }
         </div>
     </div>
 
