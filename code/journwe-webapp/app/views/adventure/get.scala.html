@@ -16,6 +16,8 @@
             <li  id="nav-adventure-index"
             @if(active == "index"){class="active"}><a href="#index" onclick="return jumpToSection('index');"><i
                 class="icon-info" title="Overview"></i></a></li>
+            <li id="nav-adventure-discussion"
+            @if(active == "discussion"){class="active"}><a href="#discussion" onclick="return jumpToSection('discussion');"><i class="icon-comments" title="Discussion"></i></a></li>
             <li id="nav-adventure-places"
             @if(active == "places"){class="active"}><a href="#places" onclick="return jumpToSection('places');"><i class="icon-globe" title="Place"></i></a></li>
             <li id="nav-adventure-adventurers"
@@ -54,6 +56,9 @@
             <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> @Messages("adventure.general.button.leave")</a>
         </div>
     </div>
+
+    @comment.commentsCommon()
+
 
     <div class="jrn-container">
         <h2 id="index"><i class="icon-info icon-for-adventure-title"></i> @Messages("adventure.getScala.adventure.title")</h2>

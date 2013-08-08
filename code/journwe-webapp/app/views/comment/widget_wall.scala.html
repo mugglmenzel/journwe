@@ -14,84 +14,68 @@
 	</div>
 
 
-	<script id="template-comment" type="text/x-tmpl">
-		<div>
-			<div class="comment-text"><i class="icon-comment"></i> <%= text %></div>
-			<div class="comment-info"><%= user.name %> <small>-</small> <%= time %></div>
-		</div>
-	</script>
-
-	<script>
-
-		$(function(){
-
-			var adventureId = "@adv.getId()",
-				topic = ("@topic"+""),
-				threadId = adventureId+topic,
-				input = $("#input-comment-@topic input"),
-				btn = $("#btn-add-comment-@topic");
-
-			// A template for one comment entry
-			// Todo Use more appropriate templating (e.g. underscore, handlebar!)
-			var template = function(replace, obj){
-
-					return replace(function(foo, t){
-						t = t.trim();
-						var val = obj;
-						t.split(".").forEach(function(key){
-							val = val[key];
-						});
-						return val;
-					}).trim();
-
-				// A little hacky, but so its only initialized once, but used at the right time!
-				}.bind(this, "".replace.bind($("#template-comment").html(), /<%=(.*?)%>/g)); 
+    <script id="template-wall" type="text/x-tmpl">
+        <div>
+            <img class="pull-left" style="margin-right: 10px; max-height: 24pt;" src="{%=o.user.image%}">
+            <div class="comment-text"><i class="icon-comment"></i> {%=o.comment.text%}</div>
+            <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.time%}</div>
+        </div>
+    </script>
 
 
+    <script>
 
-			// The container for all comments
-			var list = $("#comments-list-@topic");
+    $(function(){
 
+    var adventureId = "@adv.getId()",
+    topic = ("@topic"+""),
+    threadId = adventureId+topic,
+    input = $("#input-comment-@topic input"),
+    btn = $("#btn-add-comment-@topic");
 
-			// Perform GET
-			$.get("/comments/"+threadId, function(res){
-				list.html("");
-				res.forEach(function(f){
-					f.time = formatTime(f.timestamp); // Append
-					list.append(template(f));
-				});
-
-				if (!res.length){
-					list.append('<div class="empty"><i class="icon-envelope"></i> Write a first comment!</div>');
-				}
-			});
-
-			// Perform POST
-			btn.click(function(){
-				var val;
-
-				// Check if there is a value
-				if (val = (input.val()||"").trim()){
-					btn.html('<i class="icon-spin icon-spinner"></i>');
-					input.val(""); // Reset
-
-					$.post("/comment/save", {text: val, threadId: threadId}, function(f){
-						list.find(".empty").remove();
-
-						f.time = formatTime(f.timestamp); // Append
-						list.append($(template(f)).fadeIn());
-						btn.html('<i class="icon-plus"></i>');
-					});
-				}
-			});
-
-			input.keyup(function(e) {
-				if(e.keyCode == 13) {
-					btn.click();
-				}
-			});
+    // The container for all comments
+    var list = $("#comments-list-@topic");
 
 
-		});
-	</script>
+    // Perform GET
+    $.get('@routes.CommentController.listComments("")'+threadId, function(res){
+    list.html("");
+    res.forEach(function(f){
+    f.time = formatTime(f.comment.timestamp); // Append
+    list.append(tmpl('template-wall', f)).fadeIn();
+    });
+
+    if (!res.length){
+    list.append('<div class="empty"><i class="icon-envelope"></i> Write a first wall post!</div>');
+    }
+    });
+
+    // Perform POST
+    btn.click(function(){
+    var val;
+
+    // Check if there is a value
+    if (val = (input.val()||"").trim()){
+    btn.html('<i class="icon-spin icon-spinner"></i>');
+    input.val(""); // Reset
+
+    $.post("@routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f){
+    list.find(".empty").remove();
+
+    f.time = formatTime(f.comment.timestamp); // Append
+    list.append(tmpl('template-wall', f)).fadeIn();
+    btn.html('<i class="icon-plus"></i>');
+    });
+    }
+    });
+
+    input.keyup(function(e) {
+    if(e.keyCode == 13) {
+    btn.click();
+    }
+    });
+
+
+    });
+    </script>
 </div>

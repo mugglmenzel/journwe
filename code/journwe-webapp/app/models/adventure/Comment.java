@@ -60,15 +60,6 @@ public class Comment {
         this.userId = userId;
     }
 
-    @DynamoDBIgnore
-    public User getUser() {
-        UserSocial social = new UserSocialDAO().findBySocialId(this.getUserId());
-
-        if (social != null) {
-            return new UserDAO().get(social.getUserId());
-        }
-        return null;
-    }
 
 //    @DynamoDBIndexRangeKey(localSecondaryIndexName = "timestamp-index", attributeName = "timestamp")
 //    @DynamoDBAttribute

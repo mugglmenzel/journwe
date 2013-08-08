@@ -1,18 +1,17 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import models.auth.SecuredBetaUser;
 import models.adventure.Adventure;
+import models.adventure.Comment;
 import models.adventure.EPreferenceVote;
 import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.place.PlaceOption;
-import models.dao.AdventureDAO;
-import models.dao.PlaceAdventurerPreferenceDAO;
-import models.dao.PlaceOptionDAO;
-import models.dao.UserDAO;
+import models.auth.SecuredBetaUser;
+import models.dao.*;
 import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
+import org.joda.time.DateTime;
 import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
@@ -103,12 +102,23 @@ public class AdventurePlaceController extends Controller {
         }
         new PlaceOptionDAO().save(place);
 
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-
+        User user = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        Comment comment = new Comment();
         PlaceAdventurerPreference pref = new PlaceAdventurerPreference();
-        pref.setPlaceOptionId(place.getOptionId());
-        pref.setAdventurerId(usr.getId());
-        new PlaceAdventurerPreferenceDAO().save(pref);
+
+        if (user != null) {
+            if (requestData.get("comment") != null && !"".equals(requestData.get("comment"))) {
+                comment.setText(requestData.get("comment"));
+                comment.setThreadId(advId + "places");
+                comment.setTimestamp(new Long(DateTime.now().getMillis()));
+                comment.setUserId(user.getId());
+                new CommentDAO().save(comment);
+            }
+
+            pref.setPlaceOptionId(place.getOptionId());
+            pref.setAdventurerId(user.getId());
+            new PlaceAdventurerPreferenceDAO().save(pref);
+        }
 
         ObjectNode node = Json.newObject();
         node.put("id", place.getOptionId());
@@ -121,7 +131,7 @@ public class AdventurePlaceController extends Controller {
         node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));
 
-        return ok(Json.toJson(node));
+        return created(Json.toJson(node));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)

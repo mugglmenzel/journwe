@@ -125,7 +125,7 @@ public class AdventureTimeController extends Controller {
             node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getOptionId())));
             node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getOptionId())));
 
-            return ok(Json.toJson(node));
+            return created(Json.toJson(node));
         } catch (ParseException pe) {
             Logger.error("Got a parse exception for date parsing: " + pe.getLocalizedMessage());
             return badRequest();

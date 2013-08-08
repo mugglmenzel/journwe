@@ -12,12 +12,6 @@
 	</div>
 
 
-	<script id="template-comment" type="text/x-tmpl">
-		<div>
-			<div class="comment-text"><i class="icon-comment"></i> <%= text %></div>
-			<div class="comment-info"><%= user.name %> <small>-</small> <%= time %></div>
-		</div>
-	</script>
 
 	<script>
 
@@ -29,59 +23,23 @@
 				input = $("#input-comment-@topic input"),
 				btn = $("#btn-add-comment-@topic");
 
-			// A template for one comment entry
-			// Todo Use more appropriate templating (e.g. underscore, handlebar!)
-			var template = function(replace, obj){
-
-					return replace(function(foo, t){
-						t = t.trim();
-						var val = obj;
-						t.split(".").forEach(function(key){
-							val = val[key];
-						});
-						return val;
-					}).trim();
-
-				// A little hacky, but so its only initialized once, but used at the right time!
-				}.bind(this, "".replace.bind($("#template-comment").html(), /<%=(.*?)%>/g)); 
-
-
-
 			// The container for all comments
 			var list = $("#comments-list-@topic");
 
 
 			// Perform GET
-			$.get("/comments/"+threadId, function(res){
-				list.html("");
-				res.forEach(function(f){
-					f.time = formatTime(f.timestamp); // Append
-					list.append(template(f));
-				});
-
-				if (!res.length){
-					list.append('<div class="empty"><i class="icon-envelope"></i> Write a first comment!</div>');
-				}
-			});
+            refreshComments(threadId, list);
 
 			// Perform POST
-			btn.click(function(){
-				var val;
+			btn.click(function () {
+                var val;
 
-				// Check if there is a value
-				if (val = (input.val()||"").trim()){
-					btn.html('<i class="icon-spin icon-spinner"></i>');
-					input.val(""); // Reset
-
-					$.post("/comment/save", {text: val, threadId: threadId}, function(f){
-						list.find(".empty").remove();
-
-						f.time = formatTime(f.timestamp); // Append
-						list.append($(template(f)).fadeIn());
-						btn.html('<i class="icon-plus"></i>');
-					});
-				}
-			});
+                // Check if there is a value
+                if (val = (input.val()||"").trim()){
+                    input.val(""); // Reset
+                    addComment(threadId, list, val, btn);
+                }
+            });
 
 			input.keyup(function(e) {
 				if(e.keyCode == 13) {

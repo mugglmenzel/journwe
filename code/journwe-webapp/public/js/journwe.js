@@ -35,7 +35,7 @@ function formatTime(time){
             + ":"
             + two(time.getMinutes());
     } else {
-        return formatDate(time);
+        return formatDateShort(time);
     }
 };
 

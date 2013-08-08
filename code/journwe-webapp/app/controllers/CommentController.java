@@ -6,6 +6,10 @@ import models.adventure.CommentThread;
 import models.dao.CommentDAO;
 import models.dao.CommentThreadDAO;
 
+import models.dao.UserDAO;
+import models.user.User;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.joda.time.DateTime;
 
 import play.Logger;
@@ -22,6 +26,9 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
 import models.auth.SecuredUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommentController extends Controller {
 
@@ -58,23 +65,22 @@ public class CommentController extends Controller {
 	@Security.Authenticated(SecuredUser.class)
 	public static Result saveComment() {
 		try {
-		AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-		if(usr==null)
-			throw new Exception("Posting a comment failed because user is null.");
-		Form<Comment> filledCommentForm = commentForm.bindFromRequest();
-		Comment comment = filledCommentForm.get();
-		comment.setTimestamp(new Long(DateTime.now().getMillis()));
-		comment.setUserId(usr.getId());
-		Logger.debug("thread with id: "+comment.getThreadId());
-		Logger.debug("ts: "+comment.getTimestamp());
+            User user = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            if(user==null)
+                throw new Exception("Posting a comment failed because user is null.");
+            Form<Comment> filledCommentForm = commentForm.bindFromRequest();
+            Comment comment = filledCommentForm.get();
+            comment.setTimestamp(new Long(DateTime.now().getMillis()));
+            comment.setUserId(user.getId());
 			if (new CommentDAO().save(comment)) {
-				flash("Posted new comment.");
-				return created(Json.toJson(comment));
+                ObjectNode result = Json.newObject();
+                result.put("comment", Json.toJson(comment));
+                result.put("user", Json.toJson(new UserDAO().get(comment.getUserId())));
+				return created(Json.toJson(result));
 			} else {
 				throw new Exception("Saving comment failed.");
 			}
 		} catch (Exception e) {
-			flash("error", "Something went wrong during saving the comment.");
 			Logger.error(e.getMessage());
 			return internalServerError();
 		}
@@ -82,7 +88,16 @@ public class CommentController extends Controller {
 	
 	@Security.Authenticated(SecuredUser.class)
 	public static Result listComments(String threadId) {
-		return ok(Json.toJson(new CommentDAO().getComments(threadId)));
+        List<ObjectNode> results = new ArrayList<ObjectNode>();
+
+        for(Comment c : new CommentDAO().getComments(threadId)) {
+            ObjectNode result = Json.newObject();
+            result.put("comment", Json.toJson(c));
+            result.put("user", Json.toJson(new UserDAO().get(c.getUserId())));
+            results.add(result);
+        }
+
+		return ok(Json.toJson(results));
 	}
 	
 	@Security.Authenticated(SecuredUser.class)
