@@ -57,9 +57,9 @@ public class JournweAuthorization {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canVoteForPlaces() : false;
     }
-    public static boolean canChangeVoteForPlaces(final String advId) {
+    public static boolean canChangeVoteOnOffForPlaces(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canChangeVoteForPlaces() : false;
+        return (authorization!=null) ? authorization.canChangeVoteOnOffForPlaces() : false;
     }
     public static boolean canViewFavoritePlace(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
@@ -120,6 +120,10 @@ public class JournweAuthorization {
     public static boolean canViewDateAndTime(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canViewDateAndTime() : false;
+    }
+    public static boolean canChangeVoteOnOffForDateAndTime(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canChangeVoteOnOffForDateAndTime() : false;
     }
     public static boolean canVoteForDateAndTime(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);

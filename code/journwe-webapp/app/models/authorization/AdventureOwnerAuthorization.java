@@ -62,7 +62,7 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     }
 
     @Override
-    boolean canChangeVoteForPlaces() {
+    boolean canChangeVoteOnOffForPlaces() {
         return true;
     }
 
@@ -146,7 +146,7 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     }
 
     @Override
-    boolean canChangeVoteForDateAndTime() {
+    boolean canChangeVoteOnOffForDateAndTime() {
         return true;
     }
 
