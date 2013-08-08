@@ -15,6 +15,7 @@ import models.adventure.group.AdventurerGroup;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredBetaUser;
+import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
@@ -366,7 +367,7 @@ public class AdventureController extends Controller {
 
     public static Result updateImage(String advId) {
         if (!JournweAuthorization.canEditAdventureImage(advId))
-            return badRequest("You are not authorized to do this.");
+            return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         try {
             Http.MultipartFormData body = request().body().asMultipartFormData();
@@ -396,6 +397,8 @@ public class AdventureController extends Controller {
     }
 
     public static Result updatePlaceVoteOpen(String advId) {
+        if (!JournweAuthorization.canChangeVoteOnOffForPlaces(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         Boolean openVote = new Boolean(data.get("voteOpen"));
         Adventure adv = new AdventureDAO().get(advId);
@@ -408,6 +411,8 @@ public class AdventureController extends Controller {
     }
 
     public static Result updateTimeVoteOpen(String advId) {
+        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         Boolean openVote = new Boolean(data.get("voteOpen"));
         Adventure adv = new AdventureDAO().get(advId);
