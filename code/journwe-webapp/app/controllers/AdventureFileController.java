@@ -8,6 +8,8 @@ import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.file.JournweFile;
 import models.auth.SecuredBetaUser;
+import models.authorization.AuthorizationMessage;
+import models.authorization.JournweAuthorization;
 import models.dao.JournweFileDAO;
 import play.Logger;
 import play.data.Form;
@@ -36,6 +38,8 @@ public class AdventureFileController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result uploadFile(String advId) {
         try {
+        if (!JournweAuthorization.canUploadFiles(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if(usr==null)
             throw new Exception("File upload failed because user is null.");
@@ -73,6 +77,8 @@ public class AdventureFileController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result listFiles(String adventureId) {
+        if (!JournweAuthorization.canViewAndDownloadFiles(adventureId))
+            return AuthorizationMessage.notAuthorizedResponse();
         Logger.debug("Listing files from DynamoDB ...");
         List<JournweFile> files = new JournweFileDAO().all(adventureId);
         for(JournweFile file : files)
@@ -82,8 +88,12 @@ public class AdventureFileController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result deleteFile(String id, String tid) {
+        if (!JournweAuthorization.canDeleteFiles(id))
+            return AuthorizationMessage.notAuthorizedResponse();
 
         new JournweFileDAO().delete(tid, id);
+
+        // TODO delete file from S3
 
         return ok(); //TODO: Error handling
     }

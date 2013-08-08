@@ -62,7 +62,7 @@ public class AdventureParticipantAuthorization extends AbstractAuthorization {
     }
 
     @Override
-    boolean canChangeVoteForPlaces() {
+    boolean canChangeVoteOnOffForPlaces() {
         return true;
     }
 
@@ -146,7 +146,7 @@ public class AdventureParticipantAuthorization extends AbstractAuthorization {
     }
 
     @Override
-    boolean canChangeVoteForDateAndTime() {
+    boolean canChangeVoteOnOffForDateAndTime() {
         return true;
     }
 
@@ -206,6 +206,11 @@ public class AdventureParticipantAuthorization extends AbstractAuthorization {
 
     @Override
     boolean canViewAndDownloadFiles() {
+        return true;
+    }
+
+    @Override
+    boolean canDeleteFiles() {
         return true;
     }
 

@@ -37,7 +37,7 @@ public abstract class AbstractAuthorization {
     boolean canVoteForPlaces() {
         return false;
     }
-    boolean canChangeVoteForPlaces() {
+    boolean canChangeVoteOnOffForPlaces() {
         return false;
     }
     boolean canViewVotesForPlaces() {
@@ -89,7 +89,7 @@ public abstract class AbstractAuthorization {
     boolean canVoteForDateAndTime() {
         return false;
     }
-    boolean canChangeVoteForDateAndTime() {
+    boolean canChangeVoteOnOffForDateAndTime() {
         return false;
     }
     boolean canViewVotesForDateAndTime() {
@@ -128,6 +128,9 @@ public abstract class AbstractAuthorization {
         return false;
     }
     boolean canViewAndDownloadFiles() {
+        return false;
+    }
+    boolean canDeleteFiles() {
         return false;
     }
     boolean canEditFilesComments() {

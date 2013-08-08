@@ -12,7 +12,7 @@
     <i id="times-favorite-time-icon" class="icon-spin icon-spinner"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name"></span></em>
 </div>
 
-<div>
+<div class="pull-right">
     @Messages("adventure.general.voting")
     <div class="switch">
         <input id="times-voting-active-switch" type="checkbox" @if(adv.getTimeVoteOpen){checked="checked"}>
@@ -41,18 +41,18 @@
 
 <div class="times-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
 
-<div id="time-add-form" class="inline input-append">
+<div id="time-add-form" class="row">
 
-        <div class="input-prepend">
-            <span class="add-on">@Messages("adventure.time.start")</span>
-            <input class="journwe-date" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="Start Date" style="max-width: 150px;" required="required"/>
+        <div class="input-group col-5">
+            <span class="input-group-addon">@Messages("adventure.time.start")</span>
+            <input class="journwe-date form-control" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="Start Date" style="max-width: 200px;" required="required"/>
         </div>
-        <div class="input-prepend">
-            <span class="add-on">@Messages("adventure.time.end")</span>
-            <input class="journwe-date" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="End Date" style="max-width: 150px;" required="required"/>
+        <div class="input-group col-5">
+            <span class="input-group-addon">@Messages("adventure.time.end")</span>
+            <input class="journwe-date form-control" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="End Date" style="max-width: 200px;" required="required"/>
         </div>
 
-        <button id="time-add-button" class="btn"><i class="icon-plus"></i></button>
+        <button id="time-add-button" class="btn btn-primary col-1"><i class="icon-plus"></i></button>
 
 </div>
 
@@ -68,7 +68,7 @@
                         <i class="icon-pencil"></i>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a onclick="voteTime('YES', '{%=o.timeId%}');"><i class="icon-thumbs-up"></i> @Messages("adventure.general.YES")</a></li>
+                        <li><a onclick="voteTime('YES', '{%=o.timeId%}');"><i class="icon-thumbs-up"></i> @Messages("adventure.general.yes")</a></li>
                         <li><a onclick="voteTime('MAYBE', '{%=o.timeId%}');"><i class="icon-question"></i> @Messages("adventure.general.maybe")</a></li>
                         <li><a onclick="voteTime('NO', '{%=o.timeId%}');"><i class="icon-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
                     </ul>

@@ -597,7 +597,6 @@ h1 .x-edit-loading {
 }
 
 #todo-title {
-	width: 300px;
 }
 
 .adventures-list-full {
@@ -629,10 +628,6 @@ h1 .x-edit-loading {
 
 .polaroid h4 {
 	margin: 10px 0px;
-}
-
-.todo-entry .btn-check {
-	width: 16px;
 }
 
 .prime-image {
@@ -723,4 +718,29 @@ h1 .x-edit-loading {
 
 .alert {
 	margin-top: 50px;
+}
+
+.btn-group {
+	white-space: nowrap;
+}
+
+.has-switch {
+	border: none;
+	overflow: hidden;
+	min-width: 125px;
+}
+
+.has-switch span.switch-primary, 
+.has-switch span.switch-left {
+	background: #428bca;
+}
+
+.has-switch span, 
+.has-switch label {
+	padding-bottom: 8px;
+	padding-top: 8px;
+}
+
+.has-switch span.switch-right {
+	background: none;
 }
