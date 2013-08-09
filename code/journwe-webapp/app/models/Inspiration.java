@@ -1,7 +1,6 @@
 package models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import models.adventure.place.PlaceOption;
 import models.helpers.WeatherFactory;
 import play.data.validation.Constraints.Required;
 
@@ -21,6 +20,9 @@ public class Inspiration {
 
     private String placeAddress;
 
+    private Double placeLatitude;
+
+    private Double placeLongitude;
 
 
     // Tools
@@ -34,7 +36,7 @@ public class Inspiration {
 
     @DynamoDBIgnore
     public static Inspiration fromId(String id) {
-        if(id == null || !id.contains(":")) return null;
+        if (id == null || !id.contains(":")) return null;
         Inspiration po = new Inspiration();
         po.setCategoryId(id.split(":")[0]);
         po.setInspirationId(id.split(":")[1]);
@@ -122,6 +124,33 @@ public class Inspiration {
         this.image = image;
     }
 
+    @DynamoDBAttribute
+    public String getPlaceAddress() {
+        return placeAddress;
+    }
+
+    public void setPlaceAddress(String placeAddress) {
+        this.placeAddress = placeAddress;
+    }
+
+    @DynamoDBAttribute
+    public Double getPlaceLatitude() {
+        return placeLatitude;
+    }
+
+    public void setPlaceLatitude(Double placeLatitude) {
+        this.placeLatitude = placeLatitude;
+    }
+
+    @DynamoDBAttribute
+    public Double getPlaceLongitude() {
+        return placeLongitude;
+    }
+
+    public void setPlaceLongitude(Double placeLongitude) {
+        this.placeLongitude = placeLongitude;
+    }
+
     /**
      * @return the image
      */
@@ -157,7 +186,7 @@ public class Inspiration {
      */
     @DynamoDBIgnore
     public Weather getWeather() {
-        if (this.weatherId == null){
+        if (this.weatherId == null) {
             return null;
         }
         return WeatherFactory.getWeather(this.weatherId);
@@ -177,6 +206,7 @@ public class Inspiration {
     public void setWeatherId(String weatherId) {
         this.weatherId = weatherId;
     }
+
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()

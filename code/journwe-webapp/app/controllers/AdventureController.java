@@ -254,7 +254,9 @@ public class AdventureController extends Controller {
                 PlaceOption po = new PlaceOption();
                 po.setAdventureId(adv.getId());
                 placeI++;
-                po.setAddress(filledForm.data().get(key));
+                po.setAddress(filledForm.data().get(key).split("|")[0]);
+                po.setLatitude(new Double(filledForm.data().get(key).split("|")[1]));
+                po.setLongitude(new Double(filledForm.data().get(key).split("|")[2]));
                 new PlaceOptionDAO().save(po);
                 lastPlaceId = po.getPlaceId();
                 //placeOptions.add(po);

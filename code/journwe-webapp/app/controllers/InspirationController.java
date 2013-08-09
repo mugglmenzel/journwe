@@ -100,6 +100,15 @@ public class InspirationController extends Controller {
                     ins.setImage(new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()).getImage());
 
 
+
+                if((ins.getPlaceAddress() == null && form().bindFromRequest().get("place") != null) ||(ins.getPlaceAddress() != null && !ins.getPlaceAddress().equals(form().bindFromRequest().get("place")))) {
+                    String place = form().bindFromRequest().get("place");
+                    ins.setPlaceAddress(place.split("|")[0]);
+                    ins.setPlaceLatitude(new Double(place.split("|")[1]));
+                    ins.setPlaceLongitude(new Double(place.split("|")[2]));
+                }
+
+
                 if (new InspirationDAO().save(ins)) {
 
                     flash("success",
