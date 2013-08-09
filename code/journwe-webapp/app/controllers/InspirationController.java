@@ -103,9 +103,10 @@ public class InspirationController extends Controller {
 
                 if((ins.getPlaceAddress() == null && form().bindFromRequest().get("place") != null) ||(ins.getPlaceAddress() != null && !ins.getPlaceAddress().equals(form().bindFromRequest().get("place")))) {
                     String place = form().bindFromRequest().get("place");
-                    ins.setPlaceAddress(place.split("|")[0]);
-                    ins.setPlaceLatitude(new Double(place.split("|")[1]));
-                    ins.setPlaceLongitude(new Double(place.split("|")[2]));
+                    Logger.debug("got place: " + place + ", saving: " + place.split("/")[0] + ", " + place.split("/")[1] + ", " + place.split("/")[2]);
+                    ins.setPlaceAddress(place.split("/")[0]);
+                    ins.setPlaceLatitude(new Double(place.split("/")[1]));
+                    ins.setPlaceLongitude(new Double(place.split("/")[2]));
                 }
 
 
@@ -114,6 +115,7 @@ public class InspirationController extends Controller {
                     flash("success",
                             "Saved Inspiration with image " + ins.getImage()
                                     + ".");
+                    insForm = form(Inspiration.class);
                     return created(manage.render(insForm,
                             new CategoryDAO().allOptionsMap(),
                             new InspirationDAO().all()));
@@ -121,6 +123,7 @@ public class InspirationController extends Controller {
                     throw new Exception();
             } catch (Exception e) {
                 flash("error", "Something went wrong during saving :(");
+                Logger.error("inspiration saving went wrong", e);
                 return internalServerError(manage.render(filledInsForm,
                         new CategoryDAO().allOptionsMap(),
                         new InspirationDAO().all()));

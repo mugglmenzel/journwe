@@ -41,6 +41,9 @@
             <div>
                 <div>Place</div>
                 <ul id="inspiration-place" class="list-unstyled list-inline">
+                    @if(inspForm("placeAddress").value()) {
+                    <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label"><i class="icon-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
+                    }
                 </ul>
 
                 <div class="input-group">
@@ -80,7 +83,7 @@
                 function searchPlace() {
                     new google.maps.Geocoder().geocode({'address': $('#inspiration-place-input').val()}, function (results, status) {
                         var id = 'inspiration-place';
-                        $('#inspiration-place').html('<li id="' + id +'"><input type="hidden" name="place" value="' + results[0].formatted_address + '|' + results[0].geometry.location.lat().toString() + '|' + results[0].geometry.location.lng().toString() + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
+                        $('#inspiration-place').html('<li id="' + id +'"><input type="hidden" name="place" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
                         map.setCenter(results[0].geometry.location);
                         var marker = new google.maps.Marker({
                             map: map,
