@@ -48,7 +48,7 @@
 
                 <div class="input-group">
                     <input type="text" placeholder="A decent place name" id="inspiration-place-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
-                    <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="icon-plus"></i></a></div>
+                    <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="icon-check"></i></a></div>
                 </div>
                 <div style="height: 400px; margin-top: 10px;">
                     <div id="inspiration-place-map" style="width: 100%; height: 100%"></div>
@@ -111,6 +111,39 @@
                     resetBounds();
                     return false;
                 }
+                </script>
+            </div>
+            <div>
+                <div>Time</div>
+                <ul id="inspiration-time" class="list-unstyled list-inline">
+                    @if(inspForm("timeStart").value()) {
+                        <li id="inspiration-time"><input type="hidden" name="time" value="@inspForm("timeStart").value(),@inspForm("timeEnd").value()"><span class="label"><i class="icon-time"></i> @inspForm("timeStart").value() to @inspForm("timeEnd").value() &nbsp;<a href="#" onclick="$('#inspiration-time').remove();">&times;</a></span> <span class="divider"></span></li>
+                    }
+                </ul>
+
+                <div class="row">
+                    <div class="input-group col-5">
+                        <span class="input-group-addon"><i class="icon-calendar"></i> Start Date</span>
+                        <input id="inspiration-time-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;" class="form-control"/>
+                    </div>
+                    <div class="input-group col-5">
+                        <span class="input-group-addon"><i class="icon-calendar"></i> End Date</span>
+                        <input id="inspiration-time-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;" class="form-control"/>
+                    </div>
+
+                    <a class="btn btn-add btn-primary col-1" onclick="addTime();"><i class="icon-check"></i></a>
+                </div>
+
+                <script>
+
+                    $('document').ready(function () {$('#inspiration-time-input-start').attr('min', new Date().toJSON().slice(0,10));});
+
+                    function addTime() {
+                        var id = 'inspiration-time';
+                        $('#inspiration-time').html('<li id="' + id +'"><input type="hidden" name="time" value="' + $('#inspiration-time-input-start').val() + ',' + $('#inspiration-time-input-end').val() + '"><span class="label"><i class="icon-time"></i> ' + $('#inspiration-time-input-start').val() + ' to ' + $('#inspiration-time-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+                        $('#inspiration-time-input-start').val('');
+                        $('#inspiration-time-input-end').val('');
+                    }
                 </script>
             </div>
  

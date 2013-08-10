@@ -4,6 +4,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.helpers.WeatherFactory;
 import play.data.validation.Constraints.Required;
 
+import java.util.Date;
+
 @DynamoDBTable(tableName = "journwe-inspiration")
 public class Inspiration {
 
@@ -24,6 +26,9 @@ public class Inspiration {
 
     private Double placeLongitude;
 
+    private Date timeStart;
+
+    private Date timeEnd;
 
     // Tools
 
@@ -149,6 +154,24 @@ public class Inspiration {
 
     public void setPlaceLongitude(Double placeLongitude) {
         this.placeLongitude = placeLongitude;
+    }
+
+    @DynamoDBAttribute
+    public Date getTimeStart() {
+        return timeStart;
+    }
+
+    public void setTimeStart(Date timeStart) {
+        this.timeStart = timeStart;
+    }
+
+    @DynamoDBAttribute
+    public Date getTimeEnd() {
+        return timeEnd;
+    }
+
+    public void setTimeEnd(Date timeEnd) {
+        this.timeEnd = timeEnd;
     }
 
     /**

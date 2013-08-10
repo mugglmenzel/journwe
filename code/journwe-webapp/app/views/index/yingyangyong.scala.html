@@ -293,7 +293,7 @@
 
 
 
-    $('#time-add-input-start').ready(function () {$('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));});
+    $('document').ready(function () {$('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));});
 
     function addTime() {
         var id = 'time-item-' + $('#time-add-input-start').val() + '-' +  $('#time-add-input-end').val();

@@ -6,11 +6,11 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.typesafe.config.ConfigFactory;
+import models.Category;
+import models.Inspiration;
 import models.auth.SecuredBetaUser;
 import models.dao.CategoryDAO;
 import models.dao.InspirationDAO;
-import models.Category;
-import models.Inspiration;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -22,6 +22,7 @@ import views.html.inspiration.get;
 import views.html.inspiration.manage;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class InspirationController extends Controller {
                 ConfigFactory.load().getString("aws.accessKey"),
                 ConfigFactory.load().getString("aws.secretKey")));
         List<String> images = new ArrayList<String>();
-        for(S3ObjectSummary os : s3.listObjects(S3_BUCKET_INSPIRATION_IMAGES, id + "/").getObjectSummaries()){
+        for (S3ObjectSummary os : s3.listObjects(S3_BUCKET_INSPIRATION_IMAGES, id + "/").getObjectSummaries()) {
             images.add(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                     os.getKey()));
         }
@@ -96,17 +97,24 @@ public class InspirationController extends Controller {
                             .withCannedAcl(CannedAccessControlList.PublicRead));
                     ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                             ins.getInspirationId() + "/title"));
-                }  else
+                } else
                     ins.setImage(new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()).getImage());
 
 
-
-                if((ins.getPlaceAddress() == null && form().bindFromRequest().get("place") != null) ||(ins.getPlaceAddress() != null && !ins.getPlaceAddress().equals(form().bindFromRequest().get("place")))) {
+                if (form().bindFromRequest().get("place") != null) {
                     String place = form().bindFromRequest().get("place");
-                    Logger.debug("got place: " + place + ", saving: " + place.split("/")[0] + ", " + place.split("/")[1] + ", " + place.split("/")[2]);
                     ins.setPlaceAddress(place.split("/")[0]);
                     ins.setPlaceLatitude(new Double(place.split("/")[1]));
                     ins.setPlaceLongitude(new Double(place.split("/")[2]));
+                }
+
+
+                if (form().bindFromRequest().get("time") != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+                    String time = form().bindFromRequest().get("time");
+                    ins.setTimeStart(sdf.parse(time.split(",")[0]));
+                    ins.setTimeEnd(sdf.parse(time.split(",")[1]));
                 }
 
 
@@ -115,7 +123,7 @@ public class InspirationController extends Controller {
                     flash("success",
                             "Saved Inspiration with image " + ins.getImage()
                                     + ".");
-                    insForm = form(Inspiration.class);
+                    //insForm = form(Inspiration.class);
                     return created(manage.render(insForm,
                             new CategoryDAO().allOptionsMap(),
                             new InspirationDAO().all()));
