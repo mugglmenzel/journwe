@@ -1,6 +1,6 @@
 package models.helpers;
 
-import models.Category;
+import models.category.Category;
 
 public class CategoryCount {
 

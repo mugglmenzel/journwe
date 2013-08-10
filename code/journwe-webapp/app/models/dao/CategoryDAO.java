@@ -2,13 +2,12 @@ package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
+import models.category.CategoryHierarchy;
 import models.dao.common.CommonEntityDAO;
-import models.Category;
+import models.category.Category;
 import models.Inspiration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,18 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
         for (Category in : all())
             result.put(in.getId(), in.getName());
         return result;
+    }
+
+    public List<Category> allOfCategory(String categoryId) {
+        CategoryHierarchy hier = new CategoryHierarchy();
+        hier.setSuperCategoryId(categoryId);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        query.setHashKeyValues(hier);
+        List<CategoryHierarchy> hiers = pm.query(CategoryHierarchy.class, query);
+        List<Category> results = new ArrayList<Category>();
+        for(CategoryHierarchy h : hiers)
+            results.add(get(h.getSubCategoryId()));
+        return results;
     }
 
     public Integer countInspirations(String id) {

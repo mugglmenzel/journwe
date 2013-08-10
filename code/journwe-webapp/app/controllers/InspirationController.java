@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.typesafe.config.ConfigFactory;
-import models.Category;
+import models.category.Category;
 import models.Inspiration;
 import models.auth.SecuredBetaUser;
 import models.dao.CategoryDAO;
