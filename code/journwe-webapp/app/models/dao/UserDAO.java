@@ -3,6 +3,7 @@ package models.dao;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
+import com.feth.play.module.pa.providers.AuthProvider;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
@@ -42,8 +43,11 @@ public class UserDAO extends CommonEntityDAO<User> {
             if (authUser instanceof PicturedIdentity) {
                 Logger.debug("updating picture");
                 User user = new UserDAO().get(social.getUserId());
-                if (!((PicturedIdentity) authUser).getPicture().equals(user.getImage())) {
-                    user.setImage(((PicturedIdentity) authUser).getPicture());
+                String picture = "";
+                if(authUser instanceof FacebookAuthUser) picture = ((PicturedIdentity) authUser).getPicture() + "?width=1200";
+                else picture = ((PicturedIdentity) authUser).getPicture();
+                if (!picture.equals(user.getImage())) {
+                    user.setImage(picture);
                     new UserDAO().save(user);
                 }
             }
@@ -69,8 +73,12 @@ public class UserDAO extends CommonEntityDAO<User> {
                 user.setName(name);
             }
         }
-        if (authUser instanceof PicturedIdentity)
-            user.setImage(((PicturedIdentity) authUser).getPicture());
+        if (authUser instanceof PicturedIdentity) {
+            String picture = "";
+            if(authUser instanceof FacebookAuthUser) picture = ((PicturedIdentity) authUser).getPicture() + "?type=large";
+            else picture = ((PicturedIdentity) authUser).getPicture();
+            user.setImage(picture);
+        }
 
         new UserDAO().save(user);
 

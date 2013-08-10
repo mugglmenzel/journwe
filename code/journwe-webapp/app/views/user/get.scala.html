@@ -2,9 +2,19 @@
 
 @import models.notifications.ENotificationFrequency
 
-@main("User Profile") {
-    <h1>User Profile of @user.getName <small>- A @user.getRole User</small></h1>
-} {
+@main("User Profile") { } {
+
+    <div class="prime-image">
+        <div style="width: 100%;">
+            <img id="user-prime-image" style="width: 100%; height: 200;" @if(user.getImage == null){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=No+image"}else{src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@user.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
+        </div>
+
+        <div class="title-name">
+            @user.getName <small>- @user.getRole</small>
+        </div>
+        <div class="toolbar">
+        </div>
+    </div>
 
     <div class="jrn-container">
         <h2 id="options"><i class="icon-cogs"></i> User Options</h2>
