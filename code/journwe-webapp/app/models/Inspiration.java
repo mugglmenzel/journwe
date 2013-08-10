@@ -2,6 +2,7 @@ package models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.helpers.WeatherFactory;
+import play.data.format.Formatters;
 import play.data.validation.Constraints.Required;
 
 import java.util.Date;
