@@ -59,7 +59,7 @@ adventure.create.startAdv=Starte ein neues Gruppen-Abenteuer
 #Adventure.general.voting
 adventure.general.favourite=Favorit
 adventure.general.advvotes=Abenteurer Abstimmung
-adventure.general.voting=Offene Abstimmung:
+adventure.general.voting=Abstimmung Offen:
 adventure.general.yourvote=Deine Wahl 
 adventure.general.yes=JA 
 adventure.general.maybe=VIELLEICHT
@@ -83,7 +83,7 @@ adventure.getScala.messages.subtitle=Nutzt eure gemeinsame JournWe Emailadresse 
 adventure.getScala.todo.title=Todo Liste
 adventure.getScala.todo.subtitle=Was gilt es noch zu erledigen? Was muss ich noch einpacken? Teilt eure Liste mit euren Mitreisenden und stimmt euch ab.
 adventure.getScala.files.title=Dateien
-adventure.getScala.files.subtitle=Teilt eure Dateien. Store jpgs, pdfs, docs, xls, ...
+adventure.getScala.files.subtitle=Teilt eure Dateien. Speichert jpgs, pdfs, docs, xls, ...
 adventure.getScala.offers.title=Angebote
 adventure.getScala.offers.subtitle=Die besten Angebote zu eurer Reise. Schnell und einfach das passende raus suchen.
 adventure.getScala.adventurers.title=Abenteurer
