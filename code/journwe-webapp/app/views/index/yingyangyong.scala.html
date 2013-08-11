@@ -1,4 +1,7 @@
+@(ins: models.Inspiration)
+
 @import models.dao._
+@import java.text.SimpleDateFormat
 
 <div id="yingyangyong-click-info" class="row">
     <div class="col-2 col-lg-offset-1 text-center">
@@ -57,6 +60,21 @@
                         <h1><i class="icon-globe"></i> Where do you want to go?</h1>
 
                         <ul id="places-list" class="list-unstyled list-inline">
+                        @if(ins != null && ins.getPlaceAddress != null) {
+                            <li id="places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")"><input type="hidden" name="place[]" value="@ins.getPlaceAddress/@ins.getPlaceLatitude/@ins.getPlaceLongitude"><span class="label"><i class="icon-map-marker"></i> @ins.getPlaceAddress &nbsp;<a href="#" onclick="$('#places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")').remove(); removeMarker('places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")'); return false;">&times;</a></span> <span class="divider"></span></li>
+                            <script>
+                                $('document' ).ready(function () {
+                                    var marker = new google.maps.Marker({
+                                        map: map,
+                                        position: new google.maps.LatLng(@ins.getPlaceLatitude, @ins.getPlaceLongitude)
+                                    });
+                                    var id = 'places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")';
+                                    markers[id] = marker;
+
+                                    resetBounds();
+                                });
+                            </script>
+                        }
                         </ul>
 
                         <div class="input-group">
@@ -111,7 +129,13 @@
                     <div style="background-color: rgba(255, 255, 255, 0.5); padding: 15px; ">
                         <h1><i class="icon-calendar"></i> When do you want to set off?</h1>
 
-                        <ul id="time-list" class="list-unstyled list-inline"></ul>
+                        <ul id="time-list" class="list-unstyled list-inline">
+                        @if(ins != null && ins.getTimeStart != null) {
+                            @defining(new SimpleDateFormat("yyyy-MM-dd")){sdf =>
+                                <li id="time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)"><input type="hidden" name="time[]" value="@sdf.format(ins.getTimeStart),@sdf.format(ins.getTimeEnd)"><span class="label"><i class="icon-time"></i> @sdf.format(ins.getTimeStart) to @sdf.format(ins.getTimeEnd) &nbsp;<a href="#" onclick="$('#time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)').remove();">&times;</a></span> <span class="divider"></span></li>
+                            }
+                        }
+                        </ul>
 
                         <div class="row">
 
