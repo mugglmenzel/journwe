@@ -81,16 +81,27 @@
                                 @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
                                     @if(auth != null && user != null) {
 
-                                        <div class="text-right user-login">
+                                        <div class="text-right">
                                             @defining(new NotificationDAO()) { notiDAO =>
-                                                <span class="label label-info" title="Notifications">@notiDAO.count(user.getId)</span>
+                                                <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications"> <i class="icon-bell" title="Notifications"> @notiDAO.count(user.getId)</i></a>
+                                                <div id="notifications-list" class="stash">
+                                                    <div class="list-group">
+                                                    @for(noti <- notiDAO.all(user.getId)){
+                                                      <a href="#" class="list-group-item" style="color: black">@noti.getMessage</a>
+                                                    }
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    $('#notifications-link').popover({content: function () {return $('#notifications-list').html();}});
+                                                </script>
                                             }
                                             <a class="btn btn-link" href="@routes.UserController.getProfile(user.getId())">
-                                                <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px;">
+                                                <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
                                                 @user.getName()
                                             </a>
                                             <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
                                         </div>
+
 
                                     } else {
                                         <div class="btn-group user-login text-right">
@@ -99,9 +110,9 @@
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu">
-                                            @forProviders() { p =>
+                                        @forProviders() { p =>
                                                 <li><a href="@p.getUrl()"><i class="icon-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
-                                            }
+                                        }
                                             </ul>
                                         </div>
                                     }

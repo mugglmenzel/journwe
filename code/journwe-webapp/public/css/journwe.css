@@ -26,12 +26,17 @@ a {
 }
 
 a:hover,
-a:focus {
-	color:#F1F1F1;
+a:focus,
+.header a:hover.btn-link,
+.header a:focus.btn-link  {
+	color:#D1D1D1;
+	text-decoration: none;
 }
 
 .nav a:hover,
-.nav a:focus {
+.nav a:focus,
+.nav a:hover i,
+.nav a:focus i {
 	color: gray;
 }
 
