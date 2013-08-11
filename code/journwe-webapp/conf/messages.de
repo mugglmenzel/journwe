@@ -1,9 +1,152 @@
-adventure.time.start=Start
-adventure.time.end=Ende
 
+#journwe
 journwe.subtitle=Auf ins Abenteuer.
-
-
-
 subscribe.welcometext=JournWe ist das Beste seit geschnitten Brot. Planen und Organisieren von Gruppenreise - der pure Horror? Nicht mit JournWe. Einloggen, Reise eintragen, Freunde einladen, Cocktail schlürfen. Fertig.
 subscribe.cta=Subscribe mit Deiner Email-Adresse. Wir benachrichtigen Dich, wenn wir Online gehen. Kein Spam, versprochen!
+
+#Landingpage
+subscribe.story=Wir lieben JournWe
+#Story1
+subscribe.story1.header=Markus always wanted to visit ancient Temples
+subscribe.story1.content=Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".
+subscribe.story1.cite=Markus Klems, a JournWe adventurer
+#Story1a
+subscribe.story1a.header=Markus always wanted to GO ON A TRIP TO...
+subscribe.story1a.content=...the ancient temples of Chichén Itzá. This year his dream will become true. He asked three of his best friends to join him on this adventure. They found a perfect week in August matching all their schedules. Now they are figuring out the best value offers.
+#Story2
+subscribe.story2.header=Jozsef found the right place to meet friends
+subscribe.story2.content=Every year Jozsef meets with friends at the exact same weekend. But where to go is always trouble! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks JournWe."
+subscribe.story2.cite=Jozsef, construction worker at JournWe
+#Story2a
+subscribe.story2a.header=Lets PLAY BASKETBALL
+subscribe.story2a.content=Baseketball is Jozsef life. Every week he's playing on the San Fran grounds. Join him an his friends and get distracted by the fantastic views whilst tying another slam dunk. Bring some sports shoes and a towel.
+#Story3
+subscribe.story3.header=This years biggest FEATURED EVENT
+subscribe.story3.content=Roskilde 2013! The place to be on June 11th. Kraftwerk, Queens Of The Stone Age, Disclosure, Goat, Slipknot,... There are special bus shuttels picking you up anywhere in Europe, check them out. Tents will be provided but all sorts of things recommended to bring. But no need for a cam, pictures are shared here afterwards.
+subscribe.story3.cite=Somebody
+#Story4
+subscribe.story4.header=Every year WE REUNITE
+subscribe.story4.content=Since we left uni, every year we try to meet again. The people are set but big discussions on date and place. Well, JournWe created, options entered and after we voted the hurdle was taken. It will be a blast - as always.
+subscribe.story4.cite=A guy
+#Story5
+subscribe.story5.header=Remember THE DREAM
+subscribe.story5.content=That's his personal dream. Whenever it will happen, but here Willi saved it. A detailed plan aiming on one goal -  see Britney Spears and get her signature right next to his Britney bum tattoo.
+subscribe.story5.cite=Shorty
+#Story6
+subscribe.story6.header=What to do NEXT WEEKEND
+subscribe.story6.content=Andy got time. Who's up for some crazy party? Or let's do some barbecue next to the river. He fixed the date now let's see who's in and what they can do.
+subscribe.story6.cite=Andy
+
+#Adventure.general.buttons
+adventure.general.button.join=Teilnehmen
+adventure.general.button.clone=Klonen
+adventure.general.button.cancel=Abbrechen
+adventure.general.button.leave=Verlassen
+adventure.general.button.reset=Zurücksetzen
+adventure.general.button.facebookPost=Posten bei Facebook
+
+#Adventure.general.created
+adventure.created.button.emailInvite=Email Einladung
+adventure.created.facebookMessage=Moin moin und servus! Begleite mich auf meinem Abenteur bei JournWe.com
+adventure.created.emailMessage=Moin moin und servus! Begleite mich auf meinem Abenteur bei JournWe.com. Schau dir an was wir demnächst zusammen erleben können: 
+adventure.created.button.emailSend=Email Senden
+adventure.created.url=Du kannst dein Abenteuer mit dieser URL aufrufen:
+adventure.created.urlShort=Deine kurz-URL:
+adventure.created.manageAdv=Deine Abenteuerplanung
+adventure.create.shortURLavail=kurzname verfügbar?
+adventure.create.startAdv=Starte ein neues Gruppen-Abenteuer
+
+#Adventure.general.voting
+adventure.general.favourite=Favorit
+adventure.general.advvotes=Abenteurer Abstimmung
+adventure.general.voting=Offene Abstimmung:
+adventure.general.yourvote=Deine Wahl 
+adventure.general.yes=JA 
+adventure.general.maybe=VIELLEICHT
+adventure.general.no=NEIN
+
+#Adventure.general
+adventure.general.listactions=Aktionen
+adventure.general.loading=Laden
+adventure.general.cloneby=Du kannst ein neues Abenteuer erstellen basierend auf
+adventure.general.invitation=Du wurdest eingeladen an diesem Abeuteuer teilzunehmen!
+adventure.general.leaveconfirm=Bist du dir sicher, dass du hier raus willst?
+
+#Adventure.getScala
+adventure.getScala.adventure.title=Abenteuer
+adventure.getScala.place.title=Ort
+adventure.getScala.place.subtitle=Finde eine interessante Location an der euer Abenteuer stattfinden soll. Die Welt ist gross, sucht euch was nettes aus.
+adventure.getScala.time.title=Datum
+adventure.getScala.time.subtitle=Besser ein ausgefülltes Leben, als ein voller Terminkalender. Findet die richtige Zeit um zusammen etwas zu erleben.
+adventure.getScala.messages.title=Nachrichten
+adventure.getScala.messages.subtitle=Nutzt eure gemeinsame JournWe Emailadresse um euch Reisebüro und Touranbietern abzustimmen. Alles an einem Ort, für alle sichtbar.
+adventure.getScala.todo.title=Todo Liste
+adventure.getScala.todo.subtitle=Was gilt es noch zu erledigen? Was muss ich noch einpacken? Teilt eure Liste mit euren Mitreisenden und stimmt euch ab.
+adventure.getScala.files.title=Dateien
+adventure.getScala.files.subtitle=Teilt eure Dateien. Store jpgs, pdfs, docs, xls, ...
+adventure.getScala.offers.title=Angebote
+adventure.getScala.offers.subtitle=Die besten Angebote zu eurer Reise. Schnell und einfach das passende raus suchen.
+adventure.getScala.adventurers.title=Abenteurer
+adventure.getScala.adventurers.subtitle=Ein Erlebnis mit grossartigen Begleitern und waren Freunden. Ladet sie ein, plant zusammen und lasst das Abenteuer beginnen.
+
+#Adventure.options
+adventure.options.facebookpublish=Posten auf Facebook
+adventure.options.facebooklike=Liken auf Facebook
+adventure.options.twitter=Twitter auf Twitter
+
+#Adventure.location
+adventure.places.location=Ort
+adventure.places.favourite=Bevorzugter Ort:
+
+#Adventure.time
+adventure.time.start=Starttermin
+adventure.time.end=Endtermin
+adventure.time.favourite=Bevorzugter Termin:
+adventure.time.option=Datums Option 
+
+#Adventure.adventurers
+adventure.adventurers.name=Name
+adventure.adventurers.myStat=Du bist...
+adventure.adventurers.status.notIn=Raus
+adventure.adventurers.status.undecided=Unentschlossen
+adventure.adventurers.status.soIn=Nicht abgeneigt
+adventure.adventurers.status.booked=Dabei
+adventure.adventurers.applicant=YDu bist ein Bewerber.
+adventure.adventurers.button.participate=Teilnehmer
+adventure.adventurers.status=Status
+adventure.adventurers.applicants=Bewerber
+adventure.adventurers.adopt=Aufnehmen
+
+#Adventure.todo
+adventure.todos.listaction=Aktionen
+adventure.todos.listheading=Zu erledigen
+
+#Adventure.files
+adventure.files.fileName=Dateiname
+adventure.files.uploadedBy=Hochladen via
+adventure.files.downloadBy=Download URL
+adventure.files.fileUpload=Datei Hochladen
+adventure.files.fileDrop=Datei hier Droppen
+adventure.files.fileSelect=Datei Selektieren
+adventure.files.fileChange=Ändern
+adventure.files.fileRemove=Entfernen
+
+
+#Travel Phrases
+#„Der kürzeste Weg zu dir selbst führt einmal um die Welt.“ - Richard Hoffmann
+#Der Sinn des Reisens besteht darin, die Vorstellungen mit der Wirklichkeit auszugleichen, und anstatt zu denken, wie die Dinge sein könnten, sie so zu sehen, wie sie sind. - Samuel Johnson
+#Die Welt ist ein Buch. Wer nie reist, sieht nur eine Seite davon. - Augustinus Aurelius
+#Astronauten sind Männer, die ihren Frauen von ihren Reisen nichts mitbringen müssen. - Robert Lembke
+#Ich fliege irgendwo in den Süden - vielleicht nach Kanada oder so. - Mehmet Scholl
+#Reisen ist tödlich für Vorurteile. - Mark Twain 
+#Jeder Mensch braucht dann und wann ein bißchen Wüste! - Sven Hedin
+#Steigst du nicht auf die Berge, so siehst du auch nicht in die Ferne. - Fernöstliches Sprichwort
+#Eine Reise von tausend Meilen beginnt mit einem einzigen Schritt. - Lao-tse
+#Es gibt kein sichereres Mittel festzustellen, ob man einen Menschen mag oder nicht, als mit ihm auf Reisen zu gehen. - Mark Twain
+#Die gefährlichste aller Weltanschauungen ist die Weltanschauung der Leute, welche die Welt nicht angeschaut haben. - Alexander von Humboldt
+#Das wichtigste Stück des Reisegepäcks ist und bleibt ein fröhliches Herz. - Hermann Löns 
+#Toren bereisen in fremden Ländern die Museen, Weise gehen in die Tavernen. - Erich Kästner
+#Auf Reisen verwandeln sich selbst Katastrophen, die unterwegs natürlich nie ausbleiben, in Abenteuer. - M. French
+#Es ist nicht zu wenig Zeit, die wir haben, sondern es ist zu viel Zeit, die wir nicht nutzen. - Lucius Annaeus Seneca
+#Die Zeit vergeht nicht schneller als früher, aber wir laufen eiliger an ihr vorbei. - George Orwell
+
