@@ -49,142 +49,34 @@
 <body>
     <div class="">
         <div class="header row">
-            <div class="col-offset-2 col-8">
-                <div>
-                    <div>
-                            <!--<button type="button" class="btn btn-navbar" data-toggle="collapse"
-    						data-target=".nav-collapse">
-    						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-    							class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-    					</button>-->
-
-                        <ul class="nav nav-pills col-5">
-                            <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="icon-lightbulb"></i> Inspirations</a></li>
-                            <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="icon-search"></i> Search</a></li>
-                        </ul>
-
-
-                        <div class="col-2">
-                            <div class="text-center navbar-text">
-                                <a href="@routes.ApplicationController.index" onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');" class="brand" style="float: none;vertical-align: bottom;">
-                                    <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 20px;">
-                                        Journ<strong>We</strong>
-                                            <!--<img src="@routes.Assets.at("img/suitcase_brand.png")" style="height: 14px">-->
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-5 clearfix text-right">
-                        @currentAuth() { auth =>
-                            @defining(new UserDAO()) { userDAO =>
-                                @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
-                                    @if(auth != null && user != null) {
-
-                                        <div class="text-right">
-                                            @defining(new NotificationDAO()) { notiDAO =>
-                                                <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications"> <i class="icon-bell" title="Notifications"> @notiDAO.count(user.getId)</i></a>
-                                                <div id="notifications-list" class="stash">
-                                                    <div class="list-group">
-                                                    @for(noti <- notiDAO.all(user.getId)){
-                                                      <a href="#" class="list-group-item" style="color: black">@noti.getMessage</a>
-                                                    }
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                    $('#notifications-link').popover({content: function () {return $('#notifications-list').html();}});
-                                                </script>
-                                            }
-                                            <a class="btn btn-link" href="@routes.UserController.getProfile(user.getId())">
-                                                <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
-                                                @user.getName()
-                                            </a>
-                                            <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
-                                        </div>
-
-
-                                    } else {
-                                        <div class="btn-group user-login text-right">
-                                            <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
-                                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                        @forProviders() { p =>
-                                                <li><a href="@p.getUrl()"><i class="icon-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
-                                        }
-                                            </ul>
-                                        </div>
-                                    }
-                                }}
-                        }
-                    </div>
-                    <div class="row" id="navbar-secondlevel-collapsable">
-                        <div class="accordion-body collapse col-12" id="navbar-secondlevel-journwe-home-select">
-                            <div class="text-center" style="margin: 10px 0px; line-height: 70px;">
-                                <span><a href="@routes.ApplicationController.index()"><i class="icon-home" style="font-size: 70px;"></i></a> or <a href="@routes.ApplicationController.indexNew()"><img src="http://i.embed.ly/1/image/resize?height=50&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 50px; vertical-align: text-bottom;"></a></span>
-                            </div>
-                            <div class="text-center"><a onclick="$('#navbar-secondlevel-journwe-home-select').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
-                        </div>
-                        <div class="accordion-body collapse col-12" id="navbar-secondlevel-inspiration-categories">
-                            <div>
-                                <h4>Categories of Inspirations</h4>
-                                <ul class="nav nav-pills nav-stacked">
-                                @defining(new CategoryDAO()){catDAO =>
-                                    @defining(catDAO.all()){ categories =>
-                                        @for(cat <- categories) {
-                                            <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
-                                                <span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span>@cat.getName()</a>
-                                            </li>
-                                        }
-                                    }
-                                }
-                                </ul>
-                            </div>
-                            <div class="text-center"><a onclick="$('#navbar-secondlevel-inspiration-categories').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
-                        </div>
-                        <div class="accordion-body collapse col-12" id="navbar-secondlevel-general-search">
-                            <div class="text-center">
-                                <div class="input-append">
-                                    <input type="text" class="search-query" placeholder="Find Places, People and Inspirations">
-                                    <button class="btn"><i class="icon-search"></i></button>
-                                </div>
-                            </div>
-                            <div class="text-center"><a onclick="$('#navbar-secondlevel-general-search').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @header.render()
+        </div>
+        <div class="main row">
+            <div class="col-8 col-offset-2">
+        		<div class="page-header">
+        			<h1>JournWe <small>@Messages("journwe.subtitle")</small></h1>
+        		</div>
+        		@if(flash("error")) {
+        		<div class="alert alert-error">
+        			<button type="button" class="close" data-dismiss="alert">&times;</button>
+        			@flash("error")
+        		</div>
+        		}
+        		@if(flash("success")) {
+        		<div class="alert alert-success">
+        			<button type="button" class="close" data-dismiss="alert">&times;</button>
+        			@flash("success")
+        		</div>
+        		}
+        		@if(flash("info")) {
+        		<div class="alert alert-info">
+        			<button type="button" class="close" data-dismiss="alert">&times;</button>
+        			@flash("info")
+        		</div>
+        		}
+                @content
+        	</div>
         </div>
     </div>
-	<!--<div class="row-fluid">
-	<div class="hero-unit span8 offset2">  -->
-
-    <div class="main row">
-        <div class="col-8 col-offset-2">
-    		<div class="page-header">
-    			<h1>JournWe <small>@Messages("journwe.subtitle")</small></h1>
-    		</div>
-    		@if(flash("error")) {
-    		<div class="alert alert-error">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			@flash("error")
-    		</div>
-    		}
-    		@if(flash("success")) {
-    		<div class="alert alert-success">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			@flash("success")
-    		</div>
-    		}
-    		@if(flash("info")) {
-    		<div class="alert alert-info">
-    			<button type="button" class="close" data-dismiss="alert">&times;</button>
-    			@flash("info")
-    		</div>
-    		}
-            @content
-    	</div>
-	</div>
 </body>
 </html>

@@ -263,12 +263,6 @@ table.inspiration .images img {
 
 }
 
-.badge {
-	top: -2px;
-	position: relative;
-}
-
-
 .status-COMPLETE {
 	text-decoration: line-through;
 }

@@ -1,4 +1,4 @@
-@(title: String)(header: Html = Html("Welcome"))(content: Html)(implicit active: String = "home")
+@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit active: String = "home")
 
 @import play.api.Play.current
 @import play.mvc.Http
@@ -54,132 +54,13 @@
     <body>
         <div class="">
             <div class="header row">
-                <div class="col-offset-2 col-8">
-                    <div>
-                        @currentAuth() { auth =>
-                            @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
-                                <div>
-                                    <ul class="nav nav-pills col-5">
-                                        <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="icon-lightbulb"></i> Inspirations</a></li>
-                                        <li class="disabled"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="icon-search"></i> Search</a></li>
-                                        @if(EUserRole.ADMIN.equals(user.getRole)) {
-                                            <li><a href="@routes.ApplicationController.admin()"><i class="icon-cogs"></i> Admin</a></li>
-                                        }
-                                        </ul>
-
-                                    <div class="col-2">
-                                        <div class="text-center navbar-text">
-                                            <a href="@routes.ApplicationController.index" onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');" class="brand" style="float: none;vertical-align: bottom;">
-                                                <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 20px;">
-                                                    Journ<strong>We</strong>
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-4 clearfix">
-
-
-                                    @if(auth != null && user != null) {
-                                        <div class="text-right">
-                                            @defining(new NotificationDAO()) { notiDAO =>
-                                                <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications"> <i class="icon-bell" title="Notifications"> @notiDAO.count(user.getId)</i></a>
-                                                <div id="notifications-list" class="stash">
-                                                    <div class="list-group">
-                                                    @for(noti <- notiDAO.all(user.getId)){
-                                                        <a href="#" class="list-group-item" style="color: black">@noti.getMessage</a>
-                                                    }
-                                                    </div>
-                                                </div>
-                                                <script>
-                                                $('#notifications-link').popover({content: function () {return $('#notifications-list').html();}});
-                                                </script>
-                                            }
-                                            <a class="btn btn-link" href="@routes.UserController.getProfile(user.getId())">
-                                                <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
-                                                @user.getName()
-                                            </a>
-                                            <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
-                                        </div>
-
-                                    } else {
-                                        <div class="btn-group user-login text-right">
-                                            <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
-                                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                            @forProviders() { p =>
-                                                <li><a href="@p.getUrl()"><i class="icon-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
-                                            }
-                                            </ul>
-                                        </div>
-                                    }
-                                    </div>
-                                    <div class="col-1">
-                                        <div class="btn-group">
-                                            <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                                                @Http.Context.current().lang().language() <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                            @for(lang <- Lang.availables) {
-                                                <li><a href="@routes.ApplicationController.changeLanguage(lang.language.toString)">@lang.language</a></li>
-                                            }
-                                            </ul>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                            }
-                        }
-
-
-
-                    <div class="row" id="navbar-secondlevel-collapsable">
-                        <div class="accordion-body collapse col-12" id="navbar-secondlevel-journwe-home-select" data-parent="#navbar-secondlevel-collapsable">
-                            <div class="text-center" style="margin: 10px 0px; line-height: 70px;">
-                                <span><a href="@routes.ApplicationController.index()"><i class="icon-home" style="font-size: 70px;"></i></a> or <a href="@routes.ApplicationController.indexNew()"><img src="http://i.embed.ly/1/image/resize?height=50&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 50px; vertical-align: text-bottom;"></a></span>
-                            </div>
-                            <div class="text-center"><a onclick="$('#navbar-secondlevel-journwe-home-select').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
-                        </div>
-                        <div class="accordion-body collapse col-12" id="navbar-secondlevel-inspiration-categories" data-parent="#navbar-secondlevel-collapsable">
-                            <div>
-                                <h4>Categories of Inspirations</h4>
-                                <ul class="nav nav-pills nav-stacked">
-                                @defining(new CategoryDAO()){catDAO =>
-                                    @defining(catDAO.all()){ categories =>
-                                        @for(cat <- categories) {
-                                            <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
-                                                <span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span>@cat.getName()</a>
-                                            </li>
-                                        }
-                                    }
-                                }
-                                </ul>
-                            </div>
-                            <div class="text-center"><a onclick="$('#navbar-secondlevel-inspiration-categories').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
-                        </div>
-                        <div class="accordion-body collapse col-12" id="navbar-secondlevel-general-search" data-parent="#navbar-secondlevel-collapsable">
-                            <div class="text-center">
-                                <div class="input-append">
-                                    <input type="text" class="input-xlarge search-query" placeholder="Find Places, People and Inspirations">
-                                    <button class="btn"><i class="icon-search"></i></button>
-                                </div>
-                            </div>
-                            <div class="text-center"><a onclick="$('#navbar-secondlevel-general-search').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+                @header.render()
             </div>
-
-
             <div class="main row">
                 <div class="col-8 col-offset-2">
-                    @if(!header.toString().equals(" ")){
+                    @if(!headerText.toString().equals(" ")){
                         <div class="page-header">
-                            <h1>@header</h1>
+                            <h1>@headerText</h1>
                         </div>
                     }
                     @if(flash("error")) {
