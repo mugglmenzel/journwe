@@ -22,6 +22,17 @@ h1, h2, h3, h4, h1 small, h2 small, h3 small, h4 small {
 
 a {
 	cursor: pointer;
+	color: white;
+}
+
+a:hover,
+a:focus {
+	color:#F1F1F1;
+}
+
+.nav a:hover,
+.nav a:focus {
+	color: gray;
 }
 
 hr {
