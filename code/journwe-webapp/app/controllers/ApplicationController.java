@@ -6,6 +6,7 @@ import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import models.Inspiration;
+import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
 import models.category.Category;
 import models.adventure.Adventure;
@@ -180,7 +181,7 @@ public class ApplicationController extends Controller {
         return ok(about.render());
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result admin() {
         return ok(admin.render());
     }
