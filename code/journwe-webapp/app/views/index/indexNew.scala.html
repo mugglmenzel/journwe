@@ -1,9 +1,8 @@
 @(ins: models.Inspiration)
 
-@main(Messages("journwe.subtitle")){Welcome to JournWe
-<small>@Messages("journwe.subtitle")</small>} {
+@main(Messages("journwe.subtitle")){New @ins.getName() Adventure} {
 
-    <div id="yingyangyong-container" style="margin-top: -20px; margin-bottom: 70px;">
+    <div id="yingyangyong-container" style="margin-top: -20px; margin-bottom: 50px;">
 
     @yingyangyong(ins)
     </div>

@@ -40,6 +40,15 @@ a:focus,
 	color: gray;
 }
 
+.adventure-entry a {
+	color: #333;
+}
+
+.adventure-entry a:hover,
+.adventure-entry a:focus {
+	color: #666;
+}
+
 hr {
     min-height: 0px;
     color: rgba(200, 200, 200, 0.9);
