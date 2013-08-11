@@ -66,10 +66,9 @@
     <div class="jrn-container">
         <h2 id="index"><i class="icon-info icon-for-adventure-title"></i> @Messages("adventure.getScala.adventure.title")</h2>
         <div class="row">
-        <div class="col-12">
-
-            @index(adv, ins)
-
+            <div class="col-12">
+                @index(adv, ins)
+            </div>
         </div>
         @if(JournweAuthorization.canViewAdventureComments(adv.getId)) {
             @{views.html.comment.widget_comment.render(adv, "index")}
@@ -83,7 +82,8 @@
         </div>
     </div>
 
-   <hr/>
+    <hr/>
+    
     <div class="jrn-container">
 
         <h2 id="discussion"><i class="icon-comments icon-for-adventure-title"></i> @Messages("adventure.getScala.discussion.title")</h2>

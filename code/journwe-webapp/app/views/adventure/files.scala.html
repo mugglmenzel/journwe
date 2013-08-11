@@ -55,8 +55,12 @@
     <div id="files-upload-dropzone" style="" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
         <div class="text-center"><p class="lead">@Messages("adventure.files.fileDrop")
             <div class="fileupload fileupload-new" data-provides="fileupload">
-                <div class="input-append">
-                    <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">@Messages("adventure.files.fileSelect")</span><span class="fileupload-exists">@Messages("adventure.files.fileChange")</span><input type="file" name="uploadFile" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">@Messages("adventure.files.fileRemove")</a>
+                <div class="">
+                    <div class="">
+                        <i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span>
+                    </div>
+                    <span class="btn btn-primary btn-file">
+                        <span class="fileupload-new">@Messages("adventure.files.fileSelect")</span><span class="fileupload-exists">@Messages("adventure.files.fileChange")</span><input type="file" name="uploadFile" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">@Messages("adventure.files.fileRemove")</a>
                     <button class="btn btn-upload"><i class="icon-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
                 </div>
             </div>

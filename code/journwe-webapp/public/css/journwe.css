@@ -576,8 +576,9 @@ h3 {
 }
 
 #files-upload-dropzone {
-    min-height: 200px;
-    border: dashed 3px gray;
+	min-height: 150px;
+	border: dashed 3px rgba(255,255,255,0.4);
+	padding: 10px;
 }
 
 #files-upload-dropzone.hover {
@@ -743,4 +744,25 @@ h1 .x-edit-loading {
 
 .has-switch span.switch-right {
 	background: none;
+}
+
+.btn-file {
+	border-radius: 4px;
+}
+
+.jrn-actions {
+	background: rgba(255,255,255,0.2);
+	border-top: 1px solid white;
+	padding: 20px;
+	margin: 20px -20px -20px -20px !important;
+}
+
+.jrn-form .form-group {
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+
+.jrn-form .control-label {
+	float: left;
 }

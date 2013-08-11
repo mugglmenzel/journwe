@@ -6,22 +6,22 @@
     <div class="jrn-container">
         <h2>Feedback Form</h2>
 
-        @form(routes.FeedbackController.createFeedback(), args = 'class -> "form-horizontal") {
+        @form(routes.FeedbackController.createFeedback(), args = 'class -> "form-horizontal jrn-form") {
 
-            <fieldset>
-                <div class="control-group">
-                    <label class="control-label">Feedback type:</label>
-                    <div class="controls">
-                        <select name="feedbackType">
-                            <option value="@EFeedbackType.BUG">Bug</option>
-                            <option value="@EFeedbackType.FEATURE_REQUEST">Feature request</option>
-                            <option value="@EFeedbackType.GENERAL_FEEDBACK">General feedback</option>
-                        </select>
-                    </div>
-                </div>
-                <textarea name="text" class="form-control"></textarea>
-            </fieldset>
-        <div class="form-actions">
+        <div class="form-group">
+            <label class="control-label">Feedback type:</label>
+            <div class="col-4">
+                <select name="feedbackType" class="form-control">
+                    <option value="@EFeedbackType.FEATURE_REQUEST">Feature request</option>
+                    <option value="@EFeedbackType.BUG">Bug</option>
+                    <option value="@EFeedbackType.GENERAL_FEEDBACK">General feedback</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <textarea name="text" class="form-control"></textarea>
+        </div>
+        <div class="form-actions jrn-actions">
             <input type="submit" value="Send feedback" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
         </div>
     </div>

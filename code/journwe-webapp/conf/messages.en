@@ -98,8 +98,8 @@ adventure.places.location=Location
 adventure.places.favourite=Favourite Place:
 
 #Adventure.time
-adventure.time.start=Start Date
-adventure.time.end=End Date
+adventure.time.start=Start
+adventure.time.end=End
 adventure.time.favourite=Favourite Time:
 adventure.time.option=Time Option 
 
