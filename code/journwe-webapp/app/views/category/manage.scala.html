@@ -13,19 +13,20 @@
 
     <div class="jrn-container">
         <h2>Categories</h2>
+        <p class="lead">Drag and Drop!</p>
         <div>
             @{
                 new CategoryHierarchyDAO().cleanUpCategoryHierarchy()
 
                 def catHierarchy(catId: String): NodeSeq = {
-                    <div>
+                    <ul class="sortable" style="border: dashed 2px gray; min-height: 50px;" data-id={catId}>
                     {new CategoryDAO().allOfCategory(catId).map( cat =>
-                            <div class="row draggable droppable" style="background: white; padding: 5px; margin: 2px; margin-left: 10px" data-id={cat.getId()}><div class="col-5">{cat.getId()}</div><div class="col-5">{cat.getName()}</div><div class="col-1"><a href={routes.CategoryController.edit(cat.getId()).toString()}><i class="icon-edit"></i>edit</a></div><div class="col-1"><a href={routes.CategoryController.delete(cat.getId()).toString()}><i class="icon-trash"></i>delete</a></div>
+                            <li data-id={cat.getId()}><div class="draggable droppable"><div class="row" style="background: white; padding: 5px; margin: 2px; margin-left: 10px"><div class="col-5">{cat.getId()}</div><div class="col-4">{cat.getName()}</div><div class="col-1"><a href={routes.CategoryController.edit(cat.getId()).toString()} class="act-primary"><i class="icon-edit"></i>edit</a></div><div class="col-2"><a href={routes.CategoryController.delete(cat.getId()).toString()} class="act-danger"><i class="icon-trash"></i>delete</a></div></div>
                             {catHierarchy(cat.getId)}
-                            </div>
+                            </div></li>
                         )
                     }
-                    </div>
+                    </ul>
                 }
 
                 catHierarchy(Category.SUPER_CATEGORY)
@@ -35,8 +36,18 @@
         </div>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
         <script>
-             $('.draggable' ).draggable();
-
+            $('.sortable' ).sortable({
+               connectWith: '.sortable',
+               cursor: 'move',
+               dropOnEmpty: true,
+               items: "> li",
+               opacity: 0.7,
+               receive: function (event, ui) {
+                    //alert('receiving for ' + ui.item.data('id') + ' to ' + $(this).data('id'));
+                    $.post('@routes.CategoryController.setSuperCategory()', {category: ui.item.data('id'), superCategory: $(this).data('id')});
+                },
+               scroll: true
+            });
         </script>
     </div>
 

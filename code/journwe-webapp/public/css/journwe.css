@@ -785,3 +785,7 @@ h1 .x-edit-loading {
 .jrn-form .control-label {
 	float: left;
 }
+
+.drophover {
+    border: green solid 2px;
+}

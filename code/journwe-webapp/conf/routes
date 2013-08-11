@@ -14,6 +14,7 @@ GET           /adventures/public.json                               controllers.
 GET           /category/new                                         controllers.CategoryController.create()
 GET           /category/:id/edit                                    controllers.CategoryController.edit(id:String)
 POST          /category/save                                        controllers.CategoryController.save()
+POST          /category/moveInHierarchy.json                        controllers.CategoryController.setSuperCategory()
 GET           /category/:id/delete                                  controllers.CategoryController.delete(id:String)
 
 GET           /category/:catId/inspiration/:id                      controllers.InspirationController.get(catId:String, id:String)

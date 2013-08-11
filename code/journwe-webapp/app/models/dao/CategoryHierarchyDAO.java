@@ -1,5 +1,6 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -7,6 +8,8 @@ import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.category.Category;
 import models.category.CategoryHierarchy;
 import models.dao.common.CommonRangeEntityDAO;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +23,22 @@ public class CategoryHierarchyDAO extends CommonRangeEntityDAO<CategoryHierarchy
         super(CategoryHierarchy.class);
     }
 
-    public boolean categoryInHierarchy(String catId) {
+    public List<CategoryHierarchy> categoryAsSuper(String catId) {
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        CategoryHierarchy hier = new CategoryHierarchy();
+        hier.setSuperCategoryId(catId);
+        query.setHashKeyValues(hier);
+
+        return pm.query(clazz, query);
+    }
+
+    public List<CategoryHierarchy> categoryAsSub(String catId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("subCategoryId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(catId)));
+        return pm.scan(clazz, scan);
+    }
+
+    public boolean isCategoryInHierarchy(String catId) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("subCategoryId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(catId)));
         return pm.scan(clazz, scan).size() > 0;
@@ -29,7 +47,7 @@ public class CategoryHierarchyDAO extends CommonRangeEntityDAO<CategoryHierarchy
 
     public void cleanUpCategoryHierarchy() {
         for(Category cat : new CategoryDAO().all())
-            if(!categoryInHierarchy(cat.getId())) {
+            if(!isCategoryInHierarchy(cat.getId())) {
                 CategoryHierarchy hier = new CategoryHierarchy();
                 hier.setSuperCategoryId(Category.SUPER_CATEGORY);
                 hier.setSubCategoryId(cat.getId());

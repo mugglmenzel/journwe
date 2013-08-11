@@ -1,11 +1,14 @@
 package controllers;
 
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredAdminUser;
 import models.category.Category;
 import models.category.CategoryHierarchy;
 import models.dao.CategoryDAO;
 import models.dao.CategoryHierarchyDAO;
+import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -17,18 +20,18 @@ public class CategoryController extends Controller {
 
     private static Form<Category> catForm = form(Category.class);
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
         return ok(manage.render(catForm, new CategoryDAO().all()));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result edit(String id) {
         Form<Category> editCatForm = catForm.fill(new CategoryDAO().get(id));
         return ok(manage.render(editCatForm, new CategoryDAO().all()));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result save() {
         Form<Category> filledCatForm = catForm.bindFromRequest();
         if (filledCatForm.hasErrors()) {
@@ -40,7 +43,7 @@ public class CategoryController extends Controller {
 
             if (new CategoryDAO().save(cat)) {
 
-                if (new CategoryHierarchyDAO().categoryInHierarchy(cat.getId())) {
+                if (new CategoryHierarchyDAO().isCategoryInHierarchy(cat.getId())) {
                     CategoryHierarchy hier = new CategoryHierarchy();
                     hier.setSuperCategoryId(Category.SUPER_CATEGORY);
                     hier.setSubCategoryId(cat.getId());
@@ -58,7 +61,24 @@ public class CategoryController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+
+    public static Result setSuperCategory() {
+        DynamicForm df = form().bindFromRequest();
+        String catId = df.get("category");
+        String superCatId = df.get("superCategory");
+        Logger.debug("adding " + catId + " to " + superCatId);
+
+        for(CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSub(catId))
+            new CategoryHierarchyDAO().delete(catHier);
+        CategoryHierarchy hier = new CategoryHierarchy();
+        hier.setSuperCategoryId(superCatId);
+        hier.setSubCategoryId(catId);
+        new CategoryHierarchyDAO().save(hier);
+
+        return ok(Json.toJson(hier));
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String id) {
 
         if (new CategoryDAO().delete(id)) {
