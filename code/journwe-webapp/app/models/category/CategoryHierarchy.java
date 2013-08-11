@@ -1,6 +1,8 @@
 package models.category;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 /**
@@ -17,7 +19,7 @@ public class CategoryHierarchy {
 
     private String subCategoryId;
 
-    @DynamoDBAttribute
+    @DynamoDBHashKey
     public String getSuperCategoryId() {
         return superCategoryId;
     }
@@ -26,7 +28,7 @@ public class CategoryHierarchy {
         this.superCategoryId = superCategoryId;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBRangeKey
     public String getSubCategoryId() {
         return subCategoryId;
     }

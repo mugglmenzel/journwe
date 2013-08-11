@@ -6,151 +6,154 @@
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
 @main("Manage Inspirations"){Manage Inspirations} {
-  
-	
-  
-	<h2>Inspirations</h2>
-	<table class="table table-striped">
-		
-	@for(ins <- inspirations) {
-		<tr><td>@ins.getInspirationId()</td><td>@ins.getName()</td><td><a href="@routes.InspirationController.edit(ins.getCategoryId, ins.getInspirationId())" class="act-primary"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.InspirationController.delete(ins.getCategoryId, ins.getInspirationId())" class="act-danger"><i class="icon-trash"></i>delete</a></td></tr>
-	}
-	</table>
 
-	<h2>Inspiration Form</h2>
-    @form(routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
-    	<fieldset>
-    		@if(inspForm("inspirationId").value()) {
-    		<input type="hidden" name="originalInspirationCategoryId" value="@inspForm("categoryId").value()"/>
-    		<input type="hidden" name="@inspForm("inspirationId").name()" value="@inspForm("inspirationId").value()"/>
-    		}
-            @inputText(inspForm("name"), '_label -> "Inspiration name", 'placeholder -> "Name", 'required -> "")
-            @textarea(inspForm("description"), '_label -> "Description", 'placeholder -> "Some text", 'class -> "editor editor-html ckeditor")
-    		@inputFile(inspForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
-            @textarea(inspForm("tripAdvisor"), '_label -> "TripAdvisor Snipped (see http://www.tripadvisor.com/Widgets)", 'placeholder -> "Some text")
-            @inputText(inspForm("pinterest"), '_label -> "Pinterest URL", 'placeholder -> "Pinterest")
-            @inputText(inspForm("weatherId"), '_label -> "Weather", 'placeholder -> "Country/City")
-    		@select(
-    			inspForm("categoryId"),
-    			options(categories), 
-    			'_default -> "--- Choose a Category ---",
-    			'_label -> "Category",
-    			'_error -> inspForm("categoryId").error.map(_.withMessage("Please select a Category!"))
-    		)
 
-            <div>
-                <div>Place</div>
-                <ul id="inspiration-place" class="list-unstyled list-inline">
-                    @if(inspForm("placeAddress").value()) {
-                    <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label"><i class="icon-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
-                    }
-                </ul>
+    <div class="jrn-container">
+        <h2>Inspirations</h2>
+        <table class="table table-striped">
 
-                <div class="input-group">
-                    <input type="text" placeholder="A decent place name" id="inspiration-place-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
-                    <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="icon-check"></i></a></div>
-                </div>
-                <div style="height: 400px; margin-top: 10px;">
-                    <div id="inspiration-place-map" style="width: 100%; height: 100%"></div>
-                </div>
-                <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
-                <script>
-                var map;
-                google.maps.visualRefresh = true;
+        @for(ins <- inspirations) {
+            <tr><td>@ins.getInspirationId()</td><td>@ins.getName()</td><td><a href="@routes.InspirationController.edit(ins.getCategoryId, ins.getInspirationId())" class="act-primary"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.InspirationController.delete(ins.getCategoryId, ins.getInspirationId())" class="act-danger"><i class="icon-trash"></i>delete</a></td></tr>
+        }
+        </table>
+    </div>
 
-                function initialize() {
-                    var mapOptions = {
-                        zoom: 15,
-                        center: new google.maps.LatLng(49.483472, 8.476992),
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    map = new google.maps.Map(document.getElementById('inspiration-place-map'), mapOptions);
-
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                            map.setCenter(pos);
-                        }, function() {});
-                    }
-
+    <div class="jrn-container">
+        <h2>Inspiration Form</h2>
+        @form(routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+            <fieldset>
+                @if(inspForm("inspirationId").value()) {
+                <input type="hidden" name="originalInspirationCategoryId" value="@inspForm("categoryId").value()"/>
+                <input type="hidden" name="@inspForm("inspirationId").name()" value="@inspForm("inspirationId").value()"/>
                 }
+                @inputText(inspForm("name"), '_label -> "Inspiration name", 'placeholder -> "Name", 'required -> "")
+                @textarea(inspForm("description"), '_label -> "Description", 'placeholder -> "Some text", 'class -> "editor editor-html ckeditor")
+                @inputFile(inspForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
+                @textarea(inspForm("tripAdvisor"), '_label -> "TripAdvisor Snipped (see http://www.tripadvisor.com/Widgets)", 'placeholder -> "Some text")
+                @inputText(inspForm("pinterest"), '_label -> "Pinterest URL", 'placeholder -> "Pinterest")
+                @inputText(inspForm("weatherId"), '_label -> "Weather", 'placeholder -> "Country/City")
+                @select(
+                    inspForm("categoryId"),
+                    options(categories),
+                    '_default -> "--- Choose a Category ---",
+                    '_label -> "Category",
+                    '_error -> inspForm("categoryId").error.map(_.withMessage("Please select a Category!"))
+                )
 
-                google.maps.event.addDomListener(window, 'load', initialize);
+                <div>
+                    <div>Place</div>
+                    <ul id="inspiration-place" class="list-unstyled list-inline">
+                        @if(inspForm("placeAddress").value()) {
+                        <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label"><i class="icon-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
+                        }
+                    </ul>
+
+                    <div class="input-group">
+                        <input type="text" placeholder="A decent place name" id="inspiration-place-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
+                        <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="icon-check"></i></a></div>
+                    </div>
+                    <div style="height: 400px; margin-top: 10px;">
+                        <div id="inspiration-place-map" style="width: 100%; height: 100%"></div>
+                    </div>
+                    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
+                    <script>
+                    var map;
+                    google.maps.visualRefresh = true;
+
+                    function initialize() {
+                        var mapOptions = {
+                            zoom: 15,
+                            center: new google.maps.LatLng(49.483472, 8.476992),
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+                        map = new google.maps.Map(document.getElementById('inspiration-place-map'), mapOptions);
+
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(function(position) {
+                                var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                                map.setCenter(pos);
+                            }, function() {});
+                        }
+
+                    }
+
+                    google.maps.event.addDomListener(window, 'load', initialize);
 
 
-                var markers = [];
+                    var markers = [];
 
-                function searchPlace() {
-                    new google.maps.Geocoder().geocode({'address': $('#inspiration-place-input').val()}, function (results, status) {
-                        var id = 'inspiration-place';
-                        $('#inspiration-place').html('<li id="' + id +'"><input type="hidden" name="place" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
-                        map.setCenter(results[0].geometry.location);
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location
+                    function searchPlace() {
+                        new google.maps.Geocoder().geocode({'address': $('#inspiration-place-input').val()}, function (results, status) {
+                            var id = 'inspiration-place';
+                            $('#inspiration-place').html('<li id="' + id +'"><input type="hidden" name="place" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
+                            map.setCenter(results[0].geometry.location);
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                position: results[0].geometry.location
+                            });
+                            markers[id] = marker;
+
+                            resetBounds();
+                            $('#inspiration-place-input').val('');
                         });
-                        markers[id] = marker;
+                    }
 
+                    function resetBounds() {
+                        var bounds = new google.maps.LatLngBounds();
+                        for(var i in markers) {
+                            bounds.extend(markers[i].getPosition());
+                        }
+                        map.fitBounds(bounds);
+                        google.maps.event.trigger(map, 'resize');
+                    }
+
+                    function removeMarker(id) {
+                        markers[id].setMap(null);
+                        delete markers[id];
                         resetBounds();
-                        $('#inspiration-place-input').val('');
-                    });
-                }
-
-                function resetBounds() {
-                    var bounds = new google.maps.LatLngBounds();
-                    for(var i in markers) {
-                        bounds.extend(markers[i].getPosition());
+                        return false;
                     }
-                    map.fitBounds(bounds);
-                    google.maps.event.trigger(map, 'resize');
-                }
+                    </script>
+                </div>
+                <div>
+                    <div>Time</div>
+                    <ul id="inspiration-time" class="list-unstyled list-inline">
+                        @if(inspForm("timeStart").value()) {
+                            <li id="inspiration-time"><input type="hidden" name="time" value="@inspForm("timeStart").value(),@inspForm("timeEnd").value()"><span class="label"><i class="icon-time"></i> @inspForm("timeStart").value() to @inspForm("timeEnd").value() &nbsp;<a href="#" onclick="$('#inspiration-time').remove();">&times;</a></span> <span class="divider"></span></li>
+                        }
+                    </ul>
 
-                function removeMarker(id) {
-                    markers[id].setMap(null);
-                    delete markers[id];
-                    resetBounds();
-                    return false;
-                }
-                </script>
-            </div>
-            <div>
-                <div>Time</div>
-                <ul id="inspiration-time" class="list-unstyled list-inline">
-                    @if(inspForm("timeStart").value()) {
-                        <li id="inspiration-time"><input type="hidden" name="time" value="@inspForm("timeStart").value(),@inspForm("timeEnd").value()"><span class="label"><i class="icon-time"></i> @inspForm("timeStart").value() to @inspForm("timeEnd").value() &nbsp;<a href="#" onclick="$('#inspiration-time').remove();">&times;</a></span> <span class="divider"></span></li>
-                    }
-                </ul>
+                    <div class="row">
+                        <div class="input-group col-5">
+                            <span class="input-group-addon"><i class="icon-calendar"></i> Start Date</span>
+                            <input id="inspiration-time-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;" class="form-control"/>
+                        </div>
+                        <div class="input-group col-5">
+                            <span class="input-group-addon"><i class="icon-calendar"></i> End Date</span>
+                            <input id="inspiration-time-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;" class="form-control"/>
+                        </div>
 
-                <div class="row">
-                    <div class="input-group col-5">
-                        <span class="input-group-addon"><i class="icon-calendar"></i> Start Date</span>
-                        <input id="inspiration-time-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;" class="form-control"/>
-                    </div>
-                    <div class="input-group col-5">
-                        <span class="input-group-addon"><i class="icon-calendar"></i> End Date</span>
-                        <input id="inspiration-time-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;" class="form-control"/>
+                        <a class="btn btn-add btn-primary col-1" onclick="addTime();"><i class="icon-check"></i></a>
                     </div>
 
-                    <a class="btn btn-add btn-primary col-1" onclick="addTime();"><i class="icon-check"></i></a>
+                    <script>
+
+                        $('document').ready(function () {$('#inspiration-time-input-start').attr('min', new Date().toJSON().slice(0,10));});
+
+                        function addTime() {
+                            var id = 'inspiration-time';
+                            $('#inspiration-time').html('<li id="' + id +'"><input type="hidden" name="time" value="' + $('#inspiration-time-input-start').val() + ',' + $('#inspiration-time-input-end').val() + '"><span class="label"><i class="icon-time"></i> ' + $('#inspiration-time-input-start').val() + ' to ' + $('#inspiration-time-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+                            $('#inspiration-time-input-start').val('');
+                            $('#inspiration-time-input-end').val('');
+                        }
+                    </script>
                 </div>
 
-                <script>
-
-                    $('document').ready(function () {$('#inspiration-time-input-start').attr('min', new Date().toJSON().slice(0,10));});
-
-                    function addTime() {
-                        var id = 'inspiration-time';
-                        $('#inspiration-time').html('<li id="' + id +'"><input type="hidden" name="time" value="' + $('#inspiration-time-input-start').val() + ',' + $('#inspiration-time-input-end').val() + '"><span class="label"><i class="icon-time"></i> ' + $('#inspiration-time-input-start').val() + ' to ' + $('#inspiration-time-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
-                        $('#inspiration-time-input-start').val('');
-                        $('#inspiration-time-input-end').val('');
-                    }
-                </script>
+            </fieldset>
+            <div class="form-actions">
+              <input type="submit" value="Save Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
             </div>
- 
-    	</fieldset>
-    	<div class="form-actions">
-    	  <input type="submit" value="Save Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
-    	</div>
-    }
+        }
+    </div>
     
 }

@@ -6,6 +6,7 @@ import models.category.CategoryHierarchy;
 import models.dao.common.CommonEntityDAO;
 import models.category.Category;
 import models.Inspiration;
+import play.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,14 +32,20 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     }
 
     public List<Category> allOfCategory(String categoryId) {
+        Logger.debug("retrieving hierarchy for " + categoryId);
+
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+
         CategoryHierarchy hier = new CategoryHierarchy();
         hier.setSuperCategoryId(categoryId);
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
         query.setHashKeyValues(hier);
+
         List<CategoryHierarchy> hiers = pm.query(CategoryHierarchy.class, query);
+
         List<Category> results = new ArrayList<Category>();
         for(CategoryHierarchy h : hiers)
             results.add(get(h.getSubCategoryId()));
+
         return results;
     }
 

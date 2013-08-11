@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import models.category.Category;
 import models.category.CategoryHierarchy;
 import models.dao.common.CommonRangeEntityDAO;
 
@@ -25,5 +26,15 @@ public class CategoryHierarchyDAO extends CommonRangeEntityDAO<CategoryHierarchy
         return pm.scan(clazz, scan).size() > 0;
     }
 
+
+    public void cleanUpCategoryHierarchy() {
+        for(Category cat : new CategoryDAO().all())
+            if(!categoryInHierarchy(cat.getId())) {
+                CategoryHierarchy hier = new CategoryHierarchy();
+                hier.setSuperCategoryId(Category.SUPER_CATEGORY);
+                hier.setSubCategoryId(cat.getId());
+                save(hier);
+            }
+    }
 
 }

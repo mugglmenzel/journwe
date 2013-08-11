@@ -1,34 +1,60 @@
 @(categoryForm: Form[models.category.Category])(categories: List[models.category.Category])
 
 @import models.category.Category
+@import models.dao.CategoryDAO
+@import models.dao.CategoryHierarchyDAO
 @import helper._
 @import fieldConstructor._
+              @import scala.xml.NodeSeq
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
 @main("Manage Inspiration Categories"){Manage Inspiration Categories} {
-  
-	<h2>Categories</h2>
-	<table class="table table-striped">
-		
-	@for(cat <- categories) {
-		<tr><td>@cat.getId()</td><td>@cat.getName()</td><td><a href="@routes.CategoryController.edit(cat.getId())"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.CategoryController.delete(cat.getId())"><i class="icon-trash"></i>delete</a></td></tr>
-	}
-	</table>
 
-	<h2>Inspiration Category Form</h2>
+    <div class="jrn-container">
+        <h2>Categories</h2>
+        <div>
+            @{
+                new CategoryHierarchyDAO().cleanUpCategoryHierarchy()
 
-    @form(routes.CategoryController.save(), args = 'class -> "form-horizontal") {
+                def catHierarchy(catId: String): NodeSeq = {
+                    <div>
+                    {new CategoryDAO().allOfCategory(catId).map( cat =>
+                            <div class="row draggable droppable" style="background: white; padding: 5px; margin: 2px; margin-left: 10px" data-id={cat.getId()}><div class="col-5">{cat.getId()}</div><div class="col-5">{cat.getName()}</div><div class="col-1"><a href={routes.CategoryController.edit(cat.getId()).toString()}><i class="icon-edit"></i>edit</a></div><div class="col-1"><a href={routes.CategoryController.delete(cat.getId()).toString()}><i class="icon-trash"></i>delete</a></div>
+                            {catHierarchy(cat.getId)}
+                            </div>
+                        )
+                    }
+                    </div>
+                }
 
-    	<fieldset>
-    		@if(categoryForm("id").value()) { 
-    		<input type="hidden" name="@categoryForm("id").name()" value="@categoryForm("id").value()" />
-    		}
-       		@inputText(categoryForm("name"), '_label -> "Category name")
-    	</fieldset>
-    	<div class="form-actions">
-    	  <input type="submit" value="Save category!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
-    	</div>
-    }
-    
+                catHierarchy(Category.SUPER_CATEGORY)
+            }
+
+
+        </div>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        <script>
+             $('.draggable' ).draggable();
+
+        </script>
+    </div>
+
+    <div class="jrn-container">
+        <h2>Inspiration Category Form</h2>
+
+        @form(routes.CategoryController.save(), args = 'class -> "form-horizontal") {
+
+            <fieldset>
+                @if(categoryForm("id").value()) {
+                <input type="hidden" name="@categoryForm("id").name()" value="@categoryForm("id").value()" />
+                }
+                @inputText(categoryForm("name"), '_label -> "Category name")
+            </fieldset>
+            <div class="form-actions">
+              <input type="submit" value="Save category!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+            </div>
+        }
+
+    </div>
 }
