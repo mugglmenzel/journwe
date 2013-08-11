@@ -1,8 +1,12 @@
 
 
 @import play.api.Play.current
-@import models.dao._
-@import models.user._
+@import models.dao.CategoryDAO
+@import models.dao.NotificationDAO
+@import models.dao.UserDAO
+@import models.category.Category
+@import models.user.EUserRole
+@import models.user.User
 @import com.feth.play.module.pa.views.html._
 @import com.feth.play.module.pa.providers.AuthProvider.Registry
 
@@ -100,15 +104,15 @@
                     <h4>Categories of Inspirations</h4>
                     <ul class="nav nav-pills nav-stacked">
                         @defining(new CategoryDAO()){catDAO =>
-                            @defining(catDAO.all()){ categories =>
-                                @for(cat <- categories) {
-                                	@if(catDAO.countInspirations(cat.getId())>0){
-                                    <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
-                                        @cat.getName()<span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span></a>
-                                    </li>
-                                	}
+
+                            @for(cat <- catDAO.allOfCategory(Category.SUPER_CATEGORY)) {
+                                @if(catDAO.countInspirations(cat.getId) > 0){
+                                <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
+                                    @cat.getName()<span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span></a>
+                                </li>
                                 }
                             }
+
                         }
                     </ul>
                 </div>
