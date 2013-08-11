@@ -4,17 +4,17 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
     <div class="jrn-container">
-        <h2>Feedback Form</h2>
+        <h2>@Messages("feedback.title")</h2>
 
         @form(routes.FeedbackController.createFeedback(), args = 'class -> "form-horizontal jrn-form") {
 
         <div class="form-group">
-            <label class="control-label">Feedback type:</label>
+            <label class="control-label">@Messages("feedback.type")</label>
             <div class="col-4">
                 <select name="feedbackType" class="form-control">
-                    <option value="@EFeedbackType.FEATURE_REQUEST">Feature request</option>
-                    <option value="@EFeedbackType.BUG">Bug</option>
-                    <option value="@EFeedbackType.GENERAL_FEEDBACK">General feedback</option>
+                    <option value="@EFeedbackType.FEATURE_REQUEST">@Messages("feedback.type.feature")</option>
+                    <option value="@EFeedbackType.BUG">@Messages("feedback.type.bug")/option>
+                    <option value="@EFeedbackType.GENERAL_FEEDBACK">@Messages("feedback.type.general")</option>
                 </select>
             </div>
         </div>
