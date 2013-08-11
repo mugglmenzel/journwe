@@ -15,13 +15,13 @@
                 @if(category != null) {<small>- <a href="@routes.ApplicationController.categoryIndex(category.getId)">@category.getName()</a></small>}
             </div>
         <div class="toolbar">
-            <a class="btn btn-primary pull-right" href="@routes.AdventureController.createFromInspiration(ins.getInspirationId())"><i class="icon-right-big"></i> Start</a>
+            <a class="btn btn-primary pull-right" href="@routes.InspirationController.createAdventure(ins.getCategoryId, ins.getInspirationId)"><i class="icon-arrow-right"></i> Start</a>
         </div>
     </div>
 
     <div class="jrn-container">
         <div class="row text-center">
-            <a class="btn btn-primary btn-large text-center" href="@routes.AdventureController.createFromInspiration(ins.getInspirationId())">Start a
+            <a class="btn btn-primary btn-large text-center" href="@routes.InspirationController.createAdventure(ins.getCategoryId, ins.getInspirationId)">Start a
                 "@ins.getName()" Adventure</a>
         </div>
 

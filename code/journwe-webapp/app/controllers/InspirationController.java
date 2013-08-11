@@ -18,6 +18,7 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.index.indexNew;
 import views.html.inspiration.get;
 import views.html.inspiration.manage;
 
@@ -54,6 +55,10 @@ public class InspirationController extends Controller {
     public static Result create() {
         return ok(manage.render(insForm, new CategoryDAO().allOptionsMap(),
                 new InspirationDAO().all()));
+    }
+
+    public static Result createAdventure(String catId, String insId) {
+        return ok(indexNew.render(new InspirationDAO().get(catId, insId)));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
