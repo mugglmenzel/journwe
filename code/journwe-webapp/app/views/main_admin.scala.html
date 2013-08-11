@@ -61,7 +61,7 @@
                                 <div>
                                     <ul class="nav nav-pills col-5">
                                         <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="icon-lightbulb"></i> Inspirations</a></li>
-                                        <li><a class="disabled" onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="icon-search"></i> Search</a></li>
+                                        <li class="disabled"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="icon-search"></i> Search</a></li>
                                         @if(EUserRole.ADMIN.equals(user.getRole)) {
                                             <li><a href="@routes.ApplicationController.admin()"><i class="icon-cogs"></i> Admin</a></li>
                                         }
