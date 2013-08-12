@@ -123,15 +123,15 @@ h1 .editableform {
 }
 
 .jrn-container h2#places {
-	background: rgba(242,157,150,0.6);
+	background: rgba(184, 246, 145, 0.6)
 }
 
 .jrn-container h2#adventurers {
-	background: rgba(194, 237, 166, 0.6);
+	background: rgba(235, 114, 104, 0.6);
 }
 
 .jrn-container h2#times {
-	background: rgba(180, 234, 250, 0.6);
+	background: rgba(152, 229, 251, 0.6);
 }
 
 .main > .row > * {
@@ -370,27 +370,51 @@ table.inspiration .images img {
 }
 
 .nav-adventure {
-	background-color: gray;
+	background-color: rgba(0,0,0,0.4);
 	font-size: 40px;
-	margin-top: 50px;
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+}
+
+.nav-adventure li {
+	height: calc(100% / 8);
+	min-height: 80px;
+}
+
+.nav-adventure li + li {
+	margin-top: 1px;
 }
 
 .nav-adventure li a {
 	border-radius: 0;
-	border-bottom: 5px solid white;
+	border-right: 5px solid rgba(255,255,255,0.6);
+	text-align: center;
+	margin: 0;
+	height: 100%;
+	width: 100px;
 }
 
+.nav-adventure li a i {
+	position: absolute;
+	top: 50%;
+	margin-top: -20px;
+	width: 40px;
+	left: 50%;
+	margin-left: -20px;
+}
 
 .nav-adventure li#nav-adventure-places a {
-	border-bottom-color: rgba(184, 246, 145, 0.5);
+	border-right-color: rgba(184, 246, 145, 0.5);
 }
 
 .nav-adventure li#nav-adventure-adventurers a {
-	border-bottom-color: rgba(235, 114, 104, 0.5);
+	border-right-color: rgba(235, 114, 104, 0.5);
 }
 
 .nav-adventure li#nav-adventure-time a {
-	border-bottom-color: rgba(152, 229, 251, 0.5);
+	border-right-color: rgba(152, 229, 251, 0.5);
 }
 
 .nav-adventure > li > a {
@@ -399,12 +423,29 @@ table.inspiration .images img {
 }
 
 .nav-adventure a {
-       color:  white;
+    color:  white;
 }
 
-.nav-adventure a:hover,
-.nav-adventure a:focus {
-	color: gray;
+.nav-adventure .nav-pills>li.active>a, 
+.nav-adventure .nav-pills>li.active>a:hover, 
+.nav-adventure .nav-pills>li.active>a:focus {
+	background: rgba(255,255,255,0.4) !important;
+}
+
+.nav-adventure .nav-pills>li>a:hover, 
+.nav-adventure .nav-pills>li>a:focus {
+	color: white;
+	background: rgba(255,255,255,0.2);
+}
+
+.nav-adventure .nav-pills>li>a:hover i, 
+.nav-adventure .nav-pills>li>a:focus i{
+	color: white;
+}
+
+
+.nav-adventure .nav {
+	height: 100%;
 }
 
 h3 {

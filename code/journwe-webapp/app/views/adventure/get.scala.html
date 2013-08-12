@@ -13,7 +13,7 @@
     UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
     <div class="nav-adventure" style=""> <!---->
-        <ul id="nav-adventure-list" class="nav nav-pills nav-justified">
+        <ul id="nav-adventure-list" class="nav nav-pills nav-stacked">
             <li  id="nav-adventure-index"
             @if(active == "index"){class="active"}><a href="#index" onclick="return jumpToSection('index');"><i
                 class="icon-info" title="Overview"></i></a></li>
@@ -25,7 +25,7 @@
             @if(active == "adventurers"){class="active"}><a href="#adventurers" onclick="return jumpToSection('adventurers');"><i class="icon-group" title="Adventurers"></i></a></li>
             <li  id="nav-adventure-time"
             @if(active == "times"){class="active"}><a href="#times" onclick="return jumpToSection('times');"><i
-                class="icon-time" title="Date &amp; Time"></i></a></li>
+                class="icon-calendar" title="Date &amp; Time"></i></a></li>
 
             @*<li id="nav-adventure-messages"
             @if(active == "messages"){class="active"}><a href="#messages" onclick="return jumpToSection('messages');"><i class="icon-envelope" title="Messages"></i></a></li>*@
