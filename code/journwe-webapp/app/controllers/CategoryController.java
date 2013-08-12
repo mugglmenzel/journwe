@@ -68,7 +68,7 @@ public class CategoryController extends Controller {
         String superCatId = df.get("superCategory");
         Logger.debug("adding " + catId + " to " + superCatId);
 
-        for(CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSub(catId))
+        for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSub(catId))
             new CategoryHierarchyDAO().delete(catHier);
         CategoryHierarchy hier = new CategoryHierarchy();
         hier.setSuperCategoryId(superCatId);
@@ -80,6 +80,15 @@ public class CategoryController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String id) {
+        for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSub(id))
+            if (catHier != null) new CategoryHierarchyDAO().delete(catHier);
+        for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSuper(id))
+            if (catHier != null) {
+                CategoryHierarchy hier = new CategoryHierarchy();
+                hier.setSuperCategoryId(Category.SUPER_CATEGORY);
+                hier.setSubCategoryId(catHier.getSuperCategoryId());
+                new CategoryHierarchyDAO().save(hier);
+            }
 
         if (new CategoryDAO().delete(id)) {
             flash("success", "Category with id " + id + " deleted.");
