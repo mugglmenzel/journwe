@@ -2,28 +2,30 @@
 @import models.dao.CategoryDAO
 
 
-@main(Messages("journwe.subtitle")) {JournWe
+@main(Messages("journwe.subtitle")) {Category @cat.getName
     <small>@Messages("journwe.subtitle")</small>
 } {
 
+    @defining(new CategoryDAO()){ catDAO =>
     <div class="jrn-container">
-        <h2><i class="icon-arrow-down"></i>Subcategories @cat.getName</h2>
-        <div style="">
-            @defining(new CategoryDAO()){ catDAO =>
-                @for(subcat <- catDAO.allOfCategory(cat.getId)) {
-                     <a href="@routes.ApplicationController.categoryIndex(subcat.getId)"><span class="label">@subcat.getName</span></a>
-                }
-            }
 
+        <h2><i class="icon-arrow-down"></i> Subcategories <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
+        <div style="font-size: 20pt;">
+            @for(subcat <- catDAO.allSubcategory(cat.getId)) {
+                 <a href="@routes.ApplicationController.categoryIndex(subcat.getId)"><span class="label">@subcat.getName</span></a>
+            }
         </div>
+
     </div>
     <div class="jrn-container">
-        <h2><i class="icon-bullhorn"></i>Inspirations in @cat.getName</h2>
+        <h2><i class="icon-bullhorn"></i> Inspirations <small>- @catDAO.countInspirations(cat.getId)</small> </h2>
         <div style="">
             <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-block" onclick="loadInspirations($('#inspirations-public-list .polaroid').last().data('id'));">Show More</button></div>
         </div>
     </div>
+
+    }
     <script type="text/x-tmpl" id="inspiration-public-template">
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 33.3333%;">
             <a href="{%=o.link%}"><img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>

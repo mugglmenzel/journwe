@@ -32,10 +32,25 @@ public class CategoryHierarchyDAO extends CommonRangeEntityDAO<CategoryHierarchy
         return pm.query(clazz, query);
     }
 
+    public Integer countCategoryAsSuper(String catId) {
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        CategoryHierarchy hier = new CategoryHierarchy();
+        hier.setSuperCategoryId(catId);
+        query.setHashKeyValues(hier);
+
+        return pm.count(clazz, query);
+    }
+
     public List<CategoryHierarchy> categoryAsSub(String catId) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("subCategoryId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(catId)));
         return pm.scan(clazz, scan);
+    }
+
+    public Integer countCategoryAsSub(String catId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("subCategoryId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(catId)));
+        return pm.count(clazz, scan);
     }
 
     public boolean isCategoryInHierarchy(String catId) {

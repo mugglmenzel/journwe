@@ -6,7 +6,6 @@ import models.category.CategoryHierarchy;
 import models.dao.common.CommonEntityDAO;
 import models.category.Category;
 import models.Inspiration;
-import play.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,16 +30,8 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
         return result;
     }
 
-    public List<Category> allOfCategory(String categoryId) {
-        Logger.debug("retrieving hierarchy for " + categoryId);
-
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
-
-        CategoryHierarchy hier = new CategoryHierarchy();
-        hier.setSuperCategoryId(categoryId);
-        query.setHashKeyValues(hier);
-
-        List<CategoryHierarchy> hiers = pm.query(CategoryHierarchy.class, query);
+    public List<Category> allSubcategory(String categoryId) {
+        List<CategoryHierarchy> hiers = new CategoryHierarchyDAO().categoryAsSuper(categoryId);
 
         List<Category> results = new ArrayList<Category>();
         for(CategoryHierarchy h : hiers)
@@ -49,11 +40,23 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
         return results;
     }
 
+    public Integer countSubcategory(String categoryId) {
+         return new CategoryHierarchyDAO().countCategoryAsSuper(categoryId);
+    }
+
     public Integer countInspirations(String id) {
         DynamoDBQueryExpression query = new DynamoDBQueryExpression();
         Inspiration ins = new Inspiration();
         ins.setCategoryId(id);
         query.setHashKeyValues(ins);
         return pm.count(Inspiration.class, query);
+    }
+
+    public Integer countInspirationsHierarchy(String id) {
+        Integer sum = countInspirations(id);
+        for(Category cat : allSubcategory(id)) {
+            sum += countInspirationsHierarchy(cat.getId());
+        }
+        return sum;
     }
 }
