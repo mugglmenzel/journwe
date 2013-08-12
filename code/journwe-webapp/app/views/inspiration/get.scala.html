@@ -70,6 +70,7 @@
         </div>
     </div>
 
+    @if(ins.getPlaceAddress != null){
     <div class="jrn-container">
         <h2 id="place"><i class="icon-globe"></i> Place</h2>
         <div class="row">
@@ -106,7 +107,9 @@
             </div>
         </div>
     </div>
+    }
 
+    @if(ins.getTimeStart != null) {
     <div class="jrn-container">
         <h2 id="time"><i class="icon-calendar"></i> Date &amp; Time</h2>
         <div class="row">
@@ -115,4 +118,5 @@
             </div>
         </div>
     </div>
+    }
 }
