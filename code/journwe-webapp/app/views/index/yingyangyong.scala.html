@@ -227,13 +227,6 @@
         map = new google.maps.Map(document.getElementById('where-map'),
         mapOptions);
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    map.setCenter(pos);
-                }, function() {});
-        }
-
         resetBounds();
 
         $(".journwe-date").datepicker();
@@ -261,11 +254,18 @@
     }
 
     function resetBounds() {
-        var bounds = new google.maps.LatLngBounds();
-        for(var i in markers) {
-        bounds.extend(markers[i].getPosition());
+        if (!$.isEmptyObject(markers)) {
+            var bounds = new google.maps.LatLngBounds();
+            for(var i in markers) {
+                bounds.extend(markers[i].getPosition());
+            }
+            map.fitBounds(bounds);
+        } else if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            map.setCenter(pos);
+            }, function() {});
         }
-        map.fitBounds(bounds);
         google.maps.event.trigger(map, 'resize');
     }
 

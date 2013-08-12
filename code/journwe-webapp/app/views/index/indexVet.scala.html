@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col-3">
                 <div id="yingyangyong-starter" class="text-center">
-                    <button class="btn btn-link" href="#" onclick="$('#yingyangyong-container').slideDown(); $('#yingyangyong-starter button').prop('disabled', true); google.maps.event.trigger(map, 'resize');">
+                    <button class="btn btn-link" href="#" onclick="$('#yingyangyong-container').slideDown(function () {resetBounds();}); $('#yingyangyong-starter button').prop('disabled', true);">
                         <img src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' width="170"><br>
                         <p class="lead"><i class="icon-asterisk"></i> Create New</p>
                     </button>
