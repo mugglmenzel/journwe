@@ -1,11 +1,22 @@
 @(cat:  models.category.Category)
+@import models.dao.CategoryDAO
 
 
 @main(Messages("journwe.subtitle")) {JournWe
     <small>@Messages("journwe.subtitle")</small>
 } {
 
+    <div class="jrn-container">
+        <h2><i class="icon-arrow-down"></i>Subcategories @cat.getName</h2>
+        <div style="">
+            @defining(new CategoryDAO()){ catDAO =>
+                @for(subcat <- catDAO.allOfCategory(cat.getId)) {
+                     <a href="@routes.ApplicationController.categoryIndex(subcat.getId)"><span class="label">@subcat.getName</span></a>
+                }
+            }
 
+        </div>
+    </div>
     <div class="jrn-container">
         <h2><i class="icon-bullhorn"></i>Inspirations in @cat.getName</h2>
         <div style="">
