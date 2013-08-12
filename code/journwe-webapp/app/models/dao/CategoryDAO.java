@@ -26,7 +26,7 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     public Map<String, String> allOptionsMap() {
         Map<String, String> result = new HashMap<String, String>();
         for (Category in : all())
-            result.put(in.getId(), in.getName());
+            if(in != null) result.put(in.getId(), in.getName());
         return result;
     }
 
@@ -35,7 +35,7 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
 
         List<Category> results = new ArrayList<Category>();
         for(CategoryHierarchy h : hiers)
-            results.add(get(h.getSubCategoryId()));
+            if(h != null) results.add(get(h.getSubCategoryId()));
 
         return results;
     }
@@ -54,9 +54,9 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
 
     public Integer countInspirationsHierarchy(String id) {
         Integer sum = countInspirations(id);
-        for(Category cat : allSubcategory(id)) {
-            sum += countInspirationsHierarchy(cat.getId());
-        }
+        for(Category cat : allSubcategory(id))
+            if(cat != null) sum += countInspirationsHierarchy(cat.getId());
+
         return sum;
     }
 }

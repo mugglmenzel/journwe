@@ -103,10 +103,10 @@
                 <div>
                     <h4>Categories of Inspirations</h4>
                     <ul class="nav nav-pills nav-stacked">
-                        @defining(new CategoryDAO){catDAO =>
+                        @defining(new CategoryDAO()){catDAO =>
 
                             @for(cat <- catDAO.allSubcategory(Category.SUPER_CATEGORY)) {
-                                @if(catDAO.countInspirationsHierarchy(cat.getId) > 0){
+                                @if(cat != null && catDAO.countInspirationsHierarchy(cat.getId) > 0){
                                 <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
                                     @cat.getName() <span class="badge badge-info pull-right">@catDAO.countInspirationsHierarchy(cat.getId())</span></a>
                                 </li>
