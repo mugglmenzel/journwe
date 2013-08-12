@@ -10,7 +10,7 @@
 @import com.feth.play.module.pa.views.html._
 @import com.feth.play.module.pa.providers.AuthProvider.Registry
 
-<div class="col-offset-2 col-8">
+<div class="col-offset-2 col-12 col-lg-8">
 	<div>
         @currentAuth() { auth =>
             @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>

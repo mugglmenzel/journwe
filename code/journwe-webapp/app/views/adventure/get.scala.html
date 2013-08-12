@@ -12,7 +12,7 @@
     @if(new AdventurerDAO().get(adv.getId(), new
     UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
-    <div class="nav-adventure" style=""> <!---->
+    <div class="nav-adventure visible-lg" style=""> <!---->
         <ul id="nav-adventure-list" class="nav nav-pills nav-stacked">
             <li  id="nav-adventure-index"
             @if(active == "index"){class="active"}><a href="#index" onclick="return jumpToSection('index');"><i

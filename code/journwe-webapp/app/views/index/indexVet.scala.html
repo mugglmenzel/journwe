@@ -92,7 +92,7 @@
         </div>
     </div>
     <script type="text/x-tmpl" id="adventure-public-template">
-        <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 33.333%;">
+        <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
             <a href="{%=o.link%}"><img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                 <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
@@ -113,7 +113,7 @@
 
         function loadPublicAdventures(lastId, clear) {
             $('#adventures-public-load-more-button').html('<i class="icon-spin icon-spinner"></i>');
-            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 9} , function (advs) {
+            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
                     var polaroid = tmpl('adventure-public-template', advs[i]);
