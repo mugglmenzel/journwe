@@ -45,6 +45,20 @@
                     <ul id="inspiration-place" class="list-unstyled list-inline">
                         @if(inspForm("placeAddress").value()) {
                         <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label"><i class="icon-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
+                        <script>
+                            $(document).ready(function (){
+                                var placeLatLng = new google.maps.LatLng(@inspForm("placeLatitude").value(), @inspForm("placeLongitude").value());
+
+                                var marker = new google.maps.Marker({
+                                    map: map,
+                                    position: placeLatLng
+                                });
+                                markers['inspiration-place'] = marker;
+
+                                resetBounds();
+                            });
+
+                        </script>
                         }
                     </ul>
 
@@ -57,62 +71,64 @@
                     </div>
                     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
                     <script>
-                    var map;
-                    google.maps.visualRefresh = true;
+                        var map;
+                        google.maps.visualRefresh = true;
 
-                    function initialize() {
-                        var mapOptions = {
-                            zoom: 15,
-                            center: new google.maps.LatLng(49.483472, 8.476992),
-                            mapTypeId: google.maps.MapTypeId.ROADMAP
-                        };
-                        map = new google.maps.Map(document.getElementById('inspiration-place-map'), mapOptions);
-
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(function(position) {
-                                var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                                map.setCenter(pos);
-                            }, function() {});
-                        }
-
-                    }
-
-                    google.maps.event.addDomListener(window, 'load', initialize);
-
-
-                    var markers = [];
-
-                    function searchPlace() {
-                        new google.maps.Geocoder().geocode({'address': $('#inspiration-place-input').val()}, function (results, status) {
-                            var id = 'inspiration-place';
-                            $('#inspiration-place').html('<li id="' + id +'"><input type="hidden" name="place" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
-                            map.setCenter(results[0].geometry.location);
-                            var marker = new google.maps.Marker({
-                                map: map,
-                                position: results[0].geometry.location
-                            });
-                            markers[id] = marker;
+                        function initialize() {
+                            var mapOptions = {
+                                zoom: 15,
+                                center: new google.maps.LatLng(49.483472, 8.476992),
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                            };
+                            map = new google.maps.Map(document.getElementById('inspiration-place-map'), mapOptions);
 
                             resetBounds();
-                            $('#inspiration-place-input').val('');
-                        });
-                    }
 
-                    function resetBounds() {
-                        var bounds = new google.maps.LatLngBounds();
-                        for(var i in markers) {
-                            bounds.extend(markers[i].getPosition());
                         }
-                        map.fitBounds(bounds);
-                        google.maps.event.trigger(map, 'resize');
-                    }
 
-                    function removeMarker(id) {
-                        markers[id].setMap(null);
-                        delete markers[id];
-                        resetBounds();
-                        return false;
-                    }
+                        google.maps.event.addDomListener(window, 'load', initialize);
+
+
+                        var markers = {};
+
+                        function searchPlace() {
+                            new google.maps.Geocoder().geocode({'address': $('#inspiration-place-input').val()}, function (results, status) {
+                                var id = 'inspiration-place';
+                                $('#inspiration-place').html('<li id="' + id +'"><input type="hidden" name="place" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
+                                map.setCenter(results[0].geometry.location);
+                                var marker = new google.maps.Marker({
+                                    map: map,
+                                    position: results[0].geometry.location
+                                });
+                                markers[id] = marker;
+
+                                resetBounds();
+                                $('#inspiration-place-input').val('');
+                            });
+                        }
+
+                        function resetBounds() {
+                            if (!$.isEmptyObject(markers)) {
+                                var bounds = new google.maps.LatLngBounds();
+                                for(var i in markers) {
+                                    bounds.extend(markers[i].getPosition());
+                                }
+                                map.fitBounds(bounds);
+                            } else if(navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(function(position) {
+                                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                                    map.setCenter(pos);
+                                }, function() {});
+                            }
+                            google.maps.event.trigger(map, 'resize');
+                        }
+
+                        function removeMarker(id) {
+                            markers[id].setMap(null);
+                            delete markers[id];
+                            resetBounds();
+                            return false;
+                        }
                     </script>
                 </div>
                 <div>

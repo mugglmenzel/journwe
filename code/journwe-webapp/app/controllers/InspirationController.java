@@ -12,6 +12,7 @@ import models.auth.SecuredBetaUser;
 import models.dao.CategoryDAO;
 import models.dao.InspirationDAO;
 import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -73,6 +74,7 @@ public class InspirationController extends Controller {
     public static Result save() {
 
         Form<Inspiration> filledInsForm = insForm.bindFromRequest();
+        DynamicForm df = form().bindFromRequest();
         MultipartFormData body = request().body().asMultipartFormData();
         FilePart image = body.getFile("image");
 
@@ -90,6 +92,9 @@ public class InspirationController extends Controller {
                 if (ins.getInspirationId() == null && !new InspirationDAO().save(ins))
                     throw new Exception();
 
+                String originalCategoryId = df.get("originalInspirationCategoryId");
+                Logger.debug("original cat: " + originalCategoryId + ", new cat: " + ins.getCategoryId());
+
 
                 Logger.info("got image files " + image.getFilename());
                 if (image.getFilename() != null
@@ -103,7 +108,7 @@ public class InspirationController extends Controller {
                     ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                             ins.getInspirationId() + "/title"));
                 } else
-                    ins.setImage(new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()).getImage());
+                    ins.setImage(new InspirationDAO().get(originalCategoryId, ins.getInspirationId()).getImage());
 
 
                 if (form().bindFromRequest().get("place") != null) {
@@ -111,6 +116,10 @@ public class InspirationController extends Controller {
                     ins.setPlaceAddress(place.split("/")[0]);
                     ins.setPlaceLatitude(new Double(place.split("/")[1]));
                     ins.setPlaceLongitude(new Double(place.split("/")[2]));
+                } else {
+                    ins.setPlaceAddress(null);
+                    ins.setPlaceLatitude(null);
+                    ins.setPlaceLongitude(null);
                 }
 
 
@@ -120,10 +129,17 @@ public class InspirationController extends Controller {
                     String time = form().bindFromRequest().get("time");
                     ins.setTimeStart(sdf.parse(time.split(",")[0]));
                     ins.setTimeEnd(sdf.parse(time.split(",")[1]));
+                } else {
+                    ins.setTimeStart(null);
+                    ins.setTimeEnd(null);
                 }
 
 
                 if (new InspirationDAO().save(ins)) {
+                    if(!ins.getCategoryId().equals(originalCategoryId)) {
+                        Logger.debug("deleting " + originalCategoryId + "," + ins.getInspirationId());
+                        new InspirationDAO().delete(originalCategoryId, ins.getInspirationId());
+                    }
 
                     flash("success",
                             "Saved Inspiration with image " + ins.getImage()
