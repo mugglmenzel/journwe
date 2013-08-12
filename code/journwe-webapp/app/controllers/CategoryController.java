@@ -84,10 +84,8 @@ public class CategoryController extends Controller {
             if (catHier != null) new CategoryHierarchyDAO().delete(catHier);
         for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSuper(id))
             if (catHier != null) {
-                CategoryHierarchy hier = new CategoryHierarchy();
-                hier.setSuperCategoryId(Category.SUPER_CATEGORY);
-                hier.setSubCategoryId(catHier.getSuperCategoryId());
-                new CategoryHierarchyDAO().save(hier);
+                catHier.setSuperCategoryId(Category.SUPER_CATEGORY);
+                new CategoryHierarchyDAO().save(catHier);
             }
 
         if (new CategoryDAO().delete(id)) {
