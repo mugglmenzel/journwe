@@ -24,7 +24,9 @@
             <div class="col-12">
                 <div class="text-center"><a class="btn btn-primary btn-large text-center" href="@routes.InspirationController.createAdventure(ins.getCategoryId, ins.getInspirationId)">Start a
                     "@ins.getName()" Adventure</a></div>
-                <p>@Html(ins.getDescription)</p>
+                @if(ins.getDescription != null){
+                    <p>@Html(ins.getDescription())</p>
+                }
 
                 @if(ins.getWeatherId != null){
                     <div class="weather-container">
