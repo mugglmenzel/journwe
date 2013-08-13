@@ -637,8 +637,10 @@ h3 {
 
 #files-upload-dropzone {
 	min-height: 150px;
+    line-height: 150px;
 	border: dashed 3px rgba(255,255,255,0.4);
 	padding: 10px;
+    margin-top: 10px;
 }
 
 #files-upload-dropzone.hover {

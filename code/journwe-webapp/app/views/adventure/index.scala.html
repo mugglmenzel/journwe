@@ -2,9 +2,9 @@
 
 @import models.authorization.JournweAuthorization
 
-<p class="pull-left">
+<div class="row pull-left">
     <img id="adventure-title-image" class="img-polaroid" style="border: solid 1px rgba(0, 0, 0, 0); margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null || !JournweAuthorization.canViewAdventureImage(adv.getId)){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=Drop+image"}else{src="http://i.embed.ly/1/image/crop?height=200&width=150&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
-    <i id="adventure-title-image-loading" class="icon-spin icon-spinner stash"></i>
+    <div><input id="adventure-title-image-file-input" type="file" class="hide"/><button id="adventure-title-image-upload-button" class="btn btn-upload" onclick="$('#adventure-title-image-file-input').click();"><i class="icon-upload"></i> @Messages("adventure.files.fileUpload")</button></div>
 
 @if(JournweAuthorization.canViewAdventureDescription(adv.getId)) {
     <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
@@ -14,42 +14,65 @@
 @if(JournweAuthorization.canEditAdventureDescription(adv.getId)) {
     <div class="btn-edit-description"><a class="btn btn-mini" onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');$(this).parent().hide()"><i class="icon-pencil"></i> Edit</a></div>
 }
-</p>
+</div>
 <script type="text/javascript">
-jQuery.event.props.push('dataTransfer');
+    jQuery.event.props.push('dataTransfer');
 
-$('#adventure-title-image').on('drop', function (event){processDroppedImage(event);});
-$('#adventure-prime-image').on('drop', function (event){processDroppedImage(event);});
+    $('#adventure-title-image').on('drop', function (event){processDroppedTitleImage(event);});
+    $('#adventure-prime-image').on('drop', function (event){processDroppedTitleImage(event);});
 
-function processDroppedImage(event) {
-event.stopPropagation();
-event.preventDefault();
+    $('#adventure-title-image-file-input').change(function () {
+        var inputFile = $('#adventure-title-image-file-input'),
+            files = inputFile[0].files;
+        if(files) {
+            uploadTitleImage(files);
+            inputFile.val('');
+        }
+    });
 
-$('#adventure-title-image').hide();
-$('#adventure-prime-image').hide();
-$('#adventure-title-image-loading').show();
-$('#adventure-prime-image-loading').show();
+    function processDroppedTitleImage(event) {
+        event.stopPropagation();
+        event.preventDefault();
 
-var files = event.target.files || event.dataTransfer.files;
-var data = new FormData();
-data.append(files[0].name, files[0])
-$.ajax({
-url: '@routes.AdventureController.updateImage(adv.getId)',
-data: data,
-cache: false,
-contentType: false,
-processData: false,
-type: 'POST',
-success:  function (data) {
-$('#adventure-title-image-loading').hide();
-$('#adventure-prime-image-loading').hide();
-$('#adventure-title-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=150&url=' + data.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime());
-$('#adventure-prime-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + data.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime());
-$('#adventure-title-image').show();
-$('#adventure-prime-image').show();
-}
-});
-$('#adventure-title-image').removeClass('hover');
-return false;
-}
+        uploadTitleImage(event.target.files || event.dataTransfer.files);
+
+
+        $('#adventure-title-image').removeClass('hover');
+        return false;
+    }
+
+    function uploadTitleImage(files) {
+        var btn = $('#adventure-title-image-upload-button'),
+            btnOriginal = btn.html();
+        btn.css({width:btn.css('width')})
+            .html('<i class="icon-spin icon-spinner"></i>');
+        $('#adventure-title-image').hide();
+        $('#adventure-prime-image').hide();
+        $('#adventure-title-image-loading').show();
+        $('#adventure-prime-image-loading').show();
+
+        var data = new FormData();
+        data.append(files[0].name, files[0])
+
+        $.ajax({
+            url: '@routes.AdventureController.updateImage(adv.getId)',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success:  function (result) {
+                $('#adventure-title-image-loading').hide();
+                $('#adventure-prime-image-loading').hide();
+                $('#adventure-title-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=150&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime());
+                $('#adventure-prime-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime());
+                $('#adventure-title-image').show();
+                $('#adventure-prime-image').show();
+                btn.css({width:""})
+                    .html(btnOriginal);
+            }
+        });
+
+    }
+
 </script>

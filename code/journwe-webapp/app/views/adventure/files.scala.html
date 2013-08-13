@@ -11,7 +11,7 @@
 @if(JournweAuthorization.canViewAndDownloadFiles(adv.getId)) {
     <script type="text/x-tmpl" id="files-template">
         <tr>
-            <td><a class="btn btn-link" href="{%=o.url%}" target="_blank">{%=o.fileName%}</a></td>
+            <td><a class="btn btn-link" href="{%=o.url%}" target="_blank"><i class="icon-file"></i> {%=o.fileName%}</a></td>
             <td><span class="label label-info" title="{%=o.user.name%}">{%=String(o.user.name).split(/\s/)[0]%}</span></td>
             <td class="text-center"><button class="btn btn-primary" href="{%=o.url%}" target="_blank"><i class="icon-cloud-download"></i></button> <button class="btn btn-danger" onclick="deleteFile('{%=o.fileName%}', this);"><i class="icon-trash"></i></button></td>
         </tr>
@@ -40,7 +40,7 @@
 }
 
 @if(JournweAuthorization.canUploadFiles(adv.getId)) {
-    <div id="files-upload-dropzone" style="margin-top: 10px;" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
+    <div id="files-upload-dropzone" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
         <div class="text-center">
             <p class="lead">@Messages("adventure.files.fileDrop")
                 <input id="files-file-input" type="file" class="hide"/><button class="btn btn-upload" onclick="$('#files-file-input').click();"><i class="icon-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
@@ -59,8 +59,7 @@
             event.stopPropagation();
             event.preventDefault();
 
-            $('#files-file-input')[0].files =  event.target.files || event.dataTransfer.files;
-            //uploadFiles(event.target.files || event.dataTransfer.files);
+            uploadFiles(event.target.files || event.dataTransfer.files);
 
             $('#files-upload-dropzone').removeClass('hover');
             return false;
