@@ -24,9 +24,9 @@
             <div class="col-12">
                 <div class="text-center"><a class="btn btn-primary btn-large text-center" href="@routes.InspirationController.createAdventure(ins.getCategoryId, ins.getInspirationId)">Start a
                     "@ins.getName()" Adventure</a></div>
-                Description...
+                <p>@Html(ins.getDescription)</p>
 
-                @if(ins.getWeatherId!=null){
+                @if(ins.getWeatherId != null){
                     <div class="weather-container">
                     @for(period <- ins.getWeather()){
                         <div class="weather">
@@ -96,7 +96,24 @@
         <h2 id="photos"><i class="icon-picture"></i> Photos</h2>
         <div class="row">
             <div class="col-12">
-                Photos...
+                <div id="inspiration-photos"></div>
+                <script type="text/x-tmpl" id="inspiration-photo-template">
+                    <div class="polaroid" style="position: relative; float: left; width: 20%;">
+                       <img style="margin: 0px; width: 100%;" src="{% if(o == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
+                    </div>
+                </script>
+                <script>
+                    $(document).ready(function(){
+                        $.get('@routes.InspirationController.getImages(category.getId, ins.getId)', function (images) {
+                            if(images.length){
+                                for(var i in images) {
+                                    $('#inspiration-photos').append(tmpl('inspiration-photo-template', advs[i]));
+                                }
+                                $('#inspiration-photos .polaroid').last().hide().fadeIn();
+                            } else $('#inspiration-photos').html('No Photos.');
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>

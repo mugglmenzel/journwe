@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.typesafe.config.ConfigFactory;
 import models.Inspiration;
+import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
 import models.category.Category;
 import models.dao.CategoryDAO;
@@ -50,6 +51,7 @@ public class InspirationController extends Controller {
         return ok(get.render(ins, cat));
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getImages(String catId, String id) {
         List<String> images = new ArrayList<String>();
         for (S3ObjectSummary os : s3.listObjects(S3_BUCKET_INSPIRATION_IMAGES, id + "/").getObjectSummaries()) {
@@ -60,17 +62,18 @@ public class InspirationController extends Controller {
         return ok(Json.toJson(images));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
         return ok(manage.render(insForm, new CategoryDAO().allOptionsMap(),
                 new InspirationDAO().all()));
     }
 
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result createAdventure(String catId, String insId) {
         return ok(indexNew.render(new InspirationDAO().get(catId, insId)));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result edit(String catId, String id) {
         Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(catId, id));
         return ok(manage.render(editInsForm,
@@ -79,6 +82,12 @@ public class InspirationController extends Controller {
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
+    public static String getBucketURL(String catId, String id) {
+        return s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
+                id);
+    }
+
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result save() {
 
         Form<Inspiration> filledInsForm = insForm.bindFromRequest();
@@ -168,7 +177,7 @@ public class InspirationController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String catId, String id) {
         try {
             AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(

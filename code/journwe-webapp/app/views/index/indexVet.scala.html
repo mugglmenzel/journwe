@@ -116,19 +116,17 @@
             $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
-                    var polaroid = tmpl('adventure-public-template', advs[i]);
-                    $('#adventures-public-list').append(polaroid);
-
-                    $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
-                        function(){
-                            $(this).find("div.overlay").slideDown("fast");
-                        },
-                        function(){
-                            $(this).find("div.overlay").slideUp("fast");
-                        }
-                    );
-
+                    $('#adventures-public-list').append(tmpl('adventure-public-template', advs[i]));
                 }
+
+                $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
+                    function(){
+                        $(this).find("div.overlay").slideDown("fast");
+                    },
+                    function(){
+                        $(this).find("div.overlay").slideUp("fast");
+                    }
+                );
                 $('#adventures-public-load-more-button').html('Show More');
             });
         }
