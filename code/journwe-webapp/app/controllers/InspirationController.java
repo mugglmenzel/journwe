@@ -6,14 +6,15 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.typesafe.config.ConfigFactory;
-import models.category.Category;
 import models.Inspiration;
 import models.auth.SecuredBetaUser;
+import models.category.Category;
 import models.dao.CategoryDAO;
 import models.dao.InspirationDAO;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -36,20 +37,27 @@ public class InspirationController extends Controller {
 
     private static Form<Inspiration> insForm = form(Inspiration.class);
 
+    private static AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+            ConfigFactory.load().getString("aws.accessKey"),
+            ConfigFactory.load().getString("aws.secretKey")));
+
+
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result get(String catId, String id) {
         Inspiration ins = new InspirationDAO().get(catId, id);
         Category cat = new CategoryDAO().get(ins.getCategoryId());
-        AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
-                ConfigFactory.load().getString("aws.accessKey"),
-                ConfigFactory.load().getString("aws.secretKey")));
+
+        return ok(get.render(ins, cat));
+    }
+
+    public static Result getImages(String catId, String id) {
         List<String> images = new ArrayList<String>();
         for (S3ObjectSummary os : s3.listObjects(S3_BUCKET_INSPIRATION_IMAGES, id + "/").getObjectSummaries()) {
             images.add(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                     os.getKey()));
         }
 
-        return ok(get.render(ins, cat, images));
+        return ok(Json.toJson(images));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
@@ -136,7 +144,7 @@ public class InspirationController extends Controller {
 
 
                 if (new InspirationDAO().save(ins)) {
-                    if(!ins.getCategoryId().equals(originalCategoryId)) {
+                    if (!ins.getCategoryId().equals(originalCategoryId)) {
                         Logger.debug("deleting " + originalCategoryId + "," + ins.getInspirationId());
                         new InspirationDAO().delete(originalCategoryId, ins.getInspirationId());
                     }

@@ -18,6 +18,7 @@ POST          /category/moveInHierarchy.json                        controllers.
 GET           /category/:id/delete                                  controllers.CategoryController.delete(id:String)
 
 GET           /category/:catId/inspiration/:id                      controllers.InspirationController.get(catId:String, id:String)
+GET           /category/:catId/inspiration/:id/images.json          controllers.InspirationController.getImages(catId:String, id:String)
 GET           /inspiration/new                                      controllers.InspirationController.create()
 GET           /category/:catId/inspiration/:id/adventure/new        controllers.InspirationController.createAdventure(catId:String, id:String)
 GET           /category/:catId/inspiration/:id/edit                 controllers.InspirationController.edit(catId:String, id:String)
@@ -73,14 +74,14 @@ DELETE        /adventure/:id/time/:timeId                           controllers.
 POST          /adventure/:id/times/voteOpen.json                    controllers.AdventureController.updateTimeVoteOpen(id:String)
 
 
-GET           /adventure/:id/todos                                  controllers.AdventureTodoController.getTodos(id:String)
-POST          /adventure/:id/todos                                  controllers.AdventureTodoController.addTodo(id:String)
+GET           /adventure/:id/todos.json                             controllers.AdventureTodoController.getTodos(id:String)
+POST          /adventure/:id/todos.json                             controllers.AdventureTodoController.addTodo(id:String)
 PUT           /adventure/:id/todos/:tid                             controllers.AdventureTodoController.setTodo(id:String, tid: String)
 DELETE        /adventure/:id/todos/:tid                             controllers.AdventureTodoController.deleteTodo(id:String, tid: String)
 
 
-GET           /adventure/:id/files                                  controllers.AdventureFileController.listFiles(id:String)
-POST          /adventure/:id/files                                  controllers.AdventureFileController.uploadFile(id:String)
+GET           /adventure/:id/files.json                             controllers.AdventureFileController.listFiles(id:String)
+POST          /adventure/:id/files.json                             controllers.AdventureFileController.uploadFile(id:String)
 DELETE        /adventure/:id/files/:fileName                        controllers.AdventureFileController.deleteFile(id:String, fileName: String)
 
 

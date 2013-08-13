@@ -82,11 +82,7 @@ public class AdventureFileController extends Controller {
     public static Result listFiles(String adventureId) {
         if (!JournweAuthorization.canViewAndDownloadFiles(adventureId))
             return AuthorizationMessage.notAuthorizedResponse();
-        Logger.debug("Listing files from DynamoDB ...");
-        List<JournweFile> files = new JournweFileDAO().all(adventureId);
-        for (JournweFile file : files)
-            Logger.debug(file.getFileName());
-        return ok(Json.toJson(files));
+        return ok(Json.toJson(new JournweFileDAO().all(adventureId)));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
