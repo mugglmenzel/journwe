@@ -603,6 +603,14 @@ h3 {
 	animation: spinWhen 1s ease 1;
 }
 
+#inspiration-container .social {
+    position: absolute;
+    left: 100%;
+    max-width: 90px;
+    padding-left: 10px;
+    top: 0px;
+}
+
 #adventure-container .comments {
 	position: absolute;
 	left: 100%;
