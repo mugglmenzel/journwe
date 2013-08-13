@@ -8,62 +8,42 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
-@if(JournweAuthorization.canUploadFiles(adv.getId)) {
-<script type="text/x-tmpl" id="files-template">
-    <tr>
-        <td>{%=o.fileName%}</td>
-        <td>{%=o.user.name%}</td>
-        <td><a href="{%=o.url%}" target="_blank">{%=o.url%}</a></td>
-        <td><a onclick="deleteFile('{%=o.fileName%}', this);" class="btn btn-danger"><i class="icon-trash"></i></a></td>
-    </tr>
-</script>
-}
+@if(JournweAuthorization.canViewAndDownloadFiles(adv.getId)) {
+    <script type="text/x-tmpl" id="files-template">
+        <tr>
+            <td><a class="btn btn-link" href="{%=o.url%}" target="_blank">{%=o.fileName%}</a></td>
+            <td><span class="label label-info" title="{%=o.user.name%}">{%=String(o.user.name).split(/\s/)[0]%}</span></td>
+            <td class="text-center"><button class="btn btn-primary" href="{%=o.url%}" target="_blank"><i class="icon-cloud-download"></i></button> <button class="btn btn-danger" onclick="deleteFile('{%=o.fileName%}', this);"><i class="icon-trash"></i></button></td>
+        </tr>
+    </script>
 
-<div class="times-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
 
-    @if(JournweAuthorization.canViewAndDownloadFiles(adv.getId)) {
-    <table id="files-list" class="table table-striped table-hover hide">
+    <div class="row">
+        <div class="pull-left files-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
+        <div class="pull-right"><button class="btn btn-success" onclick="loadFiles();"><i class="icon-refresh"></i></button></div>
+    </div>
+
+    <table id="files-list" class="table table-striped table-hover table-condensed stash">
         <thead>
             <tr>
                 <th>@Messages("adventure.files.fileName")</th>
                 <th>@Messages("adventure.files.uploadedBy")</th>
-                <th>
-@Messages("adventure.files.downloadBy")</th>
-                <th>@Messages("adventure.general.listactions")</th>
+                <!--<th>@Messages("adventure.files.downloadBy")</th>-->
+                <th class="text-center">@Messages("adventure.general.listactions")</th>
             </tr>
         </thead>
         <tbody>
 
         </tbody>
     </table>
-    }
 
-@*
-@form(routes.AdventureFileController.uploadFile(adv.getId()), args = 'class -> "form-horizontal form-file",  'enctype -> "multipart/form-data") {
-    <fieldset>
-        @inputText(fileForm("fileName"), '_label -> "File name", 'required -> "required")
-        @inputText(fileForm("fileDescription"), '_label -> "Description")
-        @inputFile(fileForm("uploadFile"), '_label -> "File")(FieldConstructor(twitterBootstrapInputFileUpload.render), Lang.apply("en-US"))
-    </fieldset>
-    <div class="form-actions">
-        <button class="btn btn-primary">@Messages("adventure.files.fileUpload")</button> | <a href="#" class="btn btn-link">@Messages("adventure.general.button.reset")</a>
-    </div>
 }
-*@
 
-@if(JournweAuthorization.canViewAndDownloadFiles(adv.getId)) {
-    <div id="files-upload-dropzone" style="" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
-        <div class="text-center"><p class="lead">@Messages("adventure.files.fileDrop")
-            <div class="fileupload fileupload-new" data-provides="fileupload">
-                <div class="">
-                    <div class="">
-                        <i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span>
-                    </div>
-                    <span class="btn btn-primary btn-file">
-                        <span class="fileupload-new">@Messages("adventure.files.fileSelect")</span><span class="fileupload-exists">@Messages("adventure.files.fileChange")</span><input type="file" name="uploadFile" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">@Messages("adventure.files.fileRemove")</a>
-                    <button class="btn btn-upload"><i class="icon-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
-                </div>
-            </div>
+@if(JournweAuthorization.canUploadFiles(adv.getId)) {
+    <div id="files-upload-dropzone" style="margin-top: 10px;" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
+        <div class="text-center">
+            <p class="lead">@Messages("adventure.files.fileDrop")
+                <input id="files-file-input" type="file" class="hide"/><button class="btn btn-upload" onclick="$('#files-file-input').click();"><i class="icon-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
             </p>
         </div>
     </div>
@@ -72,58 +52,41 @@
 <script type="text/javascript">
     jQuery.event.props.push('dataTransfer');
 
-    $('#files-upload-dropzone .fileupload').fileupload();
+    $(document).ready(function (){
+        loadFiles();
 
-    $('#files-upload-dropzone').on('drop', function (event) {
-        event.stopPropagation();
-        event.preventDefault();
+        $('#files-upload-dropzone').on('drop', function (event) {
+            event.stopPropagation();
+            event.preventDefault();
 
-        uploadFile(event.target.files || event.dataTransfer.files);
+            $('#files-file-input')[0].files =  event.target.files || event.dataTransfer.files;
+            //uploadFiles(event.target.files || event.dataTransfer.files);
 
-        $('#files-upload-dropzone').removeClass('hover');
-        return false;
-    }).find('.btn-upload').click(function () {
-        uploadFile($('#files-upload-dropzone input:file')[0].files);
-    });
+            $('#files-upload-dropzone').removeClass('hover');
+            return false;
+        });
 
-    function uploadFile(files) {
-        var data = new FormData(),
-            btn = $('#files-upload-dropzone .btn-upload');
-        data.append('uploadFile', files[0]);
-        data.append('fileName', files[0].name);
-        btn.css({width:btn.css('width')})
-            .html('<i class="icon-spin icon-spinner"></i>');
-        $.ajax({
-            url: '@routes.AdventureFileController.uploadFile(adv.getId())',
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: 'POST',
-            success:  function (data) {
-                btn.css({width:""})
-                    .html('<i class="icon-cloud-upload"></i> Upload file');
-                $('#files-upload-dropzone .fileupload').fileupload('reset');
+        $('#files-file-input').change(function () {
+            var inputFile = $('#files-file-input'),
+                files = inputFile[0].files;
+            if(files) {
+                uploadFiles(files);
+                inputFile.val('');
             }
         });
-    }
+    });
 
-    $(function(){
 
-        $('form.form-file').on('submit', function(){
+    function uploadFiles(files) {
+        var btn = $('#files-upload-dropzone .btn-upload'),
+        btnOriginal = btn.html();
+        btn.css({width:btn.css('width')})
+            .html('<i class="icon-spin icon-spinner"></i>');
 
-            var data = new FormData(),
-                form = $(this),
-                btn = form.find('button');
-            
-            form.find('input').each(function(){
-                if (this.name){
-                    data.append(this.name, this.files ? this.files[0] : this.value);
-                }
-            });
-
-            btn.css({width:btn.css('width')})
-                .html('<i class="icon-spin icon-spinner"></i>');
+        for(var i = 0; i < files.length; i++) {
+            var data = new FormData();
+            data.append('uploadFile', files[i]);
+            data.append('fileName', files[i].name);
 
             $.ajax({
                 url: '@routes.AdventureFileController.uploadFile(adv.getId())',
@@ -132,23 +95,17 @@
                 contentType: false,
                 processData: false,
                 type: 'POST',
-                success:  function (data) {
+                success:  function (result) {
                     btn.css({width:""})
-                        .html('Upload file');
-                    form[0].reset();
+                        .html(btnOriginal);
+                    loadFiles();
                 }
             });
+        }
+    }
 
-            return false;
-        }).find('button').click(function(){
-            $(this).parents('form').submit();
-            return false;
-        });
-
-        $('form.form-file a').click(function(){
-            $(this).parents('form')[0].reset();
-            return false;
-        });
+    function loadFiles() {
+        $('.files-loading').show();
 
         $.get('@routes.AdventureFileController.listFiles(adv.getId)', function (files) {
             $('#files-list tbody').empty();
@@ -164,10 +121,7 @@
 
             $('.files-loading').hide();
         });
-
-
-    });
-
+    }
 
 
     function renderFile(data, replace) {
