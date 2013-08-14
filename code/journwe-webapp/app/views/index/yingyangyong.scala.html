@@ -321,10 +321,25 @@
     $('document').ready(function () {$('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));});
 
     function addTime() {
-        var id = 'time-item-' + $('#time-add-input-start').val() + '-' +  $('#time-add-input-end').val();
-        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + $('#time-add-input-start').val() + ',' + $('#time-add-input-end').val() + '"><span class="label"><i class="icon-time"></i> ' + $('#time-add-input-start').val() + ' to ' + $('#time-add-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
-        $('#time-add-input-start').val('');
-        $('#time-add-input-end').val('');
+
+        var start = $('#time-add-input-start'),
+            end = $('#time-add-input-end');
+
+        if (!start.val()){
+            start.focus();
+            return false;
+        }
+
+        if (!end.val()){
+            end.focus();
+            return false;
+        }
+
+        var id = 'time-item-' + start.val() + '-' + end.val();
+        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label"><i class="icon-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+
+        start.val('');
+        end.val('');
     }
 
 </script>
