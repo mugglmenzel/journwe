@@ -38,6 +38,8 @@ public class AdventurePlaceController extends Controller {
     public static Result getPlaces(String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
+        String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
+
         List<ObjectNode> places = new ArrayList<ObjectNode>();
         for (PlaceOption po : new PlaceOptionDAO().all(advId)) {
             ObjectNode node = Json.newObject();
@@ -51,11 +53,12 @@ public class AdventurePlaceController extends Controller {
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getOptionId())));
             node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(po.getOptionId())));
-
+            if (favId != null && po.getPlaceId().equals(favId)){
+                node.put("favorite", true);
+            }
             places.add(node);
         }
 
-        String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
 
         ObjectNode result = Json.newObject();
         result.put("places", Json.toJson(places));

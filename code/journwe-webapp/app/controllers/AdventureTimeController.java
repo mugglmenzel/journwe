@@ -45,6 +45,7 @@ public class AdventureTimeController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getTimes(String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
 
         List<ObjectNode> times = new ArrayList<ObjectNode>();
         for (TimeOption to : new TimeOptionDAO().all(advId)) {
@@ -58,11 +59,11 @@ public class AdventureTimeController extends Controller {
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(to.getOptionId())));
             node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(to.getOptionId())));
-
+            if (favId != null && to.getTimeId().equals(favId)){
+                node.put("favorite", true);
+            }
             times.add(node);
         }
-
-        String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
 
         ObjectNode result = Json.newObject();
         result.put("times", Json.toJson(times));

@@ -1,9 +1,17 @@
 @(adv: models.adventure.Adventure)
 
-<div id="places-favorite-place" style="font-size: 20px; margin-bottom: 10px;">
-    <i id="places-favorite-place-icon" class="icon-spin icon-spinner"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
-</div>
+<div class="clearfix">
+    <div id="places-favorite-place" class="pull-left" style="font-size: 20px; margin-bottom: 10px;">
+        <i id="places-favorite-place-icon" class="icon-spin icon-spinner"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
+    </div>
 
+    <div class="pull-right btn-close-place stash">
+        @Messages("adventure.general.voting")
+        <div class="switch">
+            <input id="places-voting-active-switch" type="checkbox" @if(adv.getPlaceVoteOpen){checked="checked"}>
+        </div>
+    </div>
+</div>
 <table id="places-list" class="table table-striped table-hover stash">
     <thead>
         <tr>
@@ -25,14 +33,6 @@
 
 <div class="places-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
 
-
-<div class="pull-right" style="position: relative; top: 1px;">
-    @Messages("adventure.general.voting")
-    <div class="switch">
-        <input id="places-voting-active-switch" type="checkbox" @if(adv.getPlaceVoteOpen){checked="checked"}>
-    </div>
-</div>
-
 <div id="place-add-form">
     <div class="row">
         <div class="input-group col-8" style="margin-bottom: 10px;">
@@ -52,7 +52,7 @@
 
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
-        <td><button class="btn" onclick="setFavoritePlaceOption('{%=o.placeId%}')"><i class="icon-star"></i></button></td>
+        <td><button class="btn {%=o.favorite?'btn-success':''%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
         <td><em>{%=o.address%}</em></td>
         <td>
             <div class="btn-group">
@@ -110,12 +110,17 @@
     }
 
 
-    function setFavoritePlaceOption(optionId) {
-    $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
-    $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
-    $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
-    $('#places-favorite-place-name').html(data.address);
-    });
+    function setFavoritePlaceOption(optionId, el) {
+        $('#places-list td:first-child .btn-success').removeClass('btn-success');
+        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
+        $(el).find('i').removeClass("icon-star").addClass("icon-spin icon-spinner");
+        $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
+            $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
+            $(el).find('i').removeClass("icon-spin icon-spinner").addClass("icon-star");
+            $('#places-favorite-place-name').html(data.address);
+            $('.btn-close-place').show();
+            $(el).addClass('btn-success');
+        });
     }
 
     function renderPlaceOption(data, replace) {
@@ -143,12 +148,15 @@
 
     $('document').ready(function (){
         initialize();
+        
+
         $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
+
         $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (result) {
 
 
             $('#places-favorite-place-name').html(result.favoritePlace != "" ? result.favoritePlace.address : "No favorite yet");
-
+            $('.btn-close-place').toggle(!!result.favoritePlace);
 
             $('#places-list tbody').empty();
             for(var id in result.places) {

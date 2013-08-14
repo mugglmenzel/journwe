@@ -8,14 +8,16 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
 
-<div id="times-favorite-time" style="font-size: 20px; margin-bottom: 10px;">
-    <i id="times-favorite-time-icon" class="icon-spin icon-spinner"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name"></span></em>
-</div>
+<div class="clearfix">
+    <div id="times-favorite-time" style="font-size: 20px; margin-bottom: 10px;" class="pull-left">
+        <i id="times-favorite-time-icon" class="icon-spin icon-spinner"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name"></span></em>
+    </div>
 
-<div class="pull-right">
-    @Messages("adventure.general.voting")
-    <div class="switch">
-        <input id="times-voting-active-switch" type="checkbox" @if(adv.getTimeVoteOpen){checked="checked"}>
+    <div class="pull-right btn-close-time stash">
+        @Messages("adventure.general.voting")
+        <div class="switch">
+            <input id="times-voting-active-switch" type="checkbox" @if(adv.getTimeVoteOpen){checked="checked"}>
+        </div>
     </div>
 </div>
 
@@ -45,21 +47,23 @@
 
         <div class="input-group col-5">
             <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start")</span>
-            <input class="journwe-date form-control" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="Start Date" style="max-width: 200px;" required="required"/>
+            <input class="journwe-date form-control" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="Start Date" style="" required="required"/>
         </div>
         <div class="input-group col-5">
             <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end")</span>
-            <input class="journwe-date form-control" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="End Date" style="max-width: 200px;" required="required"/>
+            <input class="journwe-date form-control" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="End Date" style="" required="required"/>
         </div>
 
-        <button id="time-add-button" class="btn btn-primary col-1"><i class="icon-plus"></i></button>
+        <div class="col-2 text-right">
+            <button id="time-add-button" class="btn btn-primary"><i class="icon-plus"></i></button>
+        </div>
 
 </div>
 
 
     <script type="text/x-tmpl" id="time-template">
         <tr id="timeoption-item-{%=o.timeId%}">
-            <td><button class="btn" onclick="setFavoriteTimeOption('{%=o.timeId%}')"><i class="icon-star"></i></button></td>
+            <td><button class="btn {%=o.favorite?'btn-success':''%}" onclick="setFavoriteTimeOption('{%=o.timeId%}', this)"><i class="icon-star"></i></button></td>
             <td><em>{%=formatDate(o.startDate)%} - {%=formatDate(o.endDate)%}</em></td>
             <td>
                 <div class="btn-group">
@@ -90,31 +94,43 @@
        });
         });
 
-        function setFavoriteTimeOption(optionId) {
-        $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
-        $.post('@routes.AdventureTimeController.setFavoriteTime(adv.getId)', {favoriteTimeId: optionId}, function (data) {
-        $('#times-favorite-time-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
-        $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
-        });
+        function setFavoriteTimeOption(optionId, el) {
+            $('#times-list td:first-child .btn-success').removeClass('btn-success');
+            $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
+            $(el).find('i').removeClass("icon-star").addClass("icon-spin icon-spinner");
+            $.post('@routes.AdventureTimeController.setFavoriteTime(adv.getId)', {favoriteTimeId: optionId}, function (data) {
+                $('#times-favorite-time-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
+                $(el).find('i').removeClass("icon-spin icon-spinner").addClass("icon-star");
+                $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
+                $(el).addClass('btn-success');
+                $('.btn-close-time').show();
+            });
         }
 
         $('#time-add-button').on('click', function() {
-        $(this).html('<i class="icon-spin icon-spinner"></i>');
-        $.post('@routes.AdventureTimeController.addTime(adv.getId)', { startDate: $('#time-add-form input[name=startDate]').val(), endDate: $('#time-add-form input[name=endDate]').val()}, function(res) {
-        renderTimeOption(res);
-        $('#time-add-form input[name=name]').val("");
-        $('#time-add-form input[name=startDate]').val("");
-        $('#time-add-form input[name=endDate]').val("");
-        $('#time-add-button').html('<i class="icon-plus"></i>');
-        $('#times-list').show();
-        });
+
+            var start = $('#time-add-form input[name=startDate]'),
+                end = $('#time-add-form input[name=endDate]');
+
+            if (!start.val()){ start.focus(); return false; }
+            if (!end.val()){ end.focus(); return false; }
+
+            $(this).html('<i class="icon-spin icon-spinner"></i>');
+            $.post('@routes.AdventureTimeController.addTime(adv.getId)', { startDate: start.val(), endDate: end.val()}, function(res) {
+                renderTimeOption(res);
+                $('#time-add-form input[name=name]').val("");
+                $('#time-add-form input[name=startDate]').val("");
+                $('#time-add-form input[name=endDate]').val("");
+                $('#time-add-button').html('<i class="icon-plus"></i>');
+                $('#times-list').show();
+            });
         });
 
         $('document').ready(function (){
             $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
             $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (result) {
             $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "No favorite yet");
-
+            $('.btn-close-time').toggle(!!result.favoriteTime);
 
             $('#times-list tbody').empty();
             for(var id in result.times) {
