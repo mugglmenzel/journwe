@@ -8,10 +8,7 @@ import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
 import models.Inspiration;
-import models.adventure.Adventure;
-import models.adventure.AdventureShortname;
-import models.adventure.Adventurer;
-import models.adventure.EAdventurerParticipation;
+import models.adventure.*;
 import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
@@ -121,6 +118,12 @@ public class AdventurePeopleController extends Controller {
         }
         advr.setParticipationStatus(EAdventurerParticipation.GOING);
         new AdventurerDAO().save(advr);
+
+        AdventureAuthorization authorization = new AdventureAuthorization();
+        authorization.setAdventureId(advId);
+        authorization.setUserId(usr.getId());
+        authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
+        new AdventureAuthorizationDAO().save(authorization);
 
 
         ObjectNode result = (ObjectNode) Json.toJson(advr);

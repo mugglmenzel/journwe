@@ -55,7 +55,7 @@ case EAdventurerParticipation.APPLICANT => {}
     @advrDAO.all(adv.getId()).filter(!_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).map{ advr =>
         @defining(new UserDAO().get(advr.getUserId())) { user =>
     <div id="adventurer-state-@user.getId" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
-        <img style="margin: 0px;" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
+        <img style="margin: 0px;" title="@user.getName" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
         <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
             <div style="line-height: 10px;">@user.getName().replaceAll(" [^ ]*$", "")</div>
             <div class="overlay text-center">
@@ -71,13 +71,13 @@ case EAdventurerParticipation.APPLICANT => {}
     @advrDAO.all(adv.getId()).filter(_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).map{ advr =>
         @defining(new UserDAO().get(advr.getUserId())) { user =>
             <div id="adventurer-state-@user.getId" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
-                <img style="margin: 0px;" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
+                <img style="margin: 0px;" title="@user.getName" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
                 <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
                     <div style="line-height: 10px;">@user.getName().replaceAll(" [^ ]*$", "")</div>
                     <div class="overlay text-center">
                         <span class="label @cssForStatus(advr.getParticipationStatus())" title="Status" style="display: inline-block; width: 100%;">@advr.getParticipationStatus()</span>
                         @if(!status.equals(EAdventurerParticipation.APPLICANT) && JournweAuthorization.canAcceptAdventurerApplicants(adv.getId)){
-                        <button class="btn btn-primary btn-adopt" href="@routes.AdventurePeopleController.adopt(adv.getId(),advr.getUserId())">Adopt</button>
+                        <button class="btn btn-primary btn-small btn-adopt" href="@routes.AdventurePeopleController.adopt(adv.getId(),advr.getUserId())">Adopt</button>
                         }
                     </div>
                 </div>
@@ -189,22 +189,15 @@ case EAdventurerParticipation.APPLICANT => {}
             $.post(el.attr('href'), function(json){
                 var state = json.participationStatus;
 
-                el.css({width:""})
-                    .html(html);
+                /*el.css({width:""})
+                    .html(html);*/
 
-                el.parents('tr').fadeOut(function(){
-                    if ($(this).parent().find('tr').lenght <= 1){
-                        $(this).parents('table').remove();
-                    } else {
-                        $(this).remove();
-                    }
-                });
-
-                $('.table-adventurers tbody').append('<tr class="'+conf[state]+'"><td>'+(json.userName||json.userId)+'</td><td class="text-center">'+state+'</td></tr>');
+                window.location.reload();
 
             });
             return false;
         });
+
     });
 </script>
 
