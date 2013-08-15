@@ -318,10 +318,11 @@
 
 
     $('document').ready(function () {
-        $(".journwe-date").datepicker().on('changeDate', function(){$(".journwe-date").datepicker('hide');});
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        $("#time-add-input-start").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end" ).datepicker('setStartDate', e.date); $("#time-add-input-start").datepicker('hide');});
 
-        $('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));
-
+        $("#time-add-input-end").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end").datepicker('hide');});
     });
 
     function addTime() {
