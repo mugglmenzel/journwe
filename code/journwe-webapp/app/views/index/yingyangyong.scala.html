@@ -229,7 +229,6 @@
 
         resetBounds();
 
-        $(".journwe-date").datepicker();
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
@@ -318,7 +317,12 @@
 
 
 
-    $('document').ready(function () {$('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));});
+    $('document').ready(function () {
+        $(".journwe-date").datepicker().on('changeDate', function(){$(".journwe-date").datepicker('hide');});
+
+        $('#time-add-input-start').attr('min', new Date().toJSON().slice(0,10));
+
+    });
 
     function addTime() {
 

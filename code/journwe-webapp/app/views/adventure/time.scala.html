@@ -87,12 +87,6 @@
     </script>
 
     <script type="text/javascript">
-        $(".journwe-date").datepicker();
-
-        $('document').ready(function () {
-        $.get('@routes.AdventureTimeController.getFavoriteTime(adv.getId)', function (data) {
-       });
-        });
 
         function setFavoriteTimeOption(optionId, el) {
             $('#times-list td:first-child .btn-success').removeClass('btn-success');
@@ -126,26 +120,28 @@
             });
         });
 
-        $('document').ready(function (){
+        $(document).ready(function (){
+            $(".journwe-date").datepicker().on('changeDate', function(){$(".journwe-date").datepicker('hide');});
+
             $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
             $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (result) {
-            $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "No favorite yet");
-            $('.btn-close-time').toggle(!!result.favoriteTime);
+                $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "No favorite yet");
+                $('.btn-close-time').toggle(!!result.favoriteTime);
 
-            $('#times-list tbody').empty();
-            for(var id in result.times) {
-                renderTimeOption(result.times[id])
-            }
-            if (result.times.length){
-                $('#times-list').show();
-            } else {
-                $('#times-list').hide();
-            }
+                $('#times-list tbody').empty();
+                for(var id in result.times) {
+                    renderTimeOption(result.times[id])
+                }
+                if (result.times.length){
+                    $('#times-list').show();
+                } else {
+                    $('#times-list').hide();
+                }
 
-            $('.times-loading').hide();
-            $('#times-favorite-time-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
+                $('.times-loading').hide();
+                $('#times-favorite-time-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
 
-            updateTimeVoteOpen(@adv.getTimeVoteOpen)
+                updateTimeVoteOpen(@adv.getTimeVoteOpen)
             });
         });
 
@@ -167,46 +163,46 @@
 
 
         $('#times-voting-active-switch').on('change', function () {
-        $.post('@routes.AdventureController.updateTimeVoteOpen(adv.getId)', {voteOpen: $('#times-voting-active-switch').prop('checked')}, updateTimeVoteOpen);
+            $.post('@routes.AdventureController.updateTimeVoteOpen(adv.getId)', {voteOpen: $('#times-voting-active-switch').prop('checked')}, updateTimeVoteOpen);
         });
 
         function updateTimeVoteOpen(data) {
 
-        if(data) {
-        $('#times-list button').prop('disabled', false);
-        $('#time-add-form').fadeIn();
-        } else {
-        $('#times-list button').prop('disabled', true);
-        $('#time-add-form').fadeOut();
-        }
+            if(data) {
+            $('#times-list button').prop('disabled', false);
+            $('#time-add-form').fadeIn();
+            } else {
+            $('#times-list button').prop('disabled', true);
+            $('#time-add-form').fadeOut();
+            }
 
         }
 
 
-            function voteTime(vote, optId) {
+        function voteTime(vote, optId) {
 
-        $('#timeoption-item-'+optId+' .dropdown-toggle')
-            .html('<i class="icon-spin icon-spinner"></i>');
-        $.ajax({
-        url: '@routes.AdventureTimeController.vote(adv.getId, "")' + optId,
-        data: {
-        vote: vote
-        },
-        type: 'PUT',
-        success: function(res) {
-            renderTimeOption(res, $('#timeoption-item-' + res.timeId));
-            $('#timeoption-item-'+res.timeId+' .dropdown-toggle')
-                .html('<i class="icon-pencil"></i>');
-        }
-        });
+            $('#timeoption-item-'+optId+' .dropdown-toggle')
+                .html('<i class="icon-spin icon-spinner"></i>');
+            $.ajax({
+            url: '@routes.AdventureTimeController.vote(adv.getId, "")' + optId,
+            data: {
+            vote: vote
+            },
+            type: 'PUT',
+            success: function(res) {
+                renderTimeOption(res, $('#timeoption-item-' + res.timeId));
+                $('#timeoption-item-'+res.timeId+' .dropdown-toggle')
+                    .html('<i class="icon-pencil"></i>');
+            }
+            });
         }
 
         function deleteTime(optId, el) {
-        $(el).html('<i class="icon-spin icon-spinner"></i>');
-        $.ajax({url: '@routes.AdventureTimeController.deleteTime(adv.getId, "")' + optId, type: 'DELETE', success: function () {
-            $('#timeoption-item-' + optId).fadeOut(function () {$('#timeoption-item-' + optId).remove();});
-        }
-        });
+            $(el).html('<i class="icon-spin icon-spinner"></i>');
+            $.ajax({url: '@routes.AdventureTimeController.deleteTime(adv.getId, "")' + optId, type: 'DELETE', success: function () {
+                $('#timeoption-item-' + optId).fadeOut(function () {$('#timeoption-item-' + optId).remove();});
+            }
+            });
         }
 
 </script>
