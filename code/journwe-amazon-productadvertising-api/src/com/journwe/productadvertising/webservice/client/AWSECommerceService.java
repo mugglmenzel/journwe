@@ -3,12 +3,20 @@ package com.journwe.productadvertising.webservice.client;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.WebServiceFeature;
+import javax.xml.ws.handler.*;
+import javax.xml.ws.handler.soap.SOAPHandler;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 
 /**
@@ -42,31 +50,30 @@ public class AWSECommerceService
         super(__getWsdlLocation(), AWSECOMMERCESERVICE_QNAME);
     }
 /*
-
-    public AWSECommerceService(WebServiceFeature... features) {
+    public AWSECommerceService(WebServiceFeature features) {
         super(__getWsdlLocation(), AWSECOMMERCESERVICE_QNAME, features);
     }
-*/
+
 
     public AWSECommerceService(URL wsdlLocation) {
         super(wsdlLocation, AWSECOMMERCESERVICE_QNAME);
     }
-/*
+
 
     public AWSECommerceService(URL wsdlLocation, WebServiceFeature... features) {
         super(wsdlLocation, AWSECOMMERCESERVICE_QNAME, features);
     }
-*/
+
 
     public AWSECommerceService(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
     }
-/*
+
 
     public AWSECommerceService(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
         super(wsdlLocation, serviceName, features);
     }
-*/
+      */
 
     /**
      * 

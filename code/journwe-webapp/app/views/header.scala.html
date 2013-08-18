@@ -106,10 +106,12 @@
                         @defining(new CategoryDAO()){catDAO =>
 
                             @for(cat <- catDAO.allSubcategory(Category.SUPER_CATEGORY)) {
-                                @if(cat != null && catDAO.countInspirationsHierarchy(cat.getId) > 0){
-                                <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
-                                    @cat.getName() <span class="badge badge-info pull-right">@catDAO.countInspirationsHierarchy(cat.getId())</span></a>
-                                </li>
+                                @defining(catDAO.countInspirationsHierarchy(cat.getId)){ count =>
+                                    @if(cat != null && count > 0){
+                                    <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
+                                        @cat.getName() <span class="badge badge-info pull-right">@count</span></a>
+                                    </li>
+                                    }
                                 }
                             }
 

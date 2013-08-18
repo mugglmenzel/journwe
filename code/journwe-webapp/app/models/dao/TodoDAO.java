@@ -27,18 +27,16 @@ public class TodoDAO extends CommonRangeEntityDAO<Todo> {
     }
 
     public List<Todo> all(String advId) {
-
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
-        Todo t = new Todo();
-        t.setAdventureId(advId);
-        query.setHashKeyValues(t);
-        return pm.query(clazz, query);
-
-        /*
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.scan(Todo.class, scan);
-        */
+        return pm.scan(clazz, scan);
+    }
+
+    public List<Todo> all(String userId, String advId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
+        scan.addFilterCondition("userId", new Condition().withAttributeValueList(new AttributeValue(userId)).withComparisonOperator(ComparisonOperator.EQ));
+        return pm.scan(clazz, scan);
     }
 
     public Map<String, List<Todo>> allByUser(String advId) {
