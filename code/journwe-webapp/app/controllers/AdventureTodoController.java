@@ -53,7 +53,7 @@ public class AdventureTodoController extends Controller {
             new AWSECommerceService().getAWSECommerceServicePort().itemSearch(EMarketplaceDomain.US.getMarketPlaceDomain(), ConfigFactory.load().getString("aws.accessKey"), "jouaufinsabe-21", "Single", "False", shared, new ArrayList<ItemSearchRequest>(), opOut, itemsOut);
         }
 
-        //return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
+        return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
