@@ -1,7 +1,11 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.journwe.productadvertising.webservice.client.*;
+import com.journwe.productadvertising.webservice.client.enums.EMarketplaceDomain;
+import com.typesafe.config.ConfigFactory;
 import models.Inspiration;
+import models.adventure.checklist.Todo;
 import models.auth.SecuredBetaUser;
 import models.adventure.Adventure;
 import models.adventure.Adventurer;
@@ -15,6 +19,10 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.adventure.getTodos;
+
+import javax.xml.ws.Holder;
+import java.util.ArrayList;
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -35,7 +43,17 @@ public class AdventureTodoController extends Controller {
         Inspiration ins = Inspiration.fromId(adv.getInspirationId());
         ins = ins != null ? new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()) : ins;
 
-        return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
+
+
+        for(models.adventure.checklist.Todo todo : new TodoDAO().all(advId)) {
+            ItemSearchRequest shared = new ItemSearchRequest();
+            shared.setKeywords(todo.getTitle());
+            Holder<OperationRequest> opOut = new Holder<OperationRequest>();
+            Holder<List<Items>> itemsOut = new Holder<List<Items>>();
+            new AWSECommerceService().getAWSECommerceServicePort().itemSearch(EMarketplaceDomain.US.getMarketPlaceDomain(), ConfigFactory.load().getString("aws.accessKey"), "jouaufinsabe-21", "Single", "False", shared, new ArrayList<ItemSearchRequest>(), opOut, itemsOut);
+        }
+
+        //return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)

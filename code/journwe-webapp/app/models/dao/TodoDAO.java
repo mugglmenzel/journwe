@@ -1,5 +1,6 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -26,9 +27,18 @@ public class TodoDAO extends CommonRangeEntityDAO<Todo> {
     }
 
     public List<Todo> all(String advId) {
+
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        Todo t = new Todo();
+        t.setAdventureId(advId);
+        query.setHashKeyValues(t);
+        return pm.query(clazz, query);
+
+        /*
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("adventureId", new Condition().withAttributeValueList(new AttributeValue(advId)).withComparisonOperator(ComparisonOperator.EQ));
         return pm.scan(Todo.class, scan);
+        */
     }
 
     public Map<String, List<Todo>> allByUser(String advId) {
