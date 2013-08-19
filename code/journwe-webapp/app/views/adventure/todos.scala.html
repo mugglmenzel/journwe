@@ -66,18 +66,18 @@
 
     <script type="text/x-tmpl" id="todo-template">
         <tr class="status-{%=o.todo.status%} todo-entry" data-id="{%=o.todo.id%}">
-            <td><a href="#" class="btn btn-primary btn-check"><i class="icon-check{% if(o.todo.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></a></td>
+            <td><button class="btn btn-primary btn-check"><i class="icon-check{% if(o.todo.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></button></td>
             <td style="width:100%;">{%=o.todo.title%}</td>
             <td><ul>{% for (var i in o.productAdvertisingURLs) { %}<li><a href="{%=o.productAdvertisingURLs[i]%}" target="_blank">At Amazon</a></li>{% } %}</ul></td>
-            <td class="text-center"><a href="#" class="btn btn-danger btn-delete"><i class="icon-trash"></i></a></td>
+            <td class="text-center"><button class="btn btn-danger btn-delete"><i class="icon-trash"></i></button></td>
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-adventurer-template">
         <tr class="status-{%=o.todo.status%} todo-entry" data-id="{%=o.todo.id%}">
-            <td><a href="#" class="btn btn-primary btn-check"><i class="icon-check{% if(o.todo.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></a></td>
+            <td><i class="icon-check{% if(o.todo.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></td>
             <td style="width:100%;">{%=o.todo.title%}</td>
             <td><ul>{% for (var i in o.productAdvertisingURLs) { %}<li><a href="{%=o.productAdvertisingURLs[i]%}" target="_blank">At Amazon</a></li>{% } %}</ul></td>
-            <td class="text-center"><a href="#" class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></a></td>
+            <td class="text-center"><button class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></button></td>
         </tr>
     </script>
 
@@ -86,30 +86,32 @@
 
             $(document).ready(function () {
 
-                 loadUserTodos();
+                loadUserTodos();
+
 
             });
 
             function loadUserTodos() {
-                loadTodos('@advr.getUserId', '#todos-list', 'todo-template');
+                loadTodos('@advr.getUserId', '#todos-list', 'todo-template', activateUserButtonListener);
             }
 
             function loadAdventurerTodos(advrId) {
                 $('#todos-adventurers-selection > div').css('border', '');
                 $('#todos-adventurer-' + advrId).css('border',  '3px solid green');
-                loadTodos(advrId, '#todos-adventurers-list', 'todo-adventurer-template');
+                loadTodos(advrId, '#todos-adventurers-list', 'todo-adventurer-template', activateAdventurerButtonListener);
             }
 
-            function loadTodos(userId, target, template) {
+            function loadTodos(userId, target, template, activator) {
                 $.get('@routes.AdventureTodoController.getTodos(adv.getId, "")' + userId, function (results){
                     $(target + ' tbody').empty();
 
                     for (var todo in results)
                         renderTodo(results[todo], target, template);
 
-                    if (results.length)
+                    if (results.length) {
                         $(target).show();
-                    else
+                        activator();
+                    } else
                         $(target).hide();
                 });
             }
@@ -119,6 +121,7 @@
                     replace.replaceWith(tmpl(template, data)).fadeIn();
                 else
                     $(target + ' tbody').append(tmpl(template, data));
+
 
             }
 
@@ -142,67 +145,71 @@
         });
 
 
-        $('table.table-my-todos').on('click', '.btn-check', function() {
 
-            var input = $(this),
-                tr = input.parents('.todo-entry'),
-                id = tr.attr('data-id'),
-                i = tr.find('.btn-check i'),
-                complete = i.is('.icon-check-empty');
+        function activateUserButtonListener() {
+            $('#todos-list tbody .btn-check').on('click', function() {
 
-            i.removeClass('icon-check, icon-check-empty').addClass('icon-spin icon-spinner');
+                var input = $(this),
+                    tr = input.parents('.todo-entry'),
+                    id = tr.attr('data-id'),
+                    i = tr.find('.btn-check i'),
+                    complete = i.is('.icon-check-empty');
 
-            $.ajax({
-                url: '@routes.AdventureTodoController.setTodo(adv.getId(), "")' + id,
-                data: {
-                    status: complete ? "@EStatus.COMPLETE" : "@EStatus.NEW"
-                },
-                type: 'PUT',
-                success: function(res) {
-                    tr.get(0).className = 'status-' + res.todo.status + ' todo-entry';
-                    i.removeClass('icon-spin icon-spinner').addClass(res.todo.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
-                }
+                i.removeClass('icon-check, icon-check-empty').addClass('icon-spin icon-spinner');
+
+                $.ajax({
+                    url: '@routes.AdventureTodoController.setTodo(adv.getId(), "")' + id,
+                    data: {
+                        status: complete ? "@EStatus.COMPLETE" : "@EStatus.NEW"
+                    },
+                    type: 'PUT',
+                    success: function(res) {
+                        tr.get(0).className = 'status-' + res.todo.status + ' todo-entry';
+                        i.removeClass('icon-spin icon-spinner').addClass(res.todo.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
+                    }
+                });
+
+                return false;
             });
 
-            return false;
-        });
+            $('#todos-list tbody .btn-delete').on('click', function(e) {
+                $(this).html('<i class="icon-spin icon-spinner"></i>');
+                e.preventDefault();
 
-        $('table.table-my-todos').on('click', 'a.btn-delete', function(e) {
-            $(this).html('<i class="icon-spin icon-spinner"></i>');
-            e.preventDefault();
+                var a = $(this),
+                    tr = a.parents('.todo-entry'),
+                    id = tr.data('id');
 
-            var a = $(this),
-                tr = a.parents('.todo-entry'),
-                id = tr.attr('data-id');
+                $.ajax({
+                    url: '@routes.AdventureTodoController.deleteTodo(adv.getId(), "")' + id,
+                    type: 'DELETE',
+                    success: function(res) {
+                        tr.fadeOut(function() {
+                            tr.remove();
+                        });
+                    }
+                });
 
-            $.ajax({
-                url: '@routes.AdventureTodoController.deleteTodo(adv.getId(), "")' + id,
-                type: 'DELETE',
-                success: function(res) {
-                    tr.fadeOut(function() {
-                        tr.remove();
-                    });
-                }
             });
+        }
 
-        });
+        function activateAdventurerButtonListener() {
+            $('#todos-adventurers-list tbody .btn-copy').on('click', function(e) {
+                e.preventDefault();
 
-        $('.btn-copy')
-        .on('click', function(e) {
-            e.preventDefault();
+                var btn = $(this),
+                    tr = btn.parents('.todo-entry'),
+                    td = tr.find('td'),
+                    title = $(td[1]).text();
 
-            var btn = $(this),
-                tr = btn.parents('tr'),
-                td = tr.find('td'),
-                title = $(td[1]).text();
+                btn.html('<i class="icon-spin icon-spinner"></i>');
 
-            btn.html('<i class="icon-spin icon-spinner"></i>');
-
-            $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {title: title}, function(res) {
+                $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {title: title}, function(res) {
                     $('.table-my-todos tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
                     btn.html('<i class="icon-plus"></i>');
+                });
             });
-        });
+        }
 
     </script>
 
