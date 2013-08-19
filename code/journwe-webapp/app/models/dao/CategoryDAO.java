@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import models.Inspiration;
 import models.category.Category;
+import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
 import models.dao.common.CommonEntityDAO;
 import play.Logger;
@@ -54,30 +55,18 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
         return pm.count(Inspiration.class, query);
     }
 
+
+
     public Integer countInspirationsHierarchy(String id) {
-        long start = new Date().getTime();
-        Logger.debug("Starting count for " + id + " at " + start);
         Integer sum = countInspirations(id);
-        ExecutorService exec = Executors.newCachedThreadPool();
-        List<Callable<Integer>> callables = new ArrayList<Callable<Integer>>();
-        for (final Category cat : allSubcategory(id))
-            if (cat != null) callables.add(new Callable<Integer>() {
-                @Override
-                public Integer call() throws Exception {
-                    return countInspirationsHierarchy(cat.getId());  //To change body of implemented methods use File | Settings | File Templates.
-                }
-            });
-        try {
-            List<Future<Integer>> futures = exec.invokeAll(callables);
-            for (Future<Integer> f : futures)
-                sum += f.get();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        long end = new Date().getTime();
-        Logger.debug("Ending count for " + id + " at " + end + ", took " + (end - start));
+        for (Category cat : allSubcategory(id))
+            if (cat != null) sum += countInspirationsHierarchy(cat.getId());
         return sum;
     }
+
+    public Integer countInspirationsHierarchyCached(String id) {
+        CategoryCount cc = new CategoryCountDAO().get(id);
+        return cc != null ? cc.getCount() : countInspirationsHierarchy(id);
+    }
+
 }

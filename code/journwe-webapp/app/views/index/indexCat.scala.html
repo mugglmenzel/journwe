@@ -12,7 +12,7 @@
         <h2><i class="icon-arrow-down"></i> Subcategories <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
         <div style="font-size: 20pt;">
             @for(subcat <- catDAO.allSubcategory(cat.getId)) {
-                 <a href="@routes.ApplicationController.categoryIndex(subcat.getId)"><span class="label label-info">@subcat.getName <span class="badge">@catDAO.countInspirationsHierarchy(subcat.getId)</span></span></a>
+                 <a href="@routes.ApplicationController.categoryIndex(subcat.getId)"><span class="label label-info">@subcat.getName <span class="badge">@catDAO.countInspirationsHierarchyCached(subcat.getId)</span></span></a>
             }
         </div>
 

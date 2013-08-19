@@ -3,6 +3,10 @@ import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
 import controllers.routes;
+import models.category.Category;
+import models.category.CategoryCount;
+import models.dao.CategoryCountDAO;
+import models.dao.CategoryDAO;
 import models.dao.NotificationDAO;
 import models.dao.UserDAO;
 import models.notifications.ENotificationFrequency;
@@ -95,6 +99,21 @@ public class Global extends GlobalSettings {
             }
         }, Akka.system().dispatcher());
 
+
+
+        Akka.system().scheduler().schedule(Duration.create(5, TimeUnit.SECONDS), Duration.create(1, TimeUnit.DAYS), new Runnable() {
+            @Override
+            public void run() {
+                Logger.debug("Updating Category Count Cache");
+                for(Category cat : new CategoryDAO().all()) {
+                    CategoryCount cc = new CategoryCount();
+                    cc.setCategoryId(cat.getId());
+                    cc.setCount(new CategoryDAO().countInspirationsHierarchy(cat.getId()));
+                    new CategoryCountDAO().save(cc);
+                }
+
+            }
+        }, Akka.system().dispatcher());
     }
 
 }
