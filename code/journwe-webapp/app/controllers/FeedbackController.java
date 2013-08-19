@@ -20,6 +20,7 @@ import java.util.Date;
 import static play.data.Form.form;
 import static play.mvc.Controller.flash;
 import static play.mvc.Controller.request;
+import static play.mvc.Http.HeaderNames.REFERER;
 import static play.mvc.Results.ok;
 import static play.mvc.Results.redirect;
 
@@ -42,7 +43,7 @@ public class FeedbackController {
         new FeedbackDAO().save(feedback);
         flash("success","Thanks!! Your feedback has been submitted successfully!");
 
-        return ApplicationController.index();
+        return redirect(Http.Context.current().request().getHeader(REFERER));
     }
 
 }
