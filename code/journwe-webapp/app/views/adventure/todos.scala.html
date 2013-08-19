@@ -2,171 +2,208 @@
 
 @import models.dao.TodoDAO
 @import models.dao.UserDAO
+@import models.dao.AdventurerDAO
 @import models.adventure.checklist.EStatus
+@import models.adventure.EAdventurerParticipation
 
-    @if(adv != null && advr != null) {
-@defining(advr.getUserId()) { user =>
-        @if(user != null) {
-@defining(new TodoDAO().allByUser(adv.getId())) { list =>
-<table class="table table-striped table-hover table-my-todos">
-    <thead>
-    <tr>
-        <th colspan="2">@Messages("adventure.todos.listheading")</th>
-        <th class="text-center">@Messages("adventure.general.listactions")</th>
-    </tr>
-    </thead>
-    <tbody>
-    @if(list.containsKey(user)){
-    @for(todo <- list.get(user)) {
-        <tr class="status-@todo.getStatus() todo-entry" data-id="@todo.getId()">
-            <td><a href="#" class="btn btn-primary btn-check"><i class="icon-check@if(todo.getStatus()!=EStatus.COMPLETE){-empty}"></i></a></td>
-            <td style="width:100%;">@todo.getTitle()</td>
-            <td class="text-center"><a href="#" class="btn btn-danger btn-delete"><i class="icon-trash"></i></td>
+@if(adv != null && advr != null) {
+    <table id="todos-list" class="table table-striped table-hover table-my-todos">
+        <thead>
+        <tr>
+            <th colspan="2">@Messages("adventure.todos.listheading")</th>
+            <th></th>
+            <th class="text-center">@Messages("adventure.general.listactions")</th>
         </tr>
-    }
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 
 
-<div class="row">
-    <div class="input-group col-6">
-        <input id="todo-title" type="text" placeholder="Add an important thing" class="form-control"/>
-        <div class="input-group-btn">
-            <button id="btn-add-todo" class="btn btn-primary" type="button"><i class="icon-plus"></i></button>
+    <div class="row">
+        <div class="input-group col-6">
+            <input id="todo-title" type="text" placeholder="Add an important thing" class="form-control"/>
+            <div class="input-group-btn">
+                <button id="btn-add-todo" class="btn btn-primary" type="button"><i class="icon-plus"></i></button>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="spacer30"></div>
+    <div class="spacer30"></div>
+    <h3>Adventurer's Todo Lists</h3>
 
-@for(usr <- list.keySet()) {
-@if(usr != null && usr != user){
-    @defining(new UserDAO().get(usr)) { userOfTodos =>
-        @if(userOfTodos != null){
-<table class="table table-striped table-hover">
-    <thead>
-    <tr>
-        <th colspan="2">@userOfTodos.getName()</th>
-        <th class="text-center">@Messages("adventure.general.listactions")</th>
-    </tr>
-    </thead>
-    <tbody>
-    @for(todo <- list.get(usr)) {
+    <div id="todos-adventurers-selection" style="overflow: hidden;">
+    @defining(new AdventurerDAO()){ advrDAO =>
+        @advrDAO.all(adv.getId()).filter(!_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).filter(!_.getUserId.equals(advr.getUserId)).zipWithIndex.map{ case(coadvr, idx) =>
+            @defining(new UserDAO().get(coadvr.getUserId())) { user =>
+                <div id="todos-adventurer-@user.getId" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
+                    <a onclick="loadAdventurerTodos('@coadvr.getUserId')">
+                        <img style="margin: 0px;" title="@user.getName" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
+                    </a>
+                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
+                        <div style="line-height: 10px;"><a onclick="loadAdventurerTodos('@coadvr.getUserId')">@user.getName().replaceAll(" [^ ]*$", "")</a></div>
+                    </div>
+                </div>
+                @if(idx == 0){<script>$(document).ready(function () {loadAdventurerTodos('@coadvr.getUserId');});</script>}
+            }
+        }
+    }
+    </div>
+
+    <table id="todos-adventurers-list" class="table table-striped table-hover">
+        <thead>
         <tr>
-            <td><i class="icon-check@if(todo.getStatus()!=EStatus.COMPLETE){-empty}" style="margin: 13px;"></i></td>
-            <td style="width:100%;">@todo.getTitle()</td>
+            <th colspan="2">@Messages("adventure.todos.listheading")</th>
+            <th></th>
+            <th class="text-center">@Messages("adventure.general.listactions")</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+
+    <script type="text/x-tmpl" id="todo-template">
+        <tr class="status-{%=o.todo.status%} todo-entry" data-id="{%=o.todo.id%}">
+            <td><a href="#" class="btn btn-primary btn-check"><i class="icon-check{% if(o.todo.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></a></td>
+            <td style="width:100%;">{%=o.todo.title%}</td>
+            <td><ul>{% for (var i in o.productAdvertisingURLs) { %}<li><a href="{%=o.productAdvertisingURLs[i]%}" target="_blank">At Amazon</a></li>{% } %}</ul></td>
+            <td class="text-center"><a href="#" class="btn btn-danger btn-delete"><i class="icon-trash"></i></a></td>
+        </tr>
+    </script>
+    <script type="text/x-tmpl" id="todo-adventurer-template">
+        <tr class="status-{%=o.todo.status%} todo-entry" data-id="{%=o.todo.id%}">
+            <td><a href="#" class="btn btn-primary btn-check"><i class="icon-check{% if(o.todo.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></a></td>
+            <td style="width:100%;">{%=o.todo.title%}</td>
+            <td><ul>{% for (var i in o.productAdvertisingURLs) { %}<li><a href="{%=o.productAdvertisingURLs[i]%}" target="_blank">At Amazon</a></li>{% } %}</ul></td>
             <td class="text-center"><a href="#" class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></a></td>
         </tr>
-    }
-    </tbody>
-</table>
-        }
-    }
-}
-}
+    </script>
 
-<script type="text/x-tmpl" id="todo-template">
-    <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}"> 
-        <td><a href="#" class="btn btn-primary btn-check"><i class="icon-check-empty"></i></a></td>
-        <td style="width:100%;">{%=o.title%}</td>
-        <td class="text-center"><a href="#" class="btn btn-danger btn-delete"><i class="icon-trash"></i></a></td>
-    </tr>
-</script>
-
-<script type="text/javascript">
-    $(function() {
-
-    $('#todo-title').on('keydown', function(e){
-        if (e.keyCode==13){
-            $('#btn-add-todo').click();
-        }
-    });
-
-    $('#btn-add-todo').on('click', function() {
-        $(this).html('<i class="icon-spin icon-spinner"></i>');
-        var btn = $(this),
-        fld = $('#todo-title');
-
-        $.post('@routes.AdventureTodoController.addTodo(adv.getId)', { title: fld.val() }, function(res) { 
-            $('.table-my-todos  tbody')
-                .append($(tmpl('todo-template', res).trim()).fadeIn());
-            fld.val("");
-            $('#btn-add-todo').html('<i class="icon-plus"></i>')
-        });
-    });
+    <script type="text/javascript">
 
 
-    $('table.table-my-todos').on('click', '.btn-check', function() {
+            $(document).ready(function () {
 
-        var input = $(this),
-            tr = input.parents('.todo-entry'),
-            id = tr.attr('data-id'),
-            i = tr.find('.btn-check i'),
-            complete = i.is('.icon-check-empty');
+                 loadUserTodos();
 
-        i.removeClass('icon-check, icon-check-empty').addClass('icon-spin icon-spinner');
+            });
 
-        $.ajax({
-            url: '@routes.AdventureTodoController.setTodo(adv.getId(), "")' + id,
-            data: {
-                status: complete ? "COMPLETE" : "NEW"
-            },
-            type: 'PUT',
-            success: function(res) {
-                tr.get(0).className = 'status-' + res.status + ' todo-entry';
-                i.removeClass('icon-spin icon-spinner').addClass(res.status == 'COMPLETE' ? 'icon-check' : 'icon-check-empty');
+            function loadUserTodos() {
+                loadTodos('@advr.getUserId', '#todos-list', 'todo-template');
+            }
+
+            function loadAdventurerTodos(advrId) {
+                $('#todos-adventurers-selection > div').css('border', '');
+                $('#todos-adventurer-' + advrId).css('border',  '3px solid green');
+                loadTodos(advrId, '#todos-adventurers-list', 'todo-adventurer-template');
+            }
+
+            function loadTodos(userId, target, template) {
+                $.get('@routes.AdventureTodoController.getTodos(adv.getId, "")' + userId, function (results){
+                    $(target + ' tbody').empty();
+
+                    for (var todo in results)
+                        renderTodo(results[todo], target, template);
+
+                    if (results.length)
+                        $(target).show();
+                    else
+                        $(target).hide();
+                });
+            }
+
+            function renderTodo(data, target, template, replace) {
+                if(replace)
+                    replace.replaceWith(tmpl(template, data)).fadeIn();
+                else
+                    $(target + ' tbody').append(tmpl(template, data));
+
+            }
+
+        $('#todo-title').on('keydown', function(e){
+            if (e.keyCode==13){
+                $('#btn-add-todo').click();
             }
         });
 
-        return false;
-    });
+        $('#btn-add-todo').on('click', function() {
+            $(this).html('<i class="icon-spin icon-spinner"></i>');
+            var btn = $(this),
+            fld = $('#todo-title');
 
-    $('table.table-my-todos').on('click', 'a.btn-delete', function(e) {
-        $(this).html('<i class="icon-spin icon-spinner"></i>');
-        e.preventDefault();
-
-        var a = $(this),
-            tr = a.parents('.todo-entry'),
-            id = tr.attr('data-id');
-
-    $.ajax({
-    url: '@routes.AdventureTodoController.deleteTodo(adv.getId(), "")' + id,
-    type: 'DELETE',
-    success: function(res) {
-    tr.fadeOut(function() {
-    tr.remove();
-    });
-    }
-    });
-
-    });
-
-    $('.btn-copy')
-    .on('click', function(e) {
-        e.preventDefault();
-
-        var btn = $(this),
-            tr = btn.parents('tr'),
-            td = tr.find('td'),
-            title = $(td[1]).text();
-
-        btn.html('<i class="icon-spin icon-spinner"></i>');
-
-        $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {
-            title: title
-            }, function(res) {
-                $('.table-my-todos tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
-                btn.html('<i class="icon-plus"></i>');
+            $.post('@routes.AdventureTodoController.addTodo(adv.getId)', { title: fld.val() }, function(res) {
+                $('.table-my-todos  tbody')
+                    .append($(tmpl('todo-template', res).trim()).fadeIn());
+                fld.val("");
+                $('#btn-add-todo').html('<i class="icon-plus"></i>')
             });
         });
 
 
-    });
+        $('table.table-my-todos').on('click', '.btn-check', function() {
 
+            var input = $(this),
+                tr = input.parents('.todo-entry'),
+                id = tr.attr('data-id'),
+                i = tr.find('.btn-check i'),
+                complete = i.is('.icon-check-empty');
 
-</script>
+            i.removeClass('icon-check, icon-check-empty').addClass('icon-spin icon-spinner');
 
-} }
+            $.ajax({
+                url: '@routes.AdventureTodoController.setTodo(adv.getId(), "")' + id,
+                data: {
+                    status: complete ? "@EStatus.COMPLETE" : "@EStatus.NEW"
+                },
+                type: 'PUT',
+                success: function(res) {
+                    tr.get(0).className = 'status-' + res.todo.status + ' todo-entry';
+                    i.removeClass('icon-spin icon-spinner').addClass(res.todo.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
+                }
+            });
+
+            return false;
+        });
+
+        $('table.table-my-todos').on('click', 'a.btn-delete', function(e) {
+            $(this).html('<i class="icon-spin icon-spinner"></i>');
+            e.preventDefault();
+
+            var a = $(this),
+                tr = a.parents('.todo-entry'),
+                id = tr.attr('data-id');
+
+            $.ajax({
+                url: '@routes.AdventureTodoController.deleteTodo(adv.getId(), "")' + id,
+                type: 'DELETE',
+                success: function(res) {
+                    tr.fadeOut(function() {
+                        tr.remove();
+                    });
+                }
+            });
+
+        });
+
+        $('.btn-copy')
+        .on('click', function(e) {
+            e.preventDefault();
+
+            var btn = $(this),
+                tr = btn.parents('tr'),
+                td = tr.find('td'),
+                title = $(td[1]).text();
+
+            btn.html('<i class="icon-spin icon-spinner"></i>');
+
+            $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {title: title}, function(res) {
+                    $('.table-my-todos tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
+                    btn.html('<i class="icon-plus"></i>');
+            });
+        });
+
+    </script>
+
 }
-    }
