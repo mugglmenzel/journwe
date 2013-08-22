@@ -1,6 +1,6 @@
 @(adv: models.adventure.Adventure)
 
-<div>Public? <div class="switch"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div> | <button class="btn btn-primary">@Messages("adventure.options.facebookpublish")</button> </div>
+<div>Public? <div class="switch"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div> | <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary">@Messages("adventure.options.facebookpublish")</button> </div>
 @if(adv.isPublish){
     <div><button class="btn btn-primary">@Messages("adventure.options.twitter")</button> | <button class="btn btn-primary">@Messages("adventure.options.facebooklike")</button> </div>
 }

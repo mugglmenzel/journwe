@@ -15,7 +15,12 @@ body, body * {
 	font-weight:300;
 }
 
-h1, h2, h3, h4, h1 small, h2 small, h3 small, h4 small {
+h1, h1 small {
+    font-weight:100;
+    margin-bottom: 20px;
+}
+
+h2, h3, h4, h2 small, h3 small, h4 small {
    font-weight:100;
    margin-bottom: 20px;
 }
