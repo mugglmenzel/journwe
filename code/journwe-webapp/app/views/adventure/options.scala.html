@@ -1,6 +1,21 @@
 @(adv: models.adventure.Adventure)
 
-<div>Public? <div class="switch"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div> | <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary">@Messages("adventure.options.facebookpublish")</button> </div>
-@if(adv.isPublish){
-    <div><button class="btn btn-primary">@Messages("adventure.options.twitter")</button> | <button class="btn btn-primary">@Messages("adventure.options.facebooklike")</button> </div>
-}
+<div class="row">
+    <div><i class="icon-link"></i> <a href="@adv.getShortURL">@adv.getShortURL</a></div>
+</div>
+<div class="row">
+    <div class="col-3"> Public? <div class="switch"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div></div>
+    <div class="col-3"> <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="icon-facebook"></i> @Messages("adventure.options.facebookpublish")</button> </div>
+    @if(adv.isPublish){
+    <div class="col-3">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-via="JournWe" data-lang="de" data-size="large" data-related="JournWe" data-hashtags="journwe">@Messages("adventure.options.twitter")</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </div>
+
+    }
+    <script>
+
+    </script>
+
+</div>
+

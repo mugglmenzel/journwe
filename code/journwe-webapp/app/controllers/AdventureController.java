@@ -21,6 +21,7 @@ import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.notifications.helper.AdventurerNotifier;
+import models.user.EUserRole;
 import models.user.User;
 import models.user.UserEmail;
 import models.user.UserSocial;
@@ -223,9 +224,13 @@ public class AdventureController extends Controller {
             shortURL = request().host().contains("localhost") ?
                     shortURL :
                     Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(shortURL)).getShortUrl();
+            adv.setShortURL(shortURL);
+
+            new AdventureDAO().save(adv);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         UserSocial us = new UserSocialDAO().findByUserId("facebook", usr.getId());
@@ -297,6 +302,16 @@ public class AdventureController extends Controller {
                 if (us != null) {
                     String fbUser = filledForm.data().get(key);
                     new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", fbUser);
+
+                    User invitee = new User();
+                    invitee.setRole(EUserRole.INVITEE);
+                    new UserDAO().save(invitee);
+
+                    UserSocial inviteeSoc = new UserSocial();
+                    inviteeSoc.setProvider("facebook");
+                    inviteeSoc.setSocialId(fbUser);
+                    inviteeSoc.setUserId(invitee.getId());
+                    new UserSocialDAO().save(inviteeSoc);
                 }
             }
         }

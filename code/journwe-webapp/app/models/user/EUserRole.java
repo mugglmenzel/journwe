@@ -1,6 +1,6 @@
 package models.user;
 
 public enum EUserRole {
-	USER, ADMIN, BETA;
+	USER, ADMIN, BETA, INVITEE;
 
 }

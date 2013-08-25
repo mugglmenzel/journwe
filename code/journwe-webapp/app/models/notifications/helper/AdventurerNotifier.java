@@ -80,6 +80,6 @@ public class AdventurerNotifier extends UserNotifier {
 
     public void notifyAdventurer(Adventurer adventurer, ENotificationTopics topic, String message, String subject) {
         Adventure adventure = new AdventureDAO().get(adventurer.getAdventureId());
-        super.notifyUser(adventurer.getUserId(), topic, message, (subject != null ? subject + " in " : "") + "Adventure \"" + adventure.getName() + "\"");
+        super.notifyUser(adventurer.getUserId(), topic, adventure.getId(), message, (subject != null ? subject + " in " : "") + "Adventure \"" + adventure.getName() + "\"");
     }
 }

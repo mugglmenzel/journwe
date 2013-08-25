@@ -21,6 +21,8 @@ public class Notification {
 
     private ENotificationTopics topic;
 
+    private String topicRef;
+
     private String subject;
 
     private String message;
@@ -54,6 +56,15 @@ public class Notification {
 
     public void setTopic(ENotificationTopics topic) {
         this.topic = topic;
+    }
+
+    @DynamoDBAttribute
+    public String getTopicRef() {
+        return topicRef;
+    }
+
+    public void setTopicRef(String topicRef) {
+        this.topicRef = topicRef;
     }
 
     @DynamoDBAttribute

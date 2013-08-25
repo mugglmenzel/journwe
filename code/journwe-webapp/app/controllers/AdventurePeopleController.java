@@ -205,8 +205,19 @@ public class AdventurePeopleController extends Controller {
 
                 return ok();
             } else if ("facebook".equals(f.get("type"))) {
+                String inviteeId = f.get("value");
                 UserSocial us = new UserSocialDAO().findByUserId("facebook", usr.getId());
-                new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", f.get("value"));
+                new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", inviteeId);
+
+                User invitee = new User();
+                invitee.setRole(EUserRole.INVITEE);
+                new UserDAO().save(invitee);
+
+                UserSocial inviteeSoc = new UserSocial();
+                inviteeSoc.setProvider("facebook");
+                inviteeSoc.setSocialId(inviteeId);
+                inviteeSoc.setUserId(invitee.getId());
+                new UserSocialDAO().save(inviteeSoc);
 
                 return ok();
             }

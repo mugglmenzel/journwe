@@ -29,32 +29,33 @@ public class UserNotifier {
 
 
     public void notifyUser(String userId, String message) {
-        this.notifyUser(userId, ENotificationTopics.GENERAL, message);
+        this.notifyUser(userId, ENotificationTopics.GENERAL, userId, message);
     }
 
 
-    public void notifyUser(String userId, ENotificationTopics topic, String message) {
-        this.notifyUser(userId, topic, message, null);
+    public void notifyUser(String userId, ENotificationTopics topic, String topicRef, String message) {
+        this.notifyUser(userId, topic, topicRef, message, null);
     }
 
 
-    public void notifyUser(String userId, ENotificationTopics topic, String message, String subject) {
-        this.notifyUser(new UserDAO().get(userId), topic, message, subject);
+    public void notifyUser(String userId, ENotificationTopics topic, String topicRef, String message, String subject) {
+        this.notifyUser(new UserDAO().get(userId), topic, topicRef, message, subject);
     }
 
     public void notifyUser(User user, String message) {
-        this.notifyUser(user, ENotificationTopics.GENERAL, message);
+        this.notifyUser(user, ENotificationTopics.GENERAL, user.getId(), message);
     }
 
-    public void notifyUser(User user, ENotificationTopics topic, String message) {
-        this.notifyUser(user, topic, message, null);
+    public void notifyUser(User user, ENotificationTopics topic, String topicRef, String message) {
+        this.notifyUser(user, topic, topicRef, message, null);
     }
 
-    public void notifyUser(User user, ENotificationTopics topic, String message, String subject) {
+    public void notifyUser(User user, ENotificationTopics topic, String topicRef, String message, String subject) {
 
         Notification noti = new Notification();
         noti.setUserId(user.getId());
         noti.setTopic(topic);
+        noti.setTopicRef(topicRef);
         noti.setMessage(message);
         noti.setSubject(subject);
         new NotificationDAO().save(noti);
@@ -71,7 +72,7 @@ public class UserNotifier {
             Logger.debug("user " + user.getName() + " wants a digest? " + (new Date().getTime() > user.getLastDigest().getTime() + minimumAge) + "(lastDigest: " + user.getLastDigest().getTime() + ", now: " + new Date().getTime() + ")");
             if (new Date().getTime() > user.getLastDigest().getTime() + minimumAge) {
                 Logger.debug("checking notifications for " + user.getName());
-                new UserNotifier().notifyUserViaEmailDigest(new NotificationDAO().unsent(user.getId()), frequency.getDigestName());
+                notifyUserViaEmailDigest(new NotificationDAO().unsent(user.getId()), frequency.getDigestName());
                 user.setLastDigest(new Date());
                 new UserDAO().save(user);
 

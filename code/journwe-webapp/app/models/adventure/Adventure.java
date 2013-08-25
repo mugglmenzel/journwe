@@ -23,6 +23,8 @@ public class Adventure {
 
     private String image;
 
+    private String shortURL;
+
     private boolean publish = false;
 
     private boolean limited = false;
@@ -106,6 +108,14 @@ public class Adventure {
         this.image = image;
     }
 
+    @DynamoDBAttribute
+    public String getShortURL() {
+        return shortURL;
+    }
+
+    public void setShortURL(String shortURL) {
+        this.shortURL = shortURL;
+    }
 
     /**
      * @return the publish
