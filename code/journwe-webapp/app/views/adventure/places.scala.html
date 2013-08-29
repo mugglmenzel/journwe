@@ -33,21 +33,18 @@
 
 <div class="places-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
 
-<div id="place-add-form">
-    <div class="row">
-        <div class="input-group col-8" style="margin-bottom: 10px;">
-            <input type="text" placeholder="Add a decent place" id="place-add-input" style="" class="form-control">
-            <input id="place-add-comment-input" class="form-control stash" style="display: none; width: 50%;" type="text" placeholder="Comment ...">
-            <div class="input-group-btn">
-                <button id="place-add-button" class="btn btn-add btn-primary"><i class="icon-plus"></i></button>
-            </div>
+<div id="place-add-form" class="row">
+    <div class="input-group col-8" style="margin-bottom: 10px;">
+        <input type="text" placeholder="Add a decent place" id="place-add-input" style="" class="form-control">
+        <input id="place-add-comment-input" class="form-control stash" style="display: none; width: 50%;" type="text" placeholder="Comment ...">
+        <div class="input-group-btn">
+            <button id="place-add-button" class="btn btn-add btn-primary"><i class="icon-plus"></i></button>
         </div>
     </div>
+</div>
 
-
-    <div style="height: 400px;">
-        <div id="place-add-map" style="width: 100%; height: 100%"></div>
-    </div>
+<div style="height: 400px;">
+    <div id="place-add-map" style="width: 100%; height: 100%"></div>
 </div>
 
 <script type="text/x-tmpl" id="place-template">
