@@ -1,8 +1,10 @@
 @(ins: models.Inspiration)
 
+@import play.api.Play.current
 @import models.dao._
 @import java.text.SimpleDateFormat
 
+@play.api.cache.Cache.getOrElse("yingyangyong" + (if(ins != null){"." + ins.getId}else{""}), 3600) {
 <div id="yingyangyong-click-info" class="row">
     <div class="col-2 col-lg-offset-1 text-center">
         <i class="icon-chevron-down"></i> 
@@ -28,7 +30,7 @@
                         @defining(new CategoryDAO()){catDAO =>
                             @defining(catDAO.all()){ categories =>
                                 @for(cat <- categories) {
-                                    <li><a><span class="badge badge-info pull-right">@catDAO.countInspirations(cat.getId())</span>@cat.getName()</a></li>
+                                    <li><a><span class="badge badge-info pull-right">@catDAO.countInspirationsHierarchyCached(cat.getId())</span>@cat.getName()</a></li>
                                 }
                             }
                         }
@@ -343,3 +345,6 @@
     }
 
 </script>
+
+
+}

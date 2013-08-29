@@ -13,6 +13,7 @@ case EAdventurerParticipation.UNDECIDED => {label-warning}
 case EAdventurerParticipation.GOING => {label-info}
 case EAdventurerParticipation.BOOKED => {label-success}
 case EAdventurerParticipation.APPLICANT => {}
+case EAdventurerParticipation.INVITEE => {label-warning}
 }
 }
 
@@ -52,19 +53,38 @@ case EAdventurerParticipation.APPLICANT => {}
 
 <div style="overflow: hidden;">
     @defining(new AdventurerDAO()){ advrDAO =>
-    @advrDAO.all(adv.getId()).filter(!_.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT)).map{ advr =>
+    @advrDAO.all(adv.getId()).filter(advr => !(advr.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT) || advr.getParticipationStatus().equals(EAdventurerParticipation.INVITEE))).map{ advr =>
         @defining(new UserDAO().get(advr.getUserId())) { user =>
     <div id="adventurer-state-@user.getId" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
         <a href="@routes.UserController.getProfile(user.getId)">
             <img style="margin: 0px;" title="@user.getName" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
         </a>
         <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
-            <div style="line-height: 10px;"><a href="@routes.UserController.getProfile(user.getId)">@user.getName().replaceAll(" [^ ]*$", "")</a></div>
+            <div style="line-height: 10px;"><a href="@routes.UserController.getProfile(user.getId)">@if(user.getName){@user.getName().replaceAll(" [^ ]*$", "")}else{Unknown}</a></div>
             <div class="overlay text-center">
                 <span class="label @cssForStatus(advr.getParticipationStatus())" title="Status" style="display: inline-block; width: 100%;">@advr.getParticipationStatus()</span>
             </div>
         </div>
     </div>
+        }}}
+</div>
+
+
+<div style="overflow: hidden;">
+@defining(new AdventurerDAO()){ advrDAO =>
+    @advrDAO.all(adv.getId()).filter(_.getParticipationStatus().equals(EAdventurerParticipation.INVITEE)).map{ advr =>
+        @defining(new UserDAO().get(advr.getUserId())) { user =>
+            <div id="adventurer-state-@user.getId" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
+                <a href="@routes.UserController.getProfile(user.getId)">
+                    <img style="margin: 0px;" title="@user.getName" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
+                </a>
+                <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
+                    <div style="line-height: 10px;"><a href="@routes.UserController.getProfile(user.getId)">@if(user.getName){@user.getName().replaceAll(" [^ ]*$", "")}else{Unknown}</a></div>
+                    <div class="overlay text-center">
+                        <span class="label @cssForStatus(advr.getParticipationStatus())" title="Status" style="display: inline-block; width: 100%;">@advr.getParticipationStatus()</span>
+                    </div>
+                </div>
+            </div>
         }}}
 </div>
 
@@ -77,7 +97,7 @@ case EAdventurerParticipation.APPLICANT => {}
                     <img style="margin: 0px;" title="@user.getName" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
                 </a>
                 <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
-                    <div style="line-height: 10px;"><a href="@routes.UserController.getProfile(user.getId)">@user.getName().replaceAll(" [^ ]*$", "")</a></div>
+                    <div style="line-height: 10px;"><a href="@routes.UserController.getProfile(user.getId)">@if(user.getName){@user.getName().replaceAll(" [^ ]*$", "")}else{Unknown}</a></div>
                     <div class="overlay text-center">
                         <span class="label @cssForStatus(advr.getParticipationStatus())" title="Status" style="display: inline-block; width: 100%;">@advr.getParticipationStatus()</span>
                         @if(!status.equals(EAdventurerParticipation.APPLICANT) && JournweAuthorization.canAcceptAdventurerApplicants(adv.getId)){
@@ -108,7 +128,7 @@ case EAdventurerParticipation.APPLICANT => {}
         </div>
         <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
         <div class="input-group-btn">
-            <button class="btn btn-primary btn-add" onclick="addFriend();"><i class="icon-plus"></i></button>
+            <button id="people-add-button" class="btn btn-primary btn-add" onclick="addFriend();"><i class="icon-plus"></i></button>
         </div>
     </div>
 </div>
@@ -120,8 +140,10 @@ case EAdventurerParticipation.APPLICANT => {}
     var facebookUserNames = [];
 
     function addFriend() {
+        $('#people-add-button i').removeClass("icon-plus").addClass("icon-spinner icon-spin");
         $.post('@routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
             $('#people-add-input').val('');
+            $('#people-add-button i').removeClass("icon-spinner icon-spin").addClass("icon-plus");
         });
     }
 

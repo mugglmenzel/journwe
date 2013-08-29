@@ -8,6 +8,7 @@ import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
 import models.user.*;
 import play.Logger;
+import play.cache.Cache;
 
 import java.io.IOException;
 
@@ -25,15 +26,26 @@ public class UserDAO extends CommonEntityDAO<User> {
 
 
     private User getAuthUserFind(final AuthUserIdentity identity) {
+        if (Cache.get("user.social." + identity.getProvider() + "." + identity.getId()) != null)
+            return (User) Cache.get("user.social." + identity.getProvider() + "." + identity.getId());
         UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
-        return social != null ? new UserDAO().get(social.getUserId()) : null;
+        if (social != null) {
+            Cache.set("user.social." + identity.getProvider() + "." + identity.getId(), new UserDAO().get(social.getUserId()));
+
+            return (User) Cache.get("user.social." + identity.getProvider() + "." + identity.getId());
+        }
+
+        return null;
     }
 
     public User findByAuthUserIdentity(final AuthUserIdentity identity) {
+        Logger.debug("getting auth user");
         if (identity == null)
             return null;
 
-        return getAuthUserFind(identity);
+        User user = getAuthUserFind(identity);
+        Logger.debug("returning auth user");
+        return user;
     }
 
     public void update(final AuthUser authUser, final AuthUserIdentity identity) {

@@ -52,8 +52,9 @@ public class ApplicationController extends Controller {
                 && (SecuredBetaUser.isBeta(usr) || SecuredBetaUser.isAdmin(usr))) {
 
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
-
+            Logger.debug("checking if adventurer");
             if (new AdventurerDAO().isAdventurer(userId)) {
+                Logger.debug("is adventurer");
                 Logger.debug("rendering template");
                 Html tmpl = indexVet.render();
                 long endTime = new Date().getTime();
@@ -68,13 +69,12 @@ public class ApplicationController extends Controller {
         }
     }
 
+    @Cached(key = "indexNew", duration = 3600)
     public static Result indexNew() {
         return ok(index.render());
     }
 
-
     public static Result categoryIndex(String catId) {
-
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
 
