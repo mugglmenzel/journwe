@@ -3,7 +3,6 @@ package models.dao;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
-import com.feth.play.module.pa.providers.AuthProvider;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
@@ -40,11 +39,55 @@ public class UserDAO extends CommonEntityDAO<User> {
     public void update(final AuthUser authUser, final AuthUserIdentity identity) {
         UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
         if (social != null && authUser != null) {
+            User user = new UserDAO().get(social.getUserId());
+            if (authUser instanceof NameIdentity && ((NameIdentity) authUser).getName() != null && !((NameIdentity) authUser).getName().equals(user.getName())) {
+                Logger.debug("updating name");
+                user.setName(((NameIdentity) authUser).getName());
+            }
+
+
+            if (authUser instanceof EmailIdentity) {
+                UserEmail userEmail = new UserEmailDAO().getPrimaryEmailOfUser(social.getUserId());
+                if (userEmail == null || !userEmail.equals(((EmailIdentity) authUser).getEmail())) {
+                    UserEmail email = new UserEmailDAO().get(social.getUserId(), ((EmailIdentity) authUser).getEmail());
+
+                    if (email == null) {
+                        email = new UserEmail();
+                        email.setUserId(user.getId());
+                        email.setEmail(((EmailIdentity) authUser).getEmail());
+                        email.setValidated(false);
+                        email.setPrimary(userEmail == null);
+                        new UserEmailDAO().save(email);
+
+                        Subscriber sub = new Subscriber();
+                        sub.setEmail(email.getEmail());
+                        new SubscriberDAO().save(sub);
+                        try {
+                            ListSubscribeMethod listSubscribeMethod = new ListSubscribeMethod();
+                            listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
+                            listSubscribeMethod.id = "c18d5a32fb";
+                            listSubscribeMethod.email_address = sub.getEmail();
+                            listSubscribeMethod.double_optin = false;
+                            listSubscribeMethod.update_existing = true;
+                            listSubscribeMethod.send_welcome = true;
+
+                            new MailChimpClient().execute(listSubscribeMethod);
+                        } catch (IOException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        } catch (MailChimpException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                    }
+                }
+
+            }
+
             if (authUser instanceof PicturedIdentity) {
                 Logger.debug("updating picture");
-                User user = new UserDAO().get(social.getUserId());
+
                 String picture = "";
-                if(authUser instanceof FacebookAuthUser) picture = ((PicturedIdentity) authUser).getPicture() + "?width=1200";
+                if (authUser instanceof FacebookAuthUser)
+                    picture = ((PicturedIdentity) authUser).getPicture() + "?width=1200";
                 else picture = ((PicturedIdentity) authUser).getPicture();
                 if (!picture.equals(user.getImage())) {
                     user.setImage(picture);
@@ -66,16 +109,13 @@ public class UserDAO extends CommonEntityDAO<User> {
         final User user = new User();
         user.setActive(true);
         user.setRole(role);
-        if (authUser instanceof NameIdentity) {
-            final NameIdentity identity = (NameIdentity) authUser;
-            final String name = identity.getName();
-            if (name != null) {
-                user.setName(name);
-            }
+        if (authUser instanceof NameIdentity && ((NameIdentity) authUser).getName() != null) {
+            user.setName(((NameIdentity) authUser).getName());
         }
         if (authUser instanceof PicturedIdentity) {
             String picture = "";
-            if(authUser instanceof FacebookAuthUser) picture = ((PicturedIdentity) authUser).getPicture() + "?type=large";
+            if (authUser instanceof FacebookAuthUser)
+                picture = ((PicturedIdentity) authUser).getPicture() + "?type=large";
             else picture = ((PicturedIdentity) authUser).getPicture();
             user.setImage(picture);
         }

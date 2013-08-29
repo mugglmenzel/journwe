@@ -6,14 +6,16 @@ import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import models.Inspiration;
+import models.adventure.Adventure;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
-import models.category.Category;
-import models.adventure.Adventure;
+import models.category.CategoryCount;
+import models.category.CategoryHierarchy;
 import models.dao.*;
-import models.helpers.CategoryCount;
 import models.user.Subscriber;
 import org.codehaus.jackson.node.ObjectNode;
+import play.Logger;
+import play.api.templates.Html;
 import play.cache.Cached;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -22,12 +24,17 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-
-import views.html.index.*;
-import views.html.*;
+import views.html.about;
+import views.html.admin;
+import views.html.imprint;
+import views.html.index.index;
+import views.html.index.indexCat;
+import views.html.index.indexVet;
+import views.html.subscribe;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -38,15 +45,21 @@ public class ApplicationController extends Controller {
     private static Form<Subscriber> subForm = form(Subscriber.class);
 
     public static Result index() {
+        long initialTime = new Date().getTime();
+        Logger.debug("starting to prepare output");
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
                 && (SecuredBetaUser.isBeta(usr) || SecuredBetaUser.isAdmin(usr))) {
 
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
 
-            if (new AdventurerDAO().isAdventurer(userId))
-                return ok(indexVet.render());
-            else {
+            if (new AdventurerDAO().isAdventurer(userId)) {
+                Logger.debug("rendering template");
+                Html tmpl = indexVet.render();
+                long endTime = new Date().getTime();
+                Logger.debug("took " + (endTime - initialTime) + "ms to prepare output");
+                return ok(tmpl);
+            } else {
 
                 return ok(index.render());
             }
@@ -56,11 +69,6 @@ public class ApplicationController extends Controller {
     }
 
     public static Result indexNew() {
-        List<CategoryCount> catCounts = new ArrayList<CategoryCount>();
-        for (Category cat : new CategoryDAO().all())
-            catCounts.add(new CategoryCount(cat, new CategoryDAO()
-                    .countInspirations(cat.getId())));
-
         return ok(index.render());
     }
 
@@ -69,6 +77,23 @@ public class ApplicationController extends Controller {
 
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
+
+    public static Result getCategories(String superCatId) {
+        List<ObjectNode> results = new ArrayList<ObjectNode>();
+        for (CategoryHierarchy cat : new CategoryHierarchyDAO().categoryAsSuper(superCatId)) {
+            CategoryCount cc = new CategoryCountDAO().get(cat.getSubCategoryId());
+            if (cat != null && cc.getCount() > 0) {
+                ObjectNode node = Json.newObject();
+                node.put("name", new CategoryDAO().get(cc.getCategoryId()).getName());
+                node.put("url", routes.ApplicationController.categoryIndex(cc.getCategoryId()).absoluteURL(request()));
+                node.put("count", cc.getCount());
+                results.add(node);
+            }
+        }
+
+        return ok(Json.toJson(results));
+    }
+
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getMyAdventures() {
@@ -168,7 +193,6 @@ public class ApplicationController extends Controller {
 
         return ok(subscribe.render(subForm));
     }
-
 
 
     @Cached(key = "imprint")

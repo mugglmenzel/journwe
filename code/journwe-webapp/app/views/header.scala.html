@@ -114,7 +114,9 @@
             <div class="accordion-body collapse col-12" id="navbar-secondlevel-inspiration-categories" data-parent="#navbar-secondlevel-collapsable">
                 <div>
                     <h4>Categories of Inspirations</h4>
-                    <ul class="nav nav-pills nav-stacked">
+                    <div id="header-categories-loading"><i class="icon-spinner icon-spin"></i></div>
+                    <ul id="header-categories-list" class="nav nav-pills nav-stacked">
+                        @*
                         @defining(new CategoryDAO()){catDAO =>
 
                             @for(cat <- catDAO.allSubcategory(Category.SUPER_CATEGORY)) {
@@ -128,7 +130,29 @@
                             }
 
                         }
+                        *@
+
                     </ul>
+                    <script type="text/x-tmpl" id="header-category-template">
+                        <li><a href="{%=o.url%}">{%=o.name%} <span class="badge badge-info pull-right">{%=o.count%}</span></a></li>
+                    </script>
+                    <script type="text/javascript">
+                        $(function(){
+
+                            $('#navbar-secondlevel-inspiration-categories').on('show.bs.collapse', function () {loadHeaderCategories();});
+
+                            function loadHeaderCategories() {
+                                $('#header-categories-loading').removeClass('stash');
+                                $.get('@routes.ApplicationController.getCategories(Category.SUPER_CATEGORY)', function (cats) {
+                                    $('#header-categories-list').empty();
+                                    for(var i in cats) {
+                                        $('#header-categories-list').append(tmpl('header-category-template', cats[i]));
+                                    }
+                                    $('#header-categories-loading').addClass('stash');
+                                });
+                            }
+                        });
+                    </script>
                 </div>
                 <div class="text-center"><a onclick="$('#navbar-secondlevel-inspiration-categories').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
             </div>

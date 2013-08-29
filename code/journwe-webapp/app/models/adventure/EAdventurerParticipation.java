@@ -8,5 +8,5 @@ package models.adventure;
  * To change this template use File | Settings | File Templates.
  */
 public enum EAdventurerParticipation {
-    APPLICANT, NOTGOING, GOING, UNDECIDED, BOOKED;
+    APPLICANT, NOTGOING, GOING, UNDECIDED, BOOKED, INVITEE;
 }

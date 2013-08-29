@@ -93,6 +93,7 @@ public class AdventureController extends Controller {
 
     }
 
+    /*
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result saveOld() {
         Form<Adventure> filledAdvForm = form(Adventure.class).bindFromRequest();
@@ -201,6 +202,7 @@ public class AdventureController extends Controller {
 
 
     }
+    */
 
 
     public static Result save() {

@@ -6,6 +6,7 @@
 # GET     /showProgress                                               controllers.ProgressController.getProgressHome()
 # GET		/progress													controllers.ProgressController.getProgress()
 
+GET           /category/:id/categories.json                         controllers.ApplicationController.getCategories(id:String)
 GET           /category/:id/inspirations.json                       controllers.ApplicationController.getInspirations(id:String)
 GET           /adventures/my.json                                   controllers.ApplicationController.getMyAdventures()
 GET           /adventures/public.json                               controllers.ApplicationController.getPublicAdventures()
@@ -29,7 +30,7 @@ GET           /category/:catId/inspiration/:id/delete               controllers.
 POST          /feedback                                             controllers.FeedbackController.createFeedback()
 
 # Adventure
-GET           /adventure/new                                        controllers.AdventureController.create()
+#GET           /adventure/new                                        controllers.AdventureController.create()
 #POST	/adventure/saveOld											controllers.AdventureController.saveOld()
 POST          /adventure/save/editable                              controllers.AdventureController.saveEditable()
 POST          /adventure/save                                       controllers.AdventureController.save()
@@ -52,7 +53,6 @@ GET           /adventure/:id/participate                            controllers.
 POST          /adventure/:id/participate/:status                    controllers.AdventurePeopleController.participateStatus(id:String, status:String)
 POST          /adventure/:id/adopt/:user                            controllers.AdventurePeopleController.adopt(id:String, user:String)
 POST          /adventure/:id/postFacebookWall                       controllers.AdventurePeopleController.postOnMyFacebookWall(id:String)
-POST          /adventure/:id/inviteViaEmail                         controllers.AdventurePeopleController.inviteViaEmail(id:String)
 POST          /adventure/:id/invite.json                            controllers.AdventurePeopleController.invite(id:String)
 GET           /people/facebook/autocomplete.json                    controllers.AdventurePeopleController.autocompleteFacebook()
 GET           /adventure/:id/leave                                  controllers.AdventurePeopleController.leave(id:String)

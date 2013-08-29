@@ -164,7 +164,7 @@ public class AdventurePeopleController extends Controller {
         return ok();
     }
 
-
+    /*
     public static Result inviteViaEmail(String advId) {
         if (!JournweAuthorization.canInviteAdventurerParticipants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -186,6 +186,7 @@ public class AdventurePeopleController extends Controller {
         }
         return ok();
     }
+    */
 
 
     public static Result invite(String advId) {
@@ -209,15 +210,39 @@ public class AdventurePeopleController extends Controller {
                 UserSocial us = new UserSocialDAO().findByUserId("facebook", usr.getId());
                 new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", inviteeId);
 
-                User invitee = new User();
-                invitee.setRole(EUserRole.INVITEE);
-                new UserDAO().save(invitee);
 
-                UserSocial inviteeSoc = new UserSocial();
-                inviteeSoc.setProvider("facebook");
-                inviteeSoc.setSocialId(inviteeId);
+                UserSocial inviteeSoc = new UserSocialDAO().findByUserId("facebook", inviteeId);
+
+                User invitee = inviteeSoc != null && inviteeSoc.getUserId() != null ? new UserDAO().get(inviteeSoc.getUserId()) : null;
+                if (invitee == null) {
+                    invitee = new User();
+                    invitee.setRole(EUserRole.INVITEE);
+                    new UserDAO().save(invitee);
+                }
+
+                if (inviteeSoc == null) {
+                    inviteeSoc = new UserSocial();
+                    inviteeSoc.setProvider("facebook");
+                    inviteeSoc.setSocialId(inviteeId);
+                }
                 inviteeSoc.setUserId(invitee.getId());
                 new UserSocialDAO().save(inviteeSoc);
+
+
+                Adventurer advr = new AdventurerDAO().get(advId, invitee.getId());
+                if (advr == null) {
+                    advr = new Adventurer();
+                    advr.setUserId(invitee.getId());
+                    advr.setAdventureId(advId);
+                    advr.setParticipationStatus(EAdventurerParticipation.INVITEE);
+                    new AdventurerDAO().save(advr);
+
+                    AdventureAuthorization authorization = new AdventureAuthorization();
+                    authorization.setAdventureId(advId);
+                    authorization.setUserId(usr.getId());
+                    authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
+                    new AdventureAuthorizationDAO().save(authorization);
+                }
 
                 return ok();
             }
