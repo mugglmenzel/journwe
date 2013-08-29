@@ -52,15 +52,46 @@
                     <div class="text-right">
                         @defining(new NotificationDAO()) { notiDAO =>
                         	<a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"> <i class="icon-bell" title="Notifications"> @notiDAO.count(user.getId)</i></a>
-                            <div id="notifications-list" class="stash" style="max-height: 300px">
-                                <div class="list-group">
-                                @notiDAO.all(user.getId).filter(!_.isRead).map{ noti =>
-                                  <a href="@getNotificationLink(noti.getTopic, noti.getTopicRef)" class="list-group-item" style="color: black" title="@noti.getMessage">@noti.getSubject</a>
-                                }
-                                </div>
-                            </div>
                             <script>
-                                $('#notifications-link').popover({content: function () {return $('#notifications-list').html();}});
+                                (function(){
+
+                                    var internal = false;
+                                    $('#notifications-link').popover()
+                                        .on('show.bs.popover', function(){
+                                            if (internal){ return; }
+                                            $(this).data('bs.popover').options.content = '<i class="icon-spinner icon-spin"></i> Loading...';
+                                        })
+                                        .on('shown.bs.popover', function(){
+                                            if (internal){ return; }
+
+                                            var el = $(this),
+                                                pop = el.data('bs.popover'),
+                                                fn = arguments.callee;
+
+                                            $.get("/user/notifications", function(d){
+                                                pop.options.content = '<div class="list-group">'
+                                                        + $.map(d, function(not){
+                                                                var link = "#";
+
+                                                                switch(String(not.topic).toUpperCase()){
+                                                                    case "ADVENTURE": 
+                                                                        link = "/adventure/"+not.topicRef; break;
+                                                                    case "GENERAL": 
+                                                                        link = "/"; break;
+                                                                    case "USER": 
+                                                                        link = "/user/"+not.topicRef; break;
+                                                                }
+
+                                                                return '<a href="'+link+'" class="list-group-item" style="color: black" title="'+not.message+'">'+not.subject+'</a>';
+                                                            }).join('')
+                                                        + '</div>';
+
+                                                internal = true;
+                                                pop.show(); 
+                                                internal = false;
+                                            });
+                                        });
+                                }());
                             </script>
                         }
                         <a class="btn btn-link" href="@routes.UserController.getProfile(user.getId())">
