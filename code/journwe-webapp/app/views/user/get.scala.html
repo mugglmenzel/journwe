@@ -17,7 +17,7 @@
         <div class="toolbar">
         </div>
     </div>
-    @if(!user.getId.equals(new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId())){
+    @if(user.getId.equals(new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId())){
     <div class="jrn-container">
         <h2 id="options"><i class="icon-cogs"></i> User Options</h2>
         <div class="row">
@@ -62,12 +62,52 @@
     }
 
     <div class="jrn-container">
-        <h2 id="jorunwes"><i class="icon-compass"></i> JournWes <small>- 400</small></h2>
-        <div class="row">
-            <div class="col-12">
-                JournWes parade, just a few...
-            </div>
+        <h2 id="jorunwes"><i class="icon-compass"></i> JournWes <small>- <span id="adventures-user-count">0</span></small></h2>
+        <div id="adventures-user-list" class="row" style="overflow: hidden">
+             <i class="icon-spin icon-spinner stash"></i>
         </div>
+        <script type="text/x-tmpl" id="adventure-user-template">
+            <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
+                <img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
+                <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                    <div style="line-height: 20px;"><h4>{%=o.name%}</h4></div>
+                    <div class="overlay text-center" style="display: none;">
+                        <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                        <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
+                        <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <script type="text/javascript">
+        $(document).ready(function(){
+
+            loadUserAdventures(true);
+
+        });
+
+        function loadUserAdventures(clear) {
+            $('#adventures-user-list i').removeClass('stash');
+            $.get('@routes.UserController.getAdventures(user.getId)', {count: 10} , function (advs) {
+                $('#adventures-user-count').html(advs.count);
+
+                if (clear) $('#adventures-user-list').empty();
+                for(var i in advs.adventures) {
+                    $('#adventures-user-list').append(tmpl('adventure-user-template', advs.adventures[i]));
+                }
+
+                $('#adventures-user-list .polaroid').hide().fadeIn().hover(
+                function(){
+                    $(this).find("div.overlay").slideDown("fast");
+                },
+                function(){
+                    $(this).find("div.overlay").slideUp("fast");
+                }
+                );
+                $('#adventures-user-list i').addClass('stash');
+            });
+        }
+        </script>
     </div>
 
 

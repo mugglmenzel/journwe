@@ -43,6 +43,12 @@ public class AdventurerDAO extends CommonRangeEntityDAO<Adventurer> {
         return pm.scan(clazz, scan);
     }
 
+    public int countOfUserId(String userId) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression();
+        scan.addFilterCondition("userId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(userId)));
+        return pm.count(clazz, scan);
+    }
+
     public List<Adventurer> allOfUserId(String userId, String lastKey, int limit) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(limit);
         if (lastKey != null && !"".equals(lastKey)) {

@@ -27,6 +27,10 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
         return results;
     }
 
+    public int countOfUserId(String userId) {
+        return new AdventurerDAO().countOfUserId(userId);
+    }
+
     public List<Adventure> allOfUserId(String userId, String lastKey, int limit) {
         List<Adventure> results = new ArrayList<Adventure>();
         for (Adventurer avr : new AdventurerDAO().allOfUserId(userId, lastKey, limit)) {

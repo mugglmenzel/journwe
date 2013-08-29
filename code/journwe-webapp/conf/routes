@@ -98,6 +98,7 @@ POST          /comment/save                                         controllers.
 
 # User
 GET           /user/:id                                             controllers.UserController.getProfile(id:String)
+GET           /user/:id/adventures.json                             controllers.UserController.getAdventures(id:String)
 POST          /user/:id/notifications/frequency/:freq               controllers.UserController.setMailDigestFrequency(id:String, freq:String)
 
 # Facebook
