@@ -27,7 +27,7 @@
             }
         }
     
-        <h3><i class="icon-bookmark"></i> My JournWes</h3>
+        <h3><i class="icon-bookmark"></i> My JournWes <div class="pull-right"><button id="adventures-my-button-refresh" class="btn btn-success btn-small"><i class="icon-refresh"></i></button></div></h3>
         <div class="row">
             <div class="col-3">
                 <div id="yingyangyong-starter" class="text-center">
@@ -38,8 +38,8 @@
                 </div>
             </div>
             <div class="col-9">
-                <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-                <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-block" onclick="loadMyAdventures($('#adventures-my-list .adventure-entry').last().data('id'));">Show More</button></div>
+                <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-spinner" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+                <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-block">Show More</button></div>
                 <script type="text/x-tmpl" id="adventure-my-template">
                     <div class="adventure-entry row" data-id="{%=o.id%}" style="background-color: rgba(245,245,245,0.6); margin: 3px; padding: 14px;">
                         <div class="col-1" style="margin: -13px 0 -13px -13px;">
@@ -64,9 +64,13 @@
 
                         loadMyAdventures(null, true);
 
+                        $('#adventures-my-button-refresh').click(function () {loadMyAdventures(null, true);});
+                        $('#adventures-my-load-more-button').click(function () {loadMyAdventures($('#adventures-my-list .adventure-entry').last().data('id'));});
+
                     });
 
                     function loadMyAdventures(lastId, clear) {
+                        $('#adventures-my-button-refresh i').addClass('icon-spin');
                         $('#adventures-my-load-more-button').html('<i class="icon-spin icon-spinner"></i>');
                         $.get('@routes.ApplicationController.getMyAdventures()', {lastId: lastId, count: 10} , function (advs) {
                             if (clear) $('#adventures-my-list').empty();
@@ -75,6 +79,7 @@
                                 $('#adventures-my-list').append(adventure);
                             }
                             $('#adventures-my-load-more-button').html('Show More');
+                            $('#adventures-my-button-refresh i').removeClass('icon-spin');
                         });
                     }
                 </script>
@@ -84,11 +89,11 @@
 
 
     <div class="jrn-container">
-        <h2><i class="icon-bullhorn"></i> Public JournWes</h2>
+        <h2><i class="icon-bullhorn"></i> Public JournWes <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
 
         <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-block" onclick="loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));">Show More</button></div>
+            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-spinner" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-block">Show More</button></div>
         </div>
     </div>
     <script type="text/x-tmpl" id="adventure-public-template">
@@ -109,9 +114,13 @@
 
             loadPublicAdventures(null, true);
 
+            $('#adventures-public-button-refresh').click(function () {loadPublicAdventures(null, true);});
+            $('#adventures-public-load-more-button').click(function () {loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));});
+
         });
 
         function loadPublicAdventures(lastId, clear) {
+            $('#adventures-public-button-refresh i').addClass('icon-spin');
             $('#adventures-public-load-more-button').html('<i class="icon-spin icon-spinner"></i>');
             $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
@@ -128,6 +137,7 @@
                     }
                 );
                 $('#adventures-public-load-more-button').html('Show More');
+                $('#adventures-public-button-refresh i').removeClass('icon-spin');
             });
         }
     </script>

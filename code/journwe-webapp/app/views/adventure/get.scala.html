@@ -1,4 +1,5 @@
 @(adv: models.adventure.Adventure, ins: Inspiration, advr: models.adventure.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])(description: Html)
+@import models.adventure.EAdventurerParticipation
 @import models.authorization.JournweAuthorization
 
 @import models.dao.AdventurerDAO
@@ -56,7 +57,24 @@
         }
         <div class="toolbar">
             <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
-            <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> @Messages("adventure.general.button.leave")</a>
+            @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
+                <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="icon-plus"></i> @Messages("adventure.general.button.join")</a>
+                <script>
+                    $(function(){
+                        $('.btn-participate').click(function(){
+                            var el = $(this),
+                            html = el.html();
+
+                            el.css({width:el.width()+"px"})
+                                    .html('<i class="icon-spin icon-spinner"></i>');
+
+                            return true;
+                        })
+                    });
+                </script>
+            } else {
+                <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> @Messages("adventure.general.button.leave")</a>
+            }
         </div>
     </div>
 

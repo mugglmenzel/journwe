@@ -61,7 +61,7 @@ public class AdventureController extends Controller {
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
             Inspiration ins = Inspiration.fromId(adv.getInspirationId());
             ins = ins != null ? new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()) : ins;
-            if (advr == null)
+            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()))
                 return ok(getPublic.render(adv, ins));
             else
                 return ok(getIndex.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
