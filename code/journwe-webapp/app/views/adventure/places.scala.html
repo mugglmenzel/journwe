@@ -203,17 +203,19 @@
     });
 
     $('#place-add-button').on('click', function() {
-        $(this).html('<i class="icon-spin icon-spinner"></i>');
-        new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-            $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, function(res) {
-                renderPlaceOption(res);
-                $('#place-add-input').val("");
-                $('#place-add-comment-input').val("");
-                $('#place-add-button').html('<i class="icon-plus"></i>');
-                $('#places-list').show();
-                refreshComments("@adv.getId"+"places", $("#comments-list-places"));
+        if($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
+            $(this).html('<i class="icon-spin icon-spinner"></i>');
+            new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
+                $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, function(res) {
+                    renderPlaceOption(res);
+                    $('#place-add-input').val("");
+                    $('#place-add-comment-input').val("");
+                    $('#place-add-button').html('<i class="icon-plus"></i>');
+                    $('#places-list').show();
+                    refreshComments("@adv.getId"+"places", $("#comments-list-places"));
+                });
             });
-        });
+        } else {$('#place-add-input').focus(); return false;}
     });
 
     $('#places-voting-active-switch').on('change', function () {
