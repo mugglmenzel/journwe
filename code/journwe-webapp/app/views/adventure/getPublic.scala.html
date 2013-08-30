@@ -68,10 +68,14 @@
             </div>
     </div>
 
-    <div id="cloneAdventure" class="modal hide fade" tabindex="-1" role="dialog">
-        <div class="modal-header">
-            <h3><i class="icon-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
-            @cloneAdventure(adv,new DynamicForm())
+    <div id="cloneAdventure" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="icon-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
+                    @cloneAdventure(adv,new DynamicForm())
+                </div>
+            </div>
         </div>
     </div>
 

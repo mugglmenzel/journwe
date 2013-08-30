@@ -27,9 +27,9 @@
             }
         }
     
-        <h3><i class="icon-bookmark"></i> My JournWes <div class="pull-right"><button id="adventures-my-button-refresh" class="btn btn-success btn-small"><i class="icon-refresh"></i></button></div></h3>
+        <h3><i class="icon-bookmark"></i> My JournWes <div class="pull-right"><button id="adventures-my-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h3>
         <div class="row">
-            <div class="col-3">
+            <div class="col-lg-3">
                 <div id="yingyangyong-starter" class="text-center">
                     <button class="btn btn-link" href="#" onclick="$('#yingyangyong-container').slideDown(function () {resetBounds();}); $('#yingyangyong-starter button').prop('disabled', true);">
                         <img src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' width="170"><br>
@@ -37,22 +37,22 @@
                     </button>
                 </div>
             </div>
-            <div class="col-9">
+            <div class="col-lg-9">
                 <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-spinner" style="font-size: 50px; margin-bottom: 20px;"></i></div>
                 <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-block">Show More</button></div>
                 <script type="text/x-tmpl" id="adventure-my-template">
                     <div class="adventure-entry row" data-id="{%=o.id%}" style="background-color: rgba(245,245,245,0.6); margin: 3px; padding: 14px;">
-                        <div class="col-1" style="margin: -13px 0 -13px -13px;">
+                        <div class="col-lg-1" style="margin: -13px 0 -13px -13px;">
                             <a href="{%=o.link%}" class="media-object">
                                 <img class="img-polaroid" height="50" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
                             </a>
                         </div>
-                        <div class="col-4">
+                        <div class="col-lg-4">
                             <span class="label" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
                             <span class="label" style="background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
                             <span class="label" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                         </div>
-                        <div class="col-7 text-left">
+                        <div class="col-lg-7 text-left">
                             <a href="{%=o.link%}">
                                 <h4>{%=o.name%}</h4>
                             </a>
@@ -181,13 +181,17 @@
     </div>
     </div>
     *@
-    <div id="leave" class="modal hide fade" tabindex="-1" role="dialog" onfocus="$('#leave-question').html('Sure, you want to leave ' + $('#leave').data('adventure-name') + '?')">
-        <div class="modal-header">
-            <h3 id="leave-question">Sure, you want to leave?</h3>
-        </div>
-        <div class="modal-footer">
-            <a class="btn btn-danger" onclick="window.location.href = $('#leave').data('leave-link')">Leave</a> <a class="btn"
-        data-dismiss="modal">Cancel</a>
+    <div id="leave" class="modal fade" tabindex="-1" role="dialog" onfocus="$('#leave-question').html('Sure, you want to leave ' + $('#leave').data('adventure-name') + '?')">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="leave-question">Sure, you want to leave?</h3>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" onclick="window.location.href = $('#leave').data('leave-link')">Leave</a> <a class="btn"
+                data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
         </div>
     </div>
 }

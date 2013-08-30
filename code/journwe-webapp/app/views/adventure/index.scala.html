@@ -8,13 +8,16 @@
 
 @if(JournweAuthorization.canViewAdventureDescription(adv.getId)) {
     <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
-    data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-xxlarge" data-showbuttons="bottom"
-    data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@Html(adv.getHTMLDescription())</div>
-}
-@if(JournweAuthorization.canEditAdventureDescription(adv.getId)) {
-    <div class="btn-edit-description"><a class="btn btn-mini" onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');$(this).parent().hide()"><i class="icon-pencil"></i> Edit</a></div>
+        data-url="@routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="input-lg" data-showbuttons="bottom"
+        data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@Html(adv.getHTMLDescription())</div>
 }
 </div>
+@if(JournweAuthorization.canEditAdventureDescription(adv.getId)) {
+<div class="pull-right">
+    <div class="btn-edit-description"><a class="btn btn-xs" onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');$(this).parent().hide()"><i class="icon-pencil"></i> Edit</a></div>
+</div>
+}
+
 <script type="text/javascript">
     jQuery.event.props.push('dataTransfer');
 

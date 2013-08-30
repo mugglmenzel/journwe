@@ -6,23 +6,23 @@
 
 @play.api.cache.Cache.getOrElse("yingyangyong" + (if(ins != null){"." + ins.getId}else{""}), 3600) {
 <div id="yingyangyong-click-info" class="row">
-    <div class="col-2 col-lg-offset-1 text-center">
+    <div class="col-lg-2 col-lg-offset-1 text-center">
         <i class="icon-chevron-down"></i> 
         click on <img src='http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' style="height: 20px;">
     </div>
 </div>
 <form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
     <div class="row">
-        <div class="col-3 text-center">
+        <div class="col-lg-3 text-center">
             <a href="#" onclick="switchMode(); $('#yingyangyong-click-info').fadeOut();"><img id="yingyangyong" src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' class="where"></a>
         </div>
-         <div class="col-9" style="min-height: 680px; position: relative;">
+         <div class="col-lg-9" style="min-height: 680px; position: relative;">
             <div class="row">
-                <div class="col-8 input-group">
+                <div class="col-lg-8 input-group">
                     <input type="text" name="name" placeholder="Name your JournWe" required="required" class="input input-large form-control">
 
                     <div class="input-group-btn">
-                        <a class="btn btn-primary btn-large dropdown-toggle" data-toggle="dropdown" href="#">
+                        <a class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" href="#">
                             Category
                             <span class="caret"></span>
                         </a>
@@ -37,8 +37,8 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-4">
-                    <button type="submit" class="btn btn-large btn-success pull-right" onclick="$('#yingyangyong-form').submit();">
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-lg btn-success pull-right" onclick="$('#yingyangyong-form').submit();">
                         Start JournWe <i class="icon-angle-right"></i></button>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             </div>
             *@
 
-            <div class="row col-12">
+            <div class="row col-lg-12">
                 <div id="where-dialog" style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-top: 20px; margin-bottom: 20px">
                     <div style="background-color: rgba(255, 255, 255, 0.3); padding: 15px; ">
                         <h1><i class="icon-globe"></i> Where do you want to go?</h1>
@@ -139,16 +139,16 @@
                         <div class="row">
 
 
-                            <div class="input-group col-5">
+                            <div class="input-group col-lg-5">
                                 <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start")</span>
                                 <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="Start Date" style="max-width: 200px;"/>
                             </div>
-                            <div class="input-group col-5">
+                            <div class="input-group col-lg-5">
                                 <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end")</span>
                                 <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="End Date" style="max-width: 200px;"/>
                             </div>
 
-                            <div class="col-2 text-right">
+                            <div class="col-lg-2 text-right">
                                 <a class="btn btn-add btn-primary" onclick="addTime();"><i class="icon-plus"></i></a>
                             </div>
                         </div>

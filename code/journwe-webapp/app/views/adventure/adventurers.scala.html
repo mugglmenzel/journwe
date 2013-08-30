@@ -101,7 +101,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
                     <div class="overlay text-center">
                         <span class="label @cssForStatus(advr.getParticipationStatus())" title="Status" style="display: inline-block; width: 100%;">@advr.getParticipationStatus()</span>
                         @if(!status.equals(EAdventurerParticipation.APPLICANT) && JournweAuthorization.canAcceptAdventurerApplicants(adv.getId)){
-                        <button class="btn btn-primary btn-small btn-adopt" href="@routes.AdventurePeopleController.adopt(adv.getId(),advr.getUserId())">Adopt</button>
+                        <button class="btn btn-primary btn-sm btn-adopt" href="@routes.AdventurePeopleController.adopt(adv.getId(),advr.getUserId())">Adopt</button>
                         }
                     </div>
                 </div>
@@ -113,7 +113,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 
 @if(JournweAuthorization.canInviteAdventurerParticipants(adv.getId)) {
 <div class="row">
-    <div class="input-group col-6">
+    <div class="input-group col-lg-6">
         <div class="input-group-btn">
             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                 <i id="people-add-type" class="icon-facebook"></i>
