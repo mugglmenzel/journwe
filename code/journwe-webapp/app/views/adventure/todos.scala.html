@@ -50,7 +50,7 @@
     }
     </div>
 
-    <table id="todos-adventurers-list" class="table table-striped table-hover">
+    <table id="todos-adventurers-list" class="table table-striped table-hover stash">
         <thead>
         <tr>
             <th colspan="2">@Messages("adventure.todos.listheading")</th>
@@ -113,6 +113,7 @@
 
                 loadUserTodos();
 
+                $('#todos-button-refresh' ).click(function (){loadUserTodos();});
 
             });
 
@@ -127,6 +128,7 @@
             }
 
             function loadTodos(userId, target, template, activator) {
+                $('#todos-button-refresh i').addClass("icon-spin");
                 $.get('@routes.AdventureTodoController.getTodos(adv.getId, "")' + userId, function (results){
                     $(target + ' tbody').empty();
 
@@ -138,6 +140,8 @@
                         activator();
                     } else
                         $(target).hide();
+
+                    $('#todos-button-refresh i').removeClass("icon-spin");
                 });
             }
 
@@ -162,8 +166,9 @@
             fld = $('#todo-title');
 
             $.post('@routes.AdventureTodoController.addTodo(adv.getId)', { title: fld.val() }, function(res) {
-                $('.table-my-todos  tbody')
-                    .append($(tmpl('todo-template', res).trim()).fadeIn());
+                //$('.table-my-todos  tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
+                //activateUserButtonListener();
+                loadUserTodos();
                 fld.val("");
                 $('#btn-add-todo').html('<i class="icon-plus"></i>')
             });
@@ -189,8 +194,8 @@
                     },
                     type: 'PUT',
                     success: function(res) {
-                        tr.get(0).className = 'status-' + res.todo.status + ' todo-entry';
-                        i.removeClass('icon-spin icon-spinner').addClass(res.todo.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
+                        tr.get(0).className = 'status-' + res.status + ' todo-entry';
+                        i.removeClass('icon-spin icon-spinner').addClass(res.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
                     }
                 });
 

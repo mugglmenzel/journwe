@@ -71,8 +71,8 @@ public class AdventureTodoController extends Controller {
                 node.put("url", j.getDetailPageURL());
                 node.put("image", j.getMediumImage() != null ? j.getMediumImage().getURL() : (j.getLargeImage() != null ? j.getLargeImage().getURL() : ""));
                 node.put("title", j.getItemAttributes().getTitle());
-                node.put("description", j.getEditorialReviews() != null && j.getEditorialReviews().getEditorialReview().size() > 0 ? j.getEditorialReviews().getEditorialReview().get(0).getContent() : "");
-                node.put("price", j.getOfferSummary() != null ? j.getOfferSummary().getLowestNewPrice().getFormattedPrice() : (j.getItemAttributes().getListPrice() != null ? j.getItemAttributes().getListPrice().getFormattedPrice() : ""));
+                node.put("description",  j.getEditorialReviews() != null && j.getEditorialReviews().getEditorialReview() != null && j.getEditorialReviews().getEditorialReview().size() > 0 && j.getEditorialReviews().getEditorialReview().get(0) != null ? j.getEditorialReviews().getEditorialReview().get(0).getContent() : "");
+                node.put("price", j.getOfferSummary() != null && j.getOfferSummary().getLowestNewPrice() != null ? j.getOfferSummary().getLowestNewPrice().getFormattedPrice() : (j.getItemAttributes().getListPrice() != null ? j.getItemAttributes().getListPrice().getFormattedPrice() : ""));
                 productItems.add(node);
             }
 
