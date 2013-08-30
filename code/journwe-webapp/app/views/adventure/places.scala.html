@@ -49,11 +49,11 @@
 
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
-        <td><button class="btn {%=o.favorite?'btn-success':''%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
+        <td><button class="btn {%=o.favorite?'btn-success':'btn-default'%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
         <td><em>{%=o.address%}</em></td>
         <td>
             <div class="btn-group">
-                <button id="placeoption-status-{%=o.placeId%}" class="btn" style="width: 90px" disabled="disabled"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
+                <button id="placeoption-status-{%=o.placeId%}" class="btn btn-default" style="width: 90px" disabled="disabled"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-pencil"></i>
                 </button>

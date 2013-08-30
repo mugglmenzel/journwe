@@ -11,7 +11,7 @@
     <div id="yingyangyong-container" style="display: none; margin-top: -20px; margin-bottom: 70px;">
         @yingyangyong(null)
         <div>
-            <button class="btn btn-block" onclick="$('#yingyangyong-container').slideUp(500); $('#yingyangyong-starter button').prop('disabled', false);"><i class="icon-chevron-up"></i></button>
+            <button class="btn btn-default btn-block" onclick="$('#yingyangyong-container').slideUp(500); $('#yingyangyong-starter button').prop('disabled', false);"><i class="icon-chevron-up"></i></button>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
             </div>
             <div class="col-lg-9">
                 <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-spinner" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-                <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-block">Show More</button></div>
+                <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-default btn-block">Show More</button></div>
                 <script type="text/x-tmpl" id="adventure-my-template">
                     <div class="adventure-entry row" data-id="{%=o.id%}" style="background-color: rgba(245,245,245,0.6); margin: 3px; padding: 14px;">
                         <div class="col-lg-1" style="margin: -13px 0 -13px -13px;">
@@ -93,7 +93,7 @@
 
         <div style="">
             <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-spinner" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-block">Show More</button></div>
+            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block">Show More</button></div>
         </div>
     </div>
     <script type="text/x-tmpl" id="adventure-public-template">
@@ -188,7 +188,7 @@
                     <h3 id="leave-question">Sure, you want to leave?</h3>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" onclick="window.location.href = $('#leave').data('leave-link')">Leave</a> <a class="btn"
+                    <a class="btn btn-danger" onclick="window.location.href = $('#leave').data('leave-link')">Leave</a> <a class="btn btn-default"
                 data-dismiss="modal">Cancel</a>
                 </div>
             </div>

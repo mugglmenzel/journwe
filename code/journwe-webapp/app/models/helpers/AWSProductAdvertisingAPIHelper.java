@@ -27,7 +27,7 @@ import java.util.*;
  */
 public class AWSProductAdvertisingAPIHelper {
 
-    public static AWSECommerceService getService() {
+    public static AWSECommerceService getService(final String intendedOperation) {
         AWSECommerceService service = new AWSECommerceService();
         service.setHandlerResolver(new HandlerResolver() {
             @Override
@@ -67,7 +67,7 @@ public class AWSProductAdvertisingAPIHelper {
                                     SecretKeySpec secret_key = new SecretKeySpec(ConfigFactory
                                             .load().getString("aws.productadvertising.secretKey").getBytes(), "HmacSHA256");
                                     sha256_HMAC.init(secret_key);
-                                    String data = "ItemSearch" + DatatypeConverter.printDateTime(cal);
+                                    String data = intendedOperation + DatatypeConverter.printDateTime(cal);
 
                                     signatureElem.addTextNode(Base64.encodeBase64String(sha256_HMAC.doFinal(data.getBytes())));
                                 } catch (Exception e) {

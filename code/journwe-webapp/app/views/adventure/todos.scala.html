@@ -64,38 +64,46 @@
     </table>
 
 
-    <div id="amazon-affiliate" class="modal fade" tabindex="-1" role="dialog">
+    <div id="amazon-affiliate" class="modal fade" tabindex="-1" role="dialog" style="color: black">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title">Get Prepared for your JournWe!</h3>
                 </div>
-                <div class="modal-body">Test body!</div>
+                <div class="modal-body">No items on Amazon.</div>
                 <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal"><i class="icon-remove"></i> Close</button>
+                    <button class="btn btn-default" data-dismiss="modal"><i class="icon-remove"></i> Close</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script type="text/x-tmpl" id="todo-template">
-        <tr class="status-{%=o.todo.status%} todo-entry" data-id="{%=o.todo.id%}">
-            <td><button class="btn btn-primary btn-check"><i class="icon-check{% if(o.todo.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></button></td>
-            <td style="width:100%;">{%=o.todo.title%}</td>
-            <td>{% if(o.productAdvertisingURLs.length) { %}<a onclick="$('#amazon-affiliate').modal();">Purchase on Amazon</a>{% } %}<ul>{% for (var i in o.productAdvertisingURLs) { %}<li><a href="{%=o.productAdvertisingURLs[i]%}" target="_blank">At Amazon</a></li>{% } %}</ul></td>
+        <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}">
+            <td><button class="btn btn-primary btn-check"><i class="icon-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></button></td>
+            <td style="width:100%;">{%=o.title%}</td>
+            <td><a class="btn btn-link btn-affiliate">Purchase on Amazon</a></td>
             <td class="text-center"><button class="btn btn-danger btn-delete"><i class="icon-trash"></i></button></td>
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-adventurer-template">
-        <tr class="status-{%=o.todo.status%} todo-entry" data-id="{%=o.todo.id%}">
-            <td><i class="icon-check{% if(o.todo.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></td>
-            <td style="width:100%;">{%=o.todo.title%}</td>
-            <td>{% if(o.productAdvertisingURLs.length) { %}<a onclick="$('#amazon-affiliate').modal();">Purchase on Amazon</a>{% } %}<ul>{% for (var i in o.productAdvertisingURLs) { %}<li><a href="{%=o.productAdvertisingURLs[i]%}" target="_blank">At Amazon</a></li>{% } %}</ul></td>
+        <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}">
+            <td><i class="icon-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></td>
+            <td style="width:100%;">{%=o.title%}</td>
+            <td>Amazon?</td>
             <td class="text-center"><button class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></button></td>
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-affiliate-template">
-        <ul>{% for (var i in o.productAdvertisingURLs) { %}<li><a href="{%=o.productAdvertisingURLs[i]%}" target="_blank">At Amazon</a></li>{% } %}</ul>
+        <div class="media" style="max-height: 200px">
+            <a class="pull-left" href="{%=o.url%}" target="_blank">
+                <img class="media-object" src="{%=o.image%}" alt="{%=o.title%} thumbnail" style="width: 100px;">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading">{%=o.title%} ({%=o.price%})</h4>
+                {%=o.description%} <a href="{%=o.url%}" target="_blank">Show More</a>
+            </div>
+        </div>
     </script>
 
     <script type="text/javascript">
@@ -205,6 +213,26 @@
                             tr.remove();
                         });
                     }
+                });
+
+            });
+
+            $('#todos-list tbody .btn-affiliate').on('click', function(e) {
+                //$(this).html('<i class="icon-spin icon-spinner"></i>');
+                e.preventDefault();
+
+                var a = $(this),
+                tr = a.parents('.todo-entry'),
+                id = tr.data('id');
+
+                $.get('@routes.AdventureTodoController.getTodoAffiliateItems(adv.getId())', {id: id}, function(res) {
+                    if(res.length) $('#amazon-affiliate .modal-content .modal-body').first().empty();
+                    else $('#amazon-affiliate .modal-content .modal-body').first().html('No items!');
+
+                    for(var i in res)
+                        $('#amazon-affiliate .modal-content .modal-body').first().append(tmpl('todo-affiliate-template', res[i]));
+
+                    $('#amazon-affiliate').modal();
                 });
 
             });

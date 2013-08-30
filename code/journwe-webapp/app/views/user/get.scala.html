@@ -25,13 +25,13 @@
                 I want to be notified...
                  <div class="btn-group btn-select-notification-frequency">
 
-                    <button class="btn @if(user.getNotificationDigest == ENotificationFrequency.IMMEDIATELY) {active}"
+                    <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.IMMEDIATELY) {active}"
                     href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.IMMEDIATELY.toString)"><i class="icon-exclamation-sign"></i> Immediately</button>
-                    <button class="btn @if(user.getNotificationDigest == ENotificationFrequency.DAILY) {active}"
+                    <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.DAILY) {active}"
                     href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.DAILY.toString)"><i class="icon-time"></i> Daily</button>
-                    <button class="btn @if(user.getNotificationDigest == ENotificationFrequency.WEEKLY) {active}"
+                    <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.WEEKLY) {active}"
                     href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.WEEKLY.toString)"><i class="icon-calendar"></i> Weekly</button>
-                    <button class="btn @if(user.getNotificationDigest == ENotificationFrequency.NONE) {active}"
+                    <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.NONE) {active}"
                     href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.NONE.toString)"><i class="icon-stop"></i> None</button>
                  </div>
 

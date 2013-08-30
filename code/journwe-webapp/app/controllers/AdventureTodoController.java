@@ -1,18 +1,17 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.journwe.productadvertising.webservice.client.*;
-import com.journwe.productadvertising.webservice.client.enums.EMarketplaceDomain;
+import com.journwe.productadvertising.webservice.client.Item;
+import com.journwe.productadvertising.webservice.client.ItemSearchRequest;
+import com.journwe.productadvertising.webservice.client.Items;
+import com.journwe.productadvertising.webservice.client.OperationRequest;
 import com.typesafe.config.ConfigFactory;
-import models.Inspiration;
-import models.adventure.Adventure;
-import models.adventure.Adventurer;
 import models.adventure.checklist.EStatus;
 import models.auth.SecuredBetaUser;
-import models.dao.*;
+import models.dao.TodoDAO;
+import models.dao.UserDAO;
 import models.helpers.AWSProductAdvertisingAPIHelper;
 import models.user.User;
-import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
@@ -21,21 +20,10 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.adventure.getTodos;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.namespace.QName;
-import javax.xml.soap.*;
 import javax.xml.ws.Holder;
-import javax.xml.ws.handler.Handler;
-import javax.xml.ws.handler.HandlerResolver;
-import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.handler.PortInfo;
-import javax.xml.ws.handler.soap.SOAPHandler;
-import javax.xml.ws.handler.soap.SOAPMessageContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -50,35 +38,49 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getTodos(String advId, String userId) {
-        List<ObjectNode> results = new ArrayList<ObjectNode>();
-
-        for (models.adventure.checklist.Todo todo : new TodoDAO().all(userId, advId)) {
-            ItemSearchRequest shared = new ItemSearchRequest();
-            shared.setKeywords(todo.getTitle());
-            shared.setSearchIndex("All");
-            List<ItemSearchRequest> itemSearches = new ArrayList<ItemSearchRequest>();
-            itemSearches.add(shared);
-
-
-            Holder<OperationRequest> opOut = new Holder<OperationRequest>();
-            Holder<List<Items>> itemsOut = new Holder<List<Items>>();
-
-            //EMarketplaceDomain.US.getMarketPlaceDomain()
-            AWSProductAdvertisingAPIHelper.getService().getAWSECommerceServicePort().itemSearch(null, ConfigFactory.load().getString("aws.productadvertising.accessKey"), "jourwheradvem-21", "Single", "False", shared, itemSearches, opOut, itemsOut);
-            List<String> productURLs = new ArrayList<String>();
-            for (Items i : itemsOut.value)
-                for (Item j : i.getItem())
-                    productURLs.add(j.getDetailPageURL());
-
-            ObjectNode node = Json.newObject();
-            node.put("todo", Json.toJson(todo));
-            node.put("productAdvertisingURLs", Json.toJson(productURLs));
-            results.add(node);
-        }
-
-        return ok(Json.toJson(results));
+        return ok(Json.toJson(new TodoDAO().all(userId, advId)));
 
         //return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
+    }
+
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result getTodoAffiliateItems(String advId) {
+        String id = form().bindFromRequest().get("id");
+        models.adventure.checklist.Todo todo = new TodoDAO().get(id, advId);
+        Logger.debug("searching affiliate for " + todo.getTitle());
+
+        ItemSearchRequest shared = new ItemSearchRequest();
+        shared.setKeywords(todo.getTitle());
+        shared.setSearchIndex("All");
+        shared.getResponseGroup().add("ItemAttributes");
+        shared.getResponseGroup().add("Medium");
+        shared.getResponseGroup().add("OfferSummary");
+        shared.getResponseGroup().add("EditorialReview");
+        List<ItemSearchRequest> itemSearches = new ArrayList<ItemSearchRequest>();
+        itemSearches.add(shared);
+
+        Holder<OperationRequest> opOut = new Holder<OperationRequest>();
+        Holder<List<Items>> itemsOut = new Holder<List<Items>>();
+
+        //EMarketplaceDomain.US.getMarketPlaceDomain()
+        AWSProductAdvertisingAPIHelper.getService("ItemSearch").getAWSECommerceServicePort().itemSearch(null, ConfigFactory.load().getString("aws.productadvertising.accessKey"), "jourwheradvem-21", "Single", "False", shared, itemSearches, opOut, itemsOut);
+        List<ObjectNode> productItems = new ArrayList<ObjectNode>();
+        for (Items i : itemsOut.value)
+            for (Item j : i.getItem()) {
+                ObjectNode node = Json.newObject();
+                node.put("url", j.getDetailPageURL());
+                node.put("image", j.getMediumImage() != null ? j.getMediumImage().getURL() : (j.getLargeImage() != null ? j.getLargeImage().getURL() : ""));
+                node.put("title", j.getItemAttributes().getTitle());
+                node.put("description", j.getEditorialReviews() != null && j.getEditorialReviews().getEditorialReview().size() > 0 ? j.getEditorialReviews().getEditorialReview().get(0).getContent() : "");
+                node.put("price", j.getOfferSummary() != null ? j.getOfferSummary().getLowestNewPrice().getFormattedPrice() : (j.getItemAttributes().getListPrice() != null ? j.getItemAttributes().getListPrice().getFormattedPrice() : ""));
+                productItems.add(node);
+            }
+
+
+        Logger.debug("returning " + Json.toJson(productItems));
+        return
+
+                ok(Json.toJson(productItems));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
@@ -95,69 +97,28 @@ public class AdventureTodoController extends Controller {
 
         new TodoDAO().save(todo);
 
-        ItemSearchRequest shared = new ItemSearchRequest();
-        shared.setKeywords(todo.getTitle());
-        shared.setSearchIndex("All");
-        List<ItemSearchRequest> itemSearches = new ArrayList<ItemSearchRequest>();
-        itemSearches.add(shared);
-
-
-        Holder<OperationRequest> opOut = new Holder<OperationRequest>();
-        Holder<List<Items>> itemsOut = new Holder<List<Items>>();
-
-        //EMarketplaceDomain.US.getMarketPlaceDomain()
-        AWSProductAdvertisingAPIHelper.getService().getAWSECommerceServicePort().itemSearch(null, ConfigFactory.load().getString("aws.productadvertising.accessKey"), "jourwheradvem-21", "Single", "False", shared, itemSearches, opOut, itemsOut);
-        List<String> productURLs = new ArrayList<String>();
-        for (Items i : itemsOut.value)
-            for (Item j : i.getItem())
-                productURLs.add(j.getDetailPageURL());
-
-        ObjectNode result = Json.newObject();
-        result.put("todo", Json.toJson(todo));
-        result.put("productAdvertisingURLs", Json.toJson(productURLs));
-
-        return ok(Json.toJson(result));
+        return ok(Json.toJson(todo));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result setTodo(String id, String tid) {
+    public static Result setTodo(String advId, String tid) {
 
         DynamicForm requestData = form().bindFromRequest();
 
-        models.adventure.checklist.Todo todo = new TodoDAO().get(tid, id);
+        models.adventure.checklist.Todo todo = new TodoDAO().get(tid, advId);
 
         String status = requestData.get("status").toUpperCase();
         todo.setStatus(EStatus.valueOf(status));
 
         new TodoDAO().save(todo);
 
-        ItemSearchRequest shared = new ItemSearchRequest();
-        shared.setKeywords(todo.getTitle());
-        shared.setSearchIndex("All");
-        List<ItemSearchRequest> itemSearches = new ArrayList<ItemSearchRequest>();
-        itemSearches.add(shared);
-
-
-        Holder<OperationRequest> opOut = new Holder<OperationRequest>();
-        Holder<List<Items>> itemsOut = new Holder<List<Items>>();
-
-        //EMarketplaceDomain.US.getMarketPlaceDomain()
-        AWSProductAdvertisingAPIHelper.getService().getAWSECommerceServicePort().itemSearch(null, ConfigFactory.load().getString("aws.productadvertising.accessKey"), "jourwheradvem-21", "Single", "False", shared, itemSearches, opOut, itemsOut);
-        List<String> productURLs = new ArrayList<String>();
-        for (Items i : itemsOut.value)
-            for (Item j : i.getItem())
-                productURLs.add(j.getDetailPageURL());
-        ObjectNode result = Json.newObject();
-        result.put("todo", Json.toJson(todo));
-        result.put("productAdvertisingURLs", Json.toJson(productURLs));
-
-        return ok(Json.toJson(result)); //TODO: Error handling
+        return ok(Json.toJson(todo)); //TODO: Error handling
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result deleteTodo(String id, String tid) {
+    public static Result deleteTodo(String advId, String tid) {
 
-        new TodoDAO().delete(tid, id);
+        new TodoDAO().delete(tid, advId);
 
         return ok(); //TODO: Error handling
     }

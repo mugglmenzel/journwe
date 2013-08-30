@@ -96,7 +96,7 @@
                     <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
                     @user.getName()
                 </a>
-                <a class="btn" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
+                <a class="btn btn-link" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
             </div>
 
         } else {
@@ -192,7 +192,7 @@
                 <div class="text-center">
                     <div class="input-append">
                         <input type="text" class="input-lg search-query" placeholder="Find Places, People and Inspirations">
-                        <button class="btn btn-lg"><i class="icon-search"></i></button>
+                        <button class="btn btn-primary btn-lg"><i class="icon-search"></i></button>
                     </div>
                 </div>
                 <div class="text-center"><a onclick="$('#navbar-secondlevel-general-search').collapse('hide');"><i class="icon-chevron-up"></i></a></div>

@@ -75,6 +75,7 @@ POST          /adventure/:id/times/voteOpen.json                    controllers.
 
 
 GET           /adventure/:id/todos.json/:userId                     controllers.AdventureTodoController.getTodos(id:String, userId:String)
+GET           /adventure/:id/affiliate.json                         controllers.AdventureTodoController.getTodoAffiliateItems(id:String)
 POST          /adventure/:id/todos.json                             controllers.AdventureTodoController.addTodo(id:String)
 PUT           /adventure/:id/todos/:tid                             controllers.AdventureTodoController.setTodo(id:String, tid: String)
 DELETE        /adventure/:id/todos/:tid                             controllers.AdventureTodoController.deleteTodo(id:String, tid: String)
@@ -97,7 +98,7 @@ POST          /comment/save                                         controllers.
 
 
 # User
-GET 		  /user/notifications              						controllers.UserController.getNotifications()
+GET           /user/notifications                                   controllers.UserController.getNotifications()
 GET           /user/:id                                             controllers.UserController.getProfile(id:String)
 GET           /user/:id/adventures.json                             controllers.UserController.getAdventures(id:String)
 POST          /user/:id/notifications/frequency/:freq               controllers.UserController.setMailDigestFrequency(id:String, freq:String)
