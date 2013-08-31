@@ -9,7 +9,7 @@
     @defining(new CategoryDAO()){ catDAO =>
     <div class="jrn-container">
 
-        <h2><i class="icon-arrow-down"></i> Subcategories <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
+        <h2><i class="icon-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
         <div style="font-size: 20pt;">
             @for(subcat <- catDAO.allSubcategory(cat.getId)) {
                  <a href="@routes.ApplicationController.categoryIndex(subcat.getId)"><span class="label label-info">@subcat.getName <span class="badge">@catDAO.countInspirationsHierarchyCached(subcat.getId)</span></span></a>
@@ -18,10 +18,10 @@
 
     </div>
     <div class="jrn-container">
-        <h2><i class="icon-bullhorn"></i> Inspirations <small>- @catDAO.countInspirations(cat.getId)</small> </h2>
+        <h2><i class="icon-bullhorn"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> </h2>
         <div style="">
             <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-            <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block" onclick="loadInspirations($('#inspirations-public-list .polaroid').last().data('id'));">Show More</button></div>
+            <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block" onclick="loadInspirations($('#inspirations-public-list .polaroid').last().data('id'));"> @Messages("adventure.general.button.more") </button></div>
         </div>
     </div>
 

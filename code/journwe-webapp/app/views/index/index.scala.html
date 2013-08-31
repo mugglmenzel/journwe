@@ -9,12 +9,12 @@
 
     <div class="jrn-container">
 
-        <p class="lead">Get inspired from...</p>
+        <p class="lead">@Messages("inspiration.getInspired")</p>
 
-        <h3><i class="icon-bullhorn"></i> Public JournWes <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h3>
+        <h3><i class="icon-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h3>
         <div style="background-color: rgba(245,245,245,0.6);">
             <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-spinner" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block">Show More</button></div>
+            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
     </div>  
     <script type="text/x-tmpl" id="adventure-public-template">
@@ -69,10 +69,10 @@
 <div>
     <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#inspirations" data-toggle="tab"><i class="icon-th"></i> JournWe Ideas</a>
+        <li class="active"><a href="#inspirations" data-toggle="tab"><i class="icon-th"></i> @Messages("inspiration.ideas") </a>
         </li>
-        <li><a href="#adventures" data-toggle="tab"><i class="icon-th"></i>Public JournWes</a></li>
-        <li><a href="#search" data-toggle="tab"><i class="icon-search"></i>Search</a></li>
+        <li><a href="#adventures" data-toggle="tab"><i class="icon-th"></i> @Messages("public.adventures") </a></li>
+        <li><a href="#search" data-toggle="tab"><i class="icon-search"></i> @Messages("adventure.general.label.search")</a></li>
     </ul>
 
     <div class="tab-content">

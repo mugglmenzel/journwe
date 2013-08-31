@@ -7,19 +7,28 @@ subscribe.cta=Subscribe with your email to get notified when we go online!
 adventure.general.label.facebook=Facebook
 adventure.general.label.email=Email
 adventure.general.label.edit=Edit
+adventure.general.label.delete=Delete
+adventure.general.label.search=Search
+adventure.general.label.all=All
+adventure.general.label.start=Start
 adventure.general.label.on=ON
 adventure.general.label.off=OFF
+adventure.general.label.photos=Photos
+adventure.general.label.time=Time
 
 #Adventure.general.buttons
+adventure.general.button.createNew=Create New
 adventure.general.button.join=Join
 adventure.general.button.clone=Clone
 adventure.general.button.cancel=Cancel
 adventure.general.button.leave=Leave
 adventure.general.button.reset=Reset
+adventure.general.button.close=Close
 adventure.general.button.check=Check
 adventure.general.button.facebookPost=Post on Facebook
 adventure.general.button.category=Category
 adventure.general.button.startJournWe=Start JournWe
+adventure.general.button.more=Show More
 
 #Adventure.general.created
 adventure.created.button.emailInvite=Invite by Email
@@ -32,10 +41,9 @@ adventure.created.urlShort=Your shortened URL:
 adventure.created.manageAdv=Manage your Adventure
 adventure.create.shortURLavail=shortname available?
 adventure.create.startAdv=Start a new Group Adventure
-adventure.create.confirmation1=We created the new Adventure 
-adventure.create.confirmation2= for you!
+adventure.create.confirmation=We created the new Adventure {0} for you!
 adventure.create.inviteOthers=Start motivating friends to join your Adventure
-adventure.create.inviteOthersVia=(Facebook, Email, if(public): Twitter)
+adventure.create.inviteOthersVia=(Facebook, Email, (if public): Twitter)
 
 #Yingyangyong
 yingyangyong.label.clickOn=click on
@@ -70,7 +78,9 @@ adventure.general.leaveconfirm=Are you sure, you want to leave
 adventure.header.find.placeholder=Find Places, People and Inspirations
 
 #Adventure.getScala
+adventure.getScala.start=Start a {0} Adventure
 adventure.getScala.adventure.title=Adventure
+adventure.getScala.discussion.title=Discussion
 adventure.getScala.place.title=Place
 adventure.getScala.place.subtitle=Find a special place where your adventure takes place. Make it a beautiful spot worth exploring.
 adventure.getScala.time.title=Date
@@ -123,6 +133,9 @@ adventure.todos.listaction=Actions
 adventure.todos.listheading=My things to do
 adventure.todos.placeholder=Add an important thing
 adventure.todos.otherAdventurer=Other Adventurer's Todo Lists
+adventure.todos.amazon.title=Get Prepared for your JournWe!
+adventure.todos.amazon.noItems=No items on Amazon.
+adventure.todos.amazon.purchase=Purchase on Amazon
 
 #Adventure.files
 adventure.files.fileName=File name
@@ -133,6 +146,8 @@ adventure.files.fileDrop=Drop file here or
 adventure.files.fileSelect=Select file
 adventure.files.fileChange=Change
 adventure.files.fileRemove=Remove
+adventure.files.imageSelect=Select image
+adventure.files.imageUpload=Upload image
 
 #Adventure.comments
 adventure.comments.noComment=No comments here. Want to create a new comment?
@@ -146,10 +161,33 @@ adventure.widgetComments.firstComment=Write a first comment!
 adventure.wallComments.placeholder=Speak up!
 adventure.wallComments.firstComment=Write a first wall post!
 
+#IndexVet
+index.welcome1=Welcome back, {0}! You have some adventures before you.
+index.myJournWes=My JournWes
+
 #Admin
 admin.title=Administration and Maintenance
 admin.category=Manage Category
+admin.category.subcategories=Subcategories
 admin.inspiration=Manage Inspiration
+
+#Inspiration
+inspiration.text=Inspirations
+inspiration.title=Inspiration Category Form
+inspiration.getInspired=Get inspired from...
+inspiration.ideas=JournWe Ideas
+
+#Public
+public.adventures=Public JournWes
+
+#User
+user.options=User Options
+user.notify=I want to be notified...
+user.notify.immediately=Immediately
+user.notify.daily=Daily
+user.notify.weekly=Weekly
+user.notify.none=None
+user.badges=Badges
 
 #Feedback
 feedback.title=Feedback Form

@@ -1,4 +1,3 @@
-
 #journwe
 journwe.subtitle=Auf ins Abenteuer.
 subscribe.welcometext=JournWe ist das Beste seit geschnitten Brot. Planen und Organisieren von Gruppenreise - der pure Horror? Nicht mit JournWe. Einloggen, Reise eintragen, Freunde einladen, Cocktail schlürfen. Fertig.
@@ -8,8 +7,209 @@ subscribe.cta=Subscribe mit Deiner Email-Adresse. Wir benachrichtigen Dich, wenn
 adventure.general.label.facebook=Facebook
 adventure.general.label.email=Email
 adventure.general.label.edit=Bearbeiten
+adventure.general.label.delete=Löschen
+adventure.general.label.search=Suchen
+adventure.general.label.all=Alle
+adventure.general.label.start=Start
 adventure.general.label.on=AN
 adventure.general.label.off=AUS
+adventure.general.label.photos=Fotos
+adventure.general.label.time=Zeit
+
+#Adventure.general.buttons
+adventure.general.button.createNew=Neu Anlegen
+adventure.general.button.join=Teilnehmen
+adventure.general.button.clone=Klonen
+adventure.general.button.cancel=Abbrechen
+adventure.general.button.leave=Verlassen
+adventure.general.button.reset=Zurücksetzen
+adventure.general.button.close=Schliessen
+adventure.general.button.check=Prüfen
+adventure.general.button.facebookPost=Posten bei Facebook
+adventure.general.button.category=Kategorie
+adventure.general.button.startJournWe=JournWe Starten
+adventure.general.button.more=Mehr Zeigen
+
+#Adventure.general.created
+adventure.created.button.emailInvite=Email Einladung
+adventure.created.facebookMessage=Moin moin und servus! Begleite mich auf meinem Abenteur bei JournWe.com
+adventure.created.emailMessage=Moin moin und servus! Begleite mich auf meinem Abenteur bei JournWe.com. Schau dir an was wir demnächst zusammen erleben können: 
+adventure.created.email.placeholder=friend@@example.com
+adventure.created.button.emailSend=Email Senden
+adventure.created.url=Du kannst dein Abenteuer mit dieser URL aufrufen:
+adventure.created.urlShort=Deine kurz-URL:
+adventure.created.manageAdv=Deine Abenteuerplanung
+adventure.create.shortURLavail=kurzname verfügbar?
+adventure.create.startAdv=Starte ein neues Gruppen-Abenteuer
+adventure.create.confirmation=Wir haben dein neues Abenteuer {0} für dich angelegt!
+adventure.create.inviteOthers=Nun lade deine Freunde ein, an deinem Abenteuer teilzunehmen
+adventure.create.inviteOthersVia=(Facebook, Email, (falls öffentlich): Twitter)
+
+#Yingyangyong
+yingyangyong.label.clickOn=klicke auf
+yingyangyong.name.placeholder=Gib deinem JournWe einen Namen
+yingyangyong.shortname.placeholder=Kurzname
+yingyangyong.place=Wo möchtest du hin?
+yingyangyong.place.placeholder=Ein interessanter Ort
+yingyangyong.adventurers=Wer beleitet dich auf deinem JournWe?
+yingyangyong.adventurers.public=Ist dein Abenteuer öffentlich?
+yingyangyong.adventurers.publish=Auf meiner Facebook Wall veröffentlichen
+yingyangyong.adventurers.facebookMessage=Facebook Nachricht
+yingyangyong.time=Wann soll es los gehen?
+
+#Adventure.general.voting
+adventure.general.favourite=Favorit
+adventure.general.advvotes=Abenteurer Abstimmung
+adventure.general.voting=Abstimmung Offen:
+adventure.general.yourvote=Deine Wahl 
+adventure.general.yes=JA 
+adventure.general.maybe=VIELLEICHT
+adventure.general.no=NEIN
+adventure.general.nofavourite.placeholder=Bislang kein Favorit ausgewählt
+
+#Adventure.general
+adventure.general.listactions=Aktionen
+adventure.general.loading=Laden
+adventure.general.cloneby=Du kannst ein neues Abenteuer erstellen basierend auf
+adventure.general.invitation=Du wurdest eingeladen an diesem Abeuteuer teilzunehmen!
+adventure.general.leaveconfirm=Bist du dir sicher, dass du hier raus willst?
+
+#Adventure.header
+adventure.header.find.placeholder=Find Orte, Leute und Inspirationen
+
+#Adventure.getScala
+adventure.getScala.start=Starte ein {0} Abenteuer
+adventure.getScala.adventure.title=Abenteuer
+adventure.getScala.discussion.title=Diskussion
+adventure.getScala.place.title=Ort
+adventure.getScala.place.subtitle=Finde eine interessante Location an der euer Abenteuer stattfinden soll. Die Welt ist gross, sucht euch was nettes aus.
+adventure.getScala.time.title=Datum
+adventure.getScala.time.subtitle=Besser ein ausgefülltes Leben, als ein voller Terminkalender. Findet die richtige Zeit um zusammen etwas zu erleben.
+adventure.getScala.messages.title=Nachrichten
+adventure.getScala.messages.subtitle=Nutzt eure gemeinsame JournWe Emailadresse um euch Reisebüro und Touranbietern abzustimmen. Alles an einem Ort, für alle sichtbar.
+adventure.getScala.todo.title=Todo Liste
+adventure.getScala.todo.subtitle=Was gilt es noch zu erledigen? Was muss ich noch einpacken? Teilt eure Liste mit euren Mitreisenden und stimmt euch ab.
+adventure.getScala.files.title=Dateien
+adventure.getScala.files.subtitle=Teilt eure Dateien. Speichert jpgs, pdfs, docs, xls, ...
+adventure.getScala.offers.title=Angebote
+adventure.getScala.offers.subtitle=Die besten Angebote zu eurer Reise. Schnell und einfach das passende raus suchen.
+adventure.getScala.adventurers.title=Abenteurer
+adventure.getScala.adventurers.subtitle=Ein Erlebnis mit grossartigen Begleitern und waren Freunden. Ladet sie ein, plant zusammen und lasst das Abenteuer beginnen.
+
+#Adventure.options
+adventure.options.facebookpublish=Posten auf Facebook
+adventure.options.facebooklike=Liken auf Facebook
+adventure.options.twitter=Twitter auf Twitter
+adventure.options.public=Öffentlich?
+
+#Adventure.location
+adventure.places.location=Ort
+adventure.places.favourite=Bevorzugter Ort:
+
+#Adventure.time
+adventure.time.start=Starttermin
+adventure.time.end=Endtermin
+adventure.time.start.placeholder=Start Datum
+adventure.time.end.placeholder=End Datum
+adventure.time.favourite=Bevorzugter Termin:
+adventure.time.option=Datums Option 
+
+#Adventure.adventurers
+adventure.adventurers.name=Name
+adventure.adventurers.myStat=Du bist...
+adventure.adventurers.status.notIn=Raus
+adventure.adventurers.status.undecided=Unentschlossen
+adventure.adventurers.status.soIn=Nicht abgeneigt
+adventure.adventurers.status.booked=Dabei
+adventure.adventurers.applicant=YDu bist ein Bewerber.
+adventure.adventurers.button.participate=Teilnehmer
+adventure.adventurers.status=Status
+adventure.adventurers.applicants=Bewerber
+adventure.adventurers.adopt=Aufnehmen
+adventure.adventurers.add.placeholder=Ein guter Freund
+
+#Adventure.todo
+adventure.todos.listaction=Aktionen
+adventure.todos.listheading=Zu erledigen
+adventure.todos.placeholder=Eine wichtige Sache
+adventure.todos.otherAdventurer=Todo Listen anderer Abenteurer
+adventure.todos.amazon.title=Bereite dich auf dein JournWe vor!
+adventure.todos.amazon.noItems=Keine Ergebnisse bei Amazon.
+adventure.todos.amazon.purchase=Bei Amazon bestellen
+
+#Adventure.files
+adventure.files.fileName=Dateiname
+adventure.files.uploadedBy=Hochladen via
+adventure.files.downloadBy=Download URL
+adventure.files.fileUpload=Datei Hochladen
+adventure.files.fileDrop=Datei hier Droppen
+adventure.files.fileSelect=Datei Selektieren
+adventure.files.fileChange=Ändern
+adventure.files.fileRemove=Entfernen
+adventure.files.imageSelect=Bild auswählen
+adventure.files.imageUpload=Bild hochladen
+
+#Adventure.comments
+adventure.comments.noComment=Bislang keine Kommentare. Möchtest du ein Kommentar anlegen?
+adventure.comments.comment=Kommentar...
+
+#Adventure.widgetComments
+adventure.widgetComments.placeholder=Sag hallo!
+adventure.widgetComments.firstComment=Schreibe ein erstes Kommentar!
+
+#Adventure.wallComments
+adventure.wallComments.placeholder=Sag was!
+adventure.wallComments.firstComment=Schreib eine erste Nachricht auf die Wall!
+
+#IndexVet
+index.welcome1=Willkommen zurück, {0}! Es warten neue Abenteuer auf dich.
+index.myJournWes=Meine JournWes
+
+#Admin
+admin.title=Administration and Wartung
+admin.category=Verwalte Kategorien
+admin.category.subcategories=Unterkategorien
+admin.inspiration=Verwalte Inspirationen
+
+#Inspiration
+inspiration.text=Inspirationen
+inspiration.title=Inspirations Kategorien Formular
+inspiration.getInspired=Werde inspirirert von...
+inspiration.ideas=JournWe Ideen
+
+#Public
+public.adventures=Öffentliche JournWes
+
+#User
+user.options=Nutzeroptionen
+user.notify=Ich möchte benachrichtigt werden...
+user.notify.immediately=Sofort
+user.notify.daily=Täglich
+user.notify.weekly=Wöchentlich
+user.notify.none=Nie
+user.badges=Badges
+
+#Feedback
+feedback.title=Feedback Formular
+feedback.type=Feedback Typ:
+feedback.type.feature=Feature request
+feedback.type.bug=Bug
+feedback.type.general=General feedback
+
+#Imprint
+imprint.title=Imprint & Disclaimer
+imprint.player1=JournWe is Michael Menzel
+imprint.player2= , Markus Klems
+imprint.player3= , Willi Tscheschner
+imprint.player4= and Sebastian Roth
+imprint.copyright=Copyright &copy; 2013 all rights reserved
+imprint.disclaimer=Website Disclaimer
+imprint.disclaimer.source=Source: businesslink.gov.uk
+imprint.disclaimer.text=The information contained in this website is for general information purposes only. The information is provided by www.journwe.com and while we endeavour to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk. In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of, or in connection with, the use of this website. Through this website you are able to link to other websites which are not under the control of www.journwe.com. We have no control over the nature, content and availability of those sites. The inclusion of any links does not necessarily imply a recommendation or endorse the views expressed within them. Every effort is made to keep the website up and running smoothly. However, www.journwe.com takes no responsibility for, and will not be liable for, the website being temporarily unavailable due to technical issues beyond our control.
+
+#example Texts
+yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow adventurer on this magnificent JournWe.
+
 
 #Landingpage
 subscribe.story=Wir lieben JournWe
@@ -43,100 +243,6 @@ subscribe.story5.cite=Shorty
 subscribe.story6.header=What to do NEXT WEEKEND
 subscribe.story6.content=Andy got time. Who's up for some crazy party? Or let's do some barbecue next to the river. He fixed the date now let's see who's in and what they can do.
 subscribe.story6.cite=Andy
-
-#Adventure.general.buttons
-adventure.general.button.join=Teilnehmen
-adventure.general.button.clone=Klonen
-adventure.general.button.cancel=Abbrechen
-adventure.general.button.leave=Verlassen
-adventure.general.button.reset=Zurücksetzen
-adventure.general.button.facebookPost=Posten bei Facebook
-
-#Adventure.general.created
-adventure.created.button.emailInvite=Email Einladung
-adventure.created.facebookMessage=Moin moin und servus! Begleite mich auf meinem Abenteur bei JournWe.com
-adventure.created.emailMessage=Moin moin und servus! Begleite mich auf meinem Abenteur bei JournWe.com. Schau dir an was wir demnächst zusammen erleben können: 
-adventure.created.button.emailSend=Email Senden
-adventure.created.url=Du kannst dein Abenteuer mit dieser URL aufrufen:
-adventure.created.urlShort=Deine kurz-URL:
-adventure.created.manageAdv=Deine Abenteuerplanung
-adventure.create.shortURLavail=kurzname verfügbar?
-adventure.create.startAdv=Starte ein neues Gruppen-Abenteuer
-
-#Adventure.general.voting
-adventure.general.favourite=Favorit
-adventure.general.advvotes=Abenteurer Abstimmung
-adventure.general.voting=Abstimmung Offen:
-adventure.general.yourvote=Deine Wahl 
-adventure.general.yes=JA 
-adventure.general.maybe=VIELLEICHT
-adventure.general.no=NEIN
-
-#Adventure.general
-adventure.general.listactions=Aktionen
-adventure.general.loading=Laden
-adventure.general.cloneby=Du kannst ein neues Abenteuer erstellen basierend auf
-adventure.general.invitation=Du wurdest eingeladen an diesem Abeuteuer teilzunehmen!
-adventure.general.leaveconfirm=Bist du dir sicher, dass du hier raus willst?
-
-#Adventure.getScala
-adventure.getScala.adventure.title=Abenteuer
-adventure.getScala.place.title=Ort
-adventure.getScala.place.subtitle=Finde eine interessante Location an der euer Abenteuer stattfinden soll. Die Welt ist gross, sucht euch was nettes aus.
-adventure.getScala.time.title=Datum
-adventure.getScala.time.subtitle=Besser ein ausgefülltes Leben, als ein voller Terminkalender. Findet die richtige Zeit um zusammen etwas zu erleben.
-adventure.getScala.messages.title=Nachrichten
-adventure.getScala.messages.subtitle=Nutzt eure gemeinsame JournWe Emailadresse um euch Reisebüro und Touranbietern abzustimmen. Alles an einem Ort, für alle sichtbar.
-adventure.getScala.todo.title=Todo Liste
-adventure.getScala.todo.subtitle=Was gilt es noch zu erledigen? Was muss ich noch einpacken? Teilt eure Liste mit euren Mitreisenden und stimmt euch ab.
-adventure.getScala.files.title=Dateien
-adventure.getScala.files.subtitle=Teilt eure Dateien. Speichert jpgs, pdfs, docs, xls, ...
-adventure.getScala.offers.title=Angebote
-adventure.getScala.offers.subtitle=Die besten Angebote zu eurer Reise. Schnell und einfach das passende raus suchen.
-adventure.getScala.adventurers.title=Abenteurer
-adventure.getScala.adventurers.subtitle=Ein Erlebnis mit grossartigen Begleitern und waren Freunden. Ladet sie ein, plant zusammen und lasst das Abenteuer beginnen.
-
-#Adventure.options
-adventure.options.facebookpublish=Posten auf Facebook
-adventure.options.facebooklike=Liken auf Facebook
-adventure.options.twitter=Twitter auf Twitter
-
-#Adventure.location
-adventure.places.location=Ort
-adventure.places.favourite=Bevorzugter Ort:
-
-#Adventure.time
-adventure.time.start=Starttermin
-adventure.time.end=Endtermin
-adventure.time.favourite=Bevorzugter Termin:
-adventure.time.option=Datums Option 
-
-#Adventure.adventurers
-adventure.adventurers.name=Name
-adventure.adventurers.myStat=Du bist...
-adventure.adventurers.status.notIn=Raus
-adventure.adventurers.status.undecided=Unentschlossen
-adventure.adventurers.status.soIn=Nicht abgeneigt
-adventure.adventurers.status.booked=Dabei
-adventure.adventurers.applicant=YDu bist ein Bewerber.
-adventure.adventurers.button.participate=Teilnehmer
-adventure.adventurers.status=Status
-adventure.adventurers.applicants=Bewerber
-adventure.adventurers.adopt=Aufnehmen
-
-#Adventure.todo
-adventure.todos.listaction=Aktionen
-adventure.todos.listheading=Zu erledigen
-
-#Adventure.files
-adventure.files.fileName=Dateiname
-adventure.files.uploadedBy=Hochladen via
-adventure.files.downloadBy=Download URL
-adventure.files.fileUpload=Datei Hochladen
-adventure.files.fileDrop=Datei hier Droppen
-adventure.files.fileSelect=Datei Selektieren
-adventure.files.fileChange=Ändern
-adventure.files.fileRemove=Entfernen
 
 
 #Travel Phrases
