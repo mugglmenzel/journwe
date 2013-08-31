@@ -3,11 +3,11 @@
 <div class="comments-wall">
 
 	<div id="comments-list-@topic" class="comment-list">
-		<div class="empty"><i class="icon-spinner icon-spin"></i> Loading...</div>
+		<div class="empty"><i class="icon-spinner icon-spin"></i> @Messages("adventure.general.loading")</div>
 	</div>	
 
 	<div id="input-comment-@topic" class="input-group row col-lg-8" style="margin-top: 20px;">
-	    <input type="text" placeholder="Speak up!" class="form-control"/>
+	    <input type="text" placeholder="@Messages("adventure.wallComments.placeholder")" class="form-control"/>
 	    <div class="input-group-btn">
 	    	<button id="btn-add-comment-@topic" class="btn btn-primary btn-add-comment" type="button"><i class="icon-plus"></i></button>
 	    </div>
@@ -46,7 +46,7 @@
     });
 
     if (!res.length){
-    list.append('<div class="empty"><i class="icon-envelope"></i> Write a first wall post!</div>');
+    list.append('<div class="empty"><i class="icon-envelope"></i> @Messages("adventure.wallComments.firstComment")</div>');
     }
     });
 

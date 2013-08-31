@@ -111,6 +111,17 @@ adventure.files.fileSelect=Select file
 adventure.files.fileChange=Change
 adventure.files.fileRemove=Remove
 
+#Adventure.comments
+adventure.comments.noComment=No comments here. Want to create a new comment?
+
+#Adventure.widgetComments
+adventure.widgetComments.placeholder=Say hello!
+adventure.widgetComments.firstComment=Write a first comment!
+
+#Adventure.wallComments
+adventure.wallComments.placeholder=Speak up!
+adventure.wallComments.firstComment=Write a first wall post!
+
 #Admin
 admin.title=Administration and Maintenance
 admin.category=Manage Category
