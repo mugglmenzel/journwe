@@ -201,8 +201,10 @@ body > .row-fluid > div.span8 h2 {
     padding: 18px 40px 18px 20px;
 }
 
-.navbar .brand span {
+.header .brand span {
 	font-weight: 100;
+    font-size: 20px;
+    line-height: 25px;
 }
 
 .navbar .nav > li > a {
