@@ -90,7 +90,7 @@
         <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}">
             <td><i class="icon-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></td>
             <td style="width:100%;">{%=o.title%}</td>
-            <td>Amazon?</td>
+            <td><a class="btn btn-link btn-affiliate">Purchase on Amazon</a></td>
             <td class="text-center"><button class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></button></td>
         </tr>
     </script>
@@ -258,6 +258,26 @@
                     $('.table-my-todos tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
                     btn.html('<i class="icon-plus"></i>');
                 });
+            });
+
+            $('#todos-adventurers-list tbody .btn-affiliate').on('click', function(e) {
+                //$(this).html('<i class="icon-spin icon-spinner"></i>');
+                e.preventDefault();
+
+                var a = $(this),
+                    tr = a.parents('.todo-entry'),
+                    id = tr.data('id');
+
+                $.get('@routes.AdventureTodoController.getTodoAffiliateItems(adv.getId())', {id: id}, function(res) {
+                    if(res.length) $('#amazon-affiliate .modal-content .modal-body').first().empty();
+                    else $('#amazon-affiliate .modal-content .modal-body').first().html('No items!');
+
+                    for(var i in res)
+                        $('#amazon-affiliate .modal-content .modal-body').first().append(tmpl('todo-affiliate-template', res[i]));
+
+                    $('#amazon-affiliate').modal();
+                });
+
             });
         }
 
