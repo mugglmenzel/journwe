@@ -68,7 +68,11 @@ public class AdventurePeopleController extends Controller {
                 advr.setAdventureId(advId);
                 advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
                 new AdventurerDAO().save(advr);
+            } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())){
+                advr.setParticipationStatus(EAdventurerParticipation.GOING);
+                new AdventurerDAO().save(advr);
             }
+
 
             return AdventureController.getIndex(advId);
         }
