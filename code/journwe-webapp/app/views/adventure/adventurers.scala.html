@@ -121,9 +121,9 @@ case EAdventurerParticipation.INVITEE => {label-warning}
             </a>
             <ul class="dropdown-menu">
                 <li><a onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i>
-                    Facebook</a></li>
+                    @Messages("adventure.general.label.facebook")</a></li>
                 <li><a onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i>
-                    Email</a></li>
+                    @Messages("adventure.general.label.email")</a></li>
             </ul>
         </div>
         <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
