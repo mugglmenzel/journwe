@@ -43,6 +43,17 @@ public class NotificationDAO extends CommonRangeEntityDAO<Notification> {
         return pm.count(clazz, query);
     }
 
+    public List<Notification> unread(String userId) {
+        List<Notification> result = new ArrayList<Notification>();
+        for (Notification notification : all(userId))
+            if (!notification.isRead()) result.add(notification);
+        return result;
+    }
+
+    public int countUnread(String userId){
+        return unread(userId).size();
+    }
+
     public List<Notification> unsent(String userId) {
         List<Notification> result = new ArrayList<Notification>();
         for (Notification notification : all(userId))

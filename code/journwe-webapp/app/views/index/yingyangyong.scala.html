@@ -239,7 +239,7 @@
     function searchPlace() {
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
             var id = 'places-item-' + results[0].geometry.location.lat().toString().replace('.', '_') + '-' + results[0].geometry.location.lng().toString().replace('.', '_');
-            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
+            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label label-success"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
             map.setCenter(results[0].geometry.location);
             var marker = new google.maps.Marker({
                 map: map,
@@ -282,7 +282,7 @@
     function addFriend() {
         var id = 'people-item-' + peopleCounter++;
         var input = ($('#people-add-input').attr('type') == 'text') ? '<input type="hidden" name="facebook[]" value="' + facebookUsers[$('#people-add-input').val()] + '">' : '<input type="hidden" name="email[]" value="' + $('#people-add-input').val() + '">';
-        $('#people-list').append('<li id="' + id +'">' + input + '<span class="label"><i class="' + $('#people-add-type').attr('class') + '"></i> ' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#people-list').append('<li id="' + id +'">' + input + '<span class="label label-danger"><i class="' + $('#people-add-type').attr('class') + '"></i> ' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
         $('#people-add-input').val('');
     }
 
@@ -338,7 +338,7 @@
         }
 
         var id = 'time-item-' + start.val() + '-' + end.val();
-        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label"><i class="icon-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label label-info"><i class="icon-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
 
         start.val('');
         end.val('');

@@ -62,7 +62,19 @@ public class UserController extends Controller {
 
         for (Notification c : new NotificationDAO().all(usr.getId())) {
             if (!c.isRead()){
-                results.add(Json.toJson(c));
+                ObjectNode node = Json.newObject();
+                String link = "#";
+                switch(c.getTopic()){
+                    case GENERAL:
+                    case USER:  link = routes.UserController.getProfile(usr.getId()).absoluteURL(request()); break;
+                    case ADVENTURE: link = routes.AdventureController.getIndex(c.getTopicRef()).absoluteURL(request()); break;
+                    default: link = routes.UserController.getProfile(usr.getId()).absoluteURL(request()); break;
+                }
+                node.put("link", link);
+                node.put("subject", c.getSubject());
+                node.put("message", c.getMessage());
+                node.put("sent", c.isSent());
+                results.add(node);
             }
         }
 

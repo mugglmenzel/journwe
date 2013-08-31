@@ -23,7 +23,6 @@ import play.mvc.Security;
 
 import javax.xml.ws.Holder;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,16 +77,13 @@ public class AdventureTodoController extends Controller {
                 }
                 node.put("image", j.getMediumImage() != null ? j.getMediumImage().getURL() : (j.getLargeImage() != null ? j.getLargeImage().getURL() : ""));
                 node.put("title", j.getItemAttributes().getTitle());
-                node.put("description",  j.getEditorialReviews() != null && j.getEditorialReviews().getEditorialReview() != null && j.getEditorialReviews().getEditorialReview().size() > 0 && j.getEditorialReviews().getEditorialReview().get(0) != null ? j.getEditorialReviews().getEditorialReview().get(0).getContent() : "");
+                node.put("description", j.getEditorialReviews() != null && j.getEditorialReviews().getEditorialReview() != null && j.getEditorialReviews().getEditorialReview().size() > 0 && j.getEditorialReviews().getEditorialReview().get(0) != null ? j.getEditorialReviews().getEditorialReview().get(0).getContent() : "");
                 node.put("price", j.getOfferSummary() != null && j.getOfferSummary().getLowestNewPrice() != null ? j.getOfferSummary().getLowestNewPrice().getFormattedPrice() : (j.getItemAttributes().getListPrice() != null ? j.getItemAttributes().getListPrice().getFormattedPrice() : ""));
                 productItems.add(node);
             }
 
 
-        Logger.debug("returning " + Json.toJson(productItems));
-        return
-
-                ok(Json.toJson(productItems));
+        return ok(Json.toJson(productItems));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)

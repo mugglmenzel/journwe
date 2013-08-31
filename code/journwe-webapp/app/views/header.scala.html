@@ -48,50 +48,43 @@
         <div class="col-lg-4 clearfix">
         @if(auth != null && user != null) {
             <div class="text-right">
-                @defining(new NotificationDAO()) { notiDAO =>
-                    <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"> <i class="icon-bell" title="Notifications"> @notiDAO.count(user.getId)</i></a>
+
+                    <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="icon-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
+                    <script type="text/x-tmpl" id="header-notification-template">
+                        <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}">{%=o.subject%}</a>
+                    </script>
                     <script>
                         (function(){
 
-                            var internal = false;
-                            $('#notifications-link').popover()
+                            var pop_content = '<i class="icon-spinner icon-spin"></i> Loading...';
+                            var pop_content_loaded = false;
+                            $('#notifications-link').popover({content: function () {return pop_content;}})
                                 .on('show.bs.popover', function(){
-                                    if (internal){ return; }
-                                    $(this).data('bs.popover').options.content = '<i class="icon-spinner icon-spin"></i> Loading...';
-                                })
-                                .on('shown.bs.popover', function(){
-                                    if (internal){ return; }
+                                    if(!pop_content_loaded)
+                                        loadNotifications();
 
-                                    var el = $(this),
-                                        pop = el.data('bs.popover'),
-                                        fn = arguments.callee;
-
-                                    $.get("/user/notifications", function(d){
-                                        pop.options.content = '<div class="list-group">'
-                                                + $.map(d, function(not){
-                                                        var link = "#";
-
-                                                        switch(String(not.topic).toUpperCase()){
-                                                            case "ADVENTURE":
-                                                                link = "/adventure/"+not.topicRef; break;
-                                                            case "GENERAL":
-                                                                link = "/"; break;
-                                                            case "USER":
-                                                                link = "/user/"+not.topicRef; break;
-                                                        }
-
-                                                        return '<a href="'+link+'" class="list-group-item" style="color: black" title="'+not.message+'">'+not.subject+'</a>';
-                                                    }).join('')
-                                                + '</div>';
-
-                                        internal = true;
-                                        pop.show();
-                                        internal = false;
+                                    $('#notifications-popover-content').scroll(function (event) {
+                                    alert('scrolltop: ' + $(this).scrollTop() + ', event: ' + event);
+                                        if($(this).scrollTop() == 0)
+                                            loadNotifications();
                                     });
+
                                 });
+
+                            function loadNotifications() {
+                                $.get('@routes.UserController.getNotifications()', function (d) {
+                                    pop_content = '<i class="icon-spinner icon-spin"></i> Loading...<div id="notifications-popover-content" class="list-group" style="overflow: auto; max-height: 200px;">' + $.map(d, function(not){
+                                    return tmpl('header-notification-template', not);
+                                    }).join('') + '</div>';
+                                    pop_content_loaded = true;
+                                    $('#notifications-link').popover('show');
+                                    $('#notifications-popover-content i').addClass('stash');
+                                });
+                            }
+
                         }());
                     </script>
-                }
+
                 <a class="btn btn-link" href="@routes.UserController.getProfile(user.getId())">
                     <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
                     @user.getName()
