@@ -22,6 +22,8 @@
               , classes = $element.attr('class')
               , color
               , moving
+ /*           , onLabel = "@Messages("adventure.general.label.on")"
+              , offLabel = "@Messages("adventure.general.label.off")"; */
               , onLabel = "ON"
               , offLabel = "OFF";
 

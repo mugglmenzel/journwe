@@ -126,7 +126,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
                     @Messages("adventure.general.label.email")</a></li>
             </ul>
         </div>
-        <input id="people-add-input" type="text" placeholder="A good ol' friend" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
+        <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
         <div class="input-group-btn">
             <button id="people-add-button" class="btn btn-primary btn-add" onclick="addFriend();"><i class="icon-plus"></i></button>
         </div>

@@ -47,11 +47,11 @@
 
         <div class="input-group col-lg-5">
             <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start")</span>
-            <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="Start Date" style=""/>
+            <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style=""/>
         </div>
         <div class="input-group col-lg-5">
             <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end")</span>
-            <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="End Date" style=""/>
+            <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style=""/>
         </div>
 
         <div class="col-lg-2 text-right">
@@ -126,7 +126,7 @@
 
             $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
             $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (result) {
-                $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "No favorite yet");
+                $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "@Messages("adventure.general.nofavourite.placeholder")");
                 $('.btn-close-time').toggle(!!result.favoriteTime);
 
                 $('#times-list tbody').empty();

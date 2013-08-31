@@ -35,8 +35,8 @@
 
 <div id="place-add-form" class="row">
     <div class="input-group col-lg-8" style="margin-bottom: 10px;">
-        <input type="text" placeholder="Add a decent place" id="place-add-input" style="" class="form-control">
-        <input id="place-add-comment-input" class="form-control stash" style="display: none; width: 50%;" type="text" placeholder="Comment ...">
+        <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" id="place-add-input" style="" class="form-control">
+        <input id="place-add-comment-input" class="form-control stash" style="display: none; width: 50%;" type="text" placeholder="@Messages("adventure.comments.comment")">
         <div class="input-group-btn">
             <button id="place-add-button" class="btn btn-add btn-primary"><i class="icon-plus"></i></button>
         </div>
@@ -152,7 +152,7 @@
         $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (result) {
 
 
-            $('#places-favorite-place-name').html(result.favoritePlace != "" ? result.favoritePlace.address : "No favorite yet");
+            $('#places-favorite-place-name').html(result.favoritePlace != "" ? result.favoritePlace.address : "@Messages("adventure.general.nofavourite.placeholder")");
             $('.btn-close-place').toggle(!!result.favoritePlace);
 
             $('#places-list tbody').empty();
