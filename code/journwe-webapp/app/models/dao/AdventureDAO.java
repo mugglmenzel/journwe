@@ -46,14 +46,13 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
 
 
     public List<Adventure> allPublic() {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("publish", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withN("1")));
-        return pm.scan(clazz,
-                scan);
+        return allPublic(null, -1);
     }
 
     public List<Adventure> allPublic(String lastKey, int limit) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(limit);
+        if (limit > 0) scan.setLimit(limit);
+
         if (lastKey != null && !"".equals(lastKey)) {
             Map<String, AttributeValue> startkey = new HashMap<String, AttributeValue>();
             startkey.put("id", new AttributeValue(lastKey));
@@ -62,7 +61,7 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
         scan.addFilterCondition("publish", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withN("1")));
         List<Adventure> results = pm.scan(clazz,
                 scan);
-        return results.subList(0, results.size() >= limit ? limit : results.size());
+        return limit > 0 ? results.subList(0, results.size() >= limit ? limit : results.size()) : results;
     }
 
 

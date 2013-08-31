@@ -4,7 +4,7 @@
 @import models.dao._
 @import java.text.SimpleDateFormat
 
-@play.api.cache.Cache.getOrElse("yingyangyong" + (if(ins != null){"." + ins.getId}else{""}), 3600) {
+@*play.api.cache.Cache.getOrElse("yingyangyong" + (if(ins != null){"." + ins.getId}else{""}), 3600) {*@
 <div id="yingyangyong-click-info" class="row">
     <div class="col-lg-2 col-lg-offset-1 text-center">
         <i class="icon-chevron-down"></i> 
@@ -347,4 +347,4 @@
 </script>
 
 
-}
+@*}*@

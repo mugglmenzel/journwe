@@ -50,35 +50,62 @@
             <div class="text-right">
 
                     <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="icon-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
+                    <div class="stash">
+                        <div id="notifications-popover-content">
+                            <div class="text-center"><i class="loading-top icon-spinner icon-spin"></i></div>
+                            <div class="notifications-list list-group pull-left" style="overflow: auto; max-height: 250px;"></div>
+                            <div class="text-center"><i class="loading-bottom icon-spinner icon-spin stash"></i></div>
+                        </div>
+                    </div>
                     <script type="text/x-tmpl" id="header-notification-template">
-                        <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}">{%=o.subject%}</a>
+                        <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}" data-id="{%=o.created%}">
+                            <div class="media">
+                                <span class="pull-left">
+                                    <img class="media-object" src="{%=o.image%}" alt="{%=o.subject%}" style="width: 50px">
+                                </span>
+                                <div class="media-body {% if(o.read){ %}mute{% } %}">
+                                    <h4 class="media-heading">{%=o.subject%}</h4>
+                                    <span>{%=o.message%}</span>
+                                </div>
+                            </div>
+                        </a>
                     </script>
                     <script>
                         (function(){
 
-                            var pop_content = '<i class="icon-spinner icon-spin"></i> Loading...';
+                            var pop_content = $('#notifications-popover-content');
                             var pop_content_loaded = false;
                             $('#notifications-link').popover({content: function () {return pop_content;}})
                                 .on('show.bs.popover', function(){
                                     if(!pop_content_loaded)
-                                        loadNotifications();
-
-                                    $('#notifications-popover-content').scroll(function (event) {
-                                    alert('scrolltop: ' + $(this).scrollTop() + ', event: ' + event);
-                                        if($(this).scrollTop() == 0)
-                                            loadNotifications();
-                                    });
-
+                                        loadNotifications(true);
                                 });
 
-                            function loadNotifications() {
-                                $.get('@routes.UserController.getNotifications()', function (d) {
-                                    pop_content = '<i class="icon-spinner icon-spin"></i> Loading...<div id="notifications-popover-content" class="list-group" style="overflow: auto; max-height: 200px;">' + $.map(d, function(not){
-                                    return tmpl('header-notification-template', not);
-                                    }).join('') + '</div>';
+                            function loadNotifications(clear, lastId) {
+                                if (clear) $(pop_content).find('i.loading-top').removeClass('stash');
+                                $.get('@routes.UserController.getNotifications()', {lastId: lastId, count: 5}, function (d) {
+                                    if (clear) $(pop_content).find('.notifications-list').empty();
+                                    for(var i in d)
+                                        $(pop_content).find('.notifications-list').append(tmpl('header-notification-template', d[i]));
+
+                                    if(!pop_content_loaded)
+                                        $(pop_content).find('.notifications-list').scroll(function (event) {
+                                            if($(this).scrollTop() === 0)
+                                                loadNotifications(true);
+                                            else if($(this).scrollTop() >= $(this).prop('scrollHeight') - $(this).height() - 20) {
+                                                var lastKey = $(this).find('a').last().data('id');
+                                                if(lastKey) {
+                                                    $(pop_content).find('i.loading-bottom').removeClass('stash');
+                                                    loadNotifications(false, lastKey);
+                                                }
+                                            }
+                                            //else {alert('scrolltop:' + $(this).scrollTop() + ',scrollheight:' + $(this).prop('scrollHeight') + ',height:' + $(this).height());}
+
+                                        });
+
                                     pop_content_loaded = true;
-                                    $('#notifications-link').popover('show');
-                                    $('#notifications-popover-content i').addClass('stash');
+
+                                    $(pop_content).find('i').addClass('stash');
                                 });
                             }
 

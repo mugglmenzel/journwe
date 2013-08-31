@@ -1,18 +1,15 @@
 package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.dao.common.CommonRangeEntityDAO;
-import models.notifications.ENotificationFrequency;
 import models.notifications.Notification;
 import models.notifications.NotificationDigestQueueItem;
-import models.user.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,11 +25,26 @@ public class NotificationDAO extends CommonRangeEntityDAO<Notification> {
     }
 
     public List<Notification> all(String userId) {
+        return all(userId, null, -1);
+    }
+
+    public List<Notification> all(String userId, String lastKey, int limit) {
         DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+
+        if (limit > 0) query.setLimit(limit);
+
+        if (lastKey != null && !"".equals(lastKey)) {
+            Map<String, AttributeValue> startkey = new HashMap<String, AttributeValue>();
+            startkey.put("userId", new AttributeValue(userId));
+            startkey.put("created", new AttributeValue(lastKey));
+            query.setExclusiveStartKey(startkey);
+        }
+
         Notification noti = new Notification();
         noti.setUserId(userId);
         query.setHashKeyValues(noti);
-        return pm.query(clazz, query);
+        List<Notification> results = pm.query(clazz, query);
+        return limit > 0 ? results.subList(0, results.size() >= limit ? limit : results.size()) : results;
     }
 
     public int count(String userId) {
@@ -50,7 +62,7 @@ public class NotificationDAO extends CommonRangeEntityDAO<Notification> {
         return result;
     }
 
-    public int countUnread(String userId){
+    public int countUnread(String userId) {
         return unread(userId).size();
     }
 
@@ -67,8 +79,6 @@ public class NotificationDAO extends CommonRangeEntityDAO<Notification> {
             if (notification.isSent()) result.add(notification);
         return result;
     }
-
-
 
 
     @Override
