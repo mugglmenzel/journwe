@@ -16,10 +16,12 @@ adventure.general.button.clone=Clone
 adventure.general.button.cancel=Cancel
 adventure.general.button.leave=Leave
 adventure.general.button.reset=Reset
+adventure.general.button.close=Close
 adventure.general.button.check=Check
 adventure.general.button.facebookPost=Post on Facebook
 adventure.general.button.category=Category
 adventure.general.button.startJournWe=Start JournWe
+adventure.general.button.more=Show More
 
 #Adventure.general.created
 adventure.created.button.emailInvite=Invite by Email
@@ -71,6 +73,7 @@ adventure.header.find.placeholder=Find Places, People and Inspirations
 
 #Adventure.getScala
 adventure.getScala.adventure.title=Adventure
+adventure.getScala.discussion.title=Discussion
 adventure.getScala.place.title=Place
 adventure.getScala.place.subtitle=Find a special place where your adventure takes place. Make it a beautiful spot worth exploring.
 adventure.getScala.time.title=Date
@@ -123,6 +126,9 @@ adventure.todos.listaction=Actions
 adventure.todos.listheading=My things to do
 adventure.todos.placeholder=Add an important thing
 adventure.todos.otherAdventurer=Other Adventurer's Todo Lists
+adventure.todos.amazon.title=Get Prepared for your JournWe!
+adventure.todos.amazon.noItems=No items on Amazon.
+adventure.todos.amazon.purchase=Purchase on Amazon
 
 #Adventure.files
 adventure.files.fileName=File name
