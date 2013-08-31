@@ -51,10 +51,10 @@
 
                     <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="icon-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
                     <div class="stash">
-                        <div id="notifications-popover-content">
-                            <div class="text-center"><i class="loading-top icon-spinner icon-spin"></i></div>
-                            <div class="notifications-list list-group pull-left" style="overflow: auto; max-height: 250px;"></div>
-                            <div class="text-center"><i class="loading-bottom icon-spinner icon-spin stash"></i></div>
+                        <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
+                            <div class="text-center" style="display: block;"><i class="loading-top icon-spinner icon-spin"></i></div>
+                            <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
+                            <div class="text-center" style="display: block;"><i class="loading-bottom icon-spinner icon-spin stash"></i></div>
                         </div>
                     </div>
                     <script type="text/x-tmpl" id="header-notification-template">
@@ -77,9 +77,10 @@
                             var pop_content_loaded = false;
                             $('#notifications-link').popover({content: function () {return pop_content;}})
                                 .on('show.bs.popover', function(){
+                                    $('body').addClass('unscrollable');
                                     if(!pop_content_loaded)
                                         loadNotifications(true);
-                                });
+                                } ).on('hide.bs.popover', function(){$('body').removeClass('unscrollable');});
 
                             function loadNotifications(clear, lastId) {
                                 if (clear) $(pop_content).find('i.loading-top').removeClass('stash');
@@ -89,7 +90,12 @@
                                         $(pop_content).find('.notifications-list').append(tmpl('header-notification-template', d[i]));
 
                                     if(!pop_content_loaded)
-                                        $(pop_content).find('.notifications-list').scroll(function (event) {
+                                        $(pop_content).find('.notifications-list').scroll(function (e) {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            event.preventDefault();
+                                            event.stopPropagation();
+
                                             if($(this).scrollTop() === 0)
                                                 loadNotifications(true);
                                             else if($(this).scrollTop() >= $(this).prop('scrollHeight') - $(this).height() - 20) {
@@ -100,13 +106,14 @@
                                                 }
                                             }
                                             //else {alert('scrolltop:' + $(this).scrollTop() + ',scrollheight:' + $(this).prop('scrollHeight') + ',height:' + $(this).height());}
-
+                                            return false;
                                         });
 
                                     pop_content_loaded = true;
 
                                     $(pop_content).find('i').addClass('stash');
                                 });
+
                             }
 
                         }());

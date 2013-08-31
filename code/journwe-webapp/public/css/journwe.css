@@ -4,7 +4,9 @@ body {
 	background-position: left top;
 	background-attachment: fixed;
 	background-size: cover;
+
 }
+
 
 body > * {
 	background-color: rgba(0,0,0,0.4);
@@ -850,4 +852,12 @@ h1 .x-edit-loading {
 
 .drophover {
     border: green solid 2px;
+}
+
+.popover {
+    max-width: 1200px;
+}
+
+.unscrollable {
+    overflow: hidden;
 }
