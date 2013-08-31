@@ -3,13 +3,12 @@ journwe.subtitle=where adventurers meet...
 subscribe.welcometext=JournWe helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join an adventure.
 subscribe.cta=Subscribe with your email to get notified when we go online!
 
-#yingyangyong
-yingyangyong.place.placeholder=A decent place
-
 #Adventure.general.labels
 adventure.general.label.facebook=Facebook
 adventure.general.label.email=Email
 adventure.general.label.edit=Edit
+adventure.general.label.on=ON
+adventure.general.label.off=OFF
 
 #Adventure.general.buttons
 adventure.general.button.join=Join
@@ -17,12 +16,16 @@ adventure.general.button.clone=Clone
 adventure.general.button.cancel=Cancel
 adventure.general.button.leave=Leave
 adventure.general.button.reset=Reset
+adventure.general.button.check=Check
 adventure.general.button.facebookPost=Post on Facebook
+adventure.general.button.category=Category
+adventure.general.button.startJournWe=Start JournWe
 
 #Adventure.general.created
 adventure.created.button.emailInvite=Invite by Email
 adventure.created.facebookMessage=Hey guys! Join my adventure on JournWe.com
 adventure.created.emailMessage=Hey guys! Join my adventure on JournWe.com. Discover what we could experience together: 
+adventure.created.email.placeholder=friend@@example.com
 adventure.created.button.emailSend=Send Email
 adventure.created.url=You can find your Adventure under this URL:
 adventure.created.urlShort=Your shortened URL:
@@ -34,6 +37,18 @@ adventure.create.confirmation2= for you!
 adventure.create.inviteOthers=Start motivating friends to join your Adventure
 adventure.create.inviteOthersVia=(Facebook, Email, if(public): Twitter)
 
+#Yingyangyong
+yingyangyong.label.clickOn=click on
+yingyangyong.name.placeholder=Name your JournWe
+yingyangyong.shortname.placeholder=Shortname
+yingyangyong.place=Where do you want to go?
+yingyangyong.place.placeholder=A decent place
+yingyangyong.adventurers=Who's gonna join your JournWe?
+yingyangyong.adventurers.public=Is your Adventure public?
+yingyangyong.adventurers.publish=Publish on my Facebook Wall
+yingyangyong.adventurers.facebookMessage=Facebook Message
+yingyangyong.time=When do you want to set off?
+
 #Adventure.general.voting
 adventure.general.favourite=Favourite
 adventure.general.advvotes=Adventurers' Votes
@@ -42,6 +57,7 @@ adventure.general.yourvote=Your Vote
 adventure.general.yes=YES 
 adventure.general.maybe=MAYBE
 adventure.general.no=NO
+adventure.general.nofavourite.placeholder=No favorite yet
 
 #Adventure.general
 adventure.general.listactions=Actions
@@ -49,6 +65,9 @@ adventure.general.loading=Loading
 adventure.general.cloneby=You can create a new Adventure based on
 adventure.general.invitation=You have been invited to join this Adventure!
 adventure.general.leaveconfirm=Are you sure, you want to leave
+
+#Adventure.header
+adventure.header.find.placeholder=Find Places, People and Inspirations
 
 #Adventure.getScala
 adventure.getScala.adventure.title=Adventure
@@ -80,6 +99,8 @@ adventure.places.favourite=Favourite Place:
 #Adventure.time
 adventure.time.start=Start
 adventure.time.end=End
+adventure.time.start.placeholder=Start Date
+adventure.time.end.placeholder=End Date
 adventure.time.favourite=Favourite Time:
 adventure.time.option=Time Option 
 
@@ -95,11 +116,13 @@ adventure.adventurers.button.participate=Participate
 adventure.adventurers.status=Status
 adventure.adventurers.applicants=Applicants
 adventure.adventurers.adopt=Adopt
+adventure.adventurers.add.placeholder=A good ol' friend
 
 #Adventure.todo
 adventure.todos.listaction=Actions
 adventure.todos.listheading=My things to do
 adventure.todos.placeholder=Add an important thing
+adventure.todos.otherAdventurer=Other Adventurer's Todo Lists
 
 #Adventure.files
 adventure.files.fileName=File name
@@ -110,6 +133,18 @@ adventure.files.fileDrop=Drop file here or
 adventure.files.fileSelect=Select file
 adventure.files.fileChange=Change
 adventure.files.fileRemove=Remove
+
+#Adventure.comments
+adventure.comments.noComment=No comments here. Want to create a new comment?
+adventure.comments.comment=Comment...
+
+#Adventure.widgetComments
+adventure.widgetComments.placeholder=Say hello!
+adventure.widgetComments.firstComment=Write a first comment!
+
+#Adventure.wallComments
+adventure.wallComments.placeholder=Speak up!
+adventure.wallComments.firstComment=Write a first wall post!
 
 #Admin
 admin.title=Administration and Maintenance
@@ -133,6 +168,10 @@ imprint.copyright=Copyright &copy; 2013 all rights reserved
 imprint.disclaimer=Website Disclaimer
 imprint.disclaimer.source=Source: businesslink.gov.uk
 imprint.disclaimer.text=The information contained in this website is for general information purposes only. The information is provided by www.journwe.com and while we endeavour to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk. In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of, or in connection with, the use of this website. Through this website you are able to link to other websites which are not under the control of www.journwe.com. We have no control over the nature, content and availability of those sites. The inclusion of any links does not necessarily imply a recommendation or endorse the views expressed within them. Every effort is made to keep the website up and running smoothly. However, www.journwe.com takes no responsibility for, and will not be liable for, the website being temporarily unavailable due to technical issues beyond our control.
+
+#example Texts
+yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow adventurer on this magnificent JournWe.
+
 
 #Landingpage
 subscribe.story=People love JournWe
