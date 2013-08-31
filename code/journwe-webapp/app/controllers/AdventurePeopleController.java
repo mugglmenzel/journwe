@@ -247,7 +247,7 @@ public class AdventurePeopleController extends Controller {
 
                     AdventureAuthorization authorization = new AdventureAuthorization();
                     authorization.setAdventureId(advId);
-                    authorization.setUserId(usr.getId());
+                    authorization.setUserId(invitee.getId());
                     authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
                     new AdventureAuthorizationDAO().save(authorization);
                 }
