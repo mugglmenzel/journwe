@@ -22,8 +22,7 @@
     <div class="jrn-container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@routes.InspirationController.createAdventure(ins.getCategoryId, ins.getInspirationId)"> @Messages("adventure.getScala.start1")
-                    "@ins.getName()" @Messages("adventure.getScala.start2") </a></div>
+                <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@routes.InspirationController.createAdventure(ins.getCategoryId, ins.getInspirationId)"> @Messages("adventure.getScala.start", ins.getName()) </a></div>
                 @if(ins.getDescription != null){
                     <p>@Html(ins.getDescription())</p>
                 }

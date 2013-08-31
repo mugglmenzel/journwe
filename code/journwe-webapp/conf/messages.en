@@ -41,10 +41,9 @@ adventure.created.urlShort=Your shortened URL:
 adventure.created.manageAdv=Manage your Adventure
 adventure.create.shortURLavail=shortname available?
 adventure.create.startAdv=Start a new Group Adventure
-adventure.create.confirmation1=We created the new Adventure 
-adventure.create.confirmation2= for you!
+adventure.create.confirmation=We created the new Adventure {0} for you!
 adventure.create.inviteOthers=Start motivating friends to join your Adventure
-adventure.create.inviteOthersVia=(Facebook, Email, if(public): Twitter)
+adventure.create.inviteOthersVia=(Facebook, Email, (if public): Twitter)
 
 #Yingyangyong
 yingyangyong.label.clickOn=click on
@@ -79,8 +78,7 @@ adventure.general.leaveconfirm=Are you sure, you want to leave
 adventure.header.find.placeholder=Find Places, People and Inspirations
 
 #Adventure.getScala
-adventure.getScala.start1=Start a
-adventure.getScala.start2= Adventure
+adventure.getScala.start=Start a {0} Adventure
 adventure.getScala.adventure.title=Adventure
 adventure.getScala.discussion.title=Discussion
 adventure.getScala.place.title=Place
