@@ -98,6 +98,9 @@ public class UserController extends Controller {
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             node.put("created", sdf.format(c.getCreated()));
             results.add(node);
+
+            c.setRead(true);
+            new NotificationDAO().save(c);
         }
 
         return ok(Json.toJson(results));
