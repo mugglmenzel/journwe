@@ -9,11 +9,11 @@
 
 
     <div class="jrn-container">
-        <h2>Inspirations</h2>
+        <h2> @Messages("inspiration.text") </h2>
         <table class="table table-striped">
 
         @for(ins <- inspirations) {
-            <tr><td>@ins.getInspirationId()</td><td>@ins.getName()</td><td><a href="@InspirationController.getBucketURL(ins.getCategoryId, ins.getInspirationId)" class="act-primary"><i class="icon-cloud-upload"></i> Upload Images</a> <a href="@routes.InspirationController.edit(ins.getCategoryId, ins.getInspirationId())" class="act-primary"><i class="icon-edit"></i>edit</a></td><td><a href="@routes.InspirationController.delete(ins.getCategoryId, ins.getInspirationId())" class="act-danger"><i class="icon-trash"></i>delete</a></td></tr>
+            <tr><td>@ins.getInspirationId()</td><td>@ins.getName()</td><td><a href="@InspirationController.getBucketURL(ins.getCategoryId, ins.getInspirationId)" class="act-primary"><i class="icon-cloud-upload"></i> @Messages("adventure.files.imageUpload") </a> <a href="@routes.InspirationController.edit(ins.getCategoryId, ins.getInspirationId())" class="act-primary"><i class="icon-edit"></i> @Messages("adventure.general.label.edit") </a></td><td><a href="@routes.InspirationController.delete(ins.getCategoryId, ins.getInspirationId())" class="act-danger"><i class="icon-trash"></i> @Messages("adventure.general.label.delete") </a></td></tr>
         }
         </table>
     </div>
@@ -132,7 +132,7 @@
                     </script>
                 </div>
                 <div>
-                    <div>Time</div>
+                    <div> @Messages("adventure.general.label.time") </div>
                     <ul id="inspiration-time" class="list-unstyled list-inline">
                         @if(inspForm("timeStart").value()) {
                             <li id="inspiration-time"><input type="hidden" name="time" value="@inspForm("timeStart").value(),@inspForm("timeEnd").value()"><span class="label"><i class="icon-time"></i> @inspForm("timeStart").value() to @inspForm("timeEnd").value() &nbsp;<a href="#" onclick="$('#inspiration-time').remove();">&times;</a></span> <span class="divider"></span></li>
@@ -141,11 +141,11 @@
 
                     <div class="row">
                         <div class="input-group col-lg-5">
-                            <span class="input-group-addon"><i class="icon-calendar"></i> Start Date</span>
+                            <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start.placeholder") </span>
                             <input id="inspiration-time-input-start" type="date" name="startDate" placeholder="Start Date" style="max-width: 150px;" class="form-control"/>
                         </div>
                         <div class="input-group col-lg-5">
-                            <span class="input-group-addon"><i class="icon-calendar"></i> End Date</span>
+                            <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end.placeholder")  @Messages("adventure.time.start.placeholder") </span>
                             <input id="inspiration-time-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;" class="form-control"/>
                         </div>
 
@@ -167,7 +167,7 @@
 
             </fieldset>
             <div class="form-actions">
-              <input type="submit" value="Save Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+              <input type="submit" value="Save Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link"> @Messages("adventure.general.button.cancel") </a>
             </div>
         }
     </div>

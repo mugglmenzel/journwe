@@ -21,25 +21,24 @@
     <div class="jrn-container" style="margin-top: -20px;">
         @currentAuth() { auth => @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
                 <p class="lead">
-                    Welcome back, @{new UserDAO().findByAuthUserIdentity(auth).getName()}! You have some adventures before
-                    you.
+                    @Messages("index.welcome1", new UserDAO().findByAuthUserIdentity(auth).getName())
                 </p>
             }
         }
     
-        <h3><i class="icon-bookmark"></i> My JournWes <div class="pull-right"><button id="adventures-my-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h3>
+        <h3><i class="icon-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button id="adventures-my-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h3>
         <div class="row">
             <div class="col-lg-3">
                 <div id="yingyangyong-starter" class="text-center">
                     <button class="btn btn-link" href="#" onclick="$('#yingyangyong-container').slideDown(function () {resetBounds();}); $('#yingyangyong-starter button').prop('disabled', true);">
                         <img src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' width="170"><br>
-                        <p class="lead"><i class="icon-asterisk"></i> Create New</p>
+                        <p class="lead"><i class="icon-asterisk"></i> @Messages("adventure.general.button.createNew") </p>
                     </button>
                 </div>
             </div>
             <div class="col-lg-9">
                 <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-spinner" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-                <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-default btn-block">Show More</button></div>
+                <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
                 <script type="text/x-tmpl" id="adventure-my-template">
                     <div class="adventure-entry row" data-id="{%=o.id%}" style="background-color: rgba(245,245,245,0.6); margin: 3px; padding: 14px;">
                         <div class="col-lg-1" style="margin: -13px 0 -13px -13px;">
@@ -89,11 +88,11 @@
 
 
     <div class="jrn-container">
-        <h2><i class="icon-bullhorn"></i> Public JournWes <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2><i class="icon-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
 
         <div style="">
             <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-spinner" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block">Show More</button></div>
+            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
     </div>
     <script type="text/x-tmpl" id="adventure-public-template">
@@ -145,13 +144,13 @@
     @*
 
 
-    <h3><i class="icon-star"></i> JournWe ideas</h3>
+    <h3><i class="icon-star"></i> @Messages("inspiration.ideas") </h3>
     <div class="row-fluid">
     <div class="span2">
 
     <ul class="nav nav-pills nav-stacked">
     <li
-    @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()">All</a></li>
+    @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()"> @Messages("adventure.general.label.all") </a></li>
     @for(cat <- categories) {
     <li
     @if(cat.getCategory().getId() == catId) {class="active"}><a
@@ -185,11 +184,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="leave-question">Sure, you want to leave?</h3>
+                    <h3 id="leave-question"> @Messages("adventure.general.leaveconfirm") </h3>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" onclick="window.location.href = $('#leave').data('leave-link')">Leave</a> <a class="btn btn-default"
-                data-dismiss="modal">Cancel</a>
+                    <a class="btn btn-danger" onclick="window.location.href = $('#leave').data('leave-link')"> @Messages("adventure.general.button.leave") </a> <a class="btn btn-default"
+                data-dismiss="modal"> @Messages("adventure.general.button.cancel") </a>
                 </div>
             </div>
         </div>
