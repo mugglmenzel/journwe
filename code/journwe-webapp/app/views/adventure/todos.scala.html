@@ -71,7 +71,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title"> @Messages("adventure.todos.amazon.title") </h3>
                 </div>
-                <div class="modal-body"> @Messages("adventure.todos.amazon.noItems") </div>
+                <div class="modal-body"><div><i class="icon-spinner icon-spin"></i></div><div class="content"></div></div>
                 <div class="modal-footer">
                     <button class="btn btn-default" data-dismiss="modal"><i class="icon-remove"></i> @Messages("adventure.general.button.close")</button>
                 </div>
@@ -231,14 +231,17 @@
                 tr = a.parents('.todo-entry'),
                 id = tr.data('id');
 
+                $('#amazon-affiliate .modal-content .modal-body .content').first().empty();
+                $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().removeClass('stash');
+                $('#amazon-affiliate').modal();
+
                 $.get('@routes.AdventureTodoController.getTodoAffiliateItems(adv.getId())', {id: id}, function(res) {
-                    if(res.length) $('#amazon-affiliate .modal-content .modal-body').first().empty();
-                    else $('#amazon-affiliate .modal-content .modal-body').first().html('No items!');
+                    if(!res.length) $('#amazon-affiliate .modal-content .modal-body .content').first().html('@Messages("adventure.todos.amazon.noItems")');
 
                     for(var i in res)
-                        $('#amazon-affiliate .modal-content .modal-body').first().append(tmpl('todo-affiliate-template', res[i]));
+                        $('#amazon-affiliate .modal-content .modal-body .content').first().append(tmpl('todo-affiliate-template', res[i]));
 
-                    $('#amazon-affiliate').modal();
+                    $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().addClass('stash');
                 });
 
             });
@@ -269,14 +272,17 @@
                     tr = a.parents('.todo-entry'),
                     id = tr.data('id');
 
+                $('#amazon-affiliate .modal-content .modal-body .content').first().empty();
+                $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().removeClass('stash');
+                $('#amazon-affiliate').modal();
+
                 $.get('@routes.AdventureTodoController.getTodoAffiliateItems(adv.getId())', {id: id}, function(res) {
-                    if(res.length) $('#amazon-affiliate .modal-content .modal-body').first().empty();
-                    else $('#amazon-affiliate .modal-content .modal-body').first().html('No items!');
+                    if(!res.length) $('#amazon-affiliate .modal-content .modal-body .content').first().html('@Messages("adventure.todos.amazon.noItems")');
 
                     for(var i in res)
-                        $('#amazon-affiliate .modal-content .modal-body').first().append(tmpl('todo-affiliate-template', res[i]));
+                        $('#amazon-affiliate .modal-content .modal-body .content').first().append(tmpl('todo-affiliate-template', res[i]));
 
-                    $('#amazon-affiliate').modal();
+                    $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().addClass('stash');
                 });
 
             });
