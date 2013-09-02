@@ -214,31 +214,52 @@ yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow a
 #Landingpage
 subscribe.story=People love JournWe
 #Story1
-subscribe.story1.header=Markus always wanted to visit ancient Temples
-subscribe.story1.content=Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".
+subscribe.story1.header=START A GROUP ADVENTURE WITH YOUR FRIENDS
+subscribe.story1.content=Markus always wanted to see the ancient temples of Chichén Itzá. He published his adventure plan on JournWe and convinced three of this friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".
 subscribe.story1.cite=Markus Klems, a JournWe adventurer
 #Story1a
 subscribe.story1a.header=Markus always wanted to GO ON A TRIP TO...
 subscribe.story1a.content=...the ancient temples of Chichén Itzá. This year his dream will become true. He asked three of his best friends to join him on this adventure. They found a perfect week in August matching all their schedules. Now they are figuring out the best value offers.
+#Story1b
+subscribe.story1b.header=Markus always wanted to visit ancient Temples
+subscribe.story1b.content=Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".
+subscribe.story1b.cite=Markus Klems, a JournWe adventurer
 #Story2
-subscribe.story2.header=Jozsef found the right place to meet friends
-subscribe.story2.content=Every year Jozsef meets with friends at the exact same weekend. But where to go is always trouble! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks JournWe."
+subscribe.story2.header=GET SUPPORT TO ACHIEVE YOUR PLANS
+subscribe.story2.content=Every year Jozsef meets again with his friends from uni. But where and when to go is always trouble! JournWe helped him and his friends to settle for the right spot and find a suitable time for everyone. "Man, last year were struggling a lot to arrange our reunion. This time was a whole new experience! Thanks JournWe."
 subscribe.story2.cite=Jozsef, construction worker at JournWe
 #Story2a
 subscribe.story2a.header=Lets PLAY BASKETBALL
 subscribe.story2a.content=Baseketball is Jozsef life. Every week he's playing on the San Fran grounds. Join him an his friends and get distracted by the fantastic views whilst tying another slam dunk. Bring some sports shoes and a towel.
+#Story2b
+subscribe.story2b.header=Jozsef found the right place to meet friends
+subscribe.story2b.content=Every year Jozsef meets with friends at the exact same weekend. But where to go is always trouble! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks JournWe."
+subscribe.story2b.cite=Jozsef, construction worker at JournWe
 #Story3
-subscribe.story3.header=This years biggest FEATURED EVENT
-subscribe.story3.content=Roskilde 2013! The place to be on June 11th. Kraftwerk, Queens Of The Stone Age, Disclosure, Goat, Slipknot,... There are special bus shuttels picking you up anywhere in Europe, check them out. Tents will be provided but all sorts of things recommended to bring. But no need for a cam, pictures are shared here afterwards.
-subscribe.story3.cite=Somebody
+subscribe.story3.header=JOIN OTHER TRAVELLERS PUBLIC ADVENTURES
+subscribe.story3.content=Andy got time and the weather forecast said it would be a sunny next weekend. He checked out what’s going on JournWe and joined a group of adventurers that were arranging a party barbecue on the beaches. “I got involved real quick and helped with the final arrangements. And the very best was that I made some new friends.”
+subscribe.story3.cite=Andy, thanks for delivering the sandwiches every day
+#Story3b
+subscribe.story3b.header=This years biggest FEATURED EVENT
+subscribe.story3b.content=Roskilde 2013! The place to be on June 11th. Kraftwerk, Queens Of The Stone Age, Disclosure, Goat, Slipknot,... There are special bus shuttels picking you up anywhere in Europe, check them out. Tents will be provided but all sorts of things recommended to bring. But no need for a cam, pictures are shared here afterwards.
+subscribe.story3b.cite=Somebody
+
 #Story4
-subscribe.story4.header=Every year WE REUNITE
-subscribe.story4.content=Since we left uni, every year we try to meet again. The people are set but big discussions on date and place. Well, JournWe created, options entered and after we voted the hurdle was taken. It will be a blast - as always.
+subscribe.story4.header=CHECK OUT OUR INSPIRATIONS
+subscribe.story4.content=We have a huge list of adventure ideas, featured events and other recommendations that may inspire your next trip. They are fully packed with infos and insights. You may just use them as a template for your very own adventure.
 subscribe.story4.cite=A guy
+#Story4b
+subscribe.story4b.header=Every year WE REUNITE
+subscribe.story4b.content=Since we left uni, every year we try to meet again. The people are set but big discussions on date and place. Well, JournWe created, options entered and after we voted the hurdle was taken. It will be a blast - as always.
+subscribe.story4b.cite=A guy
 #Story5
-subscribe.story5.header=Remember THE DREAM
-subscribe.story5.content=That's his personal dream. Whenever it will happen, but here Willi saved it. A detailed plan aiming on one goal -  see Britney Spears and get her signature right next to his Britney bum tattoo.
+subscribe.story5.header=REMEMBER YOUR DREAMS
+subscribe.story5.content=Your very own bucket list. Don’t only list your dream adventures but keep polishing them. Gather all the infos you’ve already found, what you need to remember about it and monitor the prices for flights, hotels and other stuff . The day will come when you start inviting your friends to join your dream. Good friends will listen to your adventures, best friends will join them.
 subscribe.story5.cite=Shorty
+#Story5b
+subscribe.story5b.header=Remember THE DREAM
+subscribe.story5b.content=That's his personal dream. Whenever it will happen, but here Willi saved it. A detailed plan aiming on one goal -  see Britney Spears and get her signature right next to his Britney bum tattoo.
+subscribe.story5b.cite=Shorty
 #Story6
 subscribe.story6.header=What to do NEXT WEEKEND
 subscribe.story6.content=Andy got time. Who's up for some crazy party? Or let's do some barbecue next to the river. He fixed the date now let's see who's in and what they can do.
