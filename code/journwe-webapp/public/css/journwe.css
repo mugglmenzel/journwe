@@ -759,7 +759,8 @@ h1 .x-edit-loading {
 }
 
 .header .navbar-text {
-	margin-top: 10px;
+	margin-top: -10px;
+	margin-bottom: 5px;
 }
 
 .header .text-right {
