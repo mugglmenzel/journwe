@@ -14,7 +14,7 @@
 </div>
 @if(JournweAuthorization.canEditAdventureDescription(adv.getId)) {
 <div class="pull-right">
-    <div class="btn-edit-description"><a class="btn btn-default btn-xs" onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');$(this).parent().hide()"><i class="icon-pencil"></i>@Messages("adventure.general.label.edit")</a></div>
+    <div class="btn-edit-description"><a class="btn" onclick="event.stopPropagation(); $('#adventureDescription').editable('toggle');$(this).parent().hide()"><i class="icon-pencil"></i> @Messages("adventure.general.label.edit")</a></div>
 </div>
 }
 

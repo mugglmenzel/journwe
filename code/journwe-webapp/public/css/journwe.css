@@ -141,6 +141,13 @@ h1 .editableform {
 	background: rgba(152, 229, 251, 0.6);
 }
 
+.jrn-footer {
+	background: rgba(255,255,255,0.2);
+	padding: 20px 20px;
+	border-top: 1px solid white;
+	margin: 20px -20px -20px -20px;
+}
+
 .main > .row > * {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
     display: block;
@@ -808,7 +815,7 @@ h1 .x-edit-loading {
 }
 
 .has-switch {
-	border: none;
+	border: 1px solid white;
 	overflow: hidden;
 	min-width: 125px;
 }
@@ -820,8 +827,8 @@ h1 .x-edit-loading {
 
 .has-switch span, 
 .has-switch label {
-	padding-bottom: 8px;
-	padding-top: 8px;
+	padding-bottom: 6px;
+	padding-top: 6px;
 }
 
 .has-switch span.switch-right {
