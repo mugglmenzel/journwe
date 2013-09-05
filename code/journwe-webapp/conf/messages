@@ -93,8 +93,8 @@ adventure.files.fileName=File name
 adventure.files.uploadedBy=Uploaded by
 adventure.files.downloadBy=Download URL
 adventure.files.fileUpload=Upload file
-adventure.files.fileDrop=Drop file here or
-adventure.files.fileSelect=Select file
+adventure.files.fileDrop=Drop file or
+adventure.files.fileSelect=click here
 adventure.files.fileChange=Change
 adventure.files.fileRemove=Remove
 
