@@ -28,10 +28,10 @@
     $(function(){
 
     var adventureId = "@adv.getId()",
-    topic = ("@topic"+""),
-    threadId = adventureId+topic,
-    input = $("#input-comment-@topic input"),
-    btn = $("#btn-add-comment-@topic");
+        topic = ("@topic"+""),
+        threadId = adventureId+topic,
+        input = $("#input-comment-@topic input"),
+        btn = $("#btn-add-comment-@topic");
 
     // The container for all comments
     var list = $("#comments-list-@topic");
@@ -39,40 +39,40 @@
 
     // Perform GET
     $.get('@routes.CommentController.listComments("")'+threadId, function(res){
-    list.html("");
-    res.forEach(function(f){
-    f.time = formatTime(f.comment.timestamp); // Append
-    list.append(tmpl('template-wall', f)).fadeIn();
-    });
+        list.html("");
+        res.forEach(function(f){
+            f.time = formatTime(f.comment.timestamp); // Append
+            list.append(tmpl('template-wall', f)).fadeIn();
+        });
 
-    if (!res.length){
-    list.append('<div class="empty"><i class="icon-envelope"></i> @Messages("adventure.wallComments.firstComment")</div>');
-    }
+        if (!res.length){
+            list.append('<div class="empty"><i class="icon-envelope"></i> @Messages("adventure.wallComments.firstComment")</div>');
+        }
     });
 
     // Perform POST
     btn.click(function(){
-    var val;
+        var val;
 
-    // Check if there is a value
-    if (val = (input.val()||"").trim()){
-    btn.html('<i class="icon-spin icon-spinner"></i>');
-    input.val(""); // Reset
+        // Check if there is a value
+        if (val = (input.val()||"").trim()){
+            btn.html('<i class="icon-spin icon-spinner"></i>');
+            input.val(""); // Reset
 
-    $.post("@routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f){
-    list.find(".empty").remove();
+            $.post("@routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f){
+                list.find(".empty").remove();
 
-    f.time = formatTime(f.comment.timestamp); // Append
-    list.append(tmpl('template-wall', f)).fadeIn();
-    btn.html('<i class="icon-plus"></i>');
-    });
-    }
+                f.time = formatTime(f.comment.timestamp); // Append
+                list.append(tmpl('template-wall', f)).fadeIn();
+                btn.html('<i class="icon-plus"></i>');
+            });
+        }
     });
 
     input.keyup(function(e) {
-    if(e.keyCode == 13) {
-    btn.click();
-    }
+        if(e.keyCode == 13) {
+            btn.click();
+        }
     });
 
 

@@ -40,6 +40,16 @@ a:focus,
 	text-decoration: none;
 }
 
+.modal a {
+	color: #333;
+}
+
+
+.modal a:hover, 
+.modal a:focus {
+	color: #444;
+}
+
 .nav a:hover,
 .nav a:focus,
 .nav a:hover i,
@@ -340,6 +350,10 @@ table.inspiration .images img {
 .comment-list {
 	max-height: 100px;
 	overflow: auto;
+}
+
+.comments-wall .comment-list {
+	max-height: none;
 }
 
 .comment-list > * {
