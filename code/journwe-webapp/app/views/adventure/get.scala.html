@@ -87,11 +87,11 @@
             <div class="col-lg-12">
                 @index(adv, ins)
             </div>
-        </div>
-        @if(JournweAuthorization.canViewAdventureComments(adv.getId)) {
-            @{views.html.comment.widget_comment.render(adv, "index")}
-        }
 
+            @if(JournweAuthorization.canViewAdventureComments(adv.getId)) {
+                @{views.html.comment.widget_comment.render(adv, "index")}
+            }
+        </div>
         <div class="row jrn-footer">
             <div class="col-lg-12">@options(adv)</div>
         </div>

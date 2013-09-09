@@ -348,7 +348,8 @@ table.inspiration .images img {
 }
 	
 .comment-list {
-	max-height: 100px;
+	max-height: 100%;
+	max-height: calc(100% - 40px);
 	overflow: auto;
 }
 
@@ -651,6 +652,7 @@ h3 {
     min-width: 220px;
 	color: white;
 	top: 0px;
+	height: 100%;
 }
 
 #adventure-container .comments-wall {
@@ -658,6 +660,7 @@ h3 {
     min-width: 300px;
     color: white;
     top: 0px;
+	height: auto;
 }
 
 #adventure-container .table td {
