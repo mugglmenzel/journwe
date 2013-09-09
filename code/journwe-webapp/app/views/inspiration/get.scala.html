@@ -106,9 +106,9 @@
                 <script>
                     $(document).ready(function(){
                         $.get('@routes.InspirationController.getImages(category.getId, ins.getId)', function (images) {
-                            if(images.length){
+                            if(images){
                                 for(var i in images) {
-                                    $('#inspiration-photos').append(tmpl('inspiration-photo-template', advs[i]));
+                                    $('#inspiration-photos').append(tmpl('inspiration-photo-template', images[i]));
                                 }
                                 $('#inspiration-photos .polaroid').last().hide().fadeIn();
                             } else $('#inspiration-photos').html('No Photos.');

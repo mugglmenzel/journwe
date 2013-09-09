@@ -126,9 +126,10 @@ public class ApplicationController extends Controller {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
         int count = new Integer(data.get("count")).intValue();
+        String inspirationId = data.get("inspirationId");
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
-        for (Adventure adv : new AdventureDAO().allPublic(lastId, count)) {
+        for (Adventure adv : new AdventureDAO().allPublic(lastId, count, inspirationId)) {
             ObjectNode node = Json.newObject();
             node.put("id", adv.getId());
             node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
@@ -141,6 +142,32 @@ public class ApplicationController extends Controller {
             result.add(node);
         }
 
+        return ok(Json.toJson(result));
+    }
+
+    public static Result getPublicAdventuresOfCategory(String catId) {
+        DynamicForm data = form().bindFromRequest();
+        String lastId = data.get("lastId");
+        int count = new Integer(data.get("count")).intValue();
+
+        List<ObjectNode> result = new ArrayList<ObjectNode>(count);
+        int i = 0;
+        for (Inspiration ins : new InspirationDAO().all(catId, lastId, count)) {
+            for (Adventure adv : new AdventureDAO().allPublic(lastId, count, ins.getInspirationId())) {
+                ObjectNode node = Json.newObject();
+                node.put("id", adv.getId());
+                node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                node.put("image", adv.getImage());
+                node.put("name", adv.getName());
+                node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+                node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+
+                result.add(node);
+                i++;
+            }
+            if(i >= count) break;
+        }
         return ok(Json.toJson(result));
     }
 
@@ -158,6 +185,8 @@ public class ApplicationController extends Controller {
             node.put("link", routes.InspirationController.get(ins.getCategoryId(), ins.getInspirationId()).absoluteURL(request()));
             node.put("image", ins.getImage());
             node.put("name", ins.getName());
+            node.put("lat", ins.getPlaceLatitude());
+            node.put("lng", ins.getPlaceLongitude());
 
             result.add(node);
         }

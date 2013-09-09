@@ -8,6 +8,7 @@
 
 GET           /category/:id/categories.json                         controllers.ApplicationController.getCategories(id:String)
 GET           /category/:id/inspirations.json                       controllers.ApplicationController.getInspirations(id:String)
+GET           /category/:id/adventures/public.json                  controllers.ApplicationController.getPublicAdventuresOfCategory(id:String)
 GET           /adventures/my.json                                   controllers.ApplicationController.getMyAdventures()
 GET           /adventures/public.json                               controllers.ApplicationController.getPublicAdventures()
 
