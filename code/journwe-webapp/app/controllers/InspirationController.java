@@ -55,9 +55,7 @@ public class InspirationController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getImages(String catId, String id) {
         List<String> images = new ArrayList<String>();
-        Logger.debug("checking images in " + S3_BUCKET_INSPIRATION_IMAGES + "/" + id + "/");
         for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_INSPIRATION_IMAGES).withPrefix(id + "/")).getObjectSummaries()) {
-            Logger.debug("got key: " + os.getKey());
             images.add(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                     os.getKey()));
         }

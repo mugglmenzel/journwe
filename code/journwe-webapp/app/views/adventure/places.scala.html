@@ -127,7 +127,7 @@
             $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
 
 
-        var marker = new google.maps.Marker({map: map, position: new google.maps.LatLng(data.lat, data.lng)});
+        var marker = new google.maps.Marker({animation: google.maps.Animation.DROP, map: map, position: new google.maps.LatLng(data.lat, data.lng), title: data.address});
         markers[data.placeId] = marker;
         map.setCenter(new google.maps.LatLng(data.lat, data.lng));
         resetBounds();

@@ -47,8 +47,8 @@ public class AdventurePlaceController extends Controller {
             node.put("advId", po.getAdventureId());
             node.put("placeId", po.getPlaceId());
             node.put("address", po.getAddress());
-            node.put("lat", po.getLatitude().doubleValue());
-            node.put("lng", po.getLongitude().doubleValue());
+            node.put("lat", po.getLatitude().floatValue());
+            node.put("lng", po.getLongitude().floatValue());
             PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(po.getOptionId(), usr.getId());
             node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
             node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(po.getOptionId())));

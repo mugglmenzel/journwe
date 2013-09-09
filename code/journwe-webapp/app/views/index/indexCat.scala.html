@@ -18,7 +18,7 @@
 
     </div>
     <div class="jrn-container">
-        <h2><i class="icon-bullhorn"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> </h2>
+        <h2><i class="icon-bullhorn"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
         <div style="">
             <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-compass" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block" onclick="loadInspirations($('#inspirations-public-list .polaroid').last().data('id'));"> @Messages("adventure.general.button.more") </button></div>
@@ -40,46 +40,12 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
-
-        loadInspirations(null, true);
-
-        });
-
-        function loadInspirations(lastId, clear) {
-            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-spinner"></i>');
-            $.get('@routes.ApplicationController.getInspirations(cat.getId)', {lastId: lastId, count: 10} , function (advs) {
-                if (clear) $('#inspirations-public-list').empty();
-                for(var i in advs) {
-                    var polaroid = tmpl('inspiration-public-template', advs[i]);
-                    $('#inspirations-public-list').append(polaroid);
-
-                    $('#inspirations-public-list .polaroid').last().hide().fadeIn().hover(
-                        function(){
-                            $(this).find("div.overlay").slideDown("fast");
-                        },
-                        function(){
-                            $(this).find("div.overlay").slideUp("fast");
-                        }
-                    );
-
-                    var placeLatLng = new google.maps.LatLng(advs[i].lat, advs[i].lng);
-
-                    var marker = new google.maps.Marker({
-                        map: inspirationsMap,
-                        position: placeLatLng
-                    });
-
-
-                }
-                $('#inspirations-public-load-more-button').html('Show More');
-            });
-        }
 
         var inspirationsMap;
+        var inspirationMarkers = [];
         google.maps.visualRefresh = true;
 
-        function initialize() {
+        function initializeInspirationsMap() {
             var mapOptions = {
                 zoom: 5,
                 center: new google.maps.LatLng(49.483472, 8.476992),
@@ -88,7 +54,64 @@
             inspirationsMap = new google.maps.Map(document.getElementById('inspiration-places-map'), mapOptions);
         }
 
-        google.maps.event.addDomListener(window, 'load', initialize);
+        function resetInspirationBounds() {
+            var bounds = new google.maps.LatLngBounds();
+            for(var i in inspirationMarkers) {
+                bounds.extend(inspirationMarkers[i].getPosition());
+            }
+            inspirationsMap.fitBounds(bounds);
+            google.maps.event.trigger(inspirationsMap, 'resize');
+        }
+
+        $(window).ready(function(){
+            initializeInspirationsMap();
+            loadInspirations(null, true);
+            $('#inspirations-public-button-refresh').click(function () {loadInspirations(null, true);});
+            $('#inspirations-public-load-more-button').click(function () {loadInspirations($('#inspirations-public-list .polaroid').last().data('id'));});
+
+        });
+
+        function loadInspirations(lastId, clear) {
+            $('#inspirations-public-button-refresh i').addClass('icon-spin');
+            $('#inspirations-public-load-more-button').html('<i class="icon-spin icon-spinner"></i>');
+            $.get('@routes.ApplicationController.getInspirations(cat.getId)', {lastId: lastId, count: 10} , function (advs) {
+                if (clear) $('#inspirations-public-list').empty();
+                for(var i in advs) {
+                    $('#inspirations-public-list').append(tmpl('inspiration-public-template', advs[i]));
+
+                    inspirationMarkers[advs[i].id] = new google.maps.Marker({
+                        animation: google.maps.Animation.DROP,
+                        map: inspirationsMap,
+                        position: new google.maps.LatLng(advs[i].lat, advs[i].lng),
+                        title: advs[i].name
+                    });
+                    var infowindow = new google.maps.InfoWindow({
+                        content: '<a href="' + advs[i].link + '"><h3>' + advs[i].name + '</h3></a>'
+                    });
+                    google.maps.event.addListener(inspirationMarkers[advs[i].id], 'click', function() {
+                        infowindow.open(inspirationsMap, inspirationMarkers[advs[i].id]);
+                    });
+
+                    resetInspirationBounds();
+                }
+
+                $('#inspirations-public-list .polaroid').last().hide().fadeIn().hover(
+                    function(){
+                        $(this).find("div.overlay").slideDown("fast");
+                        inspirationMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
+                    },
+                    function(){
+                        $(this).find("div.overlay").slideUp("fast");
+                        inspirationMarkers[$(this).data('id')].setAnimation(google.maps.Animation.DROP);
+                    }
+                );
+
+                $('#inspirations-public-load-more-button').html('Show More');
+                $('#inspirations-public-button-refresh i').removeClass('icon-spin');
+            });
+        }
+
+
 
     </script>
 

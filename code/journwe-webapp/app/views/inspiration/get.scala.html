@@ -105,7 +105,7 @@
                 </script>
                 <script>
                     $(document).ready(function(){
-                        $.get('@routes.InspirationController.getImages(category.getId, ins.getId)', function (images) {
+                        $.get('@routes.InspirationController.getImages(category.getId, ins.getInspirationId)', function (images) {
                             if(images){
                                 for(var i in images) {
                                     $('#inspiration-photos').append(tmpl('inspiration-photo-template', images[i]));
