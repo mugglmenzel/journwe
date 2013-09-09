@@ -101,7 +101,7 @@
                 <img class="media-object" src="{%=o.image%}" alt="{%=o.title%} thumbnail" style="width: 100px;">
             </a>
             <div class="media-body">
-                <h4 class="media-heading">{%=o.title%} ({%=o.price%})</h4>
+                <h4 class="media-heading"><a class="pull-left" href="{%=o.url%}" target="_blank">{%=o.title%}</a> {%=o.price%}</h4>
                 {%=o.description%} <a href="{%=o.url%}" target="_blank"> @Messages("adventure.general.button.more") </a>
             </div>
         </div>

@@ -27,7 +27,7 @@
     <tr>
         <th>@Messages("adventure.general.favourite")</th>
         <th>@Messages("adventure.time.option")</th>
-        <th>@Messages("adventure.general.yourvote")</th>
+        <th style="min-width: 135px;">@Messages("adventure.general.yourvote")</th>
         <th class="text-center">@Messages("adventure.general.yes")</th>
         <th class="text-center">@Messages("adventure.general.maybe")</th>
         <th class="text-center">@Messages("adventure.general.no")</th>
@@ -45,17 +45,17 @@
 
 <div id="time-add-form" class="row">
 
-        <div class="input-group col-lg-5">
+        <div class="input-group col-lg-5" style="width: 43%;">
             <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start")</span>
             <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style=""/>
         </div>
-        <div class="input-group col-lg-5">
+        <div class="input-group col-lg-5" style="width: 43%;">
             <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end")</span>
             <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style=""/>
         </div>
 
-        <div class="col-lg-2 text-right">
-            <button id="time-add-button" class="btn btn-primary"><i class="icon-plus"></i></button>
+        <div class="col-lg-2 text-right" style="width: 14%;">
+            <button id="time-add-button" class="btn btn-primary" style="width: 100%;"><i class="icon-plus"></i></button>
         </div>
 
 </div>

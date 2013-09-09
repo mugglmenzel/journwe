@@ -40,6 +40,16 @@ a:focus,
 	text-decoration: none;
 }
 
+.modal a {
+	color: #333;
+}
+
+
+.modal a:hover, 
+.modal a:focus {
+	color: #444;
+}
+
 .nav a:hover,
 .nav a:focus,
 .nav a:hover i,
@@ -149,6 +159,13 @@ h1 .editableform {
 
 .jrn-container h2#times {
 	background: rgba(152, 229, 251, 0.6);
+}
+
+.jrn-footer {
+	background: rgba(255,255,255,0.2);
+	padding: 20px 20px;
+	border-top: 1px solid white;
+	margin: 20px -20px -20px -20px;
 }
 
 .main > .row > * {
@@ -341,8 +358,17 @@ table.inspiration .images img {
 }
 	
 .comment-list {
-	max-height: 100px;
+	max-height: 100%;
+	max-height: calc(100% - 40px);
 	overflow: auto;
+}
+
+.comments-wall .comment-list {
+	max-height: none;
+}
+
+.comments-wall .comment-list > * {
+	margin-bottom: 20px;
 }
 
 .comment-list > * {
@@ -636,6 +662,7 @@ h3 {
     min-width: 220px;
 	color: white;
 	top: 0px;
+	height: 100%;
 }
 
 #adventure-container .comments-wall {
@@ -643,6 +670,7 @@ h3 {
     min-width: 300px;
     color: white;
     top: 0px;
+	height: auto;
 }
 
 #adventure-container .table td {
@@ -663,11 +691,9 @@ h3 {
 }
 
 #files-upload-dropzone {
-	min-height: 150px;
-    line-height: 150px;
 	border: dashed 3px rgba(255,255,255,0.4);
-	padding: 10px;
-    margin-top: 10px;
+	padding: 40px 0 20px 0;
+	margin-top: 15px;
 }
 
 #files-upload-dropzone.hover {
@@ -733,6 +759,7 @@ h1 .x-edit-loading {
 	left: 20px;
     color: white;
     font-size: 32px;
+    text-shadow: 0 0px 1px black, 0 1px 1px #444;
 }
 
 .prime-image .title-name a {
@@ -769,7 +796,8 @@ h1 .x-edit-loading {
 }
 
 .header .navbar-text {
-	margin-top: 10px;
+	margin-top: -10px;
+	margin-bottom: 5px;
 }
 
 .header .text-right {
@@ -819,7 +847,7 @@ h1 .x-edit-loading {
 }
 
 .has-switch {
-	border: none;
+	border: 1px solid white;
 	overflow: hidden;
 	min-width: 125px;
 }
@@ -831,8 +859,8 @@ h1 .x-edit-loading {
 
 .has-switch span, 
 .has-switch label {
-	padding-bottom: 8px;
-	padding-top: 8px;
+	padding-bottom: 6px;
+	padding-top: 6px;
 }
 
 .has-switch span.switch-right {
@@ -870,4 +898,34 @@ h1 .x-edit-loading {
 
 .unscrollable {
     overflow: hidden;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+	background-color: rgba(255,255,255,0.4);
+}
+
+.table-striped>tbody>tr:hover>td, 
+.table-striped>tbody>tr:hover>th {
+	background-color: rgba(255,255,255,0.6);
+}
+
+.table thead>tr>th, 
+.table tbody>tr>th, 
+.table tfoot>tr>th, 
+.table thead>tr>td, 
+.table tbody>tr>td, 
+.table tfoot>tr>td {
+	border-top: none;
+	border-bottom: none;
+}
+
+.adventure-container .editable-container,
+.adventure-container .editable-input,
+.adventure-container textarea {
+	width: 100%;
+}
+
+.adventure-container .editable-buttons {
+	text-align: right;
 }

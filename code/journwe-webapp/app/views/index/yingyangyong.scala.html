@@ -111,10 +111,10 @@
                             </div>
                         </div>
                         <div class="spacer20"></div>
-                        <div style="margin-bottom: 20px;"><span style="min-width: 200px; display: inline-block;"> @Messages("yingyangyong.adventurers.public") </span>
+                        <div style="margin-bottom: 20px;"><span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.public") </span>
                             <div class="switch"><input type="checkbox" id="publish" name="publish"></div>
                         </div>
-                        <div style="margin-bottom: 20px;"><span style="min-width: 200px; display: inline-block;"> @Messages("yingyangyong.adventurers.publish")</span>
+                        <div style="margin-bottom: 20px;"><span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.publish")</span>
                             <div class="switch"><input type="checkbox" id="facebookWall" name="facebookWall" onchange="$('.post-on-facebook').toggle(this.checked)"></div>
                             <div class="form-group post-on-facebook" style="display: none; margin-top: 10px;">
                                 <label for="facebookWallPost"><i class="icon-facebook"></i> @Messages("yingyangyong.adventurers.facebookMessage") </label>
@@ -139,17 +139,17 @@
                         <div class="row">
 
 
-                            <div class="input-group col-lg-5">
+                            <div class="input-group col-lg-5" style="width: 43%;">
                                 <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start")</span>
                                 <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style="max-width: 200px;"/>
                             </div>
-                            <div class="input-group col-lg-5">
+                            <div class="input-group col-lg-5" style="width: 43%;">
                                 <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end")</span>
                                 <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style="max-width: 200px;"/>
                             </div>
 
-                            <div class="col-lg-2 text-right">
-                                <a class="btn btn-add btn-primary" onclick="addTime();"><i class="icon-plus"></i></a>
+                            <div class="col-lg-2 text-right" style="width: 14%;">
+                                <a class="btn btn-add btn-primary" onclick="addTime();" style="width: 100%;"><i class="icon-plus"></i></a>
                             </div>
                         </div>
                     </div>
