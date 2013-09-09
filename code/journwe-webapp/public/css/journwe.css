@@ -746,6 +746,7 @@ h1 .x-edit-loading {
 	left: 20px;
     color: white;
     font-size: 32px;
+    text-shadow: 0 0px 1px black, 0 1px 1px #444;
 }
 
 .prime-image .title-name a {
