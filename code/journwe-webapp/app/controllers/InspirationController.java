@@ -7,12 +7,13 @@ import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.typesafe.config.ConfigFactory;
-import models.Inspiration;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
-import models.category.Category;
 import models.dao.CategoryDAO;
+import models.dao.InspirationCategoryDAO;
 import models.dao.InspirationDAO;
+import models.inspiration.Inspiration;
+import models.inspiration.InspirationCategory;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -45,15 +46,18 @@ public class InspirationController extends Controller {
 
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result get(String catId, String id) {
-        Inspiration ins = new InspirationDAO().get(catId, id);
-        Category cat = new CategoryDAO().get(ins.getCategoryId());
+    public static Result get(String id) {
+        Inspiration ins = new InspirationDAO().get(id);
+        if (ins == null) return badRequest();
 
-        return ok(get.render(ins, cat));
+        List<InspirationCategory> cats = new InspirationCategoryDAO().getCategories(ins.getId());
+        InspirationCategory cat = cats != null && cats.size() > 0 ? cats.iterator().next() : null;
+
+        return ok(get.render(ins, new CategoryDAO().get(cat.getCategoryId())));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result getImages(String catId, String id) {
+    public static Result getImages(String id) {
         List<String> images = new ArrayList<String>();
         for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_INSPIRATION_IMAGES).withPrefix(id + "/")).getObjectSummaries()) {
             images.add(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
@@ -70,20 +74,20 @@ public class InspirationController extends Controller {
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result createAdventure(String catId, String insId) {
-        return ok(indexNew.render(new InspirationDAO().get(catId, insId)));
+    public static Result createAdventure(String insId) {
+        return ok(indexNew.render(new InspirationDAO().get(insId)));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result edit(String catId, String id) {
-        Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(catId, id));
+    public static Result edit(String id) {
+        Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(id));
         return ok(manage.render(editInsForm,
                 new CategoryDAO().allOptionsMap(),
                 new InspirationDAO().all()));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static String getBucketURL(String catId, String id) {
+    public static String getBucketURL(String id) {
         return s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                 id);
     }
@@ -107,11 +111,11 @@ public class InspirationController extends Controller {
             File file = image.getFile();
 
             try {
-                if (ins.getInspirationId() == null && !new InspirationDAO().save(ins))
+                if (ins.getId() == null && !new InspirationDAO().save(ins))
                     throw new Exception();
 
-                String originalCategoryId = df.get("originalInspirationCategoryId");
-                Logger.debug("original cat: " + originalCategoryId + ", new cat: " + ins.getCategoryId());
+//                String originalCategoryId = df.get("originalInspirationCategoryId");
+//                Logger.debug("original cat: " + originalCategoryId + ", new cat: " + ins.getCategoryId());
 
 
                 Logger.info("got image files " + image.getFilename());
@@ -121,12 +125,12 @@ public class InspirationController extends Controller {
                             ConfigFactory.load().getString("aws.accessKey"),
                             ConfigFactory.load().getString("aws.secretKey")));
                     s3.putObject(new PutObjectRequest(
-                            S3_BUCKET_INSPIRATION_IMAGES, ins.getInspirationId() + "/title", file)
+                            S3_BUCKET_INSPIRATION_IMAGES, ins.getId() + "/title", file)
                             .withCannedAcl(CannedAccessControlList.PublicRead));
                     ins.setImage(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
-                            ins.getInspirationId() + "/title"));
+                            ins.getId() + "/title"));
                 } else
-                    ins.setImage(new InspirationDAO().get(originalCategoryId, ins.getInspirationId()).getImage());
+                    ins.setImage(new InspirationDAO().get(ins.getId()).getImage());
 
 
                 if (form().bindFromRequest().get("place") != null) {
@@ -152,13 +156,25 @@ public class InspirationController extends Controller {
                     ins.setTimeEnd(null);
                 }
 
+                boolean updateCategoryCount = false;
+                for (String key : form().bindFromRequest().data().keySet()) {
+                    if (key.startsWith("category[")) {
+                        InspirationCategory insCat = new InspirationCategory();
+                        insCat.setCategoryId(form().bindFromRequest().data().get(key));
+                        insCat.setInspirationId(ins.getId());
+                        new InspirationCategoryDAO().save(insCat);
+                        updateCategoryCount = true;
+                    }
+                }
 
                 if (new InspirationDAO().save(ins)) {
-                    if (!ins.getCategoryId().equals(originalCategoryId)) {
-                        Logger.debug("deleting " + originalCategoryId + "," + ins.getInspirationId());
-                        new InspirationDAO().delete(originalCategoryId, ins.getInspirationId());
-                    }
+//                    if (!ins.getCategoryId().equals(originalCategoryId)) {
+//                        Logger.debug("deleting " + originalCategoryId + "," + ins.getInspirationId());
+//                        new InspirationDAO().delete(originalCategoryId, ins.getInspirationId());
+//                    }
 
+                    if (updateCategoryCount)
+                        new CategoryDAO().updateCategoryCountCache();
                     flash("success",
                             "Saved Inspiration with image " + ins.getImage()
                                     + ".");
@@ -178,15 +194,21 @@ public class InspirationController extends Controller {
         }
     }
 
+
     @Security.Authenticated(SecuredAdminUser.class)
-    public static Result delete(String catId, String id) {
+    public static Result delete(String id) {
         try {
             AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
                     ConfigFactory.load().getString("aws.accessKey"),
                     ConfigFactory.load().getString("aws.secretKey")));
             s3.deleteObject(S3_BUCKET_INSPIRATION_IMAGES, id);
-            if (new InspirationDAO().delete(catId, id)) {
+
+            for(InspirationCategory insCat : new InspirationCategoryDAO().getCategories(id))
+                new InspirationCategoryDAO().delete(insCat);
+
+            if (new InspirationDAO().delete(id)) {
                 flash("success", "Inspiration with id " + id + " deleted.");
+                new CategoryDAO().updateCategoryCountCache();
                 return ok(manage.render(insForm,
                         new CategoryDAO().allOptionsMap(),
                         new InspirationDAO().all()));

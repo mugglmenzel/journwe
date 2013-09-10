@@ -7,7 +7,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
-import models.Inspiration;
+import models.inspiration.Inspiration;
 import models.adventure.*;
 import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
@@ -154,8 +154,7 @@ public class AdventurePeopleController extends Controller {
 
     public static Result postOnMyFacebookWall(String advId) {
         Adventure adv = new AdventureDAO().get(advId);
-        Inspiration ins = Inspiration.fromId(adv.getInspirationId());
-        ins = ins != null ? new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()) : ins;
+        Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
         AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
 
         DynamicForm f = form().bindFromRequest();

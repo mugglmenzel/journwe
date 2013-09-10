@@ -46,10 +46,10 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
 
 
     public List<Adventure> allPublic() {
-        return allPublic(null, -1, null);
+        return allPublic(null, null, -1);
     }
 
-    public List<Adventure> allPublic(String lastKey, int limit, String inspirationId) {
+    public List<Adventure> allPublic(String inspirationId, String lastKey, int limit) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(limit);
         if (limit > 0) scan.setLimit(limit);
 

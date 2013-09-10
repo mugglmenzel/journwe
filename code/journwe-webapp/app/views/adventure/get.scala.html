@@ -1,4 +1,5 @@
-@(adv: models.adventure.Adventure, ins: Inspiration, advr: models.adventure.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])(description: Html)
+@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])(description: Html)
+@import models.inspiration.Inspiration
 @import models.adventure.EAdventurerParticipation
 @import models.authorization.JournweAuthorization
 
@@ -52,7 +53,7 @@
             <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
             data-url="@routes.AdventureController.saveEditable()"
             data-original-title="Enter adventure name" data-inputclass="input-lg">@adv.getName()</a> <i class="icon-pencil muted"></i> <span></span>
-            @if(ins != null) {<small>- <a href="@routes.InspirationController.get(ins.getCategoryId, ins.getId)">@ins.getName()</a></small>}
+            @if(ins != null) {<small>- <a href="@routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
         </div>
         }
         <div class="toolbar">

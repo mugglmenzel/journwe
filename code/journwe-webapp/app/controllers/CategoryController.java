@@ -98,4 +98,11 @@ public class CategoryController extends Controller {
         }
 
     }
+
+    @Security.Authenticated(SecuredAdminUser.class)
+    public static Result updateCountCache() {
+        new CategoryDAO().updateCategoryCountCache();
+        return ok();
+    }
+
 }

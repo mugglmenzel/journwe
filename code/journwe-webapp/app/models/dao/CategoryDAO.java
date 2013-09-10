@@ -2,18 +2,14 @@ package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import models.Inspiration;
+import models.inspiration.Inspiration;
 import models.category.Category;
 import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
 import models.dao.common.CommonEntityDAO;
-import play.Logger;
+import models.inspiration.InspirationCategory;
 
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class CategoryDAO extends CommonEntityDAO<Category> {
 
@@ -49,10 +45,10 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
 
     public Integer countInspirations(String id) {
         DynamoDBQueryExpression query = new DynamoDBQueryExpression();
-        Inspiration ins = new Inspiration();
+        InspirationCategory ins = new InspirationCategory();
         ins.setCategoryId(id);
         query.setHashKeyValues(ins);
-        return pm.count(Inspiration.class, query);
+        return pm.count(InspirationCategory.class, query);
     }
 
 
@@ -67,6 +63,21 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     public Integer countInspirationsHierarchyCached(String id) {
         CategoryCount cc = new CategoryCountDAO().get(id);
         return cc != null ? cc.getCount() : countInspirationsHierarchy(id);
+    }
+
+    public void updateCategoryCountCache() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(Category cat : all()) {
+                    CategoryCount cc = new CategoryCount();
+                    cc.setCategoryId(cat.getId());
+                    cc.setCount(new CategoryDAO().countInspirationsHierarchy(cat.getId()));
+                    new CategoryCountDAO().save(cc);
+                }
+            }
+        }).start();
+
     }
 
 }

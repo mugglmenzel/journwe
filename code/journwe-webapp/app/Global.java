@@ -105,12 +105,7 @@ public class Global extends GlobalSettings {
             @Override
             public void run() {
                 Logger.debug("Updating Category Count Cache");
-                for(Category cat : new CategoryDAO().all()) {
-                    CategoryCount cc = new CategoryCount();
-                    cc.setCategoryId(cat.getId());
-                    cc.setCount(new CategoryDAO().countInspirationsHierarchy(cat.getId()));
-                    new CategoryCountDAO().save(cc);
-                }
+                new CategoryDAO().updateCategoryCountCache();
 
             }
         }, Akka.system().dispatcher());

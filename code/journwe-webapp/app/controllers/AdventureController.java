@@ -9,7 +9,7 @@ import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
-import models.Inspiration;
+import models.inspiration.Inspiration;
 import models.adventure.*;
 import models.adventure.group.AdventurerGroup;
 import models.adventure.place.PlaceOption;
@@ -35,7 +35,6 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.adventure.create;
-import views.html.adventure.created;
 import views.html.adventure.getIndex;
 import views.html.adventure.getPublic;
 
@@ -59,8 +58,7 @@ public class AdventureController extends Controller {
         else {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
-            Inspiration ins = Inspiration.fromId(adv.getInspirationId());
-            ins = ins != null ? new InspirationDAO().get(ins.getCategoryId(), ins.getInspirationId()) : ins;
+            Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
             if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()))
                 return ok(getPublic.render(adv, ins));
             else

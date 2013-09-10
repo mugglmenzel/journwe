@@ -1,3 +1,4 @@
-@(adv: models.adventure.Adventure, ins: Inspiration, advr: models.adventure.Adventurer, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])
+@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.Adventurer, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])
+@import models.inspiration.Inspiration
 
 @get(adv, ins, advr, "adventurers", timeForm, fileForm){<span></span>}

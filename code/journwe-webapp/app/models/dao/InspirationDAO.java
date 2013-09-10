@@ -1,19 +1,17 @@
 package models.dao;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.dao.common.CommonEntityDAO;
-import models.Inspiration;
-import models.dao.common.CommonRangeEntityDAO;
+import models.inspiration.Inspiration;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InspirationDAO extends CommonRangeEntityDAO<Inspiration> {
+public class InspirationDAO extends CommonEntityDAO<Inspiration> {
 
     public InspirationDAO() {
         super(Inspiration.class);
@@ -24,32 +22,22 @@ public class InspirationDAO extends CommonRangeEntityDAO<Inspiration> {
                new DynamoDBScanExpression());
     }
 
-    public List<Inspiration> all(String catId) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("categoryId", new Condition().withAttributeValueList(new AttributeValue(catId)).withComparisonOperator(ComparisonOperator.EQ));
-        return pm.scan(Inspiration.class, scan);
-    }
-
-    public List<Inspiration> all(String catId, String lastKey, int limit) {
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withLimit(limit);
+    public List<Inspiration> all(String lastKey, int limit) {
+        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(limit);
 
         if (lastKey != null && !"".equals(lastKey)) {
             Map<String, AttributeValue> startkey = new HashMap<String, AttributeValue>();
-            startkey.put("inspirationId", new AttributeValue(lastKey));
-            query.setExclusiveStartKey(startkey);
+            startkey.put("id", new AttributeValue(lastKey));
+            scan.setExclusiveStartKey(startkey);
         }
 
-        Inspiration ins = new Inspiration();
-        ins.setCategoryId(catId);
-        query.setHashKeyValues(ins);
-
-        return pm.query(Inspiration.class, query);
+        return pm.scan(Inspiration.class, scan);
     }
 
     public Map<String, String> allOptionsMap() {
         Map<String, String> result = new HashMap<String, String>();
         for (Inspiration in : all())
-            result.put(in.getInspirationId(), in.getName());
+            result.put(in.getId(), in.getName());
         return result;
     }
 }

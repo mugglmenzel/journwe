@@ -1,4 +1,5 @@
-@(ins: Inspiration)(category:  models.category.Category)
+@(ins: models.inspiration.Inspiration)(category:  models.category.Category)
+@import models.inspiration.Inspiration
 
 @import models.category.Category
 @import java.text.SimpleDateFormat
@@ -15,14 +16,14 @@
                 @if(category != null) {<small>- <a href="@routes.ApplicationController.categoryIndex(category.getId)">@category.getName()</a></small>}
             </div>
         <div class="toolbar">
-            <a class="btn btn-primary pull-right" href="@routes.InspirationController.createAdventure(ins.getCategoryId, ins.getInspirationId)"><i class="icon-arrow-right"></i> @Messages("adventure.general.label.start") </a>
+            <a class="btn btn-primary pull-right" href="@routes.InspirationController.createAdventure(ins.getId)"><i class="icon-arrow-right"></i> @Messages("adventure.general.label.start") </a>
         </div>
     </div>
 
     <div class="jrn-container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@routes.InspirationController.createAdventure(ins.getCategoryId, ins.getInspirationId)"> @Messages("adventure.getScala.start", ins.getName()) </a></div>
+                <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@routes.InspirationController.createAdventure(ins.getId)"> @Messages("adventure.getScala.start", ins.getName()) </a></div>
                 @if(ins.getDescription != null){
                     <p>@Html(ins.getDescription())</p>
                 }
@@ -58,7 +59,7 @@
 
                 <span class="pull-right">
                     <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false"></div>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="@routes.InspirationController.get(category.getId, ins.getInspirationId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="@routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a>
                     <div class="g-plusone" data-size="tall" data-annotation="vertical-bubble"></div>
                 </span>
             </div>
@@ -105,7 +106,7 @@
                 </script>
                 <script>
                     $(document).ready(function(){
-                        $.get('@routes.InspirationController.getImages(category.getId, ins.getInspirationId)', function (images) {
+                        $.get('@routes.InspirationController.getImages(ins.getId)', function (images) {
                             if(images){
                                 for(var i in images) {
                                     $('#inspiration-photos').append(tmpl('inspiration-photo-template', images[i]));

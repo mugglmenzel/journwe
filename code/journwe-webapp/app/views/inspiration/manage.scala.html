@@ -1,4 +1,6 @@
-@(inspForm: Form[Inspiration])(categories: Map[String, String])(inspirations: List[Inspiration])
+@(inspForm: Form[models.inspiration.Inspiration])(categories: Map[String, String])(inspirations: List[models.inspiration.Inspiration])
+
+@import models.dao.InspirationCategoryDAO
 
 @import helper._
 @import fieldConstructor._
@@ -13,7 +15,7 @@
         <table class="table table-striped">
 
         @for(ins <- inspirations) {
-            <tr><td>@ins.getInspirationId()</td><td>@ins.getName()</td><td><a href="@InspirationController.getBucketURL(ins.getCategoryId, ins.getInspirationId)" class="act-primary"><i class="icon-cloud-upload"></i> @Messages("adventure.files.imageUpload") </a> <a href="@routes.InspirationController.edit(ins.getCategoryId, ins.getInspirationId())" class="act-primary"><i class="icon-edit"></i> @Messages("adventure.general.label.edit") </a></td><td><a href="@routes.InspirationController.delete(ins.getCategoryId, ins.getInspirationId())" class="act-danger"><i class="icon-trash"></i> @Messages("adventure.general.label.delete") </a></td></tr>
+            <tr><td>@ins.getId()</td><td>@ins.getName()</td><td><a href="@InspirationController.getBucketURL(ins.getId)" class="act-primary"><i class="icon-cloud-upload"></i> @Messages("adventure.files.imageUpload") </a> <a href="@routes.InspirationController.edit(ins.getId())" class="act-primary"><i class="icon-edit"></i> @Messages("adventure.general.label.edit") </a></td><td><a href="@routes.InspirationController.delete(ins.getId())" class="act-danger"><i class="icon-trash"></i> @Messages("adventure.general.label.delete") </a></td></tr>
         }
         </table>
     </div>
@@ -22,9 +24,8 @@
         <h2>Inspiration Form</h2>
         @form(routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
             <fieldset>
-                @if(inspForm("inspirationId").value()) {
-                <input type="hidden" name="originalInspirationCategoryId" value="@inspForm("categoryId").value()"/>
-                <input type="hidden" name="@inspForm("inspirationId").name()" value="@inspForm("inspirationId").value()"/>
+                @if(inspForm("id").value()) {
+                <input type="hidden" name="@inspForm("id").name()" value="@inspForm("id").value()"/>
                 }
                 @inputText(inspForm("name"), '_label -> "Inspiration name", 'placeholder -> "Name", 'required -> "")
                 @textarea(inspForm("description"), '_label -> "Description", 'placeholder -> "Some text", 'class -> "editor editor-html ckeditor")
@@ -32,13 +33,32 @@
                 @textarea(inspForm("tripAdvisor"), '_label -> "TripAdvisor Snipped (see http://www.tripadvisor.com/Widgets)", 'placeholder -> "Some text")
                 @inputText(inspForm("pinterest"), '_label -> "Pinterest URL", 'placeholder -> "Pinterest")
                 @inputText(inspForm("weatherId"), '_label -> "Weather", 'placeholder -> "Country/City")
-                @select(
-                    inspForm("categoryId"),
-                    options(categories),
-                    '_default -> "--- Choose a Category ---",
-                    '_label -> "Category",
-                    '_error -> inspForm("categoryId").error.map(_.withMessage("Please select a Category!"))
-                )
+                <div id="inspiration-category">
+                    <div>Categories</div>
+                    <ul id="inspiration-categories" class="list-unstyled list-inline">
+                        @if(inspForm("id").value()){
+                            @defining(new InspirationCategoryDAO()){ inscatdao =>
+                                @inscatdao.getOptions(inspForm("id").value()).map{cat =>
+                                    <li><input type="hidden" name="category[]" value="@cat._1"><span class="label label-info"><i class="icon-file"></i> @cat._2 &nbsp;<a onclick="$('#inspiration-place').remove(); return false;">&times;</a></span> <span class="divider"></span></li>
+                                }
+                            }
+                        }</ul>
+
+                    @select(
+                        inspForm("categories"),
+                        options(categories),
+                        '_default -> "--- Choose a Category ---",
+                        '_label -> "Category",
+                        '_error -> inspForm("categories").error.map(_.withMessage("Please select a Category!"))
+                    )
+                    <a class="btn btn-primary" id="inspiration-category-add"><i class="icon-plus"></i></a>
+                    <script>
+                        $('#inspiration-category-add').click(function(){
+                             $('#inspiration-categories').append('<li id="' + $('#inspiration-category select option:selected').val() + '-' + new Date().getTime() + '"><input type="hidden" name="category[]" value="' + $('#inspiration-category select option:selected').val() + '"><span class="label label-info"><i class="icon-file"></i>' + $('#inspiration-category select option:selected').text() + '  &nbsp;<a onclick="$(\'#' + $('#inspiration-category select option:selected').val() + '-' + new Date().getTime() + '\').remove(); return false;">&times;</a></span> <span class="divider"></span></li>');
+                        });
+
+                    </script>
+                </div>
 
                 <div>
                     <div>Place</div>
