@@ -28,6 +28,9 @@ import views.html.inspiration.get;
 import views.html.inspiration.manage;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +63,13 @@ public class InspirationController extends Controller {
     public static Result getImages(String id) {
         List<String> images = new ArrayList<String>();
         for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_INSPIRATION_IMAGES).withPrefix(id + "/")).getObjectSummaries()) {
-            images.add(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
-                    os.getKey()));
+            try {
+                s3.setObjectAcl(os.getBucketName(), os.getKey(), CannedAccessControlList.PublicRead);
+                images.add(URLEncoder.encode(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
+                        os.getKey()), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                Logger.error("Error while producing public URL of inspiration image from S3.", e);
+            }
         }
 
         return ok(Json.toJson(images));
