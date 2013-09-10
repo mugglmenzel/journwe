@@ -55,10 +55,12 @@
     <body>
         <div class="">
             <div class="header row">
-                @header.render()
+                <div class="col-lg-offset-2 col-lg-8">
+                @header()
+                </div>
             </div>
             <div class="main row">
-                <div class="col-8 col-offset-2">
+                <div class="col-lg-8 col-lg-offset-2">
                     @if(!headerText.toString().equals(" ")){
                         <div class="page-header">
                             <h1>@headerText</h1>
@@ -90,7 +92,7 @@
 
                 <!-- TOP NAVIGATION -->
             <div class="row">
-                <div class="col-8 col-offset-2">
+                <div class="col-lg-8 col-lg-offset-2">
                     <div class="jrn-container clearfix">
                         <div class="pull-right"><a onclick="$('html, body').animate({ scrollTop: 0 }, 600); return false;"><i class="icon-chevron-up"></i> Top</a></div>
                     </div>
@@ -99,10 +101,10 @@
 
                 <!-- FOOTER -->
             <div class="footer row">
-                <div class="col-8 col-offset-2">
+                <div class="col-lg-8 col-lg-offset-2">
                     <div class="jrn-container clearfix">
-                        <div class="col-12">
-                            <div class="col-4">
+                        <div class="col-lg-12">
+                            <div class="col-lg-4">
                                 <ul class="nav nav-pills nav-stacked">
                                     <li @if(active == "home"){class="active"}><a href="@routes.ApplicationController.index">Home</a></li>
                                     <li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
@@ -111,7 +113,7 @@
                                     @currentAuth() { auth => @if(auth != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){<li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>}}
                                 </ul>
                             </div>
-                            <div class="col-8">
+                            <div class="col-lg-8">
 		                    Find us on Social Networks
                             </div>
                         </div>

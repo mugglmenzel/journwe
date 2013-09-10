@@ -40,7 +40,7 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
 
 	echo "---- installing JournWe web app on $ipaddress"
 	echo "----- copying play web app distribution to $ipaddress..."
-	rsync -avz -e "ssh $scp_opts" dist/journwe-*.zip $ssh_host:/home/ubuntu/ 
+	rsync -avzPu -e "ssh $scp_opts" dist/journwe-*.zip $ssh_host:/home/ubuntu/ 
 	echo "----- unzipping..."
 	ssh $ssh_opts_terminal $ssh_host "unzip -q -o journwe-*.zip -d journwe"
 	echo "----- chmoding..."
