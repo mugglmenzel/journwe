@@ -193,8 +193,8 @@ public class ApplicationController extends Controller {
                     node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
                     node.put("image", ins.getImage());
                     node.put("name", ins.getName());
-                    node.put("lat", ins.getPlaceLatitude().floatValue());
-                    node.put("lng", ins.getPlaceLongitude().floatValue());
+                    node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
+                    node.put("lng", ins.getPlaceLongitude() != null? ins.getPlaceLongitude().floatValue() : 0F);
 
                     result.add(node);
                 }
