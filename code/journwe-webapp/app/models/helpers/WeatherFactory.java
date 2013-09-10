@@ -26,9 +26,9 @@ public class WeatherFactory {
 
         Weather weather = new Weather();
 
-        JsonNode result = retrive(place);
+        JsonNode result = retreive(place);
 
-        if (result != null) {
+        if (result != null && result.get("forecast") != null) {
             Iterator<JsonNode> periods = result.get("forecast").get("simpleforecast").get("forecastday").iterator();
 
             while (periods.hasNext()) {
@@ -57,7 +57,7 @@ public class WeatherFactory {
         return weather;
     }
 
-    private static JsonNode retrive(String place) {
+    private static JsonNode retreive(String place) {
 
         // Unset cache every day
         if (cache == null || (cacheTime != null && cacheTime.getDay() != new Date().getDay())) {
