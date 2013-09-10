@@ -45,7 +45,7 @@
     <div class="prime-image">
         <div style="width: 100%;">
             <img id="adventure-prime-image" style="width: 100%; height: 200px;" @if(adv.getImage == null || !JournweAuthorization.canViewAdventureImage(adv.getId)){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=Drop+image"}else{src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
-            <i id="adventure-prime-image-loading" class="icon-spin icon-spinner stash"></i>
+            <i id="adventure-prime-image-loading" class="icon-spin icon-journwe stash"></i>
         </div>
 
         @if(JournweAuthorization.canViewAdventureTitle(adv.getId)) {
@@ -67,7 +67,7 @@
                             html = el.html();
 
                             el.css({width:el.width()+"px"})
-                                    .html('<i class="icon-spin icon-spinner"></i>');
+                                    .html('<i class="icon-spin icon-journwe"></i>');
 
                             return true;
                         })
@@ -251,7 +251,7 @@
 <script>
 
     $.fn.editable.defaults.mode = 'inline';
-    $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-spinner icon-spin"></i></div>';
+    $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-journwe icon-spin"></i></div>';
 
     $('document').ready(function () {
 

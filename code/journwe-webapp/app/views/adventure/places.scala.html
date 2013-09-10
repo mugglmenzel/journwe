@@ -2,7 +2,7 @@
 
 <div class="clearfix">
     <div id="places-favorite-place" class="pull-left" style="font-size: 20px; margin-bottom: 10px;">
-        <i id="places-favorite-place-icon" class="icon-spin icon-spinner"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
+        <i id="places-favorite-place-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
     </div>
 
     <div class="pull-right btn-close-place stash">
@@ -31,7 +31,7 @@
 
 </table>
 
-<div class="places-loading"><i class="icon-spin icon-spinner"></i> @Messages("adventure.general.loading")</div>
+<div class="places-loading"><i class="icon-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
 
 <div id="place-add-form" class="row">
     <div class="input-group col-lg-8" style="margin-bottom: 10px;">
@@ -109,11 +109,11 @@
 
     function setFavoritePlaceOption(optionId, el) {
         $('#places-list td:first-child .btn-success').removeClass('btn-success');
-        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
-        $(el).find('i').removeClass("icon-star").addClass("icon-spin icon-spinner");
+        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
+        $(el).find('i').removeClass("icon-star").addClass("icon-spin icon-journwe");
         $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
-            $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
-            $(el).find('i').removeClass("icon-spin icon-spinner").addClass("icon-star");
+            $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
+            $(el).find('i').removeClass("icon-spin icon-journwe").addClass("icon-star");
             $('#places-favorite-place-name').html(data.address);
             $('.btn-close-place').show();
             $(el).addClass('btn-success');
@@ -147,7 +147,7 @@
         initialize();
         
 
-        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-spinner");
+        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
 
         $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (result) {
 
@@ -167,7 +167,7 @@
             }
 
             $('.places-loading').hide();
-            $('#places-favorite-place-icon').removeClass("icon-spin icon-spinner").addClass("icon-star");
+            $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
 
             updatePlaceVoteOpen(@adv.getPlaceVoteOpen)
         });
@@ -201,7 +201,7 @@
 
     $('#place-add-button').on('click', function() {
         if($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
-            $(this).html('<i class="icon-spin icon-spinner"></i>');
+            $(this).html('<i class="icon-spin icon-journwe"></i>');
             new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
                 $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, function(res) {
                     renderPlaceOption(res);
@@ -237,7 +237,7 @@
         
         // Spin
         $('#placeoption-item-'+optId+' .dropdown-toggle')
-            .html('<i class="icon-spin icon-spinner"></i>');
+            .html('<i class="icon-spin icon-journwe"></i>');
 
         $.ajax({
             url: '@routes.AdventurePlaceController.vote(adv.getId, "")' + optId,
@@ -255,7 +255,7 @@
 
 
     function deletePlace(optId, event) {
-        $(event.target).html('<i class="icon-spin icon-spinner"></i>');
+        $(event.target).html('<i class="icon-spin icon-journwe"></i>');
         $.ajax({url: '@routes.AdventurePlaceController.deletePlace(adv.getId, "")' + optId, type: 'DELETE', success: function () {
             removeMarker(optId);
             $('#placeoption-item-' + optId).fadeOut(function () {$('#placeoption-item-' + optId).remove();});

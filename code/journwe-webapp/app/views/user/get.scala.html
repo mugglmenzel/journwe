@@ -41,7 +41,7 @@
                     html = el.html();
 
                     el.css({width:el.width()+"px"})
-                    .html('<i class="icon-spin icon-spinner"></i>');
+                    .html('<i class="icon-spin icon-journwe"></i>');
 
                     $.post(el.attr('href'), function(json){
                     var state = json;
@@ -64,7 +64,7 @@
     <div class="jrn-container">
         <h2 id="jorunwes"><i class="icon-compass"></i> @Messages("index.myJournWes") <small>- <span id="adventures-user-count">0</span></small></h2>
         <div id="adventures-user-list" class="row" style="overflow: hidden">
-             <i class="icon-spin icon-spinner stash"></i>
+             <i class="icon-spin icon-journwe stash"></i>
         </div>
         <script type="text/x-tmpl" id="adventure-user-template">
             <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">

@@ -140,10 +140,10 @@ case EAdventurerParticipation.INVITEE => {label-warning}
     var facebookUserNames = [];
 
     function addFriend() {
-        $('#people-add-button i').removeClass("icon-plus").addClass("icon-spinner icon-spin");
+        $('#people-add-button i').removeClass("icon-plus").addClass("icon-journwe icon-spin");
         $.post('@routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
             $('#people-add-input').val('');
-            $('#people-add-button i').removeClass("icon-spinner icon-spin").addClass("icon-plus");
+            $('#people-add-button i').removeClass("icon-journwe icon-spin").addClass("icon-plus");
         });
     }
 
@@ -186,7 +186,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
                 html = el.html();
             
             el.css({width:el.width()+"px"})
-                .html('<i class="icon-spin icon-spinner"></i>');
+                .html('<i class="icon-spin icon-journwe"></i>');
 
             $.post(el.attr('href'), function(json){
                 var state = json.participationStatus;
@@ -210,7 +210,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
                 html = el.html();
             
             el.css({width:el.width()+"px"})
-                .html('<i class="icon-spin icon-spinner"></i>');
+                .html('<i class="icon-spin icon-journwe"></i>');
 
             $.post(el.attr('href'), function(json){
                 var state = json.participationStatus;

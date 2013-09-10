@@ -25,7 +25,7 @@
 
     function addComment(threadId, list, val, btn){
 
-        btn.html('<i class="icon-spin icon-spinner"></i>');
+        btn.html('<i class="icon-spin icon-journwe"></i>');
 
         $.post("@routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f) {
             list.find(".empty").remove();

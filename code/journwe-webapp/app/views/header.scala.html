@@ -62,9 +62,9 @@
                     <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="icon-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
                     <div class="stash">
                         <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
-                            <div class="text-center" style="display: block;"><i class="loading-top icon-spinner icon-spin"></i></div>
+                            <div class="text-center" style="display: block;"><i class="loading-top icon-journwe icon-spin"></i></div>
                             <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
-                            <div class="text-center" style="display: block;"><i class="loading-bottom icon-spinner icon-spin stash"></i></div>
+                            <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe icon-spin stash"></i></div>
                         </div>
                     </div>
                     <script type="text/x-tmpl" id="header-notification-template">
@@ -182,7 +182,7 @@
             <div class="row collapse" id="navbar-secondlevel-inspiration-categories" data-parent="#navbar-secondlevel-collapsable">
                 <div class="col-lg-12">
                     <h4>Categories of Inspirations</h4>
-                    <div id="header-categories-loading"><i class="icon-spinner icon-spin"></i></div>
+                    <div id="header-categories-loading"><i class="icon-journwe icon-spin"></i></div>
                     <ul id="header-categories-list" class="nav nav-pills nav-stacked">
                         @*
                         @defining(new CategoryDAO()){catDAO =>

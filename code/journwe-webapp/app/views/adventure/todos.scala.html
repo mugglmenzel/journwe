@@ -71,7 +71,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title"> @Messages("adventure.todos.amazon.title") </h3>
                 </div>
-                <div class="modal-body"><div><i class="icon-spinner icon-spin"></i></div><div class="content"></div></div>
+                <div class="modal-body"><div><i class="icon-journwe icon-spin"></i></div><div class="content"></div></div>
                 <div class="modal-footer">
                     <button class="btn btn-default" data-dismiss="modal"><i class="icon-remove"></i> @Messages("adventure.general.button.close")</button>
                 </div>
@@ -162,7 +162,7 @@
         });
 
         $('#btn-add-todo').on('click', function() {
-            $(this).html('<i class="icon-spin icon-spinner"></i>');
+            $(this).html('<i class="icon-spin icon-journwe"></i>');
             var btn = $(this),
             fld = $('#todo-title');
 
@@ -186,7 +186,7 @@
                     i = tr.find('.btn-check i'),
                     complete = i.is('.icon-check-empty');
 
-                i.removeClass('icon-check, icon-check-empty').addClass('icon-spin icon-spinner');
+                i.removeClass('icon-check, icon-check-empty').addClass('icon-spin icon-journwe');
 
                 $.ajax({
                     url: '@routes.AdventureTodoController.setTodo(adv.getId(), "")' + id,
@@ -196,7 +196,7 @@
                     type: 'PUT',
                     success: function(res) {
                         tr.get(0).className = 'status-' + res.status + ' todo-entry';
-                        i.removeClass('icon-spin icon-spinner').addClass(res.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
+                        i.removeClass('icon-spin icon-journwe').addClass(res.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
                     }
                 });
 
@@ -204,7 +204,7 @@
             });
 
             $('#todos-list tbody .btn-delete').on('click', function(e) {
-                $(this).html('<i class="icon-spin icon-spinner"></i>');
+                $(this).html('<i class="icon-spin icon-journwe"></i>');
                 e.preventDefault();
 
                 var a = $(this),
@@ -224,7 +224,7 @@
             });
 
             $('#todos-list tbody .btn-affiliate').on('click', function(e) {
-                //$(this).html('<i class="icon-spin icon-spinner"></i>');
+                //$(this).html('<i class="icon-spin icon-journwe"></i>');
                 e.preventDefault();
 
                 var a = $(this),
@@ -256,7 +256,7 @@
                     td = tr.find('td'),
                     title = $(td[1]).text();
 
-                btn.html('<i class="icon-spin icon-spinner"></i>');
+                btn.html('<i class="icon-spin icon-journwe"></i>');
 
                 $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {title: title}, function(res) {
                     $('.table-my-todos tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
@@ -265,7 +265,7 @@
             });
 
             $('#todos-adventurers-list tbody .btn-affiliate').on('click', function(e) {
-                //$(this).html('<i class="icon-spin icon-spinner"></i>');
+                //$(this).html('<i class="icon-spin icon-journwe"></i>');
                 e.preventDefault();
 
                 var a = $(this),
