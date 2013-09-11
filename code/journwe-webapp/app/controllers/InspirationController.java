@@ -29,7 +29,6 @@ import views.html.inspiration.manage;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -164,14 +163,15 @@ public class InspirationController extends Controller {
                     ins.setTimeEnd(null);
                 }
 
-                boolean updateCategoryCount = false;
+                for(InspirationCategory insCat : new InspirationCategoryDAO().getCategories(ins.getId()))
+                    new InspirationCategoryDAO().delete(insCat);
+
                 for (String key : form().bindFromRequest().data().keySet()) {
                     if (key.startsWith("category[")) {
                         InspirationCategory insCat = new InspirationCategory();
                         insCat.setCategoryId(form().bindFromRequest().data().get(key));
                         insCat.setInspirationId(ins.getId());
                         new InspirationCategoryDAO().save(insCat);
-                        updateCategoryCount = true;
                     }
                 }
 
@@ -181,8 +181,7 @@ public class InspirationController extends Controller {
 //                        new InspirationDAO().delete(originalCategoryId, ins.getInspirationId());
 //                    }
 
-                    if (updateCategoryCount)
-                        new CategoryDAO().updateCategoryCountCache();
+                    new CategoryDAO().updateCategoryCountCache();
                     flash("success",
                             "Saved Inspiration with image " + ins.getImage()
                                     + ".");
@@ -211,7 +210,7 @@ public class InspirationController extends Controller {
                     ConfigFactory.load().getString("aws.secretKey")));
             s3.deleteObject(S3_BUCKET_INSPIRATION_IMAGES, id);
 
-            for(InspirationCategory insCat : new InspirationCategoryDAO().getCategories(id))
+            for (InspirationCategory insCat : new InspirationCategoryDAO().getCategories(id))
                 new InspirationCategoryDAO().delete(insCat);
 
             if (new InspirationDAO().delete(id)) {
