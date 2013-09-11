@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-lg-8 input-group">
                     <input type="text" name="name" placeholder="@Messages("yingyangyong.name.placeholder")" required="required" class="input input-lg form-control">
-
+                    @*
                     <div class="input-group-btn">
                         <a class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" href="#">
                             @Messages("adventure.general.button.category")
@@ -38,6 +38,8 @@
                         }
                         </ul>
                     </div>
+                    *@
+                    @if(ins != null){<input type="hidden" name="inspirationId" value="@ins.getId">}
                 </div>
                 <div class="col-lg-4">
                     <button type="submit" class="btn btn-lg btn-success pull-right" onclick="$('#yingyangyong-form').submit();">
@@ -63,7 +65,7 @@
 
                         <ul id="places-list" class="list-unstyled list-inline">
                         @if(ins != null && ins.getPlaceAddress != null) {
-                            <li id="places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")"><input type="hidden" name="place[]" value="@ins.getPlaceAddress/@ins.getPlaceLatitude/@ins.getPlaceLongitude"><span class="label"><i class="icon-map-marker"></i> @ins.getPlaceAddress &nbsp;<a href="#" onclick="$('#places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")').remove(); removeMarker('places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")'); return false;">&times;</a></span> <span class="divider"></span></li>
+                            <li id="places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")"><input type="hidden" name="place[]" value="@ins.getPlaceAddress/@ins.getPlaceLatitude/@ins.getPlaceLongitude"><span class="label label-success"><i class="icon-map-marker"></i> @ins.getPlaceAddress &nbsp;<a href="#" onclick="$('#places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")').remove(); removeMarker('places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")'); return false;">&times;</a></span> <span class="divider"></span></li>
                             <script>
                                 $('document').ready(function () {
                                     var marker = new google.maps.Marker({
@@ -133,7 +135,7 @@
                         <ul id="time-list" class="list-unstyled list-inline">
                         @if(ins != null && ins.getTimeStart != null) {
                             @defining(new SimpleDateFormat("yyyy-MM-dd")){sdf =>
-                                <li id="time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)"><input type="hidden" name="time[]" value="@sdf.format(ins.getTimeStart),@sdf.format(ins.getTimeEnd)"><span class="label"><i class="icon-time"></i> @sdf.format(ins.getTimeStart) to @sdf.format(ins.getTimeEnd) &nbsp;<a href="#" onclick="$('#time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)').remove();">&times;</a></span> <span class="divider"></span></li>
+                                <li id="time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)"><input type="hidden" name="time[]" value="@sdf.format(ins.getTimeStart),@sdf.format(ins.getTimeEnd)"><span class="label label-info"><i class="icon-time"></i> @sdf.format(ins.getTimeStart) to @sdf.format(ins.getTimeEnd) &nbsp;<a href="#" onclick="$('#time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)').remove();">&times;</a></span> <span class="divider"></span></li>
                             }
                         }
                         </ul>

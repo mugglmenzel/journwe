@@ -210,6 +210,15 @@ public class AdventureController extends Controller {
         adv.setName(filledForm.get("name"));
         new AdventureDAO().save(adv);
 
+        if(filledForm.get("inspirationId") != null){
+            Inspiration ins = new InspirationDAO().get(filledForm.get("inspirationId"));
+            if(ins != null){
+                adv.setInspirationId(ins.getId());
+                adv.setDescription(ins.getDescription());
+
+            }
+        }
+
         String shortURL = routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
 
         String shortname = filledForm.get("shortname");
