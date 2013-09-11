@@ -309,18 +309,44 @@ public class AdventureController extends Controller {
             }
             if (key.startsWith("facebook[")) {
                 if (us != null) {
-                    String fbUser = filledForm.data().get(key);
-                    new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", fbUser);
+                    String inviteeId = filledForm.data().get(key);
+                    new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", inviteeId);
 
-                    User invitee = new User();
-                    invitee.setRole(EUserRole.INVITEE);
-                    new UserDAO().save(invitee);
+                    UserSocial inviteeSoc = new UserSocialDAO().findBySocialId("facebook", inviteeId);
 
-                    UserSocial inviteeSoc = new UserSocial();
-                    inviteeSoc.setProvider("facebook");
-                    inviteeSoc.setSocialId(fbUser);
+                    User invitee = inviteeSoc != null && inviteeSoc.getUserId() != null ? new UserDAO().get(inviteeSoc.getUserId()) : null;
+                    Logger.debug("got invitee " + invitee);
+                    if (invitee == null) {
+                        invitee = new User();
+                        invitee.setName(JournweFacebookClient.create(us.getAccessToken()).getFacebookUser(inviteeId).getName());
+                        invitee.setRole(EUserRole.INVITEE);
+                        new UserDAO().save(invitee);
+                        Logger.debug("created invitee as user");
+                    }
+
+                    if (inviteeSoc == null) {
+                        inviteeSoc = new UserSocial();
+                        inviteeSoc.setProvider("facebook");
+                        inviteeSoc.setSocialId(inviteeId);
+                    }
                     inviteeSoc.setUserId(invitee.getId());
                     new UserSocialDAO().save(inviteeSoc);
+
+
+                    Adventurer inviteeAdvr = new AdventurerDAO().get(adv.getId(), invitee.getId());
+                    if (inviteeAdvr == null) {
+                        inviteeAdvr = new Adventurer();
+                        inviteeAdvr.setUserId(invitee.getId());
+                        inviteeAdvr.setAdventureId(adv.getId());
+                        inviteeAdvr.setParticipationStatus(EAdventurerParticipation.INVITEE);
+                        new AdventurerDAO().save(inviteeAdvr);
+                    }
+
+                    AdventureAuthorization authorization = new AdventureAuthorization();
+                    authorization.setAdventureId(adv.getId());
+                    authorization.setUserId(invitee.getId());
+                    authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
+                    new AdventureAuthorizationDAO().save(authorization);
                 }
             }
         }

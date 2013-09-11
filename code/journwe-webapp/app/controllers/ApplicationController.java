@@ -34,9 +34,7 @@ import views.html.index.indexVet;
 import views.html.subscribe;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static play.data.Form.form;
 
@@ -179,7 +177,6 @@ public class ApplicationController extends Controller {
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getInspirations(String catId) {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
@@ -187,14 +184,14 @@ public class ApplicationController extends Controller {
 
         Date now = new Date();
 
-        List<ObjectNode> result = new ArrayList<ObjectNode>();
+        Set<ObjectNode> result = new HashSet<ObjectNode>();
         while (count > 0 && result.size() < count) {
             List<InspirationCategory> all = new InspirationCategoryDAO().all(catId, lastId, count - result.size());
             if (!(all.size() > 0)) break;
             for (InspirationCategory insCat : all) {
                 if (insCat.getInspirationId() != null) {
                     Inspiration ins = new InspirationDAO().get(insCat.getInspirationId());
-                    if (ins != null && ins.getTimeEnd().after(now)) {
+                    if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
                         ObjectNode node = Json.newObject();
                         node.put("id", ins.getId());
                         node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
@@ -205,6 +202,7 @@ public class ApplicationController extends Controller {
 
                         result.add(node);
                         lastId = insCat.getInspirationId();
+                        if(result.size() >= count) break;
                     }
                 }
             }

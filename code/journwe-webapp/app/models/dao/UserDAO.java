@@ -39,13 +39,10 @@ public class UserDAO extends CommonEntityDAO<User> {
     }
 
     public User findByAuthUserIdentity(final AuthUserIdentity identity) {
-        Logger.debug("getting auth user");
         if (identity == null)
             return null;
 
-        User user = getAuthUserFind(identity);
-        Logger.debug("returning auth user");
-        return user;
+        return getAuthUserFind(identity);
     }
 
     public void update(final AuthUser authUser, final AuthUserIdentity identity) {

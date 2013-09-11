@@ -197,7 +197,7 @@ public class AdventurePeopleController extends Controller {
             return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        String shortURL = routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
+        String shortURL = adv.getShortURL() != null ? adv.getShortURL() : routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
 
         DynamicForm f = form().bindFromRequest();
         try {
@@ -236,17 +236,17 @@ public class AdventurePeopleController extends Controller {
                 new UserSocialDAO().save(inviteeSoc);
 
 
-                Adventurer advr = new AdventurerDAO().get(advId, invitee.getId());
+                Adventurer advr = new AdventurerDAO().get(adv.getId(), invitee.getId());
                 if (advr == null) {
                     advr = new Adventurer();
                     advr.setUserId(invitee.getId());
-                    advr.setAdventureId(advId);
+                    advr.setAdventureId(adv.getId());
                     advr.setParticipationStatus(EAdventurerParticipation.INVITEE);
                     new AdventurerDAO().save(advr);
                 }
 
                 AdventureAuthorization authorization = new AdventureAuthorization();
-                authorization.setAdventureId(advId);
+                authorization.setAdventureId(adv.getId());
                 authorization.setUserId(invitee.getId());
                 authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
                 new AdventureAuthorizationDAO().save(authorization);
