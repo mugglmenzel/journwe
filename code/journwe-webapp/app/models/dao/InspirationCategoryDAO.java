@@ -26,12 +26,15 @@ public class InspirationCategoryDAO extends CommonRangeEntityDAO<InspirationCate
         super(InspirationCategory.class);
     }
 
+
     public List<InspirationCategory> all(String catId, String lastKey, int limit) {
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withLimit(limit);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        if (limit > 0) query.setLimit(limit);
 
         if (lastKey != null && !"".equals(lastKey)) {
             Map<String, AttributeValue> startkey = new HashMap<String, AttributeValue>();
-            startkey.put("id", new AttributeValue(lastKey));
+            startkey.put("categoryId", new AttributeValue(catId));
+            startkey.put("inspirationId", new AttributeValue(lastKey));
             query.setExclusiveStartKey(startkey);
         }
 
@@ -41,7 +44,6 @@ public class InspirationCategoryDAO extends CommonRangeEntityDAO<InspirationCate
 
         return pm.query(InspirationCategory.class, query);
     }
-
 
     public List<InspirationCategory> getCategories(String insId) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();

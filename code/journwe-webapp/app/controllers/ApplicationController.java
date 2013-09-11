@@ -154,24 +154,26 @@ public class ApplicationController extends Controller {
         int count = new Integer(data.get("count")).intValue();
 
         List<ObjectNode> result = new ArrayList<ObjectNode>(count);
-        int i = 0;
-        for (InspirationCategory ins : new InspirationCategoryDAO().all(catId, lastId, count)) {
-            for (Adventure adv : new AdventureDAO().allPublic(ins.getInspirationId(), lastId, count)) {
-                ObjectNode node = Json.newObject();
-                node.put("id", adv.getId());
-                node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-                node.put("image", adv.getImage());
-                node.put("name", adv.getName());
-                node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
-                node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-                node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-                node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
-                node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
 
-                result.add(node);
-                i++;
+        if (count > 0) {
+            for (InspirationCategory ins : new InspirationCategoryDAO().all(catId, null, -1)) {
+                for (Adventure adv : new AdventureDAO().allPublic(ins.getInspirationId(), lastId, count)) {
+                    ObjectNode node = Json.newObject();
+                    node.put("id", adv.getId());
+                    node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                    node.put("image", adv.getImage());
+                    node.put("name", adv.getName());
+                    node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+                    node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                    node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+                    node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
+                    node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
+
+                    result.add(node);
+                    if(result.size() >= count) break;
+                }
+                if(result.size() >= count) break;
             }
-            if (i >= count) break;
         }
         return ok(Json.toJson(result));
     }
@@ -183,20 +185,27 @@ public class ApplicationController extends Controller {
         String lastId = data.get("lastId");
         int count = new Integer(data.get("count")).intValue();
 
-        List<ObjectNode> result = new ArrayList<ObjectNode>();
-        for (InspirationCategory insCat : new InspirationCategoryDAO().all(catId, lastId, count)) {
-            if (insCat.getInspirationId() != null) {
-                Inspiration ins = new InspirationDAO().get(insCat.getInspirationId());
-                if (ins != null) {
-                    ObjectNode node = Json.newObject();
-                    node.put("id", ins.getId());
-                    node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
-                    node.put("image", ins.getImage());
-                    node.put("name", ins.getName());
-                    node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
-                    node.put("lng", ins.getPlaceLongitude() != null? ins.getPlaceLongitude().floatValue() : 0F);
+        Date now = new Date();
 
-                    result.add(node);
+        List<ObjectNode> result = new ArrayList<ObjectNode>();
+        while (count > 0 && result.size() < count) {
+            List<InspirationCategory> all = new InspirationCategoryDAO().all(catId, lastId, count - result.size());
+            if (!(all.size() > 0)) break;
+            for (InspirationCategory insCat : all) {
+                if (insCat.getInspirationId() != null) {
+                    Inspiration ins = new InspirationDAO().get(insCat.getInspirationId());
+                    if (ins != null && ins.getTimeEnd().after(now)) {
+                        ObjectNode node = Json.newObject();
+                        node.put("id", ins.getId());
+                        node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
+                        node.put("image", ins.getImage());
+                        node.put("name", ins.getName());
+                        node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
+                        node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
+
+                        result.add(node);
+                        lastId = insCat.getInspirationId();
+                    }
                 }
             }
         }
