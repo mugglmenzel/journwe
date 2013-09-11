@@ -58,6 +58,7 @@ POST          /adventure/:id/postFacebookWall                controllers.Adventu
 POST          /adventure/:id/invite.json                     controllers.AdventurePeopleController.invite(id:String)
 GET           /people/facebook/autocomplete.json             controllers.AdventurePeopleController.autocompleteFacebook()
 GET           /adventure/:id/leave                           controllers.AdventurePeopleController.leave(id:String)
+POST          /adventure/:id/public.json                     controllers.AdventureController.updatePublic(id:String)
 
 GET           /adventure/:id/places.json                     controllers.AdventurePlaceController.getPlaces(id:String)
 POST          /adventure/:id/places.json                     controllers.AdventurePlaceController.addPlace(id:String)

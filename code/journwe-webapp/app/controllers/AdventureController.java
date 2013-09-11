@@ -422,6 +422,17 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(node));
     }
 
+    public static Result updatePublic(String advId) {
+        DynamicForm data = form().bindFromRequest();
+        Boolean publish = new Boolean(data.get("public"));
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setPublish(publish);
+        new AdventureDAO().save(adv);
+
+        return ok(Json.toJson(adv.isPublish()));
+    }
+
+
     public static Result updatePlaceVoteOpen(String advId) {
         if (!JournweAuthorization.canChangeVoteOnOffForPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -444,6 +455,9 @@ public class AdventureController extends Controller {
         Adventure adv = new AdventureDAO().get(advId);
         adv.setTimeVoteOpen(openVote);
         new AdventureDAO().save(adv);
+
+        new AdventurerNotifier().notifyAdventurers(advId, "The Time Vote is now " + (adv.getTimeVoteOpen() ? "open" : "closed") + ".", "Time Vote");
+
         return ok(Json.toJson(adv.getTimeVoteOpen()));
     }
 
