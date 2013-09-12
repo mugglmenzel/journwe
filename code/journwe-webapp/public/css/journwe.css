@@ -1048,3 +1048,12 @@ h1 .x-edit-loading {
 .icon-journwe:before {
     content: "\e000";
 }
+
+.jrn-subcategory a {
+	display: inline-block;
+}
+
+.jrn-subcategory a .badge {
+	top: -2px;
+	position: relative;
+}

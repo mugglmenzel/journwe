@@ -337,8 +337,7 @@
         }
 
         if (!end.val()){
-            end.focus();
-            return false;
+            end = start;
         }
 
         var id = 'time-item-' + start.val() + '-' + end.val();

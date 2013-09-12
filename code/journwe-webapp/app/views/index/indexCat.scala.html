@@ -25,7 +25,7 @@
     }
 
     @defining(new CategoryDAO()){ catDAO =>
-    <div class="jrn-container">
+    <div class="jrn-container jrn-subcategory">
 
         <h2 id="subcategories"><i class="icon-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
         <div style="font-size: 20pt;">

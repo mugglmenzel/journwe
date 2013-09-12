@@ -107,7 +107,7 @@
                 end = $('#time-add-form input[name=endDate]');
 
             if (!start.val()){ start.focus(); return false; }
-            if (!end.val()){ end.focus(); return false; }
+            if (!end.val()){ end = start; }
 
             $(this).html('<i class="icon-spin icon-journwe"></i>');
             $.post('@routes.AdventureTimeController.addTime(adv.getId)', { startDate: start.val(), endDate: end.val()}, function(res) {
