@@ -2,6 +2,7 @@ package controllers;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.feth.play.module.pa.PlayAuthenticate;
@@ -30,11 +31,14 @@ public class AdventureFileController extends Controller {
     public static final String S3_BUCKET = "journwe-files";
     public static final String DEFAULT_STORAGE_PROVIDER = "https://s3.amazonaws.com/" + S3_BUCKET;
 
+
     protected static Form<JournweFile> fileForm = form(JournweFile.class);
 
     private static BasicAWSCredentials credentials = new BasicAWSCredentials(
             ConfigFactory.load().getString("aws.accessKey"), ConfigFactory
             .load().getString("aws.secretKey"));
+    private static AmazonS3Client s3 = new AmazonS3Client(credentials);
+
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result uploadFile(String advId) {
@@ -68,6 +72,7 @@ public class AdventureFileController extends Controller {
             // Upload files to S3 asynchronously
             TransferManager tx = new TransferManager(credentials);
             Upload upload = tx.upload(S3_BUCKET, s3ObjectKey, file);
+            s3.setObjectAcl(S3_BUCKET, s3ObjectKey, CannedAccessControlList.PublicRead);
             flash("success", "Your files is uploading now and can be downloaded, soon...");
             return ok(Json.toJson(journweFile));
         } catch (Exception e) {
