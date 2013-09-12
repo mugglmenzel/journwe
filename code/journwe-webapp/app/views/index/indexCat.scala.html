@@ -169,6 +169,7 @@
 
         var adventuresMap;
         var adventuresMarkers = [];
+        var adventuresInfos = [];
         google.maps.visualRefresh = true;
 
         function initializeAdventuresMap() {
@@ -214,11 +215,11 @@
                             position: new google.maps.LatLng(advs[i].lat, advs[i].lng),
                             title: advs[i].name
                         });
-                        var infowindow = new google.maps.InfoWindow({
+                        adventuresInfos[advs[i].id] = new google.maps.InfoWindow({
                             content: '<a href="' + advs[i].link + '"><h3>' + advs[i].name + '</h3></a>'
                         });
                         google.maps.event.addListener(adventuresMarkers[advs[i].id], 'click', function() {
-                            infowindow.open(adventuresMap, adventuresMarkers[advs[i].id]);
+                            adventuresInfos[advs[i].id].open(adventuresMap, adventuresMarkers[advs[i].id]);
                         });
 
                         resetAdventuresBounds();
@@ -228,9 +229,12 @@
                     $('#adventures-public-list .polaroid').hide().fadeIn().hover(
                         function(){
                             $(this).find("div.overlay").slideDown("fast");
+                            adventuresMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
+                            adventuresInfos[advs[i].id].open(adventuresMap, adventuresMarkers[advs[i].id]);
                         },
                         function(){
                             $(this).find("div.overlay").slideUp("fast");
+                            adventuresMarkers[$(this).data('id')].setAnimation(google.maps.Animation.DROP);
                         }
                     );
                 } else {
