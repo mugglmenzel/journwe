@@ -100,31 +100,36 @@
                     for(var i in advs) {
                         $('#inspirations-public-list').append(tmpl('inspiration-public-template', advs[i]));
 
-                        inspirationsMarkers[advs[i].id] = new google.maps.Marker({
+                        var insId = advs[i].id;
+
+                        inspirationsMarkers[insId] = new google.maps.Marker({
                             animation: google.maps.Animation.DROP,
                             map: inspirationsMap,
                             position: new google.maps.LatLng(advs[i].lat, advs[i].lng),
                             title: advs[i].name
                         });
-                        inspirationsInfos[advs[i].id] = new google.maps.InfoWindow({
+                        inspirationsInfos[insId] = new google.maps.InfoWindow({
                             content: '<a href="' + advs[i].link + '"><h3>' + advs[i].name + '</h3></a>'
                         });
-                        google.maps.event.addListener(inspirationsMarkers[advs[i].id], 'click', function() {
-                            inspirationsInfos[advs[i].id].open(inspirationsMap, inspirationsMarkers[advs[i].id]);
-                        });
+                        (function(marker, infowindow){
+                            google.maps.event.addListener(marker, 'click', function() {
+                                infowindow.open(inspirationsMap, marker);
+                            });
+                        })(inspirationsMarkers[insId], inspirationsInfos[insId]);
 
                         resetInspirationsBounds();
                     }
 
-                    $('#inspirations-public-list .polaroid').last().hide().fadeIn().hover(
+                    $('#inspirations-public-list .polaroid').hide().fadeIn().hover(
                         function(){
                             $(this).find("div.overlay").slideDown("fast");
                             inspirationsMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
-                            inspirationsInfos[advs[i].id].open(inspirationsMap, inspirationsMarkers[advs[i].id]);
+                            inspirationsInfos[$(this).data('id')].open(inspirationsMap, inspirationsMarkers[$(this).data('id')]);
                         },
                         function(){
                             $(this).find("div.overlay").slideUp("fast");
                             inspirationsMarkers[$(this).data('id')].setAnimation(google.maps.Animation.DROP);
+                            inspirationsInfos[$(this).data('id')].close();
                         }
                     );
                 } else {
@@ -208,19 +213,22 @@
                 if(advs != null && advs.length) {
                     for(var i in advs) {
                         $('#adventures-public-list').append(tmpl('adventure-public-template', advs[i]));
+                        var advId = advs[i].id;
 
-                        adventuresMarkers[advs[i].id] = new google.maps.Marker({
+                        adventuresMarkers[advId] = new google.maps.Marker({
                             animation: google.maps.Animation.DROP,
                             map: adventuresMap,
                             position: new google.maps.LatLng(advs[i].lat, advs[i].lng),
                             title: advs[i].name
                         });
-                        adventuresInfos[advs[i].id] = new google.maps.InfoWindow({
+                        adventuresInfos[advId] = new google.maps.InfoWindow({
                             content: '<a href="' + advs[i].link + '"><h3>' + advs[i].name + '</h3></a>'
                         });
-                        google.maps.event.addListener(adventuresMarkers[advs[i].id], 'click', function() {
-                            adventuresInfos[advs[i].id].open(adventuresMap, adventuresMarkers[advs[i].id]);
-                        });
+                        (function(marker, infowindow){
+                            google.maps.event.addListener(marker, 'click', function() {
+                                infowindow.open(adventuresMap, marker);
+                            });
+                        })(adventuresMarkers[advId], adventuresInfos[advId]);
 
                         resetAdventuresBounds();
 
@@ -230,11 +238,12 @@
                         function(){
                             $(this).find("div.overlay").slideDown("fast");
                             adventuresMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
-                            adventuresInfos[advs[i].id].open(adventuresMap, adventuresMarkers[advs[i].id]);
+                            adventuresInfos[$(this).data('id')].open(adventuresMap, adventuresMarkers[$(this).data('id')]);
                         },
                         function(){
                             $(this).find("div.overlay").slideUp("fast");
                             adventuresMarkers[$(this).data('id')].setAnimation(google.maps.Animation.DROP);
+                            adventuresInfos[$(this).data('id')].close();
                         }
                     );
                 } else {
