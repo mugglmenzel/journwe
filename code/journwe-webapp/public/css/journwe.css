@@ -40,6 +40,22 @@ a:focus,
 	text-decoration: none;
 }
 
+.adventure-container a {
+	color: #333;
+	text-decoration: underline;
+}
+
+
+.adventure-container a.btn {
+	text-decoration: none;
+}
+
+
+.adventure-container a:hover,
+.adventure-container a:focus {
+	color: #555;	
+}
+
 .modal a {
 	color: #333;
 }
@@ -365,6 +381,11 @@ table.inspiration .images img {
 
 .comments-wall .comment-list {
 	max-height: none;
+	color: #333;
+}
+
+.comments-wall .comment-list .comment-info {
+	color: #555;
 }
 
 .comments-wall .comment-list > * {
