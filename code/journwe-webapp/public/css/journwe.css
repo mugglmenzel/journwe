@@ -931,6 +931,77 @@ h1 .x-edit-loading {
 }
 
 
+.nav-category {
+    background-color: rgba(0,0,0,0.4);
+    font-size: 40px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+}
+
+.nav-category li {
+    height: calc(100% / 8);
+    min-height: 80px;
+}
+
+.nav-category li + li {
+    margin-top: 1px;
+}
+
+.nav-category li a {
+    border-radius: 0;
+    border-right: 5px solid rgba(255,255,255,0.6);
+    text-align: center;
+    margin: 0;
+    height: 100%;
+    width: 100px;
+}
+
+.nav-category li a i {
+    position: absolute;
+    top: 50%;
+    margin-top: -20px;
+    width: 40px;
+    left: 50%;
+    margin-left: -20px;
+}
+
+.nav-category > li > a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.nav-category a {
+    color:  white;
+}
+
+.nav-category .nav-pills>li.active>a,
+.nav-category .nav-pills>li.active>a:hover,
+.nav-category .nav-pills>li.active>a:focus {
+    background: rgba(255,255,255,0.4) !important;
+}
+
+.nav-category .nav-pills>li>a:hover,
+.nav-category .nav-pills>li>a:focus {
+    color: white;
+    background: rgba(255,255,255,0.2);
+}
+
+.nav-category .nav-pills>li>a:hover i,
+.nav-category .nav-pills>li>a:focus i{
+    color: white;
+}
+
+
+.nav-category .nav {
+    height: 100%;
+}
+
+
+
+
+
 /* JournWe Icon */
 @font-face {
     font-family: 'journwe';

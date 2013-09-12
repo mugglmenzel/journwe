@@ -17,6 +17,16 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
         super(Category.class);
     }
 
+    public Category get(String id) {
+        if(Category.SUPER_CATEGORY.equals(id)) {
+            Category result = new Category();
+            result.setId(Category.SUPER_CATEGORY);
+            result.setName(Category.SUPER_CATEGORY);
+            return result;
+        }
+        return super.get(id);
+    }
+
     public List<Category> all() {
         return pm.scan(Category.class,
                 new DynamoDBScanExpression());
@@ -63,6 +73,13 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     public Integer countInspirationsHierarchyCached(String id) {
         CategoryCount cc = new CategoryCountDAO().get(id);
         return cc != null ? cc.getCount() : countInspirationsHierarchy(id);
+    }
+
+
+    public Category getSuperCategory(String id) {
+        List<CategoryHierarchy> superCats = new CategoryHierarchyDAO().categoryAsSub(id);
+
+        return superCats.size() > 0 ? get(superCats.get(0).getSuperCategoryId()) : null;
     }
 
     public void updateCategoryCountCache() {

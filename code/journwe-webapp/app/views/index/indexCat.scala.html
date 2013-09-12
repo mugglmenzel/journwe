@@ -1,4 +1,6 @@
 @(cat:  models.category.Category)
+@import models.category.Category
+@import models.dao.CategoryHierarchyDAO
 @import models.dao.CategoryDAO
 
 
@@ -6,10 +8,26 @@
     <small>@Messages("journwe.subtitle")</small>
 } {
 
+    @defining(new CategoryHierarchyDAO){ catHierDAO =>
+    <div class="nav-category visible-lg" style="">
+        <ul id="nav-category-list" class="nav nav-pills nav-stacked">
+            @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@routes.ApplicationController.categoryIndex(catSuper.getId)"><i class="icon-circle-arrow-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Home}else{@catSuper.getName}"></i> </a></li>}
+            @*
+            @catHierDAO.categoryAsSuper(cat.getId).map{ catHier =>
+                @defining(new CategoryDAO().get(catHier.getSubCategoryId)){ catSub => <li><a href="@routes.ApplicationController.categoryIndex(catSub.getId)"><i class="icon-circle-arrow-down" title="Level Down"></i> @catSub.getName</a></li>}
+            }
+            *@
+            <li><a href="#subcategories"><i class="icon-circle-arrow-down" title="Sub-Categories"></i></a></li>
+            <li><a href="#inspirations"><i class="icon-lightbulb" title="Inspirations"></i></a></li>
+            <li><a href="#publicadventures"><i class="icon-bullhorn" title="Public JournWes"></i></a></li>
+        </ul>
+    </div>
+    }
+
     @defining(new CategoryDAO()){ catDAO =>
     <div class="jrn-container">
 
-        <h2><i class="icon-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
+        <h2 id="subcategories"><i class="icon-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
         <div style="font-size: 20pt;">
             @for(subcat <- catDAO.allSubcategory(cat.getId)) {
                  <a href="@routes.ApplicationController.categoryIndex(subcat.getId)"><span class="label label-info">@subcat.getName <span class="badge">@catDAO.countInspirationsHierarchyCached(subcat.getId)</span></span></a>
@@ -18,7 +36,7 @@
 
     </div>
     <div class="jrn-container">
-        <h2><i class="icon-bullhorn"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
         <div style="">
             <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block" onclick="loadInspirations($('#inspirations-public-list .polaroid').last().data('id'));"> @Messages("adventure.general.button.more") </button></div>
@@ -33,7 +51,7 @@
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 25%;">
             <a href="{%=o.link%}"><img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
+                <div class="overlay text-center" style="line-height: 20px; display: none;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
             </div>
         </div>
     </script>
@@ -100,11 +118,11 @@
                     $('#inspirations-public-list .polaroid').last().hide().fadeIn().hover(
                         function(){
                             $(this).find("div.overlay").slideDown("fast");
-                            inspirationMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
+                            inspirationsMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
                         },
                         function(){
                             $(this).find("div.overlay").slideUp("fast");
-                            inspirationMarkers[$(this).data('id')].setAnimation(google.maps.Animation.DROP);
+                            inspirationsMarkers[$(this).data('id')].setAnimation(google.maps.Animation.DROP);
                         }
                     );
                 } else {
@@ -122,7 +140,7 @@
     </script>
 
     <div class="jrn-container">
-        <h2><i class="icon-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="publicadventures"><i class="icon-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
 
         <div style="">
             <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>

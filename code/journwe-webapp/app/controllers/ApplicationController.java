@@ -8,6 +8,7 @@ import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
+import models.category.Category;
 import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
 import models.dao.*;
@@ -44,21 +45,13 @@ public class ApplicationController extends Controller {
     private static Form<Subscriber> subForm = form(Subscriber.class);
 
     public static Result index() {
-        long initialTime = new Date().getTime();
-        Logger.debug("starting to prepare output");
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
                 && (SecuredBetaUser.isBeta(usr) || SecuredBetaUser.isAdmin(usr))) {
 
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
-            Logger.debug("checking if adventurer");
             if (new AdventurerDAO().isAdventurer(userId)) {
-                Logger.debug("is adventurer");
-                Logger.debug("rendering template");
-                Html tmpl = indexVet.render();
-                long endTime = new Date().getTime();
-                Logger.debug("took " + (endTime - initialTime) + "ms to prepare output");
-                return ok(tmpl);
+                return ok(indexVet.render());
             } else {
 
                 return ok(index.render());
@@ -74,6 +67,7 @@ public class ApplicationController extends Controller {
     }
 
     public static Result categoryIndex(String catId) {
+        if(Category.SUPER_CATEGORY.equals(catId)) return redirect(routes.ApplicationController.index());
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
 

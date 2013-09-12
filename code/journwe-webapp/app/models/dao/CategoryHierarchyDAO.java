@@ -53,6 +53,12 @@ public class CategoryHierarchyDAO extends CommonRangeEntityDAO<CategoryHierarchy
         return pm.count(clazz, scan);
     }
 
+    public String getSuperCategoryId(String catId) {
+        List<CategoryHierarchy> superCats = categoryAsSub(catId);
+
+        return superCats.size() > 0 ? superCats.get(0).getSuperCategoryId() : null;
+    }
+
     public boolean isCategoryInHierarchy(String catId) {
         DynamoDBScanExpression scan = new DynamoDBScanExpression();
         scan.addFilterCondition("subCategoryId", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue(catId)));
