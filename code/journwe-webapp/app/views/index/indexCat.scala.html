@@ -61,6 +61,7 @@
 
         var inspirationsMap;
         var inspirationsMarkers = [];
+        var inspirationsInfos = [];
         google.maps.visualRefresh = true;
 
         function initializeInspirationsMap() {
@@ -105,11 +106,11 @@
                             position: new google.maps.LatLng(advs[i].lat, advs[i].lng),
                             title: advs[i].name
                         });
-                        var infowindow = new google.maps.InfoWindow({
+                        inspirationsInfos[advs[i].id] = new google.maps.InfoWindow({
                             content: '<a href="' + advs[i].link + '"><h3>' + advs[i].name + '</h3></a>'
                         });
                         google.maps.event.addListener(inspirationsMarkers[advs[i].id], 'click', function() {
-                            infowindow.open(inspirationsMap, inspirationsMarkers[advs[i].id]);
+                            inspirationsInfos[advs[i].id].open(inspirationsMap, inspirationsMarkers[advs[i].id]);
                         });
 
                         resetInspirationsBounds();
@@ -119,6 +120,7 @@
                         function(){
                             $(this).find("div.overlay").slideDown("fast");
                             inspirationsMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
+                            inspirationsInfos[advs[i].id].open(inspirationsMap, inspirationsMarkers[advs[i].id]);
                         },
                         function(){
                             $(this).find("div.overlay").slideUp("fast");
