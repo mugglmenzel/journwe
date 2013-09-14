@@ -37,7 +37,7 @@
                             <small><cite>@Messages("subscribe.story1.cite")</cite></small></blockquote>
                     </div>
                     <div class="col-lg-5 text-center">
-                        @defining(new AdventureDAO().get("5fb8c20d-ce5e-40c8-999b-efcceb52f9c3")){ adv =>   @if(adv != null) {
+                        @defining(new AdventureDAO().get("965ddda2-140c-4331-9883-72c9217216ca")){ adv =>   @if(adv != null) {
                         <div class="polaroid" style="">
                             <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
                             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
