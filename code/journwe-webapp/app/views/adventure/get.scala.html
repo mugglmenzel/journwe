@@ -127,7 +127,9 @@
                 @places(adv)
 
             </div>
+            @if(JournweAuthorization.canViewPlaceComments(adv.getId)) {
             @views.html.comment.widget_comment.render(adv, "places")
+            }
         </div>
     </div>
     <hr/>
