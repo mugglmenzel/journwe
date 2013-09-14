@@ -100,11 +100,11 @@
 
                 <div class="row">
                     <div class="col-lg-5 text-center">
-                    @defining(new AdventureDAO().get("ebe510c4-25e9-4f18-9ffc-71ff10fc9901")){ adv => @if(adv != null) {
+                    @defining(new InspirationDAO().get("ebe510c4-25e9-4f18-9ffc-71ff10fc9901")){ ins => @if(ins != null) {
                         <div class="polaroid" style="position: relative; float: left;">
-                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                            <a href="@routes.InspirationController.get(ins.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@ins.getImage&key=ebe510c4-25e9-4f18-9ffc-71ff10fc9901"></a>
                             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                <div style="line-height: 20px;"><h4><a href="@routes.InspirationController.get(ins.getId)">@ins.getName</a></h4></div>
                                 <div class="overlay text-center" style="display: none;">
                                     <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> BLA</span>
                                     <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 56784</span>
