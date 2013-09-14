@@ -55,7 +55,7 @@ public class InspirationController extends Controller {
         List<InspirationCategory> cats = new InspirationCategoryDAO().getCategories(ins.getId());
         InspirationCategory cat = cats != null && cats.size() > 0 ? cats.iterator().next() : null;
 
-        return ok(get.render(ins, new CategoryDAO().get(cat.getCategoryId())));
+        return ok(get.render(ins, cat != null ? new CategoryDAO().get(cat.getCategoryId()) : null));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
