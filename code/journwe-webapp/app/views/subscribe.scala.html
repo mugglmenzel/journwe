@@ -128,15 +128,14 @@
                             <small><cite>@Messages("subscribe.story5.cite")</cite></small></blockquote>
                     </div>
                     <div class="col-lg-5 text-center">
-                    @defining(new AdventureDAO().get("10d9f313-3d43-460e-8867-d52e911da9f2")){ adv =>  @if(adv != null) {
+                    @defining(new AdventureDAO().get("a05e49c5-8008-4e16-bde5-1af28d0c46d5")){ adv =>  @if(adv != null) {
                         <div class="polaroid" style="position: relative; float: left;">
                             <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
                             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                                 <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                 <div class="overlay text-center" style="display: none;">
-                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ANCH</span>
-                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 7</span>
-                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 5-2013</span>
+                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> EARTH</span>
+                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 1</span>
                                 </div>
                             </div>
                         </div>

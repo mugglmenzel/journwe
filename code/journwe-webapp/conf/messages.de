@@ -212,7 +212,8 @@ yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow a
 
 
 #Landingpage
-subscribe.story=Wir lieben JournWe
+subscribe.story=Good friends will listen to your adventures, best friends join them.
+subscribe.story2=Wir lieben JournWe
 #Story1
 subscribe.story1.header=START A GROUP ADVENTURE WITH YOUR FRIENDS
 subscribe.story1.content=Markus always wanted to visit Southern Africa to see the Big 5. He published his adventure plan on JournWe and convinced three of this friends in social networks to join him. Planning the trip was neat. "They joined the trip, we voted for time slots and discussed out is all booked together". It's as simple as that to stay in touch and organize. "We saw them all! Especially the Leopard jumping right on our car truly was a lifetime experience!".
@@ -254,8 +255,8 @@ subscribe.story4.cite=Peter, a JournWe adventurer
 	subscribe.story4b.cite=A guy
 #Story5
 subscribe.story5.header=REMEMBER YOUR DREAMS
-subscribe.story5.content=Your very own bucket list. Don’t only list your dream adventures but keep polishing them. Gather all the infos you’ve already found, what you need to remember about it and monitor the prices for flights, hotels and other stuff . The day will come when you start inviting your friends to join your dream. Good friends will listen to your adventures, best friends will join them.
-subscribe.story5.cite=Shorty
+subscribe.story5.content=Your very own bucket list. Don’t only list your dream adventures but keep preparing them. Gather all the infos you’ve already found, what you need to remember about it and monitor the prices for flights, hotels and other stuff . The day will come when you start inviting your friends to join your dream.
+subscribe.story5.cite=The JournWe Team
 	#Story5b
 	subscribe.story5b.header=Remember THE DREAM
 	subscribe.story5b.content=That's his personal dream. Whenever it will happen, but here Willi saved it. A detailed plan aiming on one goal -  see Britney Spears and get her signature right next to his Britney bum tattoo.
