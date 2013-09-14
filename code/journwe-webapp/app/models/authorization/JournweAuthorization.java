@@ -45,6 +45,10 @@ public class JournweAuthorization {
     }
 
     // PLACE
+    public static boolean canViewAdventurePlacesWidget(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canViewAdventurePlacesWidget() : false;
+    }
     public static boolean canEditPlaces(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canEditPlaces() : false;
@@ -79,6 +83,10 @@ public class JournweAuthorization {
     }
 
     // ADVENTURERS
+    public static boolean canViewAdventureAdventurersWidget(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canViewAdventureAdventurersWidget() : false;
+    }
     public static boolean canViewAdventurerParticipants(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canViewAdventurerParticipants() : false;
@@ -113,6 +121,10 @@ public class JournweAuthorization {
     }
 
     // TIME
+    public static boolean canViewAdventureTimeWidget(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canViewAdventureTimeWidget() : false;
+    }
     public static boolean canEditDateAndTime(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canEditDateAndTime() : false;
@@ -147,7 +159,10 @@ public class JournweAuthorization {
     }
 
     // TODOLIST
-
+    public static boolean canViewAdventureTodoWidget(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canViewAdventureTodoWidget() : false;
+    }
     public static boolean canEditTodoItem(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canEditTodoItem() : false;
@@ -170,6 +185,10 @@ public class JournweAuthorization {
     }
 
     // FILE
+    public static boolean canViewAdventureFilesWidget(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canViewAdventureFilesWidget() : false;
+    }
     public static boolean canUploadFiles(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canUploadFiles() : false;
@@ -189,6 +208,18 @@ public class JournweAuthorization {
     public static boolean canViewFilesComments(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canViewFilesComments() : false;
+    }
+
+    // DISCUSSION
+    public static boolean canViewAdventureDiscussionWidget(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canViewAdventureDiscussionWidget() : false;
+    }
+
+    // OFFERS
+    public static boolean canViewAdventureOffersWidget(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canViewAdventureOffersWidget() : false;
     }
 
     /**

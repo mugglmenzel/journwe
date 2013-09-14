@@ -45,6 +45,10 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     }
 
     // PLACE
+    @Override
+    boolean canViewAdventurePlacesWidget() {
+        return true;
+    }
 
     @Override
     boolean canEditPlaces() {
@@ -87,6 +91,10 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     }
 
     // ADVENTURERS
+    @Override
+    boolean canViewAdventureAdventurersWidget() {
+        return true;
+    }
 
     @Override
     boolean canViewAdventurerParticipants() {
@@ -131,6 +139,10 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     // TIME
 
     @Override
+    boolean canViewAdventureTimeWidget() {
+        return true;
+    }
+
     boolean canEditDateAndTime() {
         return true;
     }
@@ -171,6 +183,11 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     }
 
     // TODOLIST
+
+    @Override
+    boolean canViewAdventureTodoWidget() {
+        return true;
+    }
 
     @Override
     boolean canEditTodoItem() {
@@ -223,4 +240,19 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     boolean canViewFilesComments() {
         return true;
     }
+
+    // DISCUSSION
+
+    @Override
+    boolean canViewAdventureDiscussionWidget() {
+        return true;
+    }
+
+    // OFFERS
+
+    @Override
+    boolean canViewAdventureOffersWidget() {
+        return true;
+    }
+
 }
