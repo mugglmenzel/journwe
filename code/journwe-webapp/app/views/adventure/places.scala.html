@@ -1,6 +1,6 @@
-@import models.authorization.JournweAuthorization
-
 @(adv: models.adventure.Adventure)
+
+@import models.authorization.JournweAuthorization
 
 @if(JournweAuthorization.canViewPlaces(adv.getId)) {
 <div class="clearfix">
