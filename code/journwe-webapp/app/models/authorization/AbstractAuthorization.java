@@ -28,6 +28,9 @@ public abstract class AbstractAuthorization {
     }
 
     // PLACE
+    boolean canViewAdventurePlacesWidget() {
+        return false;
+    }
     boolean canEditPlaces() {
         return false;
     }
@@ -54,6 +57,9 @@ public abstract class AbstractAuthorization {
     }
 
     // ADVENTURERS
+    boolean canViewAdventureAdventurersWidget() {
+        return false;
+    }
     boolean canViewAdventurerParticipants() {
         return false;
     }
@@ -80,6 +86,9 @@ public abstract class AbstractAuthorization {
     }
 
     // TIME
+    boolean canViewAdventureTimeWidget() {
+        return false;
+    }
     boolean canEditDateAndTime() {
         return false;
     }
@@ -106,7 +115,9 @@ public abstract class AbstractAuthorization {
     }
 
     // TODOLIST
-
+    boolean canViewAdventureTodoWidget() {
+        return false;
+    }
     boolean canEditTodoItem() {
         return false;
     }
@@ -124,6 +135,9 @@ public abstract class AbstractAuthorization {
     }
 
     // FILE
+    boolean canViewAdventureFilesWidget() {
+        return false;
+    }
     boolean canUploadFiles() {
         return false;
     }
@@ -140,4 +154,13 @@ public abstract class AbstractAuthorization {
         return false;
     }
 
+    // DISCUSSION
+    boolean canViewAdventureDiscussionWidget() {
+        return false;
+    }
+
+    // OFFERS
+    boolean canViewAdventureOffersWidget() {
+        return false;
+    }
 }

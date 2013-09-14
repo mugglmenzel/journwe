@@ -20,6 +20,10 @@ public class AdventureInviteeAuthorization extends AbstractAuthorization {
     }
 
     // PLACE
+    @Override
+    boolean canViewAdventurePlacesWidget() {
+        return true;
+    }
 
     @Override
     boolean canViewPlaces() {
@@ -36,6 +40,11 @@ public class AdventureInviteeAuthorization extends AbstractAuthorization {
     // ... can see / edit nothing
 
     // TIME
+
+    @Override
+    boolean canViewAdventureTimeWidget() {
+        return true;
+    }
 
     @Override
     boolean canViewDateAndTime() {
@@ -59,4 +68,12 @@ public class AdventureInviteeAuthorization extends AbstractAuthorization {
     // FILES
 
     // .. can see / edit nothing
+
+    // DISCUSSION
+
+    // .. can see / post nothing
+
+    // OFFERS
+
+    // .. can see nothing
 }
