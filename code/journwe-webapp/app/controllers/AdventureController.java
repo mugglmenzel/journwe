@@ -9,20 +9,22 @@ import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
-import models.adventure.file.JournweFile;
-import models.adventure.place.PlaceAdventurerPreference;
-import models.adventure.time.TimeAdventurerPreference;
-import models.inspiration.Inspiration;
 import models.adventure.*;
+import models.adventure.file.JournweFile;
 import models.adventure.group.AdventurerGroup;
+import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.place.PlaceOption;
+import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
+import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
+import models.category.Category;
 import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
+import models.inspiration.Inspiration;
 import models.notifications.helper.AdventurerNotifier;
 import models.user.EUserRole;
 import models.user.User;
@@ -205,7 +207,7 @@ public class AdventureController extends Controller {
     }
     */
 
-
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result save() {
         DynamicForm filledForm = advForm.bindFromRequest();
 
@@ -213,9 +215,9 @@ public class AdventureController extends Controller {
         adv.setName(filledForm.get("name"));
         new AdventureDAO().save(adv);
 
-        if(filledForm.get("inspirationId") != null){
+        if (filledForm.get("inspirationId") != null) {
             Inspiration ins = new InspirationDAO().get(filledForm.get("inspirationId"));
-            if(ins != null){
+            if (ins != null) {
                 adv.setInspirationId(ins.getId());
                 adv.setDescription(ins.getDescription());
 
@@ -401,6 +403,7 @@ public class AdventureController extends Controller {
 
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result saveEditable() {
         DynamicForm advForm = form().bindFromRequest();
         String advId = advForm.get("pk");
@@ -420,6 +423,7 @@ public class AdventureController extends Controller {
         return ok();
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result updateImage(String advId) {
         if (!JournweAuthorization.canEditAdventureImage(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -451,6 +455,23 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(node));
     }
 
+
+    public static Result updateCategory(String advId) {
+        DynamicForm data = form().bindFromRequest();
+        String catId = data.get("categoryId");
+
+        AdventureCategory old = new AdventureCategoryDAO().getCategory(advId);
+        if(old != null && !old.getCategoryId().equals(catId)) new AdventureCategoryDAO().delete(old);
+
+        AdventureCategory advCat = new AdventureCategory();
+        advCat.setCategoryId(catId);
+        advCat.setAdventureId(advId);
+        new AdventureCategoryDAO().save(advCat);
+
+        return ok(Json.toJson(new CategoryDAO().get(catId)));
+    }
+
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result updatePublic(String advId) {
         DynamicForm data = form().bindFromRequest();
         Boolean publish = new Boolean(data.get("public"));
@@ -461,7 +482,7 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(adv.isPublish()));
     }
 
-
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result updatePlaceVoteOpen(String advId) {
         if (!JournweAuthorization.canChangeVoteOnOffForPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -476,6 +497,7 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(adv.getPlaceVoteOpen()));
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result updateTimeVoteOpen(String advId) {
         if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -490,7 +512,7 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(adv.getTimeVoteOpen()));
     }
 
-
+    @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String advId) {
         for (Adventurer advr : new AdventurerDAO().all(advId))
             new AdventurerDAO().delete(advr);
@@ -504,19 +526,19 @@ public class AdventureController extends Controller {
             new CommentThreadDAO<Adventure>().delete(ct);
         }
 
-        for(PlaceOption po : new PlaceOptionDAO().all(advId)){
-            for(PlaceAdventurerPreference pap : new PlaceAdventurerPreferenceDAO().all(po.getOptionId()))
+        for (PlaceOption po : new PlaceOptionDAO().all(advId)) {
+            for (PlaceAdventurerPreference pap : new PlaceAdventurerPreferenceDAO().all(po.getOptionId()))
                 new PlaceAdventurerPreferenceDAO().delete(pap);
             new PlaceOptionDAO().delete(po);
         }
 
-        for(TimeOption to : new TimeOptionDAO().all(advId)) {
-            for(TimeAdventurerPreference tap : new TimeAdventurerPreferenceDAO().all(to.getOptionId()))
+        for (TimeOption to : new TimeOptionDAO().all(advId)) {
+            for (TimeAdventurerPreference tap : new TimeAdventurerPreferenceDAO().all(to.getOptionId()))
                 new TimeAdventurerPreferenceDAO().delete(tap);
             new TimeOptionDAO().delete(to);
         }
 
-        for(JournweFile jf : new JournweFileDAO().all(advId))
+        for (JournweFile jf : new JournweFileDAO().all(advId))
             new JournweFileDAO().delete(jf);
 
         // keep shortname to tell visitors it has been deleted

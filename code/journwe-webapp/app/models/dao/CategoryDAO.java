@@ -8,6 +8,7 @@ import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
 import models.dao.common.CommonEntityDAO;
 import models.inspiration.InspirationCategory;
+import play.Logger;
 
 import java.util.*;
 
@@ -28,12 +29,25 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     }
 
     public List<Category> all() {
-        return pm.scan(Category.class,
+        List<Category> scanResults = pm.scan(Category.class,
                 new DynamoDBScanExpression());
+        List<Category> results = new ArrayList<Category>();
+        for(Category cat : scanResults) {
+            results.add(cat);
+        }
+
+        Collections.sort(results, new Comparator<Category>() {
+            @Override
+            public int compare(Category category, Category category2) {
+                return category.getName().compareTo(category2.getName());  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
+        return results;
     }
 
     public Map<String, String> allOptionsMap() {
-        Map<String, String> result = new HashMap<String, String>();
+        Map<String, String> result = new LinkedHashMap<String, String>();
         for (Category in : all())
             if (in != null) result.put(in.getId(), in.getName());
         return result;
@@ -45,6 +59,13 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
         List<Category> results = new ArrayList<Category>();
         for (CategoryHierarchy h : hiers)
             if (h != null) results.add(get(h.getSubCategoryId()));
+
+        Collections.sort(results, new Comparator<Category>() {
+            @Override
+            public int compare(Category category, Category category2) {
+                return category.getName().compareTo(category2.getName());  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
 
         return results;
     }

@@ -42,6 +42,7 @@ GET           /adventure/:id/new                             controllers.Adventu
 GET           /adventure/:id/delete                          controllers.AdventureController.delete(id:String)
 POST          /adventure/check/shortname                     controllers.AdventureController.checkShortname()
 POST          /adventure/:id/updateImage                     controllers.AdventureController.updateImage(id:String)
+POST          /adventure/:id/updateCategory                  controllers.AdventureController.updateCategory(id:String)
 POST          /adventure/:id/clone                           controllers.CloneController.cloneAndSaveAdventure(id:String)
 
 # Adventurer Groups
