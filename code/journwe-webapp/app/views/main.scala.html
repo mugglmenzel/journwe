@@ -85,7 +85,9 @@
 				</div>
 				}
 				@content
-	            @feedback()
+                @currentAuth() { auth => @if(auth != null){
+                    @feedback
+                }}
 			</div>
 		</div>
 

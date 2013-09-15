@@ -46,8 +46,6 @@ public class InspirationController extends Controller {
             ConfigFactory.load().getString("aws.accessKey"),
             ConfigFactory.load().getString("aws.secretKey")));
 
-
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result get(String id) {
         Inspiration ins = new InspirationDAO().get(id);
         if (ins == null) return badRequest();
@@ -58,7 +56,6 @@ public class InspirationController extends Controller {
         return ok(get.render(ins, cat != null ? new CategoryDAO().get(cat.getCategoryId()) : null));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getImages(String id) {
         List<String> images = new ArrayList<String>();
         for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_INSPIRATION_IMAGES).withPrefix(id + "/")).getObjectSummaries()) {
@@ -80,7 +77,7 @@ public class InspirationController extends Controller {
                 new InspirationDAO().all()));
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result createAdventure(String insId) {
         return ok(indexNew.render(new InspirationDAO().get(insId)));
     }
@@ -93,7 +90,7 @@ public class InspirationController extends Controller {
                 new InspirationDAO().all()));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredAdminUser.class)
     public static String getBucketURL(String id) {
         return s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                 id);
