@@ -144,7 +144,9 @@
                 <p class="lead">@Messages("adventure.getScala.adventurers.subtitle")</p>
                 @adventurers(adv, advr)
             </div>
+            @if(JournweAuthorization.canViewAdventurerComments(adv.getId)) {
             @{views.html.comment.widget_comment.render(adv, "adventurers")}
+            }
         </div>
     </div>
     <hr/>
@@ -160,7 +162,9 @@
                 @time(adv, timeForm)
 
             </div>
+            @if(JournweAuthorization.canViewDateAndTimeComments(adv.getId)) {
             @views.html.comment.widget_comment.render(adv, "times")
+            }
         </div>
     </div>
     <hr/>
@@ -189,7 +193,9 @@
                 @todos(adv, advr)
 
             </div>
+            @if(JournweAuthorization.canViewTodoComments(adv.getId)) {
             @views.html.comment.widget_comment.render(adv, "todos")
+            }
         </div>
     </div>
     <hr/>
@@ -235,7 +241,9 @@
                 </table>
 
             </div>
+            @if(JournweAuthorization.canViewOfferComments(adv.getId)) {
             @views.html.comment.widget_comment.render(adv, "offers")
+            }
         </div>
     </div>
     }

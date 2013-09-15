@@ -173,6 +173,11 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
     }
 
     @Override
+    boolean canEditFavoriteDateAndTime() {
+        return true;
+    }
+
+    @Override
     boolean canEditDateAndTimeComments() {
         return true;
     }
@@ -252,6 +257,11 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
 
     @Override
     boolean canViewAdventureOffersWidget() {
+        return true;
+    }
+
+    @Override
+    boolean canViewOfferComments() {
         return true;
     }
 

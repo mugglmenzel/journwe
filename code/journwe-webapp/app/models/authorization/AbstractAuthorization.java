@@ -107,6 +107,9 @@ public abstract class AbstractAuthorization {
     boolean canViewFavoriteDateAndTime() {
         return false;
     }
+    boolean canEditFavoriteDateAndTime() {
+        return false;
+    }
     boolean canEditDateAndTimeComments() {
         return false;
     }
@@ -161,6 +164,9 @@ public abstract class AbstractAuthorization {
 
     // OFFERS
     boolean canViewAdventureOffersWidget() {
+        return false;
+    }
+    boolean canViewOfferComments() {
         return false;
     }
 }
