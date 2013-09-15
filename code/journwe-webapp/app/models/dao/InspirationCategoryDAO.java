@@ -42,6 +42,8 @@ public class InspirationCategoryDAO extends CommonRangeEntityDAO<InspirationCate
         insCat.setCategoryId(catId);
         query.setHashKeyValues(insCat);
 
+        query.setScanIndexForward(false);
+
         return pm.query(InspirationCategory.class, query);
     }
 
