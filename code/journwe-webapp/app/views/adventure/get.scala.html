@@ -45,7 +45,6 @@
     <div class="prime-image">
         <div style="width: 100%;">
             <img id="adventure-prime-image" style="width: 100%; height: 200px;" @if(adv.getImage == null || !JournweAuthorization.canViewAdventureImage(adv.getId)){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=Drop+image"}else{src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
-            <i id="adventure-prime-image-loading" class="icon-spin icon-journwe stash"></i>
         </div>
 
         @if(JournweAuthorization.canViewAdventureTitle(adv.getId)) {
@@ -57,25 +56,78 @@
         </div>
         }
         <div class="toolbar">
-            <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
             @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
                 <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="icon-plus"></i> @Messages("adventure.general.button.join")</a>
                 <script>
                     $(function(){
                         $('.btn-participate').click(function(){
                             var el = $(this),
-                            html = el.html();
+                                html = el.html();
 
                             el.css({width:el.width()+"px"})
-                                    .html('<i class="icon-spin icon-journwe"></i>');
+                                .html('<i class="icon-spin icon-journwe"></i>');
 
                             return true;
-                        })
+                        });
                     });
                 </script>
             } else {
                 <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> @Messages("adventure.general.button.leave")</a>
             }
+
+            <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
+
+            <input id="adventure-prime-image-file-input" type="file" class="hide"/>
+            <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="icon-upload"></i> @Messages("adventure.files.fileUpload")</a>
+            <script type="text/javascript">
+                jQuery.event.props.push('dataTransfer');
+
+                $('#adventure-prime-image').on('drop', function (event){processDroppedPrimeImage(event);});
+
+                $('#adventure-prime-image-file-input').change(function () {
+                    var inputFile = $('#adventure-prime-image-file-input'),
+                        files = inputFile[0].files;
+                    if(files) {
+                        uploadPrimeImage(files);
+                        inputFile.val('');
+                    }
+                });
+
+                function processDroppedPrimeImage(event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+
+                    uploadPrimeImage(event.target.files || event.dataTransfer.files);
+
+                    return false;
+                }
+
+                function uploadPrimeImage(files) {
+                    var btn = $('#adventure-prime-image-upload-button'),
+                        btnOriginal = btn.html();
+                    btn.css({width:btn.css('width')})
+                        .html('<i class="icon-spin icon-journwe"></i>');
+
+                    var data = new FormData();
+                    data.append(files[0].name, files[0])
+
+                    $.ajax({
+                        url: '@routes.AdventureController.updateImage(adv.getId)',
+                        data: data,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: 'POST',
+                        success:  function (result) {
+                            $('#adventure-prime-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime());
+                            btn.css({width:""})
+                                .html(btnOriginal);
+                        }
+                    });
+
+                }
+
+            </script>
         </div>
     </div>
 
