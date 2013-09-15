@@ -30,6 +30,7 @@ public class NotificationDAO extends CommonRangeEntityDAO<Notification> {
 
     public List<Notification> all(String userId, String lastKey, int limit) {
         DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        query.setScanIndexForward(false);
 
         if (limit > 0) query.setLimit(limit);
 
