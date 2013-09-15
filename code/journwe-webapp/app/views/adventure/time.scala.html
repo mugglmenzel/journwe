@@ -90,7 +90,9 @@
             <td class="text-center">{%=o.voteCount.NO%}</td>
             <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=voteTimeLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=o.voteAdventurers[i][j].split(/\s/)[0]%}</span> {% }} %}</td>
             }
+            @if(JournweAuthorization.canEditDateAndTime(adv.getId)) {
             <td class="text-center"><button onclick="deleteTime('{%=o.timeId%}', this);" class="btn btn-danger"><i class="icon-trash"></i></button></td>
+            }
         </tr>
     </script>
 

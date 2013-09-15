@@ -181,6 +181,9 @@ public class AdventureTimeController extends Controller {
     }
 
     public static Result deleteTime(String advId, String timeId) {
+        if (!JournweAuthorization.canEditFavoriteDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+
         new TimeOptionDAO().delete(advId, timeId);
         return ok();
     }
