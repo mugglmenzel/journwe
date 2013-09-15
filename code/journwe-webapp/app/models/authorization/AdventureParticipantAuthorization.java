@@ -219,6 +219,11 @@ public class AdventureParticipantAuthorization extends AbstractAuthorization {
     // FILES
 
     @Override
+    boolean canViewAdventureFilesWidget() {
+        return true;
+    }
+
+    @Override
     boolean canUploadFiles() {
         return true;
     }
