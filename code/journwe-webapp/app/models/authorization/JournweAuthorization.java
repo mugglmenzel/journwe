@@ -221,6 +221,10 @@ public class JournweAuthorization {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canViewAdventureOffersWidget() : false;
     }
+    public static boolean canViewOfferComments(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canViewOfferComments() : false;
+    }
 
     /**
      * Helper
