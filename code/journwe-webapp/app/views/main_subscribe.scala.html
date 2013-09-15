@@ -56,7 +56,7 @@
         <div class="main row">
             <div class="col-lg-offset-2 col-lg-8">
         		<div class="page-header">
-        			<h1>JournWe <small>@Messages("journwe.subtitle")</small></h1>
+        			<h1>Journ<b>We</b> <small>@Messages("journwe.subtitle")</small></h1>
         		</div>
         		@if(flash("error")) {
         		<div class="alert alert-error">
@@ -79,6 +79,11 @@
                 @content
         	</div>
         </div>
+
+
+        <!-- FOOTER -->
+        @footer()
+
     </div>
 </body>
 </html>

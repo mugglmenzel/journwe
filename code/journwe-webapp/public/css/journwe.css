@@ -12,7 +12,7 @@ body > * {
 	background-color: rgba(0,0,0,0.4);
 }
 
-body, body * {
+body, body *, .btn, .btn-link {
 	font-family: 'Lato', sans-serif;
 	font-weight: 300;
 }
@@ -35,14 +35,14 @@ h2, h3, h4, h2 small, h3 small, h4 small {
 
 a {
 	cursor: pointer;
-	color: white;
+	color: #333;
 }
 
 a:hover,
 a:focus,
 .header a:hover.btn-link,
 .header a:focus.btn-link  {
-	color:#D1D1D1;
+	color:#666;
 	text-decoration: none;
 }
 
@@ -141,11 +141,9 @@ h1 .editableform {
 .page-header {
 	background: rgba(255,255,255,0.8);
 	padding: 5px 20px;
-	color: white;
 }
 
 .page-header small {
-	color: white;
 }
 
 .jrn-container,
@@ -1026,8 +1024,6 @@ h1 .x-edit-loading {
 
 
 
-
-
 /* JournWe Icon */
 @font-face {
     font-family: 'journwe';
@@ -1061,4 +1057,15 @@ h1 .x-edit-loading {
 .jrn-subcategory a .badge {
 	top: -2px;
 	position: relative;
+}
+
+@media (min-width: 768px) {
+	.lead {
+		font-size: 20px;
+	}
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+	color: #428bca;
+	background-color: transparent;
 }

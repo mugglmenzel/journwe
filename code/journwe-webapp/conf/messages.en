@@ -265,3 +265,7 @@ subscribe.story5b.cite=Shorty
 subscribe.story6.header=What to do NEXT WEEKEND
 subscribe.story6.content=Andy got time. Who's up for some crazy party? Or let's do some barbecue next to the river. He fixed the date now let's see who's in and what they can do.
 subscribe.story6.cite=Andy
+
+#Languages
+languages.en=English
+languages.de=German  

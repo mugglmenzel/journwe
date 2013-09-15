@@ -1,6 +1,6 @@
 #journwe
 journwe.subtitle=where adventurers meet...
-subscribe.welcometext=JournWe helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join an adventure.
+subscribe.welcometext=Journ<b>We</b> helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join an adventure.
 subscribe.cta=Subscribe with your email to get notified when we go online!
 
 #Adventure.general.buttons
@@ -103,3 +103,7 @@ adventure.files.fileRemove=Remove
 notifications.digest.name.IMMEDIATELY=Immediately
 notifications.digest.name.DAILY=Daily
 notifications.digest.name.WEEKLY=Weekly
+
+#Languages
+languages.en=English
+languages.de=German  

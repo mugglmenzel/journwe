@@ -1,4 +1,5 @@
 @import models.notifications.ENotificationTopics
+@import models.notifications.ENotificationTopics
 
 @import models.dao.CategoryDAO
 
@@ -55,7 +56,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4 clearfix text-right">
+        <div class="col-lg-5 clearfix text-right">
         @if(auth != null && user != null) {
             <div class="">
 
@@ -150,21 +151,6 @@
             </div>
         }
         </div>
-        <div class="col-lg-1">
-            <div class="btn-group">
-                <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                    @Http.Context.current().lang().language() <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    @for(lang <- Lang.availables) {
-                    <li><a href="@routes.ApplicationController.changeLanguage(lang.language.toString)">@lang.language</a></li>
-                    }
-                </ul>
-            </div>
-
-
-        </div>
-
     </div>
 
     }
