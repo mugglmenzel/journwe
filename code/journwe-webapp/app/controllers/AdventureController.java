@@ -9,6 +9,9 @@ import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
+import models.adventure.file.JournweFile;
+import models.adventure.place.PlaceAdventurerPreference;
+import models.adventure.time.TimeAdventurerPreference;
 import models.inspiration.Inspiration;
 import models.adventure.*;
 import models.adventure.group.AdventurerGroup;
@@ -500,6 +503,21 @@ public class AdventureController extends Controller {
                 new CommentDAO().delete(c);
             new CommentThreadDAO<Adventure>().delete(ct);
         }
+
+        for(PlaceOption po : new PlaceOptionDAO().all(advId)){
+            for(PlaceAdventurerPreference pap : new PlaceAdventurerPreferenceDAO().all(po.getOptionId()))
+                new PlaceAdventurerPreferenceDAO().delete(pap);
+            new PlaceOptionDAO().delete(po);
+        }
+
+        for(TimeOption to : new TimeOptionDAO().all(advId)) {
+            for(TimeAdventurerPreference tap : new TimeAdventurerPreferenceDAO().all(to.getOptionId()))
+                new TimeAdventurerPreferenceDAO().delete(tap);
+            new TimeOptionDAO().delete(to);
+        }
+
+        for(JournweFile jf : new JournweFileDAO().all(advId))
+            new JournweFileDAO().delete(jf);
 
         // keep shortname to tell visitors it has been deleted
         //new AdventureShortnameDAO().delete(new AdventureShortnameDAO().getShortname(advId));
