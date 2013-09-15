@@ -52,8 +52,9 @@
     <div class="jrn-container">
         <h2>@Messages("adventure.general.invitation")</h2>
         <p class="pull-left">
+            @*
             <img id="adventure-title-image" class="img-polaroid" style="margin-right: 20px; margin-bottom: 20px;" @if(adv.getImage == null){src="http://www.placehold.it/150x200/EFEFEF/AAAAAA&text=no+image"}else{src="http://i.embed.ly/1/image/resize?height=100&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
-
+            *@
             <div>@Html(adv.getHTMLDescription())</div>
 
         </p>
