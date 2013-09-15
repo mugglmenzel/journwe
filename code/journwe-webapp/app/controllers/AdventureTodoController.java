@@ -8,6 +8,8 @@ import com.journwe.productadvertising.webservice.client.OperationRequest;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.checklist.EStatus;
 import models.auth.SecuredBetaUser;
+import models.authorization.AuthorizationMessage;
+import models.authorization.JournweAuthorization;
 import models.dao.TodoDAO;
 import models.dao.UserDAO;
 import models.helpers.AWSProductAdvertisingAPIHelper;
@@ -40,6 +42,8 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getTodos(String advId, String userId) {
+        if (!JournweAuthorization.canViewTodoItem(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         return ok(Json.toJson(new TodoDAO().all(userId, advId)));
 
         //return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
@@ -88,6 +92,8 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result addTodo(String id) {
+        if (!JournweAuthorization.canEditTodoItem(id))
+            return AuthorizationMessage.notAuthorizedResponse();
 
         DynamicForm requestData = form().bindFromRequest();
 
@@ -105,6 +111,8 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result setTodo(String advId, String tid) {
+        if (!JournweAuthorization.canEditTodoItem(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
 
         DynamicForm requestData = form().bindFromRequest();
 
@@ -120,6 +128,8 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result deleteTodo(String advId, String tid) {
+        if (!JournweAuthorization.canEditTodoItem(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
 
         new TodoDAO().delete(tid, advId);
 
