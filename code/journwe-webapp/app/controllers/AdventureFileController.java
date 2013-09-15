@@ -13,6 +13,7 @@ import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.JournweFileDAO;
+import org.joda.time.DateTime;
 import play.Logger;
 import play.data.Form;
 import play.libs.Json;
@@ -22,6 +23,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -30,6 +32,8 @@ public class AdventureFileController extends Controller {
 
     public static final String S3_BUCKET = "journwe-files";
     public static final String DEFAULT_STORAGE_PROVIDER = "https://s3.amazonaws.com/" + S3_BUCKET;
+    // expiration time = 24h
+    public static final Long EXPIRATION_TIME_IN_SECONDS = 86400L;
 
 
     protected static Form<JournweFile> fileForm = form(JournweFile.class);
@@ -64,7 +68,8 @@ public class AdventureFileController extends Controller {
             journweFile.setAdventureId(advId);
             journweFile.setStorageProvider(DEFAULT_STORAGE_PROVIDER);
             journweFile.setUserId(usr.getId());
-            String s3ObjectKey = advId + "/" + journweFile.getFileName();
+            String fileName = journweFile.getFileName();
+            String s3ObjectKey = generateS3ObjectKey(advId, fileName);
             String url = DEFAULT_STORAGE_PROVIDER + "/" + s3ObjectKey;
             journweFile.setUrl(url);
             if (!new JournweFileDAO().save(journweFile))
@@ -72,7 +77,7 @@ public class AdventureFileController extends Controller {
             // Upload files to S3 asynchronously
             TransferManager tx = new TransferManager(credentials);
             Upload upload = tx.upload(S3_BUCKET, s3ObjectKey, file);
-            s3.setObjectAcl(S3_BUCKET, s3ObjectKey, CannedAccessControlList.PublicRead);
+            s3.setObjectAcl(S3_BUCKET, s3ObjectKey, CannedAccessControlList.Private);
             flash("success", "Your files is uploading now and can be downloaded, soon...");
             return ok(Json.toJson(journweFile));
         } catch (Exception e) {
@@ -83,11 +88,21 @@ public class AdventureFileController extends Controller {
         }
     }
 
+
+
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result listFiles(String adventureId) {
         if (!JournweAuthorization.canViewAndDownloadFiles(adventureId))
             return AuthorizationMessage.notAuthorizedResponse();
-        return ok(Json.toJson(new JournweFileDAO().all(adventureId)));
+        List<JournweFile> files = new JournweFileDAO().all(adventureId);
+        for(JournweFile file : files) {
+            Long newExpirationTimeInMillis = new Long(DateTime.now().getMillis()+EXPIRATION_TIME_IN_SECONDS);
+            String s3ObjectKey = generateS3ObjectKey(adventureId, file.getFileName());
+            String presignedUrl = s3.generatePresignedUrl(S3_BUCKET,
+                    file.getFileName(), new Date(newExpirationTimeInMillis)).toString();
+            file.setUrl(presignedUrl);
+        }
+        return ok(Json.toJson(files));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
@@ -103,6 +118,17 @@ public class AdventureFileController extends Controller {
 
 
         return ok();
+    }
+
+    /**
+     * Helper method.
+     *
+     * @param advId
+     * @param fileName
+     * @return
+     */
+    private static String generateS3ObjectKey(String advId, String fileName) {
+        return advId + "/" + fileName;
     }
 
 }
