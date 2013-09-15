@@ -1,5 +1,6 @@
 @(adv: models.adventure.Adventure, timeForm: play.data.Form[models.adventure.time.TimeOption])
 
+@import models.authorization.JournweAuthorization
 @import models.adventure.time.TimeOption
 @import models.dao.TimeOptionDAO
 
@@ -21,7 +22,7 @@
     </div>
 </div>
 
-
+@if(JournweAuthorization.canViewDateAndTime(adv.getId)) {
 <table id="times-list" class="table table-striped table-hover stash">
     <thead>
     <tr>
@@ -40,9 +41,10 @@
     </tbody>
 </table>
 
-
 <div class="times-loading"><i class="icon-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
+}
 
+@if(JournweAuthorization.canEditDateAndTime(adv.getId)) {
 <div id="time-add-form" class="row">
 
         <div class="input-group col-lg-5" style="width: 43%;">
@@ -59,12 +61,15 @@
         </div>
 
 </div>
-
+}
 
     <script type="text/x-tmpl" id="time-template">
         <tr id="timeoption-item-{%=o.timeId%}">
+            @if(JournweAuthorization.canEditFavoriteDateAndTime(adv.getId)) {
             <td><button class="btn {%=o.favorite?'btn-success':'btn-default'%}" onclick="setFavoriteTimeOption('{%=o.timeId%}', this)"><i class="icon-star"></i></button></td>
+            }
             <td><em>{%=formatDate(o.startDate)%} - {%=formatDate(o.endDate)%}</em></td>
+            @if(JournweAuthorization.canVoteForDateAndTime(adv.getId)) {
             <td>
                 <div class="btn-group">
                     <button id="timeoption-status-{%=o.timeId%}" class="btn btn-default" style="width: 90px" disabled="disabled"><i id="timeoption-status-icon-{%=o.timeId%}"></i> {%=o.vote%}</button>
@@ -78,10 +83,13 @@
                     </ul>
                 </div>
             </td>
+            }
+            @if(JournweAuthorization.canViewVotesForDateAndTime(adv.getId)) {
             <td class="text-center">{%=o.voteCount.YES%}</td>
             <td class="text-center">{%=o.voteCount.MAYBE%}</td>
             <td class="text-center">{%=o.voteCount.NO%}</td>
             <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=voteTimeLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=o.voteAdventurers[i][j].split(/\s/)[0]%}</span> {% }} %}</td>
+            }
             <td class="text-center"><button onclick="deleteTime('{%=o.timeId%}', this);" class="btn btn-danger"><i class="icon-trash"></i></button></td>
         </tr>
     </script>
