@@ -170,6 +170,11 @@ public class AdventureParticipantAuthorization extends AbstractAuthorization {
     }
 
     @Override
+    boolean canEditFavoriteDateAndTime() {
+        return true;
+    }
+
+    @Override
     boolean canEditDateAndTimeComments() {
         return true;
     }

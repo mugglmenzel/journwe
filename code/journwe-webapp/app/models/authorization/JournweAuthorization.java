@@ -149,6 +149,10 @@ public class JournweAuthorization {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canViewFavoriteDateAndTime() : false;
     }
+    public static boolean canEditFavoriteDateAndTime(final String advId) {
+        AbstractAuthorization authorization = getAuthorization(advId);
+        return (authorization!=null) ? authorization.canEditFavoriteDateAndTime() : false;
+    }
     public static boolean canEditDateAndTimeComments(final String advId) {
         AbstractAuthorization authorization = getAuthorization(advId);
         return (authorization!=null) ? authorization.canEditDateAndTimeComments() : false;

@@ -6,6 +6,8 @@ import models.adventure.EPreferenceVote;
 import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredBetaUser;
+import models.authorization.AuthorizationMessage;
+import models.authorization.JournweAuthorization;
 import models.dao.AdventureDAO;
 import models.dao.TimeAdventurerPreferenceDAO;
 import models.dao.TimeOptionDAO;
@@ -44,6 +46,8 @@ public class AdventureTimeController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getTimes(String advId) {
+        if (!JournweAuthorization.canViewDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
 
@@ -75,6 +79,9 @@ public class AdventureTimeController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getFavoriteTime(String advId) {
+        if (!JournweAuthorization.canViewFavoriteDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+
         if (new TimeOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
         String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
@@ -84,6 +91,8 @@ public class AdventureTimeController extends Controller {
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result setFavoriteTime(String advId) {
+        if (!JournweAuthorization.canEditFavoriteDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         String favId = data.get("favoriteTimeId");
         Adventure adv = new AdventureDAO().get(advId);
@@ -94,7 +103,8 @@ public class AdventureTimeController extends Controller {
     }
 
     public static Result addTime(String advId) {
-
+        if (!JournweAuthorization.canEditDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm requestData = form().bindFromRequest();
         Logger.info(requestData.data().toString());
 
@@ -134,6 +144,9 @@ public class AdventureTimeController extends Controller {
     }
 
     public static Result vote(String advId, String timeId) {
+        if (!JournweAuthorization.canVoteForDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         TimeOption time = new TimeOptionDAO().get(advId, timeId);

@@ -107,6 +107,9 @@ public abstract class AbstractAuthorization {
     boolean canViewFavoriteDateAndTime() {
         return false;
     }
+    boolean canEditFavoriteDateAndTime() {
+        return false;
+    }
     boolean canEditDateAndTimeComments() {
         return false;
     }
