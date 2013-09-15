@@ -86,7 +86,7 @@
 				}
 				@content
                 @currentAuth() { auth => @if(auth != null){
-                    @feedback
+                    @feedback()
                 }}
 			</div>
 		</div>
@@ -114,9 +114,25 @@
 		                        @currentAuth() { auth => @if(auth != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){<li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>}}
 		                    </ul>
 		                </div>
-		                <div class="col-lg-8">
+		                <div class="col-lg-6">
 		                    Find us on Social Networks
+                                <ul class="inline social-icons">
+                                    <li><a href="http://twitter.com/JournWe"
+                                    data-toggle="tooltip" data-trigger="hover" data-html="true"
+                                    title="Follow on <i class='icon-twitter'></i>"><i
+                                    class="icon-twitter"></i></a></li>
+                                    <li><a href="https://www.facebook.com/JournWe"
+                                    data-toggle="tooltip" data-trigger="hover" data-html="true"
+                                    title="Like on <i class='icon-facebook-sign'></i>"><i
+                                    class="icon-facebook-sign"></i></a></li>
+                                    @*<li><a href="https://plus.google.com/114964647402155123257" rel="publisher"
+                                    data-toggle="tooltip" data-trigger="hover" data-html="true"
+                                    title="Follow on <i class='icon-google-plus-sign'></i>"><i
+                                    class="icon-google-plus-sign"></i></a>
+                                    </li>*@
+                                </ul>
 		                </div>
+                        <div class="col-lg-2">Languages</div>
 		            </div>
 		            <div class="row text-center">&copy; 2013 JournWe</div>
 	            </div>
