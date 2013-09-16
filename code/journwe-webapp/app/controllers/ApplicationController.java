@@ -17,6 +17,7 @@ import models.inspiration.Inspiration;
 import models.inspiration.InspirationCategory;
 import models.user.Subscriber;
 import org.codehaus.jackson.node.ObjectNode;
+import play.cache.Cache;
 import play.cache.Cached;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -141,16 +142,19 @@ public class ApplicationController extends Controller {
         return ok(Json.toJson(result));
     }
 
-    @Cached(duration = 300, key = "category.publicadventures")
     public static Result getPublicAdventuresOfCategory(String catId) {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
         int count = new Integer(data.get("count")).intValue();
 
+        if (Cache.get("category." + catId + ".publicadventures." + lastId + "." + count) != null)
+            return ok(Json.toJson(Cache.get("category." + catId + ".publicadventures." + lastId + "." + count)));
+
+
         List<ObjectNode> result = new ArrayList<ObjectNode>(count);
 
         boolean more = true;
-        if (count > 0) {
+        if (count > 0)
             while (more) {
                 List<AdventureCategory> advCats = new AdventureCategoryDAO().all(catId, lastId, count);
                 more = advCats.size() > 0;
@@ -178,16 +182,22 @@ public class ApplicationController extends Controller {
                 }
 
             }
-        }
+
+
+        Cache.set("category." + catId + ".publicadventures." + lastId + "." + count, result);
+
+
         return ok(Json.toJson(result));
     }
 
 
-    @Cached(duration = 300, key = "category.inspirations")
     public static Result getInspirations(String catId) {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
         int count = new Integer(data.get("count")).intValue();
+
+        if (Cache.get("category." + catId + ".inspirations." + lastId + "." + count) != null)
+            return ok(Json.toJson(Cache.get("category." + catId + ".inspirations." + lastId + "." + count)));
 
         Date now = new Date();
 
@@ -217,6 +227,7 @@ public class ApplicationController extends Controller {
                     }
                 }
             }
+        Cache.set("category." + catId + ".inspirations." + lastId + "." + count, result);
 
         return ok(Json.toJson(result));
     }
