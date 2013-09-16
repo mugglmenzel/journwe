@@ -17,6 +17,7 @@ import models.inspiration.Inspiration;
 import models.inspiration.InspirationCategory;
 import models.user.Subscriber;
 import org.codehaus.jackson.node.ObjectNode;
+import play.api.mvc.SimpleResult;
 import play.cache.Cache;
 import play.cache.Cached;
 import play.data.DynamicForm;
@@ -35,6 +36,7 @@ import views.html.index.indexVet;
 import views.html.subscribe;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +65,6 @@ public class ApplicationController extends Controller {
         }
     }
 
-    @Cached(key = "indexNew", duration = 3600)
     public static Result indexNew() {
         return ok(index.render());
     }
@@ -265,13 +266,10 @@ public class ApplicationController extends Controller {
         return ok(subscribe.render(subForm));
     }
 
-
-    @Cached(key = "imprint")
     public static Result imprint() {
         return ok(imprint.render());
     }
 
-    @Cached(key = "about")
     public static Result about() {
         return ok(about.render());
     }
@@ -291,7 +289,6 @@ public class ApplicationController extends Controller {
         return ok("oAuth went wrong");
     }
 
-    @Cached(key = "ping")
     public static Result ping() {
         return ok("pong");
     }

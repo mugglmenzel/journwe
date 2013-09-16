@@ -1,6 +1,6 @@
 @(ins: models.inspiration.Inspiration)
 
-@main(Messages("journwe.subtitle")){New @ins.getName() Adventure} {
+@main(Messages("journwe.subtitle")){New @if(ins != null){@ins.getName()} Adventure} {
 
     <div id="yingyangyong-container" style="margin-top: -20px; margin-bottom: 50px;">
 

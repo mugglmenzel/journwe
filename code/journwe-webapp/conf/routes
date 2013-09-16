@@ -113,7 +113,7 @@ GET           /fb/message/create                             controllers.Faceboo
 POST          /fb/message/send                               controllers.FacebookController.sendMessage()
 
 # Load Balancing
-GET           /ping                                          controllers.ApplicationController.ping()
+GET           /ping                                          controllers.ApplicationController.ping
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                                  controllers.Assets.at(path="/public", file)
@@ -126,12 +126,12 @@ GET           /authenticate/:provider/denied                 controllers.Applica
 
 # Home page
 GET           /subscribe                                     controllers.ApplicationController.subscribe()
-GET           /imprint                                       controllers.ApplicationController.imprint()
-GET           /about                                         controllers.ApplicationController.about()
+GET           /imprint                                       controllers.ApplicationController.imprint
+GET           /about                                         controllers.ApplicationController.about
 GET           /admin                                         controllers.ApplicationController.admin()
 GET           /lang/:id                                      controllers.ApplicationController.changeLanguage(id:String)
 
 GET           /category/:catId                               controllers.ApplicationController.categoryIndex(catId:String)
-GET           /new                                           controllers.ApplicationController.indexNew()
+GET           /new                                           controllers.ApplicationController.indexNew
 GET           /                                              controllers.ApplicationController.index()
 
