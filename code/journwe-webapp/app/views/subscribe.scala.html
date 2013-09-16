@@ -28,120 +28,146 @@
 
         <div class="jrn-container">
             <h2>@Messages("subscribe.story")</h2>
+            
+            <div id="success-stories" class="carousel slide">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#success-stories" data-slide-to="0" class="active"></li>
+                    <li data-target="#success-stories" data-slide-to="1"></li>
+                    <li data-target="#success-stories" data-slide-to="2"></li>
+                    <li data-target="#success-stories" data-slide-to="3"></li>
+                    <li data-target="#success-stories" data-slide-to="4"></li>
+                </ol>
 
-            <div id="success-stories">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <h3>@Messages("subscribe.story1.header")</h3>
-                        <blockquote><p class="lead">@Messages("subscribe.story1.content")</p>
-                            <small><cite>@Messages("subscribe.story1.cite")</cite></small></blockquote>
-                    </div>
-                    <div class="col-lg-5 text-center">
-                        @defining(new AdventureDAO().get("965ddda2-140c-4331-9883-72c9217216ca")){ adv =>   @if(adv != null) {
-                        <div class="polaroid" style="">
-                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                                <div class="overlay text-center" style="display: none;">
-                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ETO</span>
-                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 3</span>
-                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 10-2013</span>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <h3>@Messages("subscribe.story1.header")</h3>
+                                <blockquote><p class="lead">@Messages("subscribe.story1.content")</p>
+                                    <small><cite>@Messages("subscribe.story1.cite")</cite></small></blockquote>
+                            </div>
+                            <div class="col-lg-5 text-center">
+                                @defining(new AdventureDAO().get("965ddda2-140c-4331-9883-72c9217216ca")){ adv =>   @if(adv != null) {
+                                <div class="polaroid" style="">
+                                    <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                        <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                        <div class="overlay text-center" style="display: none;">
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ETO</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 3</span>
+                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 10-2013</span>
+                                        </div>
+                                    </div>
                                 </div>
+                                } }
                             </div>
                         </div>
-                        } }
+                    </div>
+                    <div class="item">
+                        <div class="row">
+                            <div class="col-lg-5 text-center">
+                            @defining(new AdventureDAO().get("5af6f85a-4145-4e3d-bcf0-ea8cf9e4962a")){ adv => @if(adv != null) {
+                                <div class="polaroid" style="position: relative; float: left;">
+                                    <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                        <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                        <div class="overlay text-center" style="display: none;">
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> STO</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 5</span>
+                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 11-2013</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }    }
+                            </div>
+                            <div class="col-lg-7">
+                                <h3>@Messages("subscribe.story2.header")</h3>
+                                <blockquote><p class="lead">@Messages("subscribe.story2.content")</p>
+                                    <small><cite>@Messages("subscribe.story2.cite")</cite></small>  </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <h3>@Messages("subscribe.story3.header")</h3>
+                                <blockquote><p class="lead">@Messages("subscribe.story3.content")</p>
+                                    <small><cite>@Messages("subscribe.story3.cite")</cite></small></blockquote>
+                            </div>
+                            <div class="col-lg-5 text-center">
+                            @defining(new AdventureDAO().get("3146479b-8f99-4023-8e88-947fc4742002")){ adv =>  @if(adv != null) {
+                                <div class="polaroid" style="position: relative; float: left;">
+                                    <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                        <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                        <div class="overlay text-center" style="display: none;">
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ZUR</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 15</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            } }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="row">
+                            <div class="col-lg-5 text-center">
+                            @defining(new InspirationDAO().get("ebe510c4-25e9-4f18-9ffc-71ff10fc9901")){ ins => @if(ins != null) {
+                                <div class="polaroid" style="position: relative; float: left;">
+                                    <a href="@routes.InspirationController.get(ins.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@ins.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                        <div style="line-height: 20px;"><h4><a href="@routes.InspirationController.get(ins.getId)">@ins.getName</a></h4></div>
+                                        <div class="overlay text-center" style="display: none;">
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> BLA</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 56784</span>
+                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 8-2014</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }   }
+                            </div>
+                            <div class="col-lg-7">
+                                <h3>@Messages("subscribe.story4.header")</h3>
+                                <blockquote><p class="lead">@Messages("subscribe.story4.content")</p>
+                                    <small><cite>@Messages("subscribe.story4.cite")</cite></small>  </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <h3>@Messages("subscribe.story5.header")</h3>
+                                <blockquote><p class="lead">@Messages("subscribe.story5.content")</p>
+                                    <small><cite>@Messages("subscribe.story5.cite")</cite></small></blockquote>
+                            </div>
+                            <div class="col-lg-5 text-center">
+                            @defining(new AdventureDAO().get("a05e49c5-8008-4e16-bde5-1af28d0c46d5")){ adv =>  @if(adv != null) {
+                                <div class="polaroid" style="position: relative; float: left;">
+                                    <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                        <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                        <div class="overlay text-center" style="display: none;">
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> EARTH</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }  }
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-lg-5 text-center">
-                    @defining(new AdventureDAO().get("5af6f85a-4145-4e3d-bcf0-ea8cf9e4962a")){ adv => @if(adv != null) {
-                        <div class="polaroid" style="position: relative; float: left;">
-                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                                <div class="overlay text-center" style="display: none;">
-                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> STO</span>
-                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 5</span>
-                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 11-2013</span>
-                                </div>
-                            </div>
-                        </div>
-                    }    }
-                    </div>
-                    <div class="col-lg-7">
-                        <h3>@Messages("subscribe.story2.header")</h3>
-                        <blockquote><p class="lead">@Messages("subscribe.story2.content")</p>
-                            <small><cite>@Messages("subscribe.story2.cite")</cite></small>  </blockquote>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-7">
-                        <h3>@Messages("subscribe.story3.header")</h3>
-                        <blockquote><p class="lead">@Messages("subscribe.story3.content")</p>
-                            <small><cite>@Messages("subscribe.story3.cite")</cite></small></blockquote>
-                    </div>
-                    <div class="col-lg-5 text-center">
-                    @defining(new AdventureDAO().get("3146479b-8f99-4023-8e88-947fc4742002")){ adv =>  @if(adv != null) {
-                        <div class="polaroid" style="position: relative; float: left;">
-                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                                <div class="overlay text-center" style="display: none;">
-                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ZUR</span>
-                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 15</span>
-                                </div>
-                            </div>
-                        </div>
-                    } }
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-5 text-center">
-                    @defining(new InspirationDAO().get("ebe510c4-25e9-4f18-9ffc-71ff10fc9901")){ ins => @if(ins != null) {
-                        <div class="polaroid" style="position: relative; float: left;">
-                            <a href="@routes.InspirationController.get(ins.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@ins.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                <div style="line-height: 20px;"><h4><a href="@routes.InspirationController.get(ins.getId)">@ins.getName</a></h4></div>
-                                <div class="overlay text-center" style="display: none;">
-                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> BLA</span>
-                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 56784</span>
-                                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 8-2014</span>
-                                </div>
-                            </div>
-                        </div>
-                    }   }
-                    </div>
-                    <div class="col-lg-7">
-                        <h3>@Messages("subscribe.story4.header")</h3>
-                        <blockquote><p class="lead">@Messages("subscribe.story4.content")</p>
-                            <small><cite>@Messages("subscribe.story4.cite")</cite></small>  </blockquote>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-7">
-                        <h3>@Messages("subscribe.story5.header")</h3>
-                        <blockquote><p class="lead">@Messages("subscribe.story5.content")</p>
-                            <small><cite>@Messages("subscribe.story5.cite")</cite></small></blockquote>
-                    </div>
-                    <div class="col-lg-5 text-center">
-                    @defining(new AdventureDAO().get("a05e49c5-8008-4e16-bde5-1af28d0c46d5")){ adv =>  @if(adv != null) {
-                        <div class="polaroid" style="position: relative; float: left;">
-                            <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                                <div class="overlay text-center" style="display: none;">
-                                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> EARTH</span>
-                                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 1</span>
-                                </div>
-                            </div>
-                        </div>
-                    }  }
-                    </div>
-                </div>
+                <!-- Controls -->
+                <a class="left carousel-control" href="#success-stories" data-slide="prev">
+                    <span class="icon-prev"></span>
+                </a>
+                <a class="right carousel-control" href="#success-stories" data-slide="next">
+                   <span class="icon-next"></span>
+                </a>
             </div>
         </div>
 
@@ -182,11 +208,15 @@
                 </div>
     		</div>
             <div class="row">
-                <ul>
-                    <li> <i class="icon-phone"></i> Notifications </li>
-                    <li> <i class="icon-heart-empty"></i> Most wanted list </li>
-                    <li> <i class="icon-trophy"></i> Rewards from travel agents </li>
-                </ul>
+                <div class="col-lg-4">
+                  <h4><i class="icon-phone"></i> Notifications</h4>
+                </div>
+                <div class="col-lg-4">
+                  <h4><i class="icon-heart-empty"></i> Most wanted list</h4>
+                </div>
+                <div class="col-lg-4">
+                  <h4><i class="icon-trophy"></i> Rewards from travel agents</h4>
+                </div>
             </div>
         </div>
 
