@@ -141,7 +141,7 @@ public class ApplicationController extends Controller {
         return ok(Json.toJson(result));
     }
 
-    @Cached(duration = 500, key = "category.publicadventures")
+    @Cached(duration = 300, key = "category.publicadventures")
     public static Result getPublicAdventuresOfCategory(String catId) {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
@@ -183,6 +183,7 @@ public class ApplicationController extends Controller {
     }
 
 
+    @Cached(duration = 300, key = "category.inspirations")
     public static Result getInspirations(String catId) {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
