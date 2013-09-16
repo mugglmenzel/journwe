@@ -843,6 +843,24 @@ h1 .x-edit-loading {
 	background-color: white;
 }
 
+#success-stories {
+	padding-bottom: 20px;
+}
+
+#success-stories .carousel-indicators {
+	bottom: -10px;
+}
+
+#success-stories .item {
+	padding: 0 70px;
+}
+
+#success-stories .carousel-control {
+	background: white;
+	width: 50px;
+	margin: -20px;
+}
+
 #success-stories .polaroid {
 	width: 100%;
 	margin-top: 20px;
