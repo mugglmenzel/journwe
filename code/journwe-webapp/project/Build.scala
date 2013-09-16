@@ -13,7 +13,7 @@ object ApplicationBuild extends Build {
     // javaJdbc,
     javaEbean,
     "com.amazonaws" % "aws-java-sdk" % "1.4.2.1",
-    "com.feth"    %% "play-authenticate" % "0.3.3",
+    "com.feth"    %% "play-authenticate" % "0.3.3-SNAPSHOT",
     "com.restfb" % "restfb" % "1.6.12",
     "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5",
     "com.rosaloves" % "bitlyj" % "2.0.0",

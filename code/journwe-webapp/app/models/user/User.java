@@ -5,10 +5,11 @@ import models.dao.helpers.EnumMarshaller;
 import models.notifications.ENotificationFrequency;
 import play.data.validation.Constraints.Required;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @DynamoDBTable(tableName = "journwe-user")
-public class User {
+public class User implements Serializable {
 
     private String id;
 
