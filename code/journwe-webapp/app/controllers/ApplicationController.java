@@ -86,6 +86,7 @@ public class ApplicationController extends Controller {
                             Category c = new CategoryDAO().get(cc.getCategoryId());
                             if (c != null) {
                                 ObjectNode node = Json.newObject();
+                                node.put("id", c.getId());
                                 node.put("name", c.getName());
                                 node.put("link", routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
                                 node.put("image", c.getImage());
@@ -162,7 +163,13 @@ public class ApplicationController extends Controller {
     public static Result getPublicAdventuresOfCategory(final String catId) {
         DynamicForm data = form().bindFromRequest();
         final String lastId = data.get("lastId");
-        final int count = new Integer(data.get("count")).intValue();
+        int countParam = 10;
+        try {
+            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
+        } catch (Exception e) {
+            return badRequest("Count is not a number.");
+        }
+        final int count = countParam;
 
         try {
             return ok(Cache.getOrElse("category." + catId + ".publicadventures." + lastId + "." + count, new Callable<String>() {
@@ -215,7 +222,13 @@ public class ApplicationController extends Controller {
     public static Result getInspirations(final String catId) {
         DynamicForm data = form().bindFromRequest();
         final String lastId = data.get("lastId");
-        final int count = new Integer(data.get("count")).intValue();
+        int countParam = 10;
+        try {
+            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
+        } catch (Exception e) {
+            return badRequest("Count is not a number.");
+        }
+        final int count = countParam;
 
         try {
             return ok(Cache.getOrElse("category." + catId + ".inspirations." + lastId + "." + count, new Callable<String>() {

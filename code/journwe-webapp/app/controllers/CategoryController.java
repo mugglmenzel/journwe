@@ -54,16 +54,16 @@ public class CategoryController extends Controller {
         } else {
             Category cat = filledCatForm.get();
 
-            File file = image.getFile();
+            File file = image != null ? image.getFile() : null;;
 
             try {
                 if (cat.getId() == null && !new CategoryDAO().save(cat))
                     throw new Exception();
 
 
-                Logger.debug("got image files " + image.getFilename());
-                if (image.getFilename() != null
-                        && !"".equals(image.getFilename()) && file.length() > 0) {
+                Logger.debug("got image files " + (image != null ? image.getFilename() : "none"));
+                if (image != null && image.getFilename() != null
+                        && !"".equals(image.getFilename()) && file != null && file.length() > 0) {
                     AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
                             ConfigFactory.load().getString("aws.accessKey"),
                             ConfigFactory.load().getString("aws.secretKey")));

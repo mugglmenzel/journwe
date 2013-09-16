@@ -38,7 +38,15 @@
             <i class="icon-spin icon-journwe"></i>
         </div>
         <script type="text/x-tmpl" id="subcategory-template">
-            <a href="{%=o.link%}"><span class="label label-info">{%=o.name%} <span class="badge">{%=o.count%}</span></span></a>
+            <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
+                <a href="{%=o.link%}"><img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
+                <div style="position: absolute; bottom: 0px; right: 0px; left: 0px; top: 0px; padding: 0px;">
+                    <img src="@routes.Assets.at("img/category_overlay.png")" style="width: 100%; height: 100%; margin: 0px;">
+                </div>
+                <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                    <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%} <span class="badge badge-info">{%=o.count%}</span></a></h4></div>
+                </div>
+            </div>
         </script>
         <script>
 
@@ -66,9 +74,9 @@
         <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
         <div style="">
             <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div class="clearfix"></div>
             <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
-        <div class="clearfix"></div>
         <div style="height: 400px; margin-top: 10px;">
             <div id="inspirations-places-map" style="width: 100%; height: 100%"></div>
         </div>
@@ -123,8 +131,8 @@
             $('#inspirations-public-button-refresh i').addClass('icon-spin');
             $('#inspirations-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getInspirations(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
-                if (clear) $('#inspirations-public-list').empty();
-                if(advs != null && advs.length) {
+                if(clear) $('#inspirations-public-list').empty();
+                if(advs != null && advs.length > 0) {
                     for(var i in advs) {
                         $('#inspirations-public-list').append(tmpl('inspiration-public-template', advs[i]));
 
@@ -160,7 +168,7 @@
                             inspirationsInfos[$(this).data('id')].close();
                         }
                     );
-                } else {
+                } else if(lastId == null) {
                     $('#inspirations-public-list').html('No inspirations here.');
                     $('#inspirations-places-map').parent().hide(function(){$(this).remove();});
                 }
@@ -179,9 +187,9 @@
 
         <div style="">
             <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div class="clearfix"></div>
             <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
-        <div class="clearfix"></div>
         <div style="height: 400px; margin-top: 10px;">
             <div id="adventures-places-map" style="width: 100%; height: 100%"></div>
         </div>
@@ -237,9 +245,9 @@
         function loadPublicAdventures(lastId, clear) {
             $('#adventures-public-button-refresh i').addClass('icon-spin');
             $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
-            $.get('@routes.ApplicationController.getPublicAdventuresOfCategory(cat.getId)', {lastId: lastId, count: 10} , function (advs) {
+            $.get('@routes.ApplicationController.getPublicAdventuresOfCategory(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
-                if(advs != null && advs.length) {
+                if(advs != null && advs.length > 0) {
                     for(var i in advs) {
                         $('#adventures-public-list').append(tmpl('adventure-public-template', advs[i]));
                         var advId = advs[i].id;
@@ -275,7 +283,7 @@
                             adventuresInfos[$(this).data('id')].close();
                         }
                     );
-                } else {
+                } else if(lastId == null) {
                     $('#adventures-public-list').html('No public JournWes here.');
                     $('#adventures-places-map').parent().hide(function(){$(this).remove();});
                 }

@@ -112,7 +112,7 @@ public class InspirationController extends Controller {
         } else {
             Inspiration ins = filledInsForm.get();
 
-            File file = image.getFile();
+            File file = image != null ? image.getFile() : null;
 
             try {
                 if (ins.getId() == null && !new InspirationDAO().save(ins))
@@ -122,9 +122,9 @@ public class InspirationController extends Controller {
 //                Logger.debug("original cat: " + originalCategoryId + ", new cat: " + ins.getCategoryId());
 
 
-                Logger.debug("got image files " + image.getFilename());
-                if (image.getFilename() != null
-                        && !"".equals(image.getFilename()) && file.length() > 0) {
+                Logger.debug("got image files " + (image != null ? image.getFilename() : "none"));
+                if (image != null && image.getFilename() != null
+                        && !"".equals(image.getFilename()) && file != null && file.length() > 0) {
                     AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
                             ConfigFactory.load().getString("aws.accessKey"),
                             ConfigFactory.load().getString("aws.secretKey")));

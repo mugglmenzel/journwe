@@ -764,7 +764,7 @@ h1 .x-edit-loading {
 }
 
 .polaroid > div {
-	padding: 2px 10px !important;
+	padding: 2px 10px;
 }
 
 .polaroid h4 {
