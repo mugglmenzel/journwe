@@ -30,6 +30,8 @@ public class CategoryController extends Controller {
 
     private static Form<Category> catForm = form(Category.class);
 
+    //public static Result categoriesAll()
+
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
         return ok(manage.render(catForm, new CategoryDAO().all()));

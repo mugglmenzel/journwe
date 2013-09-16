@@ -14,6 +14,7 @@
         </script>
         Category:
         <div id="adventure-category-select" class="btn-group">
+
         @defining(new AdventureCategoryDAO()){ advCatDAO =>
             @defining(new CategoryDAO()){ catDAO =>
 
@@ -28,6 +29,7 @@
 
             }
         }
+
         </div>
         <script>
             $('#adventure-category-select li').click(function(){
