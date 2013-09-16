@@ -17,9 +17,8 @@ import models.inspiration.Inspiration;
 import models.inspiration.InspirationCategory;
 import models.user.Subscriber;
 import org.codehaus.jackson.node.ObjectNode;
-import play.api.mvc.SimpleResult;
+import play.Logger;
 import play.cache.Cache;
-import play.cache.Cached;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -36,10 +35,10 @@ import views.html.index.indexVet;
 import views.html.subscribe;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
 
@@ -74,24 +73,37 @@ public class ApplicationController extends Controller {
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
 
-    public static Result getCategories(String superCatId) {
-        List<ObjectNode> results = new ArrayList<ObjectNode>();
-        for (CategoryHierarchy cat : new CategoryHierarchyDAO().categoryAsSuper(superCatId)) {
-            CategoryCount cc = new CategoryCountDAO().get(cat.getSubCategoryId());
-            if (cat != null && cc.getCount() > 0) {
-                Category c = new CategoryDAO().get(cc.getCategoryId());
-                if(c != null){
-                ObjectNode node = Json.newObject();
-                node.put("name", c.getName());
-                node.put("link", routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
-                node.put("image", c.getImage());
-                node.put("count", cc.getCount());
-                results.add(node);
+    public static Result getCategories(final String superCatId) {
+
+        try {
+            return ok(Cache.getOrElse("subCategoriesOf." + superCatId, new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
+                    for (CategoryHierarchy cat : new CategoryHierarchyDAO().categoryAsSuper(superCatId)) {
+                        CategoryCount cc = new CategoryCountDAO().get(cat.getSubCategoryId());
+                        if (cat != null && cc.getCount() > 0) {
+                            Category c = new CategoryDAO().get(cc.getCategoryId());
+                            if (c != null) {
+                                ObjectNode node = Json.newObject();
+                                node.put("name", c.getName());
+                                node.put("link", routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
+                                node.put("image", c.getImage());
+                                node.put("count", cc.getCount());
+                                results.add(node);
+                            }
+                        }
+                    }
+
+                    return Json.toJson(results).toString();
                 }
-            }
+            }, 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate sub-categories of " + superCatId, e);
+            return internalServerError();
         }
 
-        return ok(Json.toJson(results));
+
     }
 
 
@@ -147,94 +159,105 @@ public class ApplicationController extends Controller {
         return ok(Json.toJson(result));
     }
 
-    public static Result getPublicAdventuresOfCategory(String catId) {
+    public static Result getPublicAdventuresOfCategory(final String catId) {
         DynamicForm data = form().bindFromRequest();
-        String lastId = data.get("lastId");
-        int count = new Integer(data.get("count")).intValue();
+        final String lastId = data.get("lastId");
+        final int count = new Integer(data.get("count")).intValue();
 
-        if (Cache.get("category." + catId + ".publicadventures." + lastId + "." + count) != null)
-            return ok(Json.toJson(Cache.get("category." + catId + ".publicadventures." + lastId + "." + count)));
+        try {
+            return ok(Cache.getOrElse("category." + catId + ".publicadventures." + lastId + "." + count, new Callable<String>() {
 
 
-        List<ObjectNode> result = new ArrayList<ObjectNode>(count);
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>(count);
+                    String lastAdventureId = lastId;
 
-        boolean more = true;
-        if (count > 0)
-            while (more) {
-                List<AdventureCategory> advCats = new AdventureCategoryDAO().all(catId, lastId, count);
-                more = advCats.size() > 0;
-                for (AdventureCategory advCat : advCats) {
-                    if (more) {
-                        Adventure adv = new AdventureDAO().get(advCat.getAdventureId());
-                        if (adv != null && adv.isPublish()) {
-                            ObjectNode node = Json.newObject();
-                            node.put("id", adv.getId());
-                            node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-                            node.put("image", adv.getImage());
-                            node.put("name", adv.getName());
-                            node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
-                            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-                            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-                            node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
-                            node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
+                    boolean more = true;
+                    if (count > 0)
+                        while (more) {
+                            List<AdventureCategory> advCats = new AdventureCategoryDAO().all(catId, lastAdventureId, count);
+                            more = advCats.size() > 0;
+                            for (AdventureCategory advCat : advCats) {
+                                if (more) {
+                                    Adventure adv = new AdventureDAO().get(advCat.getAdventureId());
+                                    if (adv != null && adv.isPublish()) {
+                                        ObjectNode node = Json.newObject();
+                                        node.put("id", adv.getId());
+                                        node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                                        node.put("image", adv.getImage());
+                                        node.put("name", adv.getName());
+                                        node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+                                        node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                                        node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+                                        node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
+                                        node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
 
-                            result.add(node);
+                                        results.add(node);
 
-                            more = result.size() < count;
+                                        more = results.size() < count;
+                                    }
+                                    lastAdventureId = adv.getId();
+                                }
+                            }
+
                         }
-                        lastId = adv.getId();
-                    }
+                    return Json.toJson(results).toString();
                 }
-
-            }
-
-
-        Cache.set("category." + catId + ".publicadventures." + lastId + "." + count, result);
-
-
-        return ok(Json.toJson(result));
+            }, 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate public adventures for category " + catId, e);
+            return internalServerError();
+        }
     }
 
 
-    public static Result getInspirations(String catId) {
+    public static Result getInspirations(final String catId) {
         DynamicForm data = form().bindFromRequest();
-        String lastId = data.get("lastId");
-        int count = new Integer(data.get("count")).intValue();
+        final String lastId = data.get("lastId");
+        final int count = new Integer(data.get("count")).intValue();
 
-        if (Cache.get("category." + catId + ".inspirations." + lastId + "." + count) != null)
-            return ok(Json.toJson(Cache.get("category." + catId + ".inspirations." + lastId + "." + count)));
+        try {
+            return ok(Cache.getOrElse("category." + catId + ".inspirations." + lastId + "." + count, new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    final Date now = new Date();
 
-        Date now = new Date();
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
 
-        List<ObjectNode> result = new ArrayList<ObjectNode>();
+                    String lastInspirationId = lastId;
 
-        boolean more = true;
-        if (count > 0)
-            while (more) {
-                List<InspirationCategory> all = new InspirationCategoryDAO().all(catId, lastId, count);
-                more = all.size() > 0;
-                for (InspirationCategory insCat : all) {
-                    if (insCat.getInspirationId() != null) {
-                        Inspiration ins = new InspirationDAO().get(insCat.getInspirationId());
-                        if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
-                            ObjectNode node = Json.newObject();
-                            node.put("id", ins.getId());
-                            node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
-                            node.put("image", ins.getImage());
-                            node.put("name", ins.getName());
-                            node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
-                            node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
+                    boolean more = true;
+                    if (count > 0)
+                        while (more) {
+                            List<InspirationCategory> all = new InspirationCategoryDAO().all(catId, lastInspirationId, count);
+                            more = all.size() > 0;
+                            for (InspirationCategory insCat : all) {
+                                if (more && insCat.getInspirationId() != null) {
+                                    Inspiration ins = new InspirationDAO().get(insCat.getInspirationId());
+                                    if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
+                                        ObjectNode node = Json.newObject();
+                                        node.put("id", ins.getId());
+                                        node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
+                                        node.put("image", ins.getImage());
+                                        node.put("name", ins.getName());
+                                        node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
+                                        node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
 
-                            result.add(node);
-                            more = result.size() < count;
+                                        results.add(node);
+                                        more = results.size() < count;
+                                    }
+                                    lastInspirationId = insCat.getInspirationId();
+                                }
+                            }
                         }
-                        lastId = insCat.getInspirationId();
-                    }
+                    return Json.toJson(results).toString();
                 }
-            }
-        Cache.set("category." + catId + ".inspirations." + lastId + "." + count, result);
-
-        return ok(Json.toJson(result));
+            }, 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate inspirations for category " + catId, e);
+            return internalServerError();
+        }
     }
 
 

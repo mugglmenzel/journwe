@@ -34,18 +34,39 @@
     <div class="jrn-container jrn-subcategory">
 
         <h2 id="subcategories"><i class="icon-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
-        <div style="font-size: 20pt;">
-            @for(subcat <- catDAO.allSubcategory(cat.getId)) {
-                 <a href="@routes.ApplicationController.categoryIndex(subcat.getId)"><span class="label label-info">@subcat.getName <span class="badge">@catDAO.countInspirationsHierarchyCached(subcat.getId)</span></span></a>
-            }
+        <div id="subcategories-list" style="font-size: 20pt;">
+            <i class="icon-spin icon-journwe"></i>
         </div>
+        <script type="text/x-tmpl" id="subcategory-template">
+            <a href="{%=o.link%}"><span class="label label-info">{%=o.name%} <span class="badge">{%=o.count%}</span></span></a>
+        </script>
+        <script>
+
+            $(document).ready(function () {
+                loadSubCategories();
+            });
+
+            function loadSubCategories() {
+                $.get('@routes.ApplicationController.getCategories(cat.getId)', function (cats) {
+                    if(cats != null && cats.length)
+                        for(var i in cats) {
+                            $('#subcategories-list').append(tmpl('subcategory-template', cats[i]));
+                        }
+                    else
+                        $('#subcategories-list').append('No subcategories.')
+
+                    $('#subcategories-list i').addClass('stash');
+
+                });
+            }
+        </script>
 
     </div>
     <div class="jrn-container">
         <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
         <div style="">
             <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-            <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block" onclick="loadInspirations($('#inspirations-public-list .polaroid').last().data('id'));"> @Messages("adventure.general.button.more") </button></div>
+            <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
         <div class="clearfix"></div>
         <div style="height: 400px; margin-top: 10px;">
