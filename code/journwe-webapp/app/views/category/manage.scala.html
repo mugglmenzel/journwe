@@ -63,6 +63,8 @@
                 <input type="hidden" name="@categoryForm("id").name()" value="@categoryForm("id").value()" />
                 }
                 @inputText(categoryForm("name"), '_label -> "Category name")
+                @textarea(categoryForm("description"), '_label -> "Description", 'placeholder -> "Some text", 'class -> "editor editor-html ckeditor")
+                @inputFile(categoryForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
             </fieldset>
             <div class="form-actions">
               <input type="submit" value="Save category!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link"> @Messages("adventure.general.button.cancel") </a>

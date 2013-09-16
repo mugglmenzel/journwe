@@ -1,5 +1,10 @@
 package controllers;
 
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.typesafe.config.ConfigFactory;
 import models.auth.SecuredAdminUser;
 import models.category.Category;
 import models.category.CategoryHierarchy;
@@ -10,13 +15,18 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.category.manage;
 
+import java.io.File;
+
 import static play.data.Form.form;
 
 public class CategoryController extends Controller {
+
+    private static final String S3_BUCKET_CATEGORY_IMAGES = "journwe-category-images";
 
     private static Form<Category> catForm = form(Category.class);
 
@@ -34,6 +44,9 @@ public class CategoryController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result save() {
         Form<Category> filledCatForm = catForm.bindFromRequest();
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart image = body.getFile("image");
+
         if (filledCatForm.hasErrors()) {
             flash("error", "Please fill out the form correctly.");
             return badRequest(manage.render(filledCatForm,
@@ -41,21 +54,48 @@ public class CategoryController extends Controller {
         } else {
             Category cat = filledCatForm.get();
 
-            if (new CategoryDAO().save(cat)) {
+            File file = image.getFile();
 
-                if (new CategoryHierarchyDAO().isCategoryInHierarchy(cat.getId())) {
-                    CategoryHierarchy hier = new CategoryHierarchy();
-                    hier.setSuperCategoryId(Category.SUPER_CATEGORY);
-                    hier.setSubCategoryId(cat.getId());
-                    new CategoryHierarchyDAO().save(hier);
+            try {
+                if (cat.getId() == null && !new CategoryDAO().save(cat))
+                    throw new Exception();
+
+
+                Logger.debug("got image files " + image.getFilename());
+                if (image.getFilename() != null
+                        && !"".equals(image.getFilename()) && file.length() > 0) {
+                    AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+                            ConfigFactory.load().getString("aws.accessKey"),
+                            ConfigFactory.load().getString("aws.secretKey")));
+                    s3.putObject(new PutObjectRequest(
+                            S3_BUCKET_CATEGORY_IMAGES, cat.getId() + "/title", file)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+                    cat.setImage(s3.getResourceUrl(S3_BUCKET_CATEGORY_IMAGES,
+                            cat.getId() + "/title"));
+                } else
+                    cat.setImage(new CategoryDAO().get(cat.getId()).getImage());
+
+                if (new CategoryDAO().save(cat)) {
+
+                    if (new CategoryHierarchyDAO().isCategoryInHierarchy(cat.getId())) {
+                        CategoryHierarchy hier = new CategoryHierarchy();
+                        hier.setSuperCategoryId(Category.SUPER_CATEGORY);
+                        hier.setSubCategoryId(cat.getId());
+                        new CategoryHierarchyDAO().save(hier);
+                    }
+
+                    flash("success", "Saved Category.");
+                    return created(manage
+                            .render(catForm, new CategoryDAO().all()));
+                } else {
+                    flash("error", "Something went wrong during saving :(");
+                    return internalServerError(manage.render(filledCatForm,
+                            new CategoryDAO().all()));
                 }
-
-                flash("success", "Saved Category.");
-                return created(manage
-                        .render(catForm, new CategoryDAO().all()));
-            } else {
+            } catch (Exception e) {
                 flash("error", "Something went wrong during saving :(");
-                return internalServerError(manage.render(filledCatForm,
+                Logger.error("category saving went wrong", e);
+                return internalServerError(views.html.category.manage.render(filledCatForm,
                         new CategoryDAO().all()));
             }
         }

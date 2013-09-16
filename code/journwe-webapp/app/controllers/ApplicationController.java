@@ -78,11 +78,15 @@ public class ApplicationController extends Controller {
         for (CategoryHierarchy cat : new CategoryHierarchyDAO().categoryAsSuper(superCatId)) {
             CategoryCount cc = new CategoryCountDAO().get(cat.getSubCategoryId());
             if (cat != null && cc.getCount() > 0) {
+                Category c = new CategoryDAO().get(cc.getCategoryId());
+                if(c != null){
                 ObjectNode node = Json.newObject();
-                node.put("name", new CategoryDAO().get(cc.getCategoryId()).getName());
-                node.put("url", routes.ApplicationController.categoryIndex(cc.getCategoryId()).absoluteURL(request()));
+                node.put("name", c.getName());
+                node.put("link", routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
+                node.put("image", c.getImage());
                 node.put("count", cc.getCount());
                 results.add(node);
+                }
             }
         }
 

@@ -122,7 +122,7 @@ public class InspirationController extends Controller {
 //                Logger.debug("original cat: " + originalCategoryId + ", new cat: " + ins.getCategoryId());
 
 
-                Logger.info("got image files " + image.getFilename());
+                Logger.debug("got image files " + image.getFilename());
                 if (image.getFilename() != null
                         && !"".equals(image.getFilename()) && file.length() > 0) {
                     AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
