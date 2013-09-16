@@ -18,7 +18,8 @@ object ApplicationBuild extends Build {
     "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5",
     "com.rosaloves" % "bitlyj" % "2.0.0",
     "org.igniterealtime.smack" % "smack" % "3.2.1",
-    "org.igniterealtime.smack" % "smackx" % "3.2.1"
+    "org.igniterealtime.smack" % "smackx" % "3.2.1",
+    "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
@@ -29,7 +30,10 @@ object ApplicationBuild extends Build {
     resolvers += Resolver.url("play-easymail (snapshot)", url("http://joscha.github.com/play-easymail/repo/snapshots/"))(Resolver.ivyStylePatterns),
     // Repository for authenticate
     resolvers += Resolver.url("play-authenticate (release)", url("http://joscha.github.com/play-authenticate/repo/releases/"))(Resolver.ivyStylePatterns),
-    resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns)
+    resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns),
+    // Repository for com.github.mumoshu play2-memcached
+    // required to resolve `spymemcached`, the plugin's dependency.
+    resolvers += "Spy Repository" at "http://files.couchbase.com/maven2"
   )
 
 }
