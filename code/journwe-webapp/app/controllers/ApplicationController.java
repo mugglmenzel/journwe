@@ -34,7 +34,9 @@ import views.html.index.indexVet;
 import views.html.subscribe;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -139,6 +141,7 @@ public class ApplicationController extends Controller {
         return ok(Json.toJson(result));
     }
 
+    @Cached(duration = 500, key = "category.publicadventures")
     public static Result getPublicAdventuresOfCategory(String catId) {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
@@ -154,7 +157,7 @@ public class ApplicationController extends Controller {
                 for (AdventureCategory advCat : advCats) {
                     if (more) {
                         Adventure adv = new AdventureDAO().get(advCat.getAdventureId());
-                        if (adv.isPublish()) {
+                        if (adv != null && adv.isPublish()) {
                             ObjectNode node = Json.newObject();
                             node.put("id", adv.getId());
                             node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
@@ -187,29 +190,32 @@ public class ApplicationController extends Controller {
 
         Date now = new Date();
 
-        Set<ObjectNode> result = new HashSet<ObjectNode>();
-        while (count > 0 && result.size() < count) {
-            List<InspirationCategory> all = new InspirationCategoryDAO().all(catId, lastId, count - result.size());
-            if (!(all.size() > 0)) break;
-            for (InspirationCategory insCat : all) {
-                if (insCat.getInspirationId() != null) {
-                    Inspiration ins = new InspirationDAO().get(insCat.getInspirationId());
-                    if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
-                        ObjectNode node = Json.newObject();
-                        node.put("id", ins.getId());
-                        node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
-                        node.put("image", ins.getImage());
-                        node.put("name", ins.getName());
-                        node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
-                        node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
+        List<ObjectNode> result = new ArrayList<ObjectNode>();
 
-                        result.add(node);
+        boolean more = true;
+        if (count > 0)
+            while (more) {
+                List<InspirationCategory> all = new InspirationCategoryDAO().all(catId, lastId, count);
+                more = all.size() > 0;
+                for (InspirationCategory insCat : all) {
+                    if (insCat.getInspirationId() != null) {
+                        Inspiration ins = new InspirationDAO().get(insCat.getInspirationId());
+                        if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", ins.getId());
+                            node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
+                            node.put("image", ins.getImage());
+                            node.put("name", ins.getName());
+                            node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
+                            node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
+
+                            result.add(node);
+                            more = result.size() < count;
+                        }
                         lastId = insCat.getInspirationId();
-                        if (result.size() >= count) break;
                     }
                 }
             }
-        }
 
         return ok(Json.toJson(result));
     }
