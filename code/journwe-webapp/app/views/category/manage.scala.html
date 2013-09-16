@@ -56,7 +56,7 @@
     <div class="jrn-container">
         <h2> @Messages("inspiration.title") </h2>
 
-        @form(routes.CategoryController.save(), args = 'class -> "form-horizontal") {
+        @form(routes.CategoryController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
 
             <fieldset>
                 @if(categoryForm("id").value()) {
