@@ -10,6 +10,7 @@ body {
 
 body > * {
 	background-color: rgba(0,0,0,0.4);
+	overflow: hidden;
 }
 
 body, body *, .btn, .btn-link {
@@ -1068,4 +1069,8 @@ h1 .x-edit-loading {
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
 	color: #428bca;
 	background-color: transparent;
+}
+
+.form-control {
+	max-width: 100%;
 }
