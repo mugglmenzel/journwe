@@ -41,6 +41,9 @@ public class SecuredBetaUser extends Security.Authenticator {
 		return redirect(routes.ApplicationController.index());
 	}
 
+    public static boolean isAuthorized(AuthUser u){
+        return isBeta(u) || isAdmin(u);
+    }
 
     public static boolean isBeta(AuthUser u) {
         return new UserDAO().findByAuthUserIdentity(u) != null && EUserRole.BETA.equals(new UserDAO().findByAuthUserIdentity(u).getRole());

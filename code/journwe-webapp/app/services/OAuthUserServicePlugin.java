@@ -23,7 +23,7 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
 
         final boolean isLinked = new UserDAO().existsByAuthUserIdentity(authUser);
         if (!isLinked) {
-            return new UserDAO().create(authUser, Controller.request().cookie(UserDAO.USER_ROLE_ON_REGISTER) != null ? EUserRole.valueOf(Controller.request().cookie(UserDAO.USER_ROLE_ON_REGISTER).value()) : UserDAO.DEFAULT_USER_ROLE).getId();
+            return new UserDAO().create(authUser, new UserDAO().getRegisterUserRole()).getId();
         } else {
             new UserDAO().update(authUser, authUser);
             // we have this user already, so return null

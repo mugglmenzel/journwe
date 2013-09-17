@@ -337,7 +337,7 @@ public class ApplicationController extends Controller {
     public static Result joinBeta() {
         if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
             PlayAuthenticate.storeOriginalUrl(Http.Context.current());
-            response().setCookie(UserDAO.USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
+            response().setCookie(UserDAO.COOKIE_USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
             return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
         } else {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));

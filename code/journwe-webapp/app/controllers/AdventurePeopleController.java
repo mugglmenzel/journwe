@@ -26,7 +26,6 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import services.OAuthUserServicePlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +55,7 @@ public class AdventurePeopleController extends Controller {
         //BETA activation
         if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
             PlayAuthenticate.storeOriginalUrl(Http.Context.current());
-            response().setCookie(UserDAO.USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
+            response().setCookie(UserDAO.COOKIE_USER_ROLE_ON_REGISTER, EUserRole.BETA.toString(), 7*24*3600);
             return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
         } else {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));

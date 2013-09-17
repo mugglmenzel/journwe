@@ -8,14 +8,16 @@ import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
 import models.user.*;
 import play.Logger;
+import play.api.Play;
 import play.cache.Cache;
+import play.mvc.Controller;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
 public class UserDAO extends CommonEntityDAO<User> {
 
-    public static final String USER_ROLE_ON_REGISTER = "play-authenticate-user-role-on-register";
+    public static final String COOKIE_USER_ROLE_ON_REGISTER = "play-authenticate-user-role-on-register";
     public static final EUserRole DEFAULT_USER_ROLE = EUserRole.USER;
 
     public UserDAO() {
@@ -53,6 +55,13 @@ public class UserDAO extends CommonEntityDAO<User> {
         return getAuthUserFind(identity);
     }
 
+
+    public EUserRole getRegisterUserRole() {
+        Logger.debug("getting user role from cookie " + Controller.request().cookie(UserDAO.COOKIE_USER_ROLE_ON_REGISTER));
+        return Controller.request().cookie(COOKIE_USER_ROLE_ON_REGISTER) != null ? EUserRole.valueOf(Controller.request().cookie(COOKIE_USER_ROLE_ON_REGISTER).value()) : DEFAULT_USER_ROLE;
+    }
+
+
     public void update(final AuthUser authUser, final AuthUserIdentity identity) {
         UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
         if (social != null && authUser != null) {
@@ -60,8 +69,8 @@ public class UserDAO extends CommonEntityDAO<User> {
             boolean updateCache = false;
 
             if (EUserRole.INVITEE.equals(user.getRole())) {
-                user.setRole(DEFAULT_USER_ROLE);
-                Logger.debug("switch from INVITEE to " + DEFAULT_USER_ROLE.toString());
+                user.setRole(EUserRole.BETA);
+                Logger.debug("switch from INVITEE to " + getRegisterUserRole());
                 updateCache = true;
             }
 
@@ -135,7 +144,7 @@ public class UserDAO extends CommonEntityDAO<User> {
     }
 
     public void updateRole(User user, EUserRole role) {
-        user.setRole(DEFAULT_USER_ROLE);
+        user.setRole(role);
         save(user);
         clearCache(user.getId());
     }

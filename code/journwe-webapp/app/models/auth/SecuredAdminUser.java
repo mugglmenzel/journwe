@@ -35,9 +35,13 @@ public class SecuredAdminUser extends Security.Authenticator {
 	 */
 	@Override
 	public Result onUnauthorized(Context ctx) {
-		ctx.flash().put("error", "Nice try, but you need to log in first!");
+		ctx.flash().put("error", "Nice try, but you need to be Admin!");
 		return redirect(routes.ApplicationController.index());
 	}
+
+    public static boolean isAuthorized(AuthUser u){
+        return isAdmin(u);
+    }
 
 	public static boolean isAdmin(AuthUser u) {
 		return new UserDAO().findByAuthUserIdentity(u) != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(u).getRole());

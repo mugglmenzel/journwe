@@ -30,7 +30,6 @@ import models.user.EUserRole;
 import models.user.User;
 import models.user.UserEmail;
 import models.user.UserSocial;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
@@ -65,7 +64,7 @@ public class AdventureController extends Controller {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
             Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
-            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || EUserRole.INVITEE.equals(usr.getRole()))
+            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || !SecuredBetaUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
                 return ok(getPublic.render(adv, ins));
             else
                 return ok(getIndex.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
@@ -474,7 +473,7 @@ public class AdventureController extends Controller {
             new AdventureCategoryDAO().save(advCat);
 
             result = new CategoryDAO().get(catId);
-        } else if(old != null)
+        } else if (old != null)
             result = new CategoryDAO().get(old.getCategoryId());
         else {
             result = new Category();
