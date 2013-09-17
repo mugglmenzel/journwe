@@ -91,6 +91,10 @@ public class AdventureParticipantAuthorization extends AbstractAuthorization {
     }
 
     // ADVENTURERS
+    @Override
+    boolean canViewAdventureAdventurersWidget() {
+        return true;
+    }
 
     @Override
     boolean canViewAdventurerParticipants() {
