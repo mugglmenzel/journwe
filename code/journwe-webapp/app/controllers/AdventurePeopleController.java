@@ -112,11 +112,11 @@ public class AdventurePeopleController extends Controller {
     public static Result adopt(String advId, String userId) {
         if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
-        User usr = new UserDAO().get(userId);
-        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+
+        Adventurer advr = new AdventurerDAO().get(advId, userId));
         if (advr == null) {
             advr = new Adventurer();
-            advr.setUserId(usr.getId());
+            advr.setUserId(userId);
             advr.setAdventureId(advId);
         }
         advr.setParticipationStatus(EAdventurerParticipation.GOING);
@@ -124,14 +124,25 @@ public class AdventurePeopleController extends Controller {
 
         AdventureAuthorization authorization = new AdventureAuthorization();
         authorization.setAdventureId(advId);
-        authorization.setUserId(usr.getId());
+        authorization.setUserId(userId);
         authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
         new AdventureAuthorizationDAO().save(authorization);
 
 
         ObjectNode result = (ObjectNode) Json.toJson(advr);
-        result.put("userName", usr.getName());
+        result.put("userName", new UserDAO().get(userId).getName());
         return ok(result);
+    }
+
+
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result deny(String advId, String userId) {
+        if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+
+        new AdventurerDAO().delete(advId, userId);
+
+        return ok();
     }
 
 

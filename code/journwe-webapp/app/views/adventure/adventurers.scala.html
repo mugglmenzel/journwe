@@ -104,7 +104,8 @@ case EAdventurerParticipation.INVITEE => {label-warning}
                     <div class="overlay text-center">
                         <span class="label @cssForStatus(advr.getParticipationStatus())" title="Status" style="display: inline-block; width: 100%;">@advr.getParticipationStatus()</span>
                         @if(!status.equals(EAdventurerParticipation.APPLICANT) && JournweAuthorization.canAcceptAdventurerApplicants(adv.getId)){
-                        <button class="btn btn-primary btn-sm btn-adopt" href="@routes.AdventurePeopleController.adopt(adv.getId(),advr.getUserId())">Adopt</button>
+                            <button class="btn btn-primary btn-sm btn-adopt" href="@routes.AdventurePeopleController.adopt(adv.getId(),advr.getUserId())">Adopt</button>
+                            <button class="btn btn-primary btn-sm btn-adopt" href="@routes.AdventurePeopleController.deny(adv.getId(),advr.getUserId())">Deny</button>
                         }
                     </div>
                 </div>

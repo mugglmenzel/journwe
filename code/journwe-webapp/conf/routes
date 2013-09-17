@@ -56,6 +56,7 @@ GET           /adventure/:id/adventurers                     controllers.Adventu
 GET           /adventure/:id/participate                     controllers.AdventurePeopleController.participate(id:String)
 POST          /adventure/:id/participate/:status             controllers.AdventurePeopleController.participateStatus(id:String, status:String)
 POST          /adventure/:id/adopt/:user                     controllers.AdventurePeopleController.adopt(id:String, user:String)
+POST          /adventure/:id/deny/:user                      controllers.AdventurePeopleController.deny(id:String, user:String)
 POST          /adventure/:id/postFacebookWall                controllers.AdventurePeopleController.postOnMyFacebookWall(id:String)
 POST          /adventure/:id/invite.json                     controllers.AdventurePeopleController.invite(id:String)
 GET           /people/facebook/autocomplete.json             controllers.AdventurePeopleController.autocompleteFacebook()
@@ -63,7 +64,7 @@ GET           /adventure/:id/leave                           controllers.Adventu
 POST          /adventure/:id/public.json                     controllers.AdventureController.updatePublic(id:String)
 
 # BETA user signup
-GET          /beta/join-77777777-9999-111-3322               controllers.ApplicationController.joinBeta()
+GET           /beta/join-77777777-9999-111-3322              controllers.ApplicationController.joinBeta()
 
 GET           /adventure/:id/places.json                     controllers.AdventurePlaceController.getPlaces(id:String)
 POST          /adventure/:id/places.json                     controllers.AdventurePlaceController.addPlace(id:String)
