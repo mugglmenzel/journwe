@@ -102,7 +102,7 @@ public class Global extends GlobalSettings {
         }, Akka.system().dispatcher());
 
 
-        Akka.system().scheduler().schedule(Duration.create(5, TimeUnit.SECONDS), Duration.create(1, TimeUnit.DAYS), new Runnable() {
+        Akka.system().scheduler().schedule(Duration.create(240, TimeUnit.SECONDS), Duration.create(1, TimeUnit.DAYS), new Runnable() {
             @Override
             public void run() {
                 Logger.debug("Cleaning Adventures without Adventurers");
@@ -124,34 +124,14 @@ public class Global extends GlobalSettings {
         }, Akka.system().dispatcher());
 
 
-        Akka.system().
+        Akka.system().scheduler().schedule(Duration.create(60, TimeUnit.SECONDS), Duration.create(1, TimeUnit.DAYS), new Runnable() {
+            @Override
+            public void run() {
+                Logger.debug("Updating Category Count Cache");
+                new CategoryDAO().updateCategoryCountCache();
 
-                scheduler()
-
-                .
-
-                        schedule(Duration.create(240, TimeUnit.SECONDS), Duration
-
-                                .
-
-                                        create(1, TimeUnit.DAYS),
-
-                                new
-
-                                        Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Logger.debug("Updating Category Count Cache");
-                                                new CategoryDAO().updateCategoryCountCache();
-
-                                            }
-                                        }
-
-                                , Akka.system().
-
-                                dispatcher()
-
-                        );
+            }
+        }, Akka.system().dispatcher());
 
 
     }
