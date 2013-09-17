@@ -1,17 +1,20 @@
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
+import com.typesafe.config.ConfigFactory;
+import controllers.AdventureController;
+import controllers.AdventureFileController;
 import controllers.routes;
-import models.category.Category;
-import models.category.CategoryCount;
-import models.dao.CategoryCountDAO;
+import models.adventure.Adventure;
+import models.dao.AdventureDAO;
+import models.dao.AdventurerDAO;
 import models.dao.CategoryDAO;
-import models.dao.NotificationDAO;
-import models.dao.UserDAO;
 import models.notifications.ENotificationFrequency;
 import models.notifications.helper.UserNotifier;
-import models.user.User;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
@@ -19,7 +22,6 @@ import play.libs.Akka;
 import play.mvc.Call;
 import scala.concurrent.duration.Duration;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Global extends GlobalSettings {
@@ -100,15 +102,58 @@ public class Global extends GlobalSettings {
         }, Akka.system().dispatcher());
 
 
-
         Akka.system().scheduler().schedule(Duration.create(5, TimeUnit.SECONDS), Duration.create(1, TimeUnit.DAYS), new Runnable() {
             @Override
             public void run() {
-                Logger.debug("Updating Category Count Cache");
-                new CategoryDAO().updateCategoryCountCache();
-
+                Logger.debug("Cleaning Adventures without Adventurers");
+                for (Adventure adv : new AdventureDAO().all())
+                    if (!(new AdventurerDAO().count(adv.getId()) > 0)) {
+                        new AdventureDAO().deleteFull(adv.getId());
+                        //delete s3 objects
+                        AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+                                ConfigFactory.load().getString("aws.accessKey"),
+                                ConfigFactory.load().getString("aws.secretKey")));
+                        for (S3ObjectSummary obj : s3.listObjects(AdventureController.S3_BUCKET_ADVENTURE_IMAGES, adv.getId()).getObjectSummaries())
+                            s3.deleteObject(
+                                    AdventureController.S3_BUCKET_ADVENTURE_IMAGES, obj.getKey());
+                        for (S3ObjectSummary obj : s3.listObjects(AdventureFileController.S3_BUCKET, adv.getId()).getObjectSummaries())
+                            s3.deleteObject(
+                                    AdventureFileController.S3_BUCKET, obj.getKey());
+                    }
             }
         }, Akka.system().dispatcher());
+
+
+        Akka.system().
+
+                scheduler()
+
+                .
+
+                        schedule(Duration.create(240, TimeUnit.SECONDS), Duration
+
+                                .
+
+                                        create(1, TimeUnit.DAYS),
+
+                                new
+
+                                        Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Logger.debug("Updating Category Count Cache");
+                                                new CategoryDAO().updateCategoryCountCache();
+
+                                            }
+                                        }
+
+                                , Akka.system().
+
+                                dispatcher()
+
+                        );
+
+
     }
 
 }

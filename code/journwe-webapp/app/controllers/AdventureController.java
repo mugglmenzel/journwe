@@ -4,6 +4,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
@@ -52,7 +53,7 @@ import static play.data.Form.form;
 
 public class AdventureController extends Controller {
 
-    private static final String S3_BUCKET_ADVENTURE_IMAGES = "journwe-adventure-images";
+    public static final String S3_BUCKET_ADVENTURE_IMAGES = "journwe-adventure-images";
 
     private static DynamicForm advForm = form();
 
@@ -526,46 +527,20 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String advId) {
-        for (Adventurer advr : new AdventurerDAO().all(advId))
-            new AdventurerDAO().delete(advr);
-
-        for (models.adventure.checklist.Todo todo : new TodoDAO().all(advId))
-            new TodoDAO().delete(todo);
-
-        for (CommentThread ct : new CommentThreadDAO<Adventure>().all(advId)) {
-            for (Comment c : new CommentDAO().getComments(ct.getThreadId()))
-                new CommentDAO().delete(c);
-            new CommentThreadDAO<Adventure>().delete(ct);
-        }
-
-        for (PlaceOption po : new PlaceOptionDAO().all(advId)) {
-            for (PlaceAdventurerPreference pap : new PlaceAdventurerPreferenceDAO().all(po.getOptionId()))
-                new PlaceAdventurerPreferenceDAO().delete(pap);
-            new PlaceOptionDAO().delete(po);
-        }
-
-        for (TimeOption to : new TimeOptionDAO().all(advId)) {
-            for (TimeAdventurerPreference tap : new TimeAdventurerPreferenceDAO().all(to.getOptionId()))
-                new TimeAdventurerPreferenceDAO().delete(tap);
-            new TimeOptionDAO().delete(to);
-        }
-
-        for (JournweFile jf : new JournweFileDAO().all(advId))
-            new JournweFileDAO().delete(jf);
-
-        // keep shortname to tell visitors it has been deleted
-        //new AdventureShortnameDAO().delete(new AdventureShortnameDAO().getShortname(advId));
-
+        new AdventureDAO().deleteFull(advId);
         //delete s3 objects
         AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
                 ConfigFactory.load().getString("aws.accessKey"),
                 ConfigFactory.load().getString("aws.secretKey")));
-        s3.deleteObject(
-                S3_BUCKET_ADVENTURE_IMAGES, advId);
+        for(S3ObjectSummary obj : s3.listObjects(S3_BUCKET_ADVENTURE_IMAGES, advId).getObjectSummaries())
+            s3.deleteObject(
+                    S3_BUCKET_ADVENTURE_IMAGES, obj.getKey());
+        for(S3ObjectSummary obj : s3.listObjects(AdventureFileController.S3_BUCKET, advId).getObjectSummaries())
+            s3.deleteObject(
+                    AdventureFileController.S3_BUCKET, obj.getKey());
+
 
         flash("success", "We deleted your adventure " + new AdventureDAO().get(advId).getName());
-
-        new AdventureDAO().delete(advId);
 
         return redirect(routes.ApplicationController.index());
     }

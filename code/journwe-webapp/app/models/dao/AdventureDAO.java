@@ -1,11 +1,21 @@
 package models.dao;
 
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.typesafe.config.ConfigFactory;
 import models.adventure.Adventure;
 import models.adventure.Adventurer;
+import models.adventure.Comment;
+import models.adventure.CommentThread;
+import models.adventure.file.JournweFile;
+import models.adventure.place.PlaceAdventurerPreference;
+import models.adventure.place.PlaceOption;
+import models.adventure.time.TimeAdventurerPreference;
+import models.adventure.time.TimeOption;
 import models.dao.common.CommonEntityDAO;
 
 import java.util.ArrayList;
@@ -66,5 +76,39 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
         return limit > 0 ? results.subList(0, results.size() >= limit ? limit : results.size()) : results;
     }
 
+
+    public void deleteFull(String advId) {
+        for (Adventurer advr : new AdventurerDAO().all(advId))
+            new AdventurerDAO().delete(advr);
+
+        for (models.adventure.checklist.Todo todo : new TodoDAO().all(advId))
+            new TodoDAO().delete(todo);
+
+        for (CommentThread ct : new CommentThreadDAO<Adventure>().all(advId)) {
+            for (Comment c : new CommentDAO().getComments(ct.getThreadId()))
+                new CommentDAO().delete(c);
+            new CommentThreadDAO<Adventure>().delete(ct);
+        }
+
+        for (PlaceOption po : new PlaceOptionDAO().all(advId)) {
+            for (PlaceAdventurerPreference pap : new PlaceAdventurerPreferenceDAO().all(po.getOptionId()))
+                new PlaceAdventurerPreferenceDAO().delete(pap);
+            new PlaceOptionDAO().delete(po);
+        }
+
+        for (TimeOption to : new TimeOptionDAO().all(advId)) {
+            for (TimeAdventurerPreference tap : new TimeAdventurerPreferenceDAO().all(to.getOptionId()))
+                new TimeAdventurerPreferenceDAO().delete(tap);
+            new TimeOptionDAO().delete(to);
+        }
+
+        for (JournweFile jf : new JournweFileDAO().all(advId))
+            new JournweFileDAO().delete(jf);
+
+        // keep shortname to tell visitors it has been deleted
+        //new AdventureShortnameDAO().delete(new AdventureShortnameDAO().getShortname(advId));
+
+        new AdventureDAO().delete(advId);
+    }
 
 }
