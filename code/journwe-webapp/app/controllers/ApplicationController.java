@@ -340,6 +340,11 @@ public class ApplicationController extends Controller {
             response().setCookie(UserDAO.USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
             return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
         } else {
+            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            usr.setActive(true);
+            usr.setRole(EUserRole.BETA);
+            new UserDAO().save(usr);
+
             return ok(index.render());
         }
     }
