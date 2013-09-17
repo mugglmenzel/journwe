@@ -11,6 +11,7 @@ import play.Logger;
 import play.cache.Cache;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
 public class UserDAO extends CommonEntityDAO<User> {
 
@@ -26,16 +27,20 @@ public class UserDAO extends CommonEntityDAO<User> {
 
 
     private User getAuthUserFind(final AuthUserIdentity identity) {
-        if (Cache.get("user.social." + identity.getProvider() + "." + identity.getId()) != null)
-            return (User) Cache.get("user.social." + identity.getProvider() + "." + identity.getId());
-        UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
-        if (social != null) {
-            Cache.set("user.social." + identity.getProvider() + "." + identity.getId(), new UserDAO().get(social.getUserId()));
-
-            return (User) Cache.get("user.social." + identity.getProvider() + "." + identity.getId());
+        User result = null;
+        try {
+            result = Cache.getOrElse("user.social." + identity.getProvider() + "." + identity.getId(), new Callable<User>() {
+                @Override
+                public User call() throws Exception {
+                    UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
+                    return social != null ? new UserDAO().get(social.getUserId()) : null;
+                }
+            }, 24 * 3600);
+        } catch (Exception e) {
+            Logger.error("Error while looking up user. Ouch!", e);
         }
 
-        return null;
+        return result;
     }
 
     public User findByAuthUserIdentity(final AuthUserIdentity identity) {
