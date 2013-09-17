@@ -527,6 +527,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String advId) {
+        String name =  new AdventureDAO().get(advId).getName();
         new AdventureDAO().deleteFull(advId);
         //delete s3 objects
         AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
@@ -540,7 +541,7 @@ public class AdventureController extends Controller {
                     AdventureFileController.S3_BUCKET, obj.getKey());
 
 
-        flash("success", "We deleted your adventure " + new AdventureDAO().get(advId).getName());
+        flash("success", "We deleted your adventure " + name);
 
         return redirect(routes.ApplicationController.index());
     }
