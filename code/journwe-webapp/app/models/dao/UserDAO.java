@@ -15,6 +15,9 @@ import java.util.concurrent.Callable;
 
 public class UserDAO extends CommonEntityDAO<User> {
 
+    public static final String USER_ROLE_ON_REGISTER = "play-authenticate-user-role-on-register";
+    public static final EUserRole DEFAULT_USER_ROLE = EUserRole.USER;
+
     public UserDAO() {
         super(User.class);
     }
@@ -54,9 +57,18 @@ public class UserDAO extends CommonEntityDAO<User> {
         UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
         if (social != null && authUser != null) {
             User user = new UserDAO().get(social.getUserId());
+            boolean updateCache = false;
+
+            if (EUserRole.INVITEE.equals(user.getRole())) {
+                user.setRole(DEFAULT_USER_ROLE);
+                Logger.debug("switch from INVITEE to " + DEFAULT_USER_ROLE.toString());
+                updateCache = true;
+            }
+
             if (authUser instanceof NameIdentity && ((NameIdentity) authUser).getName() != null && !((NameIdentity) authUser).getName().equals(user.getName())) {
                 Logger.debug("updating name");
                 user.setName(((NameIdentity) authUser).getName());
+                updateCache = true;
             }
 
 
@@ -105,7 +117,7 @@ public class UserDAO extends CommonEntityDAO<User> {
                 else picture = ((PicturedIdentity) authUser).getPicture();
                 if (!picture.equals(user.getImage())) {
                     user.setImage(picture);
-                    new UserDAO().save(user);
+                    updateCache = true;
                 }
             }
 
@@ -116,7 +128,26 @@ public class UserDAO extends CommonEntityDAO<User> {
                     new UserSocialDAO().save(social);
                 }
             }
+
+            save(user);
+            if (updateCache) clearCache(user.getId());
         }
+    }
+
+    public void updateRole(User user, EUserRole role) {
+        user.setRole(DEFAULT_USER_ROLE);
+        save(user);
+        clearCache(user.getId());
+    }
+
+    private void clearCache(final String userId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                UserSocial identity = new UserSocialDAO().findByUserId(userId);
+                Cache.remove("user.social." + identity.getProvider() + "." + identity.getSocialId());
+            }
+        }).start();
     }
 
     public User create(final AuthUser authUser, final EUserRole role) {

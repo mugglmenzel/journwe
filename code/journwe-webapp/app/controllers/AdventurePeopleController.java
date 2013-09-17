@@ -56,7 +56,7 @@ public class AdventurePeopleController extends Controller {
         //BETA activation
         if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
             PlayAuthenticate.storeOriginalUrl(Http.Context.current());
-            response().setCookie(OAuthUserServicePlugin.USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
+            response().setCookie(UserDAO.USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
             return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
         } else {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -71,8 +71,8 @@ public class AdventurePeopleController extends Controller {
             } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())){
                 advr.setParticipationStatus(EAdventurerParticipation.GOING);
                 new AdventurerDAO().save(advr);
+                new UserDAO().updateRole(usr, EUserRole.BETA);
             }
-
 
             return AdventureController.getIndex(advId);
         }

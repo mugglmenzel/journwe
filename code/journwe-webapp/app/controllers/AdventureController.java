@@ -65,7 +65,7 @@ public class AdventureController extends Controller {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
             Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
-            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()))
+            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || EUserRole.INVITEE.equals(usr.getRole()))
                 return ok(getPublic.render(adv, ins));
             else
                 return ok(getIndex.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));

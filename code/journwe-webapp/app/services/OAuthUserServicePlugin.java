@@ -12,8 +12,6 @@ import play.mvc.Controller;
 
 public class OAuthUserServicePlugin extends UserServicePlugin {
 
-    public static final String USER_ROLE_ON_REGISTER = "play-authenticate-user-role-on-register";
-    private static final EUserRole DEFAULT_USER_ROLE = EUserRole.USER;
 
     public OAuthUserServicePlugin(final Application app) {
         super(app);
@@ -25,8 +23,9 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
 
         final boolean isLinked = new UserDAO().existsByAuthUserIdentity(authUser);
         if (!isLinked) {
-            return new UserDAO().create(authUser, Controller.request().cookie(USER_ROLE_ON_REGISTER) != null ? EUserRole.valueOf(Controller.request().cookie(USER_ROLE_ON_REGISTER).value()) : DEFAULT_USER_ROLE).getId();
+            return new UserDAO().create(authUser, Controller.request().cookie(UserDAO.USER_ROLE_ON_REGISTER) != null ? EUserRole.valueOf(Controller.request().cookie(UserDAO.USER_ROLE_ON_REGISTER).value()) : UserDAO.DEFAULT_USER_ROLE).getId();
         } else {
+            new UserDAO().update(authUser, authUser);
             // we have this user already, so return null
             return null;
         }
