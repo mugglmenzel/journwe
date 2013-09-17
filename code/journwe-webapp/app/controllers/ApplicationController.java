@@ -7,6 +7,8 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
 import models.adventure.AdventureCategory;
+import models.adventure.Adventurer;
+import models.adventure.EAdventurerParticipation;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
 import models.category.Category;
@@ -15,7 +17,9 @@ import models.category.CategoryHierarchy;
 import models.dao.*;
 import models.inspiration.Inspiration;
 import models.inspiration.InspirationCategory;
+import models.user.EUserRole;
 import models.user.Subscriber;
+import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.cache.Cache;
@@ -327,5 +331,16 @@ public class ApplicationController extends Controller {
 
     public static Result ping() {
         return ok("pong");
+    }
+
+    //BETA activation
+    public static Result joinBeta() {
+        if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
+            PlayAuthenticate.storeOriginalUrl(Http.Context.current());
+            response().setCookie(UserDAO.USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
+            return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
+        } else {
+            return ok(index.render());
+        }
     }
 }

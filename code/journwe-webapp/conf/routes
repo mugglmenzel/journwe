@@ -62,6 +62,9 @@ GET           /people/facebook/autocomplete.json             controllers.Adventu
 GET           /adventure/:id/leave                           controllers.AdventurePeopleController.leave(id:String)
 POST          /adventure/:id/public.json                     controllers.AdventureController.updatePublic(id:String)
 
+# BETA user signup
+GET          /beta/join-77777777-9999-111-3322               controllers.ApplicationController.joinBeta()
+
 GET           /adventure/:id/places.json                     controllers.AdventurePlaceController.getPlaces(id:String)
 POST          /adventure/:id/places.json                     controllers.AdventurePlaceController.addPlace(id:String)
 GET           /adventure/:id/place/favorite.json             controllers.AdventurePlaceController.getFavoritePlace(id:String)
