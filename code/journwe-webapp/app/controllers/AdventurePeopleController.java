@@ -113,7 +113,7 @@ public class AdventurePeopleController extends Controller {
         if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
 
-        Adventurer advr = new AdventurerDAO().get(advId, userId));
+        Adventurer advr = new AdventurerDAO().get(advId, userId);
         if (advr == null) {
             advr = new Adventurer();
             advr.setUserId(userId);
