@@ -14,31 +14,38 @@
         </script>
         Category:
         <div id="adventure-category-select" class="btn-group">
-
-        @defining(new AdventureCategoryDAO()){ advCatDAO =>
-            @defining(new CategoryDAO()){ catDAO =>
-
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-spin icon-journwe hide"></i> <span>@defining(advCatDAO.getCategory(adv.getId)){ advCat => @if(advCat != null){ @catDAO.get(advCat.getCategoryId).getName }else{No Category}}</span> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        @catDAO.allOptionsMap().map{ case (id, name) =>
-                            <li data-id="@id"><a>@name</a></li>
-                        }
-                    </ul>
-
-            }
-        }
-
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <i class="icon-spin icon-journwe hide"></i> <span>No Category</span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu"></ul>
         </div>
         <script>
-            $('#adventure-category-select li').click(function(){
-                $('#adventure-category-select').find('button i').first().removeClass('hide');
-                $.post('@routes.AdventureController.updateCategory(adv.getId)', {categoryId: $(this).data('id')}, function (data) {
-                    $('#adventure-category-select').find('button span').first().html(data.name);
-                    $('#adventure-category-select').find('button i').first().addClass('hide');
-                });
+
+            $(document).ready(function(){
+                updateCategorySelection(null);
+                loadCategoriesOptionsMap();
             });
+
+            function loadCategoriesOptionsMap() {
+                $.get('@routes.CategoryController.categoriesOptionsMap()', function (cats){
+                    $('#adventure-category-select ul.dropdown-menu').empty();
+                    if(cats != null && cats.length > 0){
+                        for(var i in cats)
+                            $('#adventure-category-select ul.dropdown-menu').append('<li data-id="' + cats[i].id + '"><a>' + cats[i].name + '</a></li>');
+                        $('#adventure-category-select li').click(function(){
+                            updateCategorySelection($(this).data('id'));
+                        });
+                    }
+                });
+            }
+
+            function updateCategorySelection(catId) {
+                $('#adventure-category-select button i').first().removeClass('hide');
+                $.post('@routes.AdventureController.updateCategory(adv.getId)', {categoryId: catId}, function (data) {
+                    if(data.name != null && data.name.length > 0) $('#adventure-category-select button span').first().html(data.name);
+                    $('#adventure-category-select button i').first().addClass('hide');
+                });
+            }
         </script>
     </div>
     <div class="col-lg-3">

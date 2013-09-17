@@ -10,7 +10,9 @@ import models.category.Category;
 import models.category.CategoryHierarchy;
 import models.dao.CategoryDAO;
 import models.dao.CategoryHierarchyDAO;
+import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
+import play.cache.Cache;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
@@ -21,6 +23,10 @@ import play.mvc.Security;
 import views.html.category.manage;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
 
@@ -30,7 +36,30 @@ public class CategoryController extends Controller {
 
     private static Form<Category> catForm = form(Category.class);
 
-    //public static Result categoriesAll()
+    public static Result categoriesOptionsMap() {
+        try {
+            return ok(Cache.getOrElse("categories.optionsMap", new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
+                    Map<String, String> optionsMap = new CategoryDAO().allOptionsMap();
+                    for (String catId : optionsMap.keySet()) {
+                        if (catId != null) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", catId);
+                            node.put("name", optionsMap.get(catId));
+                            results.add(node);
+                        }
+                    }
+
+                    return Json.toJson(results).toString();
+                }
+            }, 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate categories optionsMap", e);
+            return internalServerError();
+        }
+    }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
@@ -56,7 +85,8 @@ public class CategoryController extends Controller {
         } else {
             Category cat = filledCatForm.get();
 
-            File file = image != null ? image.getFile() : null;;
+            File file = image != null ? image.getFile() : null;
+            ;
 
             try {
                 if (cat.getId() == null && !new CategoryDAO().save(cat))

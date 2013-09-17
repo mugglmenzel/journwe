@@ -30,6 +30,7 @@ import models.user.EUserRole;
 import models.user.User;
 import models.user.UserEmail;
 import models.user.UserSocial;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
@@ -455,20 +456,32 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(node));
     }
 
-
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result updateCategory(String advId) {
         DynamicForm data = form().bindFromRequest();
         String catId = data.get("categoryId");
 
+        Category result = null;
+
         AdventureCategory old = new AdventureCategoryDAO().getCategory(advId);
-        if(old != null && !old.getCategoryId().equals(catId)) new AdventureCategoryDAO().delete(old);
 
-        AdventureCategory advCat = new AdventureCategory();
-        advCat.setCategoryId(catId);
-        advCat.setAdventureId(advId);
-        new AdventureCategoryDAO().save(advCat);
+        if (catId != null && !"".equals(catId)) {
+            if (old != null && !old.getCategoryId().equals(catId)) new AdventureCategoryDAO().delete(old);
 
-        return ok(Json.toJson(new CategoryDAO().get(catId)));
+            AdventureCategory advCat = new AdventureCategory();
+            advCat.setCategoryId(catId);
+            advCat.setAdventureId(advId);
+            new AdventureCategoryDAO().save(advCat);
+
+            result = new CategoryDAO().get(catId);
+        } else if(old != null)
+            result = new CategoryDAO().get(old.getCategoryId());
+        else {
+            result = new Category();
+            result.setName("");
+        }
+
+        return ok(Json.toJson(result));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
