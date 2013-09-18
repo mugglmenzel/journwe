@@ -208,7 +208,7 @@ public class ApplicationController extends Controller {
 
                                         more = results.size() < count;
                                     }
-                                    lastAdventureId = adv.getId();
+                                    lastAdventureId = advCat.getAdventureId();
                                 }
                             }
 

@@ -109,11 +109,12 @@ public class CategoryController extends Controller {
 
                 if (new CategoryDAO().save(cat)) {
 
-                    if (new CategoryHierarchyDAO().isCategoryInHierarchy(cat.getId())) {
+                    if (!new CategoryHierarchyDAO().isCategoryInHierarchy(cat.getId())) {
                         CategoryHierarchy hier = new CategoryHierarchy();
                         hier.setSuperCategoryId(Category.SUPER_CATEGORY);
                         hier.setSubCategoryId(cat.getId());
                         new CategoryHierarchyDAO().save(hier);
+                        new CategoryDAO().clearCache();
                     }
 
                     flash("success", "Saved Category.");
@@ -147,17 +148,23 @@ public class CategoryController extends Controller {
         hier.setSubCategoryId(catId);
         new CategoryHierarchyDAO().save(hier);
 
+        new CategoryDAO().clearCache(superCatId);
+
         return ok(Json.toJson(hier));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String id) {
         for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSub(id))
-            if (catHier != null) new CategoryHierarchyDAO().delete(catHier);
+            if (catHier != null) {
+                new CategoryHierarchyDAO().delete(catHier);
+                Cache.remove("subCategoriesOf." + catHier.getSuperCategoryId());
+            }
         for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSuper(id))
             if (catHier != null) {
                 catHier.setSuperCategoryId(Category.SUPER_CATEGORY);
                 new CategoryHierarchyDAO().save(catHier);
+                new CategoryDAO().clearCache();
             }
 
         if (new CategoryDAO().delete(id)) {
