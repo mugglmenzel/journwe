@@ -121,9 +121,9 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
     }
 
     public void clearCache(String superCatId) {
+        updateCategoryCountCache();
         Cache.remove("subCategoriesOf." + superCatId);
         Cache.remove("categories.optionsMap");
-        updateCategoryCountCache();
     }
 
 }
