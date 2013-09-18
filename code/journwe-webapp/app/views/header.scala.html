@@ -26,7 +26,7 @@
 @currentAuth() { auth =>
     @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-5 col-sm-5 col-xs-5">
             @if(auth != null && user != null) {
             <ul class="nav nav-pills">
                 <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="icon-lightbulb"></i> Inspirations</a></li>
@@ -38,7 +38,7 @@
             }
         </div>
 
-        <div class="col-lg-2">
+        <div class="col-lg-2 col-sm-2 col-xs-2">
             <div class="text-center navbar-text">
                 @if(auth != null && user != null) {
                     <a href="@routes.ApplicationController.index" onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');" class="brand" style="float: none;vertical-align: bottom;">
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div class="col-lg-5 clearfix text-right">
+        <div class="col-lg-5 col-sm-5 col-xs-5 clearfix text-right">
         @if(auth != null && user != null) {
             <div class="">
 
