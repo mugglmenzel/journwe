@@ -177,6 +177,11 @@ public class AdventureTimeController extends Controller {
         node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getOptionId())));
 
+        String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
+        if (favId != null && time.getTimeId().equals(favId)){
+            node.put("favorite", true);
+        }
+
         return ok(Json.toJson(node));
     }
 

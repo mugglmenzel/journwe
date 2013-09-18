@@ -184,6 +184,11 @@ public class AdventurePlaceController extends Controller {
         node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));
 
+        String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
+        if (favId != null && place.getPlaceId().equals(favId)){
+            node.put("favorite", true);
+        }
+
         return ok(Json.toJson(node));
     }
 

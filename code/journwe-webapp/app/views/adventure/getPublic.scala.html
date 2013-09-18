@@ -11,11 +11,12 @@
 <div id="adventure-container">
     <div class="prime-image">
 
-        <div style="width: 100%">
         @if(adv.getImage != null) {
-            <img style="width: 100%; height: 200;" src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"/>
+            <div style="width: 100%; height: 200px; background: url('http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f') no-repeat center center transparent; background-size: auto 100%;"></div>
+        } else {
+            <div style="width: 100%; height: 200px; background: #aaa; background: rgba(255,255,255,0.1);"></div>
         }
-        </div>
+     
 
         <div class="title-name">
             @adv.getName() @if(ins != null) {<small>@ins.getName()</small>}

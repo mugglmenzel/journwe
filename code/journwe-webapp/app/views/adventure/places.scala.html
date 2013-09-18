@@ -61,7 +61,7 @@
 
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
-        <td><button class="btn {%=o.favorite?'btn-success':'btn-default'%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
+        <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
         <td><em>{%=o.address%}</em></td>
         @if(JournweAuthorization.canVoteForPlaces(adv.getId)) {
         <td>

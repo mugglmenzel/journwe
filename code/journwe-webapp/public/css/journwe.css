@@ -493,7 +493,7 @@ table.inspiration .images img {
 }
 
 .nav-adventure a {
-    color:  white;
+    color:  white !important;
 }
 
 .nav-adventure .nav-pills>li.active>a, 
@@ -1091,4 +1091,14 @@ h1 .x-edit-loading {
 
 .form-control {
 	max-width: 100%;
+}
+
+.btn-adopt {
+	width: 60px;
+	margin-bottom: 2px;
+}
+
+
+.btn-adopt + .btn-adopt {
+	margin-bottom: -2px;
 }
