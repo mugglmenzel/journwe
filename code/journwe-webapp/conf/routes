@@ -52,7 +52,10 @@ GET           /adventure/:id/group/:gid/advrs.json           controllers.Adventu
 GET           /adventure/:id/groups                          controllers.AdventurerGroupController.getGroups(id:String)
 
 # POST    /adventure/:id/postTwitterStream                            controllers.AdventureController.postOnMyTwitterStream(id:String)
-GET           /adventure/:id/adventurers                     controllers.AdventurePeopleController.getAdventurers(id:String)
+GET           /adventure/:id/adventurers.json                controllers.AdventurePeopleController.getAdventurers(id:String)
+GET           /adventure/:id/participants.json               controllers.AdventurePeopleController.getParticipants(id:String)
+GET           /adventure/:id/invitees.json                   controllers.AdventurePeopleController.getInvitees(id:String)
+GET           /adventure/:id/applicants.json                 controllers.AdventurePeopleController.getApplicants(id:String)
 GET           /adventure/:id/participate                     controllers.AdventurePeopleController.participate(id:String)
 POST          /adventure/:id/participate/:status             controllers.AdventurePeopleController.participateStatus(id:String, status:String)
 POST          /adventure/:id/adopt/:user                     controllers.AdventurePeopleController.adopt(id:String, user:String)

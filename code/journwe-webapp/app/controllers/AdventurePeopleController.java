@@ -7,7 +7,6 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
-import models.inspiration.Inspiration;
 import models.adventure.*;
 import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
@@ -15,11 +14,13 @@ import models.authorization.JournweAuthorization;
 import models.dao.*;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
+import models.inspiration.Inspiration;
 import models.user.EUserRole;
 import models.user.User;
 import models.user.UserSocial;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
+import play.cache.Cache;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -29,6 +30,7 @@ import play.mvc.Security;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
 
@@ -43,19 +45,140 @@ public class AdventurePeopleController extends Controller {
 
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result getAdventurers(String advId) {
+    public static Result getAdventurers(final String advId) {
         if (!JournweAuthorization.canViewAdventurerParticipants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
-        return ok(Json.toJson(new AdventurerDAO().all(advId)));
+
+        try {
+            return ok(Cache.getOrElse("adventure." + advId + ".adventurers.all", new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
+                    for (Adventurer advr : new AdventurerDAO().all(advId))
+                        if (advr != null) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", advr.getUserId());
+                            node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+
+                            User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
+                            node.put("name", usr != null ? usr.getName() : "");
+                            node.put("image", usr != null ? usr.getImage() : null);
+
+                            node.put("status", advr.getParticipationStatus().toString());
+                            results.add(node);
+                        }
+                    return Json.toJson(results).toString();
+                }
+            }, 24 * 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate adventurers for adventure " + advId, e);
+            return internalServerError();
+        }
+    }
+
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result getParticipants(final String advId) {
+        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+
+        try {
+            return ok(Cache.getOrElse("adventure." + advId + ".adventurers.participants", new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
+                    for (Adventurer advr : new AdventurerDAO().all(advId))
+                        if (advr != null && !EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) && !EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", advr.getUserId());
+                            node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+
+                            User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
+                            node.put("name", usr != null ? usr.getName() : "");
+                            node.put("image", usr != null ? usr.getImage() : null);
+
+                            node.put("status", advr.getParticipationStatus().toString());
+                            results.add(node);
+                        }
+                    return Json.toJson(results).toString();
+                }
+            }, 24 * 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate participants for adventure " + advId, e);
+            return internalServerError();
+        }
+    }
+
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result getInvitees(final String advId) {
+        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+
+        try {
+            return ok(Cache.getOrElse("adventure." + advId + ".adventurers.invitees", new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
+                    for (Adventurer advr : new AdventurerDAO().all(advId))
+                        if (advr != null && EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", advr.getUserId());
+                            node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+
+                            User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
+                            node.put("name", usr != null ? usr.getName() : "");
+                            node.put("image", usr != null ? usr.getImage() : null);
+
+                            node.put("status", advr.getParticipationStatus().toString());
+                            results.add(node);
+                        }
+                    return Json.toJson(results).toString();
+                }
+            }, 24 * 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate invitees for adventure " + advId, e);
+            return internalServerError();
+        }
+    }
+
+    @Security.Authenticated(SecuredBetaUser.class)
+    public static Result getApplicants(final String advId) {
+        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+
+        try {
+            return ok(Cache.getOrElse("adventure." + advId + ".adventurers.applicants", new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
+                    for (Adventurer advr : new AdventurerDAO().all(advId))
+                        if (advr != null && EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", advr.getUserId());
+                            node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+
+                            User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
+                            node.put("name", usr != null ? usr.getName().replaceAll(" [^ ]*$", "") : "Unknown");
+                            node.put("image", usr != null ? usr.getImage() : null);
+
+                            node.put("status", advr.getParticipationStatus().toString());
+                            results.add(node);
+                        }
+                    return Json.toJson(results).toString();
+                }
+            }, 24 * 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate applicants for adventure " + advId, e);
+            return internalServerError();
+        }
     }
 
 
-    public static Result participate(String advId) {
+    public static Result participate(final String advId) {
 
         //BETA activation
         if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
             PlayAuthenticate.storeOriginalUrl(Http.Context.current());
-            response().setCookie(UserDAO.COOKIE_USER_ROLE_ON_REGISTER, EUserRole.BETA.toString(), 7*24*3600);
+            response().setCookie(UserDAO.COOKIE_USER_ROLE_ON_REGISTER, EUserRole.BETA.toString(), 7 * 24 * 3600);
             return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
         } else {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -67,9 +190,12 @@ public class AdventurePeopleController extends Controller {
                 advr.setAdventureId(advId);
                 advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
                 new AdventurerDAO().save(advr);
-            } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())){
+                clearCache(advId);
+            } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
                 advr.setParticipationStatus(EAdventurerParticipation.GOING);
                 new AdventurerDAO().save(advr);
+                clearCache(advId);
+
                 new UserDAO().updateRole(usr, EUserRole.BETA);
             }
 
@@ -78,7 +204,7 @@ public class AdventurePeopleController extends Controller {
     }
 
 
-    public static Result participateStatus(String advId, String statusStr) {
+    public static Result participateStatus(final String advId, final String statusStr) {
         if (!JournweAuthorization.canEditAdventurerParticipationStatus(advId))
             return AuthorizationMessage.notAuthorizedResponse();
 
@@ -89,16 +215,20 @@ public class AdventurePeopleController extends Controller {
         if (advr != null) {
             advr.setParticipationStatus(status);
             new AdventurerDAO().save(advr);
+
+            clearCache(advId);
         }
 
         return ok(Json.toJson(advr));
     }
 
-    public static Result leave(String advId) {
+    public static Result leave(final String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
 
         new AdventurerDAO().delete(advr);
+
+        clearCache(advId);
 
         flash("success", "You left the adventure " + new AdventureDAO().get(advId).getName());
 
@@ -109,7 +239,7 @@ public class AdventurePeopleController extends Controller {
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result adopt(String advId, String userId) {
+    public static Result adopt(final String advId, final String userId) {
         if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
 
@@ -128,6 +258,7 @@ public class AdventurePeopleController extends Controller {
         authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
         new AdventureAuthorizationDAO().save(authorization);
 
+        clearCache(advId);
 
         ObjectNode result = (ObjectNode) Json.toJson(advr);
         result.put("userName", new UserDAO().get(userId).getName());
@@ -136,11 +267,13 @@ public class AdventurePeopleController extends Controller {
 
 
     @Security.Authenticated(SecuredBetaUser.class)
-    public static Result deny(String advId, String userId) {
+    public static Result deny(final String advId, final String userId) {
         if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
 
         new AdventurerDAO().delete(advId, userId);
+
+        clearCache(advId);
 
         return ok();
     }
@@ -261,6 +394,8 @@ public class AdventurePeopleController extends Controller {
                 authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
                 new AdventureAuthorizationDAO().save(authorization);
 
+                clearCache(advId);
+
                 return ok();
             }
         } catch (Exception e) {
@@ -289,6 +424,14 @@ public class AdventurePeopleController extends Controller {
             }
 
         return ok(Json.toJson(results));
+    }
+
+
+    private static void clearCache(final String advId) {
+        Cache.remove("adventure." + advId + ".adventurers.all");
+        Cache.remove("adventure." + advId + ".adventurers.participants");
+        Cache.remove("adventure." + advId + ".adventurers.invitees");
+        Cache.remove("adventure." + advId + ".adventurers.applicants");
     }
 
 }
