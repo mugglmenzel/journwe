@@ -190,11 +190,16 @@ public class AdventurePeopleController extends Controller {
                 advr.setAdventureId(advId);
                 advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
                 new AdventurerDAO().save(advr);
+
                 clearCache(advId);
+                ApplicationController.clearUserCache(usr.getId());
             } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
                 advr.setParticipationStatus(EAdventurerParticipation.GOING);
                 new AdventurerDAO().save(advr);
+
                 clearCache(advId);
+                ApplicationController.clearUserCache(usr.getId());
+
 
                 new UserDAO().updateRole(usr, EUserRole.BETA);
             }
@@ -203,7 +208,7 @@ public class AdventurePeopleController extends Controller {
         }
     }
 
-
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result participateStatus(final String advId, final String statusStr) {
         if (!JournweAuthorization.canEditAdventurerParticipationStatus(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -222,6 +227,7 @@ public class AdventurePeopleController extends Controller {
         return ok(Json.toJson(advr));
     }
 
+    @Security.Authenticated(SecuredBetaUser.class)
     public static Result leave(final String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
@@ -229,6 +235,8 @@ public class AdventurePeopleController extends Controller {
         new AdventurerDAO().delete(advr);
 
         clearCache(advId);
+        ApplicationController.clearUserCache(usr.getId());
+
 
         flash("success", "You left the adventure " + new AdventureDAO().get(advId).getName());
 
@@ -259,6 +267,7 @@ public class AdventurePeopleController extends Controller {
         new AdventureAuthorizationDAO().save(authorization);
 
         clearCache(advId);
+        ApplicationController.clearUserCache(userId);
 
         ObjectNode result = (ObjectNode) Json.toJson(advr);
         result.put("userName", new UserDAO().get(userId).getName());
@@ -274,6 +283,7 @@ public class AdventurePeopleController extends Controller {
         new AdventurerDAO().delete(advId, userId);
 
         clearCache(advId);
+        ApplicationController.clearUserCache(userId);
 
         return ok();
     }
@@ -395,6 +405,7 @@ public class AdventurePeopleController extends Controller {
                 new AdventureAuthorizationDAO().save(authorization);
 
                 clearCache(advId);
+                ApplicationController.clearUserCache(invitee.getId());
 
                 return ok();
             }

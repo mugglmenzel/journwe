@@ -114,7 +114,7 @@ public class CategoryController extends Controller {
                         hier.setSuperCategoryId(Category.SUPER_CATEGORY);
                         hier.setSubCategoryId(cat.getId());
                         new CategoryHierarchyDAO().save(hier);
-                        new CategoryDAO().clearCache();
+                        clearCache();
                     }
 
                     flash("success", "Saved Category.");
@@ -148,7 +148,7 @@ public class CategoryController extends Controller {
         hier.setSubCategoryId(catId);
         new CategoryHierarchyDAO().save(hier);
 
-        new CategoryDAO().clearCache(superCatId);
+        clearCache(superCatId);
 
         return ok(Json.toJson(hier));
     }
@@ -164,7 +164,7 @@ public class CategoryController extends Controller {
             if (catHier != null) {
                 catHier.setSuperCategoryId(Category.SUPER_CATEGORY);
                 new CategoryHierarchyDAO().save(catHier);
-                new CategoryDAO().clearCache();
+                clearCache();
             }
 
         if (new CategoryDAO().delete(id)) {
@@ -182,6 +182,17 @@ public class CategoryController extends Controller {
     public static Result updateCountCache() {
         new CategoryDAO().updateCategoryCountCache();
         return ok();
+    }
+
+
+    private static void clearCache() {
+        clearCache(Category.SUPER_CATEGORY);
+    }
+
+    private static void clearCache(String superCatId) {
+        new CategoryDAO().updateCategoryCountCache();
+        Cache.remove("subCategoriesOf." + superCatId);
+        Cache.remove("categories.optionsMap");
     }
 
 }
