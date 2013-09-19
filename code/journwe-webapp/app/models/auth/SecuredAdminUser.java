@@ -20,7 +20,7 @@ public class SecuredAdminUser extends Security.Authenticator {
 	public String getUsername(Context ctx) {
 		final AuthUser u = PlayAuthenticate.getUser(ctx.session());
 
-		if (u != null && isAdmin(u)) {
+		if (u != null && isAuthorized(u)) {
 			return u.getId();
 		} else {
 			return null;

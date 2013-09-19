@@ -100,7 +100,7 @@ public class ApplicationController extends Controller {
 
                     return Json.toJson(results).toString();
                 }
-            }, 3600)).as("application/json");
+            }, 24*3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate sub-categories of " + superCatId, e);
             return internalServerError();
@@ -185,7 +185,7 @@ public class ApplicationController extends Controller {
         final String lastId = data.get("lastId");
         int countParam = 10;
         try {
-            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
+            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : countParam;
         } catch (Exception e) {
             return badRequest("Count is not a number.");
         }
@@ -231,7 +231,7 @@ public class ApplicationController extends Controller {
                         }
                     return Json.toJson(results).toString();
                 }
-            }, 3600)).as("application/json");
+            }, 24*3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate public adventures for category " + catId, e);
             return internalServerError();
@@ -286,7 +286,7 @@ public class ApplicationController extends Controller {
                         }
                     return Json.toJson(results).toString();
                 }
-            }, 3600)).as("application/json");
+            }, 24*3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate inspirations for category " + catId, e);
             return internalServerError();
