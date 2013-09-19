@@ -44,11 +44,7 @@ import static play.data.Form.form;
 public class AdventurePeopleController extends Controller {
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
     public static Result getAdventurers(final String advId) {
-        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
-            return AuthorizationMessage.notAuthorizedResponse();
-
         try {
             return ok(Cache.getOrElse("adventure." + advId + ".adventurers.all", new Callable<String>() {
                 @Override
@@ -61,7 +57,7 @@ public class AdventurePeopleController extends Controller {
                             node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
-                            node.put("name", usr != null ? usr.getName() : "");
+                            node.put("name", usr != null ? usr.getName().replaceAll(" [^ ]*$", "") : "");
                             node.put("image", usr != null ? usr.getImage() : null);
 
                             node.put("status", advr.getParticipationStatus().toString());
@@ -157,7 +153,7 @@ public class AdventurePeopleController extends Controller {
                             node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
-                            node.put("name", usr != null ? usr.getName().replaceAll(" [^ ]*$", "") : "Unknown");
+                            node.put("name", usr != null ? usr.getName() : "Unknown");
                             node.put("image", usr != null ? usr.getImage() : null);
 
                             node.put("status", advr.getParticipationStatus().toString());
