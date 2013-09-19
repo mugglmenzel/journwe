@@ -110,14 +110,16 @@ case EAdventurerParticipation.INVITEE => {label-warning}
     }
 
     function loadAdventurers(endpoint, target) {
+
         $.get(endpoint, function (advs) {
             $(target).empty();
-            if(advs != null && advs.length > 0)
+            if(advs != null && advs.length > 0) {
                 for(var i in advs) {
                     advs[i].cssLabel = cssLabel[advs[i].status];
                     $(target).append(tmpl('adventurer-template', advs[i]));
                 }
-            else $(target).parent().hide();
+                $(target).parent().show();
+            } else $(target).parent().hide();
         });
     }
 </script>
