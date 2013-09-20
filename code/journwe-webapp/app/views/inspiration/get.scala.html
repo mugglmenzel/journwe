@@ -70,9 +70,9 @@
 
                 <span class="pull-right">
                     <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false"></div>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="@routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a>
+                    <div><a href="https://twitter.com/share" class="twitter-share-button" data-url="@routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a></div>
                     <div class="g-plusone" data-size="tall" data-annotation="vertical-bubble"></div>
-                    <a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + "&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8") + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a>
+                    <div><a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + "&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8") + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a></div>
                 </span>
             </div>
         </div>
