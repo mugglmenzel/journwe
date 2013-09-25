@@ -229,6 +229,8 @@
         if (map){ return; }
         var mapOptions = {
             zoom: 15,
+            minZoom: 2,
+            maxZoom: 19,
             center: new google.maps.LatLng(49.483472, 8.476992),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };

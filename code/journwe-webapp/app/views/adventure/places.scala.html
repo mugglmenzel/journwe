@@ -100,9 +100,11 @@
 
     function initialize() {
     var mapOptions = {
-    zoom: 19,
-    center: new google.maps.LatLng(52.467541, 13.324957),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+        zoom: 19,
+        minZoom: 2,
+        maxZoom: 19,
+        center: new google.maps.LatLng(52.467541, 13.324957),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById('place-add-map'), mapOptions);
 
