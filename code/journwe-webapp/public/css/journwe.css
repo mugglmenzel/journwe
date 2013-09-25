@@ -771,6 +771,30 @@ h1 .x-edit-loading {
 	margin: 10px 0px;
 }
 
+
+.polaroid-hover > a {
+	display: block;
+	height: 100px;
+	width: 100px;
+	overflow: hidden;
+}
+
+
+.polaroid-hover > a:hover,
+.polaroid-hover > a:focus {
+	border: 3px solid #a2e085;
+}
+
+.polaroid-hover.polaroid-active > a {
+	border: 3px solid #5cb85c;
+}
+
+.polaroid-hover.polaroid-active > a img,
+.polaroid-hover > a:hover img,
+.polaroid-hover > a:focus img {
+	margin: -3px !important;
+}
+
 .prime-image {
 	border: none !important;
 	position: relative;
