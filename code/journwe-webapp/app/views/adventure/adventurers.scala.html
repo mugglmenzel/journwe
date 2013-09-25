@@ -8,7 +8,7 @@
 
 @cssForStatus(status:EAdventurerParticipation) = {
 @status match {
-case EAdventurerParticipation.NOTGOING => {label-error}
+case EAdventurerParticipation.NOTGOING => {label-danger}
 case EAdventurerParticipation.UNDECIDED => {label-warning}
 case EAdventurerParticipation.GOING => {label-info}
 case EAdventurerParticipation.BOOKED => {label-success}
@@ -85,7 +85,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
     var cssLabel = {
         '@EAdventurerParticipation.APPLICANT' : 'default',
         '@EAdventurerParticipation.INVITEE' : 'warning',
-        '@EAdventurerParticipation.NOTGOING' : 'error',
+        '@EAdventurerParticipation.NOTGOING' : 'danger',
         '@EAdventurerParticipation.UNDECIDED' : 'warning',
         '@EAdventurerParticipation.GOING' : 'info',
         '@EAdventurerParticipation.BOOKED' : 'success'
