@@ -106,6 +106,7 @@
                 $('#times-favorite-time-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
                 $(el).find('i').removeClass("icon-spin icon-journwe").addClass("icon-star");
                 $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
+                $('#times-list td:first-child .btn-success').removeClass('btn-success');
                 $(el).addClass('btn-success');
                 $('.btn-close-time').show();
             });
