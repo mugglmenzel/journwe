@@ -188,6 +188,9 @@
             };
         $('#' + dialogs[dialog]).fadeOut(500, function () {});
         $('#' + dialog).fadeIn(500);
+
+
+        initialize();
     }
 
     function checkShortname() {
@@ -223,6 +226,7 @@
     google.maps.visualRefresh = true;
 
     function initialize() {
+        if (map){ return; }
         var mapOptions = {
             zoom: 15,
             center: new google.maps.LatLng(49.483472, 8.476992),
@@ -231,7 +235,7 @@
         map = new google.maps.Map(document.getElementById('where-map'),
         mapOptions);
 
-        resetBounds();
+        // resetBounds();
 
     }
 
@@ -257,6 +261,7 @@
     }
 
     function resetBounds() {
+        if (!map){ return; }
         if (!$.isEmptyObject(markers)) {
             var bounds = new google.maps.LatLngBounds();
             for(var i in markers) {
