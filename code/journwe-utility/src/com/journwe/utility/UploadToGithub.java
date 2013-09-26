@@ -41,7 +41,7 @@ public class UploadToGithub extends Command<JournweCLIContext> {
 
 			try {
 				// load a properties file from class path, inside static method
-				prop.load(CleanJournweDBCommand.class.getClassLoader()
+				prop.load(UploadToGithub.class.getClassLoader()
 						.getResourceAsStream(propertiesFileName));
 
 				accesskey = prop.getProperty("accesskey");
