@@ -68,7 +68,12 @@
             @if(JournweAuthorization.canEditFavoriteDateAndTime(adv.getId)) {
             <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoriteTimeOption('{%=o.timeId%}', this)"><i class="icon-star"></i></button></td>
             }
-            <td><em>{%=formatDate(o.startDate)%} - {%=formatDate(o.endDate)%}</em></td>
+
+            {% if (o.startDate == o.endDate){ %}
+                <td>{%=formatDate(o.startDate)%}</td>
+            {% } else { %}
+                <td>{%=formatDate(o.startDate)%} - {%=formatDate(o.endDate)%}</td>
+            {% } %}
             @if(JournweAuthorization.canVoteForDateAndTime(adv.getId)) {
             <td>
                 <div class="btn-group">
@@ -158,10 +163,22 @@
         });
 
         function renderTimeOption(data, replace) {
-        if(replace)
+        if(replace) {
             replace.replaceWith(tmpl('time-template', data)).fadeIn();
-        else
-            $('#times-list tbody').append(tmpl('time-template', data));
+        } else {
+            var el;
+            if ("number" == typeof data.index && data.index >= 0){
+                el = $('#times-list tbody tr').get(data.index-1);
+            }
+
+            if (data.index === 0){
+                $('#times-list tbody').prepend(tmpl('time-template', data));
+            } else if (el){
+                $(el).after(tmpl('time-template', data));
+            } else {
+                $('#times-list tbody').append(tmpl('time-template', data));
+            }
+        }
 
 
         $('#timeoption-status-icon-' + data.timeId).addClass(voteTimeIconCSSClassMap[data.vote]);

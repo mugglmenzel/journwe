@@ -14,7 +14,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 @DynamoDBTable(tableName = "journwe-timeoption")
-public class TimeOption implements IAdventureComponent {
+public class TimeOption implements IAdventureComponent, Comparable<TimeOption> {
 
     private String adventureId;
 
@@ -75,5 +75,20 @@ public class TimeOption implements IAdventureComponent {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+    
+    @Override
+    public boolean equals(Object compare){
+        return getTimeId().equals(((TimeOption)compare).getTimeId());
+    }
+
+    @Override
+    public int compareTo(TimeOption compare) {
+ 
+        if (getStartDate().equals(compare.getStartDate())){
+            return getEndDate().compareTo(compare.getEndDate());
+        } else {
+            return getStartDate().compareTo(compare.getStartDate());
+        }
     }
 }

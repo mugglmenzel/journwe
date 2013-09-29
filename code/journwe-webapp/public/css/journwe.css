@@ -1126,3 +1126,7 @@ h1 .x-edit-loading {
 .btn-adopt + .btn-adopt {
 	margin-bottom: -2px;
 }
+
+.jrn-category ul {
+	padding-left: 20px;
+}
