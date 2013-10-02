@@ -1130,3 +1130,10 @@ h1 .x-edit-loading {
 .jrn-category ul {
 	padding-left: 20px;
 }
+
+img.landing {
+	width: 90%;
+	border: 1px solid white;
+	margin-bottom: 50px;
+}
+
