@@ -4,6 +4,7 @@ import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
 import models.adventure.AdventureCategory;
@@ -30,12 +31,15 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import providers.MyUsernamePasswordAuthProvider;
 import views.html.about;
 import views.html.admin;
 import views.html.imprint;
 import views.html.index.index;
 import views.html.index.indexCat;
 import views.html.index.indexVet;
+import views.html.login;
+import views.html.signup;
 import views.html.subscribe;
 
 import java.io.IOException;
@@ -48,6 +52,10 @@ import static play.data.Form.form;
 
 
 public class ApplicationController extends Controller {
+
+    public static final String FLASH_MESSAGE_KEY = "message";
+    public static final String FLASH_ERROR_KEY = "error";
+    public static final String USER_ROLE = "user";
 
     private static Form<Subscriber> subForm = form(Subscriber.class);
 
@@ -348,4 +356,44 @@ public class ApplicationController extends Controller {
             return ok(index.render());
         }
     }
+
+    // For JournWe non-thirdparty signup and login
+
+    public static Result login() {
+        return ok(login.render(MyUsernamePasswordAuthProvider.LOGIN_FORM));
+    }
+
+    public static Result doLogin() {
+        com.feth.play.module.pa.controllers.Authenticate.noCache(response());
+        final Form<MyUsernamePasswordAuthProvider.MyLogin> filledForm = MyUsernamePasswordAuthProvider.LOGIN_FORM
+                .bindFromRequest();
+        if (filledForm.hasErrors()) {
+// User did not fill everything properly
+            return badRequest(login.render(filledForm));
+        } else {
+// Everything was filled
+            return UsernamePasswordAuthProvider.handleLogin(ctx());
+        }
+    }
+
+    public static Result signup() {
+        return ok(signup.render(MyUsernamePasswordAuthProvider.SIGNUP_FORM));
+    }
+
+    public static Result doSignup() {
+        com.feth.play.module.pa.controllers.Authenticate.noCache(response());
+        final Form<MyUsernamePasswordAuthProvider.MySignup> filledForm = MyUsernamePasswordAuthProvider.SIGNUP_FORM
+                .bindFromRequest();
+        if (filledForm.hasErrors()) {
+// User did not fill everything properly
+            return badRequest(signup.render(filledForm));
+        } else {
+// Everything was filled
+// do something with your part of the form before handling the user
+// signup
+            return UsernamePasswordAuthProvider.handleSignup(ctx());
+        }
+    }
+
+
 }

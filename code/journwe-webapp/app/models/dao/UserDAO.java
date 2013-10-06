@@ -1,9 +1,12 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.avaje.ebean.ExpressionList;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
+import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
 import models.user.*;
@@ -13,6 +16,7 @@ import play.cache.Cache;
 import play.mvc.Controller;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 public class UserDAO extends CommonEntityDAO<User> {
@@ -53,6 +57,33 @@ public class UserDAO extends CommonEntityDAO<User> {
             return null;
 
         return getAuthUserFind(identity);
+    }
+
+    /**
+     * Find the user by his email address.
+     *
+     * This method is for example necessary for password recovery.
+     *
+     * @param email
+     * @return
+     */
+    public static User findByEmail(final String email) {
+        if (email == null || email.isEmpty())
+            return null;
+        String userId = getUserIdOfEmailUser(email);
+        if(userId == null)
+            return null;
+        User toReturn = getUser(userId);
+        return toReturn;
+    }
+
+    public static User findByUsernamePasswordIdentity(
+            final UsernamePasswordAuthUser identity) {
+        String email = identity.getEmail();
+        if(email!=null)
+            return findByEmail(email);
+        else
+            return null;
     }
 
 
@@ -160,6 +191,11 @@ public class UserDAO extends CommonEntityDAO<User> {
     }
 
     public User create(final AuthUser authUser, final EUserRole role) {
+        if(authUser!=null)
+            Logger.debug("Create new user with id "+authUser.getId());
+        else
+            Logger.debug("Create new user.");
+
         final User user = new User();
         user.setActive(true);
         user.setRole(role);
@@ -174,8 +210,10 @@ public class UserDAO extends CommonEntityDAO<User> {
             user.setImage(picture);
         }
 
-        new UserDAO().save(user);
-
+        if(new UserDAO().save(user))
+            Logger.debug("Saved user.");
+        else
+            Logger.error("Saving user in method UserDAO.create failed.");
 
         if (authUser instanceof EmailIdentity) {
             final UserEmail email = new UserEmail();
@@ -211,17 +249,112 @@ public class UserDAO extends CommonEntityDAO<User> {
 
         }
 
-
+        Logger.debug("authUser.getProvider() -> "+authUser.getProvider());
         final UserSocial social = new UserSocial();
         social.setProvider(authUser.getProvider());
-        social.setSocialId(authUser.getId());
+        if(authUser.getProvider().equalsIgnoreCase("password"))
+            social.setSocialId(user.getId());
+        else
+            social.setSocialId(authUser.getId());
         social.setUserId(user.getId());
         if (authUser instanceof FacebookAuthUser)
             social.setAccessToken(((FacebookAuthUser) authUser).getOAuth2AuthInfo().getAccessToken());
 
-        new UserSocialDAO().save(social);
+        if(new UserSocialDAO().save(social))
+            Logger.debug("Creating UserSocial was successful.");
+        else
+            Logger.error("Creating UserSocial failed.");
 
         return user;
     }
+
+    /**
+     * Helper for findByEmail method
+     */
+    private static String getUserIdOfEmailUser(String email) {
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        EmailToUser etu = new EmailToUser();
+        etu.setEmail(email);
+        query.setHashKeyValues(etu);
+
+        Iterator<EmailToUser> results = pm.query(EmailToUser.class, query).iterator();
+        EmailToUser result = null;
+        int i = 0;
+        while(results.hasNext()) {
+            i++;
+            result = results.next();
+        }
+        // there should be only one result
+        if(i==0)
+            return null;
+        if(i>1) {
+            Logger.warn("Something is wrong in the UserEmailDAO.getUserIdOfEmailUser method. It should only return 1 result. But there were more, namely: ");
+            while(results.hasNext()) {
+                Logger.warn(results.next().getEmail()+" with user id "+results.next().getUserId());
+            }
+        }
+        return result.getUserId();
+    }
+
+    /**
+     * Helper
+     */
+    private static User getUser(String userId) {
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+        User u = new User();
+        u.setId(userId);
+        query.setHashKeyValues(u);
+
+        Iterator<User> results = pm.query(User.class, query).iterator();
+        User result = null;
+        int i = 0;
+        while(results.hasNext()) {
+            i++;
+            result = results.next();
+        }
+        // there should be only one result
+        if(i>1) {
+            Logger.warn("Something is wrong in the UserDAO.getUser method. It should only return 1 result. But there were than 1 users with userid "+result.getId());
+        }
+        return result;
+    }
+
+    // User Password stuff
+
+    public static void verify(final User unverified) {
+// You might want to wrap this into a transaction
+        final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(unverified.getId());
+        ue.setValidated(true);
+        if (new UserEmailDAO().save(ue)) {
+        if(new UserDAO().save(unverified)) {
+            new TokenActionDAO().deleteByUser(unverified, ETokenType.EMAIL_VERIFICATION);
+        }
+        }
+    }
+
+    // TODO
+//    public void changePassword(final UsernamePasswordAuthUser authUser,
+//                               final boolean create) {
+//        LinkedAccount a = this.getAccountByProvider(authUser.getProvider());
+//        if (a == null) {
+//            if (create) {
+//                a = LinkedAccount.create(authUser);
+//                a.user = this;
+//            } else {
+//                throw new RuntimeException(
+//                        "Account not enabled for password usage");
+//            }
+//        }
+//        a.providerUserId = authUser.getHashedPassword();
+//        a.save();
+//    }
+
+    // TODO
+//    public void resetPassword(final UsernamePasswordAuthUser authUser,
+//                              final boolean create) {
+//// You might want to wrap this into a transaction
+//        this.changePassword(authUser, create);
+//        new TokenActionDAO().deleteByUser(ETokenType.PASSWORD_RESET,authUser);
+//    }
 
 }

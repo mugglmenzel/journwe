@@ -1,3 +1,4 @@
 10005:services.OAuthUserServicePlugin
 10010:com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthProvider
+10040:providers.MyUsernamePasswordAuthProvider
 5000:com.github.mumoshu.play2.memcached.MemcachedPlugin

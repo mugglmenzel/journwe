@@ -1,15 +1,9 @@
 package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.user.UserEmail;
 import models.dao.common.CommonRangeEntityDAO;
-
 import java.util.Iterator;
-import java.util.List;
 
 public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
 
@@ -32,4 +26,6 @@ public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
         }
         return result;
     }
+
+
 }
