@@ -27,15 +27,13 @@
     @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
     <div class="row">
         <div class="col-lg-5 col-sm-5 col-xs-5">
-            @if(auth != null && user != null) {
             <ul class="nav nav-pills">
                 <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="icon-lightbulb"></i> Inspirations</a></li>
                 <li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="icon-search"></i> Search</a></li>
-                @if(user != null && EUserRole.ADMIN.equals(user.getRole)) {
+                @if(auth != null && user != null && EUserRole.ADMIN.equals(user.getRole)) {
                 <li><a href="@routes.ApplicationController.admin()"><i class="icon-cogs"></i> Admin</a></li>
                 }
             </ul>
-            }
         </div>
 
         <div class="col-lg-2 col-sm-2 col-xs-2">

@@ -398,6 +398,8 @@ public class AdventureController extends Controller {
         authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_OWNER);
         new AdventureAuthorizationDAO().save(authorization);
 
+        ApplicationController.clearUserCache(usr.getId());
+
         flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa! The shortURL is " + shortURL);
 
         return redirect(routes.AdventureController.getIndex(adv.getId()));

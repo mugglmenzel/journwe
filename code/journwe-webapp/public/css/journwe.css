@@ -493,7 +493,7 @@ table.inspiration .images img {
 }
 
 .nav-adventure a {
-    color:  white;
+    color:  white !important;
 }
 
 .nav-adventure .nav-pills>li.active>a, 
@@ -769,6 +769,30 @@ h1 .x-edit-loading {
 
 .polaroid h4 {
 	margin: 10px 0px;
+}
+
+
+.polaroid-hover > a {
+	display: block;
+	height: 100px;
+	width: 100px;
+	overflow: hidden;
+}
+
+
+.polaroid-hover > a:hover,
+.polaroid-hover > a:focus {
+	border: 3px solid #a2e085;
+}
+
+.polaroid-hover.polaroid-active > a {
+	border: 3px solid #5cb85c;
+}
+
+.polaroid-hover.polaroid-active > a img,
+.polaroid-hover > a:hover img,
+.polaroid-hover > a:focus img {
+	margin: -3px !important;
 }
 
 .prime-image {
@@ -1092,3 +1116,24 @@ h1 .x-edit-loading {
 .form-control {
 	max-width: 100%;
 }
+
+.btn-adopt {
+	width: 60px;
+	margin-bottom: 2px;
+}
+
+
+.btn-adopt + .btn-adopt {
+	margin-bottom: -2px;
+}
+
+.jrn-category ul {
+	padding-left: 20px;
+}
+
+img.landing {
+	width: 90%;
+	border: 1px solid white;
+	margin-bottom: 50px;
+}
+

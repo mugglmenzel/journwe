@@ -43,8 +43,7 @@
     }
 
     <div class="prime-image">
-        <div style="width: 100%;">
-            <img id="adventure-prime-image" style="width: 100%; height: 200px;" @if(adv.getImage == null || !JournweAuthorization.canViewAdventureImage(adv.getId)){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=Drop+image"}else{src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
+        <div id="adventure-prime-image" style="width: 100%; height: 200px; background: url(@if(adv.getImage == null || !JournweAuthorization.canViewAdventureImage(adv.getId)){'http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=Drop+image'}else{'http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f'}) no-repeat center center transparent; background-size: auto 100%;">
         </div>
 
         @if(JournweAuthorization.canViewAdventureTitle(adv.getId)) {
@@ -78,7 +77,7 @@
             <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
 
             <input id="adventure-prime-image-file-input" type="file" class="hide"/>
-            <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="icon-upload"></i> @Messages("adventure.files.fileUpload")</a>
+            <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="icon-upload"></i> @Messages("adventure.files.imageUpload")</a>
             <script type="text/javascript">
                 jQuery.event.props.push('dataTransfer');
 
@@ -119,7 +118,7 @@
                         processData: false,
                         type: 'POST',
                         success:  function (result) {
-                            $('#adventure-prime-image').prop('src', 'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime());
+                            $('#adventure-prime-image').css('background', 'url(\'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime() + '\')');
                             btn.css({width:""})
                                 .html(btnOriginal);
                         }

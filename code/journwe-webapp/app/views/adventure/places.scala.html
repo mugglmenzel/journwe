@@ -61,7 +61,7 @@
 
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
-        <td><button class="btn {%=o.favorite?'btn-success':'btn-default'%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
+        <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
         <td><em>{%=o.address%}</em></td>
         @if(JournweAuthorization.canVoteForPlaces(adv.getId)) {
         <td>
@@ -100,9 +100,11 @@
 
     function initialize() {
     var mapOptions = {
-    zoom: 19,
-    center: new google.maps.LatLng(52.467541, 13.324957),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+        zoom: 19,
+        minZoom: 2,
+        maxZoom: 19,
+        center: new google.maps.LatLng(52.467541, 13.324957),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById('place-add-map'), mapOptions);
 
@@ -131,6 +133,9 @@
         $(el).find('i').removeClass("icon-star").addClass("icon-spin icon-journwe");
         $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
             $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
+            // Remove other stars
+            $(el).closest('table').find('.btn-success').removeClass("btn-success");
+            // Set stars
             $(el).find('i').removeClass("icon-spin icon-journwe").addClass("icon-star");
             $('#places-favorite-place-name').html(data.address);
             $('.btn-close-place').show();

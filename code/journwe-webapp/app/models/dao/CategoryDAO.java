@@ -116,14 +116,5 @@ public class CategoryDAO extends CommonEntityDAO<Category> {
 
     }
 
-    public void clearCache() {
-        clearCache(Category.SUPER_CATEGORY);
-    }
-
-    public void clearCache(String superCatId) {
-        Cache.remove("subCategoriesOf." + superCatId);
-        Cache.remove("categories.optionsMap");
-        updateCategoryCountCache();
-    }
 
 }

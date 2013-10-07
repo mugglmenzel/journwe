@@ -8,8 +8,6 @@ import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
 import models.adventure.AdventureCategory;
-import models.adventure.Adventurer;
-import models.adventure.EAdventurerParticipation;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
 import models.category.Category;
@@ -110,7 +108,7 @@ public class ApplicationController extends Controller {
 
                     return Json.toJson(results).toString();
                 }
-            }, 3600)).as("application/json");
+            }, 24*3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate sub-categories of " + superCatId, e);
             return internalServerError();
@@ -123,27 +121,45 @@ public class ApplicationController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getMyAdventures() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
+        final String userId = usr != null ? new UserDAO().findByAuthUserIdentity(usr).getId() : null;
+        if (userId == null) return badRequest();
 
         DynamicForm data = form().bindFromRequest();
-        String lastId = data.get("lastId");
-        int count = new Integer(data.get("count")).intValue();
+        final String lastId = data.get("lastId");
+        final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
 
-        List<ObjectNode> result = new ArrayList<ObjectNode>();
-        for (Adventure adv : new AdventureDAO().allOfUserId(userId, lastId, count)) {
-            ObjectNode node = Json.newObject();
-            node.put("id", adv.getId());
-            node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-            node.put("image", adv.getImage());
-            node.put("name", adv.getName());
-            node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
-            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+        try {
+            Callable<String> resultsCallable = new Callable<String>() {
 
-            result.add(node);
+
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
+                    for (Adventure adv : new AdventureDAO().allOfUserId(userId, lastId, count)) {
+                        ObjectNode node = Json.newObject();
+                        node.put("id", adv.getId());
+                        node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                        node.put("image", adv.getImage());
+                        node.put("name", adv.getName());
+                        node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+                        node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                        node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+
+                        results.add(node);
+                    }
+                    return Json.toJson(results).toString();
+                }
+            };
+
+
+            return ok(count == 10 && lastId == null ?
+                    Cache.getOrElse("user." + userId + ".myadventures", resultsCallable, 24 * 3600)
+                    : resultsCallable.call()).as("application/json");
+
+        } catch (Exception e) {
+            Logger.error("Couldn't generate my adventures for user " + userId, e);
+            return internalServerError();
         }
-
-        return ok(Json.toJson(result));
     }
 
 
@@ -177,7 +193,7 @@ public class ApplicationController extends Controller {
         final String lastId = data.get("lastId");
         int countParam = 10;
         try {
-            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
+            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : countParam;
         } catch (Exception e) {
             return badRequest("Count is not a number.");
         }
@@ -223,7 +239,7 @@ public class ApplicationController extends Controller {
                         }
                     return Json.toJson(results).toString();
                 }
-            }, 3600)).as("application/json");
+            }, 24*3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate public adventures for category " + catId, e);
             return internalServerError();
@@ -278,7 +294,7 @@ public class ApplicationController extends Controller {
                         }
                     return Json.toJson(results).toString();
                 }
-            }, 3600)).as("application/json");
+            }, 24*3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate inspirations for category " + catId, e);
             return internalServerError();
@@ -356,7 +372,11 @@ public class ApplicationController extends Controller {
             return ok(index.render());
         }
     }
-
+    
+    public static void clearUserCache(final String userId) {
+        Cache.remove("user." + userId + ".myadventures");
+    }
+    
     // For JournWe non-thirdparty signup and login
 
     public static Result login() {
@@ -394,6 +414,4 @@ public class ApplicationController extends Controller {
             return UsernamePasswordAuthProvider.handleSignup(ctx());
         }
     }
-
-
 }

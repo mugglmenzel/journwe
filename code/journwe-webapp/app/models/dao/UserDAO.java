@@ -44,7 +44,7 @@ public class UserDAO extends CommonEntityDAO<User> {
                     UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
                     return social != null ? new UserDAO().get(social.getUserId()) : null;
                 }
-            }, 24 * 3600);
+            }, 3600);
         } catch (Exception e) {
             Logger.error("Error while looking up user. Ouch!", e);
         }

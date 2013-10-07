@@ -1,4 +1,5 @@
 @(ins: models.inspiration.Inspiration)(category:  models.category.Category)
+@import org.hibernate.validator.constraints.URL
 @import models.inspiration.Inspiration
 
 @import models.category.Category
@@ -57,11 +58,21 @@
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
                 })();
                 </script>
+                <script type="text/javascript">
+                (function(d){
+                var f = d.getElementsByTagName('SCRIPT')[0], p = d.createElement('SCRIPT');
+                p.type = 'text/javascript';
+                p.async = true;
+                p.src = '//assets.pinterest.com/js/pinit.js';
+                f.parentNode.insertBefore(p, f);
+                }(document));
+                </script>
 
                 <span class="pull-right">
                     <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false"></div>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="@routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a>
+                    <div><a href="https://twitter.com/share" class="twitter-share-button" data-url="@routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a></div>
                     <div class="g-plusone" data-size="tall" data-annotation="vertical-bubble"></div>
+                    <div><a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + "&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8") + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a></div>
                 </span>
             </div>
         </div>
@@ -170,6 +181,63 @@
         </div>
     </div>
     }
+
+
+    <div class="jrn-container">
+        <h2 id="public-journwes"><i class="icon-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h2>
+        <div style="">
+            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div class="clearfix"></div>
+            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
+        </div>
+    </div>
+    <script type="text/x-tmpl" id="adventure-public-template">
+        <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
+            <a href="{%=o.link%}"><img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
+            <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
+                <div class="overlay text-center" style="display: none;">
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            loadPublicAdventures(null, true);
+
+            $('#adventures-public-button-refresh').click(function () {loadPublicAdventures(null, true);});
+            $('#adventures-public-load-more-button').click(function () {loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));});
+
+        });
+
+        function loadPublicAdventures(lastId, clear) {
+            $('#adventures-public-button-refresh i').addClass('icon-spin');
+            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
+            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10, inspirationId: '@ins.getId'} , function (advs) {
+                if (clear) $('#adventures-public-list').empty();
+                for(var i in advs) {
+                    var polaroid = tmpl('adventure-public-template', advs[i]);
+                    $('#adventures-public-list').append(polaroid);
+
+                    $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
+                        function(){
+                            $(this).find("div.overlay").slideDown("fast");
+                        },
+                        function(){
+                            $(this).find("div.overlay").slideUp("fast");
+                        }
+                    );
+
+                }
+                $('#adventures-public-load-more-button').html('Show More');
+                $('#adventures-public-button-refresh i').removeClass('icon-spin');
+            });
+        }
+    </script>
 
 </div>
 

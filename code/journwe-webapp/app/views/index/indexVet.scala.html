@@ -77,7 +77,11 @@
                                 var adventure = tmpl('adventure-my-template', advs[i]);
                                 $('#adventures-my-list').append(adventure);
                             }
-                            $('#adventures-my-load-more-button').html('Show More');
+                            if (advs.length < 10){
+                                $('#adventures-my-load-more-button').fadeOut();
+                            } else {
+                                $('#adventures-my-load-more-button').show().html('Show More');
+                            }
                             $('#adventures-my-button-refresh i').removeClass('icon-spin');
                         });
                     }
@@ -126,7 +130,11 @@
                     $('#categories-list').append(tmpl('category-template', cats[i]));
                 }
 
-                $('#categories-load-more-button').html('Show More');
+                if (cats.length < 10){
+                    $('#categories-load-more-button').fadeOut();
+                } else {
+                    $('#categories-load-more-button').show().html('Show More');
+                }
                 $('#categories-button-refresh i').removeClass('icon-spin');
             });
         }
@@ -225,7 +233,11 @@
                         $(this).find("div.overlay").slideUp("fast");
                     }
                 );
-                $('#adventures-public-load-more-button').html('Show More');
+                if (advs.length < 10){
+                    $('#adventures-public-load-more-button').fadeOut();
+                } else {
+                    $('#adventures-public-load-more-button').show().html('Show More');
+                }
                 $('#adventures-public-button-refresh i').removeClass('icon-spin');
             });
         }

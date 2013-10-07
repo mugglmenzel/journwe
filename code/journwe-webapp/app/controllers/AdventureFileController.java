@@ -77,7 +77,7 @@ public class AdventureFileController extends Controller {
             // Upload files to S3 asynchronously
             TransferManager tx = new TransferManager(credentials);
             Upload upload = tx.upload(S3_BUCKET, s3ObjectKey, file);
-            //s3.setObjectAcl(S3_BUCKET, s3ObjectKey, CannedAccessControlList.PublicRead);
+            s3.setObjectAcl(S3_BUCKET, s3ObjectKey, CannedAccessControlList.PublicRead);
             flash("success", "Your files is uploading now and can be downloaded, soon...");
             return ok(Json.toJson(journweFile));
         } catch (Exception e) {
@@ -95,13 +95,13 @@ public class AdventureFileController extends Controller {
         if (!JournweAuthorization.canViewAndDownloadFiles(adventureId))
             return AuthorizationMessage.notAuthorizedResponse();
         List<JournweFile> files = new JournweFileDAO().all(adventureId);
-        for(JournweFile file : files) {
-            Long newExpirationTimeInMillis = new Long(DateTime.now().getMillis()+EXPIRATION_TIME_IN_SECONDS);
-            String s3ObjectKey = generateS3ObjectKey(adventureId, file.getFileName());
-            String presignedUrl = s3.generatePresignedUrl(S3_BUCKET,
-                    s3ObjectKey, new Date(newExpirationTimeInMillis)).toString();
-            file.setUrl(presignedUrl);
-        }
+//        for(JournweFile file : files) {
+//            Long newExpirationTimeInMillis = new Long(DateTime.now().getMillis()+EXPIRATION_TIME_IN_SECONDS);
+//            String s3ObjectKey = generateS3ObjectKey(adventureId, file.getFileName());
+//            String presignedUrl = s3.generatePresignedUrl(S3_BUCKET,
+//                    s3ObjectKey, new Date(newExpirationTimeInMillis)).toString();
+//            file.setUrl(presignedUrl);
+//        }
         return ok(Json.toJson(files));
     }
 

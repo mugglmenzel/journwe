@@ -52,7 +52,11 @@ public class AdventureTimeController extends Controller {
         String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
 
         List<ObjectNode> times = new ArrayList<ObjectNode>();
-        for (TimeOption to : new TimeOptionDAO().all(advId)) {
+        List<TimeOption> timeOptions = new ArrayList<TimeOption>();
+        timeOptions.addAll(new TimeOptionDAO().all(advId));
+        java.util.Collections.sort(timeOptions);
+        
+        for (TimeOption to : timeOptions) {
             ObjectNode node = Json.newObject();
             node.put("id", to.getOptionId());
             node.put("advId", to.getAdventureId());
@@ -136,6 +140,12 @@ public class AdventureTimeController extends Controller {
             node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getOptionId())));
             node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getOptionId())));
 
+            // Get sorted index
+            List<TimeOption> timeOptions = new ArrayList<TimeOption>();
+            timeOptions.addAll(new TimeOptionDAO().all(advId));
+            java.util.Collections.sort(timeOptions);
+            node.put("index", timeOptions.indexOf(time)); 
+
             return created(Json.toJson(node));
         } catch (ParseException pe) {
             Logger.error("Got a parse exception for date parsing: " + pe.getLocalizedMessage());
@@ -176,6 +186,11 @@ public class AdventureTimeController extends Controller {
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteCount", Json.toJson(new TimeAdventurerPreferenceDAO().counts(time.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new TimeAdventurerPreferenceDAO().adventurersNames(time.getOptionId())));
+
+        String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
+        if (favId != null && time.getTimeId().equals(favId)){
+            node.put("favorite", true);
+        }
 
         return ok(Json.toJson(node));
     }
