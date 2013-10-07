@@ -3,17 +3,12 @@
 @import helper._
 @import helper.twitterBootstrap._
 
-@main(Messages("playauthenticate.signup.title")) { signup } {
+@main(Messages("playauthenticate.signup.title")) { @Messages("playauthenticate.signup.title") } {
     
-  <div class="row">
-    <div class="span6">
-      <h1>@Messages("playauthenticate.signup.title")</h1>
-    </div>
-  </div>
 
+<div class="jrn-container" style="margin-top:-20px;">
   <div id="signup" class="row">
-
-    <div class="span3">
+    <div class="col-lg-4">
         @* Display proprietary login form *@
     	@helper.form(routes.ApplicationController.doSignup) {
     	
@@ -25,7 +20,10 @@
             
              @inputText(
                 signupForm("name"),
-                '_label -> Messages("playauthenticate.signup.name")
+                '_label -> Messages("playauthenticate.signup.name"),
+                '_showConstraints -> false,
+                'required -> true,
+                'class -> "form-control"
              )
              
              @_emailPartial(signupForm)
@@ -36,12 +34,12 @@
     	}
     </div>
 
-    <div class="span3">
+    <div class="col-lg-4">
         @Messages("playauthenticate.signup.oauth")
         @* Display list of available providers *@
         @_providerPartial(skipCurrent=false)
     </div>
-
   </div>
+</div>
 
 }

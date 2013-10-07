@@ -3,17 +3,11 @@
 @import helper._
 @import helper.twitterBootstrap._
 
-@main(Messages("playauthenticate.login.title")) { login } {
+@main(Messages("playauthenticate.login.title")) { @Messages("playauthenticate.login.title") } {
 
-  <div class="row">
-    <div class="span6">
-      <h1>@Messages("playauthenticate.login.title")</h1>
-    </div>
-  </div>
-    
+<div class="jrn-container" style="margin-top:-20px;">
   <div id="login" class="row">
-
-    <div class="span3">
+    <div class="col-lg-4">
       @* Display proprietary login form *@
     	@helper.form(routes.ApplicationController.doLogin) {
     	
@@ -28,22 +22,27 @@
         @inputPassword(
           loginForm("password"),
           '_showConstraints -> false,
-          '_label -> Messages("playauthenticate.login.password.placeholder")
+          '_label -> Messages("playauthenticate.login.password.placeholder"),
+          'class -> "form-control",
+          'required -> true
         )
           
         <input type="submit" value="@Messages("playauthenticate.login.now")" class="btn btn-primary"><br/>
         <br/>
-        <a href="javascript:void(0);" onclick="window.location.href = jsRoutes.controllers.Signup.forgotPassword($('#email').val() || null).absoluteURL();">@Messages("playauthenticate.login.forgot.password")</a>
+
+        <a href="@routes.ApplicationController.signup">@Messages("playauthenticate.login.register")</a> @Messages("playauthenticate.login.or") 
+
+        <a href="javascript:void(0);" onclick="window.location.href = '@routes.Signup.forgotPassword("")'+($('#email').val()?'/'+$('#email').val():'');">@Messages("playauthenticate.login.forgot.password")</a>
 
     	}
     </div>
 
-    <div class="span3">
+    <div class="col-lg-4">
       @Messages("playauthenticate.login.oauth")
       @* Display list of available providers *@
       @_providerPartial(skipCurrent=false)
     </div>
-
   </div>
+</div>
 
 }

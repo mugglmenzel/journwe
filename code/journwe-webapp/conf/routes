@@ -132,7 +132,8 @@ POST          /signup                                        controllers.Applica
 
 GET           /login                                         controllers.ApplicationController.login
 POST          /login                                         controllers.ApplicationController.doLogin
-GET           /login/password/forgot                         controllers.Signup.forgotPassword(email: String ?= "")
+GET           /login/password/forgot 		 				 controllers.Signup.forgotPassword(email: String ?= "")
+GET           /login/password/forgot/:email 				 controllers.Signup.forgotPassword(email: String)
 POST          /login/password/forgot                         controllers.Signup.doForgotPassword
 
 #GET           /authenticate/:provider/denied                 controllers.Signup.oAuthDenied(provider: String)

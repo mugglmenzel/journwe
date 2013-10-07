@@ -336,6 +336,8 @@ playauthenticate.login.password.placeholder=Password
 playauthenticate.login.now=Login now
 playauthenticate.login.forgot.password=Forgot your password?
 playauthenticate.login.oauth=or log in using one of the following providers:
+playauthenticate.login.register=Register
+playauthenticate.login.or=or
 
 playauthenticate.signup.title=Signup
 playauthenticate.signup.name=Your name
