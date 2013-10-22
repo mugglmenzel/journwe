@@ -3,7 +3,7 @@ package providers;
 import com.feth.play.module.pa.providers.password.DefaultUsernamePasswordAuthUser;
 
 public class MyLoginUsernamePasswordAuthUser extends
-		DefaultUsernamePasswordAuthUser {
+        DefaultUsernamePasswordAuthUser {
 
 	/**
 	 * 

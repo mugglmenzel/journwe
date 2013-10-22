@@ -14,6 +14,7 @@ import play.Logger;
 import play.api.Play;
 import play.cache.Cache;
 import play.mvc.Controller;
+import providers.MyUsernamePasswordAuthUser;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -55,7 +56,7 @@ public class UserDAO extends CommonEntityDAO<User> {
     public User findByAuthUserIdentity(final AuthUserIdentity identity) {
         if (identity == null)
             return null;
-
+        Logger.debug("AuthUserIdentity: id = "+identity.getId()+" provider = "+identity.getProvider());
         return getAuthUserFind(identity);
     }
 
@@ -249,7 +250,6 @@ public class UserDAO extends CommonEntityDAO<User> {
 
         }
 
-        Logger.debug("authUser.getProvider() -> "+authUser.getProvider());
         final UserSocial social = new UserSocial();
         social.setProvider(authUser.getProvider());
         if(authUser.getProvider().equalsIgnoreCase("password"))
@@ -261,7 +261,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             social.setAccessToken(((FacebookAuthUser) authUser).getOAuth2AuthInfo().getAccessToken());
 
         if(new UserSocialDAO().save(social))
-            Logger.debug("Creating UserSocial was successful.");
+            Logger.debug("Creating UserSocial with userId = "+social.getUserId() +" and social id = "+ social.getSocialId() +" was successful.");
         else
             Logger.error("Creating UserSocial failed.");
 

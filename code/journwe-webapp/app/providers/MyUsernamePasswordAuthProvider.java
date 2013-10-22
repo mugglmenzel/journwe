@@ -27,6 +27,7 @@ import play.data.validation.Constraints.Required;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Call;
+import play.mvc.Http;
 import play.mvc.Http.Context;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,6 +41,8 @@ import static play.data.Form.form;
 public class MyUsernamePasswordAuthProvider
 		extends
 		UsernamePasswordAuthProvider<String, MyLoginUsernamePasswordAuthUser, MyUsernamePasswordAuthUser, MyUsernamePasswordAuthProvider.MyLogin, MyUsernamePasswordAuthProvider.MySignup> {
+
+    protected static final String PROVIDER_KEY = "password";
 
 	private static final String SETTING_KEY_VERIFICATION_LINK_SECURE = SETTING_KEY_MAIL
 			+ "." + "verificationLink.secure";
@@ -72,6 +75,8 @@ public class MyUsernamePasswordAuthProvider
 		public MyIdentity(final String email) {
 			this.email = email;
 		}
+
+        public String userId;
 
 		@Required
 		@Email
@@ -151,6 +156,7 @@ public class MyUsernamePasswordAuthProvider
         // TODO
         // why? -> @SuppressWarnings("unused")
         final User newUser = new UserDAO().create(user, EUserRole.USER);
+        user.setUserId(newUser.getId());
 
         // Usually the email should be verified before allowing login, however
         // if you return
@@ -199,14 +205,20 @@ public class MyUsernamePasswordAuthProvider
 	@Override
 	protected MyUsernamePasswordAuthUser buildSignupAuthUser(
 			final MySignup signup, final Context ctx) {
-		return new MyUsernamePasswordAuthUser(signup);
+        // TODO
+        MyUsernamePasswordAuthUser toReturn = new MyUsernamePasswordAuthUser(signup);
+        Logger.debug("buildSignupAuthUser() -> MyUsernamePasswordAuthUser.id = "+toReturn.getId());
+        return toReturn;
 	}
 
 	@Override
 	protected MyLoginUsernamePasswordAuthUser buildLoginAuthUser(
 			final MyLogin login, final Context ctx) {
-		return new MyLoginUsernamePasswordAuthUser(login.getPassword(),
+        // TODO
+        MyLoginUsernamePasswordAuthUser toReturn = new MyLoginUsernamePasswordAuthUser(login.getPassword(),
 				login.getEmail());
+        Logger.debug("buildLoginAuthUser() -> MyLoginUsernamePasswordAuthUser.id = " + toReturn.getId());
+        return toReturn;
 	}
 	
 
