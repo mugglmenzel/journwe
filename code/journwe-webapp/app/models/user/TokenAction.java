@@ -40,6 +40,11 @@ public class TokenAction implements Serializable {
 		return this.expires.after(new Date());
 	}
 
+    public void setValid(final boolean validity) {
+        // this method is here to prevent runtime errors by mapper
+        // do nothing ...
+    }
+
     @DynamoDBRangeKey
     public String getToken() {
         return token;

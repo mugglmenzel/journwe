@@ -8,6 +8,7 @@ import models.user.TokenAction;
 import models.user.ETokenType;
 import models.user.User;
 import models.user.UserEmail;
+import play.Logger;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
@@ -127,8 +128,8 @@ public class Signup extends Controller {
 	 */
 	private static TokenAction tokenIsValid(final String token, final ETokenType type) {
 		TokenAction ret = null;
-		if (token != null && !token.trim().isEmpty()) {
-			final TokenAction ta = new TokenActionDAO().get(type.name(), token);
+        if (token != null && !token.trim().isEmpty()) {
+			final TokenAction ta = new TokenActionDAO().get(type, token);
 			if (ta != null && ta.isValid()) {
 				ret = ta;
 			}
