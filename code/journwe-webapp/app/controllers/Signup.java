@@ -183,7 +183,7 @@ public class Signup extends Controller {
 						Messages.get("playauthenticate.reset_password.message.success.auto_login"));
                 final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(u.getId());
 				return PlayAuthenticate.loginAndRedirect(ctx(),
-						new MyLoginUsernamePasswordAuthUser(ue.getEmail()));
+						new MyLoginUsernamePasswordAuthUser(ue.getEmail(),ue.getUserId()));
 			} else {
 				// send the user to the login page
 				flash(ApplicationController.FLASH_MESSAGE_KEY,

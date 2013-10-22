@@ -42,7 +42,7 @@ public class MyUsernamePasswordAuthProvider
 		extends
 		UsernamePasswordAuthProvider<String, MyLoginUsernamePasswordAuthUser, MyUsernamePasswordAuthUser, MyUsernamePasswordAuthProvider.MyLogin, MyUsernamePasswordAuthProvider.MySignup> {
 
-    protected static final String PROVIDER_KEY = "password";
+    public static final String PROVIDER_KEY = "password";
 
 	private static final String SETTING_KEY_VERIFICATION_LINK_SECURE = SETTING_KEY_MAIL
 			+ "." + "verificationLink.secure";
@@ -82,7 +82,14 @@ public class MyUsernamePasswordAuthProvider
 		@Email
 		public String email;
 
-	}
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+    }
 
 	public static class MyLogin extends MyIdentity
 			implements
@@ -156,6 +163,11 @@ public class MyUsernamePasswordAuthProvider
         // TODO
         // why? -> @SuppressWarnings("unused")
         final User newUser = new UserDAO().create(user, EUserRole.USER);
+        // save the password-hash
+        newUser.setHashedPassword(user.getHashedPassword());
+        new UserDAO().save(newUser);
+
+        // Remember the user id for login
         user.setUserId(newUser.getId());
 
         // Usually the email should be verified before allowing login, however
@@ -173,6 +185,7 @@ public class MyUsernamePasswordAuthProvider
 		if (u == null) {
 			return LoginResult.NOT_FOUND;
 		} else {
+            authUser.setUserId(u.getId());
             if(ue == null)   {
                 Logger.error("User "+u.getId()+" is not null, but he/she has no email. So he/she could not log in.");
                 return LoginResult.USER_UNVERIFIED;
@@ -182,7 +195,7 @@ public class MyUsernamePasswordAuthProvider
 			} else {
                 final String journweProvider = getKey();
                 UserSocial us = new UserSocialDAO().findByUserId(journweProvider,u.getId());
-				if (authUser.checkPassword(u.getId(), authUser.getPassword())) {
+				if (authUser.checkPassword(u.getHashedPassword(), authUser.getPassword())) {
 							// Password was correct
 							return LoginResult.USER_LOGGED_IN;
 						} else {
@@ -216,7 +229,7 @@ public class MyUsernamePasswordAuthProvider
 			final MyLogin login, final Context ctx) {
         // TODO
         MyLoginUsernamePasswordAuthUser toReturn = new MyLoginUsernamePasswordAuthUser(login.getPassword(),
-				login.getEmail());
+				login.getEmail(), login.getUserId());
         Logger.debug("buildLoginAuthUser() -> MyLoginUsernamePasswordAuthUser.id = " + toReturn.getId());
         return toReturn;
 	}
@@ -224,7 +237,7 @@ public class MyUsernamePasswordAuthProvider
 
 	@Override
 	protected MyLoginUsernamePasswordAuthUser transformAuthUser(final MyUsernamePasswordAuthUser authUser, final Context context) {
-		return new MyLoginUsernamePasswordAuthUser(authUser.getEmail());
+		return new MyLoginUsernamePasswordAuthUser(authUser.getEmail(),authUser.getId());
 	}
 
 	@Override

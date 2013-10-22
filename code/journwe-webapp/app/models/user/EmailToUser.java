@@ -10,12 +10,8 @@ import play.data.validation.Constraints;
 public class EmailToUser {
 
     private String email;
-
     private String provider;
-
-    @Constraints.Required
     private String userId;
-
 
     @DynamoDBHashKey
     public String getEmail() {

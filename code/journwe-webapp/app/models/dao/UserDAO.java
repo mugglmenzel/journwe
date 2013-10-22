@@ -14,6 +14,8 @@ import play.Logger;
 import play.api.Play;
 import play.cache.Cache;
 import play.mvc.Controller;
+import providers.MyLoginUsernamePasswordAuthUser;
+import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthUser;
 
 import java.io.IOException;
@@ -81,10 +83,13 @@ public class UserDAO extends CommonEntityDAO<User> {
     public static User findByUsernamePasswordIdentity(
             final UsernamePasswordAuthUser identity) {
         String email = identity.getEmail();
+        Logger.debug("find user by email "+email);
         if(email!=null)
             return findByEmail(email);
-        else
+        else {
+            Logger.warn("findByUsernamePasswordIdentity(identity) identity.getEmail() is null!");
             return null;
+        }
     }
 
 
@@ -252,7 +257,7 @@ public class UserDAO extends CommonEntityDAO<User> {
 
         final UserSocial social = new UserSocial();
         social.setProvider(authUser.getProvider());
-        if(authUser.getProvider().equalsIgnoreCase("password"))
+        if(authUser.getProvider().equalsIgnoreCase(MyUsernamePasswordAuthProvider.PROVIDER_KEY))
             social.setSocialId(user.getId());
         else
             social.setSocialId(authUser.getId());
@@ -264,6 +269,19 @@ public class UserDAO extends CommonEntityDAO<User> {
             Logger.debug("Creating UserSocial with userId = "+social.getUserId() +" and social id = "+ social.getSocialId() +" was successful.");
         else
             Logger.error("Creating UserSocial failed.");
+
+        // For MyUsernamePasswordAuthUser save Email-to-User Table
+        if(authUser.getProvider().equalsIgnoreCase(MyUsernamePasswordAuthProvider.PROVIDER_KEY)) {
+            UsernamePasswordAuthUser myUser = (UsernamePasswordAuthUser)authUser;
+            EmailToUser etu = new EmailToUser();
+            etu.setEmail(myUser.getEmail());
+            etu.setProvider(myUser.getProvider());
+            etu.setUserId(user.getId());
+            if(new EmailToUserDAO().save(etu))
+                Logger.debug("Saved email-to-user mapping between "+myUser.getEmail()+" and "+myUser.getId()+" for provider "+myUser.getProvider());
+            else
+                Logger.error("Saving email "+myUser.getEmail()+" to user with id "+myUser.getId()+" has failed!");
+        }
 
         return user;
     }
@@ -300,23 +318,7 @@ public class UserDAO extends CommonEntityDAO<User> {
      * Helper
      */
     private static User getUser(String userId) {
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
-        User u = new User();
-        u.setId(userId);
-        query.setHashKeyValues(u);
-
-        Iterator<User> results = pm.query(User.class, query).iterator();
-        User result = null;
-        int i = 0;
-        while(results.hasNext()) {
-            i++;
-            result = results.next();
-        }
-        // there should be only one result
-        if(i>1) {
-            Logger.warn("Something is wrong in the UserDAO.getUser method. It should only return 1 result. But there were than 1 users with userid "+result.getId());
-        }
-        return result;
+        return new UserDAO().get(userId);
     }
 
     // User Password stuff

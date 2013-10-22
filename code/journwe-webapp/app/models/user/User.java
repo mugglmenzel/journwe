@@ -20,6 +20,8 @@ public class User implements Serializable {
 
     private boolean active;
 
+    private String hashedPassword;
+
     private EUserRole role = EUserRole.USER;
 
     private ENotificationFrequency notificationDigest = ENotificationFrequency.IMMEDIATELY;
@@ -112,6 +114,15 @@ public class User implements Serializable {
 
     public void setLastDigest(Date lastDigest) {
         this.lastDigest = lastDigest;
+    }
+
+    @DynamoDBAttribute
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
     public static class UserRoleMarshaller extends EnumMarshaller<EUserRole> {
