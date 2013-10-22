@@ -185,12 +185,15 @@ public class MyUsernamePasswordAuthProvider
 		if (u == null) {
 			return LoginResult.NOT_FOUND;
 		} else {
+            Logger.debug("MyUsernamePasswordAuthProvider: Login user with id "+u.getId());
             authUser.setUserId(u.getId());
             if(ue == null)   {
                 Logger.error("User "+u.getId()+" is not null, but he/she has no email. So he/she could not log in.");
                 return LoginResult.USER_UNVERIFIED;
             }
 			if (!ue.isValidated()) {
+                Logger.debug("ue.isValidated(): "+ue.isValidated());
+                Logger.debug("User and E-Mail has not been verified, yet: "+ue.getEmail()+" with user id "+u.getId());
 				return LoginResult.USER_UNVERIFIED;
 			} else {
                 final String journweProvider = getKey();
