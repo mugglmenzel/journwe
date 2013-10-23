@@ -6,19 +6,22 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
-import models.dao.CategoryDAO;
-import models.dao.InspirationCategoryDAO;
-import models.dao.InspirationDAO;
+import models.dao.*;
 import models.inspiration.Inspiration;
 import models.inspiration.InspirationCategory;
+import models.inspiration.InspirationTip;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Lang;
 import play.libs.Json;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
@@ -54,6 +57,28 @@ public class InspirationController extends Controller {
         InspirationCategory cat = cats != null && cats.size() > 0 ? cats.iterator().next() : null;
 
         return ok(get.render(ins, cat != null ? new CategoryDAO().get(cat.getCategoryId()) : null));
+    }
+
+    public static Result getTips(String id) {
+        DynamicForm data = form().bindFromRequest();
+        final String lastId = data.get("lastId");
+        final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 3;
+
+        return ok(Json.toJson(new InspirationTipDAO().all(lastId, count)));
+    }
+
+    public static Result addTip(String id) {
+        DynamicForm data = form().bindFromRequest();
+        final String tipTxt = data.get("tip");
+        InspirationTip tip = new InspirationTip();
+        tip.setTip(tipTxt);
+        tip.setLang(lang().code());
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        tip.setUserId(new UserSocialDAO().findBySocialId(usr.getProvider(), usr.getId()).getUserId());
+
+        new InspirationTipDAO().save(tip);
+
+        return ok();
     }
 
     public static Result getImages(String id) {

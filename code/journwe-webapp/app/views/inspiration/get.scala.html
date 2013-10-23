@@ -107,6 +107,48 @@
     </div>
 
     <div class="jrn-container">
+        <h2 id="tips"><i class="icon-thumbs-up"></i> Tips</h2>
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="inspiration-tips"></div>
+                <script type="text/x-tmpl" id="inspiration-tip-template">
+                    <div>
+                        {%=o.tip%}
+                    </div>
+                </script>
+                <script>
+                    $(document).ready(function(){
+                        loadTips();
+                    });
+                    function loadTips() {
+                        $.get('@routes.InspirationController.getTips(ins.getId)', function (tips) {
+                            $('#inspiration-tips').empty();
+                            if(tips){
+                                for(var i in tips) {
+                                    $('#inspiration-tips').append(tmpl('inspiration-tip-template', tips[i]));
+                                }
+                            } else $('#inspiration-tips').html('No Tips.');
+                        });
+                    }
+                </script>
+            </div>
+            <div class="col-lg-12">
+                <input type="text" id="tip-add-text">
+                <button id="tip-add-button" class="btn btn-primary"><i class="icon-plus"></i></button>
+                <script>
+                    $('#tip-add-button').click(function(){
+                        $.post('@routes.InspirationController.addTip(ins.getId)', {tip: $('#tip-add-text').val()}, function(){
+                            $('#tip-add-text').val('');
+                            loadTips();
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="jrn-container">
         <h2 id="photos"><i class="icon-picture"></i> @Messages("adventure.general.label.photos") </h2>
         <div class="row">
             <div class="col-lg-12">

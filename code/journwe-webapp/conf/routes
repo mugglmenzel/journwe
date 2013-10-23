@@ -23,6 +23,8 @@ GET           /category/countCache/update                    controllers.Categor
 
 GET           /inspiration/new                               controllers.InspirationController.create()
 GET           /inspiration/:id                               controllers.InspirationController.get(id:String)
+GET           /inspiration/:id/tips.json                     controllers.InspirationController.getTips(id:String)
+POST          /inspiration/:id/tips.json                controllers.InspirationController.addTip(id:String)
 GET           /inspiration/:id/images.json                   controllers.InspirationController.getImages(id:String)
 GET           /inspiration/:id/adventure/new                 controllers.InspirationController.createAdventure(id:String)
 GET           /inspiration/:id/edit                          controllers.InspirationController.edit(id:String)
@@ -132,8 +134,8 @@ POST          /signup                                        controllers.Applica
 
 GET           /login                                         controllers.ApplicationController.login
 POST          /login                                         controllers.ApplicationController.doLogin
-GET           /login/password/forgot 		 				 controllers.Signup.forgotPassword(email: String ?= "")
-GET           /login/password/forgot/:email 				 controllers.Signup.forgotPassword(email: String)
+GET           /login/password/forgot                         controllers.Signup.forgotPassword(email: String ?= "")
+GET           /login/password/forgot/:email                  controllers.Signup.forgotPassword(email: String)
 POST          /login/password/forgot                         controllers.Signup.doForgotPassword
 
 #GET           /authenticate/:provider/denied                 controllers.Signup.oAuthDenied(provider: String)
