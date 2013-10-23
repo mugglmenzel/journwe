@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.avaje.ebean.ExpressionList;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
+import com.ecwid.mailchimp.MailChimpObject;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
@@ -139,6 +140,9 @@ public class UserDAO extends CommonEntityDAO<User> {
                             listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
                             listSubscribeMethod.id = "c18d5a32fb";
                             listSubscribeMethod.email_address = sub.getEmail();
+                            MailChimpObject merge_vars = new MailChimpObject();
+                            merge_vars.put("FNAME", user.getName());
+                            listSubscribeMethod.merge_vars = merge_vars;
                             listSubscribeMethod.double_optin = false;
                             listSubscribeMethod.update_existing = true;
                             listSubscribeMethod.send_welcome = true;
