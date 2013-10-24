@@ -62,7 +62,7 @@ public class InspirationTip {
         this.tip = tip;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "active-index")
     public boolean isActive() {
         return active;
     }

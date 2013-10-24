@@ -113,7 +113,9 @@
                 <div id="inspiration-tips"></div>
                 <script type="text/x-tmpl" id="inspiration-tip-template">
                     <div>
-                        {%=o.user.name%}: {%=o.tip.tip%}
+                        <img class="pull-left" style="margin-right: 10px; max-height: 24pt;" src="{%=o.user.image%}">
+                        <div class="comment-text"><i class="icon-comment"></i> {%=o.tip.tip%}</div>
+                        <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.tip.created%}</div>
                     </div>
                 </script>
                 <script>
@@ -125,6 +127,7 @@
                             $('#inspiration-tips').empty();
                             if(tips){
                                 for(var i in tips) {
+                                    tips[i].tip.created = formatTime(tips[i].tip.created);
                                     $('#inspiration-tips').append(tmpl('inspiration-tip-template', tips[i]));
                                 }
                             } else $('#inspiration-tips').html('No Tips.');

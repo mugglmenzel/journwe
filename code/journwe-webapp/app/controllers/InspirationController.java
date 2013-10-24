@@ -66,7 +66,7 @@ public class InspirationController extends Controller {
         final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 3;
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
-        for (InspirationTip tip : new InspirationTipDAO().all(id, lastId, count)) {
+        for (InspirationTip tip : new InspirationTipDAO().activated(id, lastId, count)) {
             ObjectNode node = Json.newObject();
             node.put("user", Json.toJson(new UserDAO().get(tip.getUserId())));
             node.put("tip", Json.toJson(tip));
@@ -86,6 +86,7 @@ public class InspirationController extends Controller {
         tip.setLang(lang().code());
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         tip.setUserId(new UserSocialDAO().findBySocialId(usr.getProvider(), usr.getId()).getUserId());
+        tip.setActive(false);
 
         new InspirationTipDAO().save(tip);
 
