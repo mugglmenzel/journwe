@@ -15,10 +15,10 @@ import models.dao.*;
 import models.inspiration.Inspiration;
 import models.inspiration.InspirationCategory;
 import models.inspiration.InspirationTip;
+import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.i18n.Lang;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -35,6 +35,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -64,13 +65,23 @@ public class InspirationController extends Controller {
         final String lastId = data.get("lastId");
         final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 3;
 
-        return ok(Json.toJson(new InspirationTipDAO().all(lastId, count)));
+        List<ObjectNode> result = new ArrayList<ObjectNode>();
+        for (InspirationTip tip : new InspirationTipDAO().all(id, lastId, count)) {
+            ObjectNode node = Json.newObject();
+            node.put("user", Json.toJson(new UserDAO().get(tip.getUserId())));
+            node.put("tip", Json.toJson(tip));
+            result.add(node);
+        }
+
+        return ok(Json.toJson(result));
     }
 
     public static Result addTip(String id) {
         DynamicForm data = form().bindFromRequest();
         final String tipTxt = data.get("tip");
         InspirationTip tip = new InspirationTip();
+        tip.setInspirationId(id);
+        tip.setCreated(new Date());
         tip.setTip(tipTxt);
         tip.setLang(lang().code());
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
@@ -185,7 +196,7 @@ public class InspirationController extends Controller {
                     ins.setTimeEnd(null);
                 }
 
-                for(InspirationCategory insCat : new InspirationCategoryDAO().getCategories(ins.getId()))
+                for (InspirationCategory insCat : new InspirationCategoryDAO().getCategories(ins.getId()))
                     new InspirationCategoryDAO().delete(insCat);
 
                 for (String key : form().bindFromRequest().data().keySet()) {

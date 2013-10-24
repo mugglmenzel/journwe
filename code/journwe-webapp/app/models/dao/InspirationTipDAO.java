@@ -1,5 +1,6 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import models.dao.common.CommonEntityDAO;
@@ -24,15 +25,20 @@ public class InspirationTipDAO extends CommonEntityDAO<InspirationTip> {
         super(InspirationTip.class);
     }
 
-    public List<InspirationTip> all(String lastKey, int limit) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression().withLimit(limit);
+    public List<InspirationTip> all(String inspirationId, String lastKey, int limit) {
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withLimit(limit);
+
+        InspirationTip tip = new InspirationTip();
+        tip.setInspirationId(inspirationId);
+        query.setHashKeyValues(tip);
 
         if (lastKey != null && !"".equals(lastKey)) {
             Map<String, AttributeValue> startkey = new HashMap<String, AttributeValue>();
-            startkey.put("id", new AttributeValue(lastKey));
-            scan.setExclusiveStartKey(startkey);
+            startkey.put("inspirationId", new AttributeValue(inspirationId));
+            startkey.put("created", new AttributeValue(lastKey));
+            query.setExclusiveStartKey(startkey);
         }
 
-        return pm.scan(InspirationTip.class, scan);
+        return pm.query(InspirationTip.class, query);
     }
 }
