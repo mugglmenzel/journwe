@@ -49,18 +49,34 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
 
     }
 
+    /**
+     * Merges two user accounts after a login with an auth provider/id that is linked to a different account than the login from before
+     * Returns the user to generate the session information from
+     *
+     * @param newUser
+     * @param oldUser
+     * @return
+     */
     @Override
-    public AuthUser merge(final AuthUser newUser, final AuthUser oldUser) {
+    public AuthUser merge(final AuthUser oldUser,final AuthUser newUser) {
         Logger.debug("merging auth users");
-        new UserDAO().update(newUser, oldUser);
+        new UserDAO().merge(oldUser,newUser);
+        //new UserDAO().update(newUser, oldUser);
         return newUser;
     }
 
+    /**
+     * Links a new account to an existing local user.
+     * Returns the auth user to log in with
+     *
+     * @param oldUser
+     * @param newUser
+     */
     @Override
     public AuthUser link(final AuthUser oldUser, final AuthUser newUser) {
         Logger.debug("linking accounts");
-        // TODO: IMPLEMENT THIS User.addLinkedAccount(oldUser, newUser);
-        return null;
+        new UserDAO().addLinkedAccount(oldUser, newUser);
+        return newUser;
     }
 
 }

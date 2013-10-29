@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import models.user.User;
 import play.db.ebean.Model;
@@ -16,38 +18,37 @@ import java.io.Serializable;
 public class LinkedAccount implements Serializable {
 
     // hash id
-	public String id;
+	private String userId;
 
-	// many to one = range id
-	public User user;
+    // range id - many linked provider accounts possible
+    private String providerKey;
 
-	public String providerUserId;
-	public String providerKey;
+    private String socialUserId;
 
-//	public static final Finder<Long, LinkedAccount> find = new Finder<Long, LinkedAccount>(
-//			Long.class, LinkedAccount.class);
-//
-//	public static LinkedAccount findByProviderKey(final User user, String key) {
-//		return find.where().eq("user", user).eq("providerKey", key)
-//				.findUnique();
-//	}
+    @DynamoDBHashKey
+    public String getUserId() {
+        return userId;
+    }
 
-	public static LinkedAccount create(final AuthUser authUser) {
-		final LinkedAccount ret = new LinkedAccount();
-		ret.update(authUser);
-		return ret;
-	}
-	
-	public void update(final AuthUser authUser) {
-		this.providerKey = authUser.getProvider();
-		this.providerUserId = authUser.getId();
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public static LinkedAccount create(final LinkedAccount acc) {
-		final LinkedAccount ret = new LinkedAccount();
-		ret.providerKey = acc.providerKey;
-		ret.providerUserId = acc.providerUserId;
+    @DynamoDBRangeKey
+    public String getProviderKey() {
+        return providerKey;
+    }
 
-		return ret;
-	}
+    public void setProviderKey(String providerKey) {
+        this.providerKey = providerKey;
+    }
+
+    public String getSocialUserId() {
+        return socialUserId;
+    }
+
+    public void setSocialUserId(String socialUserId) {
+        this.socialUserId = socialUserId;
+    }
+
 }

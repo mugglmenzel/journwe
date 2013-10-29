@@ -18,6 +18,7 @@ import play.mvc.Controller;
 import providers.MyLoginUsernamePasswordAuthUser;
 import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthUser;
+import models.LinkedAccount;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -336,6 +337,31 @@ public class UserDAO extends CommonEntityDAO<User> {
             new TokenActionDAO().deleteByUser(unverified, ETokenType.EMAIL_VERIFICATION);
         }
         }
+    }
+
+    public static void addLinkedAccount(final AuthUser oldUser,
+                                        final AuthUser newUser) {
+        final User u = new UserDAO().findByAuthUserIdentity(oldUser);
+        new LinkedAccountDAO().create(u,newUser);
+    }
+
+    public void merge(final AuthUser oldUser,final AuthUser newUser) {
+        final User u1 = new UserDAO().findByAuthUserIdentity(newUser);
+        final User u2 = new UserDAO().findByAuthUserIdentity(oldUser);
+        merge(u2,u1);
+    }
+
+    public void merge(final User oldUser,final User newUser) {
+        LinkedAccountDAO ladao = new LinkedAccountDAO();
+        for (final LinkedAccount lacc : ladao.all(oldUser.getId())) {
+            lacc.setUserId(newUser.getId());
+            ladao.save(lacc);
+        }
+        // do all other merging stuff here - like resources, etc.
+
+        // deactivate the merged user that got added to this one
+        oldUser.setActive(false);
+        new UserDAO().save(oldUser);
     }
 
     // TODO

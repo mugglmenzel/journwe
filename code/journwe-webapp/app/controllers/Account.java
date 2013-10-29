@@ -10,6 +10,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
 import models.user.UserEmail;
+import play.Logger;
 import play.data.Form;
 import play.data.format.Formats.NonEmpty;
 import play.data.validation.Constraints.MinLength;
@@ -163,6 +164,7 @@ public class Account extends Controller {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		final AuthUser u = PlayAuthenticate.getLinkUser(session());
 		if (u == null) {
+            Logger.debug("Account to link could not be found. Silently redirect to login.");
 			// account to link could not be found, silently redirect to login
 			return redirect(routes.ApplicationController.index());
 		}
@@ -190,6 +192,7 @@ public class Account extends Controller {
 		// this is the user that was selected for a login
 		final AuthUser bUser = PlayAuthenticate.getMergeUser(session());
 		if (bUser == null) {
+            Logger.debug("User to merge with could not be found. Silently redirect to login.");
 			// user to merge with could not be found, silently redirect to login
 			return redirect(routes.ApplicationController.index());
 		}
