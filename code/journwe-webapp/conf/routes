@@ -24,7 +24,7 @@ GET           /category/countCache/update                    controllers.Categor
 GET           /inspiration/new                               controllers.InspirationController.create()
 GET           /inspiration/:id                               controllers.InspirationController.get(id:String)
 GET           /inspiration/:id/tips.json                     controllers.InspirationController.getTips(id:String)
-POST          /inspiration/:id/tips.json                controllers.InspirationController.addTip(id:String)
+POST          /inspiration/:id/tips.json                     controllers.InspirationController.addTip(id:String)
 GET           /inspiration/:id/images.json                   controllers.InspirationController.getImages(id:String)
 GET           /inspiration/:id/adventure/new                 controllers.InspirationController.createAdventure(id:String)
 GET           /inspiration/:id/edit                          controllers.InspirationController.edit(id:String)
@@ -145,6 +145,7 @@ GET           /accounts/password/reset/:token                controllers.Signup.
 POST          /accounts/password/reset                       controllers.Signup.doResetPassword
 GET           /accounts/password/change                      controllers.Account.changePassword
 POST          /accounts/password/change                      controllers.Account.doChangePassword
+GET           /accounts/add                                  controllers.Account.link
 GET           /accounts/link                                 controllers.Account.askLink
 POST          /accounts/link                                 controllers.Account.doLink
 GET           /accounts/merge                                controllers.Account.askMerge

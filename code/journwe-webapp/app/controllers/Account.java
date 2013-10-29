@@ -151,6 +151,7 @@ public class Account extends Controller {
 	}
 
 	public static Result askLink() {
+        Logger.debug("askLink");
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		final AuthUser u = PlayAuthenticate.getLinkUser(session());
 		if (u == null) {
@@ -161,6 +162,7 @@ public class Account extends Controller {
 	}
 
 	public static Result doLink() {
+        Logger.debug("doLink");
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		final AuthUser u = PlayAuthenticate.getLinkUser(session());
 		if (u == null) {
@@ -185,10 +187,10 @@ public class Account extends Controller {
 	}
 
 	public static Result askMerge() {
+        Logger.debug("askMerge");
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		// this is the currently logged in user
 		final AuthUser aUser = PlayAuthenticate.getUser(session());
-
 		// this is the user that was selected for a login
 		final AuthUser bUser = PlayAuthenticate.getMergeUser(session());
 		if (bUser == null) {
@@ -203,6 +205,7 @@ public class Account extends Controller {
 	}
 
 	public static Result doMerge() {
+        Logger.debug("doMerge");
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		// this is the currently logged in user
 		final AuthUser aUser = PlayAuthenticate.getUser(session());
