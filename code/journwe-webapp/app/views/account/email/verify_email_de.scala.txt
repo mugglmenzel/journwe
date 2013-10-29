@@ -6,4 +6,4 @@ um deine E-Mail-Adresse zu bestätigen, folge einfach diesem Link:
 @verificationUrl
 
 Grüße,
-Das PlayAuthenticate-Team
+Das JournWe-Team

@@ -5,4 +5,4 @@ Para validar su email siga el siguiente enlace:
 @verificationUrl
 
 Le saluda,
-El equipo de PlayAuthenticate.
+El equipo de JournWe.

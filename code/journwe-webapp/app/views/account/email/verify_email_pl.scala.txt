@@ -5,4 +5,4 @@ Aby zweryfikować konto, użyj ten link
 @verificationUrl
 
 Pozdrawiamy,
-Ekipa PlayAuthenticate
+Ekipa JournWe
