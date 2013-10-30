@@ -349,29 +349,31 @@ public class UserDAO extends CommonEntityDAO<User> {
         new UserDAO().save(oldUser);
     }
 
-    // TODO
-//    public void changePassword(final UsernamePasswordAuthUser authUser,
-//                               final boolean create) {
-//        LinkedAccount a = this.getAccountByProvider(authUser.getProvider());
-//        if (a == null) {
-//            if (create) {
-//                a = LinkedAccount.create(authUser);
-//                a.user = this;
-//            } else {
-//                throw new RuntimeException(
-//                        "Account not enabled for password usage");
-//            }
-//        }
-//        a.providerUserId = authUser.getHashedPassword();
-//        a.save();
-//    }
+    public void changePassword(final UsernamePasswordAuthUser authUser,
+                               final boolean create) {
+        UserSocial us = new UserSocialDAO().findBySocialId(authUser.getProvider(),authUser.getId());
+        if (us == null) {
+            if (create) {
+                us = new UserSocialDAO().create(authUser);
+            } else {
+                throw new RuntimeException(
+                        "Account not enabled for password usage");
+            }
+        }
+        User u = new UserDAO().findByAuthUserIdentity(authUser);
+        Logger.debug("Set hashed password: "+authUser.getHashedPassword());
+        u.setHashedPassword(authUser.getHashedPassword());
+        new UserDAO().save(u);
+        us.setUserId(u.getId());
+        new UserSocialDAO().save(us);
+    }
 
-    // TODO
-//    public void resetPassword(final UsernamePasswordAuthUser authUser,
-//                              final boolean create) {
-//// You might want to wrap this into a transaction
-//        this.changePassword(authUser, create);
-//        new TokenActionDAO().deleteByUser(ETokenType.PASSWORD_RESET,authUser);
-//    }
+    public void resetPassword(final UsernamePasswordAuthUser authUser,
+                              final boolean create) {
+        // You might want to wrap this into a transaction
+        this.changePassword(authUser, create);
+        User user = new UserDAO().findByAuthUserIdentity(authUser);
+        new TokenActionDAO().deleteByUser(user,ETokenType.PASSWORD_RESET);
+    }
 
 }

@@ -168,9 +168,8 @@ public class Signup extends Controller {
 				// Pass true for the second parameter if you want to
 				// automatically create a password and the exception never to
 				// happen
-                // TODO
-//				u.resetPassword(new MyUsernamePasswordAuthUser(newPassword),
-//						false);
+				new UserDAO().resetPassword(new MyUsernamePasswordAuthUser(u,newPassword,null),
+						false);
 			} catch (final RuntimeException re) {
 				flash(ApplicationController.FLASH_MESSAGE_KEY,
 						Messages.get("playauthenticate.reset_password.message.no_password_account"));

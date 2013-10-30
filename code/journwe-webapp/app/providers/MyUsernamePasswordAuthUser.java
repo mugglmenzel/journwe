@@ -31,6 +31,11 @@ public class MyUsernamePasswordAuthUser extends UsernamePasswordAuthUser impleme
 //            Logger.error("In constructor of MyUsernamePasswordAuthUser the user u is null.");
     }
 
+    public MyUsernamePasswordAuthUser(final User user, final String newPassword,final String email) {
+        super(newPassword, email);
+        this.setUserId(user.getId());
+    }
+
     @Override
     public String getId() {
         return userId;

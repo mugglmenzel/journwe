@@ -62,6 +62,14 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
         return save(newUserSocial);
     }
 
+    public UserSocial create(AuthUser auth) {
+            UserSocial toReturn = new UserSocial();
+        toReturn.setProvider(auth.getProvider());
+        toReturn.setSocialId(auth.getId());
+        save(toReturn);
+        return toReturn;
+    }
+
     public void saveFacebookAccessToken(final String facebookId,
                                         final String accessToken) {
         try {

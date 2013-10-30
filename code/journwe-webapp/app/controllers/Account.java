@@ -4,12 +4,14 @@ import models.auth.SecuredBetaUser;
 import models.auth.SecuredUser;
 import models.dao.UserDAO;
 import models.dao.UserEmailDAO;
+import models.dao.UserSocialDAO;
 import models.user.User;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
 import models.user.UserEmail;
+import models.user.UserSocial;
 import play.Logger;
 import play.data.Form;
 import play.data.format.Formats.NonEmpty;
@@ -114,8 +116,8 @@ public class Account extends Controller {
 		//return redirect(routes.ApplicationController.profile());
 	}
 
-    @Security.Authenticated(SecuredUser.class)
 	public static Result changePassword() {
+        Logger.debug("changePassword");
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
         AuthUser auth = PlayAuthenticate.getUser(Http.Context.current());
         final User user = new UserDAO().findByAuthUserIdentity(auth);
@@ -127,8 +129,8 @@ public class Account extends Controller {
 		}
 	}
 
-    @Security.Authenticated(SecuredUser.class)
 	public static Result doChangePassword() {
+        Logger.debug("doChangePassword");
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		final Form<Account.PasswordChange> filledForm = PASSWORD_CHANGE_FORM
 				.bindFromRequest();
@@ -137,16 +139,13 @@ public class Account extends Controller {
 			return badRequest(views.html.account.password_change.render(filledForm));
 		} else {
             AuthUser auth = PlayAuthenticate.getUser(Http.Context.current());
-            final User user = new UserDAO().findByAuthUserIdentity(auth);
+            User user = new UserDAO().findByAuthUserIdentity(auth);
+            UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(user.getId());
 			final String newPassword = filledForm.get().password;
-			// TODO
-			//user.changePassword(new MyUsernamePasswordAuthUser(newPassword),
-			//		true);
+			new UserDAO().changePassword(new MyUsernamePasswordAuthUser(user,newPassword,ue.getEmail()),true);
 			flash(ApplicationController.FLASH_MESSAGE_KEY,
 					Messages.get("playauthenticate.change_password.success"));
-            // TODO
             return ok(index.render());
-            //return redirect(routes.ApplicationController.profile());
 		}
 	}
 
