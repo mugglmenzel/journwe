@@ -1,24 +1,20 @@
 package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.avaje.ebean.ExpressionList;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.MailChimpObject;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
+import com.feth.play.module.pa.providers.AuthProvider;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
 import models.user.*;
 import play.Logger;
-import play.api.Play;
 import play.cache.Cache;
 import play.mvc.Controller;
-import providers.MyLoginUsernamePasswordAuthUser;
 import providers.MyUsernamePasswordAuthProvider;
-import providers.MyUsernamePasswordAuthUser;
-import models.LinkedAccount;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -339,27 +335,16 @@ public class UserDAO extends CommonEntityDAO<User> {
         }
     }
 
-    public static void addLinkedAccount(final AuthUser oldUser,
-                                        final AuthUser newUser) {
-        final User u = new UserDAO().findByAuthUserIdentity(oldUser);
-        new LinkedAccountDAO().create(u,newUser);
-    }
-
-    public void merge(final AuthUser oldUser,final AuthUser newUser) {
-        final User u1 = new UserDAO().findByAuthUserIdentity(newUser);
-        final User u2 = new UserDAO().findByAuthUserIdentity(oldUser);
-        merge(u2,u1);
-    }
-
-    public void merge(final User oldUser,final User newUser) {
-        LinkedAccountDAO ladao = new LinkedAccountDAO();
-        for (final LinkedAccount lacc : ladao.all(oldUser.getId())) {
-            lacc.setUserId(newUser.getId());
-            ladao.save(lacc);
-        }
+    public void merge(final AuthUser oldAuthUser,final AuthUser newAuthUser) {
+        UserSocialDAO usdao = new UserSocialDAO();
+        UserSocial us = usdao.get(oldAuthUser.getProvider(),oldAuthUser.getId());
+        final User newUser = new UserDAO().findByAuthUserIdentity(newAuthUser);
+        us.setUserId(newUser.getId());
+        usdao.save(us);
         // do all other merging stuff here - like resources, etc.
-
+        // TODO just throw away the adventures etc. of the other user?
         // deactivate the merged user that got added to this one
+        final User oldUser = new UserDAO().findByAuthUserIdentity(oldAuthUser);
         oldUser.setActive(false);
         new UserDAO().save(oldUser);
     }

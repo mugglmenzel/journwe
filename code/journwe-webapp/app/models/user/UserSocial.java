@@ -1,9 +1,6 @@
 package models.user;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,6 +40,8 @@ public class UserSocial {
         this.socialId = socialId;
     }
 
+    // TODO
+    //DynamoDBIndexRangeKey(localSecondaryIndexName = "userid-index")
     @DynamoDBAttribute
     public String getUserId() {
         return userId;

@@ -6,7 +6,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.feth.play.module.pa.user.AuthUser;
 import models.dao.common.CommonRangeEntityDAO;
+import models.user.User;
 import models.user.UserSocial;
 import play.Logger;
 
@@ -46,6 +48,18 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
         hashKeyValues.setProvider(provider);
         List<UserSocial> result = pm.query(UserSocial.class, new DynamoDBQueryExpression<UserSocial>().withHashKeyValues(hashKeyValues).withRangeKeyCondition("socialId", new Condition().withAttributeValueList(new AttributeValue().withS(socialId)).withComparisonOperator(ComparisonOperator.EQ.toString())));
         return !result.isEmpty() ? result.get(0) : null;
+    }
+
+    /**
+     * Add a UserSocial with the userId of oldUser. This method is used when a user is logged in with one social account, e.g. Facebook, and wants to add (link) another social account, for example Twitter.
+     */
+    public boolean addLinkedAccount(final AuthUser oldAuthUser, final AuthUser newAuthUser) {
+        final User oldUser = new UserDAO().findByAuthUserIdentity(oldAuthUser);
+        UserSocial newUserSocial = new UserSocial();
+        newUserSocial.setProvider(newAuthUser.getProvider());
+        newUserSocial.setSocialId(newAuthUser.getId());
+        newUserSocial.setUserId(oldUser.getId());
+        return save(newUserSocial);
     }
 
     public void saveFacebookAccessToken(final String facebookId,

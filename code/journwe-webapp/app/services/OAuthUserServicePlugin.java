@@ -4,6 +4,7 @@ import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 import models.dao.UserDAO;
+import models.dao.UserSocialDAO;
 import models.user.EUserRole;
 import models.user.User;
 import play.Application;
@@ -61,7 +62,6 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
     public AuthUser merge(final AuthUser oldUser,final AuthUser newUser) {
         Logger.debug("merging auth users");
         new UserDAO().merge(oldUser,newUser);
-        //new UserDAO().update(newUser, oldUser);
         return newUser;
     }
 
@@ -75,7 +75,7 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
     @Override
     public AuthUser link(final AuthUser oldUser, final AuthUser newUser) {
         Logger.debug("linking accounts");
-        new UserDAO().addLinkedAccount(oldUser, newUser);
+        new UserSocialDAO().addLinkedAccount(oldUser,newUser);
         return newUser;
     }
 
