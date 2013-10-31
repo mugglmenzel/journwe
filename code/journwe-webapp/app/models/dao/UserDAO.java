@@ -6,7 +6,10 @@ import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.MailChimpObject;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.providers.AuthProvider;
+import com.feth.play.module.pa.providers.oauth1.twitter.TwitterAuthUser;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
+import com.feth.play.module.pa.providers.oauth2.foursquare.FoursquareAuthInfo;
+import com.feth.play.module.pa.providers.oauth2.foursquare.FoursquareAuthUser;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
@@ -265,6 +268,10 @@ public class UserDAO extends CommonEntityDAO<User> {
         social.setUserId(user.getId());
         if (authUser instanceof FacebookAuthUser)
             social.setAccessToken(((FacebookAuthUser) authUser).getOAuth2AuthInfo().getAccessToken());
+        if (authUser instanceof FoursquareAuthUser)
+            social.setAccessToken(((FoursquareAuthUser) authUser).getOAuth2AuthInfo().getAccessToken());
+        if (authUser instanceof TwitterAuthUser)
+            social.setAccessToken(((TwitterAuthUser) authUser).getOAuth1AuthInfo().getAccessToken());
 
         if(new UserSocialDAO().save(social))
             Logger.debug("Creating UserSocial with userId = "+social.getUserId() +" and social id = "+ social.getSocialId() +" was successful.");
