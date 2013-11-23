@@ -1,5 +1,6 @@
 package controllers;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -7,15 +8,18 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.*;
-import models.adventure.file.JournweFile;
 import models.adventure.group.AdventurerGroup;
-import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.place.PlaceOption;
-import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
@@ -54,6 +58,10 @@ import static play.data.Form.form;
 public class AdventureController extends Controller {
 
     public static final String S3_BUCKET_ADVENTURE_IMAGES = "journwe-adventure-images";
+
+    private static final AWSCredentials credentials = new BasicAWSCredentials(
+            ConfigFactory.load().getString("aws.accessKey"),
+            ConfigFactory.load().getString("aws.secretKey"));
 
     private static DynamicForm advForm = form();
 
@@ -370,12 +378,17 @@ public class AdventureController extends Controller {
         }
 
 
+        // CREATE ADVENTURE EMAIL ADDRESS
+        AmazonSQS sqs = new AmazonSQSClient(credentials);
+        sqs.sendMessage(new SendMessageRequest().withQueueUrl("journwe-email-bond").withMessageBody(adv.getId()));
+        AmazonSNS sns = new AmazonSNSClient(credentials);
+        sns.publish(new PublishRequest().withTopicArn("arn:aws:sns:us-east-1:561785394163:journwe-email-bond").withSubject("Wake Up, Bond!").withMessage("New Email Addresses!"));
+
+
         try {
             UserEmail primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId());
             if (primaryEmail != null) {
-                AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
-                        ConfigFactory.load().getString("aws.accessKey"),
-                        ConfigFactory.load().getString("aws.secretKey")));
+                AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(credentials);
                 ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
                 //The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.
                 //advShortname.getShortname() + "@adventure.journwe.com"
@@ -529,16 +542,16 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String advId) {
-        String name =  new AdventureDAO().get(advId).getName();
+        String name = new AdventureDAO().get(advId).getName();
         new AdventureDAO().deleteFull(advId);
         //delete s3 objects
         AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
                 ConfigFactory.load().getString("aws.accessKey"),
                 ConfigFactory.load().getString("aws.secretKey")));
-        for(S3ObjectSummary obj : s3.listObjects(S3_BUCKET_ADVENTURE_IMAGES, advId).getObjectSummaries())
+        for (S3ObjectSummary obj : s3.listObjects(S3_BUCKET_ADVENTURE_IMAGES, advId).getObjectSummaries())
             s3.deleteObject(
                     S3_BUCKET_ADVENTURE_IMAGES, obj.getKey());
-        for(S3ObjectSummary obj : s3.listObjects(AdventureFileController.S3_BUCKET, advId).getObjectSummaries())
+        for (S3ObjectSummary obj : s3.listObjects(AdventureFileController.S3_BUCKET, advId).getObjectSummaries())
             s3.deleteObject(
                     AdventureFileController.S3_BUCKET, obj.getKey());
 
