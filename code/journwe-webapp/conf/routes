@@ -99,6 +99,8 @@ GET           /adventure/:id/files.json                      controllers.Adventu
 POST          /adventure/:id/files.json                      controllers.AdventureFileController.uploadFile(id:String)
 DELETE        /adventure/:id/files/:fileName                 controllers.AdventureFileController.deleteFile(id:String, fileName: String)
 
+GET           /adventure/:id/emails.json                     controllers.AdventureEmailController.listEmails(id:String)
+
 
 GET           /adv/:shortname                                controllers.AdventureController.getIndexShortname(shortname:String)
 

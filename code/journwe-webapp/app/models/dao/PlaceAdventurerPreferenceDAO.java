@@ -6,6 +6,7 @@ import models.adventure.EPreferenceVote;
 import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.place.PlaceOption;
 import models.dao.common.CommonRangeEntityDAO;
+import models.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,7 +70,10 @@ public class PlaceAdventurerPreferenceDAO extends CommonRangeEntityDAO<PlaceAdve
 
         for (EPreferenceVote vote : EPreferenceVote.values())
             for (Adventurer advr : adventurers.get(vote))
-                if (advr != null) adventurersNames.get(vote).add(new UserDAO().get(advr.getUserId()).getName());
+                if (advr != null) {
+                    User usr = new UserDAO().get(advr.getUserId());
+                    if(usr != null) adventurersNames.get(vote).add(usr.getName());
+                }
 
         return adventurersNames;
     }

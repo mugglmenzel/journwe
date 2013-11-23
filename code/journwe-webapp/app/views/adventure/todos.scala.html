@@ -268,7 +268,7 @@
                 btn.html('<i class="icon-spin icon-journwe"></i>');
 
                 $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {title: title}, function(res) {
-                    $('.table-my-todos tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
+                    loadUserTodos();
                     btn.html('<i class="icon-plus"></i>');
                 });
             });
