@@ -389,7 +389,7 @@ public class AdventureController extends Controller {
             UserEmail primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId());
             if (primaryEmail != null) {
                 AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(credentials);
-                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail(), adv.getId() + "@journwe.com")).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
                 //The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.
                 //advShortname.getShortname() + "@adventure.journwe.com"
             }
