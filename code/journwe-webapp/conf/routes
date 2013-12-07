@@ -73,9 +73,9 @@ GET           /beta/join-77777777-9999-111-3322              controllers.Applica
 
 GET           /adventure/:id/places.json                     controllers.AdventurePlaceController.getPlaces(id:String)
 POST          /adventure/:id/places.json                     controllers.AdventurePlaceController.addPlace(id:String)
-GET           /adventure/:id/place/favorite.json             controllers.AdventurePlaceController.getFavoritePlace(id:String)
-POST          /adventure/:id/place/favorite.json             controllers.AdventurePlaceController.setFavoritePlace(id:String)
-POST          /adventure/:id/place/vote.json                 controllers.AdventurePlaceController.voteParam(id:String)
+GET           /adventure/:id/places/favorite.json             controllers.AdventurePlaceController.getFavoritePlace(id:String)
+POST          /adventure/:id/places/favorite.json             controllers.AdventurePlaceController.setFavoritePlace(id:String)
+POST          /adventure/:id/places/vote.json                 controllers.AdventurePlaceController.voteParam(id:String)
 POST          /adventure/:id/place/:placeId/vote.json        controllers.AdventurePlaceController.vote(id:String, placeId:String)
 DELETE        /adventure/:id/place/:placeId                  controllers.AdventurePlaceController.deletePlace(id:String, placeId:String)
 POST          /adventure/:id/places/voteOpen.json            controllers.AdventureController.updatePlaceVoteOpen(id:String)

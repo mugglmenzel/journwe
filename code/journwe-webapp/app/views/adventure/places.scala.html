@@ -155,13 +155,17 @@
     }
 
     function renderPlaceOption(data, replace) {
-        if(replace)
-            replace.replaceWith(tmpl('place-template', data)).fadeIn();
-        else
-            $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
+        var place = $(tmpl('place-template', data));
 
-        $('#places-list tbody .rating :radio').change(function (star) {
-            votePlace('', $(star.target).val()/5, $(star.target).data('id'));
+        if(replace)
+            replace.replaceWith(place).fadeIn();
+        else
+            $('#places-list tbody').append(place).fadeIn();
+
+
+        place.find('.rating :radio').click(function (e) {
+            alert('voting');
+            if($(e.target).is(':checked')) votePlace('', $(e.target).val()/5, $(e.target).data('id'));
         });
 
         var marker = new google.maps.Marker({animation: google.maps.Animation.DROP, map: map, position: new google.maps.LatLng(data.lat, data.lng), title: data.address});
