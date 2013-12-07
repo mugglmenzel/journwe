@@ -8,6 +8,10 @@
     <div id="places-favorite-place" class="pull-left" style="font-size: 20px; margin-bottom: 10px;">
         <i id="places-favorite-place-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
     </div>
+    <div class="clearfix"></div>
+    <div id="places-autofavorite-place" class="pull-left text-muted" style="font-size: 20px; margin-bottom: 10px;">
+        <i id="places-autofavorite-place-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.places.favourite") <em><span id="places-autofavorite-place-name"></span></em>
+    </div>
     }
 
     @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
@@ -71,10 +75,17 @@
                     <i class="icon-pencil"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a onclick="votePlace('YES', '{%=o.placeId%}');"><i class="icon-thumbs-up"></i> @Messages("adventure.general.yes")</a></li>
-                    <li><a onclick="votePlace('MAYBE', '{%=o.placeId%}');"><i class="icon-question"></i> @Messages("adventure.general.maybe")</a></li>
-                    <li><a onclick="votePlace('NO', '{%=o.placeId%}');"><i class="icon-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
+                    <li><a onclick="votePlace('YES', 1, '{%=o.placeId%}');"><i class="icon-thumbs-up"></i> @Messages("adventure.general.yes")</a></li>
+                    <li><a onclick="votePlace('MAYBE', 0.5, '{%=o.placeId%}');"><i class="icon-question"></i> @Messages("adventure.general.maybe")</a></li>
+                    <li><a onclick="votePlace('NO', 0, '{%=o.placeId%}');"><i class="icon-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
                 </ul>
+            </div>
+            <div class="rating">
+                <input type="radio" id="{%=o.placeId%}-star5" name="{%=o.placeId%}-rating" value="5" data-id="{%=o.placeId%}" {% if(o.voteGravity == 1){ %}checked{% } %} /><label for="{%=o.placeId%}-star5" title="Rocks!"><i class="icon-star"></i></label>
+                <input type="radio" id="{%=o.placeId%}-star4" name="{%=o.placeId%}-rating" value="4" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.8){ %}checked{% } %} /><label for="{%=o.placeId%}-star4" title="Pretty good"><i class="icon-star"></i></label>
+                <input type="radio" id="{%=o.placeId%}-star3" name="{%=o.placeId%}-rating" value="3" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.6){ %}checked{% } %} /><label for="{%=o.placeId%}-star3" title="Meh"><i class="icon-star"></i></label>
+                <input type="radio" id="{%=o.placeId%}-star2" name="{%=o.placeId%}-rating" value="2" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.4){ %}checked{% } %} /><label for="{%=o.placeId%}-star2" title="Kinda bad"><i class="icon-star"></i></label>
+                <input type="radio" id="{%=o.placeId%}-star1" name="{%=o.placeId%}-rating" value="1" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.2){ %}checked{% } %} /><label for="{%=o.placeId%}-star1" title="Sucks big time"><i class="icon-star"></i></label>
             </div>
         </td>
         }
@@ -175,7 +186,8 @@
         $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (result) {
 
 
-            $('#places-favorite-place-name').html(result.favoritePlace != "" ? result.favoritePlace.address : "@Messages("adventure.general.nofavourite.placeholder")");
+            $('#places-favorite-place-name').html(result.favoritePlace != null ? result.favoritePlace.address : "@Messages("adventure.general.nofavourite.placeholder")");
+            $('#places-autofavorite-place-name').html(result.autoFavoritePlace != null ? result.autoFavoritePlace.address : "@Messages("adventure.general.nofavourite.placeholder")");
             $('.btn-close-place').toggle(!!result.favoritePlace);
 
             $('#places-list tbody').empty();
@@ -191,10 +203,19 @@
 
             $('.places-loading').hide();
             $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
+            $('#places-autofavorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
 
-            updatePlaceVoteOpen(@adv.getPlaceVoteOpen)
+            updatePlaceVoteOpen(@adv.getPlaceVoteOpen);
+            $('.rating :radio').change(function (star) {
+                votePlace('', $(star.target).val()/5, $(star.target).data('id'));
+                alert($(star.target).data('id') + ' rating changed to ' + $(star.target).val());
+
+            });
         });
     });
+
+
+
 
 
     $('#place-add-input').on('keydown', function(e){
@@ -256,24 +277,17 @@
 
     }
 
-    function votePlace(vote, optId) {
+    function votePlace(vote, voteGrav, optId) {
         
         // Spin
         $('#placeoption-item-'+optId+' .dropdown-toggle')
             .html('<i class="icon-spin icon-journwe"></i>');
 
-        $.ajax({
-            url: '@routes.AdventurePlaceController.vote(adv.getId, "")' + optId,
-            data: {
-                vote: vote
-            },
-            type: 'PUT',
-            success: function(res) {
+        $.post('@routes.AdventurePlaceController.voteParam(adv.getId)', {placeId: optId, vote: vote, voteGravity: voteGrav}, function(res) {
                 renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
                 $('#placeoption-item-'+res.placeId+' .dropdown-toggle')
                     .html('<i class="icon-pencil"></i>');
-            }
-        });
+            });
     }
 
 

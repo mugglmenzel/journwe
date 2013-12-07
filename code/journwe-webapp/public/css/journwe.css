@@ -1,86 +1,82 @@
 body {
-	/*background-image: url("http://i.embed.ly/1/image/resize?width=1600&url=http%3A%2F%2Fwww.journwe.com%2Fassets%2Fimg%2Fprekestollen.JPG&key=2c8ef5b200c6468f9f863bc75c46009f");
-	background-repeat: no-repeat;
-	background-position: left top;
-	background-attachment: fixed;
-	background-size: cover;*/
+    /*background-image: url("http://i.embed.ly/1/image/resize?width=1600&url=http%3A%2F%2Fwww.journwe.com%2Fassets%2Fimg%2Fprekestollen.JPG&key=2c8ef5b200c6468f9f863bc75c46009f");
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-attachment: fixed;
+    background-size: cover;*/
 
 }
 
 body, body *, .btn, .btn-link {
-	font-family: 'Lato', sans-serif;
-	font-weight: 300;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
 }
-
 
 body b,
 body strong {
-	font-weight: 400;
+    font-weight: 400;
 }
 
 h1, h1 small {
-    font-weight:100;
+    font-weight: 100;
     margin-bottom: 20px;
 }
 
 h2, h3, h4, h2 small, h3 small, h4 small {
-   font-weight: 300;
-   margin-bottom: 20px;
+    font-weight: 300;
+    margin-bottom: 20px;
 }
 
 a {
-	cursor: pointer;
-	color: #333;
+    cursor: pointer;
+    color: #333;
 }
 
 a:hover,
 a:focus,
 .header a:hover.btn-link,
-.header a:focus.btn-link  {
-	color:#666;
-	text-decoration: none;
+.header a:focus.btn-link {
+    color: #666;
+    text-decoration: none;
 }
 
 .adventure-container a {
-	color: #333;
-	text-decoration: underline;
+    color: #333;
+    text-decoration: underline;
 }
-
 
 .adventure-container a.btn {
-	text-decoration: none;
+    text-decoration: none;
 }
-
 
 .adventure-container a:hover,
 .adventure-container a:focus {
-	color: #555;	
+    color: #555;
 }
 
 .modal a {
-	color: #333;
+    color: #333;
 }
 
-
-.modal a:hover, 
+.modal a:hover,
 .modal a:focus {
-	color: #444;
+    color: #444;
 }
 
 .nav a:hover,
 .nav a:focus,
 .nav a:hover i,
 .nav a:focus i {
-	color: gray;
+    color: gray;
 }
 
 .adventure-entry a {
-	color: #333;
+    color: #333;
 }
 
 .adventure-entry a:hover,
 .adventure-entry a:focus {
-	color: #666;
+    color: #666;
 }
 
 hr {
@@ -91,21 +87,24 @@ hr {
 }
 
 h1 .editable-input input {
-	font-size: 38.5px;
-	line-height: 40px;
-	height: 40px;
-	margin: -8px;
-	display: inline-block;
-	margin-top: -10px;
-	margin-right: 0px;
-	margin-bottom: -10px;
+    font-size: 38.5px;
+    line-height: 40px;
+    height: 40px;
+    margin: -8px;
+    display: inline-block;
+    margin-top: -10px;
+    margin-right: 0px;
+    margin-bottom: -10px;
 }
 
 h1 .editableform {
-	margin-top: -10px;
+    margin-top: -10px;
 }
 
-.stash {display: none;}
+.stash {
+    display: none;
+}
+
 .reveal {
     -webkit-opacity: 1;
     -moz-opacity: 1;
@@ -119,11 +118,9 @@ h1 .editableform {
 }
 
 .main {
-/*	background-color: rgba(255,255,255,0.8);
-	box-shadow: 0 0 10px 0px black;     */
+    /*	background-color: rgba(255,255,255,0.8);
+        box-shadow: 0 0 10px 0px black;     */
 }
-
-
 
 .main > .container {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
@@ -134,8 +131,8 @@ h1 .editableform {
 }
 
 .page-header {
-	background: rgba(255,255,255,0.8);
-	padding: 5px 20px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 20px;
 }
 
 .page-header small {
@@ -143,68 +140,64 @@ h1 .editableform {
 
 .jrn-container,
 #yingyangyong-container {
-	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
     margin-top: 50px;
-	padding: 20px;
-	position: relative;
+    padding: 20px;
+    position: relative;
 }
-
-
-
 
 .jrn-container h2 {
-	background: rgba(255,255,255,0.3);
-	padding: 20px 20px;
-	border-bottom: 1px solid white;
-	margin: -20px -20px 20px -20px;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px 20px;
+    border-bottom: 1px solid white;
+    margin: -20px -20px 20px -20px;
 }
 
-
 .jrn-container h2#index {
-	background: rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .jrn-container h2#places {
-	background: rgba(184, 246, 145, 0.6)
+    background: rgba(184, 246, 145, 0.6)
 }
 
 .jrn-container h2#adventurers {
-	background: rgba(235, 114, 104, 0.6);
+    background: rgba(235, 114, 104, 0.6);
 }
 
 .jrn-container h2#times {
-	background: rgba(152, 229, 251, 0.6);
+    background: rgba(152, 229, 251, 0.6);
 }
 
 .jrn-footer {
-	background: rgba(255,255,255,0.3);
-	padding: 20px 20px;
-	border-top: 1px solid white;
-	margin: 20px -20px -20px -20px;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px 20px;
+    border-top: 1px solid white;
+    margin: 20px -20px -20px -20px;
 }
 
 .main > .row > * {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
     display: block;
-    padding: 20px 50px;	
+    padding: 20px 50px;
 }
 
 .main > .row {
-	margin-left: -60px;
-	margin-right: 10px;
+    margin-left: -60px;
+    margin-right: 10px;
 }
 
 #adventure-container .row .row {
     background: none;
 }
 
-#adventure-container .row.active {	
+#adventure-container .row.active {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
 }
 
 #adventure-container .row.active h2 {
-	color: gray !important;
-}	
+    color: gray !important;
+}
 
 body > .row-fluid > div.span8 {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.4);
@@ -218,12 +211,12 @@ body > .row-fluid > div.span8.no-background {
 }
 
 body > .row-fluid > div.span8 h2 {
-	background: rgba(255,255,255,0.2);
-	padding-left: 20px;
-	margin-top: 0;
-	color: white !important;
-	padding: 5px 20px;
-	border-bottom: 1px solid white;
+    background: rgba(255, 255, 255, 0.2);
+    padding-left: 20px;
+    margin-top: 0;
+    color: white !important;
+    padding: 5px 20px;
+    border-bottom: 1px solid white;
 }
 
 .navbar {
@@ -236,9 +229,9 @@ body > .row-fluid > div.span8 h2 {
 }
 
 .navbar-fixed-top .navbar-inner .brand, .hero-unit h1 {
-	color: #E97802;
-	vertical-align: text-bottom;
-	line-height: 20px;
+    color: #E97802;
+    vertical-align: text-bottom;
+    line-height: 20px;
 }
 
 .navbar .brand {
@@ -259,11 +252,11 @@ body > .row-fluid > div.span8 h2 {
 }
 
 .navbar .user-login {
-	padding: 10px 0;
+    padding: 10px 0;
 }
 
-.navbar .nav > .active > a, 
-.navbar .nav > .active > a:hover, 
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
 .navbar .nav > .active > a:focus {
     color: #E97802;
     text-decoration: none;
@@ -275,47 +268,47 @@ body > .row-fluid > div.span8 h2 {
 }
 
 .spacer100 {
-	height: 100px;
-	width: 100%;
+    height: 100px;
+    width: 100%;
 }
 
 .spacer30 {
-	height: 30px;
-	width: 100%;
+    height: 30px;
+    width: 100%;
 }
 
 .spacer20 {
-	height: 20px;
-	width: 100%;
+    height: 20px;
+    width: 100%;
 }
 
 .controls.switch {
-	height: 28px;
-	margin-left: 20px;
+    height: 28px;
+    margin-left: 20px;
 }
 
 table.inspiration td {
-	vertical-align: top;
-	padding-right: 40px;
+    vertical-align: top;
+    padding-right: 40px;
 }
 
 table.inspiration td:last-child {
-	padding-right: 0px;
+    padding-right: 0px;
 }
 
 table.inspiration td.fixed-width {
-	width: 240px;
+    width: 240px;
 }
 
 table.inspiration .images img {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .tripadvisor {
-	background: #fff!important;
-	box-shadow: 0 0 3px #aaa!important;
-	border-radius: 3px!important;
-	margin-bottom: 20px;
+    background: #fff !important;
+    box-shadow: 0 0 3px #aaa !important;
+    border-radius: 3px !important;
+    margin-bottom: 20px;
 }
 
 .tripadvisor .description {
@@ -323,232 +316,228 @@ table.inspiration .images img {
 }
 
 .status-COMPLETE {
-	text-decoration: line-through;
+    text-decoration: line-through;
 }
-
 
 .weather-container {
-	margin: 0px 0px 20px 20px;
+    margin: 0px 0px 20px 20px;
 }
 
-
 .weather-container h3 {
-	font-size: 16px;
+    font-size: 16px;
 }
 
 .weather {
-	float: left;
-	text-align: center;
-	margin-right: 20px;
+    float: left;
+    text-align: center;
+    margin-right: 20px;
 }
 
 .weather:last-child {
-	margin-right: 0px;
+    margin-right: 0px;
 }
 
-
-
 .weather img {
-	width: 100px;
-	display: block;
+    width: 100px;
+    display: block;
 }
 
 .weather .high-temperature {
-	font-size: 24px;
+    font-size: 24px;
 }
 
 .weather .low-temperature {
-	font-size: 14px;
-	margin-left: 5px;
+    font-size: 14px;
+    margin-left: 5px;
 }
 
 .comments {
-	padding-left: 10px;
+    padding-left: 10px;
 }
 
-.comments .empty{
-	color: rgba(255,255,255,0.6);
-	font-style: italic;
+.comments .empty {
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
 }
-	
+
 .comment-list {
-	max-height: 100%;
-	max-height: calc(100% - 40px);
-	overflow: auto;
+    max-height: 100%;
+    max-height: calc(100% -40px);
+    overflow: auto;
 }
 
 .comments-wall .comment-list {
-	max-height: none;
-	color: #333;
+    max-height: none;
+    color: #333;
 }
 
 .comments-wall .comment-list .comment-info {
-	color: #555;
+    color: #555;
 }
 
 .comments-wall .comment-list > * {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .comment-list > * {
-	margin-bottom: 10px;
-	padding-left: 5px;
+    margin-bottom: 10px;
+    padding-left: 5px;
 }
 
 .comment-list > *:last-child {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .comment-info {
-	color: rgba(255,255,255,0.7);
-	font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
 }
 
 .comment-info small {
-	color: #BBB;
+    color: #BBB;
 }
 
 .input-comment {
-	margin-top: 10px;
-	opacity: 0.5;
-	width: 75%;
+    margin-top: 10px;
+    opacity: 0.5;
+    width: 75%;
 }
 
 .input-comment input {
 
 }
 
-
 .btn-add {
-	
+
 }
 
-#where-map img { max-width: none; }
+#where-map img {
+    max-width: none;
+}
 
 .icon-for-adventure-title {
 
 }
 
 .icon-for-adventure-title.icon-cogs {
-	font-size: 24px;
+    font-size: 24px;
 }
 
 .nav-adventure {
-	background-color: rgba(0,0,0,0.4);
-	font-size: 40px;
-	position: fixed;
-	left: 0;
-	top: 0;
-	height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 40px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
 }
 
 .nav-adventure li {
-	height: calc(100% / 8);
-	min-height: 80px;
+    height: calc(100% / 8);
+    min-height: 80px;
 }
 
 .nav-adventure li + li {
-	margin-top: 1px;
+    margin-top: 1px;
 }
 
 .nav-adventure li a {
-	border-radius: 0;
-	border-right: 5px solid rgba(255,255,255,0.6);
-	text-align: center;
-	margin: 0;
-	height: 100%;
-	width: 100px;
+    border-radius: 0;
+    border-right: 5px solid rgba(255, 255, 255, 0.6);
+    text-align: center;
+    margin: 0;
+    height: 100%;
+    width: 100px;
 }
 
 .nav-adventure li a i {
-	position: absolute;
-	top: 50%;
-	margin-top: -20px;
-	width: 40px;
-	left: 50%;
-	margin-left: -20px;
+    position: absolute;
+    top: 50%;
+    margin-top: -20px;
+    width: 40px;
+    left: 50%;
+    margin-left: -20px;
 }
 
 .nav-adventure li#nav-adventure-places a {
-	border-right-color: rgba(184, 246, 145, 0.5);
+    border-right-color: rgba(184, 246, 145, 0.5);
 }
 
 .nav-adventure li#nav-adventure-adventurers a {
-	border-right-color: rgba(235, 114, 104, 0.5);
+    border-right-color: rgba(235, 114, 104, 0.5);
 }
 
 .nav-adventure li#nav-adventure-time a {
-	border-right-color: rgba(152, 229, 251, 0.5);
+    border-right-color: rgba(152, 229, 251, 0.5);
 }
 
 .nav-adventure > li > a {
-	padding-top: 12px;
-	padding-bottom: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 .nav-adventure a {
-    color:  white !important;
+    color: white !important;
 }
 
-.nav-adventure .nav-pills>li.active>a, 
-.nav-adventure .nav-pills>li.active>a:hover, 
+.nav-adventure .nav-pills>li.active>a,
+.nav-adventure .nav-pills>li.active>a:hover,
 .nav-adventure .nav-pills>li.active>a:focus {
-	background: rgba(255,255,255,0.4) !important;
+    background: rgba(255, 255, 255, 0.4) !important;
 }
 
-.nav-adventure .nav-pills>li>a:hover, 
+.nav-adventure .nav-pills>li>a:hover,
 .nav-adventure .nav-pills>li>a:focus {
-	color: white;
-	background: rgba(255,255,255,0.2);
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
 }
 
-.nav-adventure .nav-pills>li>a:hover i, 
-.nav-adventure .nav-pills>li>a:focus i{
-	color: white;
+.nav-adventure .nav-pills>li>a:hover i,
+.nav-adventure .nav-pills>li>a:focus i {
+    color: white;
 }
-
 
 .nav-adventure .nav {
-	height: 100%;
+    height: 100%;
 }
 
 h3 {
-	background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     margin-bottom: 10px;
     padding: 10px 20px;
 }
 
-#where-dialog, 
-#who-dialog, 
+#where-dialog,
+#who-dialog,
 #when-dialog {
-	border-left: 20px solid silver !important;
-	border-radius: 0 !important;
-	background: white !important;
-	position: absolute;
-	width: 100%;
+    border-left: 20px solid silver !important;
+    border-radius: 0 !important;
+    background: white !important;
+    position: absolute;
+    width: 100%;
 }
 
 #where-dialog {
-	border-left-color: rgba(184, 246, 145, 0.5) !important;
+    border-left-color: rgba(184, 246, 145, 0.5) !important;
 }
 
 #who-dialog {
-	border-left-color: rgba(235, 114, 104, 0.5) !important;
+    border-left-color: rgba(235, 114, 104, 0.5) !important;
 }
 
 #when-dialog {
-	border-left-color: rgba(152, 229, 251, 0.5) !important;
+    border-left-color: rgba(152, 229, 251, 0.5) !important;
 }
 
 #yingyangyong {
-/*	-webkit-transition: all 1s ease;
-	-moz-transition: all 1s ease;
-	-ms-transition: all 1s ease;
-	-o-transition: all 1s ease;
-	transition: all 1s ease; */
+    /*	-webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        transition: all 1s ease; */
 
     background-color: rgba(255, 255, 255, 0.1);
-	border-radius: 50%;
+    border-radius: 50%;
     padding: 5px;
 }
 
@@ -557,57 +546,111 @@ h3 {
 }
 
 @-webkit-keyframes spinWhere {
-0% { -webkit-transform: rotate(240deg);}
-100% { -webkit-transform: rotate(360deg);}
+    0% {
+        -webkit-transform: rotate(240deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
+
 @-moz-keyframes spinWhere {
-0% { -moz-transform: rotate(240deg);}
-100% { -moz-transform: rotate(360deg);}
+    0% {
+        -moz-transform: rotate(240deg);
+    }
+    100% {
+        -moz-transform: rotate(360deg);
+    }
 }
+
 @-o-keyframes spinWhere {
-0% { -o-transform: rotate(240deg);}
-100% { -o-transform: rotate(360deg);}
+    0% {
+        -o-transform: rotate(240deg);
+    }
+    100% {
+        -o-transform: rotate(360deg);
+    }
 }
+
 @-ms-keyframes spinWhere {
-0% { -ms-transform: rotate(240deg);}
-100% { -ms-transform: rotate(360deg);}
+    0% {
+        -ms-transform: rotate(240deg);
+    }
+    100% {
+        -ms-transform: rotate(360deg);
+    }
 }
-
-
 
 @-webkit-keyframes spinWho {
-0% { -webkit-transform: rotate(0deg);}
-100% { -webkit-transform: rotate(120deg);}
-}
-@-moz-keyframes spinWho {
-0% { -moz-transform: rotate(0deg);}
-100% { -moz-transform: rotate(120deg);}
-}
-@-o-keyframes spinWho {
-0% { -o-transform: rotate(0deg);}
-100% { -o-transform: rotate(120deg);}
-}
-@-ms-keyframes spinWho {
-0% { -ms-transform: rotate(0deg);}
-100% { -ms-transform: rotate(120deg);}
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(120deg);
+    }
 }
 
+@-moz-keyframes spinWho {
+    0% {
+        -moz-transform: rotate(0deg);
+    }
+    100% {
+        -moz-transform: rotate(120deg);
+    }
+}
+
+@-o-keyframes spinWho {
+    0% {
+        -o-transform: rotate(0deg);
+    }
+    100% {
+        -o-transform: rotate(120deg);
+    }
+}
+
+@-ms-keyframes spinWho {
+    0% {
+        -ms-transform: rotate(0deg);
+    }
+    100% {
+        -ms-transform: rotate(120deg);
+    }
+}
 
 @-webkit-keyframes spinWhen {
-0% { -webkit-transform: rotate(120deg);}
-100% { -webkit-transform: rotate(240deg);}
+    0% {
+        -webkit-transform: rotate(120deg);
+    }
+    100% {
+        -webkit-transform: rotate(240deg);
+    }
 }
+
 @-moz-keyframes spinWhen {
-0% { -moz-transform: rotate(120deg);}
-100% { -moz-transform: rotate(240deg);}
+    0% {
+        -moz-transform: rotate(120deg);
+    }
+    100% {
+        -moz-transform: rotate(240deg);
+    }
 }
+
 @-o-keyframes spinWhen {
-0% { -o-transform: rotate(120deg);}
-100% { -o-transform: rotate(240deg);}
+    0% {
+        -o-transform: rotate(120deg);
+    }
+    100% {
+        -o-transform: rotate(240deg);
+    }
 }
+
 @-ms-keyframes spinWhen {
-0% { -ms-transform: rotate(120deg);}
-100% { -ms-transform: rotate(240deg);}
+    0% {
+        -ms-transform: rotate(120deg);
+    }
+    100% {
+        -ms-transform: rotate(240deg);
+    }
 }
 
 /*
@@ -622,49 +665,47 @@ h3 {
 */
 
 #yingyangyong.where {
-	-webkit-transform: rotate(0deg);
-	-moz-transform: rotate(0deg);
-	-ms-transform: rotate(0deg);
-	-o-transform: rotate(0deg);
-	transform: rotate(0deg);
-	
-	-webkit-animation: spinWhere 1s 1 ease;
-	-moz-animation: spinWhere 1s 1 ease;
-	-o-animation: spinWhere 1s 1 ease;
-	-ms-animation: spinWhere 1s 1 ease;
-	animation: spinWhere 1s ease 1;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+
+    -webkit-animation: spinWhere 1s 1 ease;
+    -moz-animation: spinWhere 1s 1 ease;
+    -o-animation: spinWhere 1s 1 ease;
+    -ms-animation: spinWhere 1s 1 ease;
+    animation: spinWhere 1s ease 1;
 
 }
-
 
 #yingyangyong.who {
-	-webkit-transform: rotate(120deg);
-	-moz-transform: rotate(120deg);
-	-ms-transform: rotate(120deg);
-	-o-transform: rotate(120deg);
-	transform: rotate(120deg);
-	
-	-webkit-animation: spinWho 1s 1 ease;
-	-moz-animation: spinWho 1s 1 ease;
-	-o-animation: spinWho 1s 1 ease;
-	-ms-animation: spinWho 1s 1 ease;
-	animation: spinWho 1s ease 1;
+    -webkit-transform: rotate(120deg);
+    -moz-transform: rotate(120deg);
+    -ms-transform: rotate(120deg);
+    -o-transform: rotate(120deg);
+    transform: rotate(120deg);
+
+    -webkit-animation: spinWho 1s 1 ease;
+    -moz-animation: spinWho 1s 1 ease;
+    -o-animation: spinWho 1s 1 ease;
+    -ms-animation: spinWho 1s 1 ease;
+    animation: spinWho 1s ease 1;
 
 }
 
-
 #yingyangyong.when {
-	-webkit-transform: rotate(240deg);
-	-moz-transform: rotate(240deg);
-	-ms-transform: rotate(240deg);
-	-o-transform: rotate(240deg);
-	transform: rotate(240deg);
-	
-	-webkit-animation: spinWhen 1s ease 1;
-	-moz-animation: spinWhen 1s ease 1;
-	-o-animation: spinWhen 1s ease 1;
-	-ms-animation: spinWhen 1s ease 1;
-	animation: spinWhen 1s ease 1;
+    -webkit-transform: rotate(240deg);
+    -moz-transform: rotate(240deg);
+    -ms-transform: rotate(240deg);
+    -o-transform: rotate(240deg);
+    transform: rotate(240deg);
+
+    -webkit-animation: spinWhen 1s ease 1;
+    -moz-animation: spinWhen 1s ease 1;
+    -o-animation: spinWhen 1s ease 1;
+    -ms-animation: spinWhen 1s ease 1;
+    animation: spinWhen 1s ease 1;
 }
 
 #inspiration-container .social {
@@ -676,12 +717,12 @@ h3 {
 }
 
 #adventure-container .comments {
-	position: absolute;
-	left: 100%;
+    position: absolute;
+    left: 100%;
     min-width: 220px;
-	color: white;
-	top: 0px;
-	height: 100%;
+    color: white;
+    top: 0px;
+    height: 100%;
 }
 
 #adventure-container .comments-wall {
@@ -689,20 +730,20 @@ h3 {
     min-width: 300px;
     color: white;
     top: 0px;
-	height: auto;
+    height: auto;
 }
 
 #adventure-container .table td {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 #adventure-container .table th {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 .table td.text-center,
 .table th.text-center {
-	text-align: center;
+    text-align: center;
 }
 
 #adventure-title-image.hover {
@@ -710,9 +751,9 @@ h3 {
 }
 
 #files-upload-dropzone {
-	border: dashed 3px rgba(255,255,255,0.4);
-	padding: 40px 0 20px 0;
-	margin-top: 15px;
+    border: dashed 3px rgba(255, 255, 255, 0.4);
+    padding: 40px 0 20px 0;
+    margin-top: 15px;
 }
 
 #files-upload-dropzone.hover {
@@ -720,15 +761,15 @@ h3 {
 }
 
 .btn-edit-description {
-	margin-top: 10px;
+    margin-top: 10px;
 }
 
 .x-edit-loading {
-	font-size: 16px;
+    font-size: 16px;
 }
 
 h1 .x-edit-loading {
-	font-size: 22px;
+    font-size: 22px;
 }
 
 #todo-title {
@@ -739,214 +780,209 @@ h1 .x-edit-loading {
 }
 
 .adventures-list-full .row-fluid {
-	vertical-align: middle;
-	line-height: 56px;
-	height: 60px;
+    vertical-align: middle;
+    line-height: 56px;
+    height: 60px;
 }
 
 .adventures-list-full h4 {
-	margin: 0;
-	padding: 0;
-	line-height: inherit;
+    margin: 0;
+    padding: 0;
+    line-height: inherit;
 }
 
 .adventures-list-full .media-object {
 }
 
 .adventures-list-full .action {
-	margin-right: 14px;
+    margin-right: 14px;
 }
 
 .polaroid > div {
-	padding: 2px 10px;
+    padding: 2px 10px;
 }
 
 .polaroid h4 {
-	margin: 10px 0px;
+    margin: 10px 0px;
 }
-
 
 .polaroid-hover > a {
-	display: block;
-	height: 100px;
-	width: 100px;
-	overflow: hidden;
+    display: block;
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
 }
-
 
 .polaroid-hover > a:hover,
 .polaroid-hover > a:focus {
-	border: 3px solid #a2e085;
+    border: 3px solid #a2e085;
 }
 
 .polaroid-hover.polaroid-active > a {
-	border: 3px solid #5cb85c;
+    border: 3px solid #5cb85c;
 }
 
 .polaroid-hover.polaroid-active > a img,
 .polaroid-hover > a:hover img,
 .polaroid-hover > a:focus img {
-	margin: -3px !important;
+    margin: -3px !important;
 }
 
 .prime-image {
-	border: none !important;
-	position: relative;
-	margin-bottom: 0;
-	margin-top: 50px;
+    border: none !important;
+    position: relative;
+    margin-bottom: 0;
+    margin-top: 50px;
 }
 
 .prime-image .title-name {
-	position: absolute;
-	bottom: 20px;
-	left: 20px;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
     color: white;
     font-size: 32px;
     text-shadow: 0 0px 1px black, 0 1px 1px #444;
 }
 
 .prime-image .title-name a {
-	border: none;
-	color: white;
+    border: none;
+    color: white;
 }
 
 .prime-image .title-name i {
-	font-size: 24px;
-	color: white;
+    font-size: 24px;
+    color: white;
 }
 
 .prime-image .toolbar {
-	position: absolute;
-	right: 20px;
-	bottom: 20px;
-	white-space: nowrap;
-	display: inline;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    white-space: nowrap;
+    display: inline;
 }
 
 .prime-image .toolbar .btn {
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 .header > * > * {
-	background-color: rgba(255,255,255,0.2);
-	border: none;
-	padding: 20px 20px 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 20px 20px 10px;
 }
 
-
 .header * {
-	color: white;
+    color: white;
 }
 
 .header .navbar-text {
-	margin-top: -10px;
-	margin-bottom: 5px;
+    margin-top: -10px;
+    margin-bottom: 5px;
 }
 
 .header .text-right {
-	margin-top: 1px;
+    margin-top: 1px;
 }
 
 .header .pull-right i {
-	position: relative;
-	top: 2px;
+    position: relative;
+    top: 2px;
 }
 
 .popover * {
-	color: #333;
+    color: #333;
 }
 
 .nav-pills>.active>a, .nav-pills>.active>a:hover, .nav-pills>.active>a:focus {
-	color: gray;
-	background-color: white;
+    color: gray;
+    background-color: white;
 }
 
 #success-stories {
-	padding-bottom: 20px;
+    padding-bottom: 20px;
 }
 
 #success-stories .carousel-indicators {
-	bottom: -10px;
+    bottom: -10px;
 }
 
 #success-stories .item {
-	padding: 0 70px;
+    padding: 0 70px;
 }
 
 #success-stories .carousel-control {
-	background: white;
-	width: 50px;
-	margin: -20px;
+    background: white;
+    width: 50px;
+    margin: -20px;
 }
 
 #success-stories .polaroid {
-	width: 100%;
-	margin-top: 20px;
-	position: relative;
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
 }
 
-
 #success-stories .polaroid img {
-	width: 100%;
+    width: 100%;
 }
 
 .search-query {
-	padding: 8px 12px;
-	border: none;
-	width: 300px;
-	position: relative;
-	top: 2px;
-	color: #333;
+    padding: 8px 12px;
+    border: none;
+    width: 300px;
+    position: relative;
+    top: 2px;
+    color: #333;
 }
 
 .alert {
-	margin-top: 50px;
+    margin-top: 50px;
 }
 
 .btn-group {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 .has-switch {
-	border: 1px solid white;
-	overflow: hidden;
-	min-width: 125px;
+    border: 1px solid white;
+    overflow: hidden;
+    min-width: 125px;
 }
 
-.has-switch span.switch-primary, 
+.has-switch span.switch-primary,
 .has-switch span.switch-left {
-	background: #428bca;
+    background: #428bca;
 }
 
-.has-switch span, 
+.has-switch span,
 .has-switch label {
-	padding-bottom: 6px;
-	padding-top: 6px;
+    padding-bottom: 6px;
+    padding-top: 6px;
 }
 
 .has-switch span.switch-right {
-	background: none;
+    background: none;
 }
 
 .btn-file {
-	border-radius: 4px;
+    border-radius: 4px;
 }
 
 .jrn-actions {
-	background: rgba(255,255,255,0.2);
-	border-top: 1px solid white;
-	padding: 20px;
-	margin: 20px -20px -20px -20px !important;
+    background: rgba(255, 255, 255, 0.2);
+    border-top: 1px solid white;
+    padding: 20px;
+    margin: 20px -20px -20px -20px !important;
 }
 
 .jrn-form .form-group {
-	margin-right: 0px;
-	margin-left: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
 }
 
-
 .jrn-form .control-label {
-	float: left;
+    float: left;
 }
 
 .drophover {
@@ -961,39 +997,38 @@ h1 .x-edit-loading {
     overflow: hidden;
 }
 
-.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>td,
 .table-striped>tbody>tr:nth-child(odd)>th {
-	background-color: rgba(255,255,255,0.4);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
-.table-striped>tbody>tr:hover>td, 
+.table-striped>tbody>tr:hover>td,
 .table-striped>tbody>tr:hover>th {
-	background-color: rgba(255,255,255,0.6);
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
-.table thead>tr>th, 
-.table tbody>tr>th, 
-.table tfoot>tr>th, 
-.table thead>tr>td, 
-.table tbody>tr>td, 
+.table thead>tr>th,
+.table tbody>tr>th,
+.table tfoot>tr>th,
+.table thead>tr>td,
+.table tbody>tr>td,
 .table tfoot>tr>td {
-	border-top: none;
-	border-bottom: none;
+    border-top: none;
+    border-bottom: none;
 }
 
 .adventure-container .editable-container,
 .adventure-container .editable-input,
 .adventure-container textarea {
-	width: 100%;
+    width: 100%;
 }
 
 .adventure-container .editable-buttons {
-	text-align: right;
+    text-align: right;
 }
 
-
 .nav-category {
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
     font-size: 40px;
     position: fixed;
     left: 0;
@@ -1012,7 +1047,7 @@ h1 .x-edit-loading {
 
 .nav-category li a {
     border-radius: 0;
-    border-right: 5px solid rgba(255,255,255,0.6);
+    border-right: 5px solid rgba(255, 255, 255, 0.6);
     text-align: center;
     margin: 0;
     height: 100%;
@@ -1034,41 +1069,35 @@ h1 .x-edit-loading {
 }
 
 .nav-category a {
-    color:  white;
+    color: white;
 }
 
 .nav-category .nav-pills>li.active>a,
 .nav-category .nav-pills>li.active>a:hover,
 .nav-category .nav-pills>li.active>a:focus {
-    background: rgba(255,255,255,0.4) !important;
+    background: rgba(255, 255, 255, 0.4) !important;
 }
 
 .nav-category .nav-pills>li>a:hover,
 .nav-category .nav-pills>li>a:focus {
     color: white;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .nav-category .nav-pills>li>a:hover i,
-.nav-category .nav-pills>li>a:focus i{
+.nav-category .nav-pills>li>a:focus i {
     color: white;
 }
-
 
 .nav-category .nav {
     height: 100%;
 }
 
-
-
 /* JournWe Icon */
 @font-face {
     font-family: 'journwe';
-    src:url('../font/journwe.eot');
-    src:url('../font/journwe.eot?#iefix') format('embedded-opentype'),
-    url('../font/journwe.woff') format('woff'),
-    url('../font/journwe.ttf') format('truetype'),
-    url('../font/journwe.svg#journwe') format('svg');
+    src: url('../font/journwe.eot');
+    src: url('../font/journwe.eot?#iefix') format('embedded-opentype'), url('../font/journwe.woff') format('woff'), url('../font/journwe.ttf') format('truetype'), url('../font/journwe.svg#journwe') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -1083,83 +1112,114 @@ h1 .x-edit-loading {
     line-height: 1;
     -webkit-font-smoothing: antialiased;
 }
+
 .icon-journwe:before {
     content: "\e000";
 }
 
 .jrn-subcategory a {
-	display: inline-block;
+    display: inline-block;
 }
 
 .jrn-subcategory a .badge {
-	top: -2px;
-	position: relative;
+    top: -2px;
+    position: relative;
 }
 
 @media (min-width: 768px) {
-	.lead {
-		font-size: 20px;
-	}
+    .lead {
+        font-size: 20px;
+    }
 }
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
-	color: #428bca;
-	background-color: transparent;
+    color: #428bca;
+    background-color: transparent;
 }
 
 .form-control {
-	max-width: 100%;
+    max-width: 100%;
 }
 
 .btn-adopt {
-	width: 60px;
-	margin-bottom: 2px;
+    width: 60px;
+    margin-bottom: 2px;
 }
 
-
 .btn-adopt + .btn-adopt {
-	margin-bottom: -2px;
+    margin-bottom: -2px;
 }
 
 .jrn-category ul {
-	padding-left: 20px;
+    padding-left: 20px;
 }
 
 img.landing {
-	width: 90%;
-	border: 1px solid white;
-	margin-bottom: 50px;
+    width: 90%;
+    border: 1px solid white;
+    margin-bottom: 50px;
 }
 
-
 .background-container {
-	position: fixed;
-	z-index: -1;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	right: 0;
-	height: 100%;
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    right: 0;
+    height: 100%;
 }
 
 .background-container img {
-	background-image: url("http://i.embed.ly/1/image/resize?width=1600&url=http%3A%2F%2Fwww.journwe.com%2Fassets%2Fimg%2Fprekestollen.JPG&key=2c8ef5b200c6468f9f863bc75c46009f");
-	width: 100%;
-	height: 110%;
-	background-size: cover;
-	background-position: center center;
+    background-image: url("http://i.embed.ly/1/image/resize?width=1600&url=http%3A%2F%2Fwww.journwe.com%2Fassets%2Fimg%2Fprekestollen.JPG&key=2c8ef5b200c6468f9f863bc75c46009f");
+    width: 100%;
+    height: 110%;
+    background-size: cover;
+    background-position: center center;
 }
 
 .background-container div.overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0,0,0,0.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
+/* star rating      */
+.rating {
+    float: left;
+}
 
+.rating:not(:checked) > input {
+    display: none;
+}
+
+.rating:not(:checked) > label {
+    float: right;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #ddd;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: gold;
+}
+
+.rating > input:checked ~ label {
+    color: #f70;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+}
