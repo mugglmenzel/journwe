@@ -53,13 +53,7 @@ public class AdventurePlaceController extends Controller {
             places.add(node);
         }
 
-
-        ObjectNode result = Json.newObject();
-        result.put("places", Json.toJson(places));
-        result.put("favoritePlace", favId != null ? Json.toJson(new PlaceOptionDAO().get(advId, favId)) : Json.toJson(""));
-        result.put("autoFavoritePlace", Json.toJson(autoFavorite(advId)));
-
-        return ok(Json.toJson(result));
+        return ok(Json.toJson(Json.toJson(places)));
     }
 
     @Security.Authenticated(SecuredBetaUser.class)
@@ -69,14 +63,15 @@ public class AdventurePlaceController extends Controller {
         if (new PlaceOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
         String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
-
+        PlaceOption fav = (favId == null) ? autoFavorite(advId) : new PlaceOptionDAO().get(advId, favId);
 
         ObjectNode node = Json.newObject();
-        node.put("favorite", Json.toJson(new PlaceOptionDAO().get(advId, favId)));
+        node.put("favorite", Json.toJson(fav));
         node.put("autoFavorite", Json.toJson(autoFavorite(advId)));
 
         return ok(node);
     }
+
 
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result setFavoritePlace(String advId) {

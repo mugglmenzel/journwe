@@ -160,6 +160,9 @@
         else
             $('#places-list tbody').append(tmpl('place-template', data)).fadeIn();
 
+        $('#places-list tbody .rating :radio').change(function (star) {
+            votePlace('', $(star.target).val()/5, $(star.target).data('id'));
+        });
 
         var marker = new google.maps.Marker({animation: google.maps.Animation.DROP, map: map, position: new google.maps.LatLng(data.lat, data.lng), title: data.address});
         markers[data.placeId] = marker;
@@ -180,37 +183,27 @@
     $('document').ready(function (){
         initialize();
         
-
-        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
-
         $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (result) {
 
 
-            $('#places-favorite-place-name').html(result.favoritePlace != null ? result.favoritePlace.address : "@Messages("adventure.general.nofavourite.placeholder")");
-            $('#places-autofavorite-place-name').html(result.autoFavoritePlace != null ? result.autoFavoritePlace.address : "@Messages("adventure.general.nofavourite.placeholder")");
-            $('.btn-close-place').toggle(!!result.favoritePlace);
-
             $('#places-list tbody').empty();
-            for(var id in result.places) {
-                renderPlaceOption(result.places[id])
+            for(var id in result) {
+                renderPlaceOption(result[id])
             }
 
-            if (result.places.length){
+            if (result.length){
                 $('#places-list').show();
             } else {
                 $('#places-list').hide();
             }
 
             $('.places-loading').hide();
-            $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
-            $('#places-autofavorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
+
+            updateFavorite();
 
             updatePlaceVoteOpen(@adv.getPlaceVoteOpen);
-            $('.rating :radio').change(function (star) {
-                votePlace('', $(star.target).val()/5, $(star.target).data('id'));
-                alert($(star.target).data('id') + ' rating changed to ' + $(star.target).val());
 
-            });
+
         });
     });
 
@@ -277,6 +270,20 @@
 
     }
 
+    function updateFavorite() {
+
+        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
+        $('#places-autofavorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
+
+        $.get('@routes.AdventurePlaceController.getFavoritePlace(adv.getId)', function (result) {
+            $('#places-favorite-place-name').html(result.favorite != null ? result.favorite.address : "@Messages("adventure.general.nofavourite.placeholder")");
+            $('#places-autofavorite-place-name').html(result.autoFavorite != null ? result.autoFavorite.address : "@Messages("adventure.general.nofavourite.placeholder")");
+            $('.btn-close-place').toggle(!!result.favorite);
+            $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
+            $('#places-autofavorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
+        });
+    }
+
     function votePlace(vote, voteGrav, optId) {
         
         // Spin
@@ -285,6 +292,7 @@
 
         $.post('@routes.AdventurePlaceController.voteParam(adv.getId)', {placeId: optId, vote: vote, voteGravity: voteGrav}, function(res) {
                 renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
+                updateFavorite();
                 $('#placeoption-item-'+res.placeId+' .dropdown-toggle')
                     .html('<i class="icon-pencil"></i>');
             });
