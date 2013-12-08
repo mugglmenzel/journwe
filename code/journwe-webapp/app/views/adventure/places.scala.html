@@ -28,6 +28,7 @@
     <thead>
         <tr>
             <th>@Messages("adventure.general.favourite")</th>
+            <th>Group Rating</th>
             <th>@Messages("adventure.places.location")</th>
             <th style="min-width: 135px;">@Messages("adventure.general.yourvote")</th>
             <th class="text-center">@Messages("adventure.general.yes")</th>
@@ -66,6 +67,7 @@
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
         <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
+        <td>{%=(o.voteGroup*5)%}</td>
         <td><em>{%=o.address%}</em></td>
         @if(JournweAuthorization.canVoteForPlaces(adv.getId)) {
         <td>
@@ -164,7 +166,6 @@
 
 
         place.find('.rating :radio').click(function (e) {
-            alert('voting');
             if($(e.target).is(':checked')) votePlace('', $(e.target).val()/5, $(e.target).data('id'));
         });
 

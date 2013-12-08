@@ -194,30 +194,33 @@ public class AdventurePlaceController extends Controller {
         node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0.6D);
         node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));
+        node.put("voteGroup", Json.toJson(getPlaceGroupRating(place).getRating()));
 
         return node;
     }
 
+    private static PlaceOptionRating getPlaceGroupRating(PlaceOption place) {
+        double sum = 0D;
+        List<PlaceAdventurerPreference> prefs = new PlaceAdventurerPreferenceDAO().all(place.getOptionId());
+        for (PlaceAdventurerPreference pref : prefs)
+            if (0D >= pref.getVoteGravity() || EPreferenceVote.NO.equals(pref.getVote()))
+                return new PlaceOptionRating(place.getPlaceId(), 0D);
+            else
+                sum += pref.getVoteGravity();
+
+        return new PlaceOptionRating(place.getPlaceId(), new Double(sum / prefs.size()));
+    }
+
+
     private static PlaceOption autoFavorite(String advId) {
         List<PlaceOptionRating> ratings = new ArrayList<PlaceOptionRating>();
         List<PlaceOption> placeOptions = new PlaceOptionDAO().all(advId);
-        List<PlaceOption> candidates = new ArrayList<PlaceOption>(placeOptions);
-        for (PlaceOption po : placeOptions) {
-            double sum = 0D;
-            int count = 0;
-            for (PlaceAdventurerPreference pref : new PlaceAdventurerPreferenceDAO().all(po.getOptionId())) {
-                if (new Double(0D).compareTo(pref.getVoteGravity()) >= 0 || EPreferenceVote.NO.equals(pref.getVote())) {
-                    candidates.remove(po);
-                    break;
-                } else {
-                    sum += pref.getVoteGravity();
-                    count++;
-                }
-            }
 
-            if (candidates.contains(po)) ratings.add(new PlaceOptionRating(po.getPlaceId(), new Double(sum / count)));
+        for (PlaceOption po : placeOptions) {
+            PlaceOptionRating rating = getPlaceGroupRating(po);
+            if (rating != null && 0D < rating.getRating()) ratings.add(rating);
         }
-        Logger.info("List of Ratings: " + ratings);
+        Logger.debug("List of Ratings: " + ratings);
 
         String favId = Collections.max(ratings, new Comparator<PlaceOptionRating>() {
             @Override
@@ -225,7 +228,7 @@ public class AdventurePlaceController extends Controller {
                 return placeOptionRating.getRating().compareTo(placeOptionRating2.getRating());
             }
         }).getPlaceOptionId();
-        Logger.info("got autofav with id " + favId);
+        Logger.debug("got autofav with id " + favId);
 
         return new PlaceOptionDAO().get(advId, favId);
     }
