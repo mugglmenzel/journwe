@@ -37,6 +37,7 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 		System.out.println("Prepare to delete records ...");
 
 		Properties prop = new Properties();
+		String endpoint = "dynamodb.eu-west-1.amazonaws.com";
 		String accesskey = "NOT_SET";
 		String secret = "NOT_SET";
 		try {
@@ -49,11 +50,12 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("Loaded AWS credentials of EU-WEST DynamoDB.");
+		System.out.println("Loaded AWS credentials of "+endpoint);
 		
 		BasicAWSCredentials credentials = new BasicAWSCredentials(accesskey,
 				secret);
 		AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(credentials);
+		dynamoDB.setEndpoint(endpoint);
 
 		String[] tables = new String[] {};
 		if (whichTables.equals("all")) {
