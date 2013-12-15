@@ -1,7 +1,7 @@
 package models.helpers;
 
-import models.Weather;
-import models.WeatherPeriod;
+import models.adventure.weather.Weather;
+import models.adventure.weather.WeatherPeriod;
 import org.codehaus.jackson.JsonNode;
 import play.libs.Json;
 

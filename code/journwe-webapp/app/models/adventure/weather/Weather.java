@@ -1,7 +1,6 @@
-package models;
+package models.adventure.weather;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Weather extends ArrayList<WeatherPeriod> {
 

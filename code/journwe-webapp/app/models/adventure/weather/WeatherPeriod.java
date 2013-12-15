@@ -1,4 +1,4 @@
-package models;
+package models.adventure.weather;
 
 public class WeatherPeriod {
 
