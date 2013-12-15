@@ -35,7 +35,8 @@ public class UserEmail {
         this.userId = userId;
     }
 
-    @DynamoDBRangeKey
+    @DynamoDBIndexRangeKey(localSecondaryIndexName =
+            "active-index")
     public String getEmail() {
         return email;
     }

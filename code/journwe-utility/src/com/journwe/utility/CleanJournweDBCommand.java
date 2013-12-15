@@ -33,6 +33,8 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 
 	@Override
 	public CommandResult innerExecute(JournweCLIContext context) {
+		
+		System.out.println("Prepare to delete records ...");
 
 		Properties prop = new Properties();
 		String accesskey = "NOT_SET";
@@ -40,13 +42,15 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 		try {
 			// load a properties file from class path, inside static method
 			prop.load(CleanJournweDBCommand.class.getClassLoader()
-					.getResourceAsStream("aws.properties"));
+					.getResourceAsStream("aws.dev.properties"));
 
 			accesskey = prop.getProperty("accesskey");
 			secret = prop.getProperty("secret");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+		System.out.println("Loaded AWS credentials of EU-WEST DynamoDB.");
+		
 		BasicAWSCredentials credentials = new BasicAWSCredentials(accesskey,
 				secret);
 		AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(credentials);
@@ -65,6 +69,11 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 					"journwe-usersocial" };
 		} else {
 			tables = new String[] { whichTables };
+		}
+		
+		System.out.println("Delete records in: ");
+		for (String tableName : tables) {
+			System.out.println("* "+tableName);
 		}
 
 		String keyName = "";
@@ -157,7 +166,7 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 					System.out.println("DELETED RECORD " + key);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 				return CommandResult.ERROR;
 			}
 		}
