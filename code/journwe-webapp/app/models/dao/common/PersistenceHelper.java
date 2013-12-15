@@ -11,15 +11,18 @@ public class PersistenceHelper {
 	private static AmazonDynamoDB db;
 
 	public static DynamoDBMapper getManager() {
+        db = getDynamoDBClient();
+		return new DynamoDBMapper(db);
+	}
 
-		if (db == null) {
-			db = new AmazonDynamoDBClient(new BasicAWSCredentials(ConfigFactory
-					.load().getString("aws.accessKey"), ConfigFactory.load()
-					.getString("aws.secretKey")));
+    public static AmazonDynamoDB getDynamoDBClient() {
+        if (db == null) {
+            db = new AmazonDynamoDBClient(new BasicAWSCredentials(ConfigFactory
+                    .load().getString("aws.accessKey"), ConfigFactory.load()
+                    .getString("aws.secretKey")));
             db.setEndpoint(ConfigFactory.load().getString("aws.endpoint"));
         }
-		return new DynamoDBMapper(db);
-
-	}
+        return db;
+    }
 
 }
