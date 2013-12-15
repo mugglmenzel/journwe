@@ -1,9 +1,6 @@
 package models.user;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import play.data.validation.Constraints;
 
 /**
@@ -35,8 +32,8 @@ public class UserEmail {
         this.userId = userId;
     }
 
-    @DynamoDBIndexRangeKey(localSecondaryIndexName =
-            "active-index")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName =
+            "email-index")
     public String getEmail() {
         return email;
     }
