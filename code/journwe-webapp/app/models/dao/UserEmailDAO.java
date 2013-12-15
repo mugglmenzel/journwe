@@ -1,11 +1,11 @@
 package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import models.dao.common.CommonEntityDAO;
 import models.user.UserEmail;
-import models.dao.common.CommonRangeEntityDAO;
 import java.util.Iterator;
 
-public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
+public class UserEmailDAO extends CommonEntityDAO<UserEmail> {
 
     public UserEmailDAO() {
         super(UserEmail.class);
