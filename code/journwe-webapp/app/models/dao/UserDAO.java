@@ -1,6 +1,9 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
+import com.amazonaws.services.dynamodbv2.model.*;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.MailChimpObject;
@@ -13,6 +16,7 @@ import com.feth.play.module.pa.providers.oauth2.foursquare.FoursquareAuthUser;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.common.CommonEntityDAO;
+import models.dao.common.PersistenceHelper;
 import models.user.*;
 import play.Logger;
 import play.cache.Cache;
@@ -20,7 +24,10 @@ import play.mvc.Controller;
 import providers.MyUsernamePasswordAuthProvider;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class UserDAO extends CommonEntityDAO<User> {
@@ -74,7 +81,31 @@ public class UserDAO extends CommonEntityDAO<User> {
     public static User findByEmail(final String email) {
         if (email == null || email.isEmpty())
             return null;
-        String userId = getUserIdOfEmailUser(email);
+        UserEmail key = new UserEmail();
+        key.setEmail(email);
+
+        QueryRequest queryRequest = new QueryRequest()
+                .withTableName("journwe-useremail")
+                .withIndexName("email-index");
+        HashMap<String, Condition> keyConditions = new HashMap<String, Condition>();
+        keyConditions.put("email", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withS(email)));
+        queryRequest.setKeyConditions(keyConditions);
+        queryRequest.setSelect(Select.ALL_PROJECTED_ATTRIBUTES);
+        AmazonDynamoDB dynamoDbClient = PersistenceHelper.getDynamoDBClient();
+        QueryResult queryResult = dynamoDbClient.query(queryRequest);
+        List<Map<String, AttributeValue>> items = queryResult.getItems();
+        Iterator<Map<String, AttributeValue>> itemsIter = items.iterator();
+        String userId = null;
+        while (itemsIter.hasNext()) {
+            Map<String, AttributeValue> currentItem = itemsIter.next();
+            Iterator<String> currentItemIter = currentItem.keySet().iterator();
+            while (currentItemIter.hasNext()) {
+                String attr = (String) currentItemIter.next();
+                if (attr == "userId" ) {
+                    userId = currentItem.get(attr).getS();
+                }
+            }
+        }
         if(userId == null)
             return null;
         User toReturn = getUser(userId);
@@ -122,7 +153,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             if (authUser instanceof EmailIdentity) {
                 UserEmail userEmail = new UserEmailDAO().getPrimaryEmailOfUser(social.getUserId());
                 if (userEmail == null || !userEmail.equals(((EmailIdentity) authUser).getEmail())) {
-                    UserEmail email = new UserEmailDAO().get(social.getUserId(), ((EmailIdentity) authUser).getEmail());
+                    UserEmail email = new UserEmailDAO().get(social.getUserId());
 
                     if (email == null) {
                         email = new UserEmail();
@@ -278,48 +309,7 @@ public class UserDAO extends CommonEntityDAO<User> {
         else
             Logger.error("Creating UserSocial failed.");
 
-        // For MyUsernamePasswordAuthUser save Email-to-User Table
-        if(authUser.getProvider().equalsIgnoreCase(MyUsernamePasswordAuthProvider.PROVIDER_KEY)) {
-            UsernamePasswordAuthUser myUser = (UsernamePasswordAuthUser)authUser;
-            EmailToUser etu = new EmailToUser();
-            etu.setEmail(myUser.getEmail());
-            etu.setProvider(myUser.getProvider());
-            etu.setUserId(user.getId());
-            if(new EmailToUserDAO().save(etu))
-                Logger.debug("Saved email-to-user mapping between "+myUser.getEmail()+" and "+myUser.getId()+" for provider "+myUser.getProvider());
-            else
-                Logger.error("Saving email "+myUser.getEmail()+" to user with id "+myUser.getId()+" has failed!");
-        }
-
         return user;
-    }
-
-    /**
-     * Helper for findByEmail method
-     */
-    private static String getUserIdOfEmailUser(String email) {
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
-        EmailToUser etu = new EmailToUser();
-        etu.setEmail(email);
-        query.setHashKeyValues(etu);
-
-        Iterator<EmailToUser> results = pm.query(EmailToUser.class, query).iterator();
-        EmailToUser result = null;
-        int i = 0;
-        while(results.hasNext()) {
-            i++;
-            result = results.next();
-        }
-        // there should be only one result
-        if(i==0)
-            return null;
-        if(i>1) {
-            Logger.warn("Something is wrong in the UserEmailDAO.getUserIdOfEmailUser method. It should only return 1 result. But there were more, namely: ");
-            while(results.hasNext()) {
-                Logger.warn(results.next().getEmail()+" with user id "+results.next().getUserId());
-            }
-        }
-        return result.getUserId();
     }
 
     /**
