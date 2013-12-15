@@ -18,7 +18,6 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.*;
-import models.adventure.group.AdventurerGroup;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredAdminUser;
@@ -264,10 +263,6 @@ public class AdventureController extends Controller {
         advr.setUserId(usr.getId());
         advr.setParticipationStatus(EAdventurerParticipation.GOING);
         new AdventurerDAO().save(advr);
-
-        // ADVENTURER GROUP
-        AdventurerGroup group = AdventurerGroupController.createEmptyGroup(adv.getId());
-        new AdventurerGroupDAO().save(group);
 
         // PLACE AND TIME
 
