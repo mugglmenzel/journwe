@@ -18,7 +18,12 @@
                         <li @if(active == "about"){class="active"}><a href="@routes.ApplicationController.about">About</a></li>
                         <li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
                         <li @if(active == "imprint"){class="active"}><a href="@routes.ApplicationController.imprint">Imprint</a> </li>
-                        @currentAuth() { auth => @if(auth != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){<li @if(active == "admin"){class="active"}><a href="@routes.ApplicationController.admin">Admin</a></li>}}
+                        @currentAuth() {auth => @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){
+                                <li @if(active == "admin"){class="active"}>
+                                    <a href="@routes.ApplicationController.admin">Admin</a>
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
                 <div class="col-lg-4 text-center">
