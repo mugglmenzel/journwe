@@ -129,15 +129,15 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 @if(JournweAuthorization.canInviteAdventurerParticipants(adv.getId)) {
 <div class="row">
     <div class="input-group col-lg-6">
-        <div class="input-group-btn">
+        <div id="people-add-type" class="input-group-btn">
             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                <i id="people-add-type" class="icon-facebook"></i>
+                <i id="people-add-type-icon" class="icon-facebook"></i>
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-                <li><a onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i>
+                <li><a data-icon="icon-facebook" data-type="text" data-typeahead="on"><i class="icon-facebook"></i>
                     @Messages("adventure.general.label.facebook")</a></li>
-                <li><a onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i>
+                <li><a data-icon="icon-envelope" data-type="email" data-typeahead="off"><i class="icon-envelope"></i>
                     @Messages("adventure.general.label.email")</a></li>
             </ul>
         </div>
@@ -151,6 +151,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 
 <script type="text/javascript">
 
+
     var facebookUsers = {};
     var facebookUserNames = [];
 
@@ -163,28 +164,43 @@ case EAdventurerParticipation.INVITEE => {label-warning}
         });
     }
 
-    $(document).ready(function () {
+    function FacebookFriendTypeahead() {
         $('#people-add-input').typeahead({
-            source: function (input, process) {
-                if($('#people-add-input').attr('type') == 'text') {
-                    $.get('@routes.AdventurePeopleController.autocompleteFacebook', {input: input}, function (data) {
-                        facebookUsers = {};
-                        facebookUserNames = [];
-                        $.each(data, function( ix, item ){
-                            if ( $.inArray(item.name, facebookUserNames) > -1 ){
-                                item.name = item.name + ' #' + item.id;
-                            }
+            name: 'people-typeahead',
+            template: '<p><strong>{%=o.name%}</strong></p>',
+            engine: {_templ: '', compile: function(template){_templ=template; return this;}, render: function(data){return tmpl(_templ,data);}},
+            remote: {
+                url: '@routes.AdventurePeopleController.autocompleteFacebook?input=%QUERY',
+                filter: function (data) {
+                    facebookUsers = {};
+                    facebookUserNames = [];
+                    $.each(data, function( ix, item ){
+                        if ( $.inArray(item.name, facebookUserNames) > -1 ){
+                            item.nameId = item.name + ' #' + item.id;
+                        } else item.nameId = item.name
 
-                            facebookUserNames.push( item.name );
-                            facebookUsers[item.name] = item.id;
-                        });
-
-                        process(facebookUserNames);
-
+                        facebookUserNames.push( {value: item.nameId, name: item.name, tokens: [item.id, item.name]} );
+                        facebookUsers[item.nameId] = item.id;
                     });
+
+                    return facebookUserNames;
                 }
             }
         });
+    }
+
+    $(document).ready(function () {
+
+        $('#people-add-type .dropdown-menu a').click(function () {
+            $('#people-add-type-icon').attr('class', $(this).data('icon'));
+            $('#people-add-input').attr('type', $(this).data('type'));
+            if($(this).data('typeahead') == "on") FacebookFriendTypeahead();
+            else $('#people-add-input').typeahead('destroy');
+            $('#people-add-input').focus();
+        });
+
+        FacebookFriendTypeahead();
+
     });
 
 
