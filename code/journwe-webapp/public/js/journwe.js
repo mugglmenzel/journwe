@@ -23,6 +23,8 @@ $('body').ready(function(){
            bgr.css('transform', 'translateY(-'+Math.min(9, Math.max(0, (st/offsetHeight)*9 ))+'%)');
         }
 
+        $('#adventure-container').attr("class", st > 126 ? "fixed" : "");
+
     });
 
     $('#navbar-secondlevel-collapsable .collapse').collapse({

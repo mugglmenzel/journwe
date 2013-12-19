@@ -1,0 +1,192 @@
+
+.nav-adventure---OLD {
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 40px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+
+    & li {
+        height: calc(100% / 8);
+        min-height: 80px;
+
+        & + li {
+            margin-top: 1px;
+        }
+
+        & a {
+            border-radius: 0;
+            border-right: 5px solid fade(@color_white, 60%);
+            text-align: center;
+            margin: 0;
+            height: 100%;
+            width: 100px;
+        }
+
+        & a i {
+            position: absolute;
+            top: 50%;
+            margin-top: -20px;
+            width: 40px;
+            left: 50%;
+            margin-left: -20px;
+        }
+
+        &#nav-adventure-places a {
+            border-right-color: fade(@color_place, 50%);
+        }
+
+        &#nav-adventure-adventurers a {
+            border-right-color: fade(@color_adventurer, 50%);
+        }
+
+        &#nav-adventure-time a {
+            border-right-color: fade(@color_time, 50%);
+        }
+    }
+
+    & > li > a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    & a {
+        color: white !important;
+    }
+
+    & .nav-pills>li.active>a,
+    & .nav-pills>li.active>a:hover,
+    & .nav-pills>li.active>a:focus {
+        background: fade(@color_white, 40%) !important;
+    }
+
+    & .nav-pills>li>a:hover,
+    & .nav-pills>li>a:focus {
+        color: white;
+        background: fade(@color_white, 20%);
+    }
+
+    & .nav-pills>li>a:hover i,
+    & .nav-pills>li>a:focus i {
+        color: white;
+    }
+
+    & .nav {
+        height: 100%;
+    }
+}
+
+.nav-adventure {
+    font-size: 24px;
+    width: 100%;
+    background-color: fade(@color_white, 50%);
+    margin-top: 50px;
+    .transition(background 0.5s ease);
+
+    .fixed & {
+        background-color: fade(@color_white, 80%);
+        position: fixed;
+        left: 17%;
+        right: 17%;
+        z-index: 1;
+        top: -50px;
+        width: auto;
+    }
+
+    & li {
+        display: inline-block;
+
+        & + li {
+            margin-top: 1px;
+        }
+
+        & a {
+            border-radius: 0;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        & a i {
+            width: 50px;
+            display: inline-block;
+
+            .fixed & {
+                color: gray;
+                .transition(color 0.5s ease);
+            }
+        }
+
+    }
+
+    & > li > a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    & a {
+        color: white !important;
+    }
+
+    & .nav-pills>li.active>a,
+    & .nav-pills>li.active>a:hover,
+    & .nav-pills>li.active>a:focus {
+        background: fade(@color_white, 40%) !important;
+    }
+
+    & .nav-pills>li>a:hover,
+    & .nav-pills>li>a:focus {
+        color: white;
+        background: fade(@color_white, 20%);
+    }
+
+    & .nav-pills>li>a:hover i,
+    & .nav-pills>li>a:focus i {
+        color: white;
+
+        .fixed & {
+            color: #333;
+        }
+    }
+
+    & .nav {
+        width: 100%;
+    }
+}
+
+#adventure-container .row .row {
+    background: none;
+}
+
+#adventure-container .row.active {
+    background: none repeat scroll 0 0 fade(@color_white, 90%);
+}
+
+#adventure-container .row.active h2 {
+    color: gray !important;
+}
+
+.adventure-container {
+
+    & .editable-container, & .editable-input, & textarea {
+        width: 100%;
+    }
+
+    & .editable-buttons {
+        text-align: right;
+    }
+}
+
+.icon-for-adventure-title {
+
+}
+
+.icon-for-adventure-title.icon-cogs {
+    font-size: 24px;
+}
+
+
+.fixed .prime-image {
+    margin-top: calc(50px + 50px + 75px);
+}
