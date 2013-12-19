@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-lg-4"> @Messages("adventure.options.public") &nbsp;&nbsp;
-        <div id="adventure-public-switch" class="switch" style="display:inline-block;overflow:hidden;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
+        <div id="adventure-public-switch" class="make-switch" style="display:inline-block;overflow:hidden;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
         <script>
             $('#adventure-public-switch').change(function(){
                 $.post('@routes.AdventureController.updatePublic(adv.getId)', {public: $(this).find('input:checkbox').prop('checked')}, function(pub){

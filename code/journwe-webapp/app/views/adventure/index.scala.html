@@ -23,5 +23,38 @@
         </div>
     }
     </div>
+
+
+    <script>
+
+        $.fn.editable.defaults.mode = 'inline';
+        $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-journwe icon-spin"></i></div>';
+
+        $('document').ready(function () {
+
+
+
+            $('#adventureName').editable();
+
+            $('#adventureDescription').on('hidden', function(){
+            $('.btn-edit-description').show();
+            });
+            // Replace all links with html links for certain elements
+            $('.replace-links').each(function(){
+                $(this).html(replaceURLWithHTMLLinks($(this).html()));
+            });
+
+            // After saving via x-editable, replace those links as well
+            $.extend($.fn.editabletypes.textarea.prototype, {
+                v2h: $.fn.editabletypes.textarea.prototype.value2html,
+                value2html: function(foo, element){
+                    this.v2h.apply(this, arguments);
+                    $(element).html(replaceURLWithHTMLLinks($(element).html()));
+                }
+            });
+
+        });
+    </script>
+
 </div>
 
