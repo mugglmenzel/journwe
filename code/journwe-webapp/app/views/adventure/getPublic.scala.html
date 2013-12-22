@@ -6,6 +6,8 @@
 @import com.feth.play.module.pa.PlayAuthenticate
 @import com.feth.play.module.pa.views.html._
 
+@import views.html.index.quickintro
+
 @main(adv.getName()){ }{
 
 <div id="adventure-container">
@@ -63,6 +65,10 @@
             <p><span id="adventurers-count"></span> Adventurers participate.</p>
             <div id="adventurers-list" style="overflow: hidden;"></div>
             <div class="clearfix"></div>
+        </div>
+
+        <div>
+            @quickintro()
         </div>
 
         <script type="text/x-tmpl" id="adventurer-template">
