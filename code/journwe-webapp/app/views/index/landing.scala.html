@@ -4,14 +4,14 @@
 
     @main_subscribe {
         <div class="jrn-container" style="margin-top: -20px;">
-            <p class="lead">@Messages("subscribe.welcometext")</p>
+            <p class="lead">@Messages("landing.welcometext")</p>
         </div>
 
         <div class="text-center jrn-container clearfix" style="margin-top: 5px;">
 
-            <p class="lead">@Html(Messages("subscribe.cta"))</p>
+            <p class="lead">@Html(Messages("landing.cta"))</p>
 
-
+            @*
             <form action="@routes.ApplicationController.subscribe()" class=" col-lg-6 col-lg-offset-3">
                 <fieldset>
                     <div class="input-group input-group-lg">
@@ -23,27 +23,28 @@
                     </div>
                 </fieldset>
             </form>
+            *@
 
         </div>
 
 
         <div class="jrn-container">
-            <h2>@Messages("subscribe.feature")</h2>
+            <h2>@Messages("landing.feature")</h2>
             
             <div class="row">
                 <div class="col-lg-5">
                     <img src="/assets/img/landing/landing_adventurer.png" class="landing"/>
                 </div>
                 <div class="col-lg-7" style="padding-top: 22px;">
-                    <h4>@Messages("subscribe.featureH1")</h4>
-                    @Messages("subscribe.featureT1")
+                    <h4>@Messages("landing.featureH1")</h4>
+                    @Messages("landing.featureT1")
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-7" style="padding-top: 30px;">
-                    <h4>@Messages("subscribe.featureH2")</h4>
-                    @Messages("subscribe.featureT2")
+                    <h4>@Messages("landing.featureH2")</h4>
+                    @Messages("landing.featureT2")
                 </div>
                 <div class="col-lg-5">
                       <img src="/assets/img/landing/landing_todo.png" class="landing"/>
@@ -55,8 +56,8 @@
                     <img src="/assets/img/landing/landing_files.png" class="landing"/>
                 </div>
                 <div class="col-lg-7">
-                    <h4>@Messages("subscribe.featureH3")</h4>
-                    @Messages("subscribe.featureT3")
+                    <h4>@Messages("landing.featureH3")</h4>
+                    @Messages("landing.featureT3")
                 </div>
             </div>
 
@@ -109,7 +110,7 @@
 
 
         <div class="jrn-container">
-            <h2>@Messages("subscribe.story")</h2>
+            <h2>@Messages("landing.story")</h2>
             
             <div id="success-stories" class="carousel slide">
                 <!-- Indicators -->
@@ -126,9 +127,9 @@
                     <div class="item active">
                         <div class="row">
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story1.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story1.content")</p>
-                                    <small><cite>@Messages("subscribe.story1.cite")</cite></small></blockquote>
+                                <h3>@Messages("landing.story1.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story1.content")</p>
+                                    <small><cite>@Messages("landing.story1.cite")</cite></small></blockquote>
                             </div>
                             <div class="col-lg-5 text-center">
                                 @defining(new AdventureDAO().get("965ddda2-140c-4331-9883-72c9217216ca")){ adv =>   @if(adv != null) {
@@ -165,18 +166,18 @@
                             }    }
                             </div>
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story2.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story2.content")</p>
-                                    <small><cite>@Messages("subscribe.story2.cite")</cite></small>  </blockquote>
+                                <h3>@Messages("landing.story2.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story2.content")</p>
+                                    <small><cite>@Messages("landing.story2.cite")</cite></small>  </blockquote>
                             </div>
                         </div>
                     </div>
                     <div class="item">
                         <div class="row">
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story3.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story3.content")</p>
-                                    <small><cite>@Messages("subscribe.story3.cite")</cite></small></blockquote>
+                                <h3>@Messages("landing.story3.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story3.content")</p>
+                                    <small><cite>@Messages("landing.story3.cite")</cite></small></blockquote>
                             </div>
                             <div class="col-lg-5 text-center">
                             @defining(new AdventureDAO().get("3146479b-8f99-4023-8e88-947fc4742002")){ adv =>  @if(adv != null) {
@@ -212,18 +213,18 @@
                             }   }
                             </div>
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story4.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story4.content")</p>
-                                    <small><cite>@Messages("subscribe.story4.cite")</cite></small>  </blockquote>
+                                <h3>@Messages("landing.story4.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story4.content")</p>
+                                    <small><cite>@Messages("landing.story4.cite")</cite></small>  </blockquote>
                             </div>
                         </div>
                     </div>
                     <div class="item">
                         <div class="row">
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story5.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story5.content")</p>
-                                    <small><cite>@Messages("subscribe.story5.cite")</cite></small></blockquote>
+                                <h3>@Messages("landing.story5.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story5.content")</p>
+                                    <small><cite>@Messages("landing.story5.cite")</cite></small></blockquote>
                             </div>
                             <div class="col-lg-5 text-center">
                             @defining(new AdventureDAO().get("a05e49c5-8008-4e16-bde5-1af28d0c46d5")){ adv =>  @if(adv != null) {

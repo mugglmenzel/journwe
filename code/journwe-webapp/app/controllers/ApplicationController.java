@@ -38,7 +38,7 @@ import views.html.index.indexCat;
 import views.html.index.indexVet;
 import views.html.login;
 import views.html.signup;
-import views.html.subscribe;
+import views.html.index.landing;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class ApplicationController extends Controller {
                 return ok(index.render());
             }
         } else {
-            return ok(subscribe.render(subForm));
+            return ok(landing.render(subForm));
         }
     }
 
@@ -302,7 +302,8 @@ public class ApplicationController extends Controller {
     }
 
 
-    public static Result subscribe() {
+    /*
+    public static Result landing() {
         Form<Subscriber> filledSubForm = subForm.bindFromRequest();
         Subscriber sub = filledSubForm.get();
         if (new SubscriberDAO().save(sub))
@@ -327,8 +328,9 @@ public class ApplicationController extends Controller {
         }
 
 
-        return ok(subscribe.render(subForm));
+        return ok(landing.render(subForm));
     }
+    */
 
     public static Result imprint() {
         return ok(imprint.render());
@@ -357,6 +359,7 @@ public class ApplicationController extends Controller {
         return ok("pong");
     }
 
+    /*
     //BETA activation
     public static Result joinBeta() {
         if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
@@ -372,6 +375,7 @@ public class ApplicationController extends Controller {
             return ok(index.render());
         }
     }
+    */
     
     public static void clearUserCache(final String userId) {
         Cache.remove("user." + userId + ".myadventures");

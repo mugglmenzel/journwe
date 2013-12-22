@@ -64,7 +64,7 @@ GET           /adventure/:id/leave                           controllers.Adventu
 POST          /adventure/:id/public.json                     controllers.AdventureController.updatePublic(id:String)
 
 # BETA user signup
-GET           /beta/join-77777777-9999-111-3322              controllers.ApplicationController.joinBeta()
+# GET           /beta/join-77777777-9999-111-3322              controllers.ApplicationController.joinBeta()
 
 GET           /adventure/:id/places.json                     controllers.AdventurePlaceController.getPlaces(id:String)
 POST          /adventure/:id/places.json                     controllers.AdventurePlaceController.addPlace(id:String)
@@ -158,7 +158,7 @@ GET           /authenticate/:provider                        com.feth.play.modul
 GET           /authenticate/:provider/denied                 controllers.ApplicationController.oAuthDenied(provider: String)
 
 # Home page
-GET           /subscribe                                     controllers.ApplicationController.subscribe()
+# GET           /subscribe                                     controllers.ApplicationController.subscribe()
 GET           /imprint                                       controllers.ApplicationController.imprint
 GET           /about                                         controllers.ApplicationController.about
 GET           /admin                                         controllers.ApplicationController.admin()
