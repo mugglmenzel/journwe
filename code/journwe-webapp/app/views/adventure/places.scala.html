@@ -17,7 +17,7 @@
     @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
     <div class="pull-right btn-close-place stash">
         @Messages("adventure.general.voting")
-        <div class="switch">
+        <div class="make-switch">
             <input id="places-voting-active-switch" type="checkbox" @if(adv.getPlaceVoteOpen){checked="checked"}>
         </div>
     </div>

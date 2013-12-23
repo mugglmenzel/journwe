@@ -34,14 +34,14 @@
             <script type="text/x-tmpl" id="adventure-my-template">
                 <div class="adventure-entry" data-id="{%=o.id%}" style="position: relative; float: left; width: 20%;">
                     <div class="row"><a href="{%=o.link%}"><h4>{%=o.name%}</h4></a></div>
-                    <div class="row text-right">
-                        <span class="label" style="position: relative; float: right; background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                        <span class="label" style="position: relative; float: right; background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                        <span class="label" style="position: relative; float: right; background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                    <div class="row" style="margin-bottom: 5px">
+                        <div class="col-lg-4" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</div>
+                        <div class="col-lg-4" style="background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</div>
+                        <div class="col-lg-4" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</div>
                     </div>
                     <div class="row">
                         <a href="{%=o.link%}" class="media-object">
-                            <img class="img-circle" height="100" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=100&height=100&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
+                            <img height="200" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=200&height=200&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
                         </a>
                     </div>
                 </div>
@@ -103,7 +103,6 @@
             <div id="categories-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
         </div>
         <div class="clearfix"></div>
-        @quickintro()
     </div>
     <script type="text/x-tmpl" id="category-template">
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
