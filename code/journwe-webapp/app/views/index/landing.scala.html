@@ -2,16 +2,18 @@
 
 @import models.dao._
 
-    @main_subscribe {
-        <div class="jrn-container" style="margin-top: -20px;">
-            <p class="lead">@Messages("landing.welcometext")</p>
-        </div>
+    @main(Messages("journwe.subtitle")) { }{
+        <section class="jrn-container text-center" style="vertical-align: middle; height: 400; background: none;">
+            <div class="text-success" style="font-size: 50pt; font-weight: bolder; text-shadow: 3px 3px white;">JournWe - Travel together.</div>
+            <button class="btn btn-lg btn-success">Start Now</button>
+        </section>
 
+    @*
         <div class="text-center jrn-container clearfix" style="margin-top: 5px;">
 
             <p class="lead">@Html(Messages("landing.cta"))</p>
 
-            @*
+
             <form action="@routes.ApplicationController.subscribe()" class=" col-lg-6 col-lg-offset-3">
                 <fieldset>
                     <div class="input-group input-group-lg">
@@ -23,9 +25,10 @@
                     </div>
                 </fieldset>
             </form>
-            *@
+
 
         </div>
+    *@
 
 
         <div class="jrn-container">

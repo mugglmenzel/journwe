@@ -26,9 +26,29 @@
 @currentAuth() { auth =>
     @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
     <div class="row">
+        <div class="col-lg-3 col-sm-3 col-xs-3">
+            <div class="navbar-text">
+                @if(auth != null && user != null) {
+                    <a href="@routes.ApplicationController.index" onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');" class="brand" style="vertical-align: bottom;">
+                        <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
+                            Journ<strong>We</strong><sup>beta</sup>
+                        </span>
+                    </a>
+                } else {
+                    <a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
+                        <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
+                            Journ<strong>We</strong><sup>beta</sup>
+                        </span>
+                    </a>
+                }
+            </div>
+        </div>
+
         <div class="col-lg-5 col-sm-5 col-xs-5">
-            <ul class="nav nav-pills">
+            <ul class="nav nav-justified">
                 <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="icon-lightbulb"></i> Inspirations</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Start JournWe</a></li>
                 <li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="icon-search"></i> Search</a></li>
                 @if(auth != null && user != null && EUserRole.ADMIN.equals(user.getRole)) {
                 <li><a href="@routes.ApplicationController.admin()"><i class="icon-cogs"></i> Admin</a></li>
@@ -36,25 +56,8 @@
             </ul>
         </div>
 
-        <div class="col-lg-2 col-sm-2 col-xs-2">
-            <div class="text-center navbar-text">
-                @if(auth != null && user != null) {
-                    <a href="@routes.ApplicationController.index" onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');" class="brand" style="float: none;vertical-align: bottom;">
-                        <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
-                        Journ<strong>We</strong><sup>beta</sup>
-                        </span>
-                    </a>
-                } else {
-                    <a href="@routes.ApplicationController.index" class="brand" style="float: none;vertical-align: bottom;">
-                        <span><img src="http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
-                        Journ<strong>We</strong><sup>beta</sup>
-                        </span>
-                    </a>
-                }
-            </div>
-        </div>
 
-        <div class="col-lg-5 col-sm-5 col-xs-5 clearfix text-right">
+        <div class="col-lg-4 col-sm-4 col-xs-4 clearfix text-right">
         @if(auth != null && user != null) {
             <div class="">
 
