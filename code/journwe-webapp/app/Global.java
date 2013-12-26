@@ -10,7 +10,10 @@ import controllers.AdventureController;
 import controllers.AdventureFileController;
 import controllers.routes;
 import models.adventure.Adventure;
+import models.adventure.AdventureReminder;
+import models.adventure.EAdventureReminderType;
 import models.dao.AdventureDAO;
+import models.dao.AdventureReminderDAO;
 import models.dao.AdventurerDAO;
 import models.dao.CategoryDAO;
 import models.notifications.ENotificationFrequency;
@@ -22,6 +25,7 @@ import play.libs.Akka;
 import play.mvc.Call;
 import scala.concurrent.duration.Duration;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Global extends GlobalSettings {
@@ -125,6 +129,17 @@ public class Global extends GlobalSettings {
             public void run() {
                 Logger.debug("Updating Category Count Cache");
                 new CategoryDAO().updateCategoryCountCache();
+
+            }
+        }, Akka.system().dispatcher());
+
+
+        Akka.system().scheduler().schedule(Duration.create(30, TimeUnit.SECONDS), Duration.create(1, TimeUnit.DAYS), new Runnable() {
+            @Override
+            public void run() {
+                Logger.debug("Fetching Adventure Reminders from " + (new Date().getTime() -(365*24*60*60)));
+                for(AdventureReminder rem : new AdventureReminderDAO().allFromPastToNow(EAdventureReminderType.PLACE, (new Date().getTime() -(365*24*60*60))))
+                    Logger.debug("got reminder " + rem.getType() + ", " + rem.getAdventureId());
 
             }
         }, Akka.system().dispatcher());
