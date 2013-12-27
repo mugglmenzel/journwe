@@ -411,6 +411,27 @@ public class AdventureController extends Controller {
     }
 
     @Security.Authenticated(SecuredUser.class)
+    public static Result updatePlaceVoteDeadline(String advId) {
+        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+        DynamicForm data = form().bindFromRequest();
+        Long deadline = new Long(data.get("voteDeadline"));
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setPlaceVoteDeadline(deadline);
+        new AdventureDAO().save(adv);
+
+        AdventureReminder rem = new AdventureReminder();
+        rem.setAdventureId(advId);
+        rem.setType(EAdventureReminderType.PLACE);
+        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
+        new AdventureReminderDAO().save(rem);
+
+        new AdventurerNotifier().notifyAdventurers(advId, "Please adhere to the place voting deadline!", "Place Vote");
+
+        return ok(Json.toJson(adv.getPlaceVoteDeadline()));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
     public static Result placeVoteOpen(String advId) {
         Adventure adv = new AdventureDAO().get(advId);
         if (adv == null) return badRequest();
@@ -432,6 +453,27 @@ public class AdventureController extends Controller {
         new AdventurerNotifier().notifyAdventurers(advId, "The Time Vote is now " + (adv.getTimeVoteOpen() ? "open" : "closed") + ".", "Time Vote");
 
         return ok(Json.toJson(adv.getTimeVoteOpen()));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result updateTimeVoteDeadline(String advId) {
+        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+        DynamicForm data = form().bindFromRequest();
+        Long deadline = new Long(data.get("voteDeadline"));
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setTimeVoteDeadline(deadline);
+        new AdventureDAO().save(adv);
+
+        AdventureReminder rem = new AdventureReminder();
+        rem.setAdventureId(advId);
+        rem.setType(EAdventureReminderType.TIME);
+        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
+        new AdventureReminderDAO().save(rem);
+
+        new AdventurerNotifier().notifyAdventurers(advId, "Please adhere to the time voting deadline!", "Time Vote");
+
+        return ok(Json.toJson(adv.getTimeVoteDeadline()));
     }
 
     @Security.Authenticated(SecuredUser.class)
