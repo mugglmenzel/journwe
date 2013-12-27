@@ -5,7 +5,7 @@ import models.adventure.Adventure;
 import models.adventure.EPreferenceVote;
 import models.adventure.time.TimeAdventurerPreference;
 import models.adventure.time.TimeOption;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.AdventureDAO;
@@ -44,7 +44,7 @@ public class AdventureTimeController extends Controller {
 
     public static Form<TimeOption> timeForm = form(TimeOption.class);
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getTimes(String advId) {
         if (!JournweAuthorization.canViewDateAndTime(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -81,7 +81,7 @@ public class AdventureTimeController extends Controller {
         return ok(Json.toJson(result));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getFavoriteTime(String advId) {
         if (!JournweAuthorization.canViewFavoriteDateAndTime(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -93,7 +93,7 @@ public class AdventureTimeController extends Controller {
         return favId != null ? ok(Json.toJson(new TimeOptionDAO().get(advId, favId))) : ok(Json.toJson(""));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result setFavoriteTime(String advId) {
         if (!JournweAuthorization.canEditFavoriteDateAndTime(advId))
             return AuthorizationMessage.notAuthorizedResponse();

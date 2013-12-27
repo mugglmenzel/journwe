@@ -4,7 +4,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.*;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.dao.*;
 import models.user.User;
 import play.Logger;
@@ -14,9 +14,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static play.data.Form.form;
@@ -25,7 +23,7 @@ public class CloneController extends Controller {
 
     private static DynamicForm cloneAdvForm = form();
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result cloneAndSaveAdventure(final String originalAdvId) {
         // The Dynamic Form has the checkboxes
         // indicating which components of the

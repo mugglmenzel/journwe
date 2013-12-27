@@ -8,7 +8,7 @@ import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.*;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.*;
@@ -72,7 +72,7 @@ public class AdventurePeopleController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getParticipants(final String advId) {
         if (!JournweAuthorization.canViewAdventurerParticipants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -104,7 +104,7 @@ public class AdventurePeopleController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getInvitees(final String advId) {
         if (!JournweAuthorization.canViewAdventurerParticipants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -136,7 +136,7 @@ public class AdventurePeopleController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getApplicants(final String advId) {
         if (!JournweAuthorization.canViewAdventurerParticipants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -171,10 +171,8 @@ public class AdventurePeopleController extends Controller {
 
     public static Result participate(final String advId) {
 
-        //BETA activation
         if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
             PlayAuthenticate.storeOriginalUrl(Http.Context.current());
-            response().setCookie(UserDAO.COOKIE_USER_ROLE_ON_REGISTER, EUserRole.BETA.toString(), 7 * 24 * 3600);
             return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
         } else {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -195,16 +193,13 @@ public class AdventurePeopleController extends Controller {
 
                 clearCache(advId);
                 ApplicationController.clearUserCache(usr.getId());
-
-
-                new UserDAO().updateRole(usr, EUserRole.BETA);
             }
 
             return AdventureController.getIndex(advId);
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result participateStatus(final String advId, final String statusStr) {
         if (!JournweAuthorization.canEditAdventurerParticipationStatus(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -223,7 +218,7 @@ public class AdventurePeopleController extends Controller {
         return ok(Json.toJson(advr));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result leave(final String advId) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
@@ -242,7 +237,7 @@ public class AdventurePeopleController extends Controller {
             return AdventureController.delete(advId);
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result adopt(final String advId, final String userId) {
         if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -271,7 +266,7 @@ public class AdventurePeopleController extends Controller {
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result deny(final String advId, final String userId) {
         if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
             return AuthorizationMessage.notAuthorizedResponse();

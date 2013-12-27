@@ -9,11 +9,10 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.file.JournweFile;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.JournweFileDAO;
-import org.joda.time.DateTime;
 import play.Logger;
 import play.data.Form;
 import play.libs.Json;
@@ -23,7 +22,6 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -44,7 +42,7 @@ public class AdventureFileController extends Controller {
     private static AmazonS3Client s3 = new AmazonS3Client(credentials);
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result uploadFile(String advId) {
         try {
             if (!JournweAuthorization.canUploadFiles(advId))
@@ -90,7 +88,7 @@ public class AdventureFileController extends Controller {
 
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result listFiles(String adventureId) {
         if (!JournweAuthorization.canViewAndDownloadFiles(adventureId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -105,7 +103,7 @@ public class AdventureFileController extends Controller {
         return ok(Json.toJson(files));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result deleteFile(String advId, String fileId) {
         if (!JournweAuthorization.canDeleteFiles(advId))
             return AuthorizationMessage.notAuthorizedResponse();

@@ -44,8 +44,8 @@ GET           /adventure/:id/index                           controllers.Adventu
 GET           /adventure/:id/new                             controllers.AdventureController.createFromInspiration(id:String)
 GET           /adventure/:id/delete                          controllers.AdventureController.delete(id:String)
 POST          /adventure/check/shortname                     controllers.AdventureController.checkShortname()
-POST          /adventure/:id/updateImage                     controllers.AdventureController.updateImage(id:String)
-POST          /adventure/:id/updateCategory                  controllers.AdventureController.updateCategory(id:String)
+POST          /adventure/:id/image/update                    controllers.AdventureController.updateImage(id:String)
+POST          /adventure/:id/category/update                 controllers.AdventureController.updateCategory(id:String)
 POST          /adventure/:id/clone                           controllers.CloneController.cloneAndSaveAdventure(id:String)
 
 # POST    /adventure/:id/postTwitterStream                            controllers.AdventureController.postOnMyTwitterStream(id:String)
@@ -68,11 +68,12 @@ POST          /adventure/:id/public.json                     controllers.Adventu
 
 GET           /adventure/:id/places.json                     controllers.AdventurePlaceController.getPlaces(id:String)
 POST          /adventure/:id/places.json                     controllers.AdventurePlaceController.addPlace(id:String)
-GET           /adventure/:id/places/favorite.json             controllers.AdventurePlaceController.getFavoritePlace(id:String)
-POST          /adventure/:id/places/favorite.json             controllers.AdventurePlaceController.setFavoritePlace(id:String)
-POST          /adventure/:id/places/vote.json                 controllers.AdventurePlaceController.voteParam(id:String)
+GET           /adventure/:id/places/favorite.json            controllers.AdventurePlaceController.getFavoritePlace(id:String)
+POST          /adventure/:id/places/favorite.json            controllers.AdventurePlaceController.setFavoritePlace(id:String)
+POST          /adventure/:id/places/vote.json                controllers.AdventurePlaceController.voteParam(id:String)
 POST          /adventure/:id/place/:placeId/vote.json        controllers.AdventurePlaceController.vote(id:String, placeId:String)
 DELETE        /adventure/:id/place/:placeId                  controllers.AdventurePlaceController.deletePlace(id:String, placeId:String)
+GET           /adventure/:id/places/voteOpen.json            controllers.AdventureController.placeVoteOpen(id:String)
 POST          /adventure/:id/places/voteOpen.json            controllers.AdventureController.updatePlaceVoteOpen(id:String)
 
 GET           /adventure/:id/times.json                      controllers.AdventureTimeController.getTimes(id:String)

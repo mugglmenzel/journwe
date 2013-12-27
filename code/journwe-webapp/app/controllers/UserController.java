@@ -2,7 +2,7 @@ package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.Adventure;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.dao.*;
 import models.notifications.ENotificationFrequency;
 import models.notifications.Notification;
@@ -34,12 +34,12 @@ import static play.data.Form.form;
  */
 public class UserController extends Controller {
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getProfile(String userId) {
         return ok(get.render(new UserDAO().get(userId)));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result setMailDigestFrequency(String userId, String frequency) {
         ENotificationFrequency freq = ENotificationFrequency.valueOf(frequency);
         if (freq != null) {
@@ -51,7 +51,7 @@ public class UserController extends Controller {
         return badRequest();
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getNotifications() {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
@@ -106,7 +106,7 @@ public class UserController extends Controller {
         return ok(Json.toJson(results));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getAdventures(String userId) {
         DynamicForm data = form().bindFromRequest();
         int count = new Integer(data.get("count")).intValue();

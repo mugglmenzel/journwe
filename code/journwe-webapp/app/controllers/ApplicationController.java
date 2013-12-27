@@ -1,24 +1,19 @@
 package controllers;
 
-import com.ecwid.mailchimp.MailChimpClient;
-import com.ecwid.mailchimp.MailChimpException;
-import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
 import models.adventure.AdventureCategory;
 import models.auth.SecuredAdminUser;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.category.Category;
 import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
 import models.dao.*;
 import models.inspiration.Inspiration;
 import models.inspiration.InspirationCategory;
-import models.user.EUserRole;
 import models.user.Subscriber;
-import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.cache.Cache;
@@ -40,7 +35,6 @@ import views.html.login;
 import views.html.signup;
 import views.html.index.landing;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +54,7 @@ public class ApplicationController extends Controller {
     public static Result index() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
-                && (SecuredBetaUser.isBeta(usr) || SecuredBetaUser.isAdmin(usr))) {
+                && (SecuredUser.isAuthorized(usr))) {
 
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
             if (new AdventurerDAO().isAdventurer(userId)) {
@@ -118,7 +112,7 @@ public class ApplicationController extends Controller {
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getMyAdventures() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         final String userId = usr != null ? new UserDAO().findByAuthUserIdentity(usr).getId() : null;

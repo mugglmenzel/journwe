@@ -31,9 +31,13 @@ public class Adventure {
 
     private Integer limit;
 
+    private Long placeVoteDeadline;
+
     private Boolean placeVoteOpen = true;
 
     private String favoritePlaceId;
+
+    private Long timeVoteDeadline;
 
     private Boolean timeVoteOpen = true;
 
@@ -160,6 +164,22 @@ public class Adventure {
      */
     public void setLimit(Integer limit) {
         this.limit = limit;
+    }
+
+    public Long getPlaceVoteDeadline() {
+        return placeVoteDeadline;
+    }
+
+    public void setPlaceVoteDeadline(Long placeVoteDeadline) {
+        this.placeVoteDeadline = placeVoteDeadline;
+    }
+
+    public Long getTimeVoteDeadline() {
+        return timeVoteDeadline;
+    }
+
+    public void setTimeVoteDeadline(Long timeVoteDeadline) {
+        this.timeVoteDeadline = timeVoteDeadline;
     }
 
     public String getFavoritePlaceId() {

@@ -7,7 +7,7 @@ import models.adventure.EPreferenceVote;
 import models.adventure.place.PlaceAdventurerPreference;
 import models.adventure.place.PlaceOption;
 import models.adventure.place.PlaceOptionRating;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.*;
@@ -39,7 +39,7 @@ import static play.data.Form.form;
  */
 public class AdventurePlaceController extends Controller {
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getPlaces(String advId) {
         if (!JournweAuthorization.canViewPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -56,7 +56,7 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(Json.toJson(places)));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getFavoritePlace(String advId) {
         if (!JournweAuthorization.canViewFavoritePlace(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -73,7 +73,7 @@ public class AdventurePlaceController extends Controller {
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result setFavoritePlace(String advId) {
         if (!JournweAuthorization.canViewFavoritePlace(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -88,7 +88,7 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result addPlace(String advId) {
         if (!JournweAuthorization.canEditPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -128,12 +128,12 @@ public class AdventurePlaceController extends Controller {
         return created(Json.toJson(node));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result voteParam(String advId) {
         return vote(advId, form().bindFromRequest().get("placeId"));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result vote(String advId, String placeId) {
         if (!JournweAuthorization.canVoteForPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -170,7 +170,7 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(node));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result deletePlace(String advId, String placeId) {
         if (!JournweAuthorization.canEditPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
