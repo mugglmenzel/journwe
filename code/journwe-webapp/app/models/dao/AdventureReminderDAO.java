@@ -1,5 +1,6 @@
 package models.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDeleteExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -7,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.adventure.AdventureReminder;
 import models.adventure.EAdventureReminderType;
 import models.dao.common.CommonEntityDAO;
+import models.dao.common.CommonRangeEntityDAO;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ import java.util.Map;
  * Time: 18:06
  * To change this template use File | Settings | File Templates.
  */
-public class AdventureReminderDAO extends CommonEntityDAO<AdventureReminder> {
+public class AdventureReminderDAO extends CommonRangeEntityDAO<AdventureReminder> {
 
     public AdventureReminderDAO() {
         super(AdventureReminder.class);
@@ -52,6 +54,5 @@ public class AdventureReminderDAO extends CommonEntityDAO<AdventureReminder> {
 
         return pm.query(AdventureReminder.class, new DynamoDBQueryExpression().withHashKeyValues(rem).withRangeKeyConditions(cond).withIndexName("reminder-index"));
     }
-
 
 }
