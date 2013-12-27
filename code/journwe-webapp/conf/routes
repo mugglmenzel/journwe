@@ -6,166 +6,168 @@
 # GET     /showProgress                                               controllers.ProgressController.getProgressHome()
 # GET		/progress													controllers.ProgressController.getProgress()
 
-GET           /category/:id/categories.json                  controllers.ApplicationController.getCategories(id:String)
-GET           /category/:id/inspirations.json                controllers.ApplicationController.getInspirations(id:String)
-GET           /category/:id/adventures/public.json           controllers.ApplicationController.getPublicAdventuresOfCategory(id:String)
-GET           /categories/optionsMap.json                    controllers.CategoryController.categoriesOptionsMap()
-GET           /adventures/my.json                            controllers.ApplicationController.getMyAdventures()
-GET           /adventures/public.json                        controllers.ApplicationController.getPublicAdventures()
+GET           /category/:id/categories.json                   controllers.ApplicationController.getCategories(id:String)
+GET           /category/:id/inspirations.json                 controllers.ApplicationController.getInspirations(id:String)
+GET           /category/:id/adventures/public.json            controllers.ApplicationController.getPublicAdventuresOfCategory(id:String)
+GET           /categories/optionsMap.json                     controllers.CategoryController.categoriesOptionsMap()
+GET           /adventures/my.json                             controllers.ApplicationController.getMyAdventures()
+GET           /adventures/public.json                         controllers.ApplicationController.getPublicAdventures()
 
 
-GET           /category/new                                  controllers.CategoryController.create()
-GET           /category/:id/edit                             controllers.CategoryController.edit(id:String)
-POST          /category/save                                 controllers.CategoryController.save()
-POST          /category/moveInHierarchy.json                 controllers.CategoryController.setSuperCategory()
-GET           /category/:id/delete                           controllers.CategoryController.delete(id:String)
-GET           /category/countCache/update                    controllers.CategoryController.updateCountCache()
+GET           /category/new                                   controllers.CategoryController.create()
+GET           /category/:id/edit                              controllers.CategoryController.edit(id:String)
+POST          /category/save                                  controllers.CategoryController.save()
+POST          /category/moveInHierarchy.json                  controllers.CategoryController.setSuperCategory()
+GET           /category/:id/delete                            controllers.CategoryController.delete(id:String)
+GET           /category/countCache/update                     controllers.CategoryController.updateCountCache()
 
-GET           /inspiration/new                               controllers.InspirationController.create()
-GET           /inspiration/:id                               controllers.InspirationController.get(id:String)
-GET           /inspiration/:id/tips.json                     controllers.InspirationController.getTips(id:String)
-POST          /inspiration/:id/tips.json                     controllers.InspirationController.addTip(id:String)
-GET           /inspiration/:id/images.json                   controllers.InspirationController.getImages(id:String)
-GET           /inspiration/:id/adventure/new                 controllers.InspirationController.createAdventure(id:String)
-GET           /inspiration/:id/edit                          controllers.InspirationController.edit(id:String)
-POST          /inspiration/save                              controllers.InspirationController.save()
-GET           /inspiration/:id/delete                        controllers.InspirationController.delete(id:String)
+GET           /inspiration/new                                controllers.InspirationController.create()
+GET           /inspiration/:id                                controllers.InspirationController.get(id:String)
+GET           /inspiration/:id/tips.json                      controllers.InspirationController.getTips(id:String)
+POST          /inspiration/:id/tips.json                      controllers.InspirationController.addTip(id:String)
+GET           /inspiration/:id/images.json                    controllers.InspirationController.getImages(id:String)
+GET           /inspiration/:id/adventure/new                  controllers.InspirationController.createAdventure(id:String)
+GET           /inspiration/:id/edit                           controllers.InspirationController.edit(id:String)
+POST          /inspiration/save                               controllers.InspirationController.save()
+GET           /inspiration/:id/delete                         controllers.InspirationController.delete(id:String)
 
 
-POST          /feedback                                      controllers.FeedbackController.createFeedback()
+POST          /feedback                                       controllers.FeedbackController.createFeedback()
 
 # Adventure
 #GET           /adventure/new                                        controllers.AdventureController.create()
 #POST	/adventure/saveOld											controllers.AdventureController.saveOld()
-POST          /adventure/save/editable                       controllers.AdventureController.saveEditable()
-POST          /adventure/save                                controllers.AdventureController.save()
-GET           /adventure/:id                                 controllers.AdventureController.getIndex(id:String)
-GET           /adventure/:id/index                           controllers.AdventureController.getIndex(id:String)
-GET           /adventure/:id/new                             controllers.AdventureController.createFromInspiration(id:String)
-GET           /adventure/:id/delete                          controllers.AdventureController.delete(id:String)
-POST          /adventure/check/shortname                     controllers.AdventureController.checkShortname()
-POST          /adventure/:id/image/update                    controllers.AdventureController.updateImage(id:String)
-POST          /adventure/:id/category/update                 controllers.AdventureController.updateCategory(id:String)
-POST          /adventure/:id/clone                           controllers.CloneController.cloneAndSaveAdventure(id:String)
+POST          /adventure/save/editable                        controllers.AdventureController.saveEditable()
+POST          /adventure/save                                 controllers.AdventureController.save()
+GET           /adventure/:id                                  controllers.AdventureController.getIndex(id:String)
+GET           /adventure/:id/index                            controllers.AdventureController.getIndex(id:String)
+GET           /adventure/:id/new                              controllers.AdventureController.createFromInspiration(id:String)
+GET           /adventure/:id/delete                           controllers.AdventureController.delete(id:String)
+POST          /adventure/check/shortname                      controllers.AdventureController.checkShortname()
+POST          /adventure/:id/image/update                     controllers.AdventureController.updateImage(id:String)
+POST          /adventure/:id/category/update                  controllers.AdventureController.updateCategory(id:String)
+POST          /adventure/:id/clone                            controllers.CloneController.cloneAndSaveAdventure(id:String)
 
 # POST    /adventure/:id/postTwitterStream                            controllers.AdventureController.postOnMyTwitterStream(id:String)
-GET           /adventure/:id/adventurers.json                controllers.AdventurePeopleController.getAdventurers(id:String)
-GET           /adventure/:id/participants.json               controllers.AdventurePeopleController.getParticipants(id:String)
-GET           /adventure/:id/invitees.json                   controllers.AdventurePeopleController.getInvitees(id:String)
-GET           /adventure/:id/applicants.json                 controllers.AdventurePeopleController.getApplicants(id:String)
-GET           /adventure/:id/participate                     controllers.AdventurePeopleController.participate(id:String)
-POST          /adventure/:id/participate/:status             controllers.AdventurePeopleController.participateStatus(id:String, status:String)
-POST          /adventure/:id/adopt/:user                     controllers.AdventurePeopleController.adopt(id:String, user:String)
-POST          /adventure/:id/deny/:user                      controllers.AdventurePeopleController.deny(id:String, user:String)
-POST          /adventure/:id/postFacebookWall                controllers.AdventurePeopleController.postOnMyFacebookWall(id:String)
-POST          /adventure/:id/invite.json                     controllers.AdventurePeopleController.invite(id:String)
-GET           /people/facebook/autocomplete.json             controllers.AdventurePeopleController.autocompleteFacebook()
-GET           /adventure/:id/leave                           controllers.AdventurePeopleController.leave(id:String)
-POST          /adventure/:id/public.json                     controllers.AdventureController.updatePublic(id:String)
+GET           /adventure/:id/adventurers.json                 controllers.AdventurePeopleController.getAdventurers(id:String)
+GET           /adventure/:id/participants.json                controllers.AdventurePeopleController.getParticipants(id:String)
+GET           /adventure/:id/invitees.json                    controllers.AdventurePeopleController.getInvitees(id:String)
+GET           /adventure/:id/applicants.json                  controllers.AdventurePeopleController.getApplicants(id:String)
+GET           /adventure/:id/participate                      controllers.AdventurePeopleController.participate(id:String)
+POST          /adventure/:id/participate/:status              controllers.AdventurePeopleController.participateStatus(id:String, status:String)
+POST          /adventure/:id/adopt/:user                      controllers.AdventurePeopleController.adopt(id:String, user:String)
+POST          /adventure/:id/deny/:user                       controllers.AdventurePeopleController.deny(id:String, user:String)
+POST          /adventure/:id/postFacebookWall                 controllers.AdventurePeopleController.postOnMyFacebookWall(id:String)
+POST          /adventure/:id/invite.json                      controllers.AdventurePeopleController.invite(id:String)
+GET           /people/facebook/autocomplete.json              controllers.AdventurePeopleController.autocompleteFacebook()
+GET           /adventure/:id/leave                            controllers.AdventurePeopleController.leave(id:String)
+POST          /adventure/:id/public.json                      controllers.AdventureController.updatePublic(id:String)
 
 # BETA user signup
 # GET           /beta/join-77777777-9999-111-3322              controllers.ApplicationController.joinBeta()
 
-GET           /adventure/:id/places.json                     controllers.AdventurePlaceController.getPlaces(id:String)
-POST          /adventure/:id/places.json                     controllers.AdventurePlaceController.addPlace(id:String)
-GET           /adventure/:id/places/favorite.json            controllers.AdventurePlaceController.getFavoritePlace(id:String)
-POST          /adventure/:id/places/favorite.json            controllers.AdventurePlaceController.setFavoritePlace(id:String)
-POST          /adventure/:id/places/vote.json                controllers.AdventurePlaceController.voteParam(id:String)
-POST          /adventure/:id/place/:placeId/vote.json        controllers.AdventurePlaceController.vote(id:String, placeId:String)
-DELETE        /adventure/:id/place/:placeId                  controllers.AdventurePlaceController.deletePlace(id:String, placeId:String)
-GET           /adventure/:id/places/voteOpen.json            controllers.AdventureController.placeVoteOpen(id:String)
-POST          /adventure/:id/places/voteOpen.json            controllers.AdventureController.updatePlaceVoteOpen(id:String)
+GET           /adventure/:id/places.json                      controllers.AdventurePlaceController.getPlaces(id:String)
+POST          /adventure/:id/places.json                      controllers.AdventurePlaceController.addPlace(id:String)
+GET           /adventure/:id/places/favorite.json             controllers.AdventurePlaceController.getFavoritePlace(id:String)
+POST          /adventure/:id/places/favorite.json             controllers.AdventurePlaceController.setFavoritePlace(id:String)
+POST          /adventure/:id/places/vote.json                 controllers.AdventurePlaceController.voteParam(id:String)
+POST          /adventure/:id/place/:placeId/vote.json         controllers.AdventurePlaceController.vote(id:String, placeId:String)
+DELETE        /adventure/:id/place/:placeId                   controllers.AdventurePlaceController.deletePlace(id:String, placeId:String)
+GET           /adventure/:id/places/voteOpen.json             controllers.AdventureController.placeVoteOpen(id:String)
+POST          /adventure/:id/places/voteOpen.json             controllers.AdventureController.updatePlaceVoteOpen(id:String)
+POST          /adventure/:id/places/vote/deadline.json        controllers.AdventureController.updatePlaceVoteDeadline(id:String)
 
-GET           /adventure/:id/times.json                      controllers.AdventureTimeController.getTimes(id:String)
-POST          /adventure/:id/times.json                      controllers.AdventureTimeController.addTime(id:String)
-GET           /adventure/:id/time/favorite.json              controllers.AdventureTimeController.getFavoriteTime(id:String)
-POST          /adventure/:id/time/favorite.json              controllers.AdventureTimeController.setFavoriteTime(id:String)
-PUT           /adventure/:id/time/:timeId                    controllers.AdventureTimeController.vote(id:String,timeId:String)
-DELETE        /adventure/:id/time/:timeId                    controllers.AdventureTimeController.deleteTime(id:String,timeId:String)
-POST          /adventure/:id/times/voteOpen.json             controllers.AdventureController.updateTimeVoteOpen(id:String)
+GET           /adventure/:id/times.json                       controllers.AdventureTimeController.getTimes(id:String)
+POST          /adventure/:id/times.json                       controllers.AdventureTimeController.addTime(id:String)
+GET           /adventure/:id/time/favorite.json               controllers.AdventureTimeController.getFavoriteTime(id:String)
+POST          /adventure/:id/time/favorite.json               controllers.AdventureTimeController.setFavoriteTime(id:String)
+PUT           /adventure/:id/time/:timeId                     controllers.AdventureTimeController.vote(id:String,timeId:String)
+DELETE        /adventure/:id/time/:timeId                     controllers.AdventureTimeController.deleteTime(id:String,timeId:String)
+GET           /adventure/:id/times/vote/open.json             controllers.AdventureController.timeVoteOpen(id:String)
+POST          /adventure/:id/times/vote/open.json             controllers.AdventureController.updateTimeVoteOpen(id:String)
+POST          /adventure/:id/times/vote/deadline.json         controllers.AdventureController.updateTimeVoteDeadline(id:String)
 
-
-GET           /adventure/:id/todos.json/:userId              controllers.AdventureTodoController.getTodos(id:String, userId:String)
-GET           /adventure/:id/affiliate.json                  controllers.AdventureTodoController.getTodoAffiliateItems(id:String)
-POST          /adventure/:id/todos.json                      controllers.AdventureTodoController.addTodo(id:String)
-PUT           /adventure/:id/todos/:tid                      controllers.AdventureTodoController.setTodo(id:String, tid: String)
-DELETE        /adventure/:id/todos/:tid                      controllers.AdventureTodoController.deleteTodo(id:String, tid: String)
-
-
-GET           /adventure/:id/files.json                      controllers.AdventureFileController.listFiles(id:String)
-POST          /adventure/:id/files.json                      controllers.AdventureFileController.uploadFile(id:String)
-DELETE        /adventure/:id/files/:fileName                 controllers.AdventureFileController.deleteFile(id:String, fileName: String)
-
-GET           /adventure/:id/emails.json                     controllers.AdventureEmailController.listEmails(id:String)
+GET           /adventure/:id/todos.json/:userId               controllers.AdventureTodoController.getTodos(id:String, userId:String)
+GET           /adventure/:id/affiliate.json                   controllers.AdventureTodoController.getTodoAffiliateItems(id:String)
+POST          /adventure/:id/todos.json                       controllers.AdventureTodoController.addTodo(id:String)
+PUT           /adventure/:id/todos/:tid                       controllers.AdventureTodoController.setTodo(id:String, tid: String)
+DELETE        /adventure/:id/todos/:tid                       controllers.AdventureTodoController.deleteTodo(id:String, tid: String)
 
 
-GET           /adv/:shortname                                controllers.AdventureController.getIndexShortname(shortname:String)
+GET           /adventure/:id/files.json                       controllers.AdventureFileController.listFiles(id:String)
+POST          /adventure/:id/files.json                       controllers.AdventureFileController.uploadFile(id:String)
+DELETE        /adventure/:id/files/:fileName                  controllers.AdventureFileController.deleteFile(id:String, fileName: String)
+
+GET           /adventure/:id/emails.json                      controllers.AdventureEmailController.listEmails(id:String)
+
+
+GET           /adv/:shortname                                 controllers.AdventureController.getIndexShortname(shortname:String)
 
 
 # Comments
-GET           /thread/new/:advid/:topictype                  controllers.CommentController.createNewThreadAndFirstComment(advid:String, topictype:String)
-GET           /comment/new/:threadId                         controllers.CommentController.createComment(threadId:String)
-GET           /comments/:threadId                            controllers.CommentController.listComments(threadId:String)
-GET           /threads/:advid                                controllers.CommentController.listCommentThreads(advid:String)
-POST          /comment/save                                  controllers.CommentController.saveComment()
+GET           /thread/new/:advid/:topictype                   controllers.CommentController.createNewThreadAndFirstComment(advid:String, topictype:String)
+GET           /comment/new/:threadId                          controllers.CommentController.createComment(threadId:String)
+GET           /comments/:threadId                             controllers.CommentController.listComments(threadId:String)
+GET           /threads/:advid                                 controllers.CommentController.listCommentThreads(advid:String)
+POST          /comment/save                                   controllers.CommentController.saveComment()
 
 
 # User
-GET           /user/notifications                            controllers.UserController.getNotifications()
-GET           /user/:id                                      controllers.UserController.getProfile(id:String)
-GET           /user/:id/adventures.json                      controllers.UserController.getAdventures(id:String)
-POST          /user/:id/notifications/frequency/:freq        controllers.UserController.setMailDigestFrequency(id:String, freq:String)
+GET           /user/notifications                             controllers.UserController.getNotifications()
+GET           /user/:id                                       controllers.UserController.getProfile(id:String)
+GET           /user/:id/adventures.json                       controllers.UserController.getAdventures(id:String)
+POST          /user/:id/notifications/frequency/:freq         controllers.UserController.setMailDigestFrequency(id:String, freq:String)
 
 # Facebook
-GET           /fbtest                                        controllers.FacebookController.testFacebookFeatures()
-GET           /fb/message/create                             controllers.FacebookController.createMessage()
-POST          /fb/message/send                               controllers.FacebookController.sendMessage()
+GET           /fbtest                                         controllers.FacebookController.testFacebookFeatures()
+GET           /fb/message/create                              controllers.FacebookController.createMessage()
+POST          /fb/message/send                                controllers.FacebookController.sendMessage()
 
 # Load Balancing
-GET           /ping                                          controllers.ApplicationController.ping
+GET           /ping                                           controllers.ApplicationController.ping
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file                                  controllers.Assets.at(path="/public", file)
+GET           /assets/*file                                   controllers.Assets.at(path="/public", file)
 
 # Signup, login, etc.
-GET           /signup                                        controllers.ApplicationController.signup
-POST          /signup                                        controllers.ApplicationController.doSignup
+GET           /signup                                         controllers.ApplicationController.signup
+POST          /signup                                         controllers.ApplicationController.doSignup
 
-GET           /login                                         controllers.ApplicationController.login
-POST          /login                                         controllers.ApplicationController.doLogin
-GET           /login/password/forgot                         controllers.Signup.forgotPassword(email: String ?= "")
-GET           /login/password/forgot/:email                  controllers.Signup.forgotPassword(email: String)
-POST          /login/password/forgot                         controllers.Signup.doForgotPassword
+GET           /login                                          controllers.ApplicationController.login
+POST          /login                                          controllers.ApplicationController.doLogin
+GET           /login/password/forgot                          controllers.Signup.forgotPassword(email: String ?= "")
+GET           /login/password/forgot/:email                   controllers.Signup.forgotPassword(email: String)
+POST          /login/password/forgot                          controllers.Signup.doForgotPassword
 
 #GET           /authenticate/:provider/denied                 controllers.Signup.oAuthDenied(provider: String)
 
-GET           /accounts/exists                               controllers.Signup.exists
-GET           /accounts/password/reset/:token                controllers.Signup.resetPassword(token: String)
-POST          /accounts/password/reset                       controllers.Signup.doResetPassword
-GET           /accounts/password/change                      controllers.Account.changePassword
-POST          /accounts/password/change                      controllers.Account.doChangePassword
-GET           /accounts/add                                  controllers.Account.link
-GET           /accounts/link                                 controllers.Account.askLink
-POST          /accounts/link                                 controllers.Account.doLink
-GET           /accounts/merge                                controllers.Account.askMerge
-POST          /accounts/merge                                controllers.Account.doMerge
-GET           /accounts/unverified                           controllers.Signup.unverified
-GET           /accounts/verify                               controllers.Account.verifyEmail
-GET           /accounts/verify/:token                        controllers.Signup.verify(token: String)
+GET           /accounts/exists                                controllers.Signup.exists
+GET           /accounts/password/reset/:token                 controllers.Signup.resetPassword(token: String)
+POST          /accounts/password/reset                        controllers.Signup.doResetPassword
+GET           /accounts/password/change                       controllers.Account.changePassword
+POST          /accounts/password/change                       controllers.Account.doChangePassword
+GET           /accounts/add                                   controllers.Account.link
+GET           /accounts/link                                  controllers.Account.askLink
+POST          /accounts/link                                  controllers.Account.doLink
+GET           /accounts/merge                                 controllers.Account.askMerge
+POST          /accounts/merge                                 controllers.Account.doMerge
+GET           /accounts/unverified                            controllers.Signup.unverified
+GET           /accounts/verify                                controllers.Account.verifyEmail
+GET           /accounts/verify/:token                         controllers.Signup.verify(token: String)
 
 # Authentication
-GET           /logout                                        com.feth.play.module.pa.controllers.Authenticate.logout
-GET           /authenticate/:provider                        com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)
-GET           /authenticate/:provider/denied                 controllers.ApplicationController.oAuthDenied(provider: String)
+GET           /logout                                         com.feth.play.module.pa.controllers.Authenticate.logout
+GET           /authenticate/:provider                         com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)
+GET           /authenticate/:provider/denied                  controllers.ApplicationController.oAuthDenied(provider: String)
 
 # Home page
 # GET           /subscribe                                     controllers.ApplicationController.subscribe()
-GET           /imprint                                       controllers.ApplicationController.imprint
-GET           /about                                         controllers.ApplicationController.about
-GET           /admin                                         controllers.ApplicationController.admin()
-GET           /lang/:id                                      controllers.ApplicationController.changeLanguage(id:String)
+GET           /imprint                                        controllers.ApplicationController.imprint
+GET           /about                                          controllers.ApplicationController.about
+GET           /admin                                          controllers.ApplicationController.admin()
+GET           /lang/:id                                       controllers.ApplicationController.changeLanguage(id:String)
 
-GET           /category/:catId                               controllers.ApplicationController.categoryIndex(catId:String)
-GET           /new                                           controllers.ApplicationController.indexNew
-GET           /                                              controllers.ApplicationController.index()
+GET           /category/:catId                                controllers.ApplicationController.categoryIndex(catId:String)
+GET           /new                                            controllers.ApplicationController.indexNew
+GET           /                                               controllers.ApplicationController.index()
 
