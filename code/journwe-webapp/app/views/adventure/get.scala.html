@@ -16,28 +16,19 @@
     <!-- Only required for left/right tabs -->
     <div class="nav-adventure visible-lg" style=""> <!---->
         <ul id="nav-adventure-list" class="nav nav-pills nav-stacked">
-            <li  id="nav-adventure-index"
-            @if(active == "index"){class="active"}><a href="#index" onclick="return jumpToSection('index');"><i
+            <li><a href="#index"><i
                 class="icon-info" title="Overview"></i></a></li>
-            <li id="nav-adventure-discussion"
-            @if(active == "discussion"){class="active"}><a href="#discussion" onclick="return jumpToSection('discussion');"><i class="icon-comments" title="Discussion"></i></a></li>
-            <li id="nav-adventure-places"
-            @if(active == "places"){class="active"}><a href="#places" onclick="return jumpToSection('places');"><i class="icon-globe" title="Place"></i></a></li>
-            <li id="nav-adventure-adventurers"
-            @if(active == "adventurers"){class="active"}><a href="#adventurers" onclick="return jumpToSection('adventurers');"><i class="icon-group" title="Adventurers"></i></a></li>
-            <li  id="nav-adventure-time"
-            @if(active == "times"){class="active"}><a href="#times" onclick="return jumpToSection('times');"><i
+            <li><a href="#discussion"><i class="icon-comments" title="Discussion"></i></a></li>
+            <li><a href="#places"><i class="icon-globe" title="Place"></i></a></li>
+            <li><a href="#adventurers"><i class="icon-group" title="Adventurers"></i></a></li>
+            <li><a href="#times"><i
                 class="icon-calendar" title="Date &amp; Time"></i></a></li>
 
-            @*<li id="nav-adventure-messages"
-            @if(active == "messages"){class="active"}><a href="#messages" onclick="return jumpToSection('messages');"><i class="icon-envelope" title="Messages"></i></a></li>*@
-            <li   id="nav-adventure-todos"
-            @if(active == "todos"){class="active"}><a href="#todos" onclick="return jumpToSection('todos');"><i
+            @*<li><a href="#messages"><i class="icon-envelope" title="Messages"></i></a></li>*@
+            <li><a href="#todos"><i
                 class="icon-list-ol" title="Todos"></i></a></li>
-            <li   id="nav-adventure-files"
-            @if(active == "files"){class="active"}><a href="#files" onclick="return jumpToSection('files');"><i class="icon-file" title="Files"></i></a></li>
-            <li   id="nav-adventure-offers"
-            @if(active == "offers"){class="active"}><a href="#offers" onclick="return jumpToSection('offers');"><i class="icon-suitcase" title="Offers"></i></a></li>
+            <li><a href="#files"><i class="icon-file" title="Files"></i></a></li>
+            <li><a href="#offers"><i class="icon-suitcase" title="Offers"></i></a></li>
         </ul>
     </div>
     }
@@ -340,39 +331,11 @@
 </div>
 
 <script>
-
-
-    $('document').ready(function () {
-
-        jQuery.event.props.push('dataTransfer');
-        $(window).bind('drop', function(event){event.stopPropagation(); event.preventDefault(); return false;});
-        $(window).bind('dragover', function(event){event.stopPropagation(); event.preventDefault(); return false;});
-
-    });
-
-
-
-    function jumpToSection(section) {
-        /*
-        $('#nav-adventure-list').find('li').removeClass('active');
-        $('#nav-adventure-' + section).addClass('active');
-        */
-        $('html, body').animate({
-        scrollTop : $('#' + section).offset().top - 100
-        }, 'slow');
-        return false;
-    }
-	$('body').scrollspy({offset: 100}).on('activate', function(evt){
-        $('.row.active').removeClass('active');
-        $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
-    })
-    jumpToSection('@active');
-</script>
-
-<script>
     $(document).ready(function () {
         @if(adv.getImage != null && !"".equals(adv.getImage)){$('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=@adv.getImage()")');}
     });
 </script>
+
+@helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = routes.Assets.at("javascripts/adventure").url)
 
 }
