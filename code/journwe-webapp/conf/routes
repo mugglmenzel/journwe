@@ -127,6 +127,7 @@ POST          /fb/message/send                                controllers.Facebo
 GET           /ping                                           controllers.ApplicationController.ping
 
 # Map static resources from the /public folder to the /assets URL path
+GET     	  /assets/javascripts/routes.js                   controllers.ApplicationController.routes
 GET           /assets/*file                                   controllers.Assets.at(path="/public", file)
 
 # Signup, login, etc.
@@ -169,5 +170,6 @@ GET           /lang/:id                                       controllers.Applic
 
 GET           /category/:catId                                controllers.ApplicationController.categoryIndex(catId:String)
 GET           /new                                            controllers.ApplicationController.indexNew
+
 GET           /                                               controllers.ApplicationController.index()
 

@@ -24,6 +24,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import play.Routes;
 import providers.MyUsernamePasswordAuthProvider;
 import views.html.about;
 import views.html.admin;
@@ -412,4 +413,16 @@ public class ApplicationController extends Controller {
             return UsernamePasswordAuthProvider.handleSignup(ctx());
         }
     }
+
+    /**
+     * Returns a list of all routes to handle in the javascript
+     */
+    public static Result routes() {
+        response().setContentType("text/javascript");
+        return ok("define(function(){"+ // Make it AMD compatible
+            Routes.javascriptRouter("routes", 
+                routes.javascript.AdventureController.updatePlaceVoteDeadline()
+            )+";; return routes;});"
+        );
+      }
 }

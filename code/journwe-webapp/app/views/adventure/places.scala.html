@@ -15,6 +15,9 @@
     }
 
     @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
+    <div class="pull-right">
+          <button class="btn btn-default btn-set-reminder-place date" data-id="@adv.getId" data-date="@adv.getPlaceVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="icon-calendar"></i> @if(adv.getPlaceVoteDeadlineFormatted){@adv.getPlaceVoteDeadlineFormatted}else{"Set Reminder"}</button>
+    </div>
     <div class="pull-right btn-close-place stash">
         @Messages("adventure.general.voting")
         <div class="make-switch">
@@ -28,12 +31,12 @@
     <thead>
         <tr>
             <th>@Messages("adventure.general.favourite")</th>
-            <th>Group Rating</th>
             <th>@Messages("adventure.places.location")</th>
-            <th style="min-width: 135px;">@Messages("adventure.general.yourvote")</th>
-            <th class="text-center">@Messages("adventure.general.yes")</th>
-            <th class="text-center">@Messages("adventure.general.maybe")</th>
-            <th class="text-center">@Messages("adventure.general.no")</th>
+            <th style="width: 90px;">@Messages("adventure.general.yourvote")</th>
+            <th class="text-center" style="width: 100px;">Group Rating</th>
+            <th class="text-center hidden">@Messages("adventure.general.yes")</th>
+            <th class="text-center hidden">@Messages("adventure.general.maybe")</th>
+            <th class="text-center hidden">@Messages("adventure.general.no")</th>
             <th>@Messages("adventure.general.advvotes")</th>
             @if(JournweAuthorization.canEditPlaces(adv.getId)) {
             <th class="text-center">@Messages("adventure.general.listactions")</th>
@@ -67,11 +70,10 @@
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
         <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
-        <td>{%=(o.voteGroup*5)%}</td>
         <td><em>{%=o.address%}</em></td>
         @if(JournweAuthorization.canVoteForPlaces(adv.getId)) {
         <td>
-            <div class="btn-group">
+            <div class="btn-group hidden">
                 <button id="placeoption-status-{%=o.placeId%}" class="btn btn-default" style="width: 90px" disabled="disabled"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-pencil"></i>
@@ -92,9 +94,10 @@
         </td>
         }
         @if(JournweAuthorization.canViewVotesForPlaces(adv.getId)) {
-        <td class="text-center">{%=o.voteCount.YES%}</td>
-        <td class="text-center">{%=o.voteCount.MAYBE%}</td>
-        <td class="text-center">{%=o.voteCount.NO%}</td>
+        <td class="text-center">{%=(o.voteGroup*5)%}</td>
+        <td class="text-center hidden">{%=o.voteCount.YES%}</td>
+        <td class="text-center hidden">{%=o.voteCount.MAYBE%}</td>
+        <td class="text-center hidden">{%=o.voteCount.NO%}</td>
         <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
         }
         @if(JournweAuthorization.canEditPlaces(adv.getId)) {
@@ -211,8 +214,6 @@
 
         });
     });
-
-
 
 
 

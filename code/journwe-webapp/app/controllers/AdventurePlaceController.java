@@ -202,12 +202,16 @@ public class AdventurePlaceController extends Controller {
     private static PlaceOptionRating getPlaceGroupRating(PlaceOption place) {
         double sum = 0D;
         List<PlaceAdventurerPreference> prefs = new PlaceAdventurerPreferenceDAO().all(place.getOptionId());
+
+        if (prefs.size() == 0)
+            return new PlaceOptionRating(place.getPlaceId(), 0D);
+
         for (PlaceAdventurerPreference pref : prefs)
             if (0D >= pref.getVoteGravity() || EPreferenceVote.NO.equals(pref.getVote()))
                 return new PlaceOptionRating(place.getPlaceId(), 0D);
             else
                 sum += pref.getVoteGravity();
-
+        
         return new PlaceOptionRating(place.getPlaceId(), new Double(sum / prefs.size()));
     }
 
