@@ -13,6 +13,14 @@ define(function(){
     return {
 
         /**
+         * Returns the last string of the path
+         * @return String
+         */
+        id: function(){
+            return location.pathname.split("/").slice(-1)+"";
+        },
+
+        /**
          * Helper function to specify multiple event listeners
          * @param Object 
          */

@@ -16,7 +16,7 @@
 
     @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
     <div class="pull-right">
-          <button class="btn btn-default btn-set-reminder-place date" data-id="@adv.getId" data-date="@adv.getPlaceVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="icon-calendar"></i> @if(adv.getPlaceVoteDeadlineFormatted){@adv.getPlaceVoteDeadlineFormatted}else{"Set Reminder"}</button>
+          <button class="btn btn-default btn-set-reminder-place date" data-id="@adv.getId" data-date="@adv.getPlaceVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="icon-calendar"></i> @if(adv.getPlaceVoteDeadlineFormatted){@adv.getPlaceVoteDeadlineFormatted}else{ Set Deadline }</button>
     </div>
     <div class="pull-right btn-close-place stash">
         @Messages("adventure.general.voting")

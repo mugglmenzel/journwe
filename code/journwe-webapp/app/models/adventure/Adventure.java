@@ -177,7 +177,6 @@ public class Adventure {
         if (placeVoteDeadline == null || placeVoteDeadline == 0L){
             return "";
         }
-
         return new SimpleDateFormat("dd-MM-yyyy").format(new Date(placeVoteDeadline));
     }
 
@@ -187,6 +186,14 @@ public class Adventure {
 
     public Long getTimeVoteDeadline() {
         return timeVoteDeadline;
+    }
+
+    @DynamoDBIgnore
+    public String getTimeVoteDeadlineFormatted() {
+        if (timeVoteDeadline == null || timeVoteDeadline == 0L){
+            return "";
+        }
+        return new SimpleDateFormat("dd-MM-yyyy").format(new Date(timeVoteDeadline));
     }
 
     public void setTimeVoteDeadline(Long timeVoteDeadline) {

@@ -1,10 +1,35 @@
 require([
-	"main", 
+	"main",
 	"utils",
 	"routes"
 ], function(main, utils, routes){
 
-	console.log(routes)
+
+	var now = new Date(),
+		today = new Date(now.getFullYear(), now.getMonth(), now.getDate(),
+				0, 0, 0, 0);
+
+
+	var deadline = function(btn, date, route){
+
+		// Set spinner/hide calendar
+		btn.find("i").attr("class", "icon-spin icon-journwe");
+		btn.datepicker("hide");
+
+		// Do ajax call
+		route(utils.id()).ajax({
+			data: {voteDeadline: date.getTime()},
+			success: function(data) {
+
+				// Set response
+				var d = date,
+					z = function(r){ return r < 10 ? "0"+r:r; },
+					f = (z(d.getDate())+"-"+z(d.getMonth()+1)+"-"+(d.getYear()+1900));
+				btn.html('<i class="icon-calendar"></i> '+f);
+			}
+		});
+
+	};
 
 	utils.on({
 
@@ -22,27 +47,30 @@ require([
 
 
 		'changeDate .btn-set-reminder-place': function(e){
+			deadline(
+				$(this), 
+				e.date,
+				routes.controllers.AdventureController.updatePlaceVoteDeadline
+			);
+		},
 
-			var btn = $(this);
-			btn.find("i").attr("class", "icon-spin icon-journwe");
 
-			btn.datepicker("hide");
-
-			routes.controllers.AdventureController.updatePlaceVoteDeadline($(this).data("id")).ajax({
-				data: {voteDeadline: e.date.getTime()},
-				success: function(data) {
-					var d = e.date,
-						z = function(r){ return r < 10 ? "0"+r:r; },
-						f = (z(d.getDate())+"-"+z(d.getMonth()+1)+"-"+(d.getYear()+1900));
-
-					btn.html('<i class="icon-calendar"></i> '+f);
-				}
-			});
+		'changeDate .btn-set-reminder-time': function(e){
+			deadline(
+				$(this), 
+				e.date,
+				routes.controllers.AdventureController.updateTimeVoteDeadline
+			);
 		}
 	});
 
 
-	$('.date').datepicker();
+
+	// Init all date fields
+	$('.date').datepicker({
+		startDate: today,
+		weekStart: 1
+	});
 
 
 

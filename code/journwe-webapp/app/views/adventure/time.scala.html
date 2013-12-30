@@ -14,6 +14,10 @@
         <i id="times-favorite-time-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name"></span></em>
     </div>
 
+    <div class="pull-right">
+          <button class="btn btn-default btn-set-reminder-time date" data-id="@adv.getId" data-date="@adv.getTimeVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="icon-calendar"></i> @if(adv.getTimeVoteDeadlineFormatted){@adv.getTimeVoteDeadlineFormatted}else{ Set Deadline }</button>
+    </div>
+
     <div class="pull-right btn-close-time stash">
         @Messages("adventure.general.voting")
         <div class="switch">
