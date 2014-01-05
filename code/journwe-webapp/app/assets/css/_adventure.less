@@ -80,16 +80,16 @@
 .nav-adventure {
     font-size: 24px;
     width: 100%;
-    background-color: fade(@color_white, 50%);
+    background-color: @color_white;
     margin-top: 50px;
     .transition(background 0.5s ease);
 
     .fixed & {
-        background-color: fade(@color_white, 80%);
+        box-shadow: 0 0 5px gray;
         position: fixed;
         left: 17%;
         right: 17%;
-        z-index: 1;
+        z-index: 10;
         top: -50px;
         width: auto;
     }
@@ -118,6 +118,10 @@
             }
         }
 
+        &.active {
+            background: #e1e1e1;
+        }
+
     }
 
     & > li > a {
@@ -126,7 +130,7 @@
     }
 
     & a {
-        color: white !important;
+        color: #666 !important;
     }
 
     & .nav-pills>li.active>a,
@@ -137,13 +141,13 @@
 
     & .nav-pills>li>a:hover,
     & .nav-pills>li>a:focus {
-        color: white;
+        color: #333;
         background: fade(@color_white, 20%);
     }
 
     & .nav-pills>li>a:hover i,
     & .nav-pills>li>a:focus i {
-        color: white;
+        color: #333;
 
         .fixed & {
             color: #333;

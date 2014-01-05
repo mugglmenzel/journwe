@@ -61,6 +61,29 @@ require([
 				e.date,
 				routes.controllers.AdventureController.updateTimeVoteDeadline
 			);
+		},
+
+		'click .btn-favorit': function(){
+
+			var el = $(this),
+				tb = el.closest('table'),
+				placeID = el.is(".btn-success") ? undefined : el.data('placeid');
+
+			tb.find('td:first-child .btn-success').removeClass('btn-success');
+			el.find('i').attr("class", "icon-spin icon-journwe");
+			$('icon-favorite-places').removeClass("icon-star").addClass("icon-spin icon-journwe");
+
+			routes.controllers.AdventurePlaceController.setFavoritePlace(utils.id()).ajax({
+				data: {favoritePlaceId: placeID},
+				success: function(data){
+					$('icon-favorite-places').removeClass("icon-spin icon-journwe").addClass("icon-star");
+					
+					// Set stars
+					$(el).find('i').attr("class", "icon-star");
+					$('#places-favorite-place-name').html(data.address);
+					$(el).addClass('btn-success');
+				}
+			});
 		}
 	});
 
@@ -74,10 +97,10 @@ require([
 
 
 
-	// $('body').scrollspy({offset: 100}).on('activate', function(evt){
-	// 	$('.row.active').removeClass('active');
-	// 	$($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
-	// });
+	$('body').scrollspy({offset: 100}).on('activate', function(evt){
+		$('.row.active').removeClass('active');
+		$($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
+	});
 
 
 });

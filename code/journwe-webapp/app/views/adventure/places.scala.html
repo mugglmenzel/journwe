@@ -6,7 +6,7 @@
 <div class="clearfix">
     @if(JournweAuthorization.canViewFavoritePlace(adv.getId)) {
     <div id="places-favorite-place" class="pull-left" style="font-size: 20px; margin-bottom: 10px;">
-        <i id="places-favorite-place-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
+        <i id="places-favorite-place-icon" class="icon-spin icon-journwe icon-favorite-places"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
     </div>
     <div class="clearfix"></div>
     <div id="places-autofavorite-place" class="pull-left text-muted" style="font-size: 20px; margin-bottom: 10px;">
@@ -16,9 +16,16 @@
 
     @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
     <div class="pull-right">
+          <button class="btn btn-success btn-set-close-place"><i class="icon-ok"></i> Close with Berlin</button>
+    </div>
+
+    <div class="pull-right">
           <button class="btn btn-default btn-set-reminder-place date" data-id="@adv.getId" data-date="@adv.getPlaceVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="icon-calendar"></i> @if(adv.getPlaceVoteDeadlineFormatted){@adv.getPlaceVoteDeadlineFormatted}else{ Set Deadline }</button>
     </div>
-    <div class="pull-right btn-close-place stash">
+
+
+
+    <div class="pull-right btn-close-place stash hidden">
         @Messages("adventure.general.voting")
         <div class="make-switch">
             <input id="places-voting-active-switch" type="checkbox" @if(adv.getPlaceVoteOpen){checked="checked"}>
@@ -69,7 +76,7 @@
 
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
-        <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
+        <td><button class="btn btn-favorit btn-default {%=o.favorite?'btn-success':''%}" data-placeid="{%=o.placeId%}"><i class="icon-star"></i></button></td>
         <td><em>{%=o.address%}</em></td>
         @if(JournweAuthorization.canVoteForPlaces(adv.getId)) {
         <td>
@@ -140,23 +147,6 @@
         markers[id].setMap(null);
         delete markers[id];
         resetBounds();
-    }
-
-
-    function setFavoritePlaceOption(optionId, el) {
-        $('#places-list td:first-child .btn-success').removeClass('btn-success');
-        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
-        $(el).find('i').removeClass("icon-star").addClass("icon-spin icon-journwe");
-        $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
-            $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
-            // Remove other stars
-            $(el).closest('table').find('.btn-success').removeClass("btn-success");
-            // Set stars
-            $(el).find('i').removeClass("icon-spin icon-journwe").addClass("icon-star");
-            $('#places-favorite-place-name').html(data.address);
-            $('.btn-close-place').show();
-            $(el).addClass('btn-success');
-        });
     }
 
     function renderPlaceOption(data, replace) {

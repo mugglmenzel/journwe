@@ -422,7 +422,8 @@ public class ApplicationController extends Controller {
         return ok("define(function(){"+ // Make it AMD compatible
             Routes.javascriptRouter("routes", 
                 routes.javascript.AdventureController.updatePlaceVoteDeadline(),
-                routes.javascript.AdventureController.updateTimeVoteDeadline()
+                routes.javascript.AdventureController.updateTimeVoteDeadline(),
+                routes.javascript.AdventurePlaceController.setFavoritePlace()
             )+";; return routes;});"
         );
       }

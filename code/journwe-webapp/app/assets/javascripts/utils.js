@@ -35,7 +35,7 @@ define(function(){
                 var evt = i.split(" ").slice(0, 1)[0],
                     cls = i.split(" ").slice(1).join(" ");
 
-                $(cls).on(evt, obj[i]);
+                $(document).on(evt, cls, obj[i]);
             }
         },
 
