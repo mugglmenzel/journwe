@@ -28,7 +28,21 @@ require([
 				btn.html('<i class="icon-calendar"></i> '+f);
 			}
 		});
+	};
 
+	var updatePlace = function(open){
+        if(open) {
+        	var address = window.favoritePlace && favoritePlace.address.split(",")[0];
+			$('#places-list button, .btn-set-reminder-place').prop('disabled', false);
+            $(".btn-set-close-place").addClass("btn-success").html('<i class="icon-ok"></i> Close'+(address?' with '+address:''));
+            $('#place-add-form').fadeIn();
+            // resetBounds();
+        } else {
+            $('#places-list button, .btn-set-reminder-place').prop('disabled', true);
+            $('#place-add-form').fadeOut();
+            $(".btn-set-close-place").removeClass("btn-success").html('<i class="icon-ok"></i> Reopen');
+            // resetBounds();
+        }
 	};
 
 	utils.on({
@@ -76,14 +90,31 @@ require([
 			routes.controllers.AdventurePlaceController.setFavoritePlace(utils.id()).ajax({
 				data: {favoritePlaceId: placeID},
 				success: function(data){
+					window.favoritePlace = data; // TODO: Refactoring
 					$('icon-favorite-places').removeClass("icon-spin icon-journwe").addClass("icon-star");
-					
 					// Set stars
 					$(el).find('i').attr("class", "icon-star");
 					$('#places-favorite-place-name').html(data.address);
 					if (placeID){
 						$(el).addClass('btn-success');
 					}
+					updatePlace($(".btn-set-close-place").is(".btn-success"));
+				}
+			});
+		},
+
+		'click .btn-set-close-place': function(){
+
+			var btn = $(this),
+				open = btn.is(".btn-success");
+
+			btn.find('i').attr("class", "icon-spin icon-journwe");
+
+			routes.controllers.AdventureController.updatePlaceVoteOpen(utils.id()).ajax({
+				data: {voteOpen: !open},
+				success: function(data){
+					btn.find('i').attr("class", "icon-ok");
+					updatePlace(data);
 				}
 			});
 		}

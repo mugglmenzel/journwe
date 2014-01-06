@@ -12,7 +12,7 @@
 
     @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
     <div class="pull-right">
-          <button class="btn btn-success btn-set-close-place"><i class="icon-ok"></i> Close with Berlin</button>
+          <button class="btn @if(adv.getPlaceVoteOpen){btn-success} btn-set-close-place"><i class="icon-ok"></i> @if(adv.getPlaceVoteOpen){Close}else{Reopen}</button>
     </div>
 
     <div class="pull-right">
@@ -251,11 +251,13 @@
     function updatePlaceVoteOpen(data) {
 
         if(data) {
-            $('#places-list button').prop('disabled', false);
+            var address = window.favoritePlace && favoritePlace.address.split(",")[0];
+            $(".btn-set-close-place").addClass("btn-success").html('<i class="icon-ok"></i> Close'+(address?' with '+address:''));
+            $('#places-list button, .btn-set-reminder-place').prop('disabled', false);
             $('#place-add-form').fadeIn();
             resetBounds();
         } else {
-            $('#places-list button').prop('disabled', true);
+            $('#places-list button, .btn-set-reminder-place').prop('disabled', true);
             $('#place-add-form').fadeOut();
             resetBounds();
         }
@@ -268,11 +270,13 @@
         $('#places-autofavorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
 
         $.get('@routes.AdventurePlaceController.getFavoritePlace(adv.getId)', function (result) {
+            window.favoritePlace = result.favorite; // TODO use private var
             $('#places-favorite-place-name').html(result.favorite != null ? result.favorite.address : "@Messages("adventure.general.nofavourite.placeholder")");
             $('#places-autofavorite-place-name').html(result.autoFavorite != null ? result.autoFavorite.address : "@Messages("adventure.general.nofavourite.placeholder")");
             $('.btn-close-place').toggle(!!result.favorite);
             $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
             $('#places-autofavorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
+            updatePlaceVoteOpen(@adv.getPlaceVoteOpen);
         });
     }
 
