@@ -83,9 +83,12 @@ public class AdventurePlaceController extends Controller {
         adv.setFavoritePlaceId(favId);
         new AdventureDAO().save(adv);
 
-        new AdventurerNotifier().notifyAdventurers(advId, "Favorite Place is now " + new PlaceOptionDAO().get(advId, adv.getFavoritePlaceId()).getAddress() + ".", "Favorite Place");
-
-        return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));
+        if (favId != null && !"".equals(favId)){
+            new AdventurerNotifier().notifyAdventurers(advId, "Favorite Place is now " + new PlaceOptionDAO().get(advId, adv.getFavoritePlaceId()).getAddress() + ".", "Favorite Place");
+            return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));   
+        } else {
+            return ok(Json.toJson(autoFavorite(advId)));
+        }
     }
 
     @Security.Authenticated(SecuredUser.class)

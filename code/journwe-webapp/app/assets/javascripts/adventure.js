@@ -81,7 +81,9 @@ require([
 					// Set stars
 					$(el).find('i').attr("class", "icon-star");
 					$('#places-favorite-place-name').html(data.address);
-					$(el).addClass('btn-success');
+					if (placeID){
+						$(el).addClass('btn-success');
+					}
 				}
 			});
 		}

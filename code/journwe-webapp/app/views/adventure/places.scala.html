@@ -8,10 +8,6 @@
     <div id="places-favorite-place" class="pull-left" style="font-size: 20px; margin-bottom: 10px;">
         <i id="places-favorite-place-icon" class="icon-spin icon-journwe icon-favorite-places"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
     </div>
-    <div class="clearfix"></div>
-    <div id="places-autofavorite-place" class="pull-left text-muted" style="font-size: 20px; margin-bottom: 10px;">
-        <i id="places-autofavorite-place-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.places.favourite") <em><span id="places-autofavorite-place-name"></span></em>
-    </div>
     }
 
     @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
