@@ -5,7 +5,8 @@
 require(['utils'], function(utils){
 
     var lastScrollTop = 0,
-        bgr = $('#background');
+        bgr = $('#background'),
+        adv = $('#adventure-container');
 
 
     // Set background image
@@ -15,24 +16,47 @@ require(['utils'], function(utils){
     }
 
     // Set parallex scrolling
+
+    var requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+
+    var cancelAnimationFrame = (function(){
+      return  window.cancelAnimationFrame || 
+              window.mozCancelAnimationFrame ||
+              function( fn ){
+                window.clearTimeout(fn);
+              };
+    })();
+
+    var timer, top = 140;
     $(window).scroll(function(event){
-        var st = $(this).scrollTop();
-        // if (st > 200 && st > lastScrollTop){
-        //     $('.navbar-fixed-top').slideUp('fast');
-        // } else {
-        //     $('.navbar-fixed-top').slideDown('fast');
-        // }
-        // 
+        cancelAnimationFrame(timer);
+        timer = requestAnimFrame(function(){
 
-        var offsetHeight = $(document).height() - $(this).height();
-        if (!new RegExp("Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini", "i").test(navigator.userAgent)){
-           bgr.css('transform', 'translateY(-'+Math.min(9, Math.max(0, (st/offsetHeight)*9 ))+'%)');
-        }
+            var st = $(this).scrollTop();
+            // if (st > 200 && st > lastScrollTop){
+            //     $('.navbar-fixed-top').slideUp('fast');
+            // } else {
+            //     $('.navbar-fixed-top').slideDown('fast');
+            // }
+            // 
 
-        if ((st > 126 && lastScrollTop <= st) || (st <= 126 && lastScrollTop > st)){
-        	$('#adventure-container').attr("class", st > 126 ? "fixed" : "");
-    	}  
-        lastScrollTop = st;
+            // TODO: Optimize
+            // var offsetHeight = $(document).height() - $(this).height();
+            // if (!utils.isMobile()){
+            //     bgr.css('transform', 'translateY(-'+Math.min(9, Math.max(0, (st/offsetHeight)*9 ))+'%)');
+            // }
+            if ((st > top && lastScrollTop <= top) || (st <= top && lastScrollTop > top)){
+                adv.attr("class", st > top ? "fixed" : "");
+            }  
+            lastScrollTop = st;
+        }.bind(this));
     });
 
 

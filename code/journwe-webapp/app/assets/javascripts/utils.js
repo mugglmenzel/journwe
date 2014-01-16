@@ -7,7 +7,8 @@ define(function(){
     
 
     // Formats an int to a string with a leading zero
-    var two = function(r){ return (r < 10 ? "0" : "")+r; };
+    var two = function(r){ return (r < 10 ? "0" : "")+r; },
+        isMobile = new RegExp("Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini", "i").test(navigator.userAgent);
 
 
     return {
@@ -18,6 +19,14 @@ define(function(){
          */
         id: function(){
             return location.pathname.split("/").slice(-1)+"";
+        },
+
+        /**
+         * Returns TRUE if the client is a mobile browser
+         * @return Boolean
+         */
+        isMobile: function(){
+            return isMobile;
         },
 
         /**
