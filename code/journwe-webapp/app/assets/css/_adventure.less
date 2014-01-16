@@ -82,6 +82,8 @@
     width: 100%;
     background-color: @color_white;
     margin-top: 50px;
+    border-radius: 0;
+    padding: 10px;
     .transition(background 0.5s ease);
 
     .fixed & {
@@ -92,6 +94,10 @@
         z-index: 1000;
         top: -50px;
         width: auto;
+    }
+
+    & .navbar-left li {
+        padding: 9px 10px;
     }
 
     & li {
@@ -105,11 +111,11 @@
             border-radius: 0;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 15px 10px !important;
         }
 
         & a i {
-            width: 50px;
+            width: 40px;
             display: inline-block;
 
             .fixed & {
@@ -155,7 +161,7 @@
     }
 
     & .nav {
-        width: 100%;
+
     }
 }
 
