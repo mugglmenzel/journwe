@@ -1,10 +1,21 @@
 @import models.dao._
-
+@import com.feth.play.module.pa.providers.AuthProvider.Registry
+@import com.feth.play.module.pa.views.html._
 
     @main(Messages("journwe.subtitle")) { }{
         <section class="jrn-container text-center" style="vertical-align: middle; height: 400; background: none;">
             <div class="text-success" style="font-size: 50pt; font-weight: bolder; text-shadow: 3px 3px white;">JournWe - Travel together.</div>
-            <button class="btn btn-lg btn-success">Start Now</button>
+            <div class="btn-group user-login">
+                <a class="btn btn-lg btn-success" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Start Now</a>
+                <button class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                @forProviders() { p =>
+                    <li><a href="@p.getUrl()"><i class="fa fa-@p.getKey().toLowerCase fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                }
+                </ul>
+            </div>
         </section>
 
     @*

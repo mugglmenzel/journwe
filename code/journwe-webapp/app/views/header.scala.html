@@ -1,5 +1,4 @@
 @import models.notifications.ENotificationTopics
-@import models.notifications.ENotificationTopics
 
 @import models.dao.CategoryDAO
 
@@ -140,7 +139,7 @@
 
         } else {
             <div class="btn-group user-login">
-                <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="fa fa-@Registry.getProviders().iterator().next().getKey().toLowerCase fa-white fa-fw"></i> Login</a>
+                <a class="btn btn-primary" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Login</a>
                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
