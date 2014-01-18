@@ -11,15 +11,15 @@
     @defining(new CategoryHierarchyDAO){ catHierDAO =>
     <div class="nav-category visible-lg" style="">
         <ul id="nav-category-list" class="nav nav-pills nav-stacked">
-            @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@routes.ApplicationController.categoryIndex(catSuper.getId)"><i class="icon-circle-arrow-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Home}else{@catSuper.getName}"></i> </a></li>}
+            @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@routes.ApplicationController.categoryIndex(catSuper.getId)"><i class="fa fa-circle-arrow-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Home}else{@catSuper.getName}"></i> </a></li>}
             @*
             @catHierDAO.categoryAsSuper(cat.getId).map{ catHier =>
-                @defining(new CategoryDAO().get(catHier.getSubCategoryId)){ catSub => <li><a href="@routes.ApplicationController.categoryIndex(catSub.getId)"><i class="icon-circle-arrow-down" title="Level Down"></i> @catSub.getName</a></li>}
+                @defining(new CategoryDAO().get(catHier.getSubCategoryId)){ catSub => <li><a href="@routes.ApplicationController.categoryIndex(catSub.getId)"><i class="fa fa-circle-arrow-down" title="Level Down"></i> @catSub.getName</a></li>}
             }
             *@
-            <li><a href="#subcategories"><i class="icon-circle-arrow-down" title="Sub-Categories"></i></a></li>
-            <li><a href="#inspirations"><i class="icon-lightbulb" title="Inspirations"></i></a></li>
-            <li><a href="#publicadventures"><i class="icon-bullhorn" title="Public JournWes"></i></a></li>
+            <li><a href="#subcategories"><i class="fa fa-circle-arrow-down" title="Sub-Categories"></i></a></li>
+            <li><a href="#inspirations"><i class="fa fa-lightbulb" title="Inspirations"></i></a></li>
+            <li><a href="#publicadventures"><i class="fa fa-bullhorn" title="Public JournWes"></i></a></li>
         </ul>
     </div>
     }
@@ -33,10 +33,10 @@
     @defining(new CategoryDAO()){ catDAO =>
     <div class="jrn-container jrn-subcategory">
 
-        <h2 id="subcategories"><i class="icon-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
+        <h2 id="subcategories"><i class="fa fa-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
         <div style="">
             <div id="subcategories-list" style="font-size: 20pt;">
-                <i class="icon-spin icon-journwe"></i>
+                <i class="fa fa-spin icon-journwe"></i>
             </div>
         </div>
         <div class="clearfix"></div>
@@ -77,9 +77,9 @@
 
 
     <div class="jrn-container">
-        <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="inspirations"><i class="fa fa-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="">
-            <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="inspirations-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>
             <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
@@ -134,8 +134,8 @@
         });
 
         function loadInspirations(lastId, clear) {
-            $('#inspirations-public-button-refresh i').addClass('icon-spin');
-            $('#inspirations-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
+            $('#inspirations-public-button-refresh i').addClass('fa fa-spin');
+            $('#inspirations-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getInspirations(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
                 if(clear) $('#inspirations-public-list').empty();
                 if(advs != null && advs.length > 0) {
@@ -180,7 +180,7 @@
                 }
 
                 $('#inspirations-public-load-more-button').html('Show More');
-                $('#inspirations-public-button-refresh i').removeClass('icon-spin');
+                $('#inspirations-public-button-refresh i').removeClass('fa fa-spin');
             });
         }
 
@@ -189,10 +189,10 @@
     </script>
 
     <div class="jrn-container">
-        <h2 id="publicadventures"><i class="icon-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="publicadventures"><i class="fa fa-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
 
         <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>
             <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
@@ -206,9 +206,9 @@
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                 <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                 <div class="overlay text-center" style="display: none;">
-                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                 </div>
             </div>
         </div>
@@ -249,8 +249,8 @@
         });
 
         function loadPublicAdventures(lastId, clear) {
-            $('#adventures-public-button-refresh i').addClass('icon-spin');
-            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
+            $('#adventures-public-button-refresh i').addClass('fa fa-spin');
+            $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getPublicAdventuresOfCategory(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 if(advs != null && advs.length > 0) {
@@ -294,7 +294,7 @@
                     $('#adventures-places-map').parent().hide(function(){$(this).remove();});
                 }
                 $('#adventures-public-load-more-button').html('Show More');
-                $('#adventures-public-button-refresh i').removeClass('icon-spin');
+                $('#adventures-public-button-refresh i').removeClass('fa fa-spin');
             });
         }
     </script>

@@ -15,7 +15,7 @@
         Category:
         <div id="adventure-category-select" class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-spin icon-journwe hide"></i> <span>No Category</span> <span class="caret"></span>
+                <i class="fa fa-spin icon-journwe hide"></i> <span>No Category</span> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu"></ul>
         </div>
@@ -49,7 +49,7 @@
         </script>
     </div>
     <div class="col-lg-3">
-        <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="icon-facebook"></i> @Messages("adventure.options.facebookpublish")</button>
+        <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="fa fa-facebook"></i> @Messages("adventure.options.facebookpublish")</button>
     </div>
 
     @if(adv.isPublish){
@@ -61,7 +61,7 @@
 
     @if(adv.getShortURL()!=null && !adv.getShortURL().equals("")){
         <div class="col-lg-3">
-            <div><a href="@adv.getShortURL" class="btn"><i class="icon-link"></i> @adv.getShortURL</a></div>
+            <div><a href="@adv.getShortURL" class="btn"><i class="fa fa-link"></i> @adv.getShortURL</a></div>
         </div>
     }
 </div>

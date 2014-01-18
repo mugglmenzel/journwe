@@ -19,20 +19,20 @@
     </div>
     @if(user.getId.equals(new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId())){
     <div class="jrn-container">
-        <h2 id="options"><i class="icon-cogs"></i> @Messages("user.options") </h2>
+        <h2 id="options"><i class="fa fa-cogs"></i> @Messages("user.options") </h2>
         <div class="row">
             <div class="col-lg-12">
                 @Messages("user.notify")
                  <div class="btn-group btn-select-notification-frequency">
 
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.IMMEDIATELY) {active}"
-                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.IMMEDIATELY.toString)"><i class="icon-exclamation-sign"></i> @Messages("user.notify.immediately") </button>
+                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.IMMEDIATELY.toString)"><i class="fa fa-exclamation-sign"></i> @Messages("user.notify.immediately") </button>
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.DAILY) {active}"
-                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.DAILY.toString)"><i class="icon-time"></i> @Messages("user.notify.daily") </button>
+                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.DAILY.toString)"><i class="fa fa-time"></i> @Messages("user.notify.daily") </button>
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.WEEKLY) {active}"
-                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.WEEKLY.toString)"><i class="icon-calendar"></i> @Messages("user.notify.weekly") </button>
+                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.WEEKLY.toString)"><i class="fa fa-calendar"></i> @Messages("user.notify.weekly") </button>
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.NONE) {active}"
-                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.NONE.toString)"><i class="icon-stop"></i> @Messages("user.notify.none") </button>
+                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.NONE.toString)"><i class="fa fa-stop"></i> @Messages("user.notify.none") </button>
                  </div>
 
                 <script>
@@ -41,7 +41,7 @@
                     html = el.html();
 
                     el.css({width:el.width()+"px"})
-                    .html('<i class="icon-spin icon-journwe"></i>');
+                    .html('<i class="fa fa-spin icon-journwe"></i>');
 
                     $.post(el.attr('href'), function(json){
                     var state = json;
@@ -62,9 +62,9 @@
     }
 
     <div class="jrn-container">
-        <h2 id="jorunwes"><i class="icon-compass"></i> @Messages("index.myJournWes") <small>- <span id="adventures-user-count">0</span></small></h2>
+        <h2 id="jorunwes"><i class="fa fa-compass"></i> @Messages("index.myJournWes") <small>- <span id="adventures-user-count">0</span></small></h2>
         <div id="adventures-user-list" class="row" style="overflow: hidden">
-             <i class="icon-spin icon-journwe stash"></i>
+             <i class="fa fa-spin icon-journwe stash"></i>
         </div>
         <script type="text/x-tmpl" id="adventure-user-template">
             <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
@@ -72,9 +72,9 @@
                 <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                     <div style="line-height: 20px;"><h4>{%=o.name%}</h4></div>
                     <div class="overlay text-center" style="display: none;">
-                        <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                        <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                        <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                        <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                        <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
+                        <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@
 
 
     <div class="jrn-container">
-        <h2 id="badges"><i class="icon-trophy"></i> @Messages("user.badges") <small>- 1</small></h2>
+        <h2 id="badges"><i class="fa fa-trophy"></i> @Messages("user.badges") <small>- 1</small></h2>
         <div class="row" style="overflow: hidden">
             <div style="position: relative; float: left; width: 20%;">
                 <img style="margin: 0px; width: 100%;" src="@routes.Assets.at("img/badge/welcome_journwe.png")" title="Welcome to JournWe Badge">

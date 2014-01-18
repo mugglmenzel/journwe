@@ -11,13 +11,13 @@
 <form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
 
     <div class="row">
-        <div class="col-lg-8 input-group">
+        <div class="col-lg-8">
             <input type="text" name="name" placeholder="@Messages("yingyangyong.name.placeholder")" required="required" class="input input-lg form-control">
             @if(ins != null){<input type="hidden" name="inspirationId" value="@ins.getId">}
         </div>
         <div class="col-lg-4">
             <button type="submit" class="btn btn-lg btn-success pull-right" onclick="$('#yingyangyong-form').submit();">
-                @Messages("adventure.general.button.startJournWe") <i class="icon-angle-right"></i></button>
+                @Messages("adventure.general.button.startJournWe") <i class="fa fa-chevron-right fa-fw"></i></button>
         </div>
     </div>
     <div class="spacer20"></div>
@@ -36,11 +36,11 @@
         <div class="tab-pane fade in active" id="where-tab">
             <div style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-bottom: 20px">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px;">
-                    <h1><i class="icon-globe"></i> @Messages("yingyangyong.place")</h1>
+                    <h1><i class="fa fa-globe"></i> @Messages("yingyangyong.place")</h1>
 
                     <ul id="places-list" class="list-unstyled list-inline">
                     @if(ins != null && ins.getPlaceAddress != null) {
-                        <li id="places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")"><input type="hidden" name="place[]" value="@ins.getPlaceAddress/@ins.getPlaceLatitude/@ins.getPlaceLongitude"><span class="label label-success"><i class="icon-map-marker"></i> @ins.getPlaceAddress &nbsp;<a href="#" onclick="$('#places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")').remove(); removeMarker('places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")'); return false;">&times;</a></span> <span class="divider"></span></li>
+                        <li id="places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")"><input type="hidden" name="place[]" value="@ins.getPlaceAddress/@ins.getPlaceLatitude/@ins.getPlaceLongitude"><span class="label label-success"><i class="fa fa-map-marker"></i> @ins.getPlaceAddress &nbsp;<a href="#" onclick="$('#places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")').remove(); removeMarker('places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")'); return false;">&times;</a></span> <span class="divider"></span></li>
                         <script>
                         $('document').ready(function () {
                         var marker = new google.maps.Marker({
@@ -57,7 +57,7 @@
 
                     <div class="input-group">
                         <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
-                        <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="icon-plus"></i></a></div>
+                        <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="fa fa-plus"></i></a></div>
                     </div>
                     <div class="spacer10"></div>
                     <div style="height: 400px;">
@@ -65,7 +65,7 @@
                     </div>
                     <div class="spacer20"></div>
                     <div class="clearfix">
-                        <a class="btn btn-lg btn-primary pull-right" href="#who-tab" data-toggle="tab">Next</a>
+                        <a class="btn btn-lg btn-primary pull-right" href="#who-tab" data-toggle="tab">Next <i class="fa fa-angle-right fa-fw"></i></a>
                     </div>
 
                 </div>
@@ -75,45 +75,45 @@
         <div class="tab-pane fade" id="who-tab">
             <div style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-bottom: 20px;">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
-                    <h1><i class="icon-group"></i> @Messages("yingyangyong.adventurers")</h1>
+                    <h1><i class="fa fa-group"></i> @Messages("yingyangyong.adventurers")</h1>
 
                     <ul id="people-list" class="list-unstyled list-inline"></ul>
 
                     <div class="input-group">
                         <div id="people-add-type" class="input-group-btn">
                             <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
-                                <i id="people-add-type-icon" class="icon-facebook"></i>
+                                <i id="people-add-type-icon" class="fa fa-facebook fa-fw"></i>
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a data-icon="icon-facebook" data-type="text" data-typeahead="on"><i class="icon-facebook"></i>
+                                <li><a data-icon="fa fa-facebook fa-fw" data-type="text" data-typeahead="on"><i class="fa fa-facebook fa-fw"></i>
                                     @Messages("adventure.general.label.facebook")</a></li>
-                                <li><a data-icon="icon-envelope" data-type="email" data-typeahead="off"><i class="icon-envelope"></i>
+                                <li><a data-icon="fa fa-envelope fa-fw" data-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
                                     @Messages("adventure.general.label.email")</a></li>
                             </ul>
                         </div>
                         <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
                         <div class="input-group-btn">
-                            <a class="btn btn-add btn-primary" onclick="addFriend();"><i class="icon-plus"></i></a>
+                            <a class="btn btn-add btn-primary" onclick="addFriend();"><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
                     <div class="spacer20"></div>
                     <div>
                         <span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.public") </span>
-                        <div class="switch"><input type="checkbox" id="publish" name="publish"></div>
+                        <div><input type="checkbox" id="publish" name="publish"></div>
                     </div>
                     <div class="spacer20"></div>
                     <div>
                         <span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.publish")</span>
-                        <div class="switch"><input type="checkbox" id="facebookWall" name="facebookWall" onchange="$('.post-on-facebook').toggle(this.checked)"></div>
+                        <div><input type="checkbox" id="facebookWall" name="facebookWall" onchange="$('.post-on-facebook').toggle(this.checked)"></div>
                         <div class="form-group post-on-facebook" style="display: none; margin-top: 10px;">
-                            <label for="facebookWallPost"><i class="icon-facebook"></i> @Messages("yingyangyong.adventurers.facebookMessage") </label>
+                            <label for="facebookWallPost"><i class="fa fa-facebook"></i> @Messages("yingyangyong.adventurers.facebookMessage") </label>
                             <textarea name="facebookWallPost" style="width: 100%; height: 100px;" class="form-control">@Messages("yingyangyong.adventurers.facebookMessage.example")</textarea>
                         </div>
                     </div>
                     <div class="spacer20"></div>
                     <div class="clearfix">
-                        <a class="btn btn-lg btn-primary pull-right" href="#when-tab" data-toggle="tab">Next</a>
+                        <a class="btn btn-lg btn-primary pull-right" href="#when-tab" data-toggle="tab">Next <i class="fa fa-angle-right fa-fw"></i></a>
                     </div>
                 </div>
             </div>
@@ -122,12 +122,12 @@
         <div class="tab-pane fade" id="when-tab">
             <div style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-bottom: 20px;">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
-                    <h1><i class="icon-calendar"></i> @Messages("yingyangyong.time") </h1>
+                    <h1><i class="fa fa-calendar"></i> @Messages("yingyangyong.time") </h1>
 
                     <ul id="time-list" class="list-unstyled list-inline">
                     @if(ins != null && ins.getTimeStart != null) {
                         @defining(new SimpleDateFormat("yyyy-MM-dd")){sdf =>
-                            <li id="time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)"><input type="hidden" name="time[]" value="@sdf.format(ins.getTimeStart),@sdf.format(ins.getTimeEnd)"><span class="label label-info"><i class="icon-time"></i> @sdf.format(ins.getTimeStart) to @sdf.format(ins.getTimeEnd) &nbsp;<a href="#" onclick="$('#time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)').remove();">&times;</a></span> <span class="divider"></span></li>
+                            <li id="time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)"><input type="hidden" name="time[]" value="@sdf.format(ins.getTimeStart),@sdf.format(ins.getTimeEnd)"><span class="label label-info"><i class="fa fa-time"></i> @sdf.format(ins.getTimeStart) to @sdf.format(ins.getTimeEnd) &nbsp;<a href="#" onclick="$('#time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)').remove();">&times;</a></span> <span class="divider"></span></li>
                         }
                     }
                     </ul>
@@ -135,22 +135,26 @@
                     <div class="row">
 
 
-                        <div class="input-group col-lg-5" style="width: 43%;">
-                            <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start")</span>
-                            <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style="max-width: 200px;"/>
+                        <div class="col-lg-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.start")</span>
+                                <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style="max-width: 200px;"/>
+                            </div>
                         </div>
-                        <div class="input-group col-lg-5" style="width: 43%;">
-                            <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end")</span>
-                            <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style="max-width: 200px;"/>
+                        <div class="col-lg-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.end")</span>
+                                <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style="max-width: 200px;"/>
+                            </div>
                         </div>
 
-                        <div class="col-lg-2 text-right" style="width: 14%;">
-                            <a class="btn btn-add btn-primary" onclick="addTime();" style="width: 100%;"><i class="icon-plus"></i></a>
+                        <div class="col-lg-2 pull-right">
+                            <a class="btn btn-add btn-primary" onclick="addTime();" style="width: 100%;"><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
                     <div class="spacer20"></div>
                     <div class="clearfix">
-                       <a class="btn btn-lg btn-primary pull-right" href="#where-tab" data-toggle="tab">Next</a>
+                       <a class="btn btn-lg btn-primary pull-right" href="#where-tab" data-toggle="tab">Next <i class="fa fa-angle-right fa-fw"></i></a>
                     </div>
                 </div>
             </div>
@@ -191,7 +195,7 @@
     function checkShortname() {
         $.post('@routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
             function(check) {
-                $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="icon-ok"></i> available.</span>' : '<span class="text-error"><i class="icon-warning-sign"></i> not available!</span>' );
+                $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="fa fa-ok"></i> available.</span>' : '<span class="text-error"><i class="fa fa-warning-sign"></i> not available!</span>' );
                 $('#shortname').attr('aria-invalid', !check.valid);
                 if(!check.valid)
                     $('#shortname').parents(".control-group").first().addClass('error');
@@ -244,7 +248,7 @@
     function searchPlace() {
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
             var id = 'places-item-' + results[0].geometry.location.lat().toString().replace('.', '_') + '-' + results[0].geometry.location.lng().toString().replace('.', '_');
-            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label label-success"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
+            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label label-success"><i class="fa fa-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
             map.setCenter(results[0].geometry.location);
             var marker = new google.maps.Marker({
                 map: map,
@@ -350,7 +354,7 @@
         }
 
         var id = 'time-item-' + start.val() + '-' + end.val();
-        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label label-info"><i class="icon-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label label-info"><i class="fa fa-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
 
         start.val('');
         end.val('');

@@ -29,7 +29,7 @@
         <div class="col-lg-3 col-sm-3 col-xs-3">
             <div class="navbar-text">
                 @if(auth != null && user != null) {
-                    <a href="@routes.ApplicationController.index" onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');" class="brand" style="vertical-align: bottom;">
+                    <a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">   @*onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');"*@
                         <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
                             Journ<strong>We</strong><sup>beta</sup>
                         </span>
@@ -46,12 +46,12 @@
 
         <div class="col-lg-5 col-sm-5 col-xs-5">
             <ul class="nav nav-justified">
-                <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="icon-lightbulb"></i> Inspirations</a></li>
+                <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
                 <li><a href="#">About</a></li>
-                <li><a href="#">Start JournWe</a></li>
-                <li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="icon-search"></i> Search</a></li>
+                <li><a href="@routes.ApplicationController.indexNew()">New JournWe</a></li>
+                <li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="fa fa-search"></i> Search</a></li>
                 @if(auth != null && user != null && EUserRole.ADMIN.equals(user.getRole)) {
-                <li><a href="@routes.ApplicationController.admin()"><i class="icon-cogs"></i> Admin</a></li>
+                <li><a href="@routes.ApplicationController.admin()"><i class="fa fa-cogs"></i> Admin</a></li>
                 }
             </ul>
         </div>
@@ -61,12 +61,12 @@
         @if(auth != null && user != null) {
             <div class="">
 
-                    <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="icon-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
+                    <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
                     <div class="stash">
                         <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
-                            <div class="text-center" style="display: block;"><i class="loading-top icon-journwe icon-spin"></i></div>
+                            <div class="text-center" style="display: block;"><i class="loading-top icon-journwe fa fa-spin"></i></div>
                             <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
-                            <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe icon-spin stash"></i></div>
+                            <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe fa fa-spin stash"></i></div>
                         </div>
                     </div>
                     <script type="text/x-tmpl" id="header-notification-template">
@@ -135,18 +135,18 @@
                     <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
                     @user.getName()
                 </a>
-                <a class="btn btn-link" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="icon-signout"></i></a>
+                <a class="btn btn-link" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="fa fa-signout"></i></a>
             </div>
 
         } else {
             <div class="btn-group user-login">
-                <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="icon-@Registry.getProviders().iterator().next().getKey().toLowerCase icon-white"></i> Login</a>
+                <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="fa fa-@Registry.getProviders().iterator().next().getKey().toLowerCase fa-white"></i> Login</a>
                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                 @forProviders() { p =>
-                    <li><a href="@p.getUrl()"><i class="icon-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                    <li><a href="@p.getUrl()"><i class="fa fa-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
                 }
                 </ul>
             </div>
@@ -162,14 +162,14 @@
     <div id="navbar-secondlevel-collapsable">
             <div class="row collapse" id="navbar-secondlevel-journwe-home-select" data-parent="#navbar-secondlevel-collapsable">
                 <div class="col-lg-12 text-center" style="margin: 10px 0px; line-height: 70px;">
-                    <span><a href="@routes.ApplicationController.index()"><i class="icon-home" style="font-size: 70px;"></i></a> or <a href="@routes.ApplicationController.indexNew()"><img src="http://i.embed.ly/1/image/resize?height=50&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 50px; vertical-align: text-bottom;"></a></span>
+                    <span><a href="@routes.ApplicationController.index()"><i class="fa-home" style="font-size: 70px;"></i></a> or <a href="@routes.ApplicationController.indexNew()"><img src="http://i.embed.ly/1/image/resize?height=50&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 50px; vertical-align: text-bottom;"></a></span>
                 </div>
-                <div class="col-lg-12 text-center"><a onclick="$('#navbar-secondlevel-journwe-home-select').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
+                <div class="col-lg-12 text-center"><a onclick="$('#navbar-secondlevel-journwe-home-select').collapse('hide');"><i class="fa-chevron-up"></i></a></div>
             </div>
             <div class="row collapse" id="navbar-secondlevel-inspiration-categories" data-parent="#navbar-secondlevel-collapsable">
                 <div class="col-lg-12">
                     <h4>Categories of Inspirations</h4>
-                    <div id="header-categories-loading"><i class="icon-journwe icon-spin"></i></div>
+                    <div id="header-categories-loading"><i class="icon-journwe fa fa-spin"></i></div>
                     <ul id="header-categories-list" class="nav nav-pills nav-stacked">
                         @*
                         @defining(new CategoryDAO()){catDAO =>
@@ -209,17 +209,17 @@
                         });
                     </script>
                 </div>
-                <div class="row text-center"><a onclick="$('#navbar-secondlevel-inspiration-categories').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
+                <div class="row text-center"><a onclick="$('#navbar-secondlevel-inspiration-categories').collapse('hide');"><i class="fa-chevron-up"></i></a></div>
             </div>
             <!--
             <div class="collapse" id="navbar-secondlevel-general-search" data-parent="#navbar-secondlevel-collapsable">
                 <div class="text-center">
                     <div class="input-append">
                         <input type="text" class="input-lg search-query" placeholder="@Messages("adventure.header.find.placeholder")">
-                        <button class="btn btn-primary btn-lg"><i class="icon-search"></i></button>
+                        <button class="btn btn-primary btn-lg"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
-                <div class="text-center"><a onclick="$('#navbar-secondlevel-general-search').collapse('hide');"><i class="icon-chevron-up"></i></a></div>
+                <div class="text-center"><a onclick="$('#navbar-secondlevel-general-search').collapse('hide');"><i class="fa fa-chevron-up"></i></a></div>
             </div>
             -->
     </div>

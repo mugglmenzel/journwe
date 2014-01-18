@@ -70,4 +70,7 @@ require(['utils'], function(utils){
     jQuery.event.props.push('dataTransfer');
     $(window).bind('drop', function(event){event.stopPropagation(); event.preventDefault(); return false;});
     $(window).bind('dragover', function(event){event.stopPropagation(); event.preventDefault(); return false;});
+
+    // Init bootstrap switch
+    $('input[type="checkbox"],[type="radio"]').bootstrapSwitch();
 });

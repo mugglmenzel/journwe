@@ -11,11 +11,11 @@
 
 <div class="clearfix">
     <div id="times-favorite-time" style="font-size: 20px; margin-bottom: 10px;" class="pull-left">
-        <i id="times-favorite-time-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name"></span></em>
+        <i id="times-favorite-time-icon" class="fa fa-spin icon-journwe"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name"></span></em>
     </div>
 
     <div class="pull-right">
-          <button class="btn btn-default btn-set-reminder-time date" data-id="@adv.getId" data-date="@adv.getTimeVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="icon-calendar"></i> @if(adv.getTimeVoteDeadlineFormatted){@adv.getTimeVoteDeadlineFormatted}else{ Set Deadline }</button>
+          <button class="btn btn-default btn-set-reminder-time date" data-id="@adv.getId" data-date="@adv.getTimeVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="fa fa-calendar"></i> @if(adv.getTimeVoteDeadlineFormatted){@adv.getTimeVoteDeadlineFormatted}else{ Set Deadline }</button>
     </div>
 
     <div class="pull-right btn-close-time stash">
@@ -45,23 +45,23 @@
     </tbody>
 </table>
 
-<div class="times-loading"><i class="icon-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
+<div class="times-loading"><i class="fa fa-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
 }
 
 @if(JournweAuthorization.canEditDateAndTime(adv.getId)) {
 <div id="time-add-form" class="row">
 
         <div class="input-group col-lg-5" style="width: 43%;">
-            <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start")</span>
+            <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.start")</span>
             <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style=""/>
         </div>
         <div class="input-group col-lg-5" style="width: 43%;">
-            <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end")</span>
+            <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.end")</span>
             <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style=""/>
         </div>
 
         <div class="col-lg-2 text-right" style="width: 14%;">
-            <button id="time-add-button" class="btn btn-primary" style="width: 100%;"><i class="icon-plus"></i></button>
+            <button id="time-add-button" class="btn btn-primary" style="width: 100%;"><i class="fa fa-plus"></i></button>
         </div>
 
 </div>
@@ -70,7 +70,7 @@
     <script type="text/x-tmpl" id="time-template">
         <tr id="timeoption-item-{%=o.timeId%}">
             @if(JournweAuthorization.canEditFavoriteDateAndTime(adv.getId)) {
-            <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoriteTimeOption('{%=o.timeId%}', this)"><i class="icon-star"></i></button></td>
+            <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoriteTimeOption('{%=o.timeId%}', this)"><i class="fa fa-star"></i></button></td>
             }
 
             {% if (o.startDate == o.endDate){ %}
@@ -83,12 +83,12 @@
                 <div class="btn-group">
                     <button id="timeoption-status-{%=o.timeId%}" class="btn btn-default" style="width: 90px" disabled="disabled"><i id="timeoption-status-icon-{%=o.timeId%}"></i> {%=o.vote%}</button>
                     <button class="btn dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-pencil"></i>
+                        <i class="fa fa-pencil"></i>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a onclick="voteTime('YES', '{%=o.timeId%}');"><i class="icon-thumbs-up"></i> @Messages("adventure.general.yes")</a></li>
-                        <li><a onclick="voteTime('MAYBE', '{%=o.timeId%}');"><i class="icon-question"></i> @Messages("adventure.general.maybe")</a></li>
-                        <li><a onclick="voteTime('NO', '{%=o.timeId%}');"><i class="icon-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
+                        <li><a onclick="voteTime('YES', '{%=o.timeId%}');"><i class="fa fa-thumbs-up"></i> @Messages("adventure.general.yes")</a></li>
+                        <li><a onclick="voteTime('MAYBE', '{%=o.timeId%}');"><i class="fa fa-question"></i> @Messages("adventure.general.maybe")</a></li>
+                        <li><a onclick="voteTime('NO', '{%=o.timeId%}');"><i class="fa fa-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
                     </ul>
                 </div>
             </td>
@@ -100,7 +100,7 @@
             <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=voteTimeLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=o.voteAdventurers[i][j].split(/\s/)[0]%}</span> {% }} %}</td>
             }
             @if(JournweAuthorization.canEditDateAndTime(adv.getId)) {
-            <td class="text-center"><button onclick="deleteTime('{%=o.timeId%}', this);" class="btn btn-danger"><i class="icon-trash"></i></button></td>
+            <td class="text-center"><button onclick="deleteTime('{%=o.timeId%}', this);" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
             }
         </tr>
     </script>
@@ -109,11 +109,11 @@
 
         function setFavoriteTimeOption(optionId, el) {
             $('#times-list td:first-child .btn-success').removeClass('btn-success');
-            $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
-            $(el).find('i').removeClass("icon-star").addClass("icon-spin icon-journwe");
+            $('#times-favorite-time-icon').removeClass("fa fa-star").addClass("fa fa-spin icon-journwe");
+            $(el).find('i').removeClass("fa fa-star").addClass("fa fa-spin icon-journwe");
             $.post('@routes.AdventureTimeController.setFavoriteTime(adv.getId)', {favoriteTimeId: optionId}, function (data) {
-                $('#times-favorite-time-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
-                $(el).find('i').removeClass("icon-spin icon-journwe").addClass("icon-star");
+                $('#times-favorite-time-icon').removeClass("fa fa-spin icon-journwe").addClass("fa fa-star");
+                $(el).find('i').removeClass("fa fa-spin icon-journwe").addClass("fa fa-star");
                 $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
                 $('#times-list td:first-child .btn-success').removeClass('btn-success');
                 $(el).addClass('btn-success');
@@ -129,13 +129,13 @@
             if (!start.val()){ start.focus(); return false; }
             if (!end.val()){ end = start; }
 
-            $(this).html('<i class="icon-spin icon-journwe"></i>');
+            $(this).html('<i class="fa fa-spin icon-journwe"></i>');
             $.post('@routes.AdventureTimeController.addTime(adv.getId)', { startDate: start.val(), endDate: end.val()}, function(res) {
                 renderTimeOption(res);
                 $('#time-add-form input[name=name]').val("");
                 $('#time-add-form input[name=startDate]').val("");
                 $('#time-add-form input[name=endDate]').val("");
-                $('#time-add-button').html('<i class="icon-plus"></i>');
+                $('#time-add-button').html('<i class="fa fa-plus"></i>');
                 $('#times-list').show();
             });
         });
@@ -144,7 +144,7 @@
             $("#time-add-input-start").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end" ).datepicker('setStartDate', e.date); $("#time-add-input-start").datepicker('hide');});
             $("#time-add-input-end").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end").datepicker('hide');});
 
-            $('#times-favorite-time-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
+            $('#times-favorite-time-icon').removeClass("fa fa-star").addClass("fa fa-spin icon-journwe");
             $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (result) {
                 $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "@Messages("adventure.general.nofavourite.placeholder")");
                 $('.btn-close-time').toggle(!!result.favoriteTime);
@@ -160,7 +160,7 @@
                 }
 
                 $('.times-loading').hide();
-                $('#times-favorite-time-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
+                $('#times-favorite-time-icon').removeClass("fa fa-spin icon-journwe").addClass("fa fa-star");
 
                 updateTimeVoteOpen(@adv.getTimeVoteOpen)
             });
@@ -190,7 +190,7 @@
         }
 
 
-        var voteTimeIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
+        var voteTimeIconCSSClassMap = {'YES': 'fa fa-thumbs-up', 'NO': 'fa fa-thumbs-down', 'MAYBE': 'fa fa-question'};
         var voteTimeButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
         var voteTimeLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
 
@@ -215,7 +215,7 @@
         function voteTime(vote, optId) {
 
             $('#timeoption-item-'+optId+' .dropdown-toggle')
-                .html('<i class="icon-spin icon-journwe"></i>');
+                .html('<i class="fa fa-spin icon-journwe"></i>');
             $.ajax({
             url: '@routes.AdventureTimeController.vote(adv.getId, "")' + optId,
             data: {
@@ -225,13 +225,13 @@
             success: function(res) {
                 renderTimeOption(res, $('#timeoption-item-' + res.timeId));
                 $('#timeoption-item-'+res.timeId+' .dropdown-toggle')
-                    .html('<i class="icon-pencil"></i>');
+                    .html('<i class="fa fa-pencil"></i>');
             }
             });
         }
 
         function deleteTime(optId, el) {
-            $(el).html('<i class="icon-spin icon-journwe"></i>');
+            $(el).html('<i class="fa fa-spin icon-journwe"></i>');
             $.ajax({url: '@routes.AdventureTimeController.deleteTime(adv.getId, "")' + optId, type: 'DELETE', success: function () {
                 $('#timeoption-item-' + optId).fadeOut(function () {$('#timeoption-item-' + optId).remove();});
             }

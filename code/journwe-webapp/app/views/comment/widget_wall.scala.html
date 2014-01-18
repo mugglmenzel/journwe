@@ -3,13 +3,13 @@
 <div class="comments-wall">
 
 	<div id="comments-list-@topic" class="comment-list">
-		<div class="empty"><i class="icon-journwe icon-spin"></i> @Messages("adventure.general.loading")</div>
+		<div class="empty"><i class="icon-journwe fa fa-spin"></i> @Messages("adventure.general.loading")</div>
 	</div>	
 
 	<div id="input-comment-@topic" class="input-group row col-lg-8" style="margin-top: 20px;">
 	    <input type="text" placeholder="@Messages("adventure.wallComments.placeholder")" class="form-control"/>
 	    <div class="input-group-btn">
-	    	<button id="btn-add-comment-@topic" class="btn btn-primary btn-add-comment" type="button"><i class="icon-plus"></i></button>
+	    	<button id="btn-add-comment-@topic" class="btn btn-primary btn-add-comment" type="button"><i class="fa fa-plus"></i></button>
 	    </div>
 	</div>
 
@@ -17,7 +17,7 @@
     <script id="template-wall" type="text/x-tmpl">
         <div>
             <img class="pull-left" style="margin-right: 10px; max-height: 24pt;" src="{%=o.user.image%}">
-            <div class="comment-text"><i class="icon-comment"></i> {%=o.comment.text%}</div>
+            <div class="comment-text"><i class="fa fa-comment"></i> {%=o.comment.text%}</div>
             <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.time%}</div>
         </div>
     </script>
@@ -46,7 +46,7 @@
         });
 
         if (!res.length){
-            list.append('<div class="empty"><i class="icon-envelope"></i> @Messages("adventure.wallComments.firstComment")</div>');
+            list.append('<div class="empty"><i class="fa fa-envelope"></i> @Messages("adventure.wallComments.firstComment")</div>');
         }
     });
 
@@ -56,7 +56,7 @@
 
         // Check if there is a value
         if (val = (input.val()||"").trim()){
-            btn.html('<i class="icon-spin icon-journwe"></i>');
+            btn.html('<i class="fa fa-spin icon-journwe"></i>');
             input.val(""); // Reset
 
             $.post("@routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f){
@@ -64,7 +64,7 @@
 
                 f.time = formatTime(f.comment.timestamp); // Append
                 list.append(tmpl('template-wall', f)).fadeIn();
-                btn.html('<i class="icon-plus"></i>');
+                btn.html('<i class="fa fa-plus"></i>');
             });
         }
     });

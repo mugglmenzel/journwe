@@ -11,16 +11,16 @@
 @if(JournweAuthorization.canViewAndDownloadFiles(adv.getId)) {
     <script type="text/x-tmpl" id="files-template">
         <tr>
-            <td><a class="btn btn-link" href="{%=o.url%}" target="_blank"><i class="icon-file"></i> {%=o.fileName%}</a></td>
+            <td><a class="btn btn-link" href="{%=o.url%}" target="_blank"><i class="fa fa-file"></i> {%=o.fileName%}</a></td>
             <td><span class="label label-info" title="{%=o.user.name%}">{%=String(o.user.name).split(/\s/)[0]%}</span></td>
-            <td class="text-center"><button class="btn btn-primary" href="{%=o.url%}" target="_blank"><i class="icon-cloud-download"></i></button> <button class="btn btn-danger" onclick="deleteFile('{%=o.fileName%}', this);"><i class="icon-trash"></i></button></td>
+            <td class="text-center"><button class="btn btn-primary" href="{%=o.url%}" target="_blank"><i class="fa fa-cloud-download"></i></button> <button class="btn btn-danger" onclick="deleteFile('{%=o.fileName%}', this);"><i class="fa fa-trash"></i></button></td>
         </tr>
     </script>
 
 
  <!--
     <div class="row">
-        <div class="pull-left files-loading stash"><i class="icon-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
+        <div class="pull-left files-loading stash"><i class="fa fa-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
     </div>
 -->
 
@@ -44,7 +44,7 @@
     <div id="files-upload-dropzone" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
         <div class="text-center">
             <p class="lead">@Messages("adventure.files.fileDrop")
-                <input id="files-file-input" type="file" class="hide"/><button class="btn btn-upload" onclick="$('#files-file-input').click();"><i class="icon-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
+                <input id="files-file-input" type="file" class="hide"/><button class="btn btn-upload" onclick="$('#files-file-input').click();"><i class="fa fa-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
             </p>
         </div>
     </div>
@@ -84,7 +84,7 @@
         var btn = $('#files-upload-dropzone .btn-upload'),
         btnOriginal = btn.html();
         btn.css({width:btn.css('width')})
-            .html('<i class="icon-spin icon-journwe"></i>');
+            .html('<i class="fa fa-spin icon-journwe"></i>');
 
         for(var i = 0; i < files.length; i++) {
             var data = new FormData();
@@ -109,7 +109,7 @@
 
     function loadFiles() {
         //$('.files-loading').show();
-        $('#files-button-refresh i').addClass("icon-spin");
+        $('#files-button-refresh i').addClass("fa fa-spin");
 
         $.get('@routes.AdventureFileController.listFiles(adv.getId)', function (files) {
             $('#files-list tbody').empty();
@@ -124,7 +124,7 @@
             }
 
             //$('.files-loading').hide();
-            $('#files-button-refresh i').removeClass("icon-spin");
+            $('#files-button-refresh i').removeClass("fa fa-spin");
         });
     }
 
@@ -139,7 +139,7 @@
 
     function deleteFile(fileName, el) {
         
-        $(el).html('<i class="icon-spin icon-journwe"></i>');
+        $(el).html('<i class="fa fa-spin icon-journwe"></i>');
 
         $.ajax({
             url: '@routes.AdventureFileController.deleteFile(adv.getId(), "")' + fileName, 

@@ -22,7 +22,7 @@
                     <ul class="sortable list-unstyled" style="border: dashed 2px gray; min-height: 50px;" data-id={catId}>
                     {new CategoryDAO().allSubcategory(catId).map( cat =>
                             if(cat != null){
-                                <li data-id={cat.getId()}><div class="draggable droppable"><div class="row" style="background: rgba(255,255,255,0.4); padding: 5px; margin: 2px; margin-left: 10px"><div class="col-lg-5">{cat.getId()}</div><div class="col-lg-4">{cat.getName()}</div><div class="col-lg-1"><a href={routes.CategoryController.edit(cat.getId()).toString()} class="act-primary"><i class="icon-edit"></i>edit</a></div><div class="col-lg-2"><a href={routes.CategoryController.delete(cat.getId()).toString()} class="act-danger"><i class="icon-trash"></i> {Messages("adventure.general.label.delete")}</a></div></div>
+                                <li data-id={cat.getId()}><div class="draggable droppable"><div class="row" style="background: rgba(255,255,255,0.4); padding: 5px; margin: 2px; margin-left: 10px"><div class="col-lg-5">{cat.getId()}</div><div class="col-lg-4">{cat.getName()}</div><div class="col-lg-1"><a href={routes.CategoryController.edit(cat.getId()).toString()} class="act-primary"><i class="fa fa-edit"></i>edit</a></div><div class="col-lg-2"><a href={routes.CategoryController.delete(cat.getId()).toString()} class="act-danger"><i class="fa fa-trash"></i> {Messages("adventure.general.label.delete")}</a></div></div>
                                 {catHierarchy(cat.getId)}
                                 </div></li>
                             }
