@@ -47,8 +47,8 @@
         <div class="col-lg-5 col-sm-5 col-xs-5">
             <ul class="nav nav-justified">
                 <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="@routes.ApplicationController.indexNew()">New JournWe</a></li>
+                <li><a href="#"><i class="fa fa-info"></i> About</a></li>
+                <li><a href="@routes.ApplicationController.indexNew()"><i class="fa fa-asterisk"></i> New JournWe</a></li>
                 <li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="fa fa-search"></i> Search</a></li>
                 @if(auth != null && user != null && EUserRole.ADMIN.equals(user.getRole)) {
                 <li><a href="@routes.ApplicationController.admin()"><i class="fa fa-cogs"></i> Admin</a></li>
