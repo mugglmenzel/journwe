@@ -409,8 +409,11 @@ public class ApplicationController extends Controller {
                 Routes.javascriptRouter("routes",
                         routes.javascript.AdventureController.updatePlaceVoteDeadline(),
                         routes.javascript.AdventureController.updateTimeVoteDeadline(),
+                        routes.javascript.AdventureController.updatePlaceVoteOpen(),
+                        routes.javascript.AdventureController.placeVoteOpen(),
+                        routes.javascript.AdventurePlaceController.getFavoritePlace(),
                         routes.javascript.AdventurePlaceController.setFavoritePlace(),
-                        routes.javascript.AdventureController.updatePlaceVoteOpen()
+                        routes.javascript.AdventurePlaceController.voteParam()
                 ) + ";; return routes;});"
         );
     }

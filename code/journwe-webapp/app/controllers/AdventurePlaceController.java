@@ -63,11 +63,12 @@ public class AdventurePlaceController extends Controller {
         if (new PlaceOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
         String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
-        PlaceOption fav = (favId == null) ? autoFavorite(advId) : new PlaceOptionDAO().get(advId, favId);
+        PlaceOption autoFav = autoFavorite(advId);
+        PlaceOption fav = (favId == null) ? autoFav : new PlaceOptionDAO().get(advId, favId);
 
         ObjectNode node = Json.newObject();
         node.put("favorite", Json.toJson(fav));
-        node.put("autoFavorite", Json.toJson(autoFavorite(advId)));
+        node.put("autoFavorite", Json.toJson(autoFav));
 
         return ok(node);
     }
@@ -83,9 +84,9 @@ public class AdventurePlaceController extends Controller {
         adv.setFavoritePlaceId(favId);
         new AdventureDAO().save(adv);
 
-        if (favId != null && !"".equals(favId)){
+        if (favId != null && !"".equals(favId)) {
             new AdventurerNotifier().notifyAdventurers(advId, "Favorite Place is now " + new PlaceOptionDAO().get(advId, adv.getFavoritePlaceId()).getAddress() + ".", "Favorite Place");
-            return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));   
+            return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));
         } else {
             return ok(Json.toJson(autoFavorite(advId)));
         }
@@ -214,7 +215,7 @@ public class AdventurePlaceController extends Controller {
                 return new PlaceOptionRating(place.getPlaceId(), 0D);
             else
                 sum += pref.getVoteGravity();
-        
+
         return new PlaceOptionRating(place.getPlaceId(), new Double(sum / prefs.size()));
     }
 
