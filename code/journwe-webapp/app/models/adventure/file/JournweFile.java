@@ -1,13 +1,8 @@
 package models.adventure.file;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import models.adventure.IAdventureComponent;
 import models.adventure.IAdventureComponentWithUser;
 import models.adventure.JournweCloneable;
-import models.dao.UserDAO;
-import models.dao.UserSocialDAO;
-import models.user.User;
-import models.user.UserSocial;
 import play.data.validation.Constraints.Required;
 
 @DynamoDBTable(tableName = "journwe-file")
@@ -84,13 +79,4 @@ public class JournweFile implements IAdventureComponentWithUser {
         this.url = url;
     }
 
-    @DynamoDBIgnore
-    public User getUser() {
-        UserSocial social = new UserSocialDAO().findBySocialId(this.getUserId());
-
-        if (social != null) {
-            return new UserDAO().get(social.getUserId());
-        }
-        return null;
-    }
 }

@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import models.adventure.Adventure;
 import models.adventure.AdventureShortname;
+import models.dao.adventure.AdventureDAO;
 import models.dao.common.CommonEntityDAO;
 
 public class AdventureShortnameDAO extends CommonEntityDAO<AdventureShortname> {

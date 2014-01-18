@@ -1,30 +1,23 @@
 package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.user.AuthUser;
 import models.admin.EFeedbackType;
 import models.admin.Feedback;
 import models.auth.SecuredUser;
 import models.dao.FeedbackDAO;
-import models.dao.UserDAO;
+import models.dao.user.UserDAO;
 import models.user.User;
 import play.data.DynamicForm;
-import play.data.Form;
 import play.mvc.Http;
-import play.mvc.Result;
 import play.mvc.Security;
 
-import javax.swing.text.Document;
 import java.util.Date;
 
 import static play.data.Form.form;
 import static play.mvc.Controller.flash;
-import static play.mvc.Controller.request;
 import static play.mvc.Http.HeaderNames.REFERER;
 import static play.mvc.Results.ok;
 import static play.mvc.Results.redirect;
-
-import views.html.feedback;
 
 public class FeedbackController {
 

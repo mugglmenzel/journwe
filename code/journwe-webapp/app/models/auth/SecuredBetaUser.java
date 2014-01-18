@@ -1,6 +1,6 @@
 package models.auth;
 
-import models.dao.UserDAO;
+import models.dao.user.UserDAO;
 import models.user.EUserRole;
 import play.mvc.Http.Context;
 import play.mvc.Result;

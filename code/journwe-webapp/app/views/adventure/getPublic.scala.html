@@ -1,9 +1,9 @@
 @(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration)
+@import models.adventure.adventurer.EAdventurerParticipation
 @import models.inspiration.Inspiration
 
 @import models.dao._
-@import models.adventure.EAdventurerParticipation
-@import com.feth.play.module.pa.PlayAuthenticate
+    @import com.feth.play.module.pa.PlayAuthenticate
 @import com.feth.play.module.pa.views.html._
 
 @main(adv.getName()){ }{

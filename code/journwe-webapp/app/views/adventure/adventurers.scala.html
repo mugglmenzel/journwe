@@ -1,12 +1,12 @@
-@(adv: models.adventure.Adventure, advr: models.adventure.Adventurer)
+@(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
+@import models.dao.user.UserDAO
+@import models.adventure.adventurer.EAdventurerParticipation
 
 @import models.authorization.JournweAuthorization
-@import models.adventure.EAdventurerParticipation
-@import models.dao.AdventurerDAO
-@import models.dao.UserDAO
+@import models.dao.adventure.AdventurerDAO
 
 
-@cssForStatus(status:EAdventurerParticipation) = {
+    @cssForStatus(status:EAdventurerParticipation) = {
 @status match {
 case EAdventurerParticipation.NOTGOING => {label-danger}
 case EAdventurerParticipation.UNDECIDED => {label-warning}

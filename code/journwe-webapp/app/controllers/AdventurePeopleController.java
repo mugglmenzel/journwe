@@ -8,10 +8,17 @@ import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.*;
+import models.adventure.adventurer.Adventurer;
+import models.adventure.adventurer.EAdventurerParticipation;
 import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.*;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.AdventurerDAO;
+import models.dao.inspiration.InspirationDAO;
+import models.dao.user.UserDAO;
+import models.dao.user.UserSocialDAO;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.inspiration.Inspiration;
@@ -236,7 +243,7 @@ public class AdventurePeopleController extends Controller {
 
         flash("success", "You left the adventure " + new AdventureDAO().get(advId).getName());
 
-        if (new AdventurerDAO().count(advId) > 0)
+        if (new AdventurerDAO().userCountByAdventure(advId) > 0)
             return redirect(routes.ApplicationController.index());
         else
             return AdventureController.delete(advId);
@@ -360,7 +367,7 @@ public class AdventurePeopleController extends Controller {
             } else if ("facebook".equals(f.get("type"))) {
                 String inviteeId = f.get("value");
                 Logger.debug("inviting " + inviteeId);
-                UserSocial us = new UserSocialDAO().findByUserId("facebook", usr.getId());
+                UserSocial us = new UserSocialDAO().findByUserId(usr.getId());
                 new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", inviteeId);
 
 

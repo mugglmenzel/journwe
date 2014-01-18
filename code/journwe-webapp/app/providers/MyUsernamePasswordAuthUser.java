@@ -1,11 +1,6 @@
 package providers;
 
-import com.feth.play.module.pa.user.AuthUser;
-import com.feth.play.module.pa.user.EmailIdentity;
-import models.dao.UserDAO;
 import models.user.User;
-import org.mindrot.jbcrypt.BCrypt;
-import play.Logger;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
 
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;

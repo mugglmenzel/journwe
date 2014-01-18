@@ -7,15 +7,22 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
-import models.adventure.AdventureCategory;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
 import models.category.Category;
 import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
 import models.dao.*;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.AdventurerDAO;
+import models.dao.adventure.PlaceOptionDAO;
+import models.dao.adventure.TimeOptionDAO;
+import models.dao.category.CategoryCountDAO;
+import models.dao.category.CategoryDAO;
+import models.dao.category.CategoryHierarchyDAO;
+import models.dao.manytomany.CategoryToInspirationDAO;
+import models.dao.user.UserDAO;
 import models.inspiration.Inspiration;
-import models.inspiration.InspirationCategory;
 import models.user.EUserRole;
 import models.user.Subscriber;
 import models.user.User;
@@ -100,7 +107,7 @@ public class ApplicationController extends Controller {
                                 node.put("name", c.getName());
                                 node.put("link", routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
                                 node.put("image", c.getImage());
-                                node.put("count", cc.getCount());
+                                node.put("userCountByAdventure", cc.getCount());
                                 results.add(node);
                             }
                         }
@@ -126,7 +133,7 @@ public class ApplicationController extends Controller {
 
         DynamicForm data = form().bindFromRequest();
         final String lastId = data.get("lastId");
-        final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
+        final int count = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : 10;
 
         try {
             Callable<String> resultsCallable = new Callable<String>() {
@@ -135,13 +142,13 @@ public class ApplicationController extends Controller {
                 @Override
                 public String call() throws Exception {
                     List<ObjectNode> results = new ArrayList<ObjectNode>();
-                    for (Adventure adv : new AdventureDAO().allOfUserId(userId, lastId, count)) {
+                    for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, lastId, count)) {
                         ObjectNode node = Json.newObject();
                         node.put("id", adv.getId());
                         node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
                         node.put("image", adv.getImage());
                         node.put("name", adv.getName());
-                        node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+                        node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
                         node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
                         node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
 
@@ -166,17 +173,17 @@ public class ApplicationController extends Controller {
     public static Result getPublicAdventures() {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
-        int count = new Integer(data.get("count")).intValue();
+        int count = new Integer(data.get("userCountByAdventure")).intValue();
         String inspirationId = data.get("inspirationId");
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
-        for (Adventure adv : new AdventureDAO().allPublic(inspirationId, lastId, count)) {
+        for (Adventure adv : new AdventureDAO().listPublicAdventuresByInspiration(inspirationId, lastId, count)) {
             ObjectNode node = Json.newObject();
             node.put("id", adv.getId());
             node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
             node.put("image", adv.getImage());
             node.put("name", adv.getName());
-            node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+            node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
             node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
             node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
             node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
@@ -193,7 +200,7 @@ public class ApplicationController extends Controller {
         final String lastId = data.get("lastId");
         int countParam = 10;
         try {
-            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : countParam;
+            countParam = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : countParam;
         } catch (Exception e) {
             return badRequest("Count is not a number.");
         }
@@ -211,30 +218,31 @@ public class ApplicationController extends Controller {
                     boolean more = true;
                     if (count > 0)
                         while (more) {
-                            List<AdventureCategory> advCats = new AdventureCategoryDAO().all(catId, lastAdventureId, count);
-                            more = advCats.size() > 0;
-                            for (AdventureCategory advCat : advCats) {
-                                if (more) {
-                                    Adventure adv = new AdventureDAO().get(advCat.getAdventureId());
-                                    if (adv != null && adv.isPublish()) {
-                                        ObjectNode node = Json.newObject();
-                                        node.put("id", adv.getId());
-                                        node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-                                        node.put("image", adv.getImage());
-                                        node.put("name", adv.getName());
-                                        node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
-                                        node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-                                        node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-                                        node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
-                                        node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
-
-                                        results.add(node);
-
-                                        more = results.size() < count;
-                                    }
-                                    lastAdventureId = advCat.getAdventureId();
-                                }
-                            }
+                            // TODO
+//                            List<AdventureCategory> advCats = new AdventureToCategoryDAO().all(catId, lastAdventureId, userCountByAdventure);
+//                            more = advCats.size() > 0;
+//                            for (AdventureCategory advCat : advCats) {
+//                                if (more) {
+//                                    Adventure adv = new AdventureDAO().get(advCat.getAdventureId());
+//                                    if (adv != null && adv.isPublish()) {
+//                                        ObjectNode node = Json.newObject();
+//                                        node.put("id", adv.getId());
+//                                        node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+//                                        node.put("image", adv.getImage());
+//                                        node.put("name", adv.getName());
+//                                        node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
+//                                        node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+//                                        node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+//                                        node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
+//                                        node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
+//
+//                                        results.add(node);
+//
+//                                        more = results.size() < userCountByAdventure;
+//                                    }
+//                                    lastAdventureId = advCat.getAdventureId();
+//                                }
+//                            }
 
                         }
                     return Json.toJson(results).toString();
@@ -252,7 +260,7 @@ public class ApplicationController extends Controller {
         final String lastId = data.get("lastId");
         int countParam = 10;
         try {
-            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
+            countParam = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : 10;
         } catch (Exception e) {
             return badRequest("Count is not a number.");
         }
@@ -271,11 +279,10 @@ public class ApplicationController extends Controller {
                     boolean more = true;
                     if (count > 0)
                         while (more) {
-                            List<InspirationCategory> all = new InspirationCategoryDAO().all(catId, lastInspirationId, count);
-                            more = all.size() > 0;
-                            for (InspirationCategory insCat : all) {
-                                if (more && insCat.getInspirationId() != null) {
-                                    Inspiration ins = new InspirationDAO().get(insCat.getInspirationId());
+                            List<Inspiration> inspirations = new CategoryToInspirationDAO().listN(catId, lastInspirationId, count);
+                            more = inspirations.size() > 0;
+                            for (Inspiration ins : inspirations) {
+                                if (more) {
                                     if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
                                         ObjectNode node = Json.newObject();
                                         node.put("id", ins.getId());
@@ -288,7 +295,7 @@ public class ApplicationController extends Controller {
                                         results.add(node);
                                         more = results.size() < count;
                                     }
-                                    lastInspirationId = insCat.getInspirationId();
+                                    lastInspirationId = ins.getId();
                                 }
                             }
                         }

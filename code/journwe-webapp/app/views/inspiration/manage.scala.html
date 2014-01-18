@@ -1,6 +1,5 @@
 @(inspForm: Form[models.inspiration.Inspiration])(categories: Map[String, String])(inspirations: List[models.inspiration.Inspiration])
-
-@import models.dao.InspirationCategoryDAO
+@import models.dao.manytomany.CategoryToInspirationDAO
 
 @import helper._
 @import fieldConstructor._
@@ -37,8 +36,8 @@
                     <div>Categories</div>
                     <ul id="inspiration-categories" class="list-unstyled list-inline">
                         @if(inspForm("id").value()){
-                            @defining(new InspirationCategoryDAO()){ inscatdao =>
-                                @inscatdao.getOptions(inspForm("id").value()).map{cat =>
+                            @defining(new CategoryToInspirationDAO()){ c2idao =>
+                                @c2idao.getOptions(inspForm("id").value()).map{cat =>
                                     <li id="inspiration-category-@cat._1"><input type="hidden" name="category[]" value="@cat._1"><span class="label label-info"><i class="icon-file"></i> @cat._2 &nbsp;<a onclick="$('#inspiration-category-@cat._1').remove(); return false;">&times;</a></span> <span class="divider"></span></li>
                                 }
                             }

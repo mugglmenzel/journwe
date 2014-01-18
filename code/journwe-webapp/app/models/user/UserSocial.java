@@ -12,26 +12,15 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 @DynamoDBTable(tableName = "journwe-usersocial")
 public class UserSocial {
 
+    private String socialId;
 
     private String userId;
 
     private String provider;
-
-    private String socialId;
     
     private String accessToken;
 
-
     @DynamoDBHashKey
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    @DynamoDBRangeKey
     public String getSocialId() {
         return socialId;
     }
@@ -40,9 +29,16 @@ public class UserSocial {
         this.socialId = socialId;
     }
 
-    // TODO
-    //DynamoDBIndexRangeKey(localSecondaryIndexName = "userid-index")
-    @DynamoDBAttribute
+    @DynamoDBRangeKey
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "userId-index")
     public String getUserId() {
         return userId;
     }

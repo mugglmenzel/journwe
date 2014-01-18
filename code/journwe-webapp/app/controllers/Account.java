@@ -1,17 +1,14 @@
 package controllers;
 
-import models.auth.SecuredBetaUser;
 import models.auth.SecuredUser;
-import models.dao.UserDAO;
-import models.dao.UserEmailDAO;
-import models.dao.UserSocialDAO;
+import models.dao.user.UserDAO;
+import models.dao.user.UserEmailDAO;
 import models.user.User;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
 import models.user.UserEmail;
-import models.user.UserSocial;
 import play.Logger;
 import play.data.Form;
 import play.data.format.Formats.NonEmpty;
@@ -25,7 +22,6 @@ import play.mvc.Security;
 import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthUser;
 import views.html.account.*;
-import views.html.account.link$;
 import views.html.index.index;
 
 import static play.data.Form.form;

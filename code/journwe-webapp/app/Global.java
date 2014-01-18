@@ -10,9 +10,9 @@ import controllers.AdventureController;
 import controllers.AdventureFileController;
 import controllers.routes;
 import models.adventure.Adventure;
-import models.dao.AdventureDAO;
-import models.dao.AdventurerDAO;
-import models.dao.CategoryDAO;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.AdventurerDAO;
+import models.dao.category.CategoryDAO;
 import models.notifications.ENotificationFrequency;
 import models.notifications.helper.UserNotifier;
 import play.Application;
@@ -103,7 +103,7 @@ public class Global extends GlobalSettings {
             public void run() {
                 Logger.debug("Cleaning Adventures without Adventurers");
                 for (Adventure adv : new AdventureDAO().all())
-                    if (!(new AdventurerDAO().count(adv.getId()) > 0)) {
+                    if (!(new AdventurerDAO().userCountByAdventure(adv.getId()) > 0)) {
                         new AdventureDAO().deleteFull(adv.getId());
                         //delete s3 objects
                         AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(

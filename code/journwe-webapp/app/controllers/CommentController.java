@@ -1,14 +1,13 @@
 package controllers;
 
 import static play.data.Form.form;
-import models.adventure.Comment;
-import models.adventure.CommentThread;
-import models.dao.CommentDAO;
-import models.dao.CommentThreadDAO;
+import models.adventure.comment.Comment;
+import models.adventure.comment.CommentThread;
+import models.dao.adventure.CommentDAO;
+import models.dao.adventure.CommentThreadDAO;
 
-import models.dao.UserDAO;
+import models.dao.user.UserDAO;
 import models.user.User;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.joda.time.DateTime;
 
@@ -23,7 +22,6 @@ import views.html.comment.createComment;
 import views.html.comment.listThreads;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.user.AuthUser;
 
 import models.auth.SecuredUser;
 

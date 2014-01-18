@@ -4,6 +4,11 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.Adventure;
 import models.auth.SecuredBetaUser;
 import models.dao.*;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.AdventurerDAO;
+import models.dao.adventure.PlaceOptionDAO;
+import models.dao.adventure.TimeOptionDAO;
+import models.dao.user.UserDAO;
 import models.notifications.ENotificationFrequency;
 import models.notifications.Notification;
 import models.user.User;
@@ -55,7 +60,7 @@ public class UserController extends Controller {
     public static Result getNotifications() {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
-        int count = new Integer(data.get("count")).intValue();
+        int count = new Integer(data.get("userCountByAdventure")).intValue();
 
         Logger.debug("getting notifications for " + lastId + "," + count);
 
@@ -109,17 +114,17 @@ public class UserController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getAdventures(String userId) {
         DynamicForm data = form().bindFromRequest();
-        int count = new Integer(data.get("count")).intValue();
+        int count = new Integer(data.get("userCountByAdventure")).intValue();
 
 
         List<ObjectNode> results = new ArrayList<ObjectNode>();
-        for (Adventure adv : new AdventureDAO().allOfUserId(userId, null, count)) {
+        for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, null, count)) {
             ObjectNode node = Json.newObject();
             node.put("id", adv.getId());
             node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
             node.put("image", adv.getImage());
             node.put("name", adv.getName());
-            node.put("peopleCount", new AdventurerDAO().count(adv.getId()));
+            node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
             node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
             node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
 
@@ -127,7 +132,7 @@ public class UserController extends Controller {
         }
         ObjectNode result = Json.newObject();
         result.put("adventures", Json.toJson(results));
-        result.put("count", new AdventureDAO().countOfUserId(userId));
+        result.put("userCountByAdventure", new AdventureDAO().adventureCountByUser(userId));
 
         return ok(Json.toJson(result));
     }

@@ -1,9 +1,9 @@
 package models.notifications.helper;
 
 import models.adventure.Adventure;
-import models.adventure.Adventurer;
-import models.dao.AdventureDAO;
-import models.dao.AdventurerDAO;
+import models.adventure.adventurer.Adventurer;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.AdventurerDAO;
 import models.notifications.ENotificationTopics;
 
 import java.util.Collection;

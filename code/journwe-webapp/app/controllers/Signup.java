@@ -1,14 +1,13 @@
 package controllers;
 
 import com.feth.play.module.pa.user.AuthUser;
-import models.dao.TokenActionDAO;
-import models.dao.UserDAO;
-import models.dao.UserEmailDAO;
+import models.dao.user.TokenActionDAO;
+import models.dao.user.UserDAO;
+import models.dao.user.UserEmailDAO;
 import models.user.TokenAction;
 import models.user.ETokenType;
 import models.user.User;
 import models.user.UserEmail;
-import play.Logger;
 import play.data.Form;
 import play.i18n.Messages;
 import play.mvc.Controller;
@@ -21,7 +20,6 @@ import providers.MyUsernamePasswordAuthUser;
 import views.html.account.signup.*;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import views.html.account.signup.exists$;
 
 import static play.data.Form.form;
 

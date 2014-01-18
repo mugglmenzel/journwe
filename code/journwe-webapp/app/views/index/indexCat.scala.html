@@ -1,7 +1,7 @@
 @(cat:  models.category.Category)
 @import models.category.Category
-@import models.dao.CategoryHierarchyDAO
-@import models.dao.CategoryDAO
+@import models.dao.category.CategoryHierarchyDAO
+@import models.dao.category.CategoryDAO
 
 
 @main(Messages("journwe.subtitle")) {Category @cat.getName
@@ -77,7 +77,7 @@
 
 
     <div class="jrn-container">
-        <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirationsByCategory(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
         <div style="">
             <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>

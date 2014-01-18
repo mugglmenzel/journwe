@@ -11,9 +11,14 @@ import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
-import models.dao.*;
+import models.category.Category;
+import models.dao.inspiration.InspirationTipDAO;
+import models.dao.category.CategoryDAO;
+import models.dao.inspiration.InspirationDAO;
+import models.dao.manytomany.CategoryToInspirationDAO;
+import models.dao.user.UserDAO;
+import models.dao.user.UserSocialDAO;
 import models.inspiration.Inspiration;
-import models.inspiration.InspirationCategory;
 import models.inspiration.InspirationTip;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
@@ -53,17 +58,16 @@ public class InspirationController extends Controller {
     public static Result get(String id) {
         Inspiration ins = new InspirationDAO().get(id);
         if (ins == null) return badRequest();
+        List<Category> cats = new CategoryToInspirationDAO().listM(ins.getId(), "", 0);
+        Category cat = cats != null && cats.size() > 0 ? cats.iterator().next() : null;
 
-        List<InspirationCategory> cats = new InspirationCategoryDAO().getCategories(ins.getId());
-        InspirationCategory cat = cats != null && cats.size() > 0 ? cats.iterator().next() : null;
-
-        return ok(get.render(ins, cat != null ? new CategoryDAO().get(cat.getCategoryId()) : null));
+        return ok(get.render(ins, cat));
     }
 
     public static Result getTips(String id) {
         DynamicForm data = form().bindFromRequest();
         final String lastId = data.get("lastId");
-        final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 3;
+        final int count = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : 3;
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
         for (InspirationTip tip : new InspirationTipDAO().activated(id, lastId, count)) {
@@ -197,15 +201,14 @@ public class InspirationController extends Controller {
                     ins.setTimeEnd(null);
                 }
 
-                for (InspirationCategory insCat : new InspirationCategoryDAO().getCategories(ins.getId()))
-                    new InspirationCategoryDAO().delete(insCat);
+                new CategoryToInspirationDAO().deleteAllNRelationships(ins);
 
                 for (String key : form().bindFromRequest().data().keySet()) {
                     if (key.startsWith("category[")) {
-                        InspirationCategory insCat = new InspirationCategory();
-                        insCat.setCategoryId(form().bindFromRequest().data().get(key));
-                        insCat.setInspirationId(ins.getId());
-                        new InspirationCategoryDAO().save(insCat);
+                        String catId = form().bindFromRequest().data().get(key);
+                        Category cat = new Category();
+                        cat.setId(catId);
+                        new CategoryToInspirationDAO().createManyToManyRelationship(cat,ins);
                     }
                 }
 
@@ -244,8 +247,9 @@ public class InspirationController extends Controller {
                     ConfigFactory.load().getString("aws.secretKey")));
             s3.deleteObject(S3_BUCKET_INSPIRATION_IMAGES, id);
 
-            for (InspirationCategory insCat : new InspirationCategoryDAO().getCategories(id))
-                new InspirationCategoryDAO().delete(insCat);
+            Inspiration ins = new Inspiration();
+            ins.setId(id);
+            new CategoryToInspirationDAO().deleteAllNRelationships(ins);
 
             if (new InspirationDAO().delete(id)) {
                 flash("success", "Inspiration with id " + id + " deleted.");

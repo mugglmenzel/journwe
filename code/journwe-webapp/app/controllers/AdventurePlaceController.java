@@ -2,15 +2,19 @@ package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.Adventure;
-import models.adventure.Comment;
+import models.adventure.comment.Comment;
 import models.adventure.EPreferenceVote;
-import models.adventure.place.PlaceAdventurerPreference;
+import models.adventure.place.PlacePreference;
 import models.adventure.place.PlaceOption;
 import models.adventure.place.PlaceOptionRating;
 import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.dao.*;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.CommentDAO;
+import models.dao.adventure.PlaceOptionDAO;
+import models.dao.adventure.PlacePreferenceDAO;
+import models.dao.user.UserDAO;
 import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
@@ -107,7 +111,7 @@ public class AdventurePlaceController extends Controller {
 
         User user = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Comment comment = new Comment();
-        PlaceAdventurerPreference pref = new PlaceAdventurerPreference();
+        PlacePreference pref = new PlacePreference();
 
         if (user != null) {
             if (requestData.get("comment") != null && !"".equals(requestData.get("comment"))) {
@@ -119,8 +123,8 @@ public class AdventurePlaceController extends Controller {
             }
 
             pref.setPlaceOptionId(place.getOptionId());
-            pref.setAdventurerId(user.getId());
-            new PlaceAdventurerPreferenceDAO().save(pref);
+            pref.setUserId(user.getId());
+            new PlacePreferenceDAO().save(pref);
         }
 
         ObjectNode node = placeToJSON(place);
@@ -143,11 +147,11 @@ public class AdventurePlaceController extends Controller {
         String vote = form().bindFromRequest().get("vote").toUpperCase();
         Double voteGravity = new Double(form().bindFromRequest().get("voteGravity"));
 
-        PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(place.getOptionId(), usr.getId());
+        PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
         if (pref == null) {
-            pref = new PlaceAdventurerPreference();
+            pref = new PlacePreference();
             pref.setPlaceOptionId(place.getOptionId());
-            pref.setAdventurerId(usr.getId());
+            pref.setUserId(usr.getId());
         }
 
         try {
@@ -157,7 +161,7 @@ public class AdventurePlaceController extends Controller {
             Logger.error("Got unknown value for vote! value: " + vote);
         }
 
-        new PlaceAdventurerPreferenceDAO().save(pref);
+        new PlacePreferenceDAO().save(pref);
 
         //PlaceOption place = PlaceOption.fromId(pref.getPlaceOptionId());
         //place = new PlaceOptionDAO().get(place.getAdventureId(), place.getAddress());
@@ -181,7 +185,7 @@ public class AdventurePlaceController extends Controller {
 
     private static ObjectNode placeToJSON(PlaceOption place) {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        PlaceAdventurerPreference pref = new PlaceAdventurerPreferenceDAO().get(place.getOptionId(), usr.getId());
+        PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
 
         ObjectNode node = Json.newObject();
         node.put("id", place.getOptionId());
@@ -192,8 +196,8 @@ public class AdventurePlaceController extends Controller {
         node.put("lng", place.getLongitude().doubleValue());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0.6D);
-        node.put("voteCount", Json.toJson(new PlaceAdventurerPreferenceDAO().counts(place.getOptionId())));
-        node.put("voteAdventurers", Json.toJson(new PlaceAdventurerPreferenceDAO().adventurersNames(place.getOptionId())));
+        node.put("voteCount", Json.toJson(new PlacePreferenceDAO().counts(place.getOptionId())));
+        node.put("voteAdventurers", Json.toJson(new PlacePreferenceDAO().adventurersNames(place.getOptionId())));
         node.put("voteGroup", Json.toJson(getPlaceGroupRating(place).getRating()));
 
         return node;
@@ -201,8 +205,8 @@ public class AdventurePlaceController extends Controller {
 
     private static PlaceOptionRating getPlaceGroupRating(PlaceOption place) {
         double sum = 0D;
-        List<PlaceAdventurerPreference> prefs = new PlaceAdventurerPreferenceDAO().all(place.getOptionId());
-        for (PlaceAdventurerPreference pref : prefs)
+        List<PlacePreference> prefs = new PlacePreferenceDAO().all(place.getOptionId());
+        for (PlacePreference pref : prefs)
             if (0D >= pref.getVoteGravity() || EPreferenceVote.NO.equals(pref.getVote()))
                 return new PlaceOptionRating(place.getPlaceId(), 0D);
             else

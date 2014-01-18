@@ -18,6 +18,8 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.*;
+import models.adventure.adventurer.Adventurer;
+import models.adventure.adventurer.EAdventurerParticipation;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredAdminUser;
@@ -26,6 +28,14 @@ import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.category.Category;
 import models.dao.*;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.AdventurerDAO;
+import models.dao.adventure.PlaceOptionDAO;
+import models.dao.adventure.TimeOptionDAO;
+import models.dao.inspiration.InspirationDAO;
+import models.dao.user.UserDAO;
+import models.dao.user.UserEmailDAO;
+import models.dao.user.UserSocialDAO;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.inspiration.Inspiration;
@@ -144,7 +154,7 @@ public class AdventureController extends Controller {
 
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        UserSocial us = new UserSocialDAO().findByUserId("facebook", usr.getId());
+        UserSocial us = new UserSocialDAO().findByUserId(usr.getId());
 
         // ADVENTURER
         Adventurer advr = new Adventurer();
@@ -362,23 +372,24 @@ public class AdventureController extends Controller {
 
         Category result = null;
 
-        AdventureCategory old = new AdventureCategoryDAO().getCategory(advId);
-
-        if (catId != null && !"".equals(catId)) {
-            if (old != null && !old.getCategoryId().equals(catId)) new AdventureCategoryDAO().delete(old);
-
-            AdventureCategory advCat = new AdventureCategory();
-            advCat.setCategoryId(catId);
-            advCat.setAdventureId(advId);
-            new AdventureCategoryDAO().save(advCat);
-
-            result = new CategoryDAO().get(catId);
-        } else if (old != null)
-            result = new CategoryDAO().get(old.getCategoryId());
-        else {
-            result = new Category();
-            result.setName("");
-        }
+        // TODO
+//        AdventureCategory old = new AdventureToCategoryDAO().getCategory(advId);
+//
+//        if (catId != null && !"".equals(catId)) {
+//            if (old != null && !old.getCategoryId().equals(catId)) new AdventureToCategoryDAO().delete(old);
+//
+//            AdventureCategory advCat = new AdventureCategory();
+//            advCat.setCategoryId(catId);
+//            advCat.setAdventureId(advId);
+//            new AdventureToCategoryDAO().save(advCat);
+//
+//            result = new CategoryDAO().get(catId);
+//        } else if (old != null)
+//            result = new CategoryDAO().get(old.getCategoryId());
+//        else {
+//            result = new Category();
+//            result.setName("");
+//        }
 
         return ok(Json.toJson(result));
     }

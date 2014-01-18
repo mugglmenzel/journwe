@@ -1,35 +1,21 @@
 package controllers;
 
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
-import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.email.Message;
-import models.adventure.file.JournweFile;
 import models.auth.SecuredBetaUser;
-import models.authorization.AuthorizationMessage;
-import models.authorization.JournweAuthorization;
-import models.dao.AdventureEmailMessageDAO;
-import models.dao.JournweFileDAO;
-import play.Logger;
-import play.data.Form;
+import models.dao.adventure.AdventureEmailMessageDAO;
 import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.io.File;
 import java.util.List;
 
 import static play.data.Form.form;

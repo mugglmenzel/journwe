@@ -6,12 +6,12 @@ import com.journwe.productadvertising.webservice.client.ItemSearchRequest;
 import com.journwe.productadvertising.webservice.client.Items;
 import com.journwe.productadvertising.webservice.client.OperationRequest;
 import com.typesafe.config.ConfigFactory;
-import models.adventure.checklist.EStatus;
+import models.adventure.todo.EStatus;
 import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.dao.TodoDAO;
-import models.dao.UserDAO;
+import models.dao.adventure.TodoDAO;
+import models.dao.user.UserDAO;
 import models.helpers.AWSProductAdvertisingAPIHelper;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
@@ -52,7 +52,7 @@ public class AdventureTodoController extends Controller {
     @Security.Authenticated(SecuredBetaUser.class)
     public static Result getTodoAffiliateItems(String advId) {
         String id = form().bindFromRequest().get("id");
-        models.adventure.checklist.Todo todo = new TodoDAO().get(id, advId);
+        models.adventure.todo.Todo todo = new TodoDAO().get(id, advId);
         Logger.debug("searching affiliate for " + todo.getTitle());
 
         ItemSearchRequest shared = new ItemSearchRequest();
@@ -99,7 +99,7 @@ public class AdventureTodoController extends Controller {
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
-        models.adventure.checklist.Todo todo = new models.adventure.checklist.Todo();
+        models.adventure.todo.Todo todo = new models.adventure.todo.Todo();
         todo.setAdventureId(id);
         todo.setUserId(usr.getId());
         todo.setTitle(requestData.get("title"));
@@ -116,7 +116,7 @@ public class AdventureTodoController extends Controller {
 
         DynamicForm requestData = form().bindFromRequest();
 
-        models.adventure.checklist.Todo todo = new TodoDAO().get(tid, advId);
+        models.adventure.todo.Todo todo = new TodoDAO().get(tid, advId);
 
         String status = requestData.get("status").toUpperCase();
         todo.setStatus(EStatus.valueOf(status));

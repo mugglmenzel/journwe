@@ -4,7 +4,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import models.auth.SecuredBetaUser;
-import models.dao.UserSocialDAO;
+import models.dao.user.UserSocialDAO;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.user.UserSocial;

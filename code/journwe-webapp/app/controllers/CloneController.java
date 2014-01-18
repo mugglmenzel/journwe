@@ -2,10 +2,13 @@ package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.*;
+import models.adventure.adventurer.Adventurer;
+import models.adventure.adventurer.EAdventurerParticipation;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredBetaUser;
-import models.dao.*;
+import models.dao.adventure.*;
+import models.dao.user.UserDAO;
 import models.user.User;
 import play.Logger;
 import play.data.DynamicForm;
@@ -14,9 +17,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static play.data.Form.form;
@@ -78,8 +79,8 @@ public class CloneController extends Controller {
 
         if(clonecmd.isCloneTodo()) {
             // Clone time options
-            for(models.adventure.checklist.Todo todo : new TodoDAO().all(originalAdvId)) {
-                models.adventure.checklist.Todo todoClone = (models.adventure.checklist.Todo)clonecmd.cloneOf(todo);
+            for(models.adventure.todo.Todo todo : new TodoDAO().all(originalAdvId)) {
+                models.adventure.todo.Todo todoClone = (models.adventure.todo.Todo)clonecmd.cloneOf(todo);
                 if(todoClone!=null)
                     new TodoDAO().save(todoClone);
             }
@@ -241,9 +242,9 @@ public class CloneController extends Controller {
 //                toReturn.setStartDate(original.getStartDate());
 //                return toReturn;
 //            }
-//            if(object instanceof models.adventure.checklist.Todo) {
-//                models.adventure.checklist.Todo original = (models.adventure.checklist.Todo)object;
-//                models.adventure.checklist.Todo toReturn = new models.adventure.checklist.Todo();
+//            if(object instanceof models.adventure.todo.Todo) {
+//                models.adventure.todo.Todo original = (models.adventure.todo.Todo)object;
+//                models.adventure.todo.Todo toReturn = new models.adventure.todo.Todo();
 //                // If the other adventurers are not copied, only clone my own todo list.
 //                if(!cloneAdventurers && !original.getUserId().equals(me.getUserId())) {
 //                    toReturn.setAdventureId(clone.getId());

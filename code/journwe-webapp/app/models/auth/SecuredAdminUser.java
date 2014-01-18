@@ -3,7 +3,7 @@ package models.auth;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import controllers.routes;
-import models.dao.UserDAO;
+import models.dao.user.UserDAO;
 import models.user.EUserRole;
 import play.mvc.Http.Context;
 import play.mvc.Result;

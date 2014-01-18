@@ -12,8 +12,7 @@ import models.adventure.file.JournweFile;
 import models.auth.SecuredBetaUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.dao.JournweFileDAO;
-import org.joda.time.DateTime;
+import models.dao.adventure.JournweFileDAO;
 import play.Logger;
 import play.data.Form;
 import play.libs.Json;
@@ -23,7 +22,6 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;

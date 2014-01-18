@@ -2,6 +2,7 @@ package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import models.dao.common.CommonRangeEntityDAO;
+import models.dao.user.UserDAO;
 import models.notifications.ENotificationFrequency;
 import models.notifications.NotificationDigestQueueItem;
 import models.user.User;
