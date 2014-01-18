@@ -13,9 +13,9 @@ import models.category.CategoryHierarchy;
 import models.dao.*;
 import models.inspiration.Inspiration;
 import models.inspiration.InspirationCategory;
-import models.user.Subscriber;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
+import play.Routes;
 import play.cache.Cache;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -24,17 +24,9 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import play.Routes;
 import providers.MyUsernamePasswordAuthProvider;
-import views.html.about;
-import views.html.admin;
-import views.html.imprint;
-import views.html.index.index;
-import views.html.index.indexCat;
-import views.html.index.indexVet;
-import views.html.login;
-import views.html.signup;
-import views.html.index.landing;
+import views.html.*;
+import views.html.index.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,23 +42,17 @@ public class ApplicationController extends Controller {
     public static final String FLASH_ERROR_KEY = "error";
     public static final String USER_ROLE = "user";
 
-    private static Form<Subscriber> subForm = form(Subscriber.class);
 
     public static Result index() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
-                && (SecuredUser.isAuthorized(usr))) {
-
+                && SecuredUser.isAuthorized(usr)) {
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
-            if (new AdventurerDAO().isAdventurer(userId)) {
-                return ok(indexVet.render());
-            } else {
+            if (new AdventurerDAO().isAdventurer(userId)) return ok(indexVet.render());
+            else return ok(index.render());
 
-                return ok(index.render());
-            }
-        } else {
-            return ok(landing.render(subForm));
-        }
+        } else return ok(landing.render());
+
     }
 
     public static Result indexNew() {
@@ -74,7 +60,7 @@ public class ApplicationController extends Controller {
     }
 
     public static Result categoryIndex(String catId) {
-        if (Category.SUPER_CATEGORY.equals(catId)) return redirect(routes.ApplicationController.index());
+        //if (Category.SUPER_CATEGORY.equals(catId)) return redirect(routes.ApplicationController.index());
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
 
@@ -103,7 +89,7 @@ public class ApplicationController extends Controller {
 
                     return Json.toJson(results).toString();
                 }
-            }, 24*3600)).as("application/json");
+            }, 24 * 3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate sub-categories of " + superCatId, e);
             return internalServerError();
@@ -234,7 +220,7 @@ public class ApplicationController extends Controller {
                         }
                     return Json.toJson(results).toString();
                 }
-            }, 24*3600)).as("application/json");
+            }, 24 * 3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate public adventures for category " + catId, e);
             return internalServerError();
@@ -289,7 +275,7 @@ public class ApplicationController extends Controller {
                         }
                     return Json.toJson(results).toString();
                 }
-            }, 24*3600)).as("application/json");
+            }, 24 * 3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate inspirations for category " + catId, e);
             return internalServerError();
@@ -371,11 +357,11 @@ public class ApplicationController extends Controller {
         }
     }
     */
-    
+
     public static void clearUserCache(final String userId) {
         Cache.remove("user." + userId + ".myadventures");
     }
-    
+
     // For JournWe non-thirdparty signup and login
 
     public static Result login() {
@@ -419,13 +405,13 @@ public class ApplicationController extends Controller {
      */
     public static Result routes() {
         response().setContentType("text/javascript");
-        return ok("define(function(){"+ // Make it AMD compatible
-            Routes.javascriptRouter("routes", 
-                routes.javascript.AdventureController.updatePlaceVoteDeadline(),
-                routes.javascript.AdventureController.updateTimeVoteDeadline(),
-                routes.javascript.AdventurePlaceController.setFavoritePlace(),
-                routes.javascript.AdventureController.updatePlaceVoteOpen()
-            )+";; return routes;});"
+        return ok("define(function(){" + // Make it AMD compatible
+                Routes.javascriptRouter("routes",
+                        routes.javascript.AdventureController.updatePlaceVoteDeadline(),
+                        routes.javascript.AdventureController.updateTimeVoteDeadline(),
+                        routes.javascript.AdventurePlaceController.setFavoritePlace(),
+                        routes.javascript.AdventureController.updatePlaceVoteOpen()
+                ) + ";; return routes;});"
         );
-      }
+    }
 }

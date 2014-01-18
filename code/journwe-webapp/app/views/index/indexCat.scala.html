@@ -11,7 +11,9 @@
     @defining(new CategoryHierarchyDAO){ catHierDAO =>
     <div class="nav-category visible-lg" style="">
         <ul id="nav-category-list" class="nav nav-pills nav-stacked">
-            @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@routes.ApplicationController.categoryIndex(catSuper.getId)"><i class="fa fa-circle-arrow-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Home}else{@catSuper.getName}"></i> </a></li>}
+            @if(!Category.SUPER_CATEGORY.equals(cat.getId)){
+                @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@routes.ApplicationController.categoryIndex(catSuper.getId)"><i class="fa fa-circle-arrow-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Home}else{@catSuper.getName}"></i> </a></li>}
+            }
             @*
             @catHierDAO.categoryAsSuper(cat.getId).map{ catHier =>
                 @defining(new CategoryDAO().get(catHier.getSubCategoryId)){ catSub => <li><a href="@routes.ApplicationController.categoryIndex(catSub.getId)"><i class="fa fa-circle-arrow-down" title="Level Down"></i> @catSub.getName</a></li>}

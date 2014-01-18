@@ -52,7 +52,7 @@
 
     function loadEmails() {
         //$('.files-loading').show();
-        $('#emails-button-refresh i').addClass("fa fa-spin");
+        $('#emails-button-refresh i').addClass("fa-spin");
 
         $.get('@routes.AdventureEmailController.listEmails(adv.getId)', function (emails) {
             $('#emails-list tbody').empty();
@@ -67,7 +67,7 @@
             }
 
             //$('.files-loading').hide();
-            $('#emails-button-refresh i').removeClass("fa fa-spin");
+            $('#emails-button-refresh i').removeClass("fa-spin");
         });
     }
 

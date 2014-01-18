@@ -138,7 +138,7 @@
             }
 
             function loadTodos(userId, target, template, activator) {
-                $('#todos-button-refresh i').addClass("fa fa-spin");
+                $('#todos-button-refresh i').addClass("fa-spin");
                 $.get('@routes.AdventureTodoController.getTodos(adv.getId, "")' + userId, function (results){
                     $(target + ' tbody').empty();
 
@@ -151,7 +151,7 @@
                     } else
                         $(target).hide();
 
-                    $('#todos-button-refresh i').removeClass("fa fa-spin");
+                    $('#todos-button-refresh i').removeClass("fa-spin");
                 });
             }
 

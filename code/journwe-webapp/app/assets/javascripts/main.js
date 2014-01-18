@@ -72,5 +72,5 @@ require(['utils'], function(utils){
     $(window).bind('dragover', function(event){event.stopPropagation(); event.preventDefault(); return false;});
 
     // Init bootstrap switch
-    $('input[type="checkbox"],[type="radio"]').bootstrapSwitch();
+    $('input[type="checkbox"],[type="radio"]').not('.star').bootstrapSwitch();
 });

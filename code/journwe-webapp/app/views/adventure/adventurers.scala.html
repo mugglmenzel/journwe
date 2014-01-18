@@ -156,11 +156,11 @@ case EAdventurerParticipation.INVITEE => {label-warning}
     var facebookUserNames = [];
 
     function addFriend() {
-        $('#people-add-button i').removeClass("fa fa-plus").addClass("icon-journwe fa fa-spin");
+        $('#people-add-button i').removeClass("fa-plus").addClass("icon-journwe fa-spin");
         $.post('@routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
             $('#people-add-input').val('');
             loadInvitees();
-            $('#people-add-button i').removeClass("icon-journwe fa fa-spin").addClass("fa fa-plus");
+            $('#people-add-button i').removeClass("icon-journwe fa-spin").addClass("fa-plus");
         });
     }
 

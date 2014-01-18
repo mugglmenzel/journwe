@@ -109,11 +109,11 @@
 
         function setFavoriteTimeOption(optionId, el) {
             $('#times-list td:first-child .btn-success').removeClass('btn-success');
-            $('#times-favorite-time-icon').removeClass("fa fa-star").addClass("fa fa-spin icon-journwe");
-            $(el).find('i').removeClass("fa fa-star").addClass("fa fa-spin icon-journwe");
+            $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+            $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
             $.post('@routes.AdventureTimeController.setFavoriteTime(adv.getId)', {favoriteTimeId: optionId}, function (data) {
-                $('#times-favorite-time-icon').removeClass("fa fa-spin icon-journwe").addClass("fa fa-star");
-                $(el).find('i').removeClass("fa fa-spin icon-journwe").addClass("fa fa-star");
+                $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+                $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
                 $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
                 $('#times-list td:first-child .btn-success').removeClass('btn-success');
                 $(el).addClass('btn-success');
@@ -144,7 +144,7 @@
             $("#time-add-input-start").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end" ).datepicker('setStartDate', e.date); $("#time-add-input-start").datepicker('hide');});
             $("#time-add-input-end").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end").datepicker('hide');});
 
-            $('#times-favorite-time-icon').removeClass("fa fa-star").addClass("fa fa-spin icon-journwe");
+            $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
             $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (result) {
                 $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "@Messages("adventure.general.nofavourite.placeholder")");
                 $('.btn-close-time').toggle(!!result.favoriteTime);
@@ -160,7 +160,7 @@
                 }
 
                 $('.times-loading').hide();
-                $('#times-favorite-time-icon').removeClass("fa fa-spin icon-journwe").addClass("fa fa-star");
+                $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
                 updateTimeVoteOpen(@adv.getTimeVoteOpen)
             });

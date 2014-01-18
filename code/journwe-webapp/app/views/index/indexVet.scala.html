@@ -57,7 +57,7 @@
                 });
 
                 function loadMyAdventures(lastId, clear) {
-                    $('#adventures-my-button-refresh i').addClass('fa fa-spin');
+                    $('#adventures-my-button-refresh i').addClass('fa-spin');
                     $('#adventures-my-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
                     $.get('@routes.ApplicationController.getMyAdventures()', {lastId: lastId, count: 10} , function (advs) {
                         if (clear) $('#adventures-my-list').empty();
@@ -70,7 +70,7 @@
                         } else {
                             $('#adventures-my-load-more-button').show().html('Show More');
                         }
-                        $('#adventures-my-button-refresh i').removeClass('fa fa-spin');
+                        $('#adventures-my-button-refresh i').removeClass('fa-spin');
                     });
                 }
             </script>
@@ -127,7 +127,7 @@
         });
 
         function loadCategories(lastId, clear) {
-            $('#categories-button-refresh i').addClass('fa fa-spin');
+            $('#categories-button-refresh i').addClass('fa-spin');
             $('#categories-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getCategories(models.category.Category.SUPER_CATEGORY)', {lastId: lastId, count: 10} , function (cats) {
                 if (clear) $('#categories-list').empty();
@@ -140,7 +140,7 @@
                 } else {
                     $('#categories-load-more-button').show().html('Show More');
                 }
-                $('#categories-button-refresh i').removeClass('fa fa-spin');
+                $('#categories-button-refresh i').removeClass('fa-spin');
             });
         }
     </script>

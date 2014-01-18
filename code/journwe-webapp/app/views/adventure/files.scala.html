@@ -109,7 +109,7 @@
 
     function loadFiles() {
         //$('.files-loading').show();
-        $('#files-button-refresh i').addClass("fa fa-spin");
+        $('#files-button-refresh i').addClass("fa-spin");
 
         $.get('@routes.AdventureFileController.listFiles(adv.getId)', function (files) {
             $('#files-list tbody').empty();
@@ -124,7 +124,7 @@
             }
 
             //$('.files-loading').hide();
-            $('#files-button-refresh i').removeClass("fa fa-spin");
+            $('#files-button-refresh i').removeClass("fa-spin");
         });
     }
 

@@ -26,29 +26,29 @@
 @currentAuth() { auth =>
     @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
     <div class="row">
-        <div class="col-lg-3 col-sm-3 col-xs-3">
+        <div class="col-lg-2 col-sm-2 col-xs-2">
             <div class="navbar-text">
                 @if(auth != null && user != null) {
                     <a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">   @*onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');"*@
                         <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
-                            Journ<strong>We</strong><sup>beta</sup>
+                            Journ<strong>We</strong>
                         </span>
                     </a>
                 } else {
                     <a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
                         <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
-                            Journ<strong>We</strong><sup>beta</sup>
+                            Journ<strong>We</strong>
                         </span>
                     </a>
                 }
             </div>
         </div>
 
-        <div class="col-lg-5 col-sm-5 col-xs-5">
-            <ul class="nav nav-justified">
-                <li><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                <li><a href="#"><i class="fa fa-info"></i> About</a></li>
-                <li><a href="@routes.ApplicationController.indexNew()"><i class="fa fa-asterisk"></i> New JournWe</a></li>
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <ul class="nav nav-pills nav-justified">
+                <li><a href="@routes.ApplicationController.indexNew()"><i class="fa fa-asterisk"></i> New <img height="14px" src="@routes.Assets.at("img/journwe_logo.png")"></a></li>
+                <li><a href="@routes.ApplicationController.categoryIndex(Category.SUPER_CATEGORY)" onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                <li><a href="@routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
                 <li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="fa fa-search"></i> Search</a></li>
                 @if(auth != null && user != null && EUserRole.ADMIN.equals(user.getRole)) {
                 <li><a href="@routes.ApplicationController.admin()"><i class="fa fa-cogs"></i> Admin</a></li>
@@ -135,18 +135,18 @@
                     <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
                     @user.getName()
                 </a>
-                <a class="btn btn-link" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="fa fa-signout"></i></a>
+                <a class="btn btn-link" href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout"><i class="fa fa-sign-out"></i></a>
             </div>
 
         } else {
             <div class="btn-group user-login">
-                <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="fa fa-@Registry.getProviders().iterator().next().getKey().toLowerCase fa-white"></i> Login</a>
+                <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="fa fa-@Registry.getProviders().iterator().next().getKey().toLowerCase fa-white fa-fw"></i> Login</a>
                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                 @forProviders() { p =>
-                    <li><a href="@p.getUrl()"><i class="fa fa-@p.getKey().toLowerCase"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                    <li><a href="@p.getUrl()"><i class="fa fa-@p.getKey().toLowerCase fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
                 }
                 </ul>
             </div>
