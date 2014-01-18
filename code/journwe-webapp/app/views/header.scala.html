@@ -140,13 +140,13 @@
 
         } else {
             <div class="btn-group user-login">
-                <a class="btn btn-primary" href="@Registry.getProviders().iterator().next().getUrl()"><i class="fa fa-@Registry.getProviders().iterator().next().getKey().toLowerCase fa-white fa-fw"></i> Login</a>
-                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <a class="btn btn-default" href="@Registry.getProviders().iterator().next().getUrl()"><i class="fa fa-@Registry.getProviders().iterator().next().getKey().toLowerCase fa-white fa-fw"></i> Login</a>
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                 @forProviders() { p =>
-                    <li><a href="@p.getUrl()"><i class="fa fa-@p.getKey().toLowerCase fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                    <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
                 }
                 </ul>
             </div>

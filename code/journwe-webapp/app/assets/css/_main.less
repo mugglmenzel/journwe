@@ -35,6 +35,8 @@ h2, h3, h4 {
     }
 }
 
+
+
 a {
     cursor: pointer;
     color: #333;
@@ -176,6 +178,18 @@ h1 .editableform {
 
         &#times {
             background: fade(@color_time, 60%);
+        }
+    }
+
+    &.headline {
+        vertical-align: middle; 
+        height: 400; 
+        background: none;
+
+        & .text-success {
+            font-size: 68px;
+            font-weight: @font-bold;
+            text-shadow: 0 0 20px white, 0 0 5px white, 0 0 3px white;
         }
     }
 }
@@ -792,6 +806,10 @@ h3 {
     & .pull-right i {
         position: relative;
         top: 2px;
+    }
+
+    & .dropdown-menu {
+        text-align: left;
     }
 }
 
