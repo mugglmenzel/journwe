@@ -2,6 +2,7 @@
 
 @import models.dao._
 
+
     @main(Messages("journwe.subtitle")) { }{
         <section class="jrn-container text-center" style="vertical-align: middle; height: 400; background: none;">
             <div class="text-success" style="font-size: 50pt; font-weight: bolder; text-shadow: 3px 3px white;">JournWe - Travel together.</div>
@@ -29,38 +30,8 @@
 
         </div>
     *@
-        <div class="jrn-container">
-            <h2>Welcome, <small>the adventure starts now.</small></h2>
-            <p>JournWe ist das beste seit geschnitten Brot. Planen und Organisieren von Grippenreisen - der pure Horror? Nicht mit JournWe.</p>
 
-            <div id="explain" class="carousel slide">
-                    <!-- Indicators -->
-                <div class="carousel-indicators inline">
-                    <span data-target="#explain" data-slide-to="0" class="active">Freunde einladen</span>
-                    <span data-target="#explain" data-slide-to="1">Ort finden</span>
-                    <span data-target="#explain" data-slide-to="2">Zeit planen</span>
-                    <span data-target="#explain" data-slide-to="3">Spass haben</span>
-                </div>
-
-                    <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <img width="100%" height="300" src="">
-                    </div>
-                    <div class="item">
-                        <img width="100%" height="300" src="">
-                    </div>
-                    <div class="item">
-                        <img width="100%" height="300" src="">
-                    </div>
-                    <div class="item">
-                        <img width="100%" height="300" src="">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
+         @quickintro()
 
         <div class="jrn-container">
             <h2>@Messages("landing.feature")</h2>
