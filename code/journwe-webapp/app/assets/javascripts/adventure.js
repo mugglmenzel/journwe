@@ -119,7 +119,7 @@ require([
                 $('#placeoption-item-' + optId).remove();
             });
         }});
-    }
+    };
 
 
     var deadline = function (btn, date, route) {
@@ -144,35 +144,41 @@ require([
         });
     };
 
+
+
+
+    $(document).ready(function () {
+        alert('initializing');
+        //initialize Google Maps with callback to initializeMap
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false';
+        document.body.appendChild(script);
+        initializeMap();
+
+        $.get(routes.AdventurePlaceController.getPlaces(utils.id()), function (result) {
+            $('#places-list tbody').empty();
+            for (var id in result)
+                renderPlaceOption(result[id])
+
+            if (result.length)
+                $('#places-list').show();
+            else
+                $('#places-list').hide();
+
+            $('.places-loading').hide();
+
+            updateFavorite();
+
+            $.get(routes.AdventureController.placeVoteOpen(utils.id()), function (result) {
+                updatePlaceVoteOpen(result);
+            });
+        });
+
+    });
+
     utils.on({
 
-        'ready document': function () {
-            //initialize Google Maps with callback to initializeMap
-            var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false&callback=initializeMap';
-            document.body.appendChild(script);
-
-            $.get(routes.AdventurePlaceController.getPlaces(utils.id()), function (result) {
-                $('#places-list tbody').empty();
-                for (var id in result)
-                    renderPlaceOption(result[id])
-
-                if (result.length)
-                    $('#places-list').show();
-                else
-                    $('#places-list').hide();
-
-                $('.places-loading').hide();
-
-                updateFavorite();
-
-                $.get(routes.AdventureController.placeVoteOpen(utils.id()), function (result) {
-                    updatePlaceVoteOpen(result);
-                });
-            });
-
-        },
         'keydown #place-add-input': function (e) {
             if (e.keyCode == 13) {
                 $('#place-add-button').click();
@@ -259,7 +265,7 @@ require([
             routes.controllers.AdventurePlaceController.setFavoritePlace(utils.id()).ajax({
                 data: {favoritePlaceId: placeID},
                 success: function (data) {
-                    window.favoritePlace = data; // TODO: Refactoring
+                    favoritePlace = data;
                     $('icon-favorite-places').removeClass("icon-spin icon-journwe").addClass("icon-star");
                     // Set stars
                     $(el).find('i').attr("class", "icon-star");
