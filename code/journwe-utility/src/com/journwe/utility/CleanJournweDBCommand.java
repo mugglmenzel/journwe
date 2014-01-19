@@ -161,7 +161,7 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 				rangeKeyName = "userId";
 			}
 			if (tableName.equals("journwe-user-to-journwe-adventure")) {
-				keyName = "journwe-user-to-journwe-adventure";
+				keyName = "journwe-user-id";
 				rangeKeyName = "journwe-adventure-id";
 			}
 			if (tableName.equals("journwe-usertokenaction")) {
@@ -181,8 +181,10 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 			if (tableName.equals("journwe-file")) {
 				rangeKeyName = "fileName";
 			}
-			if (tableName.equals("journwe-adventurer") || 
-					tableName.equals("journwe-adventure-authorization")) {
+			if (tableName.equals("journwe-adventurer")) {
+				rangeKeyName = "userIdRangeKey";
+			}
+			if (tableName.equals("journwe-adventure-authorization")) {
 				rangeKeyName = "userId";
 			}
 			if (tableName.equals("journwe-placeoption") ) {
