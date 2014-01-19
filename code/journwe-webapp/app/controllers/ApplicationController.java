@@ -392,9 +392,11 @@ public class ApplicationController extends Controller {
                         routes.javascript.AdventureController.updateTimeVoteDeadline(),
                         routes.javascript.AdventureController.updatePlaceVoteOpen(),
                         routes.javascript.AdventureController.placeVoteOpen(),
+                        routes.javascript.AdventurePlaceController.getPlaces(),
                         routes.javascript.AdventurePlaceController.getFavoritePlace(),
                         routes.javascript.AdventurePlaceController.setFavoritePlace(),
-                        routes.javascript.AdventurePlaceController.voteParam()
+                        routes.javascript.AdventurePlaceController.voteParam(),
+                        routes.javascript.AdventurePlaceController.deletePlace()
                 ) + ";; return routes;});"
         );
     }

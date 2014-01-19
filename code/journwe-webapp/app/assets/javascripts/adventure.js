@@ -1,7 +1,8 @@
 require([
     "main",
     "utils",
-    "routes"
+    "routes",
+    "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false!callback"
 ], function (main, utils, routes) {
 
 
@@ -15,6 +16,33 @@ require([
         votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
     var favoritePlace;
 
+
+    var initialize = function () {
+        initializeMap();
+        initializePlaces();
+    };
+
+
+    var initializePlaces = function () {
+        routes.controllers.AdventurePlaceController.getPlaces(utils.id()).ajax({success: function (result) {
+            $('#places-list tbody').empty();
+            for (var id in result)
+                renderPlaceOption(result[id])
+
+            if (result.length)
+                $('#places-list').show();
+            else
+                $('#places-list').hide();
+
+            $('.places-loading').hide();
+
+            updateFavorite();
+
+            routes.controllers.AdventureController.placeVoteOpen(utils.id()).ajax({success: function (result) {
+                updatePlaceVoteOpen(result);
+            }});
+        }});
+    };
 
     var initializeMap = function () {
         google.maps.visualRefresh = true;
@@ -86,14 +114,14 @@ require([
         $('#places-favorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
         $('#places-autofavorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
-        $.get(routes.AdventurePlaceController.getFavoritePlace(utils.id()), function (result) {
+        routes.controllers.AdventurePlaceController.getFavoritePlace(utils.id()).ajax({success: function (result) {
             favoritePlace = result.favorite;
             if (result.favorite != null) $('#places-favorite-place-name').html(result.favorite.address);
             if (result.autoFavorite != null)$('#places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
             $('#places-favorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
             $('#places-autofavorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
-        });
+        }});
     };
 
     var votePlace = function (vote, voteGrav, optId) {
@@ -102,18 +130,18 @@ require([
         $('#placeoption-item-' + optId + ' .dropdown-toggle')
             .html('<i class="fa fa-spin icon-journwe"></i>');
 
-        $.post(routes.AdventurePlaceController.voteParam(utils.id()), {placeId: optId, vote: vote, voteGravity: voteGrav}, function (res) {
+        routes.controllers.AdventurePlaceController.voteParam(utils.id()).ajax({data: {placeId: optId, vote: vote, voteGravity: voteGrav}, success: function (res) {
             renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
             updateFavorite();
             $('#placeoption-item-' + res.placeId + ' .dropdown-toggle')
                 .html('<i class="fa fa-pencil"></i>');
-        });
+        }});
     };
 
 
     var deletePlace = function (optId, event) {
         $(event.target).html('<i class="fa fa-spin icon-journwe"></i>');
-        $.ajax({url: '@routes.AdventurePlaceController.deletePlace(adv.getId, "")' + optId, type: 'DELETE', success: function () {
+        routes.controllers.AdventurePlaceController.deletePlace(utils.id(), optId).ajax({success: function () {
             removeMapMarker(optId);
             $('#placeoption-item-' + optId).fadeOut(function () {
                 $('#placeoption-item-' + optId).remove();
@@ -125,7 +153,7 @@ require([
     var deadline = function (btn, date, route) {
 
         // Set spinner/hide calendar
-        btn.find("i").attr("class", "icon-spin icon-journwe");
+        btn.find("i").attr("class", "fa fa-spin icon-journwe");
         btn.datepicker("hide");
 
         // Do ajax call
@@ -145,37 +173,7 @@ require([
     };
 
 
-
-
-    $(document).ready(function () {
-        alert('initializing');
-        //initialize Google Maps with callback to initializeMap
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false';
-        document.body.appendChild(script);
-        initializeMap();
-
-        $.get(routes.AdventurePlaceController.getPlaces(utils.id()), function (result) {
-            $('#places-list tbody').empty();
-            for (var id in result)
-                renderPlaceOption(result[id])
-
-            if (result.length)
-                $('#places-list').show();
-            else
-                $('#places-list').hide();
-
-            $('.places-loading').hide();
-
-            updateFavorite();
-
-            $.get(routes.AdventureController.placeVoteOpen(utils.id()), function (result) {
-                updatePlaceVoteOpen(result);
-            });
-        });
-
-    });
+    initialize();
 
     utils.on({
 
@@ -205,14 +203,14 @@ require([
             if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
                 $(this).html('<i class="fa fa-spin icon-journwe"></i>');
                 new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-                    $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, function (res) {
+                    routes.controllers.AdventurePlaceController.addPlace(utils.id()).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
                         renderPlaceOption(res);
                         $('#place-add-input').val("");
                         $('#place-add-comment-input').val("");
                         $('#place-add-button').html('<i class="fa fa-plus"></i>');
                         $('#places-list').show();
                         refreshComments("@adv.getId" + "places", $("#comments-list-places"));
-                    });
+                    }});
                 });
             } else {
                 $('#place-add-input').focus();
@@ -220,7 +218,7 @@ require([
             }
         },
         'change #places-voting-active-switch': function () {
-            $.post('@routes.AdventureController.updatePlaceVoteOpen(adv.getId)', {voteOpen: $('#places-voting-active-switch').prop('checked')}, updatePlaceVoteOpen);
+            routes.controllers.AdventureController.updatePlaceVoteOpen(utils.id()).ajax({data: {voteOpen: $('#places-voting-active-switch').prop('checked')}, success: updatePlaceVoteOpen});
         },
         // Click on navigation to scroll to it
         'click .nav-adventure a': function () {
@@ -256,19 +254,19 @@ require([
 
             var el = $(this),
                 tb = el.closest('table'),
-                placeID = el.is(".btn-success") ? undefined : el.data('placeid');
+                placeID = el.data('placeid');
 
             tb.find('td:first-child .btn-success').removeClass('btn-success');
-            el.find('i').attr("class", "icon-spin icon-journwe");
-            $('icon-favorite-places').removeClass("icon-star").addClass("icon-spin icon-journwe");
+            el.find('i').attr("class", "fa fa-spin icon-journwe");
+            $('icon-favorite-places').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
             routes.controllers.AdventurePlaceController.setFavoritePlace(utils.id()).ajax({
                 data: {favoritePlaceId: placeID},
                 success: function (data) {
                     favoritePlace = data;
-                    $('icon-favorite-places').removeClass("icon-spin icon-journwe").addClass("icon-star");
+                    $('icon-favorite-places').removeClass("fa-spin icon-journwe").addClass("fa-star");
                     // Set stars
-                    $(el).find('i').attr("class", "icon-star");
+                    $(el).find('i').attr("class", "fa fa-star");
                     $('#places-favorite-place-name').html(data.address);
                     if (placeID) {
                         $(el).addClass('btn-success');
@@ -283,12 +281,12 @@ require([
             var btn = $(this),
                 open = btn.is(".btn-success");
 
-            btn.find('i').attr("class", "icon-spin icon-journwe");
+            btn.find('i').attr("class", "fa fa-spin icon-journwe");
 
             routes.controllers.AdventureController.updatePlaceVoteOpen(utils.id()).ajax({
                 data: {voteOpen: !open},
                 success: function (data) {
-                    btn.find('i').attr("class", "icon-ok");
+                    btn.find('i').attr("class", "fa fa-ok");
                     updatePlaceVoteOpen(data);
                 }
             });

@@ -229,18 +229,20 @@ public class AdventurePlaceController extends Controller {
         List<PlaceOptionRating> ratings = new ArrayList<PlaceOptionRating>();
         List<PlaceOption> placeOptions = new PlaceOptionDAO().all(advId);
 
+        if(placeOptions == null || !(placeOptions.size() > 0)) return null;
+
         for (PlaceOption po : placeOptions) {
             PlaceOptionRating rating = getPlaceGroupRating(po);
             if (rating != null && 0D < rating.getRating()) ratings.add(rating);
         }
         Logger.debug("List of Ratings: " + ratings);
 
-        String favId = Collections.max(ratings, new Comparator<PlaceOptionRating>() {
+        String favId = ratings.size() > 0 ? Collections.max(ratings, new Comparator<PlaceOptionRating>() {
             @Override
             public int compare(PlaceOptionRating placeOptionRating, PlaceOptionRating placeOptionRating2) {
                 return placeOptionRating.getRating().compareTo(placeOptionRating2.getRating());
             }
-        }).getPlaceOptionId();
+        }).getPlaceOptionId() : placeOptions.iterator().next().getOptionId();
         Logger.debug("got autofav with id " + favId);
 
         return new PlaceOptionDAO().get(advId, favId);
