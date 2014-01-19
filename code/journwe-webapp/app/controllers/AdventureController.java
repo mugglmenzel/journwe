@@ -32,7 +32,10 @@ import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.TimeOptionDAO;
+import models.dao.category.CategoryDAO;
 import models.dao.inspiration.InspirationDAO;
+import models.dao.manytomany.AdventureToCategoryDAO;
+import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
 import models.dao.user.UserSocialDAO;
@@ -60,6 +63,7 @@ import views.html.adventure.getPublic;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static com.rosaloves.bitlyj.Bitly.shorten;
@@ -128,7 +132,8 @@ public class AdventureController extends Controller {
             if (ins != null) {
                 adv.setInspirationId(ins.getId());
                 adv.setDescription(ins.getDescription());
-
+                // Save Adventure-to-Inspiration relationship TODO ?
+                // new AdventureToInspirationDAO().createManyToManyRelationship(adv,usr);
             }
         }
 
@@ -300,6 +305,9 @@ public class AdventureController extends Controller {
 
         }
 
+        // Save Adventure-to-User relationship
+        new AdventureToUserDAO().createManyToManyRelationship(adv,usr);
+
         // Save the creator as default owner of the adventure
         AdventureAuthorization authorization = new AdventureAuthorization();
         authorization.setAdventureId(adv.getId());
@@ -371,28 +379,14 @@ public class AdventureController extends Controller {
     public static Result updateCategory(String advId) {
         DynamicForm data = form().bindFromRequest();
         String catId = data.get("categoryId");
-
         Category result = new Category();
-
-        // TODO
-//        AdventureCategory old = new AdventureToCategoryDAO().getCategory(advId);
-//
-//        if (catId != null && !"".equals(catId)) {
-//            if (old != null && !old.getCategoryId().equals(catId)) new AdventureToCategoryDAO().delete(old);
-//
-//            AdventureCategory advCat = new AdventureCategory();
-//            advCat.setCategoryId(catId);
-//            advCat.setAdventureId(advId);
-//            new AdventureToCategoryDAO().save(advCat);
-//
-//            result = new CategoryDAO().get(catId);
-//        } else if (old != null)
-//            result = new CategoryDAO().get(old.getCategoryId());
-//        else {
-//            result = new Category();
-//            result.setName("");
-//        }
-
+        if (catId != null && !"".equals(catId)) {
+            result = new CategoryDAO().get(catId);
+            Adventure adv = new AdventureDAO().get(advId);
+            // Save Adventure-to-Category relationship
+            new AdventureToCategoryDAO().createManyToManyRelationship(adv,result);
+            new CategoryDAO().save(result);
+        }
         return ok(Json.toJson(result));
     }
 

@@ -304,22 +304,25 @@ public class ManyToManyDAO<M, N> {
                 .withComparisonOperator(ComparisonOperator.EQ.toString())
                 .withAttributeValueList(new AttributeValue().withS(hashKey));
 
-        Condition rangeKeyCondition = new Condition()
-                .withComparisonOperator(ComparisonOperator.GT.toString())
-                .withAttributeValueList(new AttributeValue().withS(lastKey));
-
         Map<String, Condition> keyConditions = new HashMap<String, Condition>();
         keyConditions.put(hashIdName, hashKeyCondition);
-        keyConditions.put(rangeIdName, rangeKeyCondition);
 
-        // Must set M-to-N table name because we want all N items that belong to hashKey.
+        // An AttributeValue may not contain an empty string.
+        if(lastKey !=null && !lastKey.equals("")) {
+            Condition rangeKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.GT.toString())
+                .withAttributeValueList(new AttributeValue().withS(lastKey));
+            keyConditions.put(rangeIdName, rangeKeyCondition);
+        }
+
+        // Prepare query request.
         QueryRequest queryRequest = new QueryRequest().withTableName(relationTableName)
                 .withKeyConditions(keyConditions);
         // Set the limit.
         if (limit > 0)
             queryRequest.setLimit(limit);
-        // Query now  TODO
-        Logger.info("Table "+relationTableName+" with hash key "+hashKey+" and with range key "+lastKey);
+        // Query now
+        Logger.debug("Table "+relationTableName+" with hash key "+hashKey+" and with range key "+lastKey);
         QueryResult result = dynamoDB.query(queryRequest);
         return result;
     }
