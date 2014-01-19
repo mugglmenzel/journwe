@@ -1,10 +1,10 @@
-@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])(description: Html)
+@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.adventurer.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])(description: Html)
 @import models.inspiration.Inspiration
-@import models.adventure.EAdventurerParticipation
+@import models.adventure.adventurer.EAdventurerParticipation
 @import models.authorization.JournweAuthorization
 
-@import models.dao.AdventurerDAO
-@import models.dao.UserDAO
+@import models.dao.adventure.AdventurerDAO
+@import models.dao.user.UserDAO
 @import com.feth.play.module.pa.PlayAuthenticate
 @import play.mvc.Http
 

@@ -1,11 +1,11 @@
-@(adv: models.adventure.Adventure, advr: models.adventure.Adventurer)
+@(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
 
 @import models.authorization.JournweAuthorization
-@import models.dao.TodoDAO
-@import models.dao.UserDAO
-@import models.dao.AdventurerDAO
-@import models.adventure.checklist.EStatus
-@import models.adventure.EAdventurerParticipation
+@import models.dao.adventure.TodoDAO
+@import models.dao.user.UserDAO
+@import models.dao.adventure.AdventurerDAO
+@import models.adventure.todo.EStatus
+@import models.adventure.adventurer.EAdventurerParticipation
 
 @if(adv != null && advr != null) {
     @if(JournweAuthorization.canViewTodoItem(adv.getId)) {

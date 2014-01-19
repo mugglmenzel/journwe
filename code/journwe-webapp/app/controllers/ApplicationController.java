@@ -9,6 +9,7 @@ import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.category.Category;
 import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
@@ -28,6 +29,7 @@ import models.user.Subscriber;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
+import play.Routes;
 import play.cache.Cache;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -37,15 +39,8 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import providers.MyUsernamePasswordAuthProvider;
-import views.html.about;
-import views.html.admin;
-import views.html.imprint;
-import views.html.index.index;
-import views.html.index.indexCat;
-import views.html.index.indexVet;
-import views.html.login;
-import views.html.signup;
-import views.html.subscribe;
+import views.html.*;
+import views.html.index.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,23 +57,16 @@ public class ApplicationController extends Controller {
     public static final String FLASH_ERROR_KEY = "error";
     public static final String USER_ROLE = "user";
 
-    private static Form<Subscriber> subForm = form(Subscriber.class);
-
     public static Result index() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
-                && (SecuredBetaUser.isBeta(usr) || SecuredBetaUser.isAdmin(usr))) {
-
+                && SecuredUser.isAuthorized(usr)) {
             String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
-            if (new AdventurerDAO().isAdventurer(userId)) {
-                return ok(indexVet.render());
-            } else {
+            if (new AdventurerDAO().isAdventurer(userId)) return ok(indexVet.render());
+            else return ok(index.render());
 
-                return ok(index.render());
-            }
-        } else {
-            return ok(subscribe.render(subForm));
-        }
+        } else return ok(landing.render());
+
     }
 
     public static Result indexNew() {
@@ -308,35 +296,6 @@ public class ApplicationController extends Controller {
         }
     }
 
-
-    public static Result subscribe() {
-        Form<Subscriber> filledSubForm = subForm.bindFromRequest();
-        Subscriber sub = filledSubForm.get();
-        if (new SubscriberDAO().save(sub))
-            flash("success", "You are subscribed now! We'll let you know.");
-        else
-            flash("error", "You could not be subscribed :(");
-
-        try {
-            ListSubscribeMethod listSubscribeMethod = new ListSubscribeMethod();
-            listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
-            listSubscribeMethod.id = "c18d5a32fb";
-            listSubscribeMethod.email_address = sub.getEmail();
-            listSubscribeMethod.double_optin = false;
-            listSubscribeMethod.update_existing = true;
-            listSubscribeMethod.send_welcome = true;
-
-            new MailChimpClient().execute(listSubscribeMethod);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (MailChimpException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
-        return ok(subscribe.render(subForm));
-    }
-
     public static Result imprint() {
         return ok(imprint.render());
     }
@@ -379,11 +338,11 @@ public class ApplicationController extends Controller {
             return ok(index.render());
         }
     }
-    
+
     public static void clearUserCache(final String userId) {
         Cache.remove("user." + userId + ".myadventures");
     }
-    
+
     // For JournWe non-thirdparty signup and login
 
     public static Result login() {
@@ -420,5 +379,23 @@ public class ApplicationController extends Controller {
 // signup
             return UsernamePasswordAuthProvider.handleSignup(ctx());
         }
+    }
+
+    /**
+     * Returns a list of all routes to handle in the javascript
+     */
+    public static Result routes() {
+        response().setContentType("text/javascript");
+        return ok("define(function(){" + // Make it AMD compatible
+                Routes.javascriptRouter("routes",
+                        routes.javascript.AdventureController.updatePlaceVoteDeadline(),
+                        routes.javascript.AdventureController.updateTimeVoteDeadline(),
+                        routes.javascript.AdventureController.updatePlaceVoteOpen(),
+                        routes.javascript.AdventureController.placeVoteOpen(),
+                        routes.javascript.AdventurePlaceController.getFavoritePlace(),
+                        routes.javascript.AdventurePlaceController.setFavoritePlace(),
+                        routes.javascript.AdventurePlaceController.voteParam()
+                ) + ";; return routes;});"
+        );
     }
 }
