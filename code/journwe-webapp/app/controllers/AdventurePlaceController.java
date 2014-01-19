@@ -2,14 +2,15 @@ package controllers;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.Adventure;
-import models.adventure.comment.Comment;
 import models.adventure.EPreferenceVote;
-import models.adventure.place.PlacePreference;
+import models.adventure.comment.Comment;
 import models.adventure.place.PlaceOption;
 import models.adventure.place.PlaceOptionRating;
-import models.auth.SecuredBetaUser;
+import models.adventure.place.PlacePreference;
+import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
+import models.dao.*;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.CommentDAO;
 import models.dao.adventure.PlaceOptionDAO;
@@ -43,7 +44,7 @@ import static play.data.Form.form;
  */
 public class AdventurePlaceController extends Controller {
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getPlaces(String advId) {
         if (!JournweAuthorization.canViewPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -60,24 +61,25 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(Json.toJson(places)));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getFavoritePlace(String advId) {
         if (!JournweAuthorization.canViewFavoritePlace(advId))
             return AuthorizationMessage.notAuthorizedResponse();
         if (new PlaceOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
         String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
-        PlaceOption fav = (favId == null) ? autoFavorite(advId) : new PlaceOptionDAO().get(advId, favId);
+        PlaceOption autoFav = autoFavorite(advId);
+        PlaceOption fav = (favId == null) ? autoFav : new PlaceOptionDAO().get(advId, favId);
 
         ObjectNode node = Json.newObject();
         node.put("favorite", Json.toJson(fav));
-        node.put("autoFavorite", Json.toJson(autoFavorite(advId)));
+        node.put("autoFavorite", Json.toJson(autoFav));
 
         return ok(node);
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result setFavoritePlace(String advId) {
         if (!JournweAuthorization.canViewFavoritePlace(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -87,12 +89,15 @@ public class AdventurePlaceController extends Controller {
         adv.setFavoritePlaceId(favId);
         new AdventureDAO().save(adv);
 
-        new AdventurerNotifier().notifyAdventurers(advId, "Favorite Place is now " + new PlaceOptionDAO().get(advId, adv.getFavoritePlaceId()).getAddress() + ".", "Favorite Place");
-
-        return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));
+        if (favId != null && !"".equals(favId)) {
+            new AdventurerNotifier().notifyAdventurers(advId, "Favorite Place is now " + new PlaceOptionDAO().get(advId, adv.getFavoritePlaceId()).getAddress() + ".", "Favorite Place");
+            return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));
+        } else {
+            return ok(Json.toJson(autoFavorite(advId)));
+        }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result addPlace(String advId) {
         if (!JournweAuthorization.canEditPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -132,12 +137,12 @@ public class AdventurePlaceController extends Controller {
         return created(Json.toJson(node));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result voteParam(String advId) {
         return vote(advId, form().bindFromRequest().get("placeId"));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result vote(String advId, String placeId) {
         if (!JournweAuthorization.canVoteForPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -174,7 +179,7 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(node));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result deletePlace(String advId, String placeId) {
         if (!JournweAuthorization.canEditPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -206,6 +211,10 @@ public class AdventurePlaceController extends Controller {
     private static PlaceOptionRating getPlaceGroupRating(PlaceOption place) {
         double sum = 0D;
         List<PlacePreference> prefs = new PlacePreferenceDAO().all(place.getOptionId());
+
+        if (prefs.size() == 0)
+            return new PlaceOptionRating(place.getPlaceId(), 0D);
+
         for (PlacePreference pref : prefs)
             if (0D >= pref.getVoteGravity() || EPreferenceVote.NO.equals(pref.getVote()))
                 return new PlaceOptionRating(place.getPlaceId(), 0D);

@@ -6,6 +6,8 @@
     @import com.feth.play.module.pa.PlayAuthenticate
 @import com.feth.play.module.pa.views.html._
 
+@import views.html.index.quickintro
+
 @main(adv.getName()){ }{
 
 <div id="adventure-container">
@@ -24,7 +26,7 @@
 
         <div class="toolbar">
 
-            <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="icon-plus"></i> @Messages("adventure.general.button.join")</a>
+            <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
             <script>
 
                 $(function(){
@@ -33,7 +35,7 @@
                 html = el.html();
 
                 el.css({width:el.width()+"px"})
-                .html('<i class="icon-spin icon-journwe"></i>');
+                .html('<i class="fa fa-spin icon-journwe"></i>');
 
                 return true;
                 })
@@ -43,7 +45,7 @@
 
             @currentAuth() { auth =>
                 @if(auth != null) {
-                    <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
+                    <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
                 }
             }
 
@@ -63,6 +65,10 @@
             <p><span id="adventurers-count"></span> Adventurers participate.</p>
             <div id="adventurers-list" style="overflow: hidden;"></div>
             <div class="clearfix"></div>
+        </div>
+
+        <div>
+            @quickintro()
         </div>
 
         <script type="text/x-tmpl" id="adventurer-template">
@@ -114,7 +120,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3><i class="icon-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
+                    <h3><i class="fa fa-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
                     @cloneAdventure(adv,new DynamicForm())
                 </div>
             </div>

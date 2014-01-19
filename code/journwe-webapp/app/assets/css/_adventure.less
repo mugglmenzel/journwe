@@ -80,18 +80,24 @@
 .nav-adventure {
     font-size: 24px;
     width: 100%;
-    background-color: fade(@color_white, 50%);
+    background-color: @color_white;
     margin-top: 50px;
+    border-radius: 0;
+    padding: 10px;
     .transition(background 0.5s ease);
 
     .fixed & {
-        background-color: fade(@color_white, 80%);
+        box-shadow: 0 0 5px gray;
         position: fixed;
         left: 17%;
         right: 17%;
-        z-index: 1;
+        z-index: 1000;
         top: -50px;
         width: auto;
+    }
+
+    & .navbar-left li {
+        padding: 9px 10px;
     }
 
     & li {
@@ -105,17 +111,21 @@
             border-radius: 0;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 15px 10px !important;
         }
 
         & a i {
-            width: 50px;
+            width: 40px;
             display: inline-block;
 
             .fixed & {
                 color: gray;
                 .transition(color 0.5s ease);
             }
+        }
+
+        &.active {
+            background: #e1e1e1;
         }
 
     }
@@ -126,7 +136,7 @@
     }
 
     & a {
-        color: white !important;
+        color: #666 !important;
     }
 
     & .nav-pills>li.active>a,
@@ -137,13 +147,13 @@
 
     & .nav-pills>li>a:hover,
     & .nav-pills>li>a:focus {
-        color: white;
+        color: #333;
         background: fade(@color_white, 20%);
     }
 
     & .nav-pills>li>a:hover i,
     & .nav-pills>li>a:focus i {
-        color: white;
+        color: #333;
 
         .fixed & {
             color: #333;
@@ -151,7 +161,7 @@
     }
 
     & .nav {
-        width: 100%;
+
     }
 }
 
@@ -189,4 +199,22 @@
 
 .fixed .prime-image {
     margin-top: calc(50px + 50px + 75px);
+}
+
+#places-list {
+
+    & td, & th {
+        vertical-align: middle;
+    }
+}
+
+.rating {
+
+    & label {
+        margin-bottom: 0;
+    }
+}
+
+.btn-set-close-place {
+    margin-left: 10px;
 }

@@ -13,17 +13,17 @@
 <div>
     <a class="btn"
        onclick="$('#emailForm').slideDown()"><!---->
-        <i class="icon-envelope"></i> @Messages("adventure.created.button.emailInvite")
+        <i class="fa fa-envelope"></i> @Messages("adventure.created.button.emailInvite")
     </a>
     <a class="btn"
        onclick="$('#facebookForm').slideDown()"><!---->
-        <i class="icon-facebook"></i> @Messages("adventure.general.button.facebookPost")
+        <i class="fa fa-facebook"></i> @Messages("adventure.general.button.facebookPost")
     </a>
     @if(adv.isPublish()){
     <a class="btn"
        href="https://twitter.com/intent/tweet?original_referer=@routes.ApplicationController.index().absoluteURL(request())&related=JournWe&text=Join+my+adventure+@adv.getName()+on+Journwe.com+@shortURL&tw_p=tweetbutton&url=@shortURL"
        target="_blank">
-        <i class="icon-twitter"></i> @Messages("adventure.options.twitter")
+        <i class="fa fa-twitter"></i> @Messages("adventure.options.twitter")
     </a>
     }
 </div>

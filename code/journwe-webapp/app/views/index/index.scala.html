@@ -11,9 +11,9 @@
 
         <p class="lead">@Messages("inspiration.getInspired")</p>
 
-        <h3><i class="icon-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h3>
+        <h3><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
         <div style="background-color: rgba(245,245,245,0.6);">
-            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
     </div>  
@@ -23,9 +23,9 @@
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                 <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                 <div class="overlay text-center" style="display: none;">
-                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                 </div>
             </div>
         </div>
@@ -42,8 +42,8 @@
         });
 
         function loadPublicAdventures(lastId, clear) {
-            $('#adventures-public-button-refresh i').addClass('icon-spin');
-            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
+            $('#adventures-public-button-refresh i').addClass('fa fa-spin');
+            $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
@@ -61,7 +61,7 @@
 
                 }
                 $('#adventures-public-load-more-button').html('Show More');
-                $('#adventures-public-button-refresh i').removeClass('icon-spin');
+                $('#adventures-public-button-refresh i').removeClass('fa fa-spin');
             });
         }
     </script>
@@ -69,10 +69,10 @@
 <div>
     <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#inspirations" data-toggle="tab"><i class="icon-th"></i> @Messages("inspiration.ideas") </a>
+        <li class="active"><a href="#inspirations" data-toggle="tab"><i class="fa fa-th"></i> @Messages("inspiration.ideas") </a>
         </li>
-        <li><a href="#adventures" data-toggle="tab"><i class="icon-th"></i> @Messages("public.adventures") </a></li>
-        <li><a href="#search" data-toggle="tab"><i class="icon-search"></i> @Messages("adventure.general.label.search")</a></li>
+        <li><a href="#adventures" data-toggle="tab"><i class="fa fa-th"></i> @Messages("public.adventures") </a></li>
+        <li><a href="#search" data-toggle="tab"><i class="fa fa-search"></i> @Messages("adventure.general.label.search")</a></li>
     </ul>
 
     <div class="tab-content">

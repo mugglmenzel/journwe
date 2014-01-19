@@ -6,18 +6,24 @@
 <div class="clearfix">
     @if(JournweAuthorization.canViewFavoritePlace(adv.getId)) {
     <div id="places-favorite-place" class="pull-left" style="font-size: 20px; margin-bottom: 10px;">
-        <i id="places-favorite-place-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name"></span></em>
-    </div>
-    <div class="clearfix"></div>
-    <div id="places-autofavorite-place" class="pull-left text-muted" style="font-size: 20px; margin-bottom: 10px;">
-        <i id="places-autofavorite-place-icon" class="icon-spin icon-journwe"></i> @Messages("adventure.places.favourite") <em><span id="places-autofavorite-place-name"></span></em>
+        <i id="places-favorite-place-icon" class="fa fa-spin icon-journwe icon-favorite-places"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name">@Messages("adventure.general.nofavourite.placeholder")</span></em>
     </div>
     }
 
     @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
-    <div class="pull-right btn-close-place stash">
+    <div class="pull-right">
+          <button class="btn @if(adv.getPlaceVoteOpen){btn-success} btn-set-close-place"><i class="fa fa-ok"></i> @if(adv.getPlaceVoteOpen){Close}else{Reopen}</button>
+    </div>
+
+    <div class="pull-right">
+          <button class="btn btn-default btn-set-reminder-place date" data-id="@adv.getId" data-date="@adv.getPlaceVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="fa fa-calendar"></i> @if(adv.getPlaceVoteDeadlineFormatted){@adv.getPlaceVoteDeadlineFormatted}else{ Set Deadline }</button>
+    </div>
+
+
+
+    <div class="pull-right btn-close-place stash hidden">
         @Messages("adventure.general.voting")
-        <div class="switch">
+        <div class="make-switch">
             <input id="places-voting-active-switch" type="checkbox" @if(adv.getPlaceVoteOpen){checked="checked"}>
         </div>
     </div>
@@ -28,12 +34,12 @@
     <thead>
         <tr>
             <th>@Messages("adventure.general.favourite")</th>
-            <th>Group Rating</th>
             <th>@Messages("adventure.places.location")</th>
-            <th style="min-width: 135px;">@Messages("adventure.general.yourvote")</th>
-            <th class="text-center">@Messages("adventure.general.yes")</th>
-            <th class="text-center">@Messages("adventure.general.maybe")</th>
-            <th class="text-center">@Messages("adventure.general.no")</th>
+            <th style="width: 90px;">@Messages("adventure.general.yourvote")</th>
+            <th class="text-center" style="width: 100px;">Group Rating</th>
+            <th class="text-center hidden">@Messages("adventure.general.yes")</th>
+            <th class="text-center hidden">@Messages("adventure.general.maybe")</th>
+            <th class="text-center hidden">@Messages("adventure.general.no")</th>
             <th>@Messages("adventure.general.advvotes")</th>
             @if(JournweAuthorization.canEditPlaces(adv.getId)) {
             <th class="text-center">@Messages("adventure.general.listactions")</th>
@@ -46,7 +52,7 @@
 
 </table>
 
-<div class="places-loading"><i class="icon-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
+<div class="places-loading"><i class="fa fa-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
 }
 @if(JournweAuthorization.canEditPlaces(adv.getId)) {
 <div id="place-add-form" class="row">
@@ -54,7 +60,7 @@
         <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" id="place-add-input" style="" class="form-control">
         <input id="place-add-comment-input" class="form-control stash" style="display: none; width: 50%;" type="text" placeholder="@Messages("adventure.comments.comment")">
         <div class="input-group-btn">
-            <button id="place-add-button" class="btn btn-add btn-primary"><i class="icon-plus"></i></button>
+            <button id="place-add-button" class="btn btn-add btn-primary"><i class="fa fa-plus"></i></button>
         </div>
     </div>
 </div>
@@ -66,254 +72,44 @@
 
 <script type="text/x-tmpl" id="place-template">
     <tr id="placeoption-item-{%=o.placeId%}">
-        <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoritePlaceOption('{%=o.placeId%}', this)"><i class="icon-star"></i></button></td>
-        <td>{%=(o.voteGroup*5)%}</td>
+        <td><button class="btn btn-favorit btn-default {%=o.favorite?'btn-success':''%}" data-placeid="{%=o.placeId%}"><i class="fa fa-star"></i></button></td>
         <td><em>{%=o.address%}</em></td>
         @if(JournweAuthorization.canVoteForPlaces(adv.getId)) {
         <td>
-            <div class="btn-group">
+            <div class="btn-group hidden">
                 <button id="placeoption-status-{%=o.placeId%}" class="btn btn-default" style="width: 90px" disabled="disabled"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-pencil"></i>
+                    <i class="fa fa-pencil"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a onclick="votePlace('YES', 1, '{%=o.placeId%}');"><i class="icon-thumbs-up"></i> @Messages("adventure.general.yes")</a></li>
-                    <li><a onclick="votePlace('MAYBE', 0.5, '{%=o.placeId%}');"><i class="icon-question"></i> @Messages("adventure.general.maybe")</a></li>
-                    <li><a onclick="votePlace('NO', 0, '{%=o.placeId%}');"><i class="icon-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
+                    <li><a onclick="votePlace('YES', 1, '{%=o.placeId%}');"><i class="fa fa-thumbs-up"></i> @Messages("adventure.general.yes")</a></li>
+                    <li><a onclick="votePlace('MAYBE', 0.5, '{%=o.placeId%}');"><i class="fa fa-question"></i> @Messages("adventure.general.maybe")</a></li>
+                    <li><a onclick="votePlace('NO', 0, '{%=o.placeId%}');"><i class="fa fa-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
                 </ul>
             </div>
             <div class="rating">
-                <input type="radio" id="{%=o.placeId%}-star5" name="{%=o.placeId%}-rating" value="5" data-id="{%=o.placeId%}" {% if(o.voteGravity == 1){ %}checked{% } %} /><label for="{%=o.placeId%}-star5" title="Rocks!"><i class="icon-star"></i></label>
-                <input type="radio" id="{%=o.placeId%}-star4" name="{%=o.placeId%}-rating" value="4" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.8){ %}checked{% } %} /><label for="{%=o.placeId%}-star4" title="Pretty good"><i class="icon-star"></i></label>
-                <input type="radio" id="{%=o.placeId%}-star3" name="{%=o.placeId%}-rating" value="3" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.6){ %}checked{% } %} /><label for="{%=o.placeId%}-star3" title="Meh"><i class="icon-star"></i></label>
-                <input type="radio" id="{%=o.placeId%}-star2" name="{%=o.placeId%}-rating" value="2" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.4){ %}checked{% } %} /><label for="{%=o.placeId%}-star2" title="Kinda bad"><i class="icon-star"></i></label>
-                <input type="radio" id="{%=o.placeId%}-star1" name="{%=o.placeId%}-rating" value="1" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.2){ %}checked{% } %} /><label for="{%=o.placeId%}-star1" title="Sucks big time"><i class="icon-star"></i></label>
+                <input type="radio" class="star" id="{%=o.placeId%}-star5" name="{%=o.placeId%}-rating" value="5" data-id="{%=o.placeId%}" {% if(o.voteGravity == 1){ %}checked{% } %} /><label for="{%=o.placeId%}-star5" title="Rocks!"><i class="fa fa-star"></i></label>
+                <input type="radio" class="star" id="{%=o.placeId%}-star4" name="{%=o.placeId%}-rating" value="4" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.8){ %}checked{% } %} /><label for="{%=o.placeId%}-star4" title="Pretty good"><i class="fa fa-star"></i></label>
+                <input type="radio" class="star" id="{%=o.placeId%}-star3" name="{%=o.placeId%}-rating" value="3" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.6){ %}checked{% } %} /><label for="{%=o.placeId%}-star3" title="Meh"><i class="fa fa-star"></i></label>
+                <input type="radio" class="star" id="{%=o.placeId%}-star2" name="{%=o.placeId%}-rating" value="2" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.4){ %}checked{% } %} /><label for="{%=o.placeId%}-star2" title="Kinda bad"><i class="fa fa-star"></i></label>
+                <input type="radio" class="star" id="{%=o.placeId%}-star1" name="{%=o.placeId%}-rating" value="1" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.2){ %}checked{% } %} /><label for="{%=o.placeId%}-star1" title="Sucks big time"><i class="fa fa-star"></i></label>
             </div>
         </td>
         }
         @if(JournweAuthorization.canViewVotesForPlaces(adv.getId)) {
-        <td class="text-center">{%=o.voteCount.YES%}</td>
-        <td class="text-center">{%=o.voteCount.MAYBE%}</td>
-        <td class="text-center">{%=o.voteCount.NO%}</td>
+        <td class="text-center">{%=(o.voteGroup*5)%}</td>
+        <td class="text-center hidden">{%=o.voteCount.YES%}</td>
+        <td class="text-center hidden">{%=o.voteCount.MAYBE%}</td>
+        <td class="text-center hidden">{%=o.voteCount.NO%}</td>
         <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
         }
         @if(JournweAuthorization.canEditPlaces(adv.getId)) {
-        <td class="text-center"><button onclick="deletePlace('{%=o.placeId%}', event);" class="btn btn-danger"><i class="icon-trash"></i></button></td>
+        <td class="text-center"><button onclick="deletePlace('{%=o.placeId%}', event);" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
         }
     </tr>
 </script>
 
 
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
-<script type="text/javascript">
-
-    var map;
-    var markers = [];
-    google.maps.visualRefresh = true;
-
-    function initialize() {
-    var mapOptions = {
-        zoom: 19,
-        minZoom: 2,
-        maxZoom: 19,
-        center: new google.maps.LatLng(52.467541, 13.324957),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    map = new google.maps.Map(document.getElementById('place-add-map'), mapOptions);
-
-    }
-
-
-    function resetBounds() {
-        var bounds = new google.maps.LatLngBounds();
-        for(var i in markers) {
-           bounds.extend(markers[i].getPosition());
-        }
-        map.fitBounds(bounds);
-        google.maps.event.trigger(map, 'resize');
-    }
-
-    function removeMarker(id) {
-        markers[id].setMap(null);
-        delete markers[id];
-        resetBounds();
-    }
-
-
-    function setFavoritePlaceOption(optionId, el) {
-        $('#places-list td:first-child .btn-success').removeClass('btn-success');
-        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
-        $(el).find('i').removeClass("icon-star").addClass("icon-spin icon-journwe");
-        $.post('@routes.AdventurePlaceController.setFavoritePlace(adv.getId)', {favoritePlaceId: optionId}, function (data) {
-            $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
-            // Remove other stars
-            $(el).closest('table').find('.btn-success').removeClass("btn-success");
-            // Set stars
-            $(el).find('i').removeClass("icon-spin icon-journwe").addClass("icon-star");
-            $('#places-favorite-place-name').html(data.address);
-            $('.btn-close-place').show();
-            $(el).addClass('btn-success');
-        });
-    }
-
-    function renderPlaceOption(data, replace) {
-        var place = $(tmpl('place-template', data));
-
-        if(replace)
-            replace.replaceWith(place).fadeIn();
-        else
-            $('#places-list tbody').append(place).fadeIn();
-
-
-        place.find('.rating :radio').click(function (e) {
-            if($(e.target).is(':checked')) votePlace('', $(e.target).val()/5, $(e.target).data('id'));
-        });
-
-        var marker = new google.maps.Marker({animation: google.maps.Animation.DROP, map: map, position: new google.maps.LatLng(data.lat, data.lng), title: data.address});
-        markers[data.placeId] = marker;
-        map.setCenter(new google.maps.LatLng(data.lat, data.lng));
-        resetBounds();
-
-        $('#placeoption-status-icon-' + data.placeId).addClass(votePlaceIconCSSClassMap[data.vote]);
-        $('#placeoption-status-' + data.placeId).addClass(votePlaceButtonCSSClassMap[data.vote]);
-    }
-
-
-    var votePlaceIconCSSClassMap = {'YES': 'icon-thumbs-up', 'NO': 'icon-thumbs-down', 'MAYBE': 'icon-question'};
-    var votePlaceButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
-    var votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
-
-
-
-    $('document').ready(function (){
-        initialize();
-        
-        $.get('@routes.AdventurePlaceController.getPlaces(adv.getId)', function (result) {
-
-
-            $('#places-list tbody').empty();
-            for(var id in result) {
-                renderPlaceOption(result[id])
-            }
-
-            if (result.length){
-                $('#places-list').show();
-            } else {
-                $('#places-list').hide();
-            }
-
-            $('.places-loading').hide();
-
-            updateFavorite();
-
-            updatePlaceVoteOpen(@adv.getPlaceVoteOpen);
-
-
-        });
-    });
-
-
-
-
-
-    $('#place-add-input').on('keydown', function(e){
-        if (e.keyCode==13){
-            $('#place-add-button').click();
-        }
-    });
-    $('#place-add-comment-input').on('keydown', function(e){
-        if (e.keyCode==13){
-            $('#place-add-button').click();
-        }
-    });
-
-    $('#place-add-input').on('focus', function(e){
-        $(this).css("width", "50%");
-        $('#place-add-comment-input').fadeIn();
-    });
-
-    $('#place-add-input').on('blur', function(e){
-        if($(this).val() == ''){
-            var el = $(this);
-            $('#place-add-comment-input').fadeOut(function(){
-                el.css("width", "100%"); 
-            });
-        }
-    });
-
-    $('#place-add-button').on('click', function() {
-        if($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
-            $(this).html('<i class="icon-spin icon-journwe"></i>');
-            new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-                $.post('@routes.AdventurePlaceController.addPlace(adv.getId)', { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, function(res) {
-                    renderPlaceOption(res);
-                    $('#place-add-input').val("");
-                    $('#place-add-comment-input').val("");
-                    $('#place-add-button').html('<i class="icon-plus"></i>');
-                    $('#places-list').show();
-                    refreshComments("@adv.getId"+"places", $("#comments-list-places"));
-                });
-            });
-        } else {$('#place-add-input').focus(); return false;}
-    });
-
-    $('#places-voting-active-switch').on('change', function () {
-        $.post('@routes.AdventureController.updatePlaceVoteOpen(adv.getId)', {voteOpen: $('#places-voting-active-switch').prop('checked')}, updatePlaceVoteOpen);
-    });
-
-    function updatePlaceVoteOpen(data) {
-
-        if(data) {
-            $('#places-list button').prop('disabled', false);
-            $('#place-add-form').fadeIn();
-            resetBounds();
-        } else {
-            $('#places-list button').prop('disabled', true);
-            $('#place-add-form').fadeOut();
-            resetBounds();
-        }
-
-    }
-
-    function updateFavorite() {
-
-        $('#places-favorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
-        $('#places-autofavorite-place-icon').removeClass("icon-star").addClass("icon-spin icon-journwe");
-
-        $.get('@routes.AdventurePlaceController.getFavoritePlace(adv.getId)', function (result) {
-            $('#places-favorite-place-name').html(result.favorite != null ? result.favorite.address : "@Messages("adventure.general.nofavourite.placeholder")");
-            $('#places-autofavorite-place-name').html(result.autoFavorite != null ? result.autoFavorite.address : "@Messages("adventure.general.nofavourite.placeholder")");
-            $('.btn-close-place').toggle(!!result.favorite);
-            $('#places-favorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
-            $('#places-autofavorite-place-icon').removeClass("icon-spin icon-journwe").addClass("icon-star");
-        });
-    }
-
-    function votePlace(vote, voteGrav, optId) {
-        
-        // Spin
-        $('#placeoption-item-'+optId+' .dropdown-toggle')
-            .html('<i class="icon-spin icon-journwe"></i>');
-
-        $.post('@routes.AdventurePlaceController.voteParam(adv.getId)', {placeId: optId, vote: vote, voteGravity: voteGrav}, function(res) {
-                renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
-                updateFavorite();
-                $('#placeoption-item-'+res.placeId+' .dropdown-toggle')
-                    .html('<i class="icon-pencil"></i>');
-            });
-    }
-
-
-    function deletePlace(optId, event) {
-        $(event.target).html('<i class="icon-spin icon-journwe"></i>');
-        $.ajax({url: '@routes.AdventurePlaceController.deletePlace(adv.getId, "")' + optId, type: 'DELETE', success: function () {
-            removeMarker(optId);
-            $('#placeoption-item-' + optId).fadeOut(function () {$('#placeoption-item-' + optId).remove();});
-        }
-        });
-    }
-
-</script>
 
 
 

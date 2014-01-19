@@ -1,7 +1,7 @@
 #journwe
 journwe.subtitle=where adventurers meet...
-subscribe.welcometext=Journ<b>We</b> helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join an adventure.
-subscribe.cta=Subscribe with your email to get notified when we go online!
+landing.welcometext=Journ<b>We</b> helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join an adventure.
+landing.cta=Subscribe with your email to get notified when we go online!
 
 #Adventure.general.buttons
 adventure.general.button.join=Join

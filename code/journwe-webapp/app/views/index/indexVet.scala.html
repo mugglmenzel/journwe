@@ -11,7 +11,7 @@
     <div id="yingyangyong-container" style="display: none; margin-top: -20px; margin-bottom: 70px;">
         @yingyangyong(null)
         <div>
-            <button class="btn btn-default btn-block" onclick="$('#yingyangyong-container').slideUp(500); $('#yingyangyong-starter button').prop('disabled', false);"><i class="icon-chevron-up"></i></button>
+            <button class="btn btn-default btn-block" onclick="$('#yingyangyong-container').slideUp(500); $('#yingyangyong-starter button').prop('disabled', false);"><i class="fa fa-chevron-up"></i></button>
         </div>
     </div>
 
@@ -26,76 +26,81 @@
             }
         }
     
-        <h3><i class="icon-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button id="adventures-my-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h3>
-        <div class="row">
-            <div class="col-lg-3">
-                <div id="yingyangyong-starter" class="text-center">
-                    <button class="btn btn-link" href="#" onclick="$('#yingyangyong-container').slideDown(function () {resetBounds();}); $('#yingyangyong-starter button').prop('disabled', true);">
-                        <img src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=@routes.Assets.at("img/yingyangyong.png").absoluteURL()' width="170"><br>
-                        <p class="lead"><i class="icon-asterisk"></i> @Messages("adventure.general.button.createNew") </p>
-                    </button>
-                </div>
-            </div>
-            <div class="col-lg-9">
-                <div id="adventures-my-list" class="text-center adventures-list-full"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-                <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
-                <script type="text/x-tmpl" id="adventure-my-template">
-                    <div class="adventure-entry row" data-id="{%=o.id%}" style="background-color: rgba(245,245,245,0.6); margin: 3px; padding: 14px 0;">
-                        <div class="col-lg-2 col-sm-2 col-xs-2" style="margin: -13px 0px -13px -13px; width: 66px;">
-                            <a href="{%=o.link%}" class="media-object">
-                                <img class="img-polaroid" height="50" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
-                            </a>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-xs-6 text-left">
-                            <a href="{%=o.link%}">
-                                <h4>{%=o.name%}</h4>
-                            </a>
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-xs-4 text-right" style="width: 36%; width: calc(50% - 53px);">
-                            <span class="label" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                            <span class="label" style="background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                            <span class="label" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
-                        </div>
+        <h3><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button id="adventures-my-button-refresh" class="btn btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
+        <div class="row" style="margin-bottom: 20px">
+
+            <div id="adventures-my-list" class="text-center adventures-list-full"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div class="text-center"><button id="adventures-my-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
+            <script type="text/x-tmpl" id="adventure-my-template">
+                <div class="adventure-entry" data-id="{%=o.id%}" style="position: relative; float: left; width: 20%;">
+                    <div class="row"><a href="{%=o.link%}"><h4>{%=o.name%}</h4></a></div>
+                    <div class="row" style="margin-bottom: 5px">
+                        <div class="col-lg-4" style="background-color: rgba(184, 246, 145, 1);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</div>
+                        <div class="col-lg-4" style="background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</div>
+                        <div class="col-lg-4" style="background-color: rgba(152, 229, 251, 1);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</div>
                     </div>
-                </script>
-                <script type="text/javascript">
-                    $(document).ready(function(){
+                    <div class="row">
+                        <a href="{%=o.link%}" class="media-object">
+                            <img height="200" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=200&height=200&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
+                        </a>
+                    </div>
+                </div>
+            </script>
+            <script type="text/javascript">
+                $(document).ready(function(){
 
-                        loadMyAdventures(null, true);
+                    loadMyAdventures(null, true);
 
-                        $('#adventures-my-button-refresh').click(function () {loadMyAdventures(null, true);});
-                        $('#adventures-my-load-more-button').click(function () {loadMyAdventures($('#adventures-my-list .adventure-entry').last().data('id'));});
+                    $('#adventures-my-button-refresh').click(function () {loadMyAdventures(null, true);});
+                    $('#adventures-my-load-more-button').click(function () {loadMyAdventures($('#adventures-my-list .adventure-entry').last().data('id'));});
 
+                });
+
+                function loadMyAdventures(lastId, clear) {
+                    $('#adventures-my-button-refresh i').addClass('fa-spin');
+                    $('#adventures-my-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
+                    $.get('@routes.ApplicationController.getMyAdventures()', {lastId: lastId, count: 10} , function (advs) {
+                        if (clear) $('#adventures-my-list').empty();
+                        for(var i in advs) {
+                            var adventure = tmpl('adventure-my-template', advs[i]);
+                            $('#adventures-my-list').append(adventure);
+                        }
+                        if (advs.length < 10){
+                            $('#adventures-my-load-more-button').fadeOut();
+                        } else {
+                            $('#adventures-my-load-more-button').show().html('Show More');
+                        }
+                        $('#adventures-my-button-refresh i').removeClass('fa-spin');
                     });
-
-                    function loadMyAdventures(lastId, clear) {
-                        $('#adventures-my-button-refresh i').addClass('icon-spin');
-                        $('#adventures-my-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
-                        $.get('@routes.ApplicationController.getMyAdventures()', {lastId: lastId, count: 10} , function (advs) {
-                            if (clear) $('#adventures-my-list').empty();
-                            for(var i in advs) {
-                                var adventure = tmpl('adventure-my-template', advs[i]);
-                                $('#adventures-my-list').append(adventure);
-                            }
-                            if (advs.length < 10){
-                                $('#adventures-my-load-more-button').fadeOut();
-                            } else {
-                                $('#adventures-my-load-more-button').show().html('Show More');
-                            }
-                            $('#adventures-my-button-refresh i').removeClass('icon-spin');
-                        });
-                    }
-                </script>
+                }
+            </script>
+        </div>
+        <div class="jumbotron row">
+            <div class="col-lg-9"><p class="lead">Starte dein nächstes JournWe!!!</p></div>
+            <div id="yingyangyong-starter" class="col-lg-3 text-center">
+                <button class="btn btn-link" href="#" onclick="$('#yingyangyong-container').slideDown(function () {resetBounds();}); $('#yingyangyong-starter button').prop('disabled', true);">
+                    <img src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=@routes.Assets.at("img/yingyangyong.png").absoluteURL()' width="170"><br>
+                    <p class="lead"><i class="fa fa-asterisk"></i> Los geht's! </p>
+                </button>
+            </div>
+        </div>
+        <div class="jumbotron row">
+            <div class="col-lg-9"><p class="lead">Hol dir Inspirationen für dein nächstes JournWe.</p></div>
+            <div id="yingyangyong-starter" class="col-lg-3 text-center">
+                <button class="btn btn-link" href="#" onclick="$('#yingyangyong-container').slideDown(function () {resetBounds();}); $('#yingyangyong-starter button').prop('disabled', true);">
+                    <img src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=@routes.Assets.at("img/yingyangyong.png").absoluteURL()' width="170"><br>
+                    <p class="lead"><i class="fa fa-lightbulb"></i> Auf zum Atem! </p>
+                </button>
             </div>
         </div>
     </div>
 
 
     <div class="jrn-container">
-        <h2><i class="icon-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button id="categories-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button id="categories-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
 
         <div style="">
-            <div id="categories-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="categories-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -122,8 +127,8 @@
         });
 
         function loadCategories(lastId, clear) {
-            $('#categories-button-refresh i').addClass('icon-spin');
-            $('#categories-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
+            $('#categories-button-refresh i').addClass('fa-spin');
+            $('#categories-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getCategories(models.category.Category.SUPER_CATEGORY)', {lastId: lastId, count: 10} , function (cats) {
                 if (clear) $('#categories-list').empty();
                 for(var i in cats) {
@@ -135,17 +140,17 @@
                 } else {
                     $('#categories-load-more-button').show().html('Show More');
                 }
-                $('#categories-button-refresh i').removeClass('icon-spin');
+                $('#categories-button-refresh i').removeClass('fa-spin');
             });
         }
     </script>
 
     @*
     <div class="jrn-container">
-        <h2><i class="icon-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
 
         <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
         <div style="height: 400px; margin-top: 10px;">
@@ -158,9 +163,9 @@
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                 <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                 <div class="overlay text-center" style="display: none;">
-                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                 </div>
             </div>
         </div>
@@ -201,8 +206,8 @@
         });
 
         function loadPublicAdventures(lastId, clear) {
-            $('#adventures-public-button-refresh i').addClass('icon-spin');
-            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
+            $('#adventures-public-button-refresh i').addClass('fa fa-spin');
+            $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
@@ -238,7 +243,7 @@
                 } else {
                     $('#adventures-public-load-more-button').show().html('Show More');
                 }
-                $('#adventures-public-button-refresh i').removeClass('icon-spin');
+                $('#adventures-public-button-refresh i').removeClass('fa fa-spin');
             });
         }
     </script>

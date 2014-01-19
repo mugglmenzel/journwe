@@ -18,7 +18,7 @@
             @if(category != null) {<small>- <a href="@routes.ApplicationController.categoryIndex(category.getId)">@category.getName()</a></small>}
         </div>
         <div class="toolbar">
-            <a class="btn btn-primary pull-right" href="@routes.InspirationController.createAdventure(ins.getId)"><i class="icon-arrow-right"></i> @Messages("adventure.general.label.start") </a>
+            <a class="btn btn-primary pull-right" href="@routes.InspirationController.createAdventure(ins.getId)"><i class="fa fa-arrow-right"></i> @Messages("adventure.general.label.start") </a>
         </div>
     </div>
 
@@ -107,14 +107,14 @@
     </div>
 
     <div class="jrn-container">
-        <h2 id="tips"><i class="icon-thumbs-up"></i> Tips</h2>
+        <h2 id="tips"><i class="fa fa-thumbs-up"></i> Tips</h2>
         <div class="row">
             <div class="col-lg-12">
                 <div id="inspiration-tips"></div>
                 <script type="text/x-tmpl" id="inspiration-tip-template">
                     <div>
                         <img class="pull-left" style="margin-right: 10px; max-height: 24pt;" src="{%=o.user.image%}">
-                        <div class="comment-text"><i class="icon-comment"></i> {%=o.tip.tip%}</div>
+                        <div class="comment-text"><i class="fa fa-comment"></i> {%=o.tip.tip%}</div>
                         <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.tip.created%}</div>
                     </div>
                 </script>
@@ -137,7 +137,7 @@
             </div>
             <div class="col-lg-12">
                 <input type="text" id="tip-add-text">
-                <button id="tip-add-button" class="btn btn-primary"><i class="icon-plus"></i></button>
+                <button id="tip-add-button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
                 <script>
                     $('#tip-add-button').click(function(){
                         $.post('@routes.InspirationController.addTip(ins.getId)', {tip: $('#tip-add-text').val()}, function(){
@@ -152,7 +152,7 @@
     </div>
 
     <div class="jrn-container">
-        <h2 id="photos"><i class="icon-picture"></i> @Messages("adventure.general.label.photos") </h2>
+        <h2 id="photos"><i class="fa fa-picture"></i> @Messages("adventure.general.label.photos") </h2>
         <div class="row">
             <div class="col-lg-12">
                 <div id="inspiration-photos"></div>
@@ -179,7 +179,7 @@
 
     @if(ins.getPlaceAddress != null){
     <div class="jrn-container">
-        <h2 id="place"><i class="icon-globe"></i> @Messages("adventure.getScala.place.title") </h2>
+        <h2 id="place"><i class="fa fa-globe"></i> @Messages("adventure.getScala.place.title") </h2>
         <div class="row">
             <div class="col-lg-12">
                 <h3><em>@ins.getPlaceAddress</em></h3>
@@ -218,7 +218,7 @@
 
     @if(ins.getTimeStart != null) {
     <div class="jrn-container">
-        <h2 id="time"><i class="icon-calendar"></i> @Messages("adventure.getScala.time.title") </h2>
+        <h2 id="time"><i class="fa fa-calendar"></i> @Messages("adventure.getScala.time.title") </h2>
         <div class="row">
             <div class="col-lg-12">
                 <h3><em id="inspiration-time">@defining(new SimpleDateFormat("yyyy-MM-dd")){sdf => <span>@sdf.format(ins.getTimeStart) @if(ins.getTimeEnd != null && ins.getTimeEnd != ins.getTimeStart) { to @sdf.format(ins.getTimeEnd)}}</em></h3>
@@ -229,9 +229,9 @@
 
 
     <div class="jrn-container">
-        <h2 id="public-journwes"><i class="icon-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="public-journwes"><i class="fa fa-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>
             <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
@@ -242,9 +242,9 @@
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                 <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                 <div class="overlay text-center" style="display: none;">
-                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                 </div>
             </div>
         </div>
@@ -260,8 +260,8 @@
         });
 
         function loadPublicAdventures(lastId, clear) {
-            $('#adventures-public-button-refresh i').addClass('icon-spin');
-            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
+            $('#adventures-public-button-refresh i').addClass('fa fa-spin');
+            $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10, inspirationId: '@ins.getId'} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
@@ -279,7 +279,7 @@
 
                 }
                 $('#adventures-public-load-more-button').html('Show More');
-                $('#adventures-public-button-refresh i').removeClass('icon-spin');
+                $('#adventures-public-button-refresh i').removeClass('fa fa-spin');
             });
         }
     </script>

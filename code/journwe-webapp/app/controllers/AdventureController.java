@@ -23,7 +23,7 @@ import models.adventure.adventurer.EAdventurerParticipation;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredAdminUser;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.category.Category;
@@ -59,6 +59,7 @@ import views.html.adventure.getPublic;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import static com.rosaloves.bitlyj.Bitly.shorten;
@@ -82,25 +83,25 @@ public class AdventureController extends Controller {
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
             Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
-            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || !SecuredBetaUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
+            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || !SecuredUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
                 return ok(getPublic.render(adv, ins));
             else
                 return ok(getIndex.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
         }
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getIndexShortname(String shortname) {
         return getIndex(new AdventureShortnameDAO().get(shortname).getAdventureId());
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result create() {
         return createFromInspiration(null);
     }
 
     //TODO: adapt to composite inspiration id
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result createFromInspiration(String insId) {
         Map<String, String> inspireOptions = new InspirationDAO()
                 .allOptionsMap();
@@ -114,7 +115,7 @@ public class AdventureController extends Controller {
 
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result save() {
         DynamicForm filledForm = advForm.bindFromRequest();
 
@@ -314,7 +315,7 @@ public class AdventureController extends Controller {
 
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result saveEditable() {
         DynamicForm advForm = form().bindFromRequest();
         String advId = advForm.get("pk");
@@ -334,7 +335,7 @@ public class AdventureController extends Controller {
         return ok();
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result updateImage(String advId) {
         if (!JournweAuthorization.canEditAdventureImage(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -366,7 +367,7 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(node));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result updateCategory(String advId) {
         DynamicForm data = form().bindFromRequest();
         String catId = data.get("categoryId");
@@ -395,7 +396,7 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(result));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result updatePublic(String advId) {
         DynamicForm data = form().bindFromRequest();
         Boolean publish = new Boolean(data.get("public"));
@@ -406,7 +407,7 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(adv.isPublish()));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result updatePlaceVoteOpen(String advId) {
         if (!JournweAuthorization.canChangeVoteOnOffForPlaces(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -421,7 +422,37 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(adv.getPlaceVoteOpen()));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
+    public static Result updatePlaceVoteDeadline(String advId) {
+        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+        DynamicForm data = form().bindFromRequest();
+        Long deadline = new Long(data.get("voteDeadline"));
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setPlaceVoteDeadline(deadline);
+        new AdventureDAO().save(adv);
+
+        AdventureReminder rem = new AdventureReminder();
+        rem.setAdventureId(advId);
+        rem.setType(EAdventureReminderType.PLACE);
+        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
+        new AdventureReminderDAO().save(rem);
+
+        new AdventurerNotifier().notifyAdventurers(advId, "Please adhere to the place voting deadline!", "Place Vote");
+
+        return ok(Json.toJson(adv.getPlaceVoteDeadline()));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result placeVoteOpen(String advId) {
+        Adventure adv = new AdventureDAO().get(advId);
+        if (adv == null) return badRequest();
+        else
+            return ok(Json.toJson(adv.getPlaceVoteDeadline() != null ? adv.getPlaceVoteDeadline() > new Date().getTime() && adv.getPlaceVoteOpen() : adv.getPlaceVoteOpen()));
+    }
+
+
+    @Security.Authenticated(SecuredUser.class)
     public static Result updateTimeVoteOpen(String advId) {
         if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -434,6 +465,35 @@ public class AdventureController extends Controller {
         new AdventurerNotifier().notifyAdventurers(advId, "The Time Vote is now " + (adv.getTimeVoteOpen() ? "open" : "closed") + ".", "Time Vote");
 
         return ok(Json.toJson(adv.getTimeVoteOpen()));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result updateTimeVoteDeadline(String advId) {
+        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
+            return AuthorizationMessage.notAuthorizedResponse();
+        DynamicForm data = form().bindFromRequest();
+        Long deadline = new Long(data.get("voteDeadline"));
+        Adventure adv = new AdventureDAO().get(advId);
+        adv.setTimeVoteDeadline(deadline);
+        new AdventureDAO().save(adv);
+
+        AdventureReminder rem = new AdventureReminder();
+        rem.setAdventureId(advId);
+        rem.setType(EAdventureReminderType.TIME);
+        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
+        new AdventureReminderDAO().save(rem);
+
+        new AdventurerNotifier().notifyAdventurers(advId, "Please adhere to the time voting deadline!", "Time Vote");
+
+        return ok(Json.toJson(adv.getTimeVoteDeadline()));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result timeVoteOpen(String advId) {
+        Adventure adv = new AdventureDAO().get(advId);
+        if (adv == null) return badRequest();
+        else
+            return ok(Json.toJson(adv.getTimeVoteDeadline() != null ? adv.getTimeVoteDeadline() > new Date().getTime() && adv.getTimeVoteOpen() : adv.getTimeVoteOpen()));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)

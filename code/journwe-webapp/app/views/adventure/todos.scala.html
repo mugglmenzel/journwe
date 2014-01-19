@@ -27,7 +27,7 @@
         <div class="input-group col-lg-6">
             <input id="todo-title" type="text" placeholder="@Messages("adventure.todos.placeholder")" class="form-control"/>
             <div class="input-group-btn">
-                <button id="btn-add-todo" class="btn btn-primary" type="button"><i class="icon-plus"></i></button>
+                <button id="btn-add-todo" class="btn btn-primary" type="button"><i class="fa fa-plus"></i></button>
             </div>
         </div>
     </div>
@@ -78,9 +78,9 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title"> @Messages("adventure.todos.amazon.title") </h3>
                 </div>
-                <div class="modal-body"><div><i class="icon-journwe icon-spin"></i></div><div class="content"></div></div>
+                <div class="modal-body"><div><i class="icon-journwe fa fa-spin"></i></div><div class="content"></div></div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal"><i class="icon-remove"></i> @Messages("adventure.general.button.close")</button>
+                    <button class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> @Messages("adventure.general.button.close")</button>
                 </div>
             </div>
         </div>
@@ -88,20 +88,20 @@
 
     <script type="text/x-tmpl" id="todo-template">
         <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}">
-            <td><button class="btn btn-primary btn-check"><i class="icon-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></button></td>
+            <td><button class="btn btn-primary btn-check"><i class="fa fa-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></button></td>
             <td style="width:100%;">{%=o.title%}</td>
             <td><a class="btn btn-link btn-affiliate"> @Messages("adventure.todos.amazon.purchase") </a></td>
             @if(JournweAuthorization.canEditTodoItem(adv.getId)) {
-            <td class="text-center"><button class="btn btn-danger btn-delete"><i class="icon-trash"></i></button></td>
+            <td class="text-center"><button class="btn btn-danger btn-delete"><i class="fa fa-trash"></i></button></td>
             }
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-adventurer-template">
         <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}">
-            <td><i class="icon-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></td>
+            <td><i class="fa fa-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></td>
             <td style="width:100%;">{%=o.title%}</td>
             <td><a class="btn btn-link btn-affiliate"> @Messages("adventure.todos.amazon.purchase") </a></td>
-            <td class="text-center"><button class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></button></td>
+            <td class="text-center"><button class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="fa fa-plus"></i></button></td>
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-affiliate-template">
@@ -138,7 +138,7 @@
             }
 
             function loadTodos(userId, target, template, activator) {
-                $('#todos-button-refresh i').addClass("icon-spin");
+                $('#todos-button-refresh i').addClass("fa-spin");
                 $.get('@routes.AdventureTodoController.getTodos(adv.getId, "")' + userId, function (results){
                     $(target + ' tbody').empty();
 
@@ -151,7 +151,7 @@
                     } else
                         $(target).hide();
 
-                    $('#todos-button-refresh i').removeClass("icon-spin");
+                    $('#todos-button-refresh i').removeClass("fa-spin");
                 });
             }
 
@@ -171,7 +171,7 @@
         });
 
         $('#btn-add-todo').on('click', function() {
-            $(this).html('<i class="icon-spin icon-journwe"></i>');
+            $(this).html('<i class="fa fa-spin icon-journwe"></i>');
             var btn = $(this),
             fld = $('#todo-title');
 
@@ -180,7 +180,7 @@
                 //activateUserButtonListener();
                 loadUserTodos();
                 fld.val("");
-                $('#btn-add-todo').html('<i class="icon-plus"></i>')
+                $('#btn-add-todo').html('<i class="fa fa-plus"></i>')
             });
         });
 
@@ -193,9 +193,9 @@
                     tr = input.parents('.todo-entry'),
                     id = tr.attr('data-id'),
                     i = tr.find('.btn-check i'),
-                    complete = i.is('.icon-check-empty');
+                    complete = i.is('.fa fa-check-empty');
 
-                i.removeClass('icon-check, icon-check-empty').addClass('icon-spin icon-journwe');
+                i.removeClass('fa fa-check, fa fa-check-empty').addClass('fa fa-spin icon-journwe');
 
                 $.ajax({
                     url: '@routes.AdventureTodoController.setTodo(adv.getId(), "")' + id,
@@ -205,7 +205,7 @@
                     type: 'PUT',
                     success: function(res) {
                         tr.get(0).className = 'status-' + res.status + ' todo-entry';
-                        i.removeClass('icon-spin icon-journwe').addClass(res.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
+                        i.removeClass('fa fa-spin icon-journwe').addClass(res.status == '@EStatus.COMPLETE' ? 'fa fa-check' : 'fa fa-check-empty');
                     }
                 });
 
@@ -213,7 +213,7 @@
             });
 
             $('#todos-list tbody .btn-delete').on('click', function(e) {
-                $(this).html('<i class="icon-spin icon-journwe"></i>');
+                $(this).html('<i class="fa fa-spin icon-journwe"></i>');
                 e.preventDefault();
 
                 var a = $(this),
@@ -233,7 +233,7 @@
             });
 
             $('#todos-list tbody .btn-affiliate').on('click', function(e) {
-                //$(this).html('<i class="icon-spin icon-journwe"></i>');
+                //$(this).html('<i class="fa fa-spin icon-journwe"></i>');
                 e.preventDefault();
 
                 var a = $(this),
@@ -241,7 +241,7 @@
                 id = tr.data('id');
 
                 $('#amazon-affiliate .modal-content .modal-body .content').first().empty();
-                $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().removeClass('stash');
+                $('#amazon-affiliate .modal-content .modal-body .fa-spin').first().removeClass('stash');
                 $('#amazon-affiliate').modal();
 
                 $.get('@routes.AdventureTodoController.getTodoAffiliateItems(adv.getId())', {id: id}, function(res) {
@@ -250,7 +250,7 @@
                     for(var i in res)
                         $('#amazon-affiliate .modal-content .modal-body .content').first().append(tmpl('todo-affiliate-template', res[i]));
 
-                    $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().addClass('stash');
+                    $('#amazon-affiliate .modal-content .modal-body .fa-spin').first().addClass('stash');
                 });
 
             });
@@ -265,16 +265,16 @@
                     td = tr.find('td'),
                     title = $(td[1]).text();
 
-                btn.html('<i class="icon-spin icon-journwe"></i>');
+                btn.html('<i class="fa fa-spin icon-journwe"></i>');
 
                 $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {title: title}, function(res) {
                     loadUserTodos();
-                    btn.html('<i class="icon-plus"></i>');
+                    btn.html('<i class="fa fa-plus"></i>');
                 });
             });
 
             $('#todos-adventurers-list tbody .btn-affiliate').on('click', function(e) {
-                //$(this).html('<i class="icon-spin icon-journwe"></i>');
+                //$(this).html('<i class="fa fa-spin icon-journwe"></i>');
                 e.preventDefault();
 
                 var a = $(this),
@@ -282,7 +282,7 @@
                     id = tr.data('id');
 
                 $('#amazon-affiliate .modal-content .modal-body .content').first().empty();
-                $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().removeClass('stash');
+                $('#amazon-affiliate .modal-content .modal-body .fa-spin').first().removeClass('stash');
                 $('#amazon-affiliate').modal();
 
                 $.get('@routes.AdventureTodoController.getTodoAffiliateItems(adv.getId())', {id: id}, function(res) {
@@ -291,7 +291,7 @@
                     for(var i in res)
                         $('#amazon-affiliate .modal-content .modal-body .content').first().append(tmpl('todo-affiliate-template', res[i]));
 
-                    $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().addClass('stash');
+                    $('#amazon-affiliate .modal-content .modal-body .fa-spin').first().addClass('stash');
                 });
 
             });

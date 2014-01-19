@@ -81,6 +81,11 @@ public class UserDAO extends CommonEntityDAO<User> {
         UserEmail key = new UserEmail();
         key.setEmail(email);
 
+        /* proposal:
+        List<UserEmail> items = pm.query(UserEmail.class, new DynamoDBQueryExpression<UserEmail>().withHashKeyValues(key).withIndexName("email-index").withRangeKeyCondition("email", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withS(email))))
+        */
+
+
         QueryRequest queryRequest = new QueryRequest()
                 .withTableName("journwe-useremail")
                 .withIndexName("email-index");
@@ -135,7 +140,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             boolean updateCache = false;
 
             if (EUserRole.INVITEE.equals(user.getRole())) {
-                user.setRole(EUserRole.BETA);
+                user.setRole(getRegisterUserRole());
                 Logger.debug("switch from INVITEE to " + getRegisterUserRole());
                 updateCache = true;
             }

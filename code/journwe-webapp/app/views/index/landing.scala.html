@@ -1,21 +1,33 @@
-@(subForm: Form[models.user.Subscriber])
-
 @import models.dao._
+@import com.feth.play.module.pa.providers.AuthProvider.Registry
+@import com.feth.play.module.pa.views.html._
 
-    @main_subscribe {
-        <div class="jrn-container" style="margin-top: -20px;">
-            <p class="lead">@Messages("subscribe.welcometext")</p>
-        </div>
+    @main(Messages("journwe.subtitle")) { }{
+        <section class="jrn-container text-center headline">
+            <div class="text-success">JournWe - Travel together.</div>
+            <div class="btn-group user-login">
+                <a class="btn btn-lg btn-success" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Start Now</a>
+                <button class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                @forProviders() { p =>
+                    <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                }
+                </ul>
+            </div>
+        </section>
 
+    @*
         <div class="text-center jrn-container clearfix" style="margin-top: 5px;">
 
-            <p class="lead">@Html(Messages("subscribe.cta"))</p>
+            <p class="lead">@Html(Messages("landing.cta"))</p>
 
 
             <form action="@routes.ApplicationController.subscribe()" class=" col-lg-6 col-lg-offset-3">
                 <fieldset>
                     <div class="input-group input-group-lg">
-                        <span class="input-group-addon"><i class="icon-envelope"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
                         <input class="form-control input-lg" name="email" type="email" required>
                         <span class="input-group-btn">
                             <input class="btn btn-success btn-lg" type="submit" value="Subscribe!"/>
@@ -24,26 +36,29 @@
                 </fieldset>
             </form>
 
-        </div>
 
+        </div>
+    *@
+
+         @quickintro()
 
         <div class="jrn-container">
-            <h2>@Messages("subscribe.feature")</h2>
+            <h2>@Messages("landing.feature")</h2>
             
             <div class="row">
                 <div class="col-lg-5">
                     <img src="/assets/img/landing/landing_adventurer.png" class="landing"/>
                 </div>
                 <div class="col-lg-7" style="padding-top: 22px;">
-                    <h4>@Messages("subscribe.featureH1")</h4>
-                    @Messages("subscribe.featureT1")
+                    <h4>@Messages("landing.featureH1")</h4>
+                    @Messages("landing.featureT1")
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-7" style="padding-top: 30px;">
-                    <h4>@Messages("subscribe.featureH2")</h4>
-                    @Messages("subscribe.featureT2")
+                    <h4>@Messages("landing.featureH2")</h4>
+                    @Messages("landing.featureT2")
                 </div>
                 <div class="col-lg-5">
                       <img src="/assets/img/landing/landing_todo.png" class="landing"/>
@@ -55,8 +70,8 @@
                     <img src="/assets/img/landing/landing_files.png" class="landing"/>
                 </div>
                 <div class="col-lg-7">
-                    <h4>@Messages("subscribe.featureH3")</h4>
-                    @Messages("subscribe.featureT3")
+                    <h4>@Messages("landing.featureH3")</h4>
+                    @Messages("landing.featureT3")
                 </div>
             </div>
 
@@ -73,43 +88,43 @@
                   You're sure, then start. <br> You haven't decided yet? - Doesn't matter, start anyway and discuss later.
                 </div>
                 <div class="col-lg-4">
-                  <h4><i class="icon-bullhorn"></i> Involve Your Friends</h4>
+                  <h4><i class="fa fa-bullhorn"></i> Involve Your Friends</h4>
                   Use JournWe to motivate friends to join an adventure. Sharing information from JournWe is a cool way for having all your friends convinced to join your trip! Or announce it to the public and fiend new friends.
                 </div>
                 <div class="col-lg-4">
-                  <h4><i class="icon-comments"></i> Keep it all in One Place</h4>
+                  <h4><i class="fa fa-comments"></i> Keep it all in One Place</h4>
                   Don't bother with emails from travel operators that only reach one or few people in your travel group. JournWe gives you an email address (your-adventure@@journwe.com) and provides you with a single communication point. All of it is kept centrally in your adventure visible for all travel mates.
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4">
-                  <h4><i class="icon-lightbulb"></i> Get Inspired</h4>
+                  <h4><i class="fa fa-lightbulb"></i> Get Inspired</h4>
                   Is there anything out there? Find the hottest current adventures you may join. We have great inspirations for you to find your next adventure! Activate a notifier and get news on adventures in your area, a certain category or on where you always wanted to go.
                 </div>
                 <div class="col-lg-4">
-                  <h4><i class="icon-plane"></i> Find the Cheapest Prices</h4>
+                  <h4><i class="fa fa-plane"></i> Find the Cheapest Prices</h4>
                   Use reference booking systems to find cheapest flights, hotels, buses, trains, homestays, tents, backseats,tickets... matching your trip.
                 </div><div class="col-4">
-                  <h4><i class="icon-camera-retro"></i> And when it's Over</h4>
+                  <h4><i class="fa fa-camera-retro"></i> And when it's Over</h4>
                   Share your pictures, write a blog, keep in touch...
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4">
-                  <h4><i class="icon-phone"></i> Notifications</h4>
+                  <h4><i class="fa fa-phone"></i> Notifications</h4>
                 </div>
                 <div class="col-lg-4">
-                  <h4><i class="icon-heart-empty"></i> Most wanted list</h4>
+                  <h4><i class="fa fa-heart-empty"></i> Most wanted list</h4>
                 </div>
                 <div class="col-lg-4">
-                  <h4><i class="icon-trophy"></i> Rewards from travel agents</h4>
+                  <h4><i class="fa fa-trophy"></i> Rewards from travel agents</h4>
                 </div>
             </div>
         </div>
 
 
         <div class="jrn-container">
-            <h2>@Messages("subscribe.story")</h2>
+            <h2>@Messages("landing.story")</h2>
             
             <div id="success-stories" class="carousel slide">
                 <!-- Indicators -->
@@ -126,9 +141,9 @@
                     <div class="item active">
                         <div class="row">
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story1.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story1.content")</p>
-                                    <small><cite>@Messages("subscribe.story1.cite")</cite></small></blockquote>
+                                <h3>@Messages("landing.story1.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story1.content")</p>
+                                    <small><cite>@Messages("landing.story1.cite")</cite></small></blockquote>
                             </div>
                             <div class="col-lg-5 text-center">
                                 @defining(new AdventureDAO().get("965ddda2-140c-4331-9883-72c9217216ca")){ adv =>   @if(adv != null) {
@@ -137,9 +152,9 @@
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                                         <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ETO</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 3</span>
-                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 10-2013</span>
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> ETO</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 3</span>
+                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> 10-2013</span>
                                         </div>
                                     </div>
                                 </div>
@@ -156,27 +171,27 @@
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                                         <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> STO</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 5</span>
-                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 11-2013</span>
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> STO</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 5</span>
+                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> 11-2013</span>
                                         </div>
                                     </div>
                                 </div>
                             }    }
                             </div>
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story2.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story2.content")</p>
-                                    <small><cite>@Messages("subscribe.story2.cite")</cite></small>  </blockquote>
+                                <h3>@Messages("landing.story2.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story2.content")</p>
+                                    <small><cite>@Messages("landing.story2.cite")</cite></small>  </blockquote>
                             </div>
                         </div>
                     </div>
                     <div class="item">
                         <div class="row">
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story3.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story3.content")</p>
-                                    <small><cite>@Messages("subscribe.story3.cite")</cite></small></blockquote>
+                                <h3>@Messages("landing.story3.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story3.content")</p>
+                                    <small><cite>@Messages("landing.story3.cite")</cite></small></blockquote>
                             </div>
                             <div class="col-lg-5 text-center">
                             @defining(new AdventureDAO().get("3146479b-8f99-4023-8e88-947fc4742002")){ adv =>  @if(adv != null) {
@@ -185,8 +200,8 @@
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                                         <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> ZUR</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 15</span>
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> ZUR</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 15</span>
                                         </div>
                                     </div>
                                 </div>
@@ -203,27 +218,27 @@
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                                         <div style="line-height: 20px;"><h4><a href="@routes.InspirationController.get(ins.getId)">@ins.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> BLA</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 56784</span>
-                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> 8-2014</span>
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> BLA</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 56784</span>
+                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> 8-2014</span>
                                         </div>
                                     </div>
                                 </div>
                             }   }
                             </div>
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story4.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story4.content")</p>
-                                    <small><cite>@Messages("subscribe.story4.cite")</cite></small>  </blockquote>
+                                <h3>@Messages("landing.story4.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story4.content")</p>
+                                    <small><cite>@Messages("landing.story4.cite")</cite></small>  </blockquote>
                             </div>
                         </div>
                     </div>
                     <div class="item">
                         <div class="row">
                             <div class="col-lg-7">
-                                <h3>@Messages("subscribe.story5.header")</h3>
-                                <blockquote><p class="lead">@Messages("subscribe.story5.content")</p>
-                                    <small><cite>@Messages("subscribe.story5.cite")</cite></small></blockquote>
+                                <h3>@Messages("landing.story5.header")</h3>
+                                <blockquote><p class="lead">@Messages("landing.story5.content")</p>
+                                    <small><cite>@Messages("landing.story5.cite")</cite></small></blockquote>
                             </div>
                             <div class="col-lg-5 text-center">
                             @defining(new AdventureDAO().get("a05e49c5-8008-4e16-bde5-1af28d0c46d5")){ adv =>  @if(adv != null) {
@@ -232,8 +247,8 @@
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                                         <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> EARTH</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> 1</span>
+                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> EARTH</span>
+                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 1</span>
                                         </div>
                                     </div>
                                 </div>
@@ -245,10 +260,10 @@
 
                 <!-- Controls -->
                 <a class="left carousel-control" href="#success-stories" data-slide="prev">
-                    <span class="icon-prev"></span>
+                    <span class="fa fa-prev"></span>
                 </a>
                 <a class="right carousel-control" href="#success-stories" data-slide="next">
-                   <span class="icon-next"></span>
+                   <span class="fa fa-next"></span>
                 </a>
             </div>
         </div>
@@ -257,7 +272,7 @@
             <h2>Some Inspirations</h2>
 
             <div class="clearfix">
-                <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+                <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             </div>
 
             <script type="text/x-tmpl" id="adventure-public-template">
@@ -266,9 +281,9 @@
                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                         <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                         <div class="overlay text-center" style="display: none;">
-                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
+                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                         </div>
                     </div>
                 </div>

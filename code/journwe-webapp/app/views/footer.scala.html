@@ -31,23 +31,23 @@
                         <ul class="list-inline social-icons">
                             <li><a href="http://twitter.com/JournWe"
                             data-toggle="tooltip" data-trigger="hover" data-html="true"
-                            title="Follow on <i class='icon-twitter'></i>"><i
-                            class="icon-twitter"></i></a></li>
+                            title="Follow on <i class='fa fa-twitter'></i>"><i
+                            class="fa fa-twitter"></i></a></li>
                             <li><a href="https://www.facebook.com/JournWe"
                             data-toggle="tooltip" data-trigger="hover" data-html="true"
-                            title="Like on <i class='icon-facebook-sign'></i>"><i
-                            class="icon-facebook-sign"></i></a></li>
+                            title="Like on <i class='fa fa-facebook-sign'></i>"><i
+                            class="fa fa-facebook-sign"></i></a></li>
                             @*<li><a href="https://plus.google.com/114964647402155123257" rel="publisher"
                             data-toggle="tooltip" data-trigger="hover" data-html="true"
-                            title="Follow on <i class='icon-google-plus-sign'></i>"><i
-                            class="icon-google-plus-sign"></i></a>
+                            title="Follow on <i class='fa fa-google-plus-sign'></i>"><i
+                            class="fa fa-google-plus-sign"></i></a>
                             </li>*@
                         </ul>
                 </div>
                 <div class="col-lg-4 text-right">
                     <ul class="nav nav-pills nav-stacked">
                         @for(lang <- Lang.availables) {
-                            <li @if(lang.language == Http.Context.current().lang().language()){class="active"}><a href="@routes.ApplicationController.changeLanguage(lang.language.toString)">@if(lang.language == Http.Context.current().lang().language()){<i class="icon-globe"></i> }@Messages("languages."+lang.language)</a></li>
+                            <li @if(lang.language == Http.Context.current().lang().language()){class="active"}><a href="@routes.ApplicationController.changeLanguage(lang.language.toString)">@if(lang.language == Http.Context.current().lang().language()){<i class="fa fa-globe"></i> }@Messages("languages."+lang.language)</a></li>
                         }
                     </ul>
 
