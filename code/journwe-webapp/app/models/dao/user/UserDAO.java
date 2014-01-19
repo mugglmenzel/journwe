@@ -357,7 +357,7 @@ public class UserDAO extends CommonEntityDAO<User> {
                 us = new UserSocialDAO().create(authUser);
             } else {
                 throw new RuntimeException(
-                        "Account not enabled for password usage");
+                        "account not enabled for password usage");
             }
         }
         User u = new UserDAO().findByAuthUserIdentity(authUser);

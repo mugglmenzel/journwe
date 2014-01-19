@@ -8,7 +8,7 @@ import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
 import models.auth.SecuredAdminUser;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.auth.SecuredUser;
 import models.category.Category;
 import models.category.CategoryCount;
@@ -113,7 +113,7 @@ public class ApplicationController extends Controller {
     }
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getMyAdventures() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         final String userId = usr != null ? new UserDAO().findByAuthUserIdentity(usr).getId() : null;

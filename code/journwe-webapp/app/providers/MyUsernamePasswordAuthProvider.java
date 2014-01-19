@@ -207,12 +207,12 @@ public class MyUsernamePasswordAuthProvider
 
 	@Override
 	protected Call userExists(final UsernamePasswordAuthUser authUser) {
-		return routes.Signup.exists();
+		return routes.SignupController.exists();
 	}
 
 	@Override
 	protected Call userUnverified(final UsernamePasswordAuthUser authUser) {
-		return routes.Signup.unverified();
+		return routes.SignupController.unverified();
 	}
 
 	@Override
@@ -260,7 +260,7 @@ public class MyUsernamePasswordAuthProvider
 
 		final boolean isSecure = getConfiguration().getBoolean(
 				SETTING_KEY_VERIFICATION_LINK_SECURE);
-		final String url = routes.Signup.verify(token).absoluteURL(
+		final String url = routes.SignupController.verify(token).absoluteURL(
 				ctx.request(), isSecure);
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
@@ -310,7 +310,7 @@ public class MyUsernamePasswordAuthProvider
 
 		final boolean isSecure = getConfiguration().getBoolean(
 				SETTING_KEY_PASSWORD_RESET_LINK_SECURE);
-		final String url = routes.Signup.resetPassword(token).absoluteURL(
+		final String url = routes.SignupController.resetPassword(token).absoluteURL(
 				ctx.request(), isSecure);
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
@@ -392,7 +392,7 @@ public class MyUsernamePasswordAuthProvider
 
 		final boolean isSecure = getConfiguration().getBoolean(
 				SETTING_KEY_VERIFICATION_LINK_SECURE);
-		final String url = routes.Signup.verify(token).absoluteURL(
+		final String url = routes.SignupController.verify(token).absoluteURL(
 				ctx.request(), isSecure);
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());

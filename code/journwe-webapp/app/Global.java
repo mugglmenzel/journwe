@@ -70,12 +70,12 @@ public class Global extends GlobalSettings {
 
             @Override
             public Call askLink() {
-                return routes.Account.askLink();
+                return routes.AccountController.askLink();
             }
 
             @Override
             public Call askMerge() {
-                return routes.Account.askMerge();
+                return routes.AccountController.askMerge();
             }
         });
 

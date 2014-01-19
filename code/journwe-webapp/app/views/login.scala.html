@@ -32,7 +32,7 @@
 
         <a href="@routes.ApplicationController.signup">@Messages("playauthenticate.login.register")</a> @Messages("playauthenticate.login.or") 
 
-        <a href="javascript:void(0);" onclick="window.location.href = '@routes.Signup.forgotPassword("")'+($('#email').val()?'/'+$('#email').val():'');">@Messages("playauthenticate.login.forgot.password")</a>
+        <a href="javascript:void(0);" onclick="window.location.href = '@routes.SignupController.forgotPassword("")'+($('#email').val()?'/'+$('#email').val():'');">@Messages("playauthenticate.login.forgot.password")</a>
 
     	}
     </div>

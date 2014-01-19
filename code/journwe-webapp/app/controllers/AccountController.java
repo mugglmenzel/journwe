@@ -26,7 +26,7 @@ import views.html.index.index;
 
 import static play.data.Form.form;
 
-public class Account extends Controller {
+public class AccountController extends Controller {
 
 	public static class Accept {
 
@@ -79,7 +79,7 @@ public class Account extends Controller {
 	}
 
 	private static final Form<Accept> ACCEPT_FORM = form(Accept.class);
-	private static final Form<Account.PasswordChange> PASSWORD_CHANGE_FORM = form(Account.PasswordChange.class);
+	private static final Form<AccountController.PasswordChange> PASSWORD_CHANGE_FORM = form(AccountController.PasswordChange.class);
 
 	public static Result link() {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -128,7 +128,7 @@ public class Account extends Controller {
 	public static Result doChangePassword() {
         Logger.debug("doChangePassword");
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-		final Form<Account.PasswordChange> filledForm = PASSWORD_CHANGE_FORM
+		final Form<AccountController.PasswordChange> filledForm = PASSWORD_CHANGE_FORM
 				.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			// User did not select whether to link or not link
@@ -161,7 +161,7 @@ public class Account extends Controller {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		final AuthUser u = PlayAuthenticate.getLinkUser(session());
 		if (u == null) {
-            Logger.debug("Account to link could not be found. Silently redirect to login.");
+            Logger.debug("account to link could not be found. Silently redirect to login.");
 			// account to link could not be found, silently redirect to login
 			return redirect(routes.ApplicationController.index());
 		}

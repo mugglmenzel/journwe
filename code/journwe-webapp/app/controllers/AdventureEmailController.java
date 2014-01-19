@@ -9,7 +9,7 @@ import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.email.Message;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.dao.adventure.AdventureEmailMessageDAO;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -28,7 +28,7 @@ public class AdventureEmailController extends Controller {
 
 
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result listEmails(String adventureId) {
         activate(adventureId);
         List<Message> messages = new AdventureEmailMessageDAO().all(adventureId);
@@ -42,7 +42,7 @@ public class AdventureEmailController extends Controller {
         return ok(Json.toJson(messages));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result activateEmails(String advId) {
         activate(advId);
         return ok();

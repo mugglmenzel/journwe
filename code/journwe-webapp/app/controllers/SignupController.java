@@ -17,15 +17,14 @@ import providers.MyLoginUsernamePasswordAuthUser;
 import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthProvider.MyIdentity;
 import providers.MyUsernamePasswordAuthUser;
-import views.html.account.signup.*;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 
 import static play.data.Form.form;
 
-public class Signup extends Controller {
+public class SignupController extends Controller {
 
-	public static class PasswordReset extends Account.PasswordChange {
+	public static class PasswordReset extends AccountController.PasswordChange {
 
 		public PasswordReset() {
 		}
@@ -197,7 +196,7 @@ public class Signup extends Controller {
 
 	public static Result exists() {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-		return ok(exists.render());
+		return ok(views.html.account.signup.exists.render());
 	}
 
 	public static Result verify(final String token) {

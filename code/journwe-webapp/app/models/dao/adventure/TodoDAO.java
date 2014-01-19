@@ -28,7 +28,8 @@ public class TodoDAO extends AdventureComponentDAO<Todo> {
     }
 
     public List<Todo> all(String userId, String advId) {
-        return allByUser(advId).get(userId);
+        List<Todo> result = allByUser(advId).get(userId);
+        return result != null ? result : new ArrayList<Todo>();
     }
 
     public Map<String, List<Todo>> allByUser(String advId) {

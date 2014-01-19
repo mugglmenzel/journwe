@@ -6,7 +6,7 @@ import models.adventure.adventurer.Adventurer;
 import models.adventure.adventurer.EAdventurerParticipation;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.dao.adventure.*;
 import models.dao.user.UserDAO;
 import models.user.User;
@@ -26,7 +26,7 @@ public class CloneController extends Controller {
 
     private static DynamicForm cloneAdvForm = form();
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result cloneAndSaveAdventure(final String originalAdvId) {
         // The Dynamic Form has the checkboxes
         // indicating which components of the

@@ -10,7 +10,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
 import models.auth.SecuredAdminUser;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.category.Category;
 import models.dao.inspiration.InspirationTipDAO;
 import models.dao.category.CategoryDAO;
@@ -118,7 +118,7 @@ public class InspirationController extends Controller {
                 new InspirationDAO().all()));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result createAdventure(String insId) {
         return ok(indexNew.render(new InspirationDAO().get(insId)));
     }

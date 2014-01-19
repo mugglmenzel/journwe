@@ -7,7 +7,7 @@ import com.journwe.productadvertising.webservice.client.Items;
 import com.journwe.productadvertising.webservice.client.OperationRequest;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.todo.EStatus;
-import models.auth.SecuredBetaUser;
+import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.adventure.TodoDAO;
@@ -40,7 +40,7 @@ import static play.data.Form.form;
  */
 public class AdventureTodoController extends Controller {
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getTodos(String advId, String userId) {
         if (!JournweAuthorization.canViewTodoItem(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -49,7 +49,7 @@ public class AdventureTodoController extends Controller {
         //return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result getTodoAffiliateItems(String advId) {
         String id = form().bindFromRequest().get("id");
         models.adventure.todo.Todo todo = new TodoDAO().get(id, advId);
@@ -90,7 +90,7 @@ public class AdventureTodoController extends Controller {
         return ok(Json.toJson(productItems));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result addTodo(String id) {
         if (!JournweAuthorization.canEditTodoItem(id))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -109,7 +109,7 @@ public class AdventureTodoController extends Controller {
         return ok(Json.toJson(todo));
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result setTodo(String advId, String tid) {
         if (!JournweAuthorization.canEditTodoItem(advId))
             return AuthorizationMessage.notAuthorizedResponse();
@@ -126,7 +126,7 @@ public class AdventureTodoController extends Controller {
         return ok(Json.toJson(todo)); //TODO: Error handling
     }
 
-    @Security.Authenticated(SecuredBetaUser.class)
+    @Security.Authenticated(SecuredUser.class)
     public static Result deleteTodo(String advId, String tid) {
         if (!JournweAuthorization.canEditTodoItem(advId))
             return AuthorizationMessage.notAuthorizedResponse();

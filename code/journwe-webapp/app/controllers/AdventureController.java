@@ -372,7 +372,7 @@ public class AdventureController extends Controller {
         DynamicForm data = form().bindFromRequest();
         String catId = data.get("categoryId");
 
-        Category result = null;
+        Category result = new Category();
 
         // TODO
 //        AdventureCategory old = new AdventureToCategoryDAO().getCategory(advId);

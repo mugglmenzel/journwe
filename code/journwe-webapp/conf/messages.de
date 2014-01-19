@@ -381,7 +381,7 @@ playauthenticate.link.account.true=Ja, dieses Konto mit meinem Benutzer verknüp
 playauthenticate.link.account.false=Nein, abmelden und einen neuen Benutzer mit diesem Konto erstellen
 playauthenticate.link.account.ok=OK
 
-# play-authenticate: Signup folder translations
+# play-authenticate: SignupController folder translations
 
 playauthenticate.verify.email.title=E-Mail-Adresse bestätigen
 playauthenticate.verify.email.requirement=Du musst deine E-Mail-Adresse bestätigen, bevor du PlayAuthenticate nutzen kannst.

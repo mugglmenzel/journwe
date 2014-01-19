@@ -363,7 +363,7 @@ playauthenticate.link.account.true=Yes, link this account
 playauthenticate.link.account.false=No, log out and create a new user with this account
 playauthenticate.link.account.ok=OK
 
-# play-authenticate: Signup folder translations
+# play-authenticate: SignupController folder translations
 
 playauthenticate.verify.email.title=Verify your e-mail
 playauthenticate.verify.email.requirement=Before you can use PlayAuthenticate, you first need to verify your e-mail address.
