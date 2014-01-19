@@ -285,18 +285,17 @@ public class ManyToManyDAO<M, N> {
         String hashIdName = "";
         String rangeIdName = "";
         String relationTableName = "";
-        String objectIdName = "";
+        if(lastKey==null)
+            lastKey = "";
         if (returnM) {
             hashIdName = nHashIdName;
             rangeIdName = mHashIdName;
             relationTableName = nToMTableName;
-            objectIdName = dynamoDbMapperHelper.getPrimaryHashKeyName(clazzM);
         } else {
             // if we want to return N-type objects, we must reverse every input parameter
             hashIdName = mHashIdName;
             rangeIdName = nHashIdName;
             relationTableName = mToNTableName;
-            objectIdName = dynamoDbMapperHelper.getPrimaryHashKeyName(clazzN);
         }
         // Done preparing the query input parameters.
 
@@ -319,7 +318,8 @@ public class ManyToManyDAO<M, N> {
         // Set the limit.
         if (limit > 0)
             queryRequest.setLimit(limit);
-        // Query now
+        // Query now  TODO
+        Logger.info("Table "+relationTableName+" with hash key "+hashKey+" and with range key "+lastKey);
         QueryResult result = dynamoDB.query(queryRequest);
         return result;
     }
@@ -338,8 +338,9 @@ public class ManyToManyDAO<M, N> {
         //ManyToManyDAO<Adventure, Category> mToN = new ManyToManyDAO<Adventure, Category>(Adventure.class, Category.class);
         //ManyToManyDAO<Adventure, User> mToN = new ManyToManyDAO<Adventure, User>(Adventure.class, User.class);
         //ManyToManyDAO<Category, Inspiration> mToN = new ManyToManyDAO<Category, Inspiration>(Category.class, Inspiration.class);
+        ManyToManyDAO<Adventure, Inspiration> mToN = new ManyToManyDAO<Adventure, Inspiration>(Adventure.class, Inspiration.class);
         // Create Adventure-Category Many-To-Many Tables
-        //mToN.createRelationshipTables();
+        mToN.createRelationshipTables();
 
 //        Adventure adv1 = new Adventure();
 //        Adventure adv2 = new Adventure();

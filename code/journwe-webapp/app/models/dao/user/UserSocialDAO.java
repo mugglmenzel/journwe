@@ -34,6 +34,8 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
         String socialId = "";
         String provider = "";
         // should have found only one result
+        if(items.size()>1)
+            Logger.warn("In UserSocialDAO.findByUserId(String userId) the query returned more than one item: items.size() = "+items.size());
         while (itemsIter.hasNext()) {
             Map<String, AttributeValue> currentItem =
                     itemsIter.next();

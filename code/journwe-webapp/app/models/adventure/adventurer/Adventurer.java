@@ -1,9 +1,6 @@
 package models.adventure.adventurer;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMarshalling;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.adventure.IAdventureComponentWithUser;
 import models.dao.helpers.EnumMarshaller;
 
@@ -19,6 +16,8 @@ public class Adventurer implements IAdventureComponentWithUser {
 
     private String adventureId;
 
+    private String userIdRangeKey;
+
     private String userId;
 
     private EAdventurerParticipation participationStatus = EAdventurerParticipation.APPLICANT;
@@ -33,6 +32,18 @@ public class Adventurer implements IAdventureComponentWithUser {
     }
 
     @DynamoDBRangeKey
+    public String getUserIdRangeKey() {
+        return userIdRangeKey;
+    }
+
+    public void setUserIdRangeKey(String userIdRangeKey) {
+        this.userIdRangeKey = userIdRangeKey;
+    }
+
+    // We need the GSI to check if a user has already created adventures
+    // to identify new users who need more guidance through the website
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName =
+            "userId-index")
     public String getUserId() {
         return userId;
     }

@@ -14,6 +14,7 @@ import models.dao.common.CommonEntityDAO;
 import models.dao.manytomany.ManyToManyListQuery;
 import models.inspiration.Inspiration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdventureDAO extends CommonEntityDAO<Adventure> {
@@ -36,6 +37,8 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
     }
 
     public List<Adventure> listPublicAdventuresByInspiration(String inspirationId, String lastKey, int limit) {
+        if(inspirationId==null)
+            return new ArrayList<Adventure>();
         return adventureToInspirationListQuery.listM(inspirationId,lastKey,limit);
     }
 

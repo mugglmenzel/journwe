@@ -49,7 +49,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             result = Cache.getOrElse("user.social." + identity.getProvider() + "." + identity.getId(), new Callable<User>() {
                 @Override
                 public User call() throws Exception {
-                    UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
+                    UserSocial social = new UserSocialDAO().get(identity.getId(),identity.getProvider());
                     return social != null ? new UserDAO().get(social.getUserId()) : null;
                 }
             }, 3600);
@@ -262,6 +262,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             // verified within the application as a security breach there might
             // break your security as well!
             email.setEmail(identity.getEmail());
+            email.setEmailRangeKey(identity.getEmail());
             email.setValidated(false);
             email.setPrimary(true);
             new UserEmailDAO().save(email);

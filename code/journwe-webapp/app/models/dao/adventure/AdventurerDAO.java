@@ -1,11 +1,15 @@
 package models.dao.adventure;
 
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import models.adventure.Adventure;
 import models.dao.common.AdventureComponentDAO;
 import models.adventure.adventurer.Adventurer;
 import models.dao.manytomany.ManyToManyCountQuery;
 import models.dao.manytomany.ManyToManyListQuery;
+import models.dao.queries.GSIQuery;
 import models.user.User;
+import play.Logger;
 
 import java.util.*;
 
@@ -27,10 +31,20 @@ public class AdventurerDAO extends AdventureComponentDAO<Adventurer> {
         adventureToUserCountQuery = new ManyToManyCountQuery<Adventure, User>(Adventure.class,User.class);
     }
 
+    /**
+     * Did the user already create or join an adventure?
+     *
+     * @param userId
+     * @return
+     */
     public boolean isAdventurer(String userId) {
-        Adventurer hashKeyObject = new Adventurer();
-        hashKeyObject.setAdventureId(userId);
-        return pm.load(clazz,hashKeyObject) != null;
+        GSIQuery q = new GSIQuery("journwe-adventurer","userId-index","userId");
+        QueryResult res = q.query(userId);
+        List<Map<String, AttributeValue>> items = res.getItems();
+        Iterator<Map<String, AttributeValue>> itemsIter =
+                items.iterator();
+        // found an adventurer associated with this user?
+        return (items.size()>0);
     }
 
     public List<Adventure> listAdventuresByUser(String userId, String lastAdventureKey, int limit) {

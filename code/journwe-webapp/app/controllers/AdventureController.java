@@ -159,6 +159,7 @@ public class AdventureController extends Controller {
         // ADVENTURER
         Adventurer advr = new Adventurer();
         advr.setAdventureId(adv.getId());
+        advr.setUserIdRangeKey(usr.getId());
         advr.setUserId(usr.getId());
         advr.setParticipationStatus(EAdventurerParticipation.GOING);
         new AdventurerDAO().save(advr);
