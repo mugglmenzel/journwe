@@ -60,7 +60,7 @@ public class UserController extends Controller {
     public static Result getNotifications() {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
-        int count = new Integer(data.get("userCountByAdventure")).intValue();
+        int count = new Integer(data.get("count")).intValue();
 
         Logger.debug("getting notifications for " + lastId + "," + count);
 
