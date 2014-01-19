@@ -60,15 +60,25 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 		String[] tables = new String[] {};
 		if (whichTables.equals("all")) {
 			tables = new String[] { "journwe-adventure",
-					"journwe-adventurehash", "journwe-adventurepart",
-					"journwe-adventurer", "journwe-adventureshortname",
+					"journwe-adventurer", "journwe-adventure-authorization",
+					"journwe-adventure-reminder", "journwe-adventure-to-journwe-category",
+					"journwe-adventure-to-journwe-user",
+					"journwe-category-hierarchy", "journwe-category-hierarchy-count",
+					"journwe-category-to-journwe-adventure",
+					"journwe-category-to-journwe-inspiration",
+					"journwe-inspiration-tip", "journwe-james-adventuremail",
+					"journwe-notification",
+					"journwe-user-to-journwe-adventure",
+					"journwe-notification-digestqueue-item", 
 					"journwe-category", "journwe-comment",
 					"journwe-commentthread", "journwe-file",
 					"journwe-inspiration", "journwe-placeoption",
 					"journwe-placepreference", "journwe-subscriber",
 					"journwe-timeoption", "journwe-timepreference",
 					"journwe-todo", "journwe-user", "journwe-useremail",
-					"journwe-usersocial" };
+					"journwe-james-forwardmailto", 
+					"journwe-usersocial",
+					"journwe-usertokenaction"};
 		} else {
 			tables = new String[] { whichTables };
 		}
@@ -90,7 +100,7 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 					|| tableName.equals("journwe-user")) {
 				keyName = "id";
 			}
-			if (tableName.equals("journwe-adventurepart")
+			if (tableName.equals("journwe-adventure-authorization")
 					|| tableName.equals("journwe-adventurer")
 					|| tableName.equals("journwe-commentthread")
 					|| tableName.equals("journwe-file")
@@ -101,6 +111,63 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 			if (tableName.equals("journwe-adventureshortname")) {
 				keyName = "shortname";
 			}
+			if (tableName.equals("journwe-adventure-reminder")) {
+				keyName = "type";
+			}
+			if (tableName.equals("journwe-adventure-to-journwe-category")) {
+				keyName = "journwe-adventure-id";
+				rangeKeyName = "journwe-category-id";
+			}
+			if (tableName.equals("journwe-adventure-to-journwe-user")) {
+				keyName = "journwe-adventure-id";
+				rangeKeyName = "journwe-user-id";
+			}
+			if (tableName.equals("journwe-category-hierarchy")) {
+				keyName = "superCategoryId";
+				rangeKeyName = "subCategoryId";
+			}
+			if (tableName.equals("journwe-category-hierarchy-count")) {
+				keyName = "categoryId";
+			}
+			if (tableName.equals("journwe-category-to-journwe-adventure")) {
+				keyName = "journwe-category-id";
+				rangeKeyName = "journwe-adventure-id";
+			}
+			if (tableName.equals("journwe-category-to-journwe-inspiration")) {
+				keyName = "journwe-category-id";
+				rangeKeyName = "journwe-inspiration-id";
+			}
+			if (tableName.equals("journwe-inspiration-tip")) {
+				keyName = "inspirationId";
+				rangeKeyName = "created";
+			}
+			if (tableName.equals("journwe-inspiration-to-journwe-category")) {
+				keyName = "journwe-inspiration-id";
+				rangeKeyName = "journwe-category-id";
+			}
+			if (tableName.equals("journwe-james-adventuremail")) {
+				keyName = "adventureId";
+				rangeKeyName = "timestamp";
+			}
+			if (tableName.equals("journwe-james-forwardmailto")) {
+				keyName = "adventureId";
+			}
+			if (tableName.equals("journwe-notification")) {
+				keyName = "userId";
+				rangeKeyName = "created";
+			}
+			if (tableName.equals("journwe-notification-digestqueue-item")) {
+				keyName = "digestQueueName";
+				rangeKeyName = "userId";
+			}
+			if (tableName.equals("journwe-user-to-journwe-adventure")) {
+				keyName = "journwe-user-to-journwe-adventure";
+				rangeKeyName = "journwe-adventure-id";
+			}
+			if (tableName.equals("journwe-usertokenaction")) {
+				keyName = "type";
+				rangeKeyName = "token";
+			}
 			if (tableName.equals("journwe-comment")) {
 				keyName = "threadId";
 				rangeKeyName = "timestamp";
@@ -108,13 +175,17 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 			if (tableName.equals("journwe-commentthread")) {
 				rangeKeyName = "topicType";
 			}
+			if (tableName.equals("journwe-adventure-reminder")) {
+				rangeKeyName = "adventureId";
+			}			
 			if (tableName.equals("journwe-file")) {
 				rangeKeyName = "fileName";
 			}
-			if (tableName.equals("journwe-adventurer")) {
+			if (tableName.equals("journwe-adventurer") || 
+					tableName.equals("journwe-adventure-authorization")) {
 				rangeKeyName = "userId";
 			}
-			if (tableName.equals("journwe-placeoption")) {
+			if (tableName.equals("journwe-placeoption") ) {
 				rangeKeyName = "placeId";
 			}
 			if (tableName.equals("journwe-placepreference")) {
@@ -147,7 +218,7 @@ public class CleanJournweDBCommand extends Command<JournweCLIContext> {
 				// Get items in table
 				ScanRequest scanRequest = new ScanRequest(tableName);
 				ScanResult scanResult = dynamoDB.scan(scanRequest);
-
+				System.out.println("Preparing delete items in table "+tableName);
 				for (int i = 0; i < scanResult.getItems().size(); i++) {
 					HashMap<String, AttributeValue> item = (HashMap<String, AttributeValue>) scanResult
 							.getItems().get(i);
