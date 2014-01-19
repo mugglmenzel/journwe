@@ -34,7 +34,7 @@ require(['utils'], function(utils){
               };
     })();
 
-    var timer, top = 140;
+    var timer, top = 130;
     $(window).scroll(function(event){
         cancelAnimationFrame(timer);
         timer = requestAnimFrame(function(){
