@@ -101,10 +101,10 @@
         <td class="text-center hidden">{%=o.voteCount.YES%}</td>
         <td class="text-center hidden">{%=o.voteCount.MAYBE%}</td>
         <td class="text-center hidden">{%=o.voteCount.NO%}</td>
-        <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
+        <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=o.votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
         }
         @if(JournweAuthorization.canEditPlaces(adv.getId)) {
-        <td class="text-center"><button onclick="deletePlace('{%=o.placeId%}', event);" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+        <td class="text-center"><button onclick="deletePlace('{%=o.placeId%}', event);" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></td>
         }
     </tr>
 </script>
