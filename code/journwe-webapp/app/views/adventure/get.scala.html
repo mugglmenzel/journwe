@@ -52,19 +52,6 @@
         <div class="toolbar">
             @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
                 <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
-                <script>
-                    $(function(){
-                        $('.btn-participate').click(function(){
-                            var el = $(this),
-                                html = el.html();
-
-                            el.css({width:el.width()+"px"})
-                                .html('<i class="fa fa-spin icon-journwe"></i>');
-
-                            return true;
-                        });
-                    });
-                </script>
             } else {
                 <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="fa fa-unlink"></i> @Messages("adventure.general.button.leave")</a>
             }
@@ -73,55 +60,6 @@
 
             <input id="adventure-prime-image-file-input" type="file" class="hide"/>
             <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="fa fa-upload"></i> @Messages("adventure.files.imageUpload")</a>
-            <script type="text/javascript">
-                jQuery.event.props.push('dataTransfer');
-
-                $('#adventure-prime-image').on('drop', function (event){processDroppedPrimeImage(event);});
-
-                $('#adventure-prime-image-file-input').change(function () {
-                    var inputFile = $('#adventure-prime-image-file-input'),
-                        files = inputFile[0].files;
-                    if(files) {
-                        uploadPrimeImage(files);
-                        inputFile.val('');
-                    }
-                });
-
-                function processDroppedPrimeImage(event) {
-                    event.stopPropagation();
-                    event.preventDefault();
-
-                    uploadPrimeImage(event.target.files || event.dataTransfer.files);
-
-                    return false;
-                }
-
-                function uploadPrimeImage(files) {
-                    var btn = $('#adventure-prime-image-upload-button'),
-                        btnOriginal = btn.html();
-                    btn.css({width:btn.css('width')})
-                        .html('<i class="fa fa-spin icon-journwe"></i>');
-
-                    var data = new FormData();
-                    data.append(files[0].name, files[0])
-
-                    $.ajax({
-                        url: '@routes.AdventureController.updateImage(adv.getId)',
-                        data: data,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        type: 'POST',
-                        success:  function (result) {
-                            $('#adventure-prime-image').css('background', 'url(\'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime() + '\')');
-                            btn.css({width:""})
-                                .html(btnOriginal);
-                        }
-                    });
-
-                }
-
-            </script>
         </div>
     </div>
 
@@ -226,19 +164,6 @@
     </div>
     <hr/>
     }
-
-@*
-    <hr/>
-    <div class="jrn-container">
-        <h2 id="messages"><i class="fa fa-envelope icon-for-adventure-title"></i> @Messages("adventure.getScala.messages.title")</h2>
-        <div class="span11">
-            <p class="lead">@Messages("adventure.getScala.messages.subtitle")</p>
-
-
-        </div>
-        @views.html.comment.widget_comment.render(adv, "messages")
-    </div>
-*@
 
     @if(JournweAuthorization.canViewAdventureTodoWidget(adv.getId)) {
     <div class="jrn-container">

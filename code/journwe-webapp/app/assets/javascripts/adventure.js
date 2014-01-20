@@ -20,9 +20,73 @@ require([
 
     var initialize = function () {
         initializeMap();
+
+        loadEmails();
+
         initializePlaces();
     };
 
+
+    var processDroppedPrimeImage = function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        uploadPrimeImage(event.target.files || event.dataTransfer.files);
+
+        return false;
+    };
+
+    var uploadPrimeImage = function (files) {
+        var btn = $('#adventure-prime-image-upload-button'),
+            btnOriginal = btn.html();
+        btn.css({width: btn.css('width')})
+            .html('<i class="fa fa-spin icon-journwe"></i>');
+
+        var data = new FormData();
+        data.append(files[0].name, files[0])
+
+        routes.controllers.AdventureController.updateImage(config.id).ajax({
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                $('#adventure-prime-image').css('background', 'url(\'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime() + '\')');
+                btn.css({width: ""})
+                    .html(btnOriginal);
+            }
+        });
+
+    };
+
+
+    var loadEmails = function () {
+        $('#emails-button-refresh i').addClass("fa-spin");
+
+        routes.controllers.AdventureEmailController.listEmails(config.id).ajax({success: function (emails) {
+            $('#emails-list tbody').empty();
+
+            for (var i in emails) {
+                renderEmail(emails[i]);
+            }
+            if (emails.length) {
+                $('#emails-list').show();
+            } else {
+                $('#emails-list').hide();
+            }
+
+            $('#emails-button-refresh i').removeClass("fa-spin");
+        }});
+    };
+
+
+    var renderEmail = function (data, replace) {
+        if (replace)
+            replace.replaceWith(tmpl('emails-template', data)).fadeIn();
+        else
+            $('#emails-list tbody').append(tmpl('emails-template', data));
+
+    };
 
     var initializePlaces = function () {
         routes.controllers.AdventurePlaceController.getPlaces(config.id).ajax({success: function (result) {
@@ -75,8 +139,8 @@ require([
 
     var renderPlaceOption = function (data, replace) {
         var place = $(tmpl('place-template', $.extend({
-                votePlaceLabelCSSClassMap: votePlaceLabelCSSClassMap
-            }, data)));
+            votePlaceLabelCSSClassMap: votePlaceLabelCSSClassMap
+        }, data)));
 
         if (replace)
             replace.replaceWith(place).fadeIn();
@@ -179,6 +243,31 @@ require([
     initialize();
 
     utils.on({
+
+        'click .btn-participate': function () {
+            var el = $(this),
+                html = el.html();
+
+            el.css({width: el.width() + "px"})
+                .html('<i class="fa fa-spin icon-journwe"></i>');
+
+            return true;
+        },
+        'drop #adventure-prime-image': function (event) {
+            processDroppedPrimeImage(event);
+        },
+        'change #adventure-prime-image-file-input': function () {
+            var inputFile = $('#adventure-prime-image-file-input'),
+                files = inputFile[0].files;
+            if (files) {
+                uploadPrimeImage(files);
+                inputFile.val('');
+            }
+        },
+
+        'click #emails-button-refresh': function () {
+            loadEmails();
+        },
 
         'keydown #place-add-input': function (e) {
             if (e.keyCode == 13) {

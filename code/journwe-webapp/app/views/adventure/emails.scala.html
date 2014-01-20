@@ -16,13 +16,6 @@
         </tr>
     </script>
 
-
- <!--
-    <div class="row">
-        <div class="pull-left files-loading stash"><i class="fa fa-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
-    </div>
--->
-
     <table id="emails-list" class="table table-striped table-hover table-condensed stash">
         <thead>
             <tr>
@@ -35,49 +28,3 @@
 
         </tbody>
     </table>
-
-
-
-
-
-<script type="text/javascript">
-    $(document).ready(function (){
-        loadEmails();
-
-        $('#emails-button-refresh' ).click(function (){loadEmails();});
-
-    });
-
-
-
-    function loadEmails() {
-        //$('.files-loading').show();
-        $('#emails-button-refresh i').addClass("fa-spin");
-
-        $.get('@routes.AdventureEmailController.listEmails(adv.getId)', function (emails) {
-            $('#emails-list tbody').empty();
-
-            for (var i in emails) {
-                renderEmail(emails[i]);
-            }
-            if (emails.length){
-                $('#emails-list').show();
-            } else {
-                $('#emails-list').hide();
-            }
-
-            //$('.files-loading').hide();
-            $('#emails-button-refresh i').removeClass("fa-spin");
-        });
-    }
-
-
-    function renderEmail(data, replace) {
-        if(replace)
-            replace.replaceWith(tmpl('emails-template', data)).fadeIn();
-        else
-            $('#emails-list tbody').append(tmpl('emails-template', data));
-
-    }
-
-</script>

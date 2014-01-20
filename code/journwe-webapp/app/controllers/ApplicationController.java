@@ -388,10 +388,12 @@ public class ApplicationController extends Controller {
         response().setContentType("text/javascript");
         return ok("define(function(){" + // Make it AMD compatible
                 Routes.javascriptRouter("routes",
+                        routes.javascript.AdventureController.updateImage(),
                         routes.javascript.AdventureController.updatePlaceVoteDeadline(),
                         routes.javascript.AdventureController.updateTimeVoteDeadline(),
                         routes.javascript.AdventureController.updatePlaceVoteOpen(),
                         routes.javascript.AdventureController.placeVoteOpen(),
+                        routes.javascript.AdventureEmailController.listEmails(),
                         routes.javascript.AdventurePlaceController.getPlaces(),
                         routes.javascript.AdventurePlaceController.getFavoritePlace(),
                         routes.javascript.AdventurePlaceController.setFavoritePlace(),
