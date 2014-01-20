@@ -2,8 +2,9 @@ require([
     "main",
     "utils",
     "routes",
+    "config",
     "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false!callback"
-], function (main, utils, routes) {
+], function (main, utils, routes, config) {
 
 
     var now = new Date(),
@@ -24,7 +25,7 @@ require([
 
 
     var initializePlaces = function () {
-        routes.controllers.AdventurePlaceController.getPlaces(utils.id()).ajax({success: function (result) {
+        routes.controllers.AdventurePlaceController.getPlaces(config.id).ajax({success: function (result) {
             $('#places-list tbody').empty();
             for (var id in result)
                 renderPlaceOption(result[id])
@@ -38,7 +39,7 @@ require([
 
             updateFavorite();
 
-            routes.controllers.AdventureController.placeVoteOpen(utils.id()).ajax({success: function (result) {
+            routes.controllers.AdventureController.placeVoteOpen(config.id).ajax({success: function (result) {
                 updatePlaceVoteOpen(result);
             }});
         }});
@@ -73,7 +74,9 @@ require([
     };
 
     var renderPlaceOption = function (data, replace) {
-        var place = $(tmpl('place-template', data));
+        var place = $(tmpl('place-template', $.extend({
+                votePlaceLabelCSSClassMap: votePlaceLabelCSSClassMap
+            }, data)));
 
         if (replace)
             replace.replaceWith(place).fadeIn();
@@ -114,7 +117,7 @@ require([
         $('#places-favorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
         $('#places-autofavorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
-        routes.controllers.AdventurePlaceController.getFavoritePlace(utils.id()).ajax({success: function (result) {
+        routes.controllers.AdventurePlaceController.getFavoritePlace(config.id).ajax({success: function (result) {
             favoritePlace = result.favorite;
             if (result.favorite != null) $('#places-favorite-place-name').html(result.favorite.address);
             if (result.autoFavorite != null)$('#places-autofavorite-place-name').html(result.autoFavorite.address);
@@ -130,7 +133,7 @@ require([
         $('#placeoption-item-' + optId + ' .dropdown-toggle')
             .html('<i class="fa fa-spin icon-journwe"></i>');
 
-        routes.controllers.AdventurePlaceController.voteParam(utils.id()).ajax({data: {placeId: optId, vote: vote, voteGravity: voteGrav}, success: function (res) {
+        routes.controllers.AdventurePlaceController.voteParam(config.id).ajax({data: {placeId: optId, vote: vote, voteGravity: voteGrav}, success: function (res) {
             renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
             updateFavorite();
             $('#placeoption-item-' + res.placeId + ' .dropdown-toggle')
@@ -141,7 +144,7 @@ require([
 
     var deletePlace = function (optId, event) {
         $(event.target).html('<i class="fa fa-spin icon-journwe"></i>');
-        routes.controllers.AdventurePlaceController.deletePlace(utils.id(), optId).ajax({success: function () {
+        routes.controllers.AdventurePlaceController.deletePlace(config.id, optId).ajax({success: function () {
             removeMapMarker(optId);
             $('#placeoption-item-' + optId).fadeOut(function () {
                 $('#placeoption-item-' + optId).remove();
@@ -157,7 +160,7 @@ require([
         btn.datepicker("hide");
 
         // Do ajax call
-        route(utils.id()).ajax({
+        route(config.id).ajax({
             data: {voteDeadline: date.getTime()},
             success: function (data) {
 
@@ -203,7 +206,7 @@ require([
             if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
                 $(this).html('<i class="fa fa-spin icon-journwe"></i>');
                 new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-                    routes.controllers.AdventurePlaceController.addPlace(utils.id()).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
+                    routes.controllers.AdventurePlaceController.addPlace(config.id).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
                         renderPlaceOption(res);
                         $('#place-add-input').val("");
                         $('#place-add-comment-input').val("");
@@ -218,7 +221,7 @@ require([
             }
         },
         'change #places-voting-active-switch': function () {
-            routes.controllers.AdventureController.updatePlaceVoteOpen(utils.id()).ajax({data: {voteOpen: $('#places-voting-active-switch').prop('checked')}, success: updatePlaceVoteOpen});
+            routes.controllers.AdventureController.updatePlaceVoteOpen(config.id).ajax({data: {voteOpen: $('#places-voting-active-switch').prop('checked')}, success: updatePlaceVoteOpen});
         },
         // Click on navigation to scroll to it
         'click .nav-adventure a': function () {
@@ -260,7 +263,7 @@ require([
             el.find('i').attr("class", "fa fa-spin icon-journwe");
             $('icon-favorite-places').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
-            routes.controllers.AdventurePlaceController.setFavoritePlace(utils.id()).ajax({
+            routes.controllers.AdventurePlaceController.setFavoritePlace(config.id).ajax({
                 data: {favoritePlaceId: placeID},
                 success: function (data) {
                     favoritePlace = data;
@@ -283,7 +286,7 @@ require([
 
             btn.find('i').attr("class", "fa fa-spin icon-journwe");
 
-            routes.controllers.AdventureController.updatePlaceVoteOpen(utils.id()).ajax({
+            routes.controllers.AdventureController.updatePlaceVoteOpen(config.id).ajax({
                 data: {voteOpen: !open},
                 success: function (data) {
                     btn.find('i').attr("class", "fa fa-ok");
