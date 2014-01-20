@@ -42,7 +42,7 @@
         });
 
         function loadPublicAdventures(lastId, clear) {
-            $('#adventures-public-button-refresh i').addClass('fa fa-spin');
+            $('#adventures-public-button-refresh i').addClass('fa-spin');
             $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
             $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
@@ -61,7 +61,7 @@
 
                 }
                 $('#adventures-public-load-more-button').html('Show More');
-                $('#adventures-public-button-refresh i').removeClass('fa fa-spin');
+                $('#adventures-public-button-refresh i').removeClass('fa-spin');
             });
         }
     </script>

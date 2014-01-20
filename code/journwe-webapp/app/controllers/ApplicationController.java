@@ -121,7 +121,7 @@ public class ApplicationController extends Controller {
 
         DynamicForm data = form().bindFromRequest();
         final String lastId = data.get("lastId");
-        final int count = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : 10;
+        final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
 
         try {
             Callable<String> resultsCallable = new Callable<String>() {
@@ -161,7 +161,7 @@ public class ApplicationController extends Controller {
     public static Result getPublicAdventures() {
         DynamicForm data = form().bindFromRequest();
         String lastId = data.get("lastId");
-        int count = new Integer(data.get("userCountByAdventure")).intValue();
+        int count = new Integer(data.get("count")).intValue();
         String inspirationId = data.get("inspirationId");
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
@@ -188,7 +188,7 @@ public class ApplicationController extends Controller {
         final String lastId = data.get("lastId");
         int countParam = 10;
         try {
-            countParam = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : countParam;
+            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : countParam;
         } catch (Exception e) {
             return badRequest("Count is not a number.");
         }
@@ -248,7 +248,7 @@ public class ApplicationController extends Controller {
         final String lastId = data.get("lastId");
         int countParam = 10;
         try {
-            countParam = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : 10;
+            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
         } catch (Exception e) {
             return badRequest("Count is not a number.");
         }
