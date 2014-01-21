@@ -16,6 +16,7 @@
                     <ul class="nav nav-pills nav-stacked">
                         <li @if(active == "home"){class="active"}><a href="@html.routes.ApplicationController.index">Home</a></li>
                         <li @if(active == "about"){class="active"}><a href="@html.routes.ApplicationController.about">About</a></li>
+                        <li @if(active == "team"){class="active"}><a href="#team">Team</a></li>
                         <li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
                         <li @if(active == "imprint"){class="active"}><a href="@html.routes.ApplicationController.imprint">Imprint</a> </li>
                         @currentAuth() {auth => @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){
