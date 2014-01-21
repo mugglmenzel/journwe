@@ -392,13 +392,26 @@ public class ApplicationController extends Controller {
                         routes.javascript.AdventureController.updatePlaceVoteDeadline(),
                         routes.javascript.AdventureController.updateTimeVoteDeadline(),
                         routes.javascript.AdventureController.updatePlaceVoteOpen(),
+                        routes.javascript.AdventureController.updateTimeVoteOpen(),
                         routes.javascript.AdventureController.placeVoteOpen(),
                         routes.javascript.AdventureEmailController.listEmails(),
                         routes.javascript.AdventurePlaceController.getPlaces(),
                         routes.javascript.AdventurePlaceController.getFavoritePlace(),
                         routes.javascript.AdventurePlaceController.setFavoritePlace(),
+                        routes.javascript.AdventurePlaceController.addPlace(),
                         routes.javascript.AdventurePlaceController.voteParam(),
-                        routes.javascript.AdventurePlaceController.deletePlace()
+                        routes.javascript.AdventurePlaceController.deletePlace(),
+                        routes.javascript.AdventureTimeController.getTimes(),
+                        routes.javascript.AdventureTimeController.setFavoriteTime(),
+                        routes.javascript.AdventureTimeController.addTime(),
+                        routes.javascript.AdventureTimeController.vote(),
+                        routes.javascript.AdventureTimeController.deleteTime(),
+                        routes.javascript.AdventureTodoController.getTodos(),
+                        routes.javascript.AdventureTodoController.addTodo(),
+                        routes.javascript.AdventureTodoController.setTodo(),
+                        routes.javascript.AdventureTodoController.deleteTodo(),
+                        routes.javascript.AdventureTodoController.getTodoAffiliateItems()
+
                 ) + ";; return routes;});"
         );
     }

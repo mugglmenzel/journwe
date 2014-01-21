@@ -71,8 +71,8 @@
 }
 
 <script type="text/x-tmpl" id="place-template">
-    <tr id="placeoption-item-{%=o.placeId%}">
-        <td><button class="btn btn-favorit btn-default {%=o.favorite?'btn-success':''%}" data-placeid="{%=o.placeId%}"><i class="fa fa-star"></i></button></td>
+    <tr id="placeoption-item-{%=o.placeId%}" data-placeid="{%=o.placeId%}">
+        <td><button class="btn btn-favorite-place btn-default {%=o.favorite?'btn-success':''%}"><i class="fa fa-star"></i></button></td>
         <td><em>{%=o.address%}</em></td>
         @if(JournweAuthorization.canVoteForPlaces(adv.getId)) {
         <td>
@@ -104,7 +104,7 @@
         <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=o.votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
         }
         @if(JournweAuthorization.canEditPlaces(adv.getId)) {
-        <td class="text-center"><button onclick="deletePlace('{%=o.placeId%}', event);" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></td>
+        <td class="text-center"><button class="btn btn-delete-place btn-danger"><i class="fa fa-trash-o"></i></button></td>
         }
     </tr>
 </script>

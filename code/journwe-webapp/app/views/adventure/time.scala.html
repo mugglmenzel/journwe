@@ -11,7 +11,7 @@
 
 <div class="clearfix">
     <div id="times-favorite-time" style="font-size: 20px; margin-bottom: 10px;" class="pull-left">
-        <i id="times-favorite-time-icon" class="fa fa-spin icon-journwe"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name"></span></em>
+        <i id="times-favorite-time-icon" class="fa fa-spin icon-journwe"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name">@Messages("adventure.general.nofavourite.placeholder")</span></em>
     </div>
 
     <div class="pull-right">
@@ -68,9 +68,9 @@
 }
 
     <script type="text/x-tmpl" id="time-template">
-        <tr id="timeoption-item-{%=o.timeId%}">
+        <tr id="timeoption-item-{%=o.timeId%}" data-timeid="{%=o.timeId%}">
             @if(JournweAuthorization.canEditFavoriteDateAndTime(adv.getId)) {
-            <td><button class="btn btn-default {%=o.favorite?'btn-success':''%}" onclick="setFavoriteTimeOption('{%=o.timeId%}', this)"><i class="fa fa-star"></i></button></td>
+            <td><button class="btn btn-favorite-time btn-default {%=o.favorite?'btn-success':''%}"><i class="fa fa-star"></i></button></td>
             }
 
             {% if (o.startDate == o.endDate){ %}
@@ -97,145 +97,30 @@
             <td class="text-center">{%=o.voteCount.YES%}</td>
             <td class="text-center">{%=o.voteCount.MAYBE%}</td>
             <td class="text-center">{%=o.voteCount.NO%}</td>
-            <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=voteTimeLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=o.voteAdventurers[i][j].split(/\s/)[0]%}</span> {% }} %}</td>
+            <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=o.voteTimeLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=o.voteAdventurers[i][j].split(/\s/)[0]%}</span> {% }} %}</td>
             }
             @if(JournweAuthorization.canEditDateAndTime(adv.getId)) {
-            <td class="text-center"><button onclick="deleteTime('{%=o.timeId%}', this);" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+            <td class="text-center"><button class="btn btn-delete-time btn-danger"><i class="fa fa-trash-o"></i></button></td>
             }
         </tr>
     </script>
 
     <script type="text/javascript">
 
-        function setFavoriteTimeOption(optionId, el) {
-            $('#times-list td:first-child .btn-success').removeClass('btn-success');
-            $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
-            $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
-            $.post('@routes.AdventureTimeController.setFavoriteTime(adv.getId)', {favoriteTimeId: optionId}, function (data) {
-                $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
-                $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
-                $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
-                $('#times-list td:first-child .btn-success').removeClass('btn-success');
-                $(el).addClass('btn-success');
-                $('.btn-close-time').show();
-            });
-        }
-
-        $('#time-add-button').on('click', function() {
-
-            var start = $('#time-add-form input[name=startDate]'),
-                end = $('#time-add-form input[name=endDate]');
-
-            if (!start.val()){ start.focus(); return false; }
-            if (!end.val()){ end = start; }
-
-            $(this).html('<i class="fa fa-spin icon-journwe"></i>');
-            $.post('@routes.AdventureTimeController.addTime(adv.getId)', { startDate: start.val(), endDate: end.val()}, function(res) {
-                renderTimeOption(res);
-                $('#time-add-form input[name=name]').val("");
-                $('#time-add-form input[name=startDate]').val("");
-                $('#time-add-form input[name=endDate]').val("");
-                $('#time-add-button').html('<i class="fa fa-plus"></i>');
-                $('#times-list').show();
-            });
-        });
-
-        $(document).ready(function (){
-            $("#time-add-input-start").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end" ).datepicker('setStartDate', e.date); $("#time-add-input-start").datepicker('hide');});
-            $("#time-add-input-end").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end").datepicker('hide');});
-
-            $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
-            $.get('@routes.AdventureTimeController.getTimes(adv.getId)', function (result) {
-                $('#times-favorite-time-name').html(result.favoriteTime != "" ? formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate) : "@Messages("adventure.general.nofavourite.placeholder")");
-                $('.btn-close-time').toggle(!!result.favoriteTime);
-
-                $('#times-list tbody').empty();
-                for(var id in result.times) {
-                    renderTimeOption(result.times[id])
-                }
-                if (result.times.length){
-                    $('#times-list').show();
-                } else {
-                    $('#times-list').hide();
-                }
-
-                $('.times-loading').hide();
-                $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
-
-                updateTimeVoteOpen(@adv.getTimeVoteOpen)
-            });
-        });
-
-        function renderTimeOption(data, replace) {
-        if(replace) {
-            replace.replaceWith(tmpl('time-template', data)).fadeIn();
-        } else {
-            var el;
-            if ("number" == typeof data.index && data.index >= 0){
-                el = $('#times-list tbody tr').get(data.index-1);
-            }
-
-            if (data.index === 0){
-                $('#times-list tbody').prepend(tmpl('time-template', data));
-            } else if (el){
-                $(el).after(tmpl('time-template', data));
-            } else {
-                $('#times-list tbody').append(tmpl('time-template', data));
-            }
-        }
 
 
-        $('#timeoption-status-icon-' + data.timeId).addClass(voteTimeIconCSSClassMap[data.vote]);
-        $('#timeoption-status-' + data.timeId).addClass(voteTimeButtonCSSClassMap[data.vote]);
-        }
 
 
-        var voteTimeIconCSSClassMap = {'YES': 'fa fa-thumbs-up', 'NO': 'fa fa-thumbs-down', 'MAYBE': 'fa fa-question'};
-        var voteTimeButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'};
-        var voteTimeLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
 
 
-        $('#times-voting-active-switch').on('change', function () {
-            $.post('@routes.AdventureController.updateTimeVoteOpen(adv.getId)', {voteOpen: $('#times-voting-active-switch').prop('checked')}, updateTimeVoteOpen);
-        });
-
-        function updateTimeVoteOpen(data) {
-
-            if(data) {
-            $('#times-list button').prop('disabled', false);
-            $('#time-add-form').fadeIn();
-            } else {
-            $('#times-list button').prop('disabled', true);
-            $('#time-add-form').fadeOut();
-            }
-
-        }
 
 
-        function voteTime(vote, optId) {
 
-            $('#timeoption-item-'+optId+' .dropdown-toggle')
-                .html('<i class="fa fa-spin icon-journwe"></i>');
-            $.ajax({
-            url: '@routes.AdventureTimeController.vote(adv.getId, "")' + optId,
-            data: {
-            vote: vote
-            },
-            type: 'PUT',
-            success: function(res) {
-                renderTimeOption(res, $('#timeoption-item-' + res.timeId));
-                $('#timeoption-item-'+res.timeId+' .dropdown-toggle')
-                    .html('<i class="fa fa-pencil"></i>');
-            }
-            });
-        }
 
-        function deleteTime(optId, el) {
-            $(el).html('<i class="fa fa-spin icon-journwe"></i>');
-            $.ajax({url: '@routes.AdventureTimeController.deleteTime(adv.getId, "")' + optId, type: 'DELETE', success: function () {
-                $('#timeoption-item-' + optId).fadeOut(function () {$('#timeoption-item-' + optId).remove();});
-            }
-            });
-        }
+
+
+
+
+
 
 </script>

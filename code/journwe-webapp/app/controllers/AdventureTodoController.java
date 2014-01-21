@@ -52,7 +52,7 @@ public class AdventureTodoController extends Controller {
     @Security.Authenticated(SecuredUser.class)
     public static Result getTodoAffiliateItems(String advId) {
         String id = form().bindFromRequest().get("id");
-        models.adventure.todo.Todo todo = new TodoDAO().get(id, advId);
+        models.adventure.todo.Todo todo = new TodoDAO().get(advId, id);
         Logger.debug("searching affiliate for " + todo.getTitle());
 
         ItemSearchRequest shared = new ItemSearchRequest();
@@ -116,7 +116,7 @@ public class AdventureTodoController extends Controller {
 
         DynamicForm requestData = form().bindFromRequest();
 
-        models.adventure.todo.Todo todo = new TodoDAO().get(tid, advId);
+        models.adventure.todo.Todo todo = new TodoDAO().get(advId, tid);
 
         String status = requestData.get("status").toUpperCase();
         todo.setStatus(EStatus.valueOf(status));
@@ -131,7 +131,7 @@ public class AdventureTodoController extends Controller {
         if (!JournweAuthorization.canEditTodoItem(advId))
             return AuthorizationMessage.notAuthorizedResponse();
 
-        new TodoDAO().delete(tid, advId);
+        new TodoDAO().delete(advId, tid);
 
         return ok(); //TODO: Error handling
     }
