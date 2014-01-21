@@ -41,32 +41,6 @@ public class FacebookController extends Controller {
         Logger.debug("My name: " + fb.getMyFacebookUser().getName());
         // Test #2 get my facebook user as json
         Logger.debug("My user as JSON: " + fb.getMyFacebookUserAsJson());
-//        // Test #3 get my friends
-//        Logger.debug("Some of my friends: ");
-//        List<User> friends = fb.getMyFriends();
-//        if(friends.size()>0) {
-//        	Logger.debug("Friend #1: "+friends.get(0));
-//            if(friends.size()>1)
-//            	Logger.debug("Friend #2: "+friends.get(1));
-//        } else {
-//        	Logger.debug("Wow, dude. You have no friends.");
-//        }
-//        // Test #4 publish something on my feed
-//        Logger.debug("I'm going to post something on your wall now... Muahahahaha!!1");
-//        fb.publishOnMyFeed("Here is a random number for you: "+(new Random()).nextDouble());
-//        // Test #5 create an event
-//        Logger.debug("I will create an awesome event now.");
-//        String eventId = fb.createNewEvent("Würstl grillen",
-//    			"Innen kalt, außen schwarz - so muss das Würstchen aussehen.", "Auf dem Dach, Englerstr 11, Karlsruhe.",
-//    			new Date(new Date().getTime()+100000000), new Date(new Date().getTime()+120000000));
-//        // Test #6 invite people to the event
-//        if(friends.size()>1) {
-//        	Logger.debug("Inviting Friend #1: "+friends.get(0)+" and Friend #2: "+friends.get(1)+" to event "+eventId);
-//        	List<String> theyAreInvited = new ArrayList<String>();
-//        	theyAreInvited.add(friends.get(0).getId());
-//        	theyAreInvited.add(friends.get(1).getId());
-//        	fb.inviteFriends(eventId, theyAreInvited);
-//        }
 //        // Test #7 post a link with caption, description and text message on the wall
         fb.publishLinkOnMyFeed("Message #1", "http://www.faz.net", "www.url-1.de", "Description #1", "http://www.thebushcraftstore.co.uk/ekmps/shops/bduimportsltd/images/swedish-forest-bushcraft-knife-choice-of-handles-on-sale--[2]-10816-p.jpg");
         // Test #8 Post only a link
