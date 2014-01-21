@@ -3,7 +3,7 @@ package models.auth;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import controllers.routes;
-import models.dao.UserDAO;
+import models.dao.user.UserDAO;
 import models.user.EUserRole;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -36,7 +36,7 @@ public class SecuredAdminUser extends Security.Authenticator {
 	@Override
 	public Result onUnauthorized(Context ctx) {
 		ctx.flash().put("error", "Nice try, but you need to be Admin!");
-		return redirect(routes.ApplicationController.index());
+		return redirect(controllers.html.routes.ApplicationController.index());
 	}
 
     public static boolean isAuthorized(AuthUser u){

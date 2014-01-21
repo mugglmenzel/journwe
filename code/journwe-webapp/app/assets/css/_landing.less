@@ -1,0 +1,65 @@
+.quickintro {
+	
+
+	& .nav li {
+
+		&.friends {
+			background-color : rgba( 50, 100, 200, 0.4);
+
+			&.active {
+				background-color : rgba( 50, 100, 200, 0.9);			
+			}
+		}
+		
+		&.place {
+			background-color : rgba( 100, 200, 100, 0.4);
+
+			&.active {
+				background-color : rgba( 100, 200, 100, 0.9);			
+			}
+		}
+		
+		&.organizate {
+			background-color : rgba( 200, 100, 100, 0.4);
+
+			&.active {
+				background-color : rgba( 200, 100, 100, 0.9);			
+			}
+		}
+		
+		&.fun {
+			background-color : rgba( 200, 200, 100, 0.4);
+
+			&.active {
+				background-color : rgba( 200, 200, 100, 0.9);				
+			}
+		}
+		
+		& a {
+			border-radius: 0;
+			border: 1px solid transparent;
+
+
+			&, & i {
+				color: #666;
+			}
+		}
+
+		&.active {
+
+		}
+
+		&.active a,
+		& a:hover,
+		&.active a:hover {
+			background: none;
+			border: 1px solid transparent;
+			border-top: 1px solid white;
+
+			&, & i {
+				color: #222;
+			}
+		}
+
+	}
+}

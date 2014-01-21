@@ -3,6 +3,7 @@ package models.dao;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import models.dao.common.CommonRangeEntityDAO;
+import models.dao.user.UserDAO;
 import models.notifications.Notification;
 import models.notifications.NotificationDigestQueueItem;
 
@@ -44,8 +45,6 @@ public class NotificationDAO extends CommonRangeEntityDAO<Notification> {
         Notification noti = new Notification();
         noti.setUserId(userId);
         query.setHashKeyValues(noti);
-
-        query.setScanIndexForward(false);
 
         List<Notification> results = pm.query(clazz, query);
         return limit > 0 ? results.subList(0, results.size() >= limit ? limit : results.size()) : results;

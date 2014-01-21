@@ -1,0 +1,23 @@
+
+@font: 'Lato', sans-serif;
+@font-normal: 300;
+@font-thin: 100;
+@font-bold: 400;
+
+@color_place: rgb(184, 246, 145);
+@color_adventurer: rgb(235, 114, 104);
+@color_time: rgb(152, 229, 251);
+@color_white: rgb(255,255,255);
+
+
+.transition(@value: all 0.5s ease){
+    -webkit-transition: @value;
+    -moz-transition: @value;
+    -ms-transition: @value;
+    -o-transition: @value;
+    transition: @value;
+}
+
+@import '_main';
+@import '_landing';
+@import '_adventure';

@@ -11,12 +11,12 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.typesafe.config.ConfigFactory;
-import controllers.Signup;
+import controllers.html.ApplicationController;
 import controllers.routes;
-import models.dao.TokenActionDAO;
-import models.dao.UserDAO;
-import models.dao.UserEmailDAO;
-import models.dao.UserSocialDAO;
+import models.dao.user.TokenActionDAO;
+import models.dao.user.UserDAO;
+import models.dao.user.UserEmailDAO;
+import models.dao.user.UserSocialDAO;
 import models.user.*;
 import play.Application;
 import play.Logger;
@@ -27,7 +27,6 @@ import play.data.validation.Constraints.Required;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Call;
-import play.mvc.Http;
 import play.mvc.Http.Context;
 
 import java.lang.reflect.InvocationTargetException;
@@ -196,8 +195,7 @@ public class MyUsernamePasswordAuthProvider
                 Logger.debug("User and E-Mail has not been verified, yet: "+ue.getEmail()+" with user id "+u.getId());
 				return LoginResult.USER_UNVERIFIED;
 			} else {
-                final String journweProvider = getKey();
-                UserSocial us = new UserSocialDAO().findByUserId(journweProvider,u.getId());
+                UserSocial us = new UserSocialDAO().findByUserId(u.getId());
 				if (authUser.checkPassword(u.getHashedPassword(), authUser.getPassword())) {
 							// Password was correct
 							return LoginResult.USER_LOGGED_IN;
@@ -210,12 +208,12 @@ public class MyUsernamePasswordAuthProvider
 
 	@Override
 	protected Call userExists(final UsernamePasswordAuthUser authUser) {
-		return routes.Signup.exists();
+		return controllers.html.routes.SignupController.exists();
 	}
 
 	@Override
 	protected Call userUnverified(final UsernamePasswordAuthUser authUser) {
-		return routes.Signup.unverified();
+		return controllers.html.routes.SignupController.unverified();
 	}
 
 	@Override
@@ -252,7 +250,7 @@ public class MyUsernamePasswordAuthProvider
 	@Override
 	protected String onLoginUserNotFound(final Context context) {
 		context.flash()
-				.put(controllers.ApplicationController.FLASH_ERROR_KEY,
+				.put(ApplicationController.FLASH_ERROR_KEY,
 						Messages.get("playauthenticate.password.login.unknown_user_or_pw"));
 		return super.onLoginUserNotFound(context);
 	}
@@ -263,7 +261,7 @@ public class MyUsernamePasswordAuthProvider
 
 		final boolean isSecure = getConfiguration().getBoolean(
 				SETTING_KEY_VERIFICATION_LINK_SECURE);
-		final String url = routes.Signup.verify(token).absoluteURL(
+		final String url = controllers.html.routes.SignupController.verify(token).absoluteURL(
 				ctx.request(), isSecure);
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
@@ -313,7 +311,7 @@ public class MyUsernamePasswordAuthProvider
 
 		final boolean isSecure = getConfiguration().getBoolean(
 				SETTING_KEY_PASSWORD_RESET_LINK_SECURE);
-		final String url = routes.Signup.resetPassword(token).absoluteURL(
+		final String url = controllers.html.routes.SignupController.resetPassword(token).absoluteURL(
 				ctx.request(), isSecure);
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
@@ -395,7 +393,7 @@ public class MyUsernamePasswordAuthProvider
 
 		final boolean isSecure = getConfiguration().getBoolean(
 				SETTING_KEY_VERIFICATION_LINK_SECURE);
-		final String url = routes.Signup.verify(token).absoluteURL(
+		final String url = controllers.html.routes.SignupController.verify(token).absoluteURL(
 				ctx.request(), isSecure);
 
 		final Lang lang = Lang.preferred(ctx.request().acceptLanguages());

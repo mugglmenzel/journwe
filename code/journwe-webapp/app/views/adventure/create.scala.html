@@ -6,10 +6,10 @@
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) } 
 
 @main(Messages("adventure.create.startAdv")){Start a new Group Adventure @if(advForm("inspirationId").value){<small>from "@inspirations.get(advForm("inspirationId").value)"</small>}} {
-    @form(routes.AdventureController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+    @form(html.routes.AdventureController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
     	<fieldset>
        		@inputText(advForm("name"), '_label -> "Adventure name", 'required -> "required")
-            @helper.input(advForm("shortname"), '_label -> "Shortname", 'required -> "required", 'minlength -> "3", Symbol("data-validation-ajax-ajax") -> routes.AdventureController.checkShortname()) { (id, name, value, args) =>
+            @helper.input(advForm("shortname"), '_label -> "Shortname", 'required -> "required", 'minlength -> "3", Symbol("data-validation-ajax-ajax") -> api.json.routes.AdventureController.checkShortname()) { (id, name, value, args) =>
             <div class="input-append">
                 <input type="text" name="@name" id="@id" @toHtmlArgs(args)>
                 <span class="add-on">@@adventure.journwe.com</span>
@@ -31,7 +31,7 @@
     		
     	</fieldset>
     	<div class="form-actions">
-    	  <input type="submit" value="Create Group Adventure!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+    	  <input type="submit" value="Create Group Adventure!" class="btn btn-primary"> | <a href="@html.routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
     	</div>
     }
 
@@ -39,9 +39,9 @@
 
             $('#shortname').change(
             function () {
-                $.post('@routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
+                $.post('@api.json.routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
                     function(check) {
-                        $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="icon-ok"></i> available.</span>' : '<span class="text-error"><i class="icon-warning-sign"></i> not available!</span>' );
+                        $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="fa fa-ok"></i> available.</span>' : '<span class="text-error"><i class="fa fa-warning-sign"></i> not available!</span>' );
                         $('#shortname').attr('aria-invalid', !check.valid);
                         if(!check.valid)
                             $('#shortname').parents(".control-group").first().addClass('error');

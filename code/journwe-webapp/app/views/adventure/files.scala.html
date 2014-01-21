@@ -10,17 +10,17 @@
 
 @if(JournweAuthorization.canViewAndDownloadFiles(adv.getId)) {
     <script type="text/x-tmpl" id="files-template">
-        <tr>
-            <td><a class="btn btn-link" href="{%=o.url%}" target="_blank"><i class="icon-file"></i> {%=o.fileName%}</a></td>
+        <tr data-id="{%=o.file.fileName%}">
+            <td><a class="btn btn-link" href="{%=o.file.url%}" target="_blank"><i class="fa fa-file"></i> {%=o.file.fileName%}</a></td>
             <td><span class="label label-info" title="{%=o.user.name%}">{%=String(o.user.name).split(/\s/)[0]%}</span></td>
-            <td class="text-center"><button class="btn btn-primary" href="{%=o.url%}" target="_blank"><i class="icon-cloud-download"></i></button> <button class="btn btn-danger" onclick="deleteFile('{%=o.fileName%}', this);"><i class="icon-trash"></i></button></td>
+            <td class="text-center"><button class="btn btn-primary" href="{%=o.file.url%}" target="_blank"><i class="fa fa-cloud-download"></i></button> <button class="btn btn-file-delete btn-danger"><i class="fa fa-trash-o"></i></button></td>
         </tr>
     </script>
 
 
  <!--
     <div class="row">
-        <div class="pull-left files-loading stash"><i class="icon-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
+        <div class="pull-left files-loading stash"><i class="fa fa-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
     </div>
 -->
 
@@ -44,111 +44,8 @@
     <div id="files-upload-dropzone" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
         <div class="text-center">
             <p class="lead">@Messages("adventure.files.fileDrop")
-                <input id="files-file-input" type="file" class="hide"/><button class="btn btn-upload" onclick="$('#files-file-input').click();"><i class="icon-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
+                <input id="files-file-input" type="file" class="hide"/><button class="btn btn-file-upload"><i class="fa fa-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>
             </p>
         </div>
     </div>
 }
-
-
-<script type="text/javascript">
-    jQuery.event.props.push('dataTransfer');
-
-    $(document).ready(function (){
-        loadFiles();
-
-        $('#files-button-refresh' ).click(function (){loadFiles();});
-
-        $('#files-upload-dropzone').on('drop', function (event) {
-            event.stopPropagation();
-            event.preventDefault();
-
-            uploadFiles(event.target.files || event.dataTransfer.files);
-
-            $('#files-upload-dropzone').removeClass('hover');
-            return false;
-        });
-
-        $('#files-file-input').change(function () {
-            var inputFile = $('#files-file-input'),
-                files = inputFile[0].files;
-            if(files) {
-                uploadFiles(files);
-                inputFile.val('');
-            }
-        });
-    });
-
-
-    function uploadFiles(files) {
-        var btn = $('#files-upload-dropzone .btn-upload'),
-        btnOriginal = btn.html();
-        btn.css({width:btn.css('width')})
-            .html('<i class="icon-spin icon-journwe"></i>');
-
-        for(var i = 0; i < files.length; i++) {
-            var data = new FormData();
-            data.append('uploadFile', files[i]);
-            data.append('fileName', files[i].name);
-
-            $.ajax({
-                url: '@routes.AdventureFileController.uploadFile(adv.getId())',
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: 'POST',
-                success:  function (result) {
-                    btn.css({width:""})
-                        .html(btnOriginal);
-                    loadFiles();
-                }
-            });
-        }
-    }
-
-    function loadFiles() {
-        //$('.files-loading').show();
-        $('#files-button-refresh i').addClass("icon-spin");
-
-        $.get('@routes.AdventureFileController.listFiles(adv.getId)', function (files) {
-            $('#files-list tbody').empty();
-
-            for (var fileName in files) {
-                renderFile(files[fileName]);
-            }
-            if (files.length){
-                $('#files-list').show();
-            } else {
-                $('#files-list').hide();
-            }
-
-            //$('.files-loading').hide();
-            $('#files-button-refresh i').removeClass("icon-spin");
-        });
-    }
-
-
-    function renderFile(data, replace) {
-        if(replace)
-            replace.replaceWith(tmpl('files-template', data)).fadeIn();
-        else
-            $('#files-list tbody').append(tmpl('files-template', data));
-
-    }
-
-    function deleteFile(fileName, el) {
-        
-        $(el).html('<i class="icon-spin icon-journwe"></i>');
-
-        $.ajax({
-            url: '@routes.AdventureFileController.deleteFile(adv.getId(), "")' + fileName, 
-            type: 'DELETE', 
-            success: function () {
-                var tr = $(el).parents('tr');
-                tr.fadeOut(function (){tr.remove();});
-            }
-        });
-    }
-
-</script>

@@ -9,7 +9,7 @@
   <div id="login" class="row">
     <div class="col-lg-4">
       @* Display proprietary login form *@
-    	@helper.form(routes.ApplicationController.doLogin) {
+    	@helper.form(html.routes.ApplicationController.doLogin) {
     	
         @if(loginForm.hasGlobalErrors) { 
           <p class="error">
@@ -30,9 +30,9 @@
         <input type="submit" value="@Messages("playauthenticate.login.now")" class="btn btn-primary"><br/>
         <br/>
 
-        <a href="@routes.ApplicationController.signup">@Messages("playauthenticate.login.register")</a> @Messages("playauthenticate.login.or") 
+        <a href="@html.routes.ApplicationController.signup">@Messages("playauthenticate.login.register")</a> @Messages("playauthenticate.login.or")
 
-        <a href="javascript:void(0);" onclick="window.location.href = '@routes.Signup.forgotPassword("")'+($('#email').val()?'/'+$('#email').val():'');">@Messages("playauthenticate.login.forgot.password")</a>
+        <a href="javascript:void(0);" onclick="window.location.href = '@html.routes.SignupController.forgotPassword("")'+($('#email').val()?'/'+$('#email').val():'');">@Messages("playauthenticate.login.forgot.password")</a>
 
     	}
     </div>

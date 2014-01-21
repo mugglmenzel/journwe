@@ -1,13 +1,12 @@
 @import play.mvc.Controller._
 
-@main_subscribe {
+@main(Messages("journwe.subtitle")){@Messages("imprint.title")}{
 
 <div class="jrn-container">
     <h2>@Messages("imprint.title")</h2>
     <div class="spacer30"></div>
     <p class="lead">@Messages("imprint.player1")<sup>1</sup>@Messages("imprint.player2")<sup>2</sup>@Messages("imprint.player4")<sup>3</sup>.</p>
 
-    <h3>Imprint</h3>
     <address>
         <strong><sup>1</sup>Michael Menzel</strong><br> Tullastr. 12<br> 68161
         Mannheim<br> <abbr title="Phone">P</abbr>: +49-(0)173 5431856<br>

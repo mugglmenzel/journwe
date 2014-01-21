@@ -12,7 +12,7 @@ object ApplicationBuild extends Build {
     javaCore,
     // javaJdbc,
     javaEbean,
-    "com.amazonaws" % "aws-java-sdk" % "1.4.2.1",
+    "com.amazonaws" % "aws-java-sdk" % "1.6.9.1",
     "com.feth"    %% "play-authenticate" % "0.3.3-SNAPSHOT",
     "com.restfb" % "restfb" % "1.6.12",
     "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5",
@@ -24,6 +24,10 @@ object ApplicationBuild extends Build {
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     // Add your own project settings here    
+
+    // Require JS
+    requireJs += "main.js",
+    requireJs += "adventure.js",
 
     // Repository for easy mail (used in authenticate)
     resolvers += Resolver.url("play-easymail (release)", url("http://joscha.github.com/play-easymail/repo/releases/"))(Resolver.ivyStylePatterns),

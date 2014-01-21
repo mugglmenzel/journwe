@@ -1,7 +1,7 @@
 #journwe
 journwe.subtitle=Auf ins Abenteuer.
-subscribe.welcometext=JournWe ist das Beste seit geschnitten Brot. Planen und Organisieren von Gruppenreise - der pure Horror? Nicht mit JournWe. Einloggen, Reise eintragen, Freunde einladen, Cocktail schlürfen. Fertig.
-subscribe.cta=Subscribe mit Deiner Email-Adresse. Wir benachrichtigen Dich, wenn wir Online gehen. Kein Spam, versprochen!
+landing.welcometext=JournWe ist das Beste seit geschnitten Brot. Planen und Organisieren von Gruppenreise - der pure Horror? Nicht mit JournWe. Einloggen, Reise eintragen, Freunde einladen, Cocktail schlürfen. Fertig.
+landing.cta=Subscribe mit Deiner Email-Adresse. Wir benachrichtigen Dich, wenn wir Online gehen. Kein Spam, versprochen!
 
 #Adventure.general.labels
 adventure.general.label.facebook=Facebook
@@ -213,87 +213,87 @@ yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow a
 
 
 #Landingpage
-subscribe.story=Good friends will listen to your adventures, best friends join them.
-subscribe.story2=People love JournWe
+landing.story=Good friends will listen to your adventures, best friends join them.
+landing.story2=People love JournWe
 #Story1
-subscribe.story1.header=START A GROUP ADVENTURE WITH YOUR FRIENDS
-subscribe.story1.content=Markus always wanted to visit South Africa to see the Big 5. He published his adventure plan on JournWe and convinced three of this friends in social networks to join him. "They joined the trip, we voted for time slots, discussed our route, and all booked together".
-subscribe.story1.cite=Markus Klems, a JournWe adventurer
+landing.story1.header=START A GROUP ADVENTURE WITH YOUR FRIENDS
+landing.story1.content=Markus always wanted to visit South Africa to see the Big 5. He published his adventure plan on JournWe and convinced three of this friends in social networks to join him. "They joined the trip, we voted for time slots, discussed our route, and all booked together".
+landing.story1.cite=Markus Klems, a JournWe adventurer
 #Story1.long
-subscribe.story1.long.header=START A GROUP ADVENTURE WITH YOUR FRIENDS
-subscribe.story1.long.content=Markus always wanted to visit South Africa to see the Big 5. He published his adventure plan on JournWe and convinced three of this friends in social networks to join him. Planning the trip was neat. "They joined the trip, we voted for time slots, discussed our route, and all booked together". It is as simple as that to stay in touch and organize. "We saw them all! Especially the Leopard jumping right on our car truly was a lifetime experience!".
-subscribe.story1.long.cite=Markus Klems, a JournWe adventurer
+landing.story1.long.header=START A GROUP ADVENTURE WITH YOUR FRIENDS
+landing.story1.long.content=Markus always wanted to visit South Africa to see the Big 5. He published his adventure plan on JournWe and convinced three of this friends in social networks to join him. Planning the trip was neat. "They joined the trip, we voted for time slots, discussed our route, and all booked together". It is as simple as that to stay in touch and organize. "We saw them all! Especially the Leopard jumping right on our car truly was a lifetime experience!".
+landing.story1.long.cite=Markus Klems, a JournWe adventurer
 #Story1a
-subscribe.story1a.header=Markus always wanted to GO ON A TRIP TO...
-subscribe.story1a.content=...the ancient temples of Chich&eacute;n Itz&aacute;. This year his dream will become true. He asked three of his best friends to join him on this adventure. They found a perfect week in August matching all their schedules. Now they are figuring out the best value offers.
+landing.story1a.header=Markus always wanted to GO ON A TRIP TO...
+landing.story1a.content=...the ancient temples of Chich&eacute;n Itz&aacute;. This year his dream will become true. He asked three of his best friends to join him on this adventure. They found a perfect week in August matching all their schedules. Now they are figuring out the best value offers.
 #Story1b
-subscribe.story1b.header=Markus always wanted to visit ancient Temples
-subscribe.story1b.content=Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".
-subscribe.story1b.cite=Markus Klems, a JournWe adventurer
+landing.story1b.header=Markus always wanted to visit ancient Temples
+landing.story1b.content=Markus published his adventure plan on JournWe and convinced friends in social networks to join him. Planning the trip was neat. "We just voted for time slots and discussed our plan.". It's as simple as that to stay in touch and organize. "The visit to the temples was a lifetime experience!".
+landing.story1b.cite=Markus Klems, a JournWe adventurer
 #Story2
-subscribe.story2.header=GET SUPPORT TO ACHIEVE YOUR PLANS
-subscribe.story2.content=Every year Andy meets up with his friends from college. But deciding where and when to go is always a hassle! JournWe helped him and his friends to settle for the right spot and find a suitable time for everyone.
-subscribe.story2.cite=Andy, the pizza delivery dude
+landing.story2.header=GET SUPPORT TO ACHIEVE YOUR PLANS
+landing.story2.content=Every year Andy meets up with his friends from college. But deciding where and when to go is always a hassle! JournWe helped him and his friends to settle for the right spot and find a suitable time for everyone.
+landing.story2.cite=Andy, the pizza delivery dude
 #Story2.long
-subscribe.story2.long.header=GET SUPPORT TO ACHIEVE YOUR PLANS
-subscribe.story2.long.content=Every year Andy meets up with his friends from college. But deciding where and when to go is always a hassle! JournWe helped him and his friends to settle for the right spot and find a suitable time for everyone. "Man, last year we were struggling a lot to arrange our reunion. This time was a whole new experience! Thanks, JournWe."
-subscribe.story2.long.cite=Andy, the pizza delivery dude
+landing.story2.long.header=GET SUPPORT TO ACHIEVE YOUR PLANS
+landing.story2.long.content=Every year Andy meets up with his friends from college. But deciding where and when to go is always a hassle! JournWe helped him and his friends to settle for the right spot and find a suitable time for everyone. "Man, last year we were struggling a lot to arrange our reunion. This time was a whole new experience! Thanks, JournWe."
+landing.story2.long.cite=Andy, the pizza delivery dude
 #Story2a
-subscribe.story2a.header=Lets PLAY BASKETBALL
-subscribe.story2a.content=Basketball is Jozsef's life. Every week he plays on the San Fran grounds. Join him an his friends and get distracted by the fantastic views whilst tying another slam dunk. Dont't forget to bring a towel.
+landing.story2a.header=Lets PLAY BASKETBALL
+landing.story2a.content=Basketball is Jozsef's life. Every week he plays on the San Fran grounds. Join him an his friends and get distracted by the fantastic views whilst tying another slam dunk. Dont't forget to bring a towel.
 #Story2b
-subscribe.story2b.header=Jozsef found the right place to meet friends
-subscribe.story2b.content=Every year Jozsef meets with friends at the exact same weekend. But deciding where and when to go is always a hassle! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks, JournWe."
-subscribe.story2b.cite=Andy, thanks for delivering the sandwiches every day
+landing.story2b.header=Jozsef found the right place to meet friends
+landing.story2b.content=Every year Jozsef meets with friends at the exact same weekend. But deciding where and when to go is always a hassle! JournWe helped him and his friends to get inspired and settle for the right spot. "Man, did we blow Kazantip! Thanks, JournWe."
+landing.story2b.cite=Andy, thanks for delivering the sandwiches every day
 #Story3
-subscribe.story3.header=JOIN PUBLIC ADVENTURES
-subscribe.story3.content= Basketball is Jozsef's life. As he just moved to a new city he was keen on getting in touch with some guys sharing his passion. He checked out public sports adventures on JournWe and joined a group of players coming together every week just in his neighbourhood.
-subscribe.story3.cite=Jozsef, construction worker at JournWe
+landing.story3.header=JOIN PUBLIC ADVENTURES
+landing.story3.content= Basketball is Jozsef's life. As he just moved to a new city he was keen on getting in touch with some guys sharing his passion. He checked out public sports adventures on JournWe and joined a group of players coming together every week just in his neighbourhood.
+landing.story3.cite=Jozsef, construction worker at JournWe
 #Story3.long
-subscribe.story3.long.header=JOIN PUBLIC ADVENTURES
-subscribe.story3.long.content= Basketball is Jozsef's life. As he just moved to a new city he was keen on getting in touch with some guys sharing his passion. He checked out what's new on JournWe and joined a group of players coming together every week just in his neighbourhood. “The very best was not even that I was able to throw some balls. I made new friends and that's a great start in my new place.”
-subscribe.story3.long.cite=Jozsef, construction worker at JournWe
+landing.story3.long.header=JOIN PUBLIC ADVENTURES
+landing.story3.long.content= Basketball is Jozsef's life. As he just moved to a new city he was keen on getting in touch with some guys sharing his passion. He checked out what's new on JournWe and joined a group of players coming together every week just in his neighbourhood. “The very best was not even that I was able to throw some balls. I made new friends and that's a great start in my new place.”
+landing.story3.long.cite=Jozsef, construction worker at JournWe
 #Story3b
-subscribe.story3b.header=This years biggest FEATURED EVENT
-subscribe.story3b.content=Roskilde 2013! The place to be on June 11th. Kraftwerk, Queens Of The Stone Age, Disclosure, Goat, Slipknot,... There are special bus shuttels picking you up anywhere in Europe, check them out. Tents will be provided but all sorts of things recommended to bring. But no need for a cam, pictures are shared here afterwards.
-subscribe.story3b.cite=Somebody
+landing.story3b.header=This years biggest FEATURED EVENT
+landing.story3b.content=Roskilde 2013! The place to be on June 11th. Kraftwerk, Queens Of The Stone Age, Disclosure, Goat, Slipknot,... There are special bus shuttels picking you up anywhere in Europe, check them out. Tents will be provided but all sorts of things recommended to bring. But no need for a cam, pictures are shared here afterwards.
+landing.story3b.cite=Somebody
 #Story4
-subscribe.story4.header=CHECK OUT OUR INSPIRATIONS
-subscribe.story4.content=Peter knew that we will be travelling next August. In order to get some inspirations on what he can do during his JournWe he checked out our huge list of adventure ideas, featured events and other recommendations.
-subscribe.story4.cite=Peter, a JournWe adventurer
+landing.story4.header=CHECK OUT OUR INSPIRATIONS
+landing.story4.content=Peter knew that we will be travelling next August. In order to get some inspirations on what he can do during his JournWe he checked out our huge list of adventure ideas, featured events and other recommendations.
+landing.story4.cite=Peter, a JournWe adventurer
 #Story4.long
-subscribe.story4.long.header=CHECK OUT OUR INSPIRATIONS
-subscribe.story4.long.content=Peter knew that we will be travelling next August. In order to get some inspirations on what he can do during his JournWe he checked out our huge list of adventure ideas, featured events and other recommendations. They are fully packed with infos and insights. You may just use them as a template for your very own adventure.
-subscribe.story4.long.cite=Peter, a JournWe adventurer
+landing.story4.long.header=CHECK OUT OUR INSPIRATIONS
+landing.story4.long.content=Peter knew that we will be travelling next August. In order to get some inspirations on what he can do during his JournWe he checked out our huge list of adventure ideas, featured events and other recommendations. They are fully packed with infos and insights. You may just use them as a template for your very own adventure.
+landing.story4.long.cite=Peter, a JournWe adventurer
 #Story4b
-subscribe.story4b.header=Every year WE REUNITE
-subscribe.story4b.content=Since we left college, every year we try to meet again. The people are set, but long discussions on date and place are always necessary. Well, JournWe created, options entered and after we voted the hurdle was taken. It will be a blast - as always.
-subscribe.story4b.cite=A guy
+landing.story4b.header=Every year WE REUNITE
+landing.story4b.content=Since we left college, every year we try to meet again. The people are set, but long discussions on date and place are always necessary. Well, JournWe created, options entered and after we voted the hurdle was taken. It will be a blast - as always.
+landing.story4b.cite=A guy
 #Story5
-subscribe.story5.header=REMEMBER YOUR DREAMS
-subscribe.story5.content=Your very own bucket list. Don't only list your dream adventures but keep preparing them. Gather all the infos you've already found, what you need to remember about it.
-subscribe.story5.cite=The JournWe Team
+landing.story5.header=REMEMBER YOUR DREAMS
+landing.story5.content=Your very own bucket list. Don't only list your dream adventures but keep preparing them. Gather all the infos you've already found, what you need to remember about it.
+landing.story5.cite=The JournWe Team
 #Story5.long
-subscribe.story5.long.header=REMEMBER YOUR DREAMS
-subscribe.story5.long.content=Your very own bucket list. Don't only list your dream adventures but keep preparing them. Gather all the infos you've already found, what you need to remember about it and monitor the prices for flights, hotels and other stuff . The day will come when you start inviting your friends to join your dream.
-subscribe.story5.long.cite=The JournWe Team
+landing.story5.long.header=REMEMBER YOUR DREAMS
+landing.story5.long.content=Your very own bucket list. Don't only list your dream adventures but keep preparing them. Gather all the infos you've already found, what you need to remember about it and monitor the prices for flights, hotels and other stuff . The day will come when you start inviting your friends to join your dream.
+landing.story5.long.cite=The JournWe Team
 #Story5b
-subscribe.story5b.header=Remember THE DREAM
-subscribe.story5b.content=That's his personal dream. Whenever it will happen, but here Willi saved it. A detailed plan aiming on one goal -  see Britney Spears and get her signature right next to his Britney bum tattoo.
-subscribe.story5b.cite=Shorty
+landing.story5b.header=Remember THE DREAM
+landing.story5b.content=That's his personal dream. Whenever it will happen, but here Willi saved it. A detailed plan aiming on one goal -  see Britney Spears and get her signature right next to his Britney bum tattoo.
+landing.story5b.cite=Shorty
 #Story6
-subscribe.story6.header=What to do NEXT WEEKEND
-subscribe.story6.content=Andy got time. Who's up for some crazy party? Or let's do some barbecue next to the river. He fixed the date now let's see who's in and what they can do.
-subscribe.story6.cite=Andy
+landing.story6.header=What to do NEXT WEEKEND
+landing.story6.content=Andy got time. Who's up for some crazy party? Or let's do some barbecue next to the river. He fixed the date now let's see who's in and what they can do.
+landing.story6.cite=Andy
 
 
-subscribe.feature=Funktionen
-subscribe.featureH1=Stimme dich mit Freunden ab.
-subscribe.featureT1=Starte ein JournWe und plane wann du und deine Freunde Zeit für den Trip haben oder wo es hingehen sollen. Jedes JournWe bietet die Möglichkeit zwischen verschiedenen Ort- und Zeitoptionen abzustimmen.
-subscribe.featureH2=Führe und vergleiche Todo-Listen.
-subscribe.featureT2=Lege Todo-Listen an und erinnere dich, was du mitnehmen musst. Vergleiche mit den Todo-Listen deiner Freunde, um zu sehen was dir fehlt oder was andere schon mitnehmen.
-subscribe.featureH3=Halte Dokumente zur Reise an einem Ort.
-subscribe.featureT3=Bei jeder Reise fallen viele Info-, Buchungs- und Reservierungsdokumente an. Speichere eine Kopie mit deinem JournWe, um sie leicht wiederzufinden und mit den Mitreisenden zu teilen.
+landing.feature=Funktionen
+landing.featureH1=Stimme dich mit Freunden ab.
+landing.featureT1=Starte ein JournWe und plane wann du und deine Freunde Zeit für den Trip haben oder wo es hingehen sollen. Jedes JournWe bietet die Möglichkeit zwischen verschiedenen Ort- und Zeitoptionen abzustimmen.
+landing.featureH2=Führe und vergleiche Todo-Listen.
+landing.featureT2=Lege Todo-Listen an und erinnere dich, was du mitnehmen musst. Vergleiche mit den Todo-Listen deiner Freunde, um zu sehen was dir fehlt oder was andere schon mitnehmen.
+landing.featureH3=Halte Dokumente zur Reise an einem Ort.
+landing.featureT3=Bei jeder Reise fallen viele Info-, Buchungs- und Reservierungsdokumente an. Speichere eine Kopie mit deinem JournWe, um sie leicht wiederzufinden und mit den Mitreisenden zu teilen.
 
 
 #Travel Phrases
@@ -381,7 +381,7 @@ playauthenticate.link.account.true=Ja, dieses Konto mit meinem Benutzer verknüp
 playauthenticate.link.account.false=Nein, abmelden und einen neuen Benutzer mit diesem Konto erstellen
 playauthenticate.link.account.ok=OK
 
-# play-authenticate: Signup folder translations
+# play-authenticate: SignupController folder translations
 
 playauthenticate.verify.email.title=E-Mail-Adresse bestätigen
 playauthenticate.verify.email.requirement=Du musst deine E-Mail-Adresse bestätigen, bevor du PlayAuthenticate nutzen kannst.

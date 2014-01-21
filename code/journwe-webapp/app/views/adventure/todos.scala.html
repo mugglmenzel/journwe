@@ -1,11 +1,11 @@
-@(adv: models.adventure.Adventure, advr: models.adventure.Adventurer)
+@(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
 
 @import models.authorization.JournweAuthorization
-@import models.dao.TodoDAO
-@import models.dao.UserDAO
-@import models.dao.AdventurerDAO
-@import models.adventure.checklist.EStatus
-@import models.adventure.EAdventurerParticipation
+@import models.dao.adventure.TodoDAO
+@import models.dao.user.UserDAO
+@import models.dao.adventure.AdventurerDAO
+@import models.adventure.todo.EStatus
+@import models.adventure.adventurer.EAdventurerParticipation
 
 @if(adv != null && advr != null) {
     @if(JournweAuthorization.canViewTodoItem(adv.getId)) {
@@ -27,7 +27,7 @@
         <div class="input-group col-lg-6">
             <input id="todo-title" type="text" placeholder="@Messages("adventure.todos.placeholder")" class="form-control"/>
             <div class="input-group-btn">
-                <button id="btn-add-todo" class="btn btn-primary" type="button"><i class="icon-plus"></i></button>
+                <button id="btn-add-todo" class="btn btn-primary" type="button"><i class="fa fa-plus"></i></button>
             </div>
         </div>
     </div>
@@ -41,16 +41,15 @@
         @advrDAO.all(adv.getId()).filter(advr => !(advr.getParticipationStatus().equals(EAdventurerParticipation.APPLICANT) && advr.getParticipationStatus().equals(EAdventurerParticipation.INVITEE))).filter(!_.getUserId.equals(advr.getUserId)).zipWithIndex.map{ case(coadvr, idx) =>
             @defining(new UserDAO().get(coadvr.getUserId())) { user =>
                     @if(user != null){
-                <div id="todos-adventurer-@user.getId" class="polaroid polaroid-hover" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
-                    <a onclick="loadAdventurerTodos('@coadvr.getUserId')">
-                        <img style="margin: 0px;" title="@user.getName" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
-                    </a>
-                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
-                        <div style="line-height: 10px;"><a onclick="loadAdventurerTodos('@coadvr.getUserId')">@if(user.getName){@user.getName().replaceAll(" [^ ]*$", "")}else{Unknown}</a></div>
-                    </div>
-                </div>
-                @if(idx == 0){<script>$(document).ready(function () {loadAdventurerTodos('@coadvr.getUserId');});</script>}
+                        <div id="todos-adventurer-@user.getId" data-id="@user.getId" class="polaroid polaroid-hover" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
+                            <a class="todos-adventurer">
+                                <img style="margin: 0px;" title="@user.getName" @if(user.getImage() == null) {src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} else {src="http://i.embed.ly/1/image/crop?width=100&height=100&url=@user.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f"}>
 
+                                <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
+                                    <div style="line-height: 10px;">@if(user.getName){@user.getName().replaceAll(" [^ ]*$", "")}else{Unknown}</div>
+                                </div>
+                            </a>
+                        </div>
                     }
             }
         }
@@ -78,30 +77,30 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title"> @Messages("adventure.todos.amazon.title") </h3>
                 </div>
-                <div class="modal-body"><div><i class="icon-journwe icon-spin"></i></div><div class="content"></div></div>
+                <div class="modal-body"><div><i class="icon-journwe fa fa-spin"></i></div><div class="content"></div></div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal"><i class="icon-remove"></i> @Messages("adventure.general.button.close")</button>
+                    <button class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> @Messages("adventure.general.button.close")</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script type="text/x-tmpl" id="todo-template">
-        <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}">
-            <td><button class="btn btn-primary btn-check"><i class="icon-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></button></td>
+        <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.todoId%}">
+            <td><button class="btn btn-primary btn-check"><i class="fa fa{% if(o.status == '@EStatus.COMPLETE'){ %}{%=String('-check')%}{% } %}-square-o"></i></button></td>
             <td style="width:100%;">{%=o.title%}</td>
             <td><a class="btn btn-link btn-affiliate"> @Messages("adventure.todos.amazon.purchase") </a></td>
             @if(JournweAuthorization.canEditTodoItem(adv.getId)) {
-            <td class="text-center"><button class="btn btn-danger btn-delete"><i class="icon-trash"></i></button></td>
+            <td class="text-center"><button class="btn btn-danger btn-delete"><i class="fa fa-trash-o"></i></button></td>
             }
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-adventurer-template">
-        <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.id%}">
-            <td><i class="icon-check{% if(o.status != '@EStatus.COMPLETE'){ %}{%=String('-empty')%}{% } %}"></i></td>
+        <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.todoId%}">
+            <td><i class="fa fa-{% if(o.status == '@EStatus.COMPLETE'){ %}{%=String('-check')%}{% } %}-square-o"></i></td>
             <td style="width:100%;">{%=o.title%}</td>
             <td><a class="btn btn-link btn-affiliate"> @Messages("adventure.todos.amazon.purchase") </a></td>
-            <td class="text-center"><button class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="icon-plus"></i></button></td>
+            <td class="text-center"><button class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="fa fa-plus"></i></button></td>
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-affiliate-template">
@@ -114,189 +113,6 @@
                 {%=o.description%} <a href="{%=o.url%}" target="_blank"> @Messages("adventure.general.button.more") </a>
             </div>
         </div>
-    </script>
-
-    <script type="text/javascript">
-
-
-            $(document).ready(function () {
-
-                loadUserTodos();
-
-                $('#todos-button-refresh' ).click(function (){loadUserTodos();});
-
-            });
-
-            function loadUserTodos() {
-                loadTodos('@advr.getUserId', '#todos-list', 'todo-template', activateUserButtonListener);
-            }
-
-            function loadAdventurerTodos(advrId) {
-                $('#todos-adventurers-selection > div').removeClass("polaroid-active");
-                $('#todos-adventurer-' + advrId+'').addClass("polaroid-active");
-                loadTodos(advrId, '#todos-adventurers-list', 'todo-adventurer-template', activateAdventurerButtonListener);
-            }
-
-            function loadTodos(userId, target, template, activator) {
-                $('#todos-button-refresh i').addClass("icon-spin");
-                $.get('@routes.AdventureTodoController.getTodos(adv.getId, "")' + userId, function (results){
-                    $(target + ' tbody').empty();
-
-                    for (var todo in results)
-                        renderTodo(results[todo], target, template);
-
-                    if (results.length) {
-                        $(target).show();
-                        activator();
-                    } else
-                        $(target).hide();
-
-                    $('#todos-button-refresh i').removeClass("icon-spin");
-                });
-            }
-
-            function renderTodo(data, target, template, replace) {
-                if(replace)
-                    replace.replaceWith(tmpl(template, data)).fadeIn();
-                else
-                    $(target + ' tbody').append(tmpl(template, data));
-
-
-            }
-
-        $('#todo-title').on('keydown', function(e){
-            if (e.keyCode==13){
-                $('#btn-add-todo').click();
-            }
-        });
-
-        $('#btn-add-todo').on('click', function() {
-            $(this).html('<i class="icon-spin icon-journwe"></i>');
-            var btn = $(this),
-            fld = $('#todo-title');
-
-            $.post('@routes.AdventureTodoController.addTodo(adv.getId)', { title: fld.val() }, function(res) {
-                //$('.table-my-todos  tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
-                //activateUserButtonListener();
-                loadUserTodos();
-                fld.val("");
-                $('#btn-add-todo').html('<i class="icon-plus"></i>')
-            });
-        });
-
-
-
-        function activateUserButtonListener() {
-            $('#todos-list tbody .btn-check').on('click', function() {
-
-                var input = $(this),
-                    tr = input.parents('.todo-entry'),
-                    id = tr.attr('data-id'),
-                    i = tr.find('.btn-check i'),
-                    complete = i.is('.icon-check-empty');
-
-                i.removeClass('icon-check, icon-check-empty').addClass('icon-spin icon-journwe');
-
-                $.ajax({
-                    url: '@routes.AdventureTodoController.setTodo(adv.getId(), "")' + id,
-                    data: {
-                        status: complete ? "@EStatus.COMPLETE" : "@EStatus.NEW"
-                    },
-                    type: 'PUT',
-                    success: function(res) {
-                        tr.get(0).className = 'status-' + res.status + ' todo-entry';
-                        i.removeClass('icon-spin icon-journwe').addClass(res.status == '@EStatus.COMPLETE' ? 'icon-check' : 'icon-check-empty');
-                    }
-                });
-
-                return false;
-            });
-
-            $('#todos-list tbody .btn-delete').on('click', function(e) {
-                $(this).html('<i class="icon-spin icon-journwe"></i>');
-                e.preventDefault();
-
-                var a = $(this),
-                    tr = a.parents('.todo-entry'),
-                    id = tr.data('id');
-
-                $.ajax({
-                    url: '@routes.AdventureTodoController.deleteTodo(adv.getId(), "")' + id,
-                    type: 'DELETE',
-                    success: function(res) {
-                        tr.fadeOut(function() {
-                            tr.remove();
-                        });
-                    }
-                });
-
-            });
-
-            $('#todos-list tbody .btn-affiliate').on('click', function(e) {
-                //$(this).html('<i class="icon-spin icon-journwe"></i>');
-                e.preventDefault();
-
-                var a = $(this),
-                tr = a.parents('.todo-entry'),
-                id = tr.data('id');
-
-                $('#amazon-affiliate .modal-content .modal-body .content').first().empty();
-                $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().removeClass('stash');
-                $('#amazon-affiliate').modal();
-
-                $.get('@routes.AdventureTodoController.getTodoAffiliateItems(adv.getId())', {id: id}, function(res) {
-                    if(!res.length) $('#amazon-affiliate .modal-content .modal-body .content').first().html('@Messages("adventure.todos.amazon.noItems")');
-
-                    for(var i in res)
-                        $('#amazon-affiliate .modal-content .modal-body .content').first().append(tmpl('todo-affiliate-template', res[i]));
-
-                    $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().addClass('stash');
-                });
-
-            });
-        }
-
-        function activateAdventurerButtonListener() {
-            $('#todos-adventurers-list tbody .btn-copy').on('click', function(e) {
-                e.preventDefault();
-
-                var btn = $(this),
-                    tr = btn.parents('.todo-entry'),
-                    td = tr.find('td'),
-                    title = $(td[1]).text();
-
-                btn.html('<i class="icon-spin icon-journwe"></i>');
-
-                $.post('@routes.AdventureTodoController.addTodo(adv.getId)', {title: title}, function(res) {
-                    loadUserTodos();
-                    btn.html('<i class="icon-plus"></i>');
-                });
-            });
-
-            $('#todos-adventurers-list tbody .btn-affiliate').on('click', function(e) {
-                //$(this).html('<i class="icon-spin icon-journwe"></i>');
-                e.preventDefault();
-
-                var a = $(this),
-                    tr = a.parents('.todo-entry'),
-                    id = tr.data('id');
-
-                $('#amazon-affiliate .modal-content .modal-body .content').first().empty();
-                $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().removeClass('stash');
-                $('#amazon-affiliate').modal();
-
-                $.get('@routes.AdventureTodoController.getTodoAffiliateItems(adv.getId())', {id: id}, function(res) {
-                    if(!res.length) $('#amazon-affiliate .modal-content .modal-body .content').first().html('@Messages("adventure.todos.amazon.noItems")');
-
-                    for(var i in res)
-                        $('#amazon-affiliate .modal-content .modal-body .content').first().append(tmpl('todo-affiliate-template', res[i]));
-
-                    $('#amazon-affiliate .modal-content .modal-body .icon-spin').first().addClass('stash');
-                });
-
-            });
-        }
-
     </script>
 
 }

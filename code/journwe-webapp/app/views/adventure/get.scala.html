@@ -1,12 +1,13 @@
-@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])(description: Html)
+@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.adventurer.Adventurer, active: String, timeForm: Form[models.adventure.time.TimeOption], fileForm: Form[models.adventure.file.JournweFile])(description: Html)
 @import models.inspiration.Inspiration
-@import models.adventure.EAdventurerParticipation
+@import models.adventure.adventurer.EAdventurerParticipation
 @import models.authorization.JournweAuthorization
 
-@import models.dao.AdventurerDAO
-@import models.dao.UserDAO
+@import models.dao.adventure.AdventurerDAO
+@import models.dao.user.UserDAO
 @import com.feth.play.module.pa.PlayAuthenticate
 @import play.mvc.Http
+@import play.libs.Json
 
 @main(adv.getName()){ }{
 
@@ -14,30 +15,24 @@
     @if(new AdventurerDAO().get(adv.getId(), new
     UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current())).getId()) != null){
     <!-- Only required for left/right tabs -->
-    <div class="nav-adventure visible-lg" style=""> <!---->
-        <ul id="nav-adventure-list" class="nav nav-pills nav-stacked">
-            <li  id="nav-adventure-index"
-            @if(active == "index"){class="active"}><a href="#index" onclick="return jumpToSection('index');"><i
-                class="icon-info" title="Overview"></i></a></li>
-            <li id="nav-adventure-discussion"
-            @if(active == "discussion"){class="active"}><a href="#discussion" onclick="return jumpToSection('discussion');"><i class="icon-comments" title="Discussion"></i></a></li>
-            <li id="nav-adventure-places"
-            @if(active == "places"){class="active"}><a href="#places" onclick="return jumpToSection('places');"><i class="icon-globe" title="Place"></i></a></li>
-            <li id="nav-adventure-adventurers"
-            @if(active == "adventurers"){class="active"}><a href="#adventurers" onclick="return jumpToSection('adventurers');"><i class="icon-group" title="Adventurers"></i></a></li>
-            <li  id="nav-adventure-time"
-            @if(active == "times"){class="active"}><a href="#times" onclick="return jumpToSection('times');"><i
-                class="icon-calendar" title="Date &amp; Time"></i></a></li>
+    <div class="nav-adventure visible-lg navbar" style=""> <!---->
+        <ul id="nav-adventure-list" class="nav nav-pills navbar-nav nav-stacked navbar-left">
+            <li>@adv.getName()</li>
+        </ul>
+        <ul id="nav-adventure-list" class="nav nav-pills navbar-nav nav-stacked navbar-right">
+            <li class="index"><a href="#index"><i
+                class="fa fa-info" title="Overview"></i></a></li>
+            <li class="discussion"><a href="#discussion"><i class="fa fa-comments" title="Discussion"></i></a></li>
+            <li class="places"><a href="#places"><i class="fa fa-globe" title="Place"></i></a></li>
+            <li class="adventurers"><a href="#adventurers"><i class="fa fa-group" title="Adventurers"></i></a></li>
+            <li class="times"><a href="#times"><i
+                class="fa fa-calendar" title="Date &amp; Time"></i></a></li>
 
-            @*<li id="nav-adventure-messages"
-            @if(active == "messages"){class="active"}><a href="#messages" onclick="return jumpToSection('messages');"><i class="icon-envelope" title="Messages"></i></a></li>*@
-            <li   id="nav-adventure-todos"
-            @if(active == "todos"){class="active"}><a href="#todos" onclick="return jumpToSection('todos');"><i
-                class="icon-list-ol" title="Todos"></i></a></li>
-            <li   id="nav-adventure-files"
-            @if(active == "files"){class="active"}><a href="#files" onclick="return jumpToSection('files');"><i class="icon-file" title="Files"></i></a></li>
-            <li   id="nav-adventure-offers"
-            @if(active == "offers"){class="active"}><a href="#offers" onclick="return jumpToSection('offers');"><i class="icon-suitcase" title="Offers"></i></a></li>
+            @*<li class="messages"><a href="#messages"><i class="fa fa-envelope" title="Messages"></i></a></li>*@
+            <li class="todos"><a href="#todos"><i
+                class="fa fa-list-ol" title="Todos"></i></a></li>
+            <li class="files"><a href="#files"><i class="fa fa-file" title="Files"></i></a></li>
+            <li class="offers"><a href="#offers"><i class="fa fa-suitcase" title="Offers"></i></a></li>
         </ul>
     </div>
     }
@@ -46,87 +41,25 @@
         <div id="adventure-prime-image" style="width: 100%; height: 200px; background: url(@if(adv.getImage == null || !JournweAuthorization.canViewAdventureImage(adv.getId)){'http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=Drop+image'}else{'http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f'}) no-repeat center center transparent; background-size: auto 100%;">
         </div>
 
-        @if(JournweAuthorization.canViewAdventureTitle(adv.getId)) {
+        @if(JournweAuthorization.canViewAdventureTitle(adv.getId)&&false) {
         <div class="title-name">
             <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-            data-url="@routes.AdventureController.saveEditable()"
-            data-original-title="Enter adventure name" data-inputclass="input-lg">@adv.getName()</a> <i class="icon-pencil muted"></i> <span></span>
-            @if(ins != null) {<small>- <a href="@routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+            data-url="@html.routes.AdventureController.saveEditable()"
+            data-original-title="Enter adventure name" data-inputclass="input-lg">@adv.getName()</a> <i class="fa fa-pencil muted"></i> <span></span>
+            @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
         </div>
         }
         <div class="toolbar">
             @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
-                <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="icon-plus"></i> @Messages("adventure.general.button.join")</a>
-                <script>
-                    $(function(){
-                        $('.btn-participate').click(function(){
-                            var el = $(this),
-                                html = el.html();
-
-                            el.css({width:el.width()+"px"})
-                                .html('<i class="icon-spin icon-journwe"></i>');
-
-                            return true;
-                        });
-                    });
-                </script>
+                <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
             } else {
-                <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="icon-unlink"></i> @Messages("adventure.general.button.leave")</a>
+                <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="fa fa-unlink"></i> @Messages("adventure.general.button.leave")</a>
             }
 
-            <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="icon-copy"></i> @Messages("adventure.general.button.clone")</a>
+            <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
 
             <input id="adventure-prime-image-file-input" type="file" class="hide"/>
-            <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="icon-upload"></i> @Messages("adventure.files.imageUpload")</a>
-            <script type="text/javascript">
-                jQuery.event.props.push('dataTransfer');
-
-                $('#adventure-prime-image').on('drop', function (event){processDroppedPrimeImage(event);});
-
-                $('#adventure-prime-image-file-input').change(function () {
-                    var inputFile = $('#adventure-prime-image-file-input'),
-                        files = inputFile[0].files;
-                    if(files) {
-                        uploadPrimeImage(files);
-                        inputFile.val('');
-                    }
-                });
-
-                function processDroppedPrimeImage(event) {
-                    event.stopPropagation();
-                    event.preventDefault();
-
-                    uploadPrimeImage(event.target.files || event.dataTransfer.files);
-
-                    return false;
-                }
-
-                function uploadPrimeImage(files) {
-                    var btn = $('#adventure-prime-image-upload-button'),
-                        btnOriginal = btn.html();
-                    btn.css({width:btn.css('width')})
-                        .html('<i class="icon-spin icon-journwe"></i>');
-
-                    var data = new FormData();
-                    data.append(files[0].name, files[0])
-
-                    $.ajax({
-                        url: '@routes.AdventureController.updateImage(adv.getId)',
-                        data: data,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        type: 'POST',
-                        success:  function (result) {
-                            $('#adventure-prime-image').css('background', 'url(\'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime() + '\')');
-                            btn.css({width:""})
-                                .html(btnOriginal);
-                        }
-                    });
-
-                }
-
-            </script>
+            <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="fa fa-upload"></i> @Messages("adventure.files.imageUpload")</a>
         </div>
     </div>
 
@@ -134,7 +67,7 @@
 
 
     <div class="jrn-container">
-        <h2 id="index"><i class="icon-info icon-for-adventure-title"></i> @Messages("adventure.getScala.adventure.title")</h2>
+        <h2 id="index"><i class="fa fa-info fa fa-for-adventure-title"></i> @Messages("adventure.getScala.adventure.title")</h2>
         <div class="row">
             <div class="col-lg-12">
                 @index(adv, ins)
@@ -154,7 +87,7 @@
     @if(JournweAuthorization.canViewAdventureDiscussionWidget(adv.getId)) {
     <div class="jrn-container">
 
-        <h2 id="discussion"><i class="icon-comments icon-for-adventure-title"></i> @Messages("adventure.getScala.discussion.title")</h2>
+        <h2 id="discussion"><i class="fa fa-comments fa fa-for-adventure-title"></i> @Messages("adventure.getScala.discussion.title")</h2>
         <div class="row">
             <div class="col-lg-12">
 
@@ -167,7 +100,7 @@
     }
 
     <div class="jrn-container">
-        <h2 id="emails"><i class="icon-list-ol icon-for-adventure-title"></i> Emails<div class="pull-right"><button id="emails-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="emails"><i class="fa fa-list-ol icon-for-adventure-title"></i> Emails<div class="pull-right"><button id="emails-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div class="row">
             <div class="col-lg-12">
                 <p class="lead">Eure eigene Emailadresse für dieses JournWe! Sendet und empfangt Emails gemeinsam.</p>
@@ -181,9 +114,7 @@
 
     @if(JournweAuthorization.canViewAdventurePlacesWidget(adv.getId)) {
     <div class="jrn-container">
-
-
-        <h2 id="places"><i class="icon-globe icon-for-adventure-title"></i> @Messages("adventure.getScala.place.title")</h2>
+        <h2 id="places"><i class="fa fa-globe icon-for-adventure-title"></i> @Messages("adventure.getScala.place.title")</h2>
         <div class="row">
             <div class="col-lg-12">
                 <p class="lead">@Messages("adventure.getScala.place.subtitle")</p>
@@ -202,7 +133,7 @@
     @if(JournweAuthorization.canViewAdventureAdventurersWidget(adv.getId)) {
     <div class="jrn-container">
 
-        <h2 id="adventurers"><i class="icon-group icon-for-adventure-title"></i> @Messages("adventure.getScala.adventurers.title")</h2>
+        <h2 id="adventurers"><i class="fa fa-group icon-for-adventure-title"></i> @Messages("adventure.getScala.adventurers.title")</h2>
         <div class="row">
             <div class="col-lg-12">
                 <p class="lead">@Messages("adventure.getScala.adventurers.subtitle")</p>
@@ -218,7 +149,7 @@
 
     @if(JournweAuthorization.canViewAdventureTimeWidget(adv.getId)) {
     <div class="jrn-container">
-        <h2 id="times"><i class="icon-calendar icon-for-adventure-title"></i> @Messages("adventure.getScala.time.title")</h2>
+        <h2 id="times"><i class="fa fa-calendar icon-for-adventure-title"></i> @Messages("adventure.getScala.time.title")</h2>
         <div class="row">
             <div class="col-lg-12">
                 <p class="lead">@Messages("adventure.getScala.time.subtitle")</p>
@@ -234,22 +165,9 @@
     <hr/>
     }
 
-@*
-    <hr/>
-    <div class="jrn-container">
-        <h2 id="messages"><i class="icon-envelope icon-for-adventure-title"></i> @Messages("adventure.getScala.messages.title")</h2>
-        <div class="span11">
-            <p class="lead">@Messages("adventure.getScala.messages.subtitle")</p>
-
-
-        </div>
-        @views.html.comment.widget_comment.render(adv, "messages")
-    </div>
-*@
-
     @if(JournweAuthorization.canViewAdventureTodoWidget(adv.getId)) {
     <div class="jrn-container">
-        <h2 id="todos"><i class="icon-list-ol icon-for-adventure-title"></i> @Messages("adventure.getScala.todo.title")<div class="pull-right"><button id="todos-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="todos"><i class="fa fa-list-ol fa fa-for-adventure-title"></i> @Messages("adventure.getScala.todo.title")<div class="pull-right"><button id="todos-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div class="row">
             <div class="col-lg-12">
                 <p class="lead">@Messages("adventure.getScala.todo.subtitle")</p>
@@ -267,7 +185,7 @@
 
     @if(JournweAuthorization.canViewAdventureFilesWidget(adv.getId)) {
     <div class="jrn-container">
-        <h2 id="files"><i class="icon-file icon-for-adventure-title"></i> @Messages("adventure.getScala.files.title")<div class="pull-right"><button id="files-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="files"><i class="fa fa-file fa fa-for-adventure-title"></i> @Messages("adventure.getScala.files.title")<div class="pull-right"><button id="files-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div class="row">
             <div class="col-lg-12">
                 <p class="lead">@Messages("adventure.getScala.files.subtitle")</p>
@@ -290,14 +208,14 @@
 
     @if(JournweAuthorization.canViewAdventureOffersWidget(adv.getId)) {
     <div class="jrn-container">
-        <h2 id="offers"><i class="icon-suitcase icon-for-adventure-title"></i> @Messages("adventure.getScala.offers.title")</h2>
+        <h2 id="offers"><i class="fa fa-suitcase icon-for-adventure-title"></i> @Messages("adventure.getScala.offers.title")</h2>
         <div class="row">
             <div class="col-lg-12">
                 <p class="lead">@Messages("adventure.getScala.offers.subtitle")</p>
 
                 <table class="table table-striped table-hover">
                     <thead>
-                        <tr><th>Time Option</th><th>Place Option</th><th><i class="icon-plane"></i> Cheap Flights</th><th><i class="icon-building"></i> Cheap Hotels</th></tr>
+                        <tr><th>Time Option</th><th>Place Option</th><th><i class="fa fa-plane"></i> Cheap Flights</th><th><i class="fa fa-building"></i> Cheap Hotels</th></tr>
                     </thead>
                     <tbody>
                         <tr><td>13.9.2013 - 19.9.2013</td><td>Berlin, Deutschland</td><td>LH 419, FRA - BER</td><td>NH Hotel Berlin City West</td></tr>
@@ -316,7 +234,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title"><i class="icon-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
+                    <h3 class="modal-title"><i class="fa fa-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
                     @cloneAdventure(adv,new DynamicForm())
                 </div>
             </div>
@@ -331,7 +249,7 @@
                 </div>
                 <div class="modal-body">@Messages("adventure.general.leaveconfirm") @adv.getName()?</div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" href="@routes.AdventurePeopleController.leave(adv.getId())">@Messages("adventure.general.button.leave")</a> <a class="btn"
+                    <a class="btn btn-danger" href="@html.routes.AdventurePeopleController.leave(adv.getId())">@Messages("adventure.general.button.leave")</a> <a class="btn"
                                                                                                                    data-dismiss="modal">@Messages("adventure.general.button.cancel")</a>
                 </div>
             </div>
@@ -340,60 +258,15 @@
 </div>
 
 <script>
-
-    $.fn.editable.defaults.mode = 'inline';
-    $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-journwe icon-spin"></i></div>';
-
-    $('document').ready(function () {
-
-        jQuery.event.props.push('dataTransfer');
-        $(window).bind('drop', function(event){event.stopPropagation(); event.preventDefault(); return false;});
-        $(window).bind('dragover', function(event){event.stopPropagation(); event.preventDefault(); return false;});
-
-        $('#adventureName').editable();
-
-        $('#adventureDescription').on('hidden', function(){
-            $('.btn-edit-description').show();
-        });
-        // Replace all links with html links for certain elements
-        $('.replace-links').each(function(){
-            $(this).html(replaceURLWithHTMLLinks($(this).html()));
-        });
-
-        // After saving via x-editable, replace those links as well
-        $.extend($.fn.editabletypes.textarea.prototype, {
-            v2h: $.fn.editabletypes.textarea.prototype.value2html,
-            value2html: function(foo, element){
-                this.v2h.apply(this, arguments);
-                $(element).html(replaceURLWithHTMLLinks($(element).html()));
-            }
-        });
-
-    });
-
-
-
-    function jumpToSection(section) {
-        /*
-        $('#nav-adventure-list').find('li').removeClass('active');
-        $('#nav-adventure-' + section).addClass('active');
-        */
-        $('html, body').animate({
-        scrollTop : $('#' + section).offset().top - 100
-        }, 'slow');
-        return false;
-    }
-	$('body').scrollspy({offset: 100}).on('activate', function(evt){
-        $('.row.active').removeClass('active');
-        $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
-    })
-    jumpToSection('@active');
-</script>
-
-<script>
     $(document).ready(function () {
         @if(adv.getImage != null && !"".equals(adv.getImage)){$('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=@adv.getImage()")');}
     });
 </script>
 
+@helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = routes.Assets.at("javascripts/adventure").url)
+
+<script>
+    define("adventureData", [], @{Html(Json.toJson(adv).toString())});
+    define("adventurerData", [], @{Html(Json.toJson(advr).toString())});
+</script>
 }

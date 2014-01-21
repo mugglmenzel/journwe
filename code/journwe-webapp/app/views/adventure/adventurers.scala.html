@@ -1,12 +1,12 @@
-@(adv: models.adventure.Adventure, advr: models.adventure.Adventurer)
+@(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
+@import models.dao.user.UserDAO
+@import models.adventure.adventurer.EAdventurerParticipation
 
 @import models.authorization.JournweAuthorization
-@import models.adventure.EAdventurerParticipation
-@import models.dao.AdventurerDAO
-@import models.dao.UserDAO
+@import models.dao.adventure.AdventurerDAO
 
 
-@cssForStatus(status:EAdventurerParticipation) = {
+    @cssForStatus(status:EAdventurerParticipation) = {
 @status match {
 case EAdventurerParticipation.NOTGOING => {label-danger}
 case EAdventurerParticipation.UNDECIDED => {label-warning}
@@ -27,13 +27,13 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 
     <div class="btn-group btn-select-adventurer">
         <button class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="icon-frown"></i> @Messages("adventure.adventurers.status.notIn")</button>
+           href="@api.json.routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="fa fa-frown"></i> @Messages("adventure.adventurers.status.notIn")</button>
         <button class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="icon-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
+           href="@api.json.routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="fa fa-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
         <button class="btn btn-info @if(status == EAdventurerParticipation.GOING){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="icon-smile"></i> @Messages("adventure.adventurers.status.soIn")</button>
+           href="@api.json.routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="fa fa-smile"></i> @Messages("adventure.adventurers.status.soIn")</button>
         <button class="btn btn-success @if(status == EAdventurerParticipation.BOOKED){active}"
-           href="@routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="icon-ok"></i> @Messages("adventure.adventurers.status.booked")</button>
+           href="@api.json.routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="fa fa-ok"></i> @Messages("adventure.adventurers.status.booked")</button>
     </div>
 </div>
     } else {
@@ -43,7 +43,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 </div>
         } else {
 <div>
-    <a class="btn btn-primary" href="@routes.AdventurePeopleController.participate(adv.getId())">@Messages("adventure.adventurers.button.participate")</a>
+    <a class="btn btn-primary" href="@html.routes.AdventurePeopleController.participate(adv.getId())">@Messages("adventure.adventurers.button.participate")</a>
 </div>
         }
     }
@@ -98,15 +98,15 @@ case EAdventurerParticipation.INVITEE => {label-warning}
     });
 
     function loadParticipants() {
-        loadAdventurers('@routes.AdventurePeopleController.getParticipants(adv.getId)', '#adventurers-participants-list');
+        loadAdventurers('@api.json.routes.AdventurePeopleController.getParticipants(adv.getId)', '#adventurers-participants-list');
     }
 
     function loadInvitees() {
-        loadAdventurers('@routes.AdventurePeopleController.getInvitees(adv.getId)', '#adventurers-invitees-list');
+        loadAdventurers('@api.json.routes.AdventurePeopleController.getInvitees(adv.getId)', '#adventurers-invitees-list');
     }
 
     function loadApplicants() {
-        loadAdventurers('@routes.AdventurePeopleController.getApplicants(adv.getId)', '#adventurers-applicants-list');
+        loadAdventurers('@api.json.routes.AdventurePeopleController.getApplicants(adv.getId)', '#adventurers-applicants-list');
     }
 
     function loadAdventurers(endpoint, target) {
@@ -129,21 +129,21 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 @if(JournweAuthorization.canInviteAdventurerParticipants(adv.getId)) {
 <div class="row">
     <div class="input-group col-lg-6">
-        <div class="input-group-btn">
+        <div id="people-add-type" class="input-group-btn">
             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                <i id="people-add-type" class="icon-facebook"></i>
+                <i id="people-add-type-icon" class="fa fa-facebook"></i>
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-                <li><a onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i>
+                <li><a data-icon="fa fa-facebook" data-type="text" data-typeahead="on"><i class="fa fa-facebook"></i>
                     @Messages("adventure.general.label.facebook")</a></li>
-                <li><a onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i>
+                <li><a data-icon="fa fa-envelope" data-type="email" data-typeahead="off"><i class="fa fa-envelope"></i>
                     @Messages("adventure.general.label.email")</a></li>
             </ul>
         </div>
         <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
         <div class="input-group-btn">
-            <button id="people-add-button" class="btn btn-primary btn-add" onclick="addFriend();"><i class="icon-plus"></i></button>
+            <button id="people-add-button" class="btn btn-primary btn-add" onclick="addFriend();"><i class="fa fa-plus"></i></button>
         </div>
     </div>
 </div>
@@ -151,40 +151,56 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 
 <script type="text/javascript">
 
+
     var facebookUsers = {};
     var facebookUserNames = [];
 
     function addFriend() {
-        $('#people-add-button i').removeClass("icon-plus").addClass("icon-journwe icon-spin");
-        $.post('@routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
+        $('#people-add-button i').removeClass("fa-plus").addClass("icon-journwe fa-spin");
+        $.post('@api.json.routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
             $('#people-add-input').val('');
             loadInvitees();
-            $('#people-add-button i').removeClass("icon-journwe icon-spin").addClass("icon-plus");
+            $('#people-add-button i').removeClass("icon-journwe fa-spin").addClass("fa-plus");
+        });
+    }
+
+    function FacebookFriendTypeahead() {
+        $('#people-add-input').typeahead({
+            name: 'people-typeahead',
+            template: '<p><strong>{%=o.name%}</strong></p>',
+            engine: {_templ: '', compile: function(template){_templ=template; return this;}, render: function(data){return tmpl(_templ,data);}},
+            remote: {
+                url: '@api.json.routes.AdventurePeopleController.autocompleteFacebook?input=%QUERY',
+                filter: function (data) {
+                    facebookUsers = {};
+                    facebookUserNames = [];
+                    $.each(data, function( ix, item ){
+                        if ( $.inArray(item.name, facebookUserNames) > -1 ){
+                            item.nameId = item.name + ' #' + item.id;
+                        } else item.nameId = item.name
+
+                        facebookUserNames.push( {value: item.nameId, name: item.name, tokens: [item.id, item.name]} );
+                        facebookUsers[item.nameId] = item.id;
+                    });
+
+                    return facebookUserNames;
+                }
+            }
         });
     }
 
     $(document).ready(function () {
-        $('#people-add-input').typeahead({
-            source: function (input, process) {
-                if($('#people-add-input').attr('type') == 'text') {
-                    $.get('@routes.AdventurePeopleController.autocompleteFacebook', {input: input}, function (data) {
-                        facebookUsers = {};
-                        facebookUserNames = [];
-                        $.each(data, function( ix, item ){
-                            if ( $.inArray(item.name, facebookUserNames) > -1 ){
-                                item.name = item.name + ' #' + item.id;
-                            }
 
-                            facebookUserNames.push( item.name );
-                            facebookUsers[item.name] = item.id;
-                        });
-
-                        process(facebookUserNames);
-
-                    });
-                }
-            }
+        $('#people-add-type .dropdown-menu a').click(function () {
+            $('#people-add-type-icon').attr('class', $(this).data('icon'));
+            $('#people-add-input').attr('type', $(this).data('type'));
+            if($(this).data('typeahead') == "on") FacebookFriendTypeahead();
+            else $('#people-add-input').typeahead('destroy');
+            $('#people-add-input').focus();
         });
+
+        FacebookFriendTypeahead();
+
     });
 
 
@@ -195,7 +211,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
                 html = el.html();
             
             el.css({width:el.width()+"px"})
-                .html('<i class="icon-spin icon-journwe"></i>');
+                .html('<i class="fa fa-spin icon-journwe"></i>');
 
             $.post(el.attr('href'), function(json){
                 var state = json.participationStatus;
@@ -219,7 +235,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
                 html = el.html();
             
             el.css({width:el.width()+"px"})
-                .html('<i class="icon-spin icon-journwe"></i>');
+                .html('<i class="fa fa-spin icon-journwe"></i>');
 
             $.post(el.attr('href'), function(json){
                 var state = json.participationStatus;

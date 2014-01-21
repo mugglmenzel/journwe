@@ -3,13 +3,11 @@ package services;
 import com.feth.play.module.pa.service.UserServicePlugin;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
-import models.dao.UserDAO;
-import models.dao.UserSocialDAO;
-import models.user.EUserRole;
+import models.dao.user.UserDAO;
+import models.dao.user.UserSocialDAO;
 import models.user.User;
 import play.Application;
 import play.Logger;
-import play.mvc.Controller;
 
 public class OAuthUserServicePlugin extends UserServicePlugin {
 

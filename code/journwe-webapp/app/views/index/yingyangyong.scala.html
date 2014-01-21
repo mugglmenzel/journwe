@@ -6,156 +6,155 @@
 @import models.dao._
 @import java.text.SimpleDateFormat
 
-@*play.api.cache.Cache.getOrElse("yingyangyong" + (if(ins != null){"." + ins.getId}else{""}), 3600) {*@
-<div id="yingyangyong-click-info" class="row">
-    <div class="col-lg-2 col-lg-offset-1 text-center">
-        <i class="icon-chevron-down"></i> 
-        @Messages("yingyangyong.label.clickOn") <img src='http://i.embed.ly/1/image/resize?height=20&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' style="height: 20px;">
-    </div>
-</div>
-<form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
+
+
+<form id="yingyangyong-form" action="@html.routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
+
     <div class="row">
-        <div class="col-lg-3 text-center">
-            <a href="#" onclick="switchMode(); $('#yingyangyong-click-info').fadeOut();"><img id="yingyangyong" src='http://i.embed.ly/1/image/resize?width=170&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")' class="where"></a>
+        <div class="col-lg-8">
+            <input type="text" name="name" placeholder="@Messages("yingyangyong.name.placeholder")" required="required" class="input input-lg form-control">
+            @if(ins != null){<input type="hidden" name="inspirationId" value="@ins.getId">}
         </div>
-         <div class="col-lg-9" style="min-height: 680px; position: relative;">
-            <div class="row">
-                <div class="col-lg-8 input-group">
-                    <input type="text" name="name" placeholder="@Messages("yingyangyong.name.placeholder")" required="required" class="input input-lg form-control">
-                    @*
-                    <div class="input-group-btn">
-                        <a class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" href="#">
-                            @Messages("adventure.general.button.category")
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                        @defining(new CategoryDAO()){catDAO =>
-                            @defining(catDAO.all()){ categories =>
-                                @for(cat <- categories) {
-                                    <li><a><span class="badge badge-info pull-right">@catDAO.countInspirationsHierarchyCached(cat.getId())</span>@cat.getName()</a></li>
-                                }
-                            }
-                        }
-                        </ul>
+        <div class="col-lg-4">
+            <button type="submit" class="btn btn-lg btn-success pull-right" onclick="$('#yingyangyong-form').submit();">
+                @Messages("adventure.general.button.startJournWe") <i class="fa fa-chevron-right fa-fw"></i></button>
+        </div>
+    </div>
+    <div class="spacer20"></div>
+
+    <div style="margin-left: 15px;">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a style="background-color: #78a942;" href="#where-tab" data-toggle="tab">Where?</a></li>
+            <li><a style="background-color: #eb3d00;" href="#who-tab" data-toggle="tab">Who?</a></li>
+            <li><a style="background-color: #00d1fb;" href="#when-tab" data-toggle="tab">When?</a></li>
+        </ul>
+    </div>
+
+
+    <div class="tab-content">
+
+        <div class="tab-pane fade in active" id="where-tab">
+            <div style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-bottom: 20px">
+                <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px;">
+                    <h1><i class="fa fa-globe"></i> @Messages("yingyangyong.place")</h1>
+
+                    <ul id="places-list" class="list-unstyled list-inline">
+                    @if(ins != null && ins.getPlaceAddress != null) {
+                        <li id="places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")"><input type="hidden" name="place[]" value="@ins.getPlaceAddress/@ins.getPlaceLatitude/@ins.getPlaceLongitude"><span class="label label-success"><i class="fa fa-map-marker"></i> @ins.getPlaceAddress &nbsp;<a href="#" onclick="$('#places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")').remove(); removeMarker('places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")'); return false;">&times;</a></span> <span class="divider"></span></li>
+                        <script>
+                        $('document').ready(function () {
+                        var marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(@ins.getPlaceLatitude, @ins.getPlaceLongitude)
+                        });
+                        var id = 'places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")';
+                        markers[id] = marker;
+
+                        });
+                        </script>
+                    }
+                    </ul>
+
+                    <div class="input-group">
+                        <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
+                        <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="fa fa-plus"></i></a></div>
                     </div>
-                    *@
-                    @if(ins != null){<input type="hidden" name="inspirationId" value="@ins.getId">}
-                </div>
-                <div class="col-lg-4">
-                    <button type="submit" class="btn btn-lg btn-success pull-right" onclick="$('#yingyangyong-form').submit();">
-                        @Messages("adventure.general.button.startJournWe") <i class="icon-angle-right"></i></button>
+                    <div class="spacer10"></div>
+                    <div style="height: 400px;">
+                        <div id="where-map" style="width: 100%; height: 100%"></div>
+                    </div>
+                    <div class="spacer20"></div>
+                    <div class="clearfix">
+                        <a class="btn btn-lg btn-primary pull-right" href="#who-tab" data-toggle="tab">Next <i class="fa fa-angle-right fa-fw"></i></a>
+                    </div>
+
                 </div>
             </div>
+        </div>
 
-            @*
-            <div>
-                <div class="input-append">
-                    <input type="text" name="shortname" placeholder="@Messages("yingyangyong.shortname.placeholder")" id="shortname" minlength="3" required="required" onchange="checkShortname();">
-                    <span class="add-on">@@adventure.journwe.com</span>
-                    <a class="add-on btn" onclick="checkShortname();">@Messages("adventure.general.button.check")</a>
+        <div class="tab-pane fade" id="who-tab">
+            <div style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-bottom: 20px;">
+                <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
+                    <h1><i class="fa fa-group"></i> @Messages("yingyangyong.adventurers")</h1>
+
+                    <ul id="people-list" class="list-unstyled list-inline"></ul>
+
+                    <div class="input-group">
+                        <div id="people-add-type" class="input-group-btn">
+                            <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
+                                <i id="people-add-type-icon" class="fa fa-facebook fa-fw"></i>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a data-icon="fa fa-facebook fa-fw" data-type="text" data-typeahead="on"><i class="fa fa-facebook fa-fw"></i>
+                                    @Messages("adventure.general.label.facebook")</a></li>
+                                <li><a data-icon="fa fa-envelope fa-fw" data-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
+                                    @Messages("adventure.general.label.email")</a></li>
+                            </ul>
+                        </div>
+                        <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
+                        <div class="input-group-btn">
+                            <a class="btn btn-add btn-primary" onclick="addFriend();"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="spacer20"></div>
+                    <div>
+                        <span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.public") </span>
+                        <div><input type="checkbox" id="publish" name="publish"></div>
+                    </div>
+                    <div class="spacer20"></div>
+                    <div>
+                        <span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.publish")</span>
+                        <div><input type="checkbox" id="facebookWall" name="facebookWall" onchange="$('.post-on-facebook').toggle(this.checked)"></div>
+                        <div class="form-group post-on-facebook" style="display: none; margin-top: 10px;">
+                            <label for="facebookWallPost"><i class="fa fa-facebook"></i> @Messages("yingyangyong.adventurers.facebookMessage") </label>
+                            <textarea name="facebookWallPost" style="width: 100%; height: 100px;" class="form-control">@Messages("yingyangyong.adventurers.facebookMessage.example")</textarea>
+                        </div>
+                    </div>
+                    <div class="spacer20"></div>
+                    <div class="clearfix">
+                        <a class="btn btn-lg btn-primary pull-right" href="#when-tab" data-toggle="tab">Next <i class="fa fa-angle-right fa-fw"></i></a>
+                    </div>
                 </div>
-                <div id="shortname-available">@Messages("adventure.create.shortURLavail")</div>
             </div>
-            *@
+        </div>
 
-            <div class="row col-lg-12">
-                <div id="where-dialog" style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-top: 20px; margin-bottom: 20px">
-                    <div style="background-color: rgba(255, 255, 255, 0.3); padding: 15px; ">
-                        <h1><i class="icon-globe"></i> @Messages("yingyangyong.place")</h1>
+        <div class="tab-pane fade" id="when-tab">
+            <div style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-bottom: 20px;">
+                <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
+                    <h1><i class="fa fa-calendar"></i> @Messages("yingyangyong.time") </h1>
 
-                        <ul id="places-list" class="list-unstyled list-inline">
-                        @if(ins != null && ins.getPlaceAddress != null) {
-                            <li id="places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")"><input type="hidden" name="place[]" value="@ins.getPlaceAddress/@ins.getPlaceLatitude/@ins.getPlaceLongitude"><span class="label label-success"><i class="icon-map-marker"></i> @ins.getPlaceAddress &nbsp;<a href="#" onclick="$('#places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")').remove(); removeMarker('places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")'); return false;">&times;</a></span> <span class="divider"></span></li>
-                            <script>
-                                $('document').ready(function () {
-                                    var marker = new google.maps.Marker({
-                                        map: map,
-                                        position: new google.maps.LatLng(@ins.getPlaceLatitude, @ins.getPlaceLongitude)
-                                    });
-                                    var id = 'places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")';
-                                    markers[id] = marker;
-
-                                });
-                            </script>
+                    <ul id="time-list" class="list-unstyled list-inline">
+                    @if(ins != null && ins.getTimeStart != null) {
+                        @defining(new SimpleDateFormat("yyyy-MM-dd")){sdf =>
+                            <li id="time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)"><input type="hidden" name="time[]" value="@sdf.format(ins.getTimeStart),@sdf.format(ins.getTimeEnd)"><span class="label label-info"><i class="fa fa-time"></i> @sdf.format(ins.getTimeStart) to @sdf.format(ins.getTimeEnd) &nbsp;<a href="#" onclick="$('#time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)').remove();">&times;</a></span> <span class="divider"></span></li>
                         }
-                        </ul>
+                    }
+                    </ul>
 
-                        <div class="input-group">
-                            <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
-                            <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="icon-plus"></i></a></div>
-                        </div>
-                        <div style="height: 400px; margin-top: 10px;">
-                            <div id="where-map" style="width: 100%; height: 100%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="who-dialog" style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-top: 20px; margin-bottom: 20px; display: none;">
-                    <div style="background-color: rgba(255, 255, 255, 0.2); padding: 15px; ">
-                        <h1><i class="icon-group"></i> @Messages("yingyangyong.adventurers")</h1>
-
-                        <ul id="people-list" class="list-unstyled list-inline"></ul>
-
-                        <div class="input-group">
-                            <div class="input-group-btn">
-                                <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
-                                    <i id="people-add-type" class="icon-facebook"></i> 
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a onclick="$('#people-add-type').attr('class', 'icon-facebook'); $('#people-add-input').attr('type', 'text'); $('#people-add-input').focus();"><i class="icon-facebook"></i> 
-                                        @Messages("adventure.general.label.facebook")</a></li>
-                                    <li><a onclick="$('#people-add-type').attr('class', 'icon-envelope'); $('#people-add-input').attr('type', 'email'); $('#people-add-input').focus();"><i class="icon-envelope"></i> 
-                                        @Messages("adventure.general.label.email")</a></li>
-                                </ul>
-                            </div>
-                            <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
-                            <div class="input-group-btn">
-                                <a class="btn btn-add btn-primary" onclick="addFriend();"><i class="icon-plus"></i></a>
-                            </div>
-                        </div>
-                        <div class="spacer20"></div>
-                        <div style="margin-bottom: 20px;"><span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.public") </span>
-                            <div class="switch"><input type="checkbox" id="publish" name="publish"></div>
-                        </div>
-                        <div style="margin-bottom: 20px;"><span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.publish")</span>
-                            <div class="switch"><input type="checkbox" id="facebookWall" name="facebookWall" onchange="$('.post-on-facebook').toggle(this.checked)"></div>
-                            <div class="form-group post-on-facebook" style="display: none; margin-top: 10px;">
-                                <label for="facebookWallPost"><i class="icon-facebook"></i> @Messages("yingyangyong.adventurers.facebookMessage") </label>
-                                <textarea name="facebookWallPost" style="width: 100%; height: 100px;" class="form-control">@Messages("yingyangyong.adventurers.facebookMessage.example")</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="when-dialog" style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-top: 20px; margin-bottom: 20px; display: none;">
-                    <div style="background-color: rgba(255, 255, 255, 0.5); padding: 15px; ">
-                        <h1><i class="icon-calendar"></i> @Messages("yingyangyong.time") </h1>
-
-                        <ul id="time-list" class="list-unstyled list-inline">
-                        @if(ins != null && ins.getTimeStart != null) {
-                            @defining(new SimpleDateFormat("yyyy-MM-dd")){sdf =>
-                                <li id="time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)"><input type="hidden" name="time[]" value="@sdf.format(ins.getTimeStart),@sdf.format(ins.getTimeEnd)"><span class="label label-info"><i class="icon-time"></i> @sdf.format(ins.getTimeStart) to @sdf.format(ins.getTimeEnd) &nbsp;<a href="#" onclick="$('#time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)').remove();">&times;</a></span> <span class="divider"></span></li>
-                            }
-                        }
-                        </ul>
-
-                        <div class="row">
+                    <div class="row">
 
 
-                            <div class="input-group col-lg-5" style="width: 43%;">
-                                <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.start")</span>
+                        <div class="col-lg-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.start")</span>
                                 <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style="max-width: 200px;"/>
                             </div>
-                            <div class="input-group col-lg-5" style="width: 43%;">
-                                <span class="input-group-addon"><i class="icon-calendar"></i> @Messages("adventure.time.end")</span>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.end")</span>
                                 <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style="max-width: 200px;"/>
                             </div>
-
-                            <div class="col-lg-2 text-right" style="width: 14%;">
-                                <a class="btn btn-add btn-primary" onclick="addTime();" style="width: 100%;"><i class="icon-plus"></i></a>
-                            </div>
                         </div>
+
+                        <div class="col-lg-2 pull-right">
+                            <a class="btn btn-add btn-primary" onclick="addTime();" style="width: 100%;"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="spacer20"></div>
+                    <div class="clearfix">
+                       <a class="btn btn-lg btn-primary pull-right" href="#where-tab" data-toggle="tab">Next <i class="fa fa-angle-right fa-fw"></i></a>
                     </div>
                 </div>
             </div>
@@ -194,9 +193,9 @@
     }
 
     function checkShortname() {
-        $.post('@routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
+        $.post('@api.json.routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
             function(check) {
-                $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="icon-ok"></i> available.</span>' : '<span class="text-error"><i class="icon-warning-sign"></i> not available!</span>' );
+                $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="fa fa-ok"></i> available.</span>' : '<span class="text-error"><i class="fa fa-warning-sign"></i> not available!</span>' );
                 $('#shortname').attr('aria-invalid', !check.valid);
                 if(!check.valid)
                     $('#shortname').parents(".control-group").first().addClass('error');
@@ -249,7 +248,7 @@
     function searchPlace() {
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
             var id = 'places-item-' + results[0].geometry.location.lat().toString().replace('.', '_') + '-' + results[0].geometry.location.lng().toString().replace('.', '_');
-            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label label-success"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
+            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label label-success"><i class="fa fa-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
             map.setCenter(results[0].geometry.location);
             var marker = new google.maps.Marker({
                 map: map,
@@ -297,34 +296,41 @@
         $('#people-add-input').val('');
     }
 
-
-    function bindPeopleAutocomplete() {
-
+    function FacebookFriendTypeahead() {
         $('#people-add-input').typeahead({
-                source: function (input, process) {
-                    if($('#people-add-input').attr('type') == 'text') {
-                        $.get('@routes.AdventurePeopleController.autocompleteFacebook', {input: input}, function (data) {
-                            facebookUsers = {};
-                            facebookUserNames = [];
-                            $.each(data, function( ix, item ){
-                                if ( $.inArray(item.name, facebookUserNames) > -1 ){
-                                item.name = item.name + ' #' + item.id;
-                            }
+            name: 'people-typeahead',
+            template: '<p><strong>{%=o.name%}</strong></p>',
+            engine: {_templ: '', compile: function(template){_templ=template; return this;}, render: function(data){return tmpl(_templ,data);}},
+            remote: {
+                url: '@api.json.routes.AdventurePeopleController.autocompleteFacebook?input=%QUERY',
+                filter: function (data) {
+                    facebookUsers = {};
+                    facebookUserNames = [];
+                    $.each(data, function( ix, item ){
+                        if ( $.inArray(item.name, facebookUserNames) > -1 ){
+                            item.nameId = item.name + ' #' + item.id;
+                        } else item.nameId = item.name
 
-                            facebookUserNames.push( item.name );
-                            facebookUsers[item.name] = item.id;
-                            });
+                        facebookUserNames.push( {value: item.nameId, name: item.name, tokens: [item.id, item.name]} );
+                        facebookUsers[item.nameId] = item.id;
+                    });
 
-                            process(facebookUserNames);
-
-                        });
-                    }
+                    return facebookUserNames;
                 }
-            });
-
-
+            }
+        });
     }
-    $('document').ready(function(){bindPeopleAutocomplete();});
+
+    $('document').ready(function(){
+        $('#people-add-type .dropdown-menu a').click(function () {
+            $('#people-add-type-icon').attr('class', $(this).data('icon'));
+            $('#people-add-input').attr('type', $(this).data('type'));
+            if($(this).data('typeahead') == "on") FacebookFriendTypeahead();
+            else $('#people-add-input').typeahead('destroy');
+            $('#people-add-input').focus();
+        });
+        FacebookFriendTypeahead();
+    });
 
 
 
@@ -348,7 +354,7 @@
         }
 
         var id = 'time-item-' + start.val() + '-' + end.val();
-        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label label-info"><i class="icon-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label label-info"><i class="fa fa-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
 
         start.val('');
         end.val('');

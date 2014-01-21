@@ -15,17 +15,17 @@
 
         <div class="title-name">
             @ins.getName()
-            @if(category != null) {<small>- <a href="@routes.ApplicationController.categoryIndex(category.getId)">@category.getName()</a></small>}
+            @if(category != null) {<small>- <a href="@html.routes.ApplicationController.categoryIndex(category.getId)">@category.getName()</a></small>}
         </div>
         <div class="toolbar">
-            <a class="btn btn-primary pull-right" href="@routes.InspirationController.createAdventure(ins.getId)"><i class="icon-arrow-right"></i> @Messages("adventure.general.label.start") </a>
+            <a class="btn btn-primary pull-right" href="@html.routes.InspirationController.createAdventure(ins.getId)"><i class="fa fa-arrow-right"></i> @Messages("adventure.general.label.start") </a>
         </div>
     </div>
 
     <div class="jrn-container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@routes.InspirationController.createAdventure(ins.getId)"> @Messages("adventure.getScala.start", ins.getName()) </a></div>
+                <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@html.routes.InspirationController.createAdventure(ins.getId)"> @Messages("adventure.getScala.start", ins.getName()) </a></div>
                 @if(ins.getDescription != null){
                     <p>@Html(ins.getDescription())</p>
                 }
@@ -70,9 +70,9 @@
 
                 <span class="pull-right">
                     <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false"></div>
-                    <div><a href="https://twitter.com/share" class="twitter-share-button" data-url="@routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a></div>
+                    <div><a href="https://twitter.com/share" class="twitter-share-button" data-url="@html.routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a></div>
                     <div class="g-plusone" data-size="tall" data-annotation="vertical-bubble"></div>
-                    <div><a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + "&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8") + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a></div>
+                    <div><a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(html.routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + "&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8") + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a></div>
                 </span>
             </div>
         </div>
@@ -107,14 +107,14 @@
     </div>
 
     <div class="jrn-container">
-        <h2 id="tips"><i class="icon-thumbs-up"></i> Tips</h2>
+        <h2 id="tips"><i class="fa fa-thumbs-up"></i> Tips</h2>
         <div class="row">
             <div class="col-lg-12">
                 <div id="inspiration-tips"></div>
                 <script type="text/x-tmpl" id="inspiration-tip-template">
                     <div>
                         <img class="pull-left" style="margin-right: 10px; max-height: 24pt;" src="{%=o.user.image%}">
-                        <div class="comment-text"><i class="icon-comment"></i> {%=o.tip.tip%}</div>
+                        <div class="comment-text"><i class="fa fa-comment"></i> {%=o.tip.tip%}</div>
                         <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.tip.created%}</div>
                     </div>
                 </script>
@@ -123,7 +123,7 @@
                         loadTips();
                     });
                     function loadTips() {
-                        $.get('@routes.InspirationController.getTips(ins.getId)', function (tips) {
+                        $.get('@api.json.routes.InspirationController.getTips(ins.getId)', function (tips) {
                             $('#inspiration-tips').empty();
                             if(tips){
                                 for(var i in tips) {
@@ -137,10 +137,10 @@
             </div>
             <div class="col-lg-12">
                 <input type="text" id="tip-add-text">
-                <button id="tip-add-button" class="btn btn-primary"><i class="icon-plus"></i></button>
+                <button id="tip-add-button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
                 <script>
                     $('#tip-add-button').click(function(){
-                        $.post('@routes.InspirationController.addTip(ins.getId)', {tip: $('#tip-add-text').val()}, function(){
+                        $.post('@api.json.routes.InspirationController.addTip(ins.getId)', {tip: $('#tip-add-text').val()}, function(){
                             $('#tip-add-text').val('');
                             loadTips();
                         });
@@ -152,7 +152,7 @@
     </div>
 
     <div class="jrn-container">
-        <h2 id="photos"><i class="icon-picture"></i> @Messages("adventure.general.label.photos") </h2>
+        <h2 id="photos"><i class="fa fa-picture"></i> @Messages("adventure.general.label.photos") </h2>
         <div class="row">
             <div class="col-lg-12">
                 <div id="inspiration-photos"></div>
@@ -163,7 +163,7 @@
                 </script>
                 <script>
                     $(document).ready(function(){
-                        $.get('@routes.InspirationController.getImages(ins.getId)', function (images) {
+                        $.get('@api.json.routes.InspirationController.getImages(ins.getId)', function (images) {
                             if(images){
                                 for(var i in images) {
                                     $('#inspiration-photos').append(tmpl('inspiration-photo-template', images[i]));
@@ -179,7 +179,7 @@
 
     @if(ins.getPlaceAddress != null){
     <div class="jrn-container">
-        <h2 id="place"><i class="icon-globe"></i> @Messages("adventure.getScala.place.title") </h2>
+        <h2 id="place"><i class="fa fa-globe"></i> @Messages("adventure.getScala.place.title") </h2>
         <div class="row">
             <div class="col-lg-12">
                 <h3><em>@ins.getPlaceAddress</em></h3>
@@ -218,7 +218,7 @@
 
     @if(ins.getTimeStart != null) {
     <div class="jrn-container">
-        <h2 id="time"><i class="icon-calendar"></i> @Messages("adventure.getScala.time.title") </h2>
+        <h2 id="time"><i class="fa fa-calendar"></i> @Messages("adventure.getScala.time.title") </h2>
         <div class="row">
             <div class="col-lg-12">
                 <h3><em id="inspiration-time">@defining(new SimpleDateFormat("yyyy-MM-dd")){sdf => <span>@sdf.format(ins.getTimeStart) @if(ins.getTimeEnd != null && ins.getTimeEnd != ins.getTimeStart) { to @sdf.format(ins.getTimeEnd)}}</em></h3>
@@ -229,9 +229,9 @@
 
 
     <div class="jrn-container">
-        <h2 id="public-journwes"><i class="icon-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="public-journwes"><i class="fa fa-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>
             <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
@@ -242,9 +242,9 @@
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                 <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                 <div class="overlay text-center" style="display: none;">
-                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="icon-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="icon-group"></i> {%=o.peopleCount%}</span>
-                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="icon-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                 </div>
             </div>
         </div>
@@ -260,9 +260,9 @@
         });
 
         function loadPublicAdventures(lastId, clear) {
-            $('#adventures-public-button-refresh i').addClass('icon-spin');
-            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
-            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10, inspirationId: '@ins.getId'} , function (advs) {
+            $('#adventures-public-button-refresh i').addClass('fa fa-spin');
+            $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
+            $.get('@api.json.routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10, inspirationId: '@ins.getId'} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
                     var polaroid = tmpl('adventure-public-template', advs[i]);
@@ -279,7 +279,7 @@
 
                 }
                 $('#adventures-public-load-more-button').html('Show More');
-                $('#adventures-public-button-refresh i').removeClass('icon-spin');
+                $('#adventures-public-button-refresh i').removeClass('fa fa-spin');
             });
         }
     </script>

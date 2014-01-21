@@ -1,7 +1,7 @@
 @(cat:  models.category.Category)
 @import models.category.Category
-@import models.dao.CategoryHierarchyDAO
-@import models.dao.CategoryDAO
+@import models.dao.category.CategoryHierarchyDAO
+@import models.dao.category.CategoryDAO
 
 
 @main(Messages("journwe.subtitle")) {Category @cat.getName
@@ -11,10 +11,10 @@
     @defining(new CategoryHierarchyDAO){ catHierDAO =>
     <div class="nav-category visible-lg" style="">
         <ul id="nav-category-list" class="nav nav-pills nav-stacked">
-            @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@routes.ApplicationController.categoryIndex(catSuper.getId)"><i class="icon-circle-arrow-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Home}else{@catSuper.getName}"></i> </a></li>}
+            @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@html.routes.ApplicationController.categoryIndex(catSuper.getId)"><i class="icon-circle-arrow-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Home}else{@catSuper.getName}"></i> </a></li>}
             @*
             @catHierDAO.categoryAsSuper(cat.getId).map{ catHier =>
-                @defining(new CategoryDAO().get(catHier.getSubCategoryId)){ catSub => <li><a href="@routes.ApplicationController.categoryIndex(catSub.getId)"><i class="icon-circle-arrow-down" title="Level Down"></i> @catSub.getName</a></li>}
+                @defining(new CategoryDAO().get(catHier.getSubCategoryId)){ catSub => <li><a href="@html.routes.ApplicationController.categoryIndex(catSub.getId)"><i class="icon-circle-arrow-down" title="Level Down"></i> @catSub.getName</a></li>}
             }
             *@
             <li><a href="#subcategories"><i class="icon-circle-arrow-down" title="Sub-Categories"></i></a></li>
@@ -61,7 +61,7 @@
         });
 
         function loadSubCategories() {
-            $.get('@routes.ApplicationController.getCategories(cat.getId)', function (cats) {
+            $.get('@api.json.routes.ApplicationController.getCategories(cat.getId)', function (cats) {
                 if(cats != null && cats.length)
                     for(var i in cats) {
                         $('#subcategories-list').append(tmpl('subcategory-template', cats[i]));
@@ -77,7 +77,7 @@
 
 
     <div class="jrn-container">
-        <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirations(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirationsByCategory(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
         <div style="">
             <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>
@@ -136,7 +136,7 @@
         function loadInspirations(lastId, clear) {
             $('#inspirations-public-button-refresh i').addClass('icon-spin');
             $('#inspirations-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
-            $.get('@routes.ApplicationController.getInspirations(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
+            $.get('@api.json.routes.ApplicationController.getInspirations(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
                 if(clear) $('#inspirations-public-list').empty();
                 if(advs != null && advs.length > 0) {
                     for(var i in advs) {
@@ -251,7 +251,7 @@
         function loadPublicAdventures(lastId, clear) {
             $('#adventures-public-button-refresh i').addClass('icon-spin');
             $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
-            $.get('@routes.ApplicationController.getPublicAdventuresOfCategory(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
+            $.get('@api.json.routes.ApplicationController.getPublicAdventuresOfCategory(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 if(advs != null && advs.length > 0) {
                     for(var i in advs) {

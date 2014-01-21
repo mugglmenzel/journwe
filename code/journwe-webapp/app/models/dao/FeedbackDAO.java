@@ -2,8 +2,6 @@ package models.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import models.admin.Feedback;
-import models.adventure.CommentThread;
-import models.dao.common.AdventureComponentDAO;
 import models.dao.common.CommonRangeEntityDAO;
 
 import java.util.ArrayList;

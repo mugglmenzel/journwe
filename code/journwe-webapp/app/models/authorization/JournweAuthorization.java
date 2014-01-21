@@ -4,7 +4,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.AdventureAuthorization;
 import models.adventure.EAuthorizationRole;
 import models.dao.AdventureAuthorizationDAO;
-import models.dao.UserDAO;
+import models.dao.user.UserDAO;
 import models.user.User;
 import play.mvc.Http;
 

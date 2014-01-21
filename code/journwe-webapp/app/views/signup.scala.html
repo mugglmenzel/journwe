@@ -10,7 +10,7 @@
   <div id="signup" class="row">
     <div class="col-lg-4">
         @* Display proprietary login form *@
-    	@helper.form(routes.ApplicationController.doSignup) {
+    	@helper.form(html.routes.ApplicationController.doSignup) {
     	
             @if(signupForm.hasGlobalErrors) { 
                 <p class="error">

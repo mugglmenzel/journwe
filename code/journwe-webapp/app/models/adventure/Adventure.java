@@ -6,6 +6,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import play.data.validation.Constraints.Required;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 @DynamoDBTable(tableName = "journwe-adventure")
 public class Adventure {
@@ -31,9 +33,13 @@ public class Adventure {
 
     private Integer limit;
 
+    private Long placeVoteDeadline;
+
     private Boolean placeVoteOpen = true;
 
     private String favoritePlaceId;
+
+    private Long timeVoteDeadline;
 
     private Boolean timeVoteOpen = true;
 
@@ -160,6 +166,38 @@ public class Adventure {
      */
     public void setLimit(Integer limit) {
         this.limit = limit;
+    }
+
+    public Long getPlaceVoteDeadline() {
+        return placeVoteDeadline;
+    }
+
+    @DynamoDBIgnore
+    public String getPlaceVoteDeadlineFormatted() {
+        if (placeVoteDeadline == null || placeVoteDeadline == 0L){
+            return "";
+        }
+        return new SimpleDateFormat("dd-MM-yyyy").format(new Date(placeVoteDeadline));
+    }
+
+    public void setPlaceVoteDeadline(Long placeVoteDeadline) {
+        this.placeVoteDeadline = placeVoteDeadline;
+    }
+
+    public Long getTimeVoteDeadline() {
+        return timeVoteDeadline;
+    }
+
+    @DynamoDBIgnore
+    public String getTimeVoteDeadlineFormatted() {
+        if (timeVoteDeadline == null || timeVoteDeadline == 0L){
+            return "";
+        }
+        return new SimpleDateFormat("dd-MM-yyyy").format(new Date(timeVoteDeadline));
+    }
+
+    public void setTimeVoteDeadline(Long timeVoteDeadline) {
+        this.timeVoteDeadline = timeVoteDeadline;
     }
 
     public String getFavoritePlaceId() {

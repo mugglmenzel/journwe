@@ -6,13 +6,13 @@ import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
 import com.typesafe.config.ConfigFactory;
-import controllers.AdventureController;
-import controllers.AdventureFileController;
+import controllers.html.AdventureController;
+import controllers.api.json.AdventureFileController;
 import controllers.routes;
 import models.adventure.Adventure;
-import models.dao.AdventureDAO;
-import models.dao.AdventurerDAO;
-import models.dao.CategoryDAO;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.AdventurerDAO;
+import models.dao.category.CategoryDAO;
 import models.notifications.ENotificationFrequency;
 import models.notifications.helper.UserNotifier;
 import play.Application;
@@ -32,19 +32,19 @@ public class Global extends GlobalSettings {
             @Override
             public Call login() {
                 // Your login page
-                return routes.ApplicationController.index();
+                return controllers.html.routes.ApplicationController.index();
             }
 
             @Override
             public Call afterAuth() {
                 // The user will be redirected to this page after authentication
                 // if no original URL was saved
-                return routes.ApplicationController.index();
+                return controllers.html.routes.ApplicationController.index();
             }
 
             @Override
             public Call afterLogout() {
-                return routes.ApplicationController.index();
+                return controllers.html.routes.ApplicationController.index();
             }
 
             @Override
@@ -58,7 +58,7 @@ public class Global extends GlobalSettings {
             @Override
             public Call onException(final AuthException e) {
                 if (e instanceof AccessDeniedException) {
-                    return routes.ApplicationController
+                    return controllers.html.routes.ApplicationController
                             .oAuthDenied(((AccessDeniedException) e)
                                     .getProviderKey());
                 }
@@ -70,12 +70,12 @@ public class Global extends GlobalSettings {
 
             @Override
             public Call askLink() {
-                return routes.Account.askLink();
+                return controllers.html.routes.AccountController.askLink();
             }
 
             @Override
             public Call askMerge() {
-                return routes.Account.askMerge();
+                return controllers.html.routes.AccountController.askMerge();
             }
         });
 
@@ -103,7 +103,7 @@ public class Global extends GlobalSettings {
             public void run() {
                 Logger.debug("Cleaning Adventures without Adventurers");
                 for (Adventure adv : new AdventureDAO().all())
-                    if (!(new AdventurerDAO().count(adv.getId()) > 0)) {
+                    if (!(new AdventurerDAO().userCountByAdventure(adv.getId()) > 0)) {
                         new AdventureDAO().deleteFull(adv.getId());
                         //delete s3 objects
                         AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
