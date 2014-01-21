@@ -44,14 +44,14 @@
         @if(JournweAuthorization.canViewAdventureTitle(adv.getId)&&false) {
         <div class="title-name">
             <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-            data-url="@routes.AdventureController.saveEditable()"
+            data-url="@html.routes.AdventureController.saveEditable()"
             data-original-title="Enter adventure name" data-inputclass="input-lg">@adv.getName()</a> <i class="fa fa-pencil muted"></i> <span></span>
-            @if(ins != null) {<small>- <a href="@routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+            @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
         </div>
         }
         <div class="toolbar">
             @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
-                <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
+                <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
             } else {
                 <a class="btn btn-danger pull-right" onclick="$('#leave').modal();"><i class="fa fa-unlink"></i> @Messages("adventure.general.button.leave")</a>
             }
@@ -249,7 +249,7 @@
                 </div>
                 <div class="modal-body">@Messages("adventure.general.leaveconfirm") @adv.getName()?</div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" href="@routes.AdventurePeopleController.leave(adv.getId())">@Messages("adventure.general.button.leave")</a> <a class="btn"
+                    <a class="btn btn-danger" href="@html.routes.AdventurePeopleController.leave(adv.getId())">@Messages("adventure.general.button.leave")</a> <a class="btn"
                                                                                                                    data-dismiss="modal">@Messages("adventure.general.button.cancel")</a>
                 </div>
             </div>

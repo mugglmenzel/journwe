@@ -1,4 +1,4 @@
-package controllers;
+package controllers.api.json;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.sns.AmazonSNS;

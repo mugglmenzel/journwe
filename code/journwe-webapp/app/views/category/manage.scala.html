@@ -22,7 +22,7 @@
                     <ul class="sortable list-unstyled" style="border: dashed 2px gray; min-height: 50px;" data-id={catId}>
                     {new CategoryDAO().allSubcategory(catId).map( cat =>
                             if(cat != null){
-                                <li data-id={cat.getId()}><div class="draggable droppable"><div class="row" style="background: rgba(255,255,255,0.4); padding: 5px; margin: 2px; margin-left: 10px"><div class="col-lg-5">{cat.getId()}</div><div class="col-lg-4">{cat.getName()}</div><div class="col-lg-1"><a href={routes.CategoryController.edit(cat.getId()).toString()} class="act-primary"><i class="fa fa-edit"></i>edit</a></div><div class="col-lg-2"><a href={routes.CategoryController.delete(cat.getId()).toString()} class="act-danger"><i class="fa fa-trash"></i> {Messages("adventure.general.label.delete")}</a></div></div>
+                                <li data-id={cat.getId()}><div class="draggable droppable"><div class="row" style="background: rgba(255,255,255,0.4); padding: 5px; margin: 2px; margin-left: 10px"><div class="col-lg-5">{cat.getId()}</div><div class="col-lg-4">{cat.getName()}</div><div class="col-lg-1"><a href={html.routes.CategoryController.edit(cat.getId()).toString()} class="act-primary"><i class="fa fa-edit"></i>edit</a></div><div class="col-lg-2"><a href={html.routes.CategoryController.delete(cat.getId()).toString()} class="act-danger"><i class="fa fa-trash"></i> {Messages("adventure.general.label.delete")}</a></div></div>
                                 {catHierarchy(cat.getId)}
                                 </div></li>
                             }
@@ -46,7 +46,7 @@
                opacity: 0.7,
                receive: function (event, ui) {
                     //alert('receiving for ' + ui.item.data('id') + ' to ' + $(this).data('id'));
-                    $.post('@routes.CategoryController.setSuperCategory()', {category: ui.item.data('id'), superCategory: $(this).data('id')});
+                    $.post('@api.json.routes.CategoryController.setSuperCategory()', {category: ui.item.data('id'), superCategory: $(this).data('id')});
                 },
                scroll: true
             });
@@ -56,7 +56,7 @@
     <div class="jrn-container">
         <h2> @Messages("inspiration.title") </h2>
 
-        @form(routes.CategoryController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+        @form(html.routes.CategoryController.save(), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
 
             <fieldset>
                 @if(categoryForm("id").value()) {
@@ -67,7 +67,7 @@
                 @inputFile(categoryForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
             </fieldset>
             <div class="form-actions">
-              <input type="submit" value="Save category!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link"> @Messages("adventure.general.button.cancel") </a>
+              <input type="submit" value="Save category!" class="btn btn-primary"> | <a href="@html.routes.ApplicationController.index()" class="btn btn-link"> @Messages("adventure.general.button.cancel") </a>
             </div>
         }
 

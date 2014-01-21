@@ -9,14 +9,14 @@
 
 	<h2>Comment Form</h2>
 
-    @form(routes.CommentController.saveComment(), args = 'class -> "form-horizontal") {
+    @form(api.json.routes.CommentController.saveComment(), args = 'class -> "form-horizontal") {
 
     	<fieldset>
     		<input type="hidden" name="threadId" value="@threadId" />
        		@inputText(commentForm("text"), '_label -> "Comment text")
     	</fieldset>
     	<div class="form-actions">
-    	  <input type="submit" value="Post comment!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+    	  <input type="submit" value="Post comment!" class="btn btn-primary"> | <a href="@html.routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
     	</div>
     }
     

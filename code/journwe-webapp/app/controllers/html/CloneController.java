@@ -1,6 +1,7 @@
-package controllers;
+package controllers.html;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import controllers.routes;
 import models.adventure.*;
 import models.adventure.adventurer.Adventurer;
 import models.adventure.adventurer.EAdventurerParticipation;
@@ -12,10 +13,7 @@ import models.dao.user.UserDAO;
 import models.user.User;
 import play.Logger;
 import play.data.DynamicForm;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Result;
-import play.mvc.Security;
+import play.mvc.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -88,7 +86,7 @@ public class CloneController extends Controller {
 
         flash("success", "We are the Borg. Resistance is futile. Your Adventure has been assimilated.");
 
-        return redirect(routes.AdventureController.getIndex(cloneAdv.getId()));
+        return Results.redirect(controllers.html.routes.AdventureController.getIndex(cloneAdv.getId()));
     }
 
     public static class CloneCommand {

@@ -6,8 +6,8 @@ import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
 import com.typesafe.config.ConfigFactory;
-import controllers.AdventureController;
-import controllers.AdventureFileController;
+import controllers.html.AdventureController;
+import controllers.api.json.AdventureFileController;
 import controllers.routes;
 import models.adventure.Adventure;
 import models.dao.adventure.AdventureDAO;
@@ -32,19 +32,19 @@ public class Global extends GlobalSettings {
             @Override
             public Call login() {
                 // Your login page
-                return routes.ApplicationController.index();
+                return controllers.html.routes.ApplicationController.index();
             }
 
             @Override
             public Call afterAuth() {
                 // The user will be redirected to this page after authentication
                 // if no original URL was saved
-                return routes.ApplicationController.index();
+                return controllers.html.routes.ApplicationController.index();
             }
 
             @Override
             public Call afterLogout() {
-                return routes.ApplicationController.index();
+                return controllers.html.routes.ApplicationController.index();
             }
 
             @Override
@@ -58,7 +58,7 @@ public class Global extends GlobalSettings {
             @Override
             public Call onException(final AuthException e) {
                 if (e instanceof AccessDeniedException) {
-                    return routes.ApplicationController
+                    return controllers.html.routes.ApplicationController
                             .oAuthDenied(((AccessDeniedException) e)
                                     .getProviderKey());
                 }
@@ -70,12 +70,12 @@ public class Global extends GlobalSettings {
 
             @Override
             public Call askLink() {
-                return routes.AccountController.askLink();
+                return controllers.html.routes.AccountController.askLink();
             }
 
             @Override
             public Call askMerge() {
-                return routes.AccountController.askMerge();
+                return controllers.html.routes.AccountController.askMerge();
             }
         });
 

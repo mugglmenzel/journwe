@@ -1,4 +1,4 @@
-package controllers;
+package controllers.html;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -35,31 +35,6 @@ public class CategoryController extends Controller {
     private static final String S3_BUCKET_CATEGORY_IMAGES = "journwe-category-images";
 
     private static Form<Category> catForm = form(Category.class);
-
-    public static Result categoriesOptionsMap() {
-        try {
-            return ok(Cache.getOrElse("categories.optionsMap", new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    List<ObjectNode> results = new ArrayList<ObjectNode>();
-                    Map<String, String> optionsMap = new CategoryDAO().allOptionsMap();
-                    for (String catId : optionsMap.keySet()) {
-                        if (catId != null) {
-                            ObjectNode node = Json.newObject();
-                            node.put("id", catId);
-                            node.put("name", optionsMap.get(catId));
-                            results.add(node);
-                        }
-                    }
-
-                    return Json.toJson(results).toString();
-                }
-            }, 3600)).as("application/json");
-        } catch (Exception e) {
-            Logger.error("Couldn't generate categories optionsMap", e);
-            return internalServerError();
-        }
-    }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result create() {
@@ -134,25 +109,6 @@ public class CategoryController extends Controller {
         }
     }
 
-
-    public static Result setSuperCategory() {
-        DynamicForm df = form().bindFromRequest();
-        String catId = df.get("category");
-        String superCatId = df.get("superCategory");
-        Logger.debug("adding " + catId + " to " + superCatId);
-
-        for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSub(catId))
-            new CategoryHierarchyDAO().delete(catHier);
-        CategoryHierarchy hier = new CategoryHierarchy();
-        hier.setSuperCategoryId(superCatId);
-        hier.setSubCategoryId(catId);
-        new CategoryHierarchyDAO().save(hier);
-
-        clearCache(superCatId);
-
-        return ok(Json.toJson(hier));
-    }
-
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String id) {
         for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSub(id))
@@ -178,11 +134,6 @@ public class CategoryController extends Controller {
 
     }
 
-    @Security.Authenticated(SecuredAdminUser.class)
-    public static Result updateCountCache() {
-        new CategoryDAO().updateCategoryCountCache();
-        return ok();
-    }
 
 
     private static void clearCache() {

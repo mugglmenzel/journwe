@@ -1,19 +1,13 @@
-package controllers;
+package controllers.api.json;
 
-import com.ecwid.mailchimp.MailChimpClient;
-import com.ecwid.mailchimp.MailChimpException;
-import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
+import controllers.*;
 import models.adventure.Adventure;
-import models.auth.SecuredAdminUser;
-import models.auth.SecuredUser;
 import models.auth.SecuredUser;
 import models.category.Category;
 import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
-import models.dao.*;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
@@ -24,25 +18,16 @@ import models.dao.category.CategoryHierarchyDAO;
 import models.dao.manytomany.CategoryToInspirationDAO;
 import models.dao.user.UserDAO;
 import models.inspiration.Inspiration;
-import models.user.EUserRole;
-import models.user.Subscriber;
-import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
-import play.Routes;
 import play.cache.Cache;
 import play.data.DynamicForm;
-import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import providers.MyUsernamePasswordAuthProvider;
-import views.html.*;
-import views.html.index.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,30 +38,6 @@ import static play.data.Form.form;
 
 public class ApplicationController extends Controller {
 
-    public static final String FLASH_MESSAGE_KEY = "message";
-    public static final String FLASH_ERROR_KEY = "error";
-    public static final String USER_ROLE = "user";
-
-    public static Result index() {
-        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
-                && SecuredUser.isAuthorized(usr)) {
-            String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
-            if (new AdventurerDAO().isAdventurer(userId)) return ok(indexVet.render());
-            else return ok(index.render());
-
-        } else return ok(landing.render());
-
-    }
-
-    public static Result indexNew() {
-        return ok(index.render());
-    }
-
-    public static Result categoryIndex(String catId) {
-        if (Category.SUPER_CATEGORY.equals(catId)) return redirect(routes.ApplicationController.index());
-        return ok(indexCat.render(new CategoryDAO().get(catId)));
-    }
 
     public static Result getCategories(final String superCatId) {
 
@@ -93,7 +54,7 @@ public class ApplicationController extends Controller {
                                 ObjectNode node = Json.newObject();
                                 node.put("id", c.getId());
                                 node.put("name", c.getName());
-                                node.put("link", routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
+                                node.put("link", controllers.html.routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
                                 node.put("image", c.getImage());
                                 node.put("userCountByAdventure", cc.getCount());
                                 results.add(node);
@@ -103,7 +64,7 @@ public class ApplicationController extends Controller {
 
                     return Json.toJson(results).toString();
                 }
-            }, 24*3600)).as("application/json");
+            }, 24 * 3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate sub-categories of " + superCatId, e);
             return internalServerError();
@@ -133,7 +94,7 @@ public class ApplicationController extends Controller {
                     for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, lastId, count)) {
                         ObjectNode node = Json.newObject();
                         node.put("id", adv.getId());
-                        node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                        node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
                         node.put("image", adv.getImage());
                         node.put("name", adv.getName());
                         node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
@@ -168,7 +129,7 @@ public class ApplicationController extends Controller {
         for (Adventure adv : new AdventureDAO().listPublicAdventuresByInspiration(inspirationId, lastId, count)) {
             ObjectNode node = Json.newObject();
             node.put("id", adv.getId());
-            node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+            node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
             node.put("image", adv.getImage());
             node.put("name", adv.getName());
             node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
@@ -235,7 +196,7 @@ public class ApplicationController extends Controller {
                         }
                     return Json.toJson(results).toString();
                 }
-            }, 24*3600)).as("application/json");
+            }, 24 * 3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate public adventures for category " + catId, e);
             return internalServerError();
@@ -274,7 +235,7 @@ public class ApplicationController extends Controller {
                                     if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
                                         ObjectNode node = Json.newObject();
                                         node.put("id", ins.getId());
-                                        node.put("link", routes.InspirationController.get(ins.getId()).absoluteURL(request()));
+                                        node.put("link", controllers.html.routes.InspirationController.get(ins.getId()).absoluteURL(request()));
                                         node.put("image", ins.getImage());
                                         node.put("name", ins.getName());
                                         node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
@@ -289,130 +250,16 @@ public class ApplicationController extends Controller {
                         }
                     return Json.toJson(results).toString();
                 }
-            }, 24*3600)).as("application/json");
+            }, 24 * 3600)).as("application/json");
         } catch (Exception e) {
             Logger.error("Couldn't generate inspirations for category " + catId, e);
             return internalServerError();
         }
     }
 
-    public static Result imprint() {
-        return ok(imprint.render());
-    }
-
-    public static Result about() {
-        return ok(about.render());
-    }
-
-    @Security.Authenticated(SecuredAdminUser.class)
-    public static Result admin() {
-        return ok(admin.render());
-    }
-
-    public static Result changeLanguage(String lang) {
-        changeLang(lang);
-
-        return redirect(request().getHeader(REFERER) != null ? request().getHeader(REFERER) : "/");
-    }
-
-    public static Result oAuthDenied(String provider) {
-        return ok("oAuth went wrong");
-    }
-
-    public static Result ping() {
-        return ok("pong");
-    }
-
-    //BETA activation
-    public static Result joinBeta() {
-        if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
-            PlayAuthenticate.storeOriginalUrl(Http.Context.current());
-            response().setCookie(UserDAO.COOKIE_USER_ROLE_ON_REGISTER, EUserRole.BETA.toString());
-            return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
-        } else {
-            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-            usr.setActive(true);
-            usr.setRole(EUserRole.BETA);
-            new UserDAO().save(usr);
-
-            return ok(index.render());
-        }
-    }
 
     public static void clearUserCache(final String userId) {
         Cache.remove("user." + userId + ".myadventures");
     }
 
-    // For JournWe non-thirdparty signup and login
-
-    public static Result login() {
-        return ok(login.render(MyUsernamePasswordAuthProvider.LOGIN_FORM));
-    }
-
-    public static Result doLogin() {
-        com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-        final Form<MyUsernamePasswordAuthProvider.MyLogin> filledForm = MyUsernamePasswordAuthProvider.LOGIN_FORM
-                .bindFromRequest();
-        if (filledForm.hasErrors()) {
-// User did not fill everything properly
-            return badRequest(login.render(filledForm));
-        } else {
-// Everything was filled
-            return UsernamePasswordAuthProvider.handleLogin(ctx());
-        }
-    }
-
-    public static Result signup() {
-        return ok(signup.render(MyUsernamePasswordAuthProvider.SIGNUP_FORM));
-    }
-
-    public static Result doSignup() {
-        com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-        final Form<MyUsernamePasswordAuthProvider.MySignup> filledForm = MyUsernamePasswordAuthProvider.SIGNUP_FORM
-                .bindFromRequest();
-        if (filledForm.hasErrors()) {
-// User did not fill everything properly
-            return badRequest(signup.render(filledForm));
-        } else {
-// Everything was filled
-// do something with your part of the form before handling the user
-// signup
-            return UsernamePasswordAuthProvider.handleSignup(ctx());
-        }
-    }
-
-    /**
-     * Returns a list of all routes to handle in the javascript
-     */
-    public static Result routes() {
-        response().setContentType("text/javascript");
-        return ok("define(function(){" + // Make it AMD compatible
-                Routes.javascriptRouter("routes",
-                        routes.javascript.AdventureController.updateImage(),
-                        routes.javascript.AdventureController.updatePlaceVoteDeadline(),
-                        routes.javascript.AdventureController.updateTimeVoteDeadline(),
-                        routes.javascript.AdventureController.updatePlaceVoteOpen(),
-                        routes.javascript.AdventureController.updateTimeVoteOpen(),
-                        routes.javascript.AdventureController.placeVoteOpen(),
-                        routes.javascript.AdventureEmailController.listEmails(),
-                        routes.javascript.AdventurePlaceController.getPlaces(),
-                        routes.javascript.AdventurePlaceController.getFavoritePlace(),
-                        routes.javascript.AdventurePlaceController.setFavoritePlace(),
-                        routes.javascript.AdventurePlaceController.addPlace(),
-                        routes.javascript.AdventurePlaceController.voteParam(),
-                        routes.javascript.AdventurePlaceController.deletePlace(),
-                        routes.javascript.AdventureTimeController.getTimes(),
-                        routes.javascript.AdventureTimeController.setFavoriteTime(),
-                        routes.javascript.AdventureTimeController.addTime(),
-                        routes.javascript.AdventureTimeController.vote(),
-                        routes.javascript.AdventureTimeController.deleteTime(),
-                        routes.javascript.AdventureTodoController.getTodos(),
-                        routes.javascript.AdventureTodoController.addTodo(),
-                        routes.javascript.AdventureTodoController.setTodo(),
-                        routes.javascript.AdventureTodoController.deleteTodo(),
-                        routes.javascript.AdventureTodoController.getTodoAffiliateItems()
-
-                ) + ";; return routes;});"
-        );
-    }
 }

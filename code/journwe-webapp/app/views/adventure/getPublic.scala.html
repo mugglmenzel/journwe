@@ -26,7 +26,7 @@
 
         <div class="toolbar">
 
-            <a class="btn btn-participate btn-success pull-right" href="@routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
+            <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
             <script>
 
                 $(function(){
@@ -101,7 +101,7 @@
 
             function loadAdventurers(target) {
 
-                $.get('@routes.AdventurePeopleController.getAdventurers(adv.getId)', function (advs) {
+                $.get('@api.json.routes.AdventurePeopleController.getAdventurers(adv.getId)', function (advs) {
                     $(target).empty();
                     if(advs != null && advs.length > 0) {
                         $('#adventurers-count').html(advs.length);

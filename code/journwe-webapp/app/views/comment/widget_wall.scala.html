@@ -38,7 +38,7 @@
 
 
     // Perform GET
-    $.get('@routes.CommentController.listComments("")'+threadId, function(res){
+    $.get('@api.json.routes.CommentController.listComments("")'+threadId, function(res){
         list.html("");
         res.forEach(function(f){
             f.time = formatTime(f.comment.timestamp); // Append
@@ -59,7 +59,7 @@
             btn.html('<i class="fa fa-spin icon-journwe"></i>');
             input.val(""); // Reset
 
-            $.post("@routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f){
+            $.post("@api.json.routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f){
                 list.find(".empty").remove();
 
                 f.time = formatTime(f.comment.timestamp); // Append

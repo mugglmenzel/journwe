@@ -25,7 +25,7 @@
             <p class="lead">@Html(Messages("landing.cta"))</p>
 
 
-            <form action="@routes.ApplicationController.subscribe()" class=" col-lg-6 col-lg-offset-3">
+            <form action="@html.routes.ApplicationController.subscribe()" class=" col-lg-6 col-lg-offset-3">
                 <fieldset>
                     <div class="input-group input-group-lg">
                         <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
@@ -149,9 +149,9 @@
                             <div class="col-lg-5 text-center">
                                 @defining(new AdventureDAO().get("965ddda2-140c-4331-9883-72c9217216ca")){ adv =>   @if(adv != null) {
                                 <div class="polaroid" style="">
-                                    <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <a href="@html.routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                        <div style="line-height: 20px;"><h4><a href="@html.routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
                                             <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> ETO</span>
                                             <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 3</span>
@@ -168,9 +168,9 @@
                             <div class="col-lg-5 text-center">
                             @defining(new AdventureDAO().get("5af6f85a-4145-4e3d-bcf0-ea8cf9e4962a")){ adv => @if(adv != null) {
                                 <div class="polaroid" style="position: relative; float: left;">
-                                    <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <a href="@html.routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                        <div style="line-height: 20px;"><h4><a href="@html.routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
                                             <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> STO</span>
                                             <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 5</span>
@@ -197,9 +197,9 @@
                             <div class="col-lg-5 text-center">
                             @defining(new AdventureDAO().get("3146479b-8f99-4023-8e88-947fc4742002")){ adv =>  @if(adv != null) {
                                 <div class="polaroid" style="position: relative; float: left;">
-                                    <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <a href="@html.routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                        <div style="line-height: 20px;"><h4><a href="@html.routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
                                             <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> ZUR</span>
                                             <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 15</span>
@@ -215,9 +215,9 @@
                             <div class="col-lg-5 text-center">
                             @defining(new InspirationDAO().get("ebe510c4-25e9-4f18-9ffc-71ff10fc9901")){ ins => @if(ins != null) {
                                 <div class="polaroid" style="position: relative; float: left;">
-                                    <a href="@routes.InspirationController.get(ins.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@ins.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <a href="@html.routes.InspirationController.get(ins.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@ins.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@routes.InspirationController.get(ins.getId)">@ins.getName</a></h4></div>
+                                        <div style="line-height: 20px;"><h4><a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
                                             <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> BLA</span>
                                             <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 56784</span>
@@ -244,9 +244,9 @@
                             <div class="col-lg-5 text-center">
                             @defining(new AdventureDAO().get("a05e49c5-8008-4e16-bde5-1af28d0c46d5")){ adv =>  @if(adv != null) {
                                 <div class="polaroid" style="position: relative; float: left;">
-                                    <a href="@routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
+                                    <a href="@html.routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
                                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
+                                        <div style="line-height: 20px;"><h4><a href="@html.routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
                                         <div class="overlay text-center" style="display: none;">
                                             <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> EARTH</span>
                                             <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 1</span>
@@ -306,7 +306,7 @@
                 });
 
                 function loadPublicAdventures(lastId, clear) {
-                $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
+                $.get('@api.json.routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
                 var polaroid = tmpl('adventure-public-template', advs[i]);

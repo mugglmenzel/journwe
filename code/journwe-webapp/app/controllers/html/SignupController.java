@@ -1,6 +1,7 @@
-package controllers;
+package controllers.html;
 
 import com.feth.play.module.pa.user.AuthUser;
+import controllers.routes;
 import models.dao.user.TokenActionDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
@@ -13,6 +14,7 @@ import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.Results;
 import providers.MyLoginUsernamePasswordAuthUser;
 import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthProvider.MyIdentity;
@@ -112,7 +114,7 @@ public class SignupController extends Controller {
 				}
 			}
 
-			return redirect(routes.ApplicationController.index());
+			return Results.redirect(controllers.html.routes.ApplicationController.index());
 		}
 	}
 
@@ -185,7 +187,7 @@ public class SignupController extends Controller {
 				flash(ApplicationController.FLASH_MESSAGE_KEY,
 						Messages.get("playauthenticate.reset_password.message.success.manual_login"));
 			}
-			return redirect(routes.ApplicationController.login());
+			return redirect(controllers.html.routes.ApplicationController.login());
 		}
 	}
 
@@ -213,10 +215,10 @@ public class SignupController extends Controller {
 				Messages.get("playauthenticate.verify_email.success", email));
         AuthUser auth = PlayAuthenticate.getUser(Http.Context.current());
         if(auth == null)
-            return redirect(routes.ApplicationController.login());
+            return redirect(controllers.html.routes.ApplicationController.login());
         final User user = new UserDAO().findByAuthUserIdentity(auth);
         if(user == null)
-            return redirect(routes.ApplicationController.login());
-		return redirect(routes.ApplicationController.index());
+            return redirect(controllers.html.routes.ApplicationController.login());
+		return redirect(controllers.html.routes.ApplicationController.index());
 	}
 }

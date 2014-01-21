@@ -1,4 +1,4 @@
-package controllers;
+package controllers.api.json;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -8,11 +8,18 @@ import com.amazonaws.services.s3.transfer.Upload;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
+import models.adventure.EPreferenceVote;
 import models.adventure.file.JournweFile;
+import models.adventure.place.PlaceOption;
+import models.adventure.place.PlacePreference;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.adventure.JournweFileDAO;
+import models.dao.adventure.PlacePreferenceDAO;
+import models.dao.user.UserDAO;
+import models.user.User;
+import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.Form;
 import play.libs.Json;
@@ -22,6 +29,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -34,7 +42,7 @@ public class AdventureFileController extends Controller {
     public static final Long EXPIRATION_TIME_IN_SECONDS = 86400L;
 
 
-    protected static Form<JournweFile> fileForm = form(JournweFile.class);
+    public static Form<JournweFile> fileForm = form(JournweFile.class);
 
     private static BasicAWSCredentials credentials = new BasicAWSCredentials(
             ConfigFactory.load().getString("aws.accessKey"), ConfigFactory
@@ -47,7 +55,7 @@ public class AdventureFileController extends Controller {
         try {
             if (!JournweAuthorization.canUploadFiles(advId))
                 return AuthorizationMessage.notAuthorizedResponse();
-            AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             if (usr == null)
                 throw new Exception("File upload failed because user is null.");
             Form<JournweFile> filledFileForm = fileForm.bindFromRequest();
@@ -75,9 +83,10 @@ public class AdventureFileController extends Controller {
             // Upload files to S3 asynchronously
             TransferManager tx = new TransferManager(credentials);
             Upload upload = tx.upload(S3_BUCKET, s3ObjectKey, file);
+            upload.waitForCompletion();
             s3.setObjectAcl(S3_BUCKET, s3ObjectKey, CannedAccessControlList.PublicRead);
             flash("success", "Your files is uploading now and can be downloaded, soon...");
-            return ok(Json.toJson(journweFile));
+            return ok(fileToJSON(journweFile));
         } catch (Exception e) {
             Logger.error("Failed uploading!", e);
             flash("error",
@@ -92,7 +101,11 @@ public class AdventureFileController extends Controller {
     public static Result listFiles(String adventureId) {
         if (!JournweAuthorization.canViewAndDownloadFiles(adventureId))
             return AuthorizationMessage.notAuthorizedResponse();
-        List<JournweFile> files = new JournweFileDAO().all(adventureId);
+
+        List<ObjectNode> result = new ArrayList<ObjectNode>();
+        for(JournweFile f : new JournweFileDAO().all(adventureId))
+                result.add(fileToJSON(f));
+
 //        for(JournweFile file : files) {
 //            Long newExpirationTimeInMillis = new Long(DateTime.now().getMillis()+EXPIRATION_TIME_IN_SECONDS);
 //            String s3ObjectKey = generateS3ObjectKey(adventureId, file.getFileName());
@@ -100,7 +113,9 @@ public class AdventureFileController extends Controller {
 //                    s3ObjectKey, new Date(newExpirationTimeInMillis)).toString();
 //            file.setUrl(presignedUrl);
 //        }
-        return ok(Json.toJson(files));
+        Logger.debug("list files returning " + Json.toJson(result));
+
+        return ok(Json.toJson(result));
     }
 
     @Security.Authenticated(SecuredUser.class)
@@ -117,6 +132,16 @@ public class AdventureFileController extends Controller {
 
         return ok();
     }
+
+
+    private static ObjectNode fileToJSON(JournweFile file) {
+        ObjectNode node = Json.newObject();
+        node.put("file", Json.toJson(file));
+        node.put("user", Json.toJson(new UserDAO().get(file.getUserId())));
+
+        return node;
+    }
+
 
     /**
      * Helper method.

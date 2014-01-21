@@ -1,9 +1,10 @@
-package controllers;
+package controllers.api.json;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import controllers.routes;
 import models.adventure.Adventure;
 import models.auth.SecuredUser;
-import models.dao.*;
+import models.dao.NotificationDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
@@ -40,11 +41,6 @@ import static play.data.Form.form;
 public class UserController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
-    public static Result getProfile(String userId) {
-        return ok(get.render(new UserDAO().get(userId)));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
     public static Result setMailDigestFrequency(String userId, String frequency) {
         ENotificationFrequency freq = ENotificationFrequency.valueOf(frequency);
         if (freq != null) {
@@ -78,7 +74,7 @@ public class UserController extends Controller {
                 case GENERAL:
                 case USER:
                 default:
-                    image = routes.UserController.getProfile(usr.getId()).absoluteURL(request());
+                    image = controllers.html.routes.UserController.getProfile(usr.getId()).absoluteURL(request());
                     break;
             }
             node.put("image", image);
@@ -86,12 +82,12 @@ public class UserController extends Controller {
             String link = "#";
             switch (c.getTopic()) {
                 case ADVENTURE:
-                    link = routes.AdventureController.getIndex(c.getTopicRef()).absoluteURL(request());
+                    link = controllers.html.routes.AdventureController.getIndex(c.getTopicRef()).absoluteURL(request());
                     break;
                 case GENERAL:
                 case USER:
                 default:
-                    link = routes.UserController.getProfile(usr.getId()).absoluteURL(request());
+                    link = controllers.html.routes.UserController.getProfile(usr.getId()).absoluteURL(request());
                     break;
             }
             node.put("link", link);
@@ -114,14 +110,14 @@ public class UserController extends Controller {
     @Security.Authenticated(SecuredUser.class)
     public static Result getAdventures(String userId) {
         DynamicForm data = form().bindFromRequest();
-        int count = new Integer(data.get("userCountByAdventure")).intValue();
+        int count = new Integer(data.get("count")).intValue();
 
 
         List<ObjectNode> results = new ArrayList<ObjectNode>();
         for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, null, count)) {
             ObjectNode node = Json.newObject();
             node.put("id", adv.getId());
-            node.put("link", routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+            node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
             node.put("image", adv.getImage());
             node.put("name", adv.getName());
             node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
@@ -132,7 +128,7 @@ public class UserController extends Controller {
         }
         ObjectNode result = Json.newObject();
         result.put("adventures", Json.toJson(results));
-        result.put("userCountByAdventure", new AdventureDAO().adventureCountByUser(userId));
+        result.put("count", new AdventureDAO().adventureCountByUser(userId));
 
         return ok(Json.toJson(result));
     }

@@ -26,13 +26,13 @@
                  <div class="btn-group btn-select-notification-frequency">
 
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.IMMEDIATELY) {active}"
-                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.IMMEDIATELY.toString)"><i class="fa fa-exclamation-sign"></i> @Messages("user.notify.immediately") </button>
+                    href="@api.json.routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.IMMEDIATELY.toString)"><i class="fa fa-exclamation-sign"></i> @Messages("user.notify.immediately") </button>
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.DAILY) {active}"
-                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.DAILY.toString)"><i class="fa fa-time"></i> @Messages("user.notify.daily") </button>
+                    href="@api.json.routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.DAILY.toString)"><i class="fa fa-time"></i> @Messages("user.notify.daily") </button>
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.WEEKLY) {active}"
-                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.WEEKLY.toString)"><i class="fa fa-calendar"></i> @Messages("user.notify.weekly") </button>
+                    href="@api.json.routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.WEEKLY.toString)"><i class="fa fa-calendar"></i> @Messages("user.notify.weekly") </button>
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.NONE) {active}"
-                    href="@routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.NONE.toString)"><i class="fa fa-stop"></i> @Messages("user.notify.none") </button>
+                    href="@api.json.routes.UserController.setMailDigestFrequency(user.getId, ENotificationFrequency.NONE.toString)"><i class="fa fa-stop"></i> @Messages("user.notify.none") </button>
                  </div>
 
                 <script>
@@ -88,7 +88,7 @@
 
         function loadUserAdventures(clear) {
             $('#adventures-user-list i').removeClass('stash');
-            $.get('@routes.UserController.getAdventures(user.getId)', {count: 10} , function (advs) {
+            $.get('@api.json.routes.UserController.getAdventures(user.getId)', {count: 10} , function (advs) {
                 $('#adventures-user-count').html(advs.count);
 
                 if (clear) $('#adventures-user-list').empty();

@@ -1,4 +1,4 @@
-package controllers;
+package controllers.html;
 
 import static play.data.Form.form;
 import models.adventure.comment.Comment;
@@ -60,44 +60,6 @@ public class CommentController extends Controller {
 		return ok(createComment.render(commentForm, threadId));
 	}
 
-	@Security.Authenticated(SecuredUser.class)
-	public static Result saveComment() {
-		try {
-            User user = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-            if(user==null)
-                throw new Exception("Posting a comment failed because user is null.");
-            Form<Comment> filledCommentForm = commentForm.bindFromRequest();
-            Comment comment = filledCommentForm.get();
-            comment.setTimestamp(new Long(DateTime.now().getMillis()));
-            comment.setUserId(user.getId());
-			if (new CommentDAO().save(comment)) {
-                ObjectNode result = Json.newObject();
-                result.put("comment", Json.toJson(comment));
-                result.put("user", Json.toJson(new UserDAO().get(comment.getUserId())));
-				return created(Json.toJson(result));
-			} else {
-				throw new Exception("Saving comment failed.");
-			}
-		} catch (Exception e) {
-			Logger.error(e.getMessage());
-			return internalServerError();
-		}
-	}
-	
-	@Security.Authenticated(SecuredUser.class)
-	public static Result listComments(String threadId) {
-        List<ObjectNode> results = new ArrayList<ObjectNode>();
-
-        for(Comment c : new CommentDAO().getComments(threadId)) {
-            ObjectNode result = Json.newObject();
-            result.put("comment", Json.toJson(c));
-            result.put("user", Json.toJson(new UserDAO().get(c.getUserId())));
-            results.add(result);
-        }
-
-		return ok(Json.toJson(results));
-	}
-	
 	@Security.Authenticated(SecuredUser.class)
 	public static Result listCommentThreads(String adventureId) {
 		return ok(listThreads.render(new CommentThreadDAO().all(adventureId)));

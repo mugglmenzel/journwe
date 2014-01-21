@@ -6,7 +6,7 @@
     <div class="jrn-container">
         <h2>@Messages("feedback.title")</h2>
 
-        @form(routes.FeedbackController.createFeedback(), args = 'class -> "form-horizontal jrn-form") {
+        @form(html.routes.FeedbackController.createFeedback(), args = 'class -> "form-horizontal jrn-form") {
 
         <div class="form-group">
             <label class="control-label">@Messages("feedback.type")</label>

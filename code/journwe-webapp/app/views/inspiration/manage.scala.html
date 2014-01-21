@@ -1,4 +1,5 @@
 @(inspForm: Form[models.inspiration.Inspiration])(categories: Map[String, String])(inspirations: List[models.inspiration.Inspiration])
+@import controllers.html.InspirationController
 @import models.dao.manytomany.CategoryToInspirationDAO
 
 @import helper._
@@ -14,14 +15,14 @@
         <table class="table table-striped">
 
         @for(ins <- inspirations) {
-            <tr><td>@ins.getId()</td><td>@ins.getName()</td><td><a href="@InspirationController.getBucketURL(ins.getId)" class="act-primary"><i class="icon-cloud-upload"></i> @Messages("adventure.files.imageUpload") </a> <a href="@routes.InspirationController.edit(ins.getId())" class="act-primary"><i class="icon-edit"></i> @Messages("adventure.general.label.edit") </a></td><td><a href="@routes.InspirationController.delete(ins.getId())" class="act-danger"><i class="icon-trash"></i> @Messages("adventure.general.label.delete") </a></td></tr>
+            <tr><td>@ins.getId()</td><td>@ins.getName()</td><td><a href="@InspirationController.getBucketURL(ins.getId)" class="act-primary"><i class="icon-cloud-upload"></i> @Messages("adventure.files.imageUpload") </a> <a href="@html.routes.InspirationController.edit(ins.getId())" class="act-primary"><i class="icon-edit"></i> @Messages("adventure.general.label.edit") </a></td><td><a href="@html.routes.InspirationController.delete(ins.getId())" class="act-danger"><i class="icon-trash"></i> @Messages("adventure.general.label.delete") </a></td></tr>
         }
         </table>
     </div>
 
     <div class="jrn-container">
         <h2>Inspiration Form</h2>
-        @form(routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+        @form(html.routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
             <fieldset>
                 @if(inspForm("id").value()) {
                 <input type="hidden" name="@inspForm("id").name()" value="@inspForm("id").value()"/>
@@ -187,7 +188,7 @@
 
             </fieldset>
             <div class="form-actions">
-              <input type="submit" value="Save Inspiration!" class="btn btn-primary"> | <a href="@routes.ApplicationController.index()" class="btn btn-link"> @Messages("adventure.general.button.cancel") </a>
+              <input type="submit" value="Save Inspiration!" class="btn btn-primary"> | <a href="@html.routes.ApplicationController.index()" class="btn btn-link"> @Messages("adventure.general.button.cancel") </a>
             </div>
         }
     </div>

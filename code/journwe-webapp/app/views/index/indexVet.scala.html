@@ -59,7 +59,7 @@
                 function loadMyAdventures(lastId, clear) {
                     $('#adventures-my-button-refresh i').addClass('fa-spin');
                     $('#adventures-my-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
-                    $.get('@routes.ApplicationController.getMyAdventures()', {lastId: lastId, count: 10} , function (advs) {
+                    $.get('@api.json.routes.ApplicationController.getMyAdventures()', {lastId: lastId, count: 10} , function (advs) {
                         if (clear) $('#adventures-my-list').empty();
                         for(var i in advs) {
                             var adventure = tmpl('adventure-my-template', advs[i]);
@@ -129,7 +129,7 @@
         function loadCategories(lastId, clear) {
             $('#categories-button-refresh i').addClass('fa-spin');
             $('#categories-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
-            $.get('@routes.ApplicationController.getCategories(models.category.Category.SUPER_CATEGORY)', {lastId: lastId, count: 10} , function (cats) {
+            $.get('@api.json.routes.ApplicationController.getCategories(models.category.Category.SUPER_CATEGORY)', {lastId: lastId, count: 10} , function (cats) {
                 if (clear) $('#categories-list').empty();
                 for(var i in cats) {
                     $('#categories-list').append(tmpl('category-template', cats[i]));
@@ -208,7 +208,7 @@
         function loadPublicAdventures(lastId, clear) {
             $('#adventures-public-button-refresh i').addClass('fa fa-spin');
             $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
-            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
+            $.get('@api.json.routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
                     $('#adventures-public-list').append(tmpl('adventure-public-template', advs[i]));

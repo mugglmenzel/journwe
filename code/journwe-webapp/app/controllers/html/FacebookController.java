@@ -1,4 +1,4 @@
-package controllers;
+package controllers.html;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;

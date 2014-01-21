@@ -30,6 +30,7 @@ require([
             initializePlaces();
             initializeTime();
             initializeTodos();
+            initializeFiles();
         };
 
 
@@ -51,7 +52,7 @@ require([
             var data = new FormData();
             data.append(files[0].name, files[0])
 
-            routes.controllers.AdventureController.updateImage(adv.id).ajax({
+            routes.controllers.api.json.AdventureController.updateImage(adv.id).ajax({
                 data: data,
                 cache: false,
                 contentType: false,
@@ -69,7 +70,7 @@ require([
         var loadEmails = function () {
             $('#emails-button-refresh i').addClass("fa-spin");
 
-            routes.controllers.AdventureEmailController.listEmails(adv.id).ajax({success: function (emails) {
+            routes.controllers.api.json.AdventureEmailController.listEmails(adv.id).ajax({success: function (emails) {
                 $('#emails-list tbody').empty();
 
                 for (var i in emails) {
@@ -95,7 +96,7 @@ require([
         };
 
         var initializePlaces = function () {
-            routes.controllers.AdventurePlaceController.getPlaces(adv.id).ajax({success: function (result) {
+            routes.controllers.api.json.AdventurePlaceController.getPlaces(adv.id).ajax({success: function (result) {
                 $('#places-list tbody').empty();
                 for (var id in result)
                     renderPlaceOption(result[id])
@@ -109,7 +110,7 @@ require([
 
                 updateFavoritePlace();
 
-                routes.controllers.AdventureController.placeVoteOpen(adv.id).ajax({success: function (result) {
+                routes.controllers.api.json.AdventureController.placeVoteOpen(adv.id).ajax({success: function (result) {
                     updatePlaceVoteOpen(result);
                 }});
             }});
@@ -187,7 +188,7 @@ require([
             $('#places-favorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
             $('#places-autofavorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
-            routes.controllers.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
+            routes.controllers.api.json.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
                 favoritePlace = result.favorite;
                 if (result.favorite != null) $('#places-favorite-place-name').html(result.favorite.address);
                 if (result.autoFavorite != null)$('#places-autofavorite-place-name').html(result.autoFavorite.address);
@@ -202,7 +203,7 @@ require([
             el.find('i').attr("class", "fa fa-spin icon-journwe");
             $('#places-favorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
-            routes.controllers.AdventurePlaceController.setFavoritePlace(adv.id).ajax({
+            routes.controllers.api.json.AdventurePlaceController.setFavoritePlace(adv.id).ajax({
                 data: {favoritePlaceId: placeID},
                 success: function (data) {
                     favoritePlace = data;
@@ -224,7 +225,7 @@ require([
             $('#placeoption-item-' + optId + ' .dropdown-toggle')
                 .html('<i class="fa fa-spin icon-journwe"></i>');
 
-            routes.controllers.AdventurePlaceController.voteParam(adv.id).ajax({data: {placeId: optId, vote: vote, voteGravity: voteGrav}, success: function (res) {
+            routes.controllers.api.json.AdventurePlaceController.voteParam(adv.id).ajax({data: {placeId: optId, vote: vote, voteGravity: voteGrav}, success: function (res) {
                 renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
                 updateFavoritePlace();
                 $('#placeoption-item-' + res.placeId + ' .dropdown-toggle')
@@ -235,7 +236,7 @@ require([
 
         var deletePlace = function (optId, el) {
             el.html('<i class="fa fa-spin icon-journwe"></i>');
-            routes.controllers.AdventurePlaceController.deletePlace(adv.id, optId).ajax({success: function () {
+            routes.controllers.api.json.AdventurePlaceController.deletePlace(adv.id, optId).ajax({success: function () {
                 removeMapMarker(optId);
                 $('#placeoption-item-' + optId).fadeOut(function () {
                     $('#placeoption-item-' + optId).remove();
@@ -254,7 +255,7 @@ require([
             });
 
             $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
-            routes.controllers.AdventureTimeController.getTimes(adv.id).ajax({success: function (result) {
+            routes.controllers.api.json.AdventureTimeController.getTimes(adv.id).ajax({success: function (result) {
                 if (result.favoriteTime != '') $('#times-favorite-time-name').html(formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate));
                 $('.btn-close-time').toggle(!!result.favoriteTime);
 
@@ -279,7 +280,7 @@ require([
         var setFavoriteTime = function (timeID, el) {
             $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
             $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
-            routes.controllers.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
+            routes.controllers.api.json.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
                 favoriteTime = data;
                 $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
                 $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
@@ -332,7 +333,7 @@ require([
         var voteTime = function (vote, optId) {
             $('#timeoption-item-' + optId + ' .dropdown-toggle')
                 .html('<i class="fa fa-spin icon-journwe"></i>');
-            routes.controllers.AdventureTimeController.vote(adv.getId, optId).ajax({
+            routes.controllers.api.json.AdventureTimeController.vote(adv.getId, optId).ajax({
                 data: {
                     vote: vote
                 },
@@ -346,7 +347,7 @@ require([
 
         var deleteTime = function (optId, el) {
             $(el).html('<i class="fa fa-spin icon-journwe"></i>');
-            routes.controllers.AdventureTimeController.deleteTime(adv.id, optId).ajax({success: function () {
+            routes.controllers.api.json.AdventureTimeController.deleteTime(adv.id, optId).ajax({success: function () {
                 $('#timeoption-item-' + optId).fadeOut(function () {
                     $('#timeoption-item-' + optId).remove();
                 });
@@ -396,7 +397,7 @@ require([
 
         var loadTodos = function (userId, target, template) {
             $('#todos-button-refresh i').addClass("fa-spin");
-            routes.controllers.AdventureTodoController.getTodos(adv.id, userId).ajax({success: function (results) {
+            routes.controllers.api.json.AdventureTodoController.getTodos(adv.id, userId).ajax({success: function (results) {
                 $(target + ' tbody').empty();
 
                 for (var todo in results)
@@ -416,6 +417,80 @@ require([
                 replace.replaceWith(tmpl(template, data)).fadeIn();
             else
                 $(target + ' tbody').append(tmpl(template, data));
+        };
+
+
+        var initializeFiles = function () {
+            loadFiles();
+        };
+
+        var uploadFiles = function (files) {
+            var btn = $('#files-upload-dropzone .btn-upload'),
+                btnOriginal = btn.html();
+            btn.css({width: btn.css('width')})
+                .html('<i class="fa fa-spin icon-journwe"></i>');
+
+            for (var i = 0; i < files.length; i++) {
+                var data = new FormData();
+                data.append('uploadFile', files[i]);
+                data.append('fileName', files[i].name);
+
+                routes.controllers.api.json.AdventureFileController.uploadFile(adv.id).ajax({
+                    data: data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        btn.css({width: ""})
+                            .html(btnOriginal);
+                        loadFiles();
+                    }
+                });
+            }
+        };
+
+        var loadFiles = function () {
+            //$('.files-loading').show();
+            $('#files-button-refresh i').addClass("fa-spin");
+
+            routes.controllers.api.json.AdventureFileController.listFiles(adv.id).ajax({success: function (files) {
+                $('#files-list tbody').empty();
+
+                for (var fileName in files) {
+                    renderFile(files[fileName]);
+                }
+                if (files.length) {
+                    $('#files-list').show();
+                } else {
+                    $('#files-list').hide();
+                }
+
+                //$('.files-loading').hide();
+                $('#files-button-refresh i').removeClass("fa-spin");
+            }});
+        };
+
+
+        var renderFile = function (data, replace) {
+            if (replace)
+                replace.replaceWith(tmpl('files-template', data)).fadeIn();
+            else
+                $('#files-list tbody').append(tmpl('files-template', data));
+
+        };
+
+        var deleteFile = function (fileName, el) {
+
+            $(el).html('<i class="fa fa-spin icon-journwe"></i>');
+
+            routes.controllers.api.json.AdventureFileController.deleteFile(adv.id, fileName).ajax({
+                success: function () {
+                    var tr = $(el).parents('tr');
+                    tr.fadeOut(function () {
+                        tr.remove();
+                    });
+                }
+            });
         };
 
 
@@ -486,7 +561,7 @@ require([
                 if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
                     $(this).html('<i class="fa fa-spin icon-journwe"></i>');
                     new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-                        routes.controllers.AdventurePlaceController.addPlace(adv.id).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
+                        routes.controllers.api.json.AdventurePlaceController.addPlace(adv.id).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
                             renderPlaceOption(res);
                             $('#place-add-input').val("");
                             $('#place-add-comment-input').val("");
@@ -501,7 +576,7 @@ require([
                 }
             },
             'change #places-voting-active-switch': function () {
-                routes.controllers.AdventureController.updatePlaceVoteOpen(adv.id).ajax({data: {voteOpen: $('#places-voting-active-switch').prop('checked')}, success: updatePlaceVoteOpen});
+                routes.controllers.api.json.AdventureController.updatePlaceVoteOpen(adv.id).ajax({data: {voteOpen: $('#places-voting-active-switch').prop('checked')}, success: updatePlaceVoteOpen});
             },
 
 
@@ -509,7 +584,7 @@ require([
                 deadline(
                     $(this),
                     e.date,
-                    routes.controllers.AdventureController.updatePlaceVoteDeadline
+                    routes.controllers.api.json.AdventureController.updatePlaceVoteDeadline
                 );
             },
 
@@ -518,7 +593,7 @@ require([
                 deadline(
                     $(this),
                     e.date,
-                    routes.controllers.AdventureController.updateTimeVoteDeadline
+                    routes.controllers.api.json.AdventureController.updateTimeVoteDeadline
                 );
             },
 
@@ -536,7 +611,7 @@ require([
 
                 btn.find('i').attr("class", "fa fa-spin icon-journwe");
 
-                routes.controllers.AdventureController.updatePlaceVoteOpen(adv.id).ajax({
+                routes.controllers.api.json.AdventureController.updatePlaceVoteOpen(adv.id).ajax({
                     data: {voteOpen: !open},
                     success: function (data) {
                         btn.find('i').attr("class", "fa fa-ok");
@@ -566,7 +641,7 @@ require([
                 }
 
                 $(this).html('<i class="fa fa-spin icon-journwe"></i>');
-                routes.controllers.AdventureTimeController.addTime(adv.id).ajax({
+                routes.controllers.api.json.AdventureTimeController.addTime(adv.id).ajax({
                     data: { startDate: start.val(), endDate: end.val()},
                     success: function (res) {
                         renderTimeOption(res);
@@ -578,7 +653,7 @@ require([
                     }});
             },
             'change #times-voting-active-switch': function () {
-                routes.controllers.AdventureController.updateTimeVoteOpen(adv.id).ajax({data: {voteOpen: $('#times-voting-active-switch').prop('checked')}, success: updateTimeVoteOpen});
+                routes.controllers.api.json.AdventureController.updateTimeVoteOpen(adv.id).ajax({data: {voteOpen: $('#times-voting-active-switch').prop('checked')}, success: updateTimeVoteOpen});
             },
 
 
@@ -596,17 +671,17 @@ require([
                     tr = input.closest('.todo-entry'),
                     id = tr.data('id'),
                     i = tr.find('.btn-check i'),
-                    complete = i.is('.fa .fa-square-o');
+                    complete = i.is('.fa-square-o');
 
-                i.removeClass('fa fa-check, fa fa-check-empty').addClass('fa fa-spin icon-journwe');
+                i.removeClass('fa-square-o fa-check-square-o').addClass('fa-spin icon-journwe');
 
-                routes.controllers.AdventureTodoController.setTodo(adv.id, id).ajax({
+                routes.controllers.api.json.AdventureTodoController.setTodo(adv.id, id).ajax({
                     data: {
                         status: complete ? 'COMPLETE' : 'NEW'
                     },
                     success: function (res) {
                         tr.get(0).className = 'status-' + res.status + ' todo-entry';
-                        i.removeClass('fa fa-spin icon-journwe').addClass(res.status == 'COMPLETE' ? 'fa fa-check' : 'fa fa-check-empty');
+                        i.removeClass('fa-spin icon-journwe').addClass(res.status == 'COMPLETE' ? 'fa-check-square-o' : 'fa-square-o');
                     }
                 });
 
@@ -622,7 +697,7 @@ require([
 
                 btn.html('<i class="fa fa-spin icon-journwe"></i>');
 
-                routes.controllers.AdventureTodoController.addTodo(adv.id).ajax({data: {title: title}, success: function (res) {
+                routes.controllers.api.json.AdventureTodoController.addTodo(adv.id).ajax({data: {title: title}, success: function (res) {
                     loadUserTodos();
                     btn.html('<i class="fa fa-plus"></i>');
                 }});
@@ -638,7 +713,7 @@ require([
                 var btn = $(this),
                     fld = $('#todo-title');
 
-                routes.controllers.AdventureTodoController.addTodo(adv.id).ajax({data: { title: fld.val() }, success: function (res) {
+                routes.controllers.api.json.AdventureTodoController.addTodo(adv.id).ajax({data: { title: fld.val() }, success: function (res) {
                     //$('.table-my-todos  tbody').append($(tmpl('todo-template', res).trim()).fadeIn());
                     //activateUserButtonListener();
                     loadUserTodos();
@@ -654,7 +729,7 @@ require([
                     tr = a.parents('.todo-entry'),
                     id = tr.data('id');
 
-                routes.controllers.AdventureTodoController.deleteTodo(adv.id, id).ajax({
+                routes.controllers.api.json.AdventureTodoController.deleteTodo(adv.id, id).ajax({
                     success: function (res) {
                         tr.fadeOut(function () {
                             tr.remove();
@@ -675,7 +750,7 @@ require([
                 $('#amazon-affiliate .modal-content .modal-body .fa-spin').first().removeClass('stash');
                 $('#amazon-affiliate').modal();
 
-                routes.controllers.AdventureTodoController.getTodoAffiliateItems(adv.id).ajax({data: {id: id}, success: function (res) {
+                routes.controllers.api.json.AdventureTodoController.getTodoAffiliateItems(adv.id).ajax({data: {id: id}, success: function (res) {
                     if (!res.length) $('#amazon-affiliate .modal-content .modal-body .content').first().html('@Messages("adventure.todos.amazon.noItems")');
 
                     for (var i in res)
@@ -683,6 +758,33 @@ require([
 
                     $('#amazon-affiliate .modal-content .modal-body .fa-spin').first().addClass('stash');
                 }});
+            },
+
+            'click #files-button-refresh': function () {
+                loadFiles();
+            },
+            'drop #files-upload-dropzone': function (event) {
+                event.stopPropagation();
+                event.preventDefault();
+
+                uploadFiles(event.target.files || event.dataTransfer.files);
+
+                $('#files-upload-dropzone').removeClass('hover');
+                return false;
+            },
+            'click .btn-file-delete': function () {
+                deleteFile($(this).closest('tr').data('id'), $(this));
+            },
+            'change #files-file-input': function () {
+                var inputFile = $('#files-file-input'),
+                    files = inputFile[0].files;
+                if (files) {
+                    uploadFiles(files);
+                    inputFile.val('');
+                }
+            },
+            'click .btn-file-upload': function () {
+                $('#files-file-input').click();
             }
 
 

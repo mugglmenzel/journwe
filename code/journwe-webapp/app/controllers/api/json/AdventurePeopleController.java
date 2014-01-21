@@ -1,4 +1,4 @@
-package controllers;
+package controllers.api.json;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
@@ -7,6 +7,8 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
+import controllers.html.*;
+import controllers.routes;
 import models.adventure.*;
 import models.adventure.adventurer.Adventurer;
 import models.adventure.adventurer.EAdventurerParticipation;
@@ -61,7 +63,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName().replaceAll(" [^ ]*$", "") : "");
@@ -93,7 +95,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null && !EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) && !EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName() : "");
@@ -125,7 +127,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null && EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName() : "");
@@ -157,7 +159,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null && EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName() : "Unknown");
@@ -175,41 +177,6 @@ public class AdventurePeopleController extends Controller {
         }
     }
 
-
-    public static Result participate(final String advId) {
-
-        //BETA activation
-        if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
-            PlayAuthenticate.storeOriginalUrl(Http.Context.current());
-            response().setCookie(UserDAO.COOKIE_USER_ROLE_ON_REGISTER, EUserRole.BETA.toString(), 7 * 24 * 3600);
-            return redirect(PlayAuthenticate.getProvider("facebook").getUrl());
-        } else {
-            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-
-            Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
-            if (advr == null) {
-                advr = new Adventurer();
-                advr.setUserId(usr.getId());
-                advr.setAdventureId(advId);
-                advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
-                new AdventurerDAO().save(advr);
-
-                clearCache(advId);
-                ApplicationController.clearUserCache(usr.getId());
-            } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
-                advr.setParticipationStatus(EAdventurerParticipation.GOING);
-                new AdventurerDAO().save(advr);
-
-                clearCache(advId);
-                ApplicationController.clearUserCache(usr.getId());
-
-
-                new UserDAO().updateRole(usr, EUserRole.BETA);
-            }
-
-            return AdventureController.getIndex(advId);
-        }
-    }
 
     @Security.Authenticated(SecuredUser.class)
     public static Result participateStatus(final String advId, final String statusStr) {
@@ -230,24 +197,6 @@ public class AdventurePeopleController extends Controller {
         return ok(Json.toJson(advr));
     }
 
-    @Security.Authenticated(SecuredUser.class)
-    public static Result leave(final String advId) {
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
-
-        new AdventurerDAO().delete(advr);
-
-        clearCache(advId);
-        ApplicationController.clearUserCache(usr.getId());
-
-
-        flash("success", "You left the adventure " + new AdventureDAO().get(advId).getName());
-
-        if (new AdventurerDAO().userCountByAdventure(advId) > 0)
-            return redirect(routes.ApplicationController.index());
-        else
-            return AdventureController.delete(advId);
-    }
 
     @Security.Authenticated(SecuredUser.class)
     public static Result adopt(final String advId, final String userId) {
@@ -318,7 +267,7 @@ public class AdventurePeopleController extends Controller {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
         JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
-        fb.publishLinkOnMyFeed(f.get("posttext"), routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()), "JournWe  Adventure: " + adv.getName(), "" + (adv.getDescription() == null ? ins.getDescription() : adv.getDescription()), "" + adv.getImage());
+        fb.publishLinkOnMyFeed(f.get("posttext"), controllers.html.routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()), "JournWe  Adventure: " + adv.getName(), "" + (adv.getDescription() == null ? ins.getDescription() : adv.getDescription()), "" + adv.getImage());
 
         return ok();
     }
@@ -353,7 +302,7 @@ public class AdventurePeopleController extends Controller {
             return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        String shortURL = adv.getShortURL() != null ? adv.getShortURL() : routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
+        String shortURL = adv.getShortURL() != null ? adv.getShortURL() : controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
 
         DynamicForm f = form().bindFromRequest();
         try {

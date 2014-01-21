@@ -8,7 +8,7 @@
 
 
 
-<form id="yingyangyong-form" action="@routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
+<form id="yingyangyong-form" action="@html.routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
 
     <div class="row">
         <div class="col-lg-8">
@@ -193,7 +193,7 @@
     }
 
     function checkShortname() {
-        $.post('@routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
+        $.post('@api.json.routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
             function(check) {
                 $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="fa fa-ok"></i> available.</span>' : '<span class="text-error"><i class="fa fa-warning-sign"></i> not available!</span>' );
                 $('#shortname').attr('aria-invalid', !check.valid);
@@ -302,7 +302,7 @@
             template: '<p><strong>{%=o.name%}</strong></p>',
             engine: {_templ: '', compile: function(template){_templ=template; return this;}, render: function(data){return tmpl(_templ,data);}},
             remote: {
-                url: '@routes.AdventurePeopleController.autocompleteFacebook?input=%QUERY',
+                url: '@api.json.routes.AdventurePeopleController.autocompleteFacebook?input=%QUERY',
                 filter: function (data) {
                     facebookUsers = {};
                     facebookUserNames = [];

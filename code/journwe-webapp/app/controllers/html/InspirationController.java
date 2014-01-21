@@ -1,4 +1,4 @@
-package controllers;
+package controllers.html;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -62,54 +62,6 @@ public class InspirationController extends Controller {
         Category cat = cats != null && cats.size() > 0 ? cats.iterator().next() : null;
 
         return ok(get.render(ins, cat));
-    }
-
-    public static Result getTips(String id) {
-        DynamicForm data = form().bindFromRequest();
-        final String lastId = data.get("lastId");
-        final int count = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : 3;
-
-        List<ObjectNode> result = new ArrayList<ObjectNode>();
-        for (InspirationTip tip : new InspirationTipDAO().activated(id, lastId, count)) {
-            ObjectNode node = Json.newObject();
-            node.put("user", Json.toJson(new UserDAO().get(tip.getUserId())));
-            node.put("tip", Json.toJson(tip));
-            result.add(node);
-        }
-
-        return ok(Json.toJson(result));
-    }
-
-    public static Result addTip(String id) {
-        DynamicForm data = form().bindFromRequest();
-        final String tipTxt = data.get("tip");
-        InspirationTip tip = new InspirationTip();
-        tip.setInspirationId(id);
-        tip.setCreated(new Date());
-        tip.setTip(tipTxt);
-        tip.setLang(lang().code());
-        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        tip.setUserId(new UserSocialDAO().findBySocialId(usr.getProvider(), usr.getId()).getUserId());
-        tip.setActive(false);
-
-        new InspirationTipDAO().save(tip);
-
-        return ok();
-    }
-
-    public static Result getImages(String id) {
-        List<String> images = new ArrayList<String>();
-        for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_INSPIRATION_IMAGES).withPrefix(id + "/")).getObjectSummaries()) {
-            try {
-                s3.setObjectAcl(os.getBucketName(), os.getKey(), CannedAccessControlList.PublicRead);
-                images.add(URLEncoder.encode(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
-                        os.getKey()), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                Logger.error("Error while producing public URL of inspiration image from S3.", e);
-            }
-        }
-
-        return ok(Json.toJson(images));
     }
 
     @Security.Authenticated(SecuredAdminUser.class)

@@ -44,7 +44,7 @@
         function loadPublicAdventures(lastId, clear) {
             $('#adventures-public-button-refresh i').addClass('fa-spin');
             $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
-            $.get('@routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
+            $.get('@api.json.routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
                 if (clear) $('#adventures-public-list').empty();
                 for(var i in advs) {
                     var polaroid = tmpl('adventure-public-template', advs[i]);
@@ -83,11 +83,11 @@
 
                     <ul class="nav nav-pills nav-stacked">
                         <li
-                        @if(catId == null) {class="active"}><a href="@routes.ApplicationController.index()">All</a></li>
+                        @if(catId == null) {class="active"}><a href="@html.routes.ApplicationController.index()">All</a></li>
                         @for(cat <- categories) {
                         <li
                         @if(cat.getCategory().getId() == catId) {class="active"}><a
-                            href="@routes.ApplicationController.categoryIndex(cat.getCategory().getId())"><span
+                            href="@html.routes.ApplicationController.categoryIndex(cat.getCategory().getId())"><span
                             class="badge badge-info pull-right">@cat.getCount()</span>@cat.getCategory().getName()
                     </a></li>
                         }
@@ -99,7 +99,7 @@
                         @inspirations.zipWithIndex.map { case(ins, i) =>
                         <li class="span3">
                             <a class="thumbnail"
-                               href="@routes.InspirationController.get(ins.getId())">
+                               href="@html.routes.InspirationController.get(ins.getId())">
                                 <img src="http://i.embed.ly/1/image/resize?width=300&url=@ins.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
                             </a>
                             <h4>@ins.getName()</h4>
@@ -117,7 +117,7 @@
             <ul class="thumbnails">
                 @adventures.zipWithIndex.map { case(adv, i) =>
                 <li class="span3">
-                    <a class="thumbnail" href="@routes.AdventureController.getIndex(adv.getId())">
+                    <a class="thumbnail" href="@html.routes.AdventureController.getIndex(adv.getId())">
                         <img src="http://i.embed.ly/1/image/resize?width=300&url=@adv.getImage()&key=2c8ef5b200c6468f9f863bc75c46009f">
                     </a>
                     <h4>@adv.getName()</h4>

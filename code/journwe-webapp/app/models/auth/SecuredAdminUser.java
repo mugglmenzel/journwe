@@ -36,7 +36,7 @@ public class SecuredAdminUser extends Security.Authenticator {
 	@Override
 	public Result onUnauthorized(Context ctx) {
 		ctx.flash().put("error", "Nice try, but you need to be Admin!");
-		return redirect(routes.ApplicationController.index());
+		return redirect(controllers.html.routes.ApplicationController.index());
 	}
 
     public static boolean isAuthorized(AuthUser u){

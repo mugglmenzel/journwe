@@ -1,10 +1,8 @@
-package controllers;
+package controllers.html;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
@@ -17,6 +15,9 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
+import controllers.api.json.AdventureFileController;
+import controllers.api.json.AdventureTimeController;
+import controllers.routes;
 import models.adventure.*;
 import models.adventure.adventurer.Adventurer;
 import models.adventure.adventurer.EAdventurerParticipation;
@@ -24,17 +25,13 @@ import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredUser;
-import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.category.Category;
 import models.dao.*;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.TimeOptionDAO;
-import models.dao.category.CategoryDAO;
 import models.dao.inspiration.InspirationDAO;
-import models.dao.manytomany.AdventureToCategoryDAO;
 import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
@@ -42,16 +39,13 @@ import models.dao.user.UserSocialDAO;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.inspiration.Inspiration;
-import models.notifications.helper.AdventurerNotifier;
 import models.user.EUserRole;
 import models.user.User;
 import models.user.UserEmail;
 import models.user.UserSocial;
-import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -60,10 +54,7 @@ import views.html.adventure.create;
 import views.html.adventure.getIndex;
 import views.html.adventure.getPublic;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import static com.rosaloves.bitlyj.Bitly.shorten;
@@ -90,7 +81,7 @@ public class AdventureController extends Controller {
             if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || !SecuredUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
                 return ok(getPublic.render(adv, ins));
             else
-                return ok(getIndex.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
+                return ok(getIndex.render(adv, ins, advr, AdventureTimeController.timeForm, controllers.api.json.AdventureFileController.fileForm));
         }
     }
 
@@ -137,13 +128,13 @@ public class AdventureController extends Controller {
             }
         }
 
-        String shortURL = routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
+        String shortURL = controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
 
         String shortname = filledForm.get("shortname");
         if (shortname != null) {
             AdventureShortname advShortname = new AdventureShortname(shortname, adv.getId());
             new AdventureShortnameDAO().save(advShortname);
-            shortURL = routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request());
+            shortURL = controllers.html.routes.AdventureController.getIndexShortname(advShortname.getShortname()).absoluteURL(request());
         }
 
 
@@ -319,7 +310,7 @@ public class AdventureController extends Controller {
 
         flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa! The shortURL is " + shortURL);
 
-        return redirect(routes.AdventureController.getIndex(adv.getId()));
+        return redirect(controllers.html.routes.AdventureController.getIndex(adv.getId()));
 
     }
 
@@ -343,152 +334,6 @@ public class AdventureController extends Controller {
         return ok();
     }
 
-    @Security.Authenticated(SecuredUser.class)
-    public static Result updateImage(String advId) {
-        if (!JournweAuthorization.canEditAdventureImage(advId))
-            return AuthorizationMessage.notAuthorizedResponse();
-        Adventure adv = new AdventureDAO().get(advId);
-        try {
-            Http.MultipartFormData body = request().body().asMultipartFormData();
-            Http.MultipartFormData.FilePart image = body.getFiles().get(0);
-            File file = image.getFile();
-
-            if (image.getFilename() != null
-                    && !"".equals(image.getFilename()) && file.length() > 0) {
-                AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
-                        ConfigFactory.load().getString("aws.accessKey"),
-                        ConfigFactory.load().getString("aws.secretKey")));
-                s3.putObject(new PutObjectRequest(
-                        S3_BUCKET_ADVENTURE_IMAGES, adv.getId(), file)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-                adv.setImage(s3.getResourceUrl(S3_BUCKET_ADVENTURE_IMAGES,
-                        adv.getId()));
-            }
-
-            new AdventureDAO().save(adv);
-        } catch (Exception e) {
-            return badRequest();
-        }
-
-        ObjectNode node = Json.newObject();
-        node.put("image", adv.getImage());
-        return ok(Json.toJson(node));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result updateCategory(String advId) {
-        DynamicForm data = form().bindFromRequest();
-        String catId = data.get("categoryId");
-        Category result = new Category();
-        if (catId != null && !"".equals(catId)) {
-            result = new CategoryDAO().get(catId);
-            Adventure adv = new AdventureDAO().get(advId);
-            // Save Adventure-to-Category relationship
-            new AdventureToCategoryDAO().createManyToManyRelationship(adv,result);
-            new CategoryDAO().save(result);
-        }
-        return ok(Json.toJson(result));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result updatePublic(String advId) {
-        DynamicForm data = form().bindFromRequest();
-        Boolean publish = new Boolean(data.get("public"));
-        Adventure adv = new AdventureDAO().get(advId);
-        adv.setPublish(publish);
-        new AdventureDAO().save(adv);
-
-        return ok(Json.toJson(adv.isPublish()));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result updatePlaceVoteOpen(String advId) {
-        if (!JournweAuthorization.canChangeVoteOnOffForPlaces(advId))
-            return AuthorizationMessage.notAuthorizedResponse();
-        DynamicForm data = form().bindFromRequest();
-        Boolean openVote = new Boolean(data.get("voteOpen"));
-        Adventure adv = new AdventureDAO().get(advId);
-        adv.setPlaceVoteOpen(openVote);
-        new AdventureDAO().save(adv);
-
-        new AdventurerNotifier().notifyAdventurers(advId, "The Place Vote is now " + (adv.getPlaceVoteOpen() ? "open" : "closed") + ".", "Place Vote");
-
-        return ok(Json.toJson(adv.getPlaceVoteOpen()));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result updatePlaceVoteDeadline(String advId) {
-        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
-            return AuthorizationMessage.notAuthorizedResponse();
-        DynamicForm data = form().bindFromRequest();
-        Long deadline = new Long(data.get("voteDeadline"));
-        Adventure adv = new AdventureDAO().get(advId);
-        adv.setPlaceVoteDeadline(deadline);
-        new AdventureDAO().save(adv);
-
-        AdventureReminder rem = new AdventureReminder();
-        rem.setAdventureId(advId);
-        rem.setType(EAdventureReminderType.PLACE);
-        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
-        new AdventureReminderDAO().save(rem);
-
-        new AdventurerNotifier().notifyAdventurers(advId, "Please adhere to the place voting deadline!", "Place Vote");
-
-        return ok(Json.toJson(adv.getPlaceVoteDeadline()));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result placeVoteOpen(String advId) {
-        Adventure adv = new AdventureDAO().get(advId);
-        if (adv == null) return badRequest();
-        else
-            return ok(Json.toJson(adv.getPlaceVoteDeadline() != null ? adv.getPlaceVoteDeadline() > new Date().getTime() && adv.getPlaceVoteOpen() : adv.getPlaceVoteOpen()));
-    }
-
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result updateTimeVoteOpen(String advId) {
-        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
-            return AuthorizationMessage.notAuthorizedResponse();
-        DynamicForm data = form().bindFromRequest();
-        Boolean openVote = new Boolean(data.get("voteOpen"));
-        Adventure adv = new AdventureDAO().get(advId);
-        adv.setTimeVoteOpen(openVote);
-        new AdventureDAO().save(adv);
-
-        new AdventurerNotifier().notifyAdventurers(advId, "The Time Vote is now " + (adv.getTimeVoteOpen() ? "open" : "closed") + ".", "Time Vote");
-
-        return ok(Json.toJson(adv.getTimeVoteOpen()));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result updateTimeVoteDeadline(String advId) {
-        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
-            return AuthorizationMessage.notAuthorizedResponse();
-        DynamicForm data = form().bindFromRequest();
-        Long deadline = new Long(data.get("voteDeadline"));
-        Adventure adv = new AdventureDAO().get(advId);
-        adv.setTimeVoteDeadline(deadline);
-        new AdventureDAO().save(adv);
-
-        AdventureReminder rem = new AdventureReminder();
-        rem.setAdventureId(advId);
-        rem.setType(EAdventureReminderType.TIME);
-        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
-        new AdventureReminderDAO().save(rem);
-
-        new AdventurerNotifier().notifyAdventurers(advId, "Please adhere to the time voting deadline!", "Time Vote");
-
-        return ok(Json.toJson(adv.getTimeVoteDeadline()));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result timeVoteOpen(String advId) {
-        Adventure adv = new AdventureDAO().get(advId);
-        if (adv == null) return badRequest();
-        else
-            return ok(Json.toJson(adv.getTimeVoteDeadline() != null ? adv.getTimeVoteDeadline() > new Date().getTime() && adv.getTimeVoteOpen() : adv.getTimeVoteOpen()));
-    }
 
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result delete(String advId) {
@@ -508,19 +353,9 @@ public class AdventureController extends Controller {
 
         flash("success", "We deleted your adventure " + name);
 
-        return redirect(routes.ApplicationController.index());
+        return redirect(controllers.html.routes.ApplicationController.index());
     }
 
-    public static Result checkShortname() {
-        DynamicForm requestData = form().bindFromRequest();
-
-        ObjectNode node = Json.newObject();
-        node.put("value", requestData.get("value"));
-        node.put("valid", new AdventureShortnameDAO().exists(requestData.get("value")) ? 0 : 1);
-        node.put("message", "Shortname already exists!");
-        Logger.info(node.toString());
-        return ok(Json.toJson(node));
-    }
 
 
 }

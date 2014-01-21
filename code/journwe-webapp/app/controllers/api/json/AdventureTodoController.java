@@ -1,4 +1,4 @@
-package controllers;
+package controllers.api.json;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.journwe.productadvertising.webservice.client.Item;

@@ -7,7 +7,7 @@
         <div id="adventure-public-switch" class="make-switch" style="display:inline-block;overflow:hidden;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
         <script>
             $('#adventure-public-switch').change(function(){
-                $.post('@routes.AdventureController.updatePublic(adv.getId)', {public: $(this).find('input:checkbox').prop('checked')}, function(pub){
+                $.post('@api.json.routes.AdventureController.updatePublic(adv.getId)', {public: $(this).find('input:checkbox').prop('checked')}, function(pub){
                     $(this).find('input:checkbox').prop('checked', pub);
                 });
             });
@@ -27,7 +27,7 @@
             });
 
             function loadCategoriesOptionsMap() {
-                $.get('@routes.CategoryController.categoriesOptionsMap()', function (cats){
+                $.get('@api.json.routes.CategoryController.categoriesOptionsMap()', function (cats){
                     $('#adventure-category-select ul.dropdown-menu').empty();
                     if(cats != null && cats.length > 0){
                         for(var i in cats)
@@ -41,7 +41,7 @@
 
             function updateCategorySelection(catId) {
                 $('#adventure-category-select button i').first().removeClass('hide');
-                $.post('@routes.AdventureController.updateCategory(adv.getId)', {categoryId: catId}, function (data) {
+                $.post('@api.json.routes.AdventureController.updateCategory(adv.getId)', {categoryId: catId}, function (data) {
                     if(data.name != null && data.name.length > 0) $('#adventure-category-select button span').first().html(data.name);
                     $('#adventure-category-select button i').first().addClass('hide');
                 });

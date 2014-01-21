@@ -15,9 +15,9 @@
 
 @getNotificationLink(status:ENotificationTopics, ref:String) = {
     @status match {
-        case ENotificationTopics.ADVENTURE => {@routes.AdventureController.getIndex(ref)}
-        case ENotificationTopics.GENERAL => {@routes.ApplicationController.index}
-        case ENotificationTopics.USER => {@routes.UserController.getProfile(ref)}
+        case ENotificationTopics.ADVENTURE => {@html.routes.AdventureController.getIndex(ref)}
+        case ENotificationTopics.GENERAL => {@html.routes.ApplicationController.index}
+        case ENotificationTopics.USER => {@html.routes.UserController.getProfile(ref)}
     }
 }
 <div>
@@ -28,13 +28,13 @@
         <div class="col-lg-2 col-sm-2 col-xs-2">
             <div class="navbar-text">
                 @if(auth != null && user != null) {
-                    <a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">   @*onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');"*@
+                    <a href="@html.routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">   @*onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');"*@
                         <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
                             Journ<strong>We</strong>
                         </span>
                     </a>
                 } else {
-                    <a href="@routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
+                    <a href="@html.routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
                         <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
                             Journ<strong>We</strong>
                         </span>
@@ -45,12 +45,12 @@
 
         <div class="col-lg-6 col-sm-6 col-xs-6">
             <ul class="nav nav-pills nav-justified">
-                <li><a href="@routes.ApplicationController.indexNew()"><i class="fa fa-asterisk"></i> New <img height="14px" src="@routes.Assets.at("img/journwe_logo.png")"></a></li>
-                <li><a href="@routes.ApplicationController.categoryIndex(Category.SUPER_CATEGORY)" onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                <li><a href="@routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
+                <li><a href="@html.routes.ApplicationController.indexNew()"><i class="fa fa-asterisk"></i> New <img height="14px" src="@routes.Assets.at("img/journwe_logo.png")"></a></li>
+                <li><a href="@html.routes.ApplicationController.categoryIndex(Category.SUPER_CATEGORY)" onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                <li><a href="@html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
                 <li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="fa fa-search"></i> Search</a></li>
                 @if(auth != null && user != null && EUserRole.ADMIN.equals(user.getRole)) {
-                <li><a href="@routes.ApplicationController.admin()"><i class="fa fa-cogs"></i> Admin</a></li>
+                <li><a href="@html.routes.ApplicationController.admin()"><i class="fa fa-cogs"></i> Admin</a></li>
                 }
             </ul>
         </div>
@@ -95,7 +95,7 @@
 
                             function loadNotifications(clear, lastId) {
                                 if (clear) $(pop_content).find('i.loading-top').removeClass('stash');
-                                $.get('@routes.UserController.getNotifications()', {lastId: lastId, count: 5}, function (d) {
+                                $.get('@api.json.routes.UserController.getNotifications()', {lastId: lastId, count: 5}, function (d) {
                                     if (clear) $(pop_content).find('.notifications-list').empty();
                                     for(var i in d)
                                         $(pop_content).find('.notifications-list').append(tmpl('header-notification-template', d[i]));
@@ -130,7 +130,7 @@
                         }());
                     </script>
 
-                <a class="btn btn-link" href="@routes.UserController.getProfile(user.getId())">
+                <a class="btn btn-link" href="@html.routes.UserController.getProfile(user.getId())">
                     <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
                     @user.getName()
                 </a>
@@ -161,7 +161,7 @@
     <div id="navbar-secondlevel-collapsable">
             <div class="row collapse" id="navbar-secondlevel-journwe-home-select" data-parent="#navbar-secondlevel-collapsable">
                 <div class="col-lg-12 text-center" style="margin: 10px 0px; line-height: 70px;">
-                    <span><a href="@routes.ApplicationController.index()"><i class="fa-home" style="font-size: 70px;"></i></a> or <a href="@routes.ApplicationController.indexNew()"><img src="http://i.embed.ly/1/image/resize?height=50&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 50px; vertical-align: text-bottom;"></a></span>
+                    <span><a href="@html.routes.ApplicationController.index()"><i class="fa-home" style="font-size: 70px;"></i></a> or <a href="@html.routes.ApplicationController.indexNew()"><img src="http://i.embed.ly/1/image/resize?height=50&key=2c8ef5b200c6468f9f863bc75c46009f&url=http://www.journwe.com/@routes.Assets.at("img/yingyangyong.png")" alt="JournWe logo" style="height: 50px; vertical-align: text-bottom;"></a></span>
                 </div>
                 <div class="col-lg-12 text-center"><a onclick="$('#navbar-secondlevel-journwe-home-select').collapse('hide');"><i class="fa-chevron-up"></i></a></div>
             </div>
@@ -176,7 +176,7 @@
                             @for(cat <- catDAO.allSubcategory(Category.SUPER_CATEGORY)) {
                                 @defining(catDAO.countInspirationsHierarchyCached(cat.getId)){ count =>
                                     @if(cat != null && count > 0){
-                                    <li><a href="@routes.ApplicationController.categoryIndex(cat.getId())">
+                                    <li><a href="@html.routes.ApplicationController.categoryIndex(cat.getId())">
                                         @cat.getName() <span class="badge badge-info pull-right">@count</span></a>
                                     </li>
                                     }
@@ -197,7 +197,7 @@
 
                             function loadHeaderCategories() {
                                 $('#header-categories-loading').removeClass('stash');
-                                $.get('@routes.ApplicationController.getCategories(Category.SUPER_CATEGORY)', function (cats) {
+                                $.get('@api.json.routes.ApplicationController.getCategories(Category.SUPER_CATEGORY)', function (cats) {
                                     $('#header-categories-list').empty();
                                     for(var i in cats) {
                                         $('#header-categories-list').append(tmpl('header-category-template', cats[i]));

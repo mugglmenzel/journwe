@@ -1,5 +1,6 @@
-package controllers;
+package controllers.html;
 
+import controllers.routes;
 import models.auth.SecuredUser;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
@@ -15,10 +16,7 @@ import play.data.format.Formats.NonEmpty;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.i18n.Messages;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Result;
-import play.mvc.Security;
+import play.mvc.*;
 import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthUser;
 import views.html.account.*;
@@ -151,7 +149,7 @@ public class AccountController extends Controller {
 		final AuthUser u = PlayAuthenticate.getLinkUser(session());
 		if (u == null) {
 			// account to link could not be found, silently redirect to login
-			return redirect(routes.ApplicationController.index());
+			return Results.redirect(controllers.html.routes.ApplicationController.index());
 		}
 		return ok(views.html.account.ask_link.render(ACCEPT_FORM, u));
 	}
@@ -163,7 +161,7 @@ public class AccountController extends Controller {
 		if (u == null) {
             Logger.debug("account to link could not be found. Silently redirect to login.");
 			// account to link could not be found, silently redirect to login
-			return redirect(routes.ApplicationController.index());
+			return redirect(controllers.html.routes.ApplicationController.index());
 		}
 
 		final Form<Accept> filledForm = ACCEPT_FORM.bindFromRequest();
@@ -191,7 +189,7 @@ public class AccountController extends Controller {
 		if (bUser == null) {
             Logger.debug("User to merge with could not be found. Silently redirect to login.");
 			// user to merge with could not be found, silently redirect to login
-			return redirect(routes.ApplicationController.index());
+			return redirect(controllers.html.routes.ApplicationController.index());
 		}
 
 		// You could also get the local user object here via
@@ -209,7 +207,7 @@ public class AccountController extends Controller {
 		final AuthUser bUser = PlayAuthenticate.getMergeUser(session());
 		if (bUser == null) {
 			// user to merge with could not be found, silently redirect to login
-			return redirect(routes.ApplicationController.index());
+			return redirect(controllers.html.routes.ApplicationController.index());
 		}
 
 		final Form<Accept> filledForm = ACCEPT_FORM.bindFromRequest();
