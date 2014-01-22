@@ -6,228 +6,230 @@ import models.adventure.EAuthorizationRole;
 import models.dao.AdventureAuthorizationDAO;
 import models.dao.user.UserDAO;
 import models.user.User;
+import play.Logger;
+import play.cache.Cache;
 import play.mvc.Http;
+
+import java.util.concurrent.Callable;
 
 public class JournweAuthorization {
 
+    private AbstractAuthorization auth;
+
+    public JournweAuthorization(String advId) {
+        this.auth = getAuthorization(advId);
+    }
+
     // ADVENTURE INFO
-    public static boolean canEditAdventureImage(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditAdventureImage() : false;
+    public boolean canEditAdventureImage() {
+        return (auth != null) ? auth.canEditAdventureImage() : false;
     }
-    public static boolean canViewAdventureImage(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureImage() : false;
+
+    public boolean canViewAdventureImage() {
+        return (auth != null) ? auth.canViewAdventureImage() : false;
     }
-    public static boolean canEditAdventureTitle(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditAdventureTitle() : false;
+
+    public boolean canEditAdventureTitle() {
+        return (auth != null) ? auth.canEditAdventureTitle() : false;
     }
-    public static boolean canViewAdventureTitle(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureTitle() : false;
+
+    public boolean canViewAdventureTitle() {
+        return (auth != null) ? auth.canViewAdventureTitle() : false;
     }
-    public static boolean canEditAdventureComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditAdventureComments() : false;
+
+    public boolean canEditAdventureComments() {
+        return (auth != null) ? auth.canEditAdventureComments() : false;
     }
-    public static boolean canViewAdventureComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureComments() : false;
+
+    public boolean canViewAdventureComments() {
+        return (auth != null) ? auth.canViewAdventureComments() : false;
     }
-    public static boolean canEditAdventureDescription(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditAdventureDescription() : false;
+
+    public boolean canEditAdventureDescription() {
+        return (auth != null) ? auth.canEditAdventureDescription() : false;
     }
-    public static boolean canViewAdventureDescription(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureDescription() : false;
+
+    public boolean canViewAdventureDescription() {
+        return (auth != null) ? auth.canViewAdventureDescription() : false;
     }
 
     // PLACE
-    public static boolean canViewAdventurePlacesWidget(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventurePlacesWidget() : false;
+    public boolean canViewAdventurePlacesWidget() {
+        return (auth != null) ? auth.canViewAdventurePlacesWidget() : false;
     }
-    public static boolean canEditPlaces(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditPlaces() : false;
+
+    public boolean canEditPlaces() {
+        return (auth != null) ? auth.canEditPlaces() : false;
     }
-    public static boolean canViewPlaces(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewPlaces() : false;
+
+    public boolean canViewPlaces() {
+        return (auth != null) ? auth.canViewPlaces() : false;
     }
-    public static boolean canVoteForPlaces(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canVoteForPlaces() : false;
+
+    public boolean canVoteForPlaces() {
+        return (auth != null) ? auth.canVoteForPlaces() : false;
     }
-    public static boolean canChangeVoteOnOffForPlaces(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canChangeVoteOnOffForPlaces() : false;
+
+    public boolean canChangeVoteOnOffForPlaces() {
+        return (auth != null) ? auth.canChangeVoteOnOffForPlaces() : false;
     }
-    public static boolean canViewFavoritePlace(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewFavoritePlace() : false;
+
+    public boolean canViewFavoritePlace() {
+        return (auth != null) ? auth.canViewFavoritePlace() : false;
     }
-    public static boolean canEditPlaceComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditPlaceComments() : false;
+
+    public boolean canEditPlaceComments() {
+        return (auth != null) ? auth.canEditPlaceComments() : false;
     }
-    public static boolean canViewPlaceComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewPlaceComments() : false;
+
+    public boolean canViewPlaceComments() {
+        return (auth != null) ? auth.canViewPlaceComments() : false;
     }
-    public static boolean canViewVotesForPlaces(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewVotesForPlaces() : false;
+
+    public boolean canViewVotesForPlaces() {
+        return (auth != null) ? auth.canViewVotesForPlaces() : false;
     }
 
     // ADVENTURERS
-    public static boolean canViewAdventureAdventurersWidget(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureAdventurersWidget() : false;
+    public boolean canViewAdventureAdventurersWidget() {
+        return (auth != null) ? auth.canViewAdventureAdventurersWidget() : false;
     }
-    public static boolean canViewAdventurerParticipants(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventurerParticipants() : false;
+
+    public boolean canViewAdventurerParticipants() {
+        return (auth != null) ? auth.canViewAdventurerParticipants() : false;
     }
-    public static boolean canEditAdventurerParticipationStatus(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditAdventurerParticipationStatus() : false;
+
+    public boolean canEditAdventurerParticipationStatus() {
+        return (auth != null) ? auth.canEditAdventurerParticipationStatus() : false;
     }
-    public static boolean canViewAdventurerParticipationStatus(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventurerParticipationStatus() : false;
+
+    public boolean canViewAdventurerParticipationStatus() {
+        return (auth != null) ? auth.canViewAdventurerParticipationStatus() : false;
     }
-    public static boolean canInviteAdventurerParticipants(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canInviteAdventurerParticipants() : false;
+
+    public boolean canInviteAdventurerParticipants() {
+        return (auth != null) ? auth.canInviteAdventurerParticipants() : false;
     }
-    public static boolean canAcceptAdventurerApplicants(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canAcceptAdventurerApplicants() : false;
+
+    public boolean canAcceptAdventurerApplicants() {
+        return (auth != null) ? auth.canAcceptAdventurerApplicants() : false;
     }
-    public static boolean canRemoveAdventurerParticipants(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canRemoveAdventurerParticipants() : false;
+
+    public boolean canRemoveAdventurerParticipants() {
+        return (auth != null) ? auth.canRemoveAdventurerParticipants() : false;
     }
-    public static boolean canEditAdventurerComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditAdventurerComments() : false;
+
+    public boolean canEditAdventurerComments() {
+        return (auth != null) ? auth.canEditAdventurerComments() : false;
     }
-    public static boolean canViewAdventurerComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventurerComments() : false;
+
+    public boolean canViewAdventurerComments() {
+        return (auth != null) ? auth.canViewAdventurerComments() : false;
     }
 
     // TIME
-    public static boolean canViewAdventureTimeWidget(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureTimeWidget() : false;
+    public boolean canViewAdventureTimeWidget() {
+        return (auth != null) ? auth.canViewAdventureTimeWidget() : false;
     }
-    public static boolean canEditDateAndTime(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditDateAndTime() : false;
+
+    public boolean canEditDateAndTime() {
+        return (auth != null) ? auth.canEditDateAndTime() : false;
     }
-    public static boolean canViewDateAndTime(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewDateAndTime() : false;
+
+    public boolean canViewDateAndTime() {
+        return (auth != null) ? auth.canViewDateAndTime() : false;
     }
-    public static boolean canChangeVoteOnOffForDateAndTime(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canChangeVoteOnOffForDateAndTime() : false;
+
+    public boolean canChangeVoteOnOffForDateAndTime() {
+        return (auth != null) ? auth.canChangeVoteOnOffForDateAndTime() : false;
     }
-    public static boolean canVoteForDateAndTime(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canVoteForDateAndTime() : false;
+
+    public boolean canVoteForDateAndTime() {
+        return (auth != null) ? auth.canVoteForDateAndTime() : false;
     }
-    public static boolean canViewVotesForDateAndTime(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewVotesForDateAndTime() : false;
+
+    public boolean canViewVotesForDateAndTime() {
+        return (auth != null) ? auth.canViewVotesForDateAndTime() : false;
     }
-    public static boolean canViewFavoriteDateAndTime(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewFavoriteDateAndTime() : false;
+
+    public boolean canViewFavoriteDateAndTime() {
+        return (auth != null) ? auth.canViewFavoriteDateAndTime() : false;
     }
-    public static boolean canEditFavoriteDateAndTime(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditFavoriteDateAndTime() : false;
+
+    public boolean canEditFavoriteDateAndTime() {
+        return (auth != null) ? auth.canEditFavoriteDateAndTime() : false;
     }
-    public static boolean canEditDateAndTimeComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditDateAndTimeComments() : false;
+
+    public boolean canEditDateAndTimeComments() {
+        return (auth != null) ? auth.canEditDateAndTimeComments() : false;
     }
-    public static boolean canViewDateAndTimeComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewDateAndTimeComments() : false;
+
+    public boolean canViewDateAndTimeComments() {
+        return (auth != null) ? auth.canViewDateAndTimeComments() : false;
     }
 
     // TODOLIST
-    public static boolean canViewAdventureTodoWidget(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureTodoWidget() : false;
+    public boolean canViewAdventureTodoWidget() {
+        return (auth != null) ? auth.canViewAdventureTodoWidget() : false;
     }
-    public static boolean canEditTodoItem(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditTodoItem() : false;
+
+    public boolean canEditTodoItem() {
+        return (auth != null) ? auth.canEditTodoItem() : false;
     }
-    public static boolean canViewTodoItem(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewTodoItem() : false;
+
+    public boolean canViewTodoItem() {
+        return (auth != null) ? auth.canViewTodoItem() : false;
     }
-    public static boolean canSetTodoListToCompleted(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canSetTodoListToCompleted() : false;
+
+    public boolean canSetTodoListToCompleted() {
+        return (auth != null) ? auth.canSetTodoListToCompleted() : false;
     }
-    public static boolean canEditTodoComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditTodoComments() : false;
+
+    public boolean canEditTodoComments() {
+        return (auth != null) ? auth.canEditTodoComments() : false;
     }
-    public static boolean canViewTodoComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewTodoComments() : false;
+
+    public boolean canViewTodoComments() {
+        return (auth != null) ? auth.canViewTodoComments() : false;
     }
 
     // FILE
-    public static boolean canViewAdventureFilesWidget(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureFilesWidget() : false;
+    public boolean canViewAdventureFilesWidget() {
+        return (auth != null) ? auth.canViewAdventureFilesWidget() : false;
     }
-    public static boolean canUploadFiles(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canUploadFiles() : false;
+
+    public boolean canUploadFiles() {
+        return (auth != null) ? auth.canUploadFiles() : false;
     }
-    public static boolean canViewAndDownloadFiles(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAndDownloadFiles() : false;
+
+    public boolean canViewAndDownloadFiles() {
+        return (auth != null) ? auth.canViewAndDownloadFiles() : false;
     }
-    public static boolean canDeleteFiles(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canDeleteFiles() : false;
+
+    public boolean canDeleteFiles() {
+        return (auth != null) ? auth.canDeleteFiles() : false;
     }
-    public static boolean canEditFilesComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canEditFilesComments() : false;
+
+    public boolean canEditFilesComments() {
+        return (auth != null) ? auth.canEditFilesComments() : false;
     }
-    public static boolean canViewFilesComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewFilesComments() : false;
+
+    public boolean canViewFilesComments() {
+        return (auth != null) ? auth.canViewFilesComments() : false;
     }
 
     // DISCUSSION
-    public static boolean canViewAdventureDiscussionWidget(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureDiscussionWidget() : false;
+    public boolean canViewAdventureDiscussionWidget() {
+        return (auth != null) ? auth.canViewAdventureDiscussionWidget() : false;
     }
 
     // OFFERS
-    public static boolean canViewAdventureOffersWidget(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewAdventureOffersWidget() : false;
+    public boolean canViewAdventureOffersWidget() {
+        return (auth != null) ? auth.canViewAdventureOffersWidget() : false;
     }
-    public static boolean canViewOfferComments(final String advId) {
-        AbstractAuthorization authorization = getAuthorization(advId);
-        return (authorization!=null) ? authorization.canViewOfferComments() : false;
+
+    public boolean canViewOfferComments() {
+        return (auth != null) ? auth.canViewOfferComments() : false;
     }
 
     /**
@@ -236,29 +238,46 @@ public class JournweAuthorization {
      * @param advId
      * @return
      */
-    private static AbstractAuthorization getAuthorization(final String advId) {
+    private AbstractAuthorization getAuthorization(final String advId) {
         try {
-            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-            if(usr==null)
+            final User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            if (usr == null)
                 return null;
+
             // Load JournweAuthorization classname from database
-            AdventureAuthorization model = new AdventureAuthorizationDAO().get(advId, usr.getId());
-            if(model==null) return null;
+            AdventureAuthorization model = null;
+            try {
+                model = Cache.getOrElse("adventureAuthorization." + advId + "." + usr.getId(), new Callable<AdventureAuthorization>() {
+                    @Override
+                    public AdventureAuthorization call() throws Exception {
+                        Logger.debug("fetched authorization from dynamodb");
+                        return new AdventureAuthorizationDAO().get(advId, usr.getId());
+                    }
+                }, 24 * 3600);
+            } catch (Exception e) {
+                Logger.error("Couldn't get Authorization for adv " + advId + ", usr " + usr.getId() + " from db", e);
+                model = new AdventureAuthorizationDAO().get(advId, usr.getId());
+            }
+
+
+            if (model == null) return null;
             EAuthorizationRole authorizationRole = model.getAuthorizationRole();
             String className = authorizationRole.getClassName();
             Class clazz = Class.forName(className);
             Object obj = clazz.newInstance();
-            if(obj instanceof AbstractAuthorization) {
-                AbstractAuthorization authorization =  (AbstractAuthorization)obj;
+            if (obj instanceof AbstractAuthorization) {
+                AbstractAuthorization authorization = (AbstractAuthorization) obj;
                 return authorization;
             }
+
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Logger.error("Auth class not found", e);
         } catch (InstantiationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Logger.error("Auth class could not be instantiated", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Logger.error("Auth class illegal access", e);
         }
+
         return null;
     }
 

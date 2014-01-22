@@ -7,8 +7,9 @@
 @import models.adventure.todo.EStatus
 @import models.adventure.adventurer.EAdventurerParticipation
 
-@if(adv != null && advr != null) {
-    @if(JournweAuthorization.canViewTodoItem(adv.getId)) {
+@defining(new JournweAuthorization(adv.getId)){ auth =>
+
+    @if(auth.canViewTodoItem()) {
     <table id="todos-list" class="table table-striped table-hover table-my-todos">
         <thead>
         <tr>
@@ -22,7 +23,7 @@
     </table>
     }
 
-    @if(JournweAuthorization.canEditTodoItem(adv.getId)) {
+    @if(auth.canEditTodoItem()) {
     <div class="row">
         <div class="input-group col-lg-6">
             <input id="todo-title" type="text" placeholder="@Messages("adventure.todos.placeholder")" class="form-control"/>
@@ -90,7 +91,7 @@
             <td><button class="btn btn-primary btn-check"><i class="fa fa{% if(o.status == '@EStatus.COMPLETE'){ %}{%=String('-check')%}{% } %}-square-o"></i></button></td>
             <td style="width:100%;">{%=o.title%}</td>
             <td><a class="btn btn-link btn-affiliate"> @Messages("adventure.todos.amazon.purchase") </a></td>
-            @if(JournweAuthorization.canEditTodoItem(adv.getId)) {
+            @if(auth.canEditTodoItem()) {
             <td class="text-center"><button class="btn btn-danger btn-delete"><i class="fa fa-trash-o"></i></button></td>
             }
         </tr>

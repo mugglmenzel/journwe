@@ -53,7 +53,7 @@ public class AdventureFileController extends Controller {
     @Security.Authenticated(SecuredUser.class)
     public static Result uploadFile(String advId) {
         try {
-            if (!JournweAuthorization.canUploadFiles(advId))
+            if (!new JournweAuthorization(advId).canUploadFiles())
                 return AuthorizationMessage.notAuthorizedResponse();
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             if (usr == null)
@@ -99,7 +99,7 @@ public class AdventureFileController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result listFiles(String adventureId) {
-        if (!JournweAuthorization.canViewAndDownloadFiles(adventureId))
+        if (!new JournweAuthorization(adventureId).canViewAndDownloadFiles())
             return AuthorizationMessage.notAuthorizedResponse();
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
@@ -120,7 +120,7 @@ public class AdventureFileController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result deleteFile(String advId, String fileId) {
-        if (!JournweAuthorization.canDeleteFiles(advId))
+        if (!new JournweAuthorization(advId).canDeleteFiles())
             return AuthorizationMessage.notAuthorizedResponse();
         JournweFile journweFile = new JournweFileDAO().get(advId, fileId);
 

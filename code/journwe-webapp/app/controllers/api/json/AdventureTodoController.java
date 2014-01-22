@@ -42,7 +42,7 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getTodos(String advId, String userId) {
-        if (!JournweAuthorization.canViewTodoItem(advId))
+        if (!new JournweAuthorization(advId).canViewTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
         return ok(Json.toJson(new TodoDAO().all(userId, advId)));
 
@@ -92,7 +92,7 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result addTodo(String id) {
-        if (!JournweAuthorization.canEditTodoItem(id))
+        if (!new JournweAuthorization(id).canEditTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
 
         DynamicForm requestData = form().bindFromRequest();
@@ -111,7 +111,7 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result setTodo(String advId, String tid) {
-        if (!JournweAuthorization.canEditTodoItem(advId))
+        if (!new JournweAuthorization(advId).canEditTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
 
         DynamicForm requestData = form().bindFromRequest();
@@ -128,7 +128,7 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result deleteTodo(String advId, String tid) {
-        if (!JournweAuthorization.canEditTodoItem(advId))
+        if (!new JournweAuthorization(advId).canEditTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
 
         new TodoDAO().delete(advId, tid);

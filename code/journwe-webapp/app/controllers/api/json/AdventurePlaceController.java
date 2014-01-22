@@ -46,7 +46,7 @@ public class AdventurePlaceController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getPlaces(String advId) {
-        if (!JournweAuthorization.canViewPlaces(advId))
+        if (!new JournweAuthorization(advId).canViewPlaces())
             return AuthorizationMessage.notAuthorizedResponse();
 
         String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
@@ -63,7 +63,7 @@ public class AdventurePlaceController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getFavoritePlace(String advId) {
-        if (!JournweAuthorization.canViewFavoritePlace(advId))
+        if (!new JournweAuthorization(advId).canViewFavoritePlace())
             return AuthorizationMessage.notAuthorizedResponse();
         if (new PlaceOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
@@ -81,7 +81,7 @@ public class AdventurePlaceController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result setFavoritePlace(String advId) {
-        if (!JournweAuthorization.canViewFavoritePlace(advId))
+        if (!new JournweAuthorization(advId).canViewFavoritePlace())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         String favId = data.get("favoritePlaceId");
@@ -99,7 +99,7 @@ public class AdventurePlaceController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result addPlace(String advId) {
-        if (!JournweAuthorization.canEditPlaces(advId))
+        if (!new JournweAuthorization(advId).canEditPlaces())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm requestData = form().bindFromRequest();
 
@@ -144,7 +144,7 @@ public class AdventurePlaceController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result vote(String advId, String placeId) {
-        if (!JournweAuthorization.canVoteForPlaces(advId))
+        if (!new JournweAuthorization(advId).canVoteForPlaces())
             return AuthorizationMessage.notAuthorizedResponse();
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
@@ -181,7 +181,7 @@ public class AdventurePlaceController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result deletePlace(String advId, String placeId) {
-        if (!JournweAuthorization.canEditPlaces(advId))
+        if (!new JournweAuthorization(advId).canEditPlaces())
             return AuthorizationMessage.notAuthorizedResponse();
         new PlaceOptionDAO().delete(advId, placeId);
         return ok();

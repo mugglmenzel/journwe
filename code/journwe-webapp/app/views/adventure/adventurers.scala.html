@@ -17,9 +17,9 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 }
 }
 
+    @defining(new JournweAuthorization(adv.getId)){ auth =>
 
-
-@if(JournweAuthorization.canEditAdventurerParticipationStatus(adv.getId)) {
+@if(auth.canEditAdventurerParticipationStatus()) {
 @defining((advr.getParticipationStatus())) { (status) =>
     @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)){
 <div>
@@ -126,7 +126,7 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 
 
 
-@if(JournweAuthorization.canInviteAdventurerParticipants(adv.getId)) {
+@if(auth.canInviteAdventurerParticipants()) {
 <div class="row">
     <div class="input-group col-lg-6">
         <div id="people-add-type" class="input-group-btn">
@@ -252,5 +252,5 @@ case EAdventurerParticipation.INVITEE => {label-warning}
 
     });
 </script>
-
+}
 }

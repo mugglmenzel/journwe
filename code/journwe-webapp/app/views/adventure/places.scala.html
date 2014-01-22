@@ -2,15 +2,18 @@
 
 @import models.authorization.JournweAuthorization
 
-@if(JournweAuthorization.canViewPlaces(adv.getId)) {
+
+@defining(new JournweAuthorization(adv.getId)){ auth =>
+
+@if(auth.canViewPlaces()) {
 <div class="clearfix">
-    @if(JournweAuthorization.canViewFavoritePlace(adv.getId)) {
+    @if(auth.canViewFavoritePlace()) {
     <div id="places-favorite-place" class="pull-left" style="font-size: 20px; margin-bottom: 10px;">
         <i id="places-favorite-place-icon" class="fa fa-spin icon-journwe icon-favorite-places"></i> @Messages("adventure.places.favourite") <em><span id="places-favorite-place-name">@Messages("adventure.general.nofavourite.placeholder")</span></em>
     </div>
     }
 
-    @if(JournweAuthorization.canChangeVoteOnOffForPlaces(adv.getId)) {
+    @if(auth.canChangeVoteOnOffForPlaces()) {
     <div class="pull-right">
           <button class="btn @if(adv.getPlaceVoteOpen){btn-success} btn-set-close-place"><i class="fa fa-ok"></i> @if(adv.getPlaceVoteOpen){Close}else{Reopen}</button>
     </div>
@@ -41,7 +44,7 @@
             <th class="text-center hidden">@Messages("adventure.general.maybe")</th>
             <th class="text-center hidden">@Messages("adventure.general.no")</th>
             <th>@Messages("adventure.general.advvotes")</th>
-            @if(JournweAuthorization.canEditPlaces(adv.getId)) {
+            @if(auth.canEditPlaces()) {
             <th class="text-center">@Messages("adventure.general.listactions")</th>
             }
         </tr>
@@ -54,7 +57,7 @@
 
 <div class="places-loading"><i class="fa fa-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
 }
-@if(JournweAuthorization.canEditPlaces(adv.getId)) {
+@if(auth.canEditPlaces()) {
 <div id="place-add-form" class="row">
     <div class="input-group col-lg-8" style="margin-bottom: 10px;">
         <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" id="place-add-input" style="" class="form-control">
@@ -74,7 +77,7 @@
     <tr id="placeoption-item-{%=o.placeId%}" data-placeid="{%=o.placeId%}">
         <td><button class="btn btn-favorite-place btn-default {%=o.favorite?'btn-success':''%}"><i class="fa fa-star"></i></button></td>
         <td><em>{%=o.address%}</em></td>
-        @if(JournweAuthorization.canVoteForPlaces(adv.getId)) {
+        @if(auth.canVoteForPlaces()) {
         <td>
             <div class="btn-group hidden">
                 <button id="placeoption-status-{%=o.placeId%}" class="btn btn-default" style="width: 90px" disabled="disabled"><i id="placeoption-status-icon-{%=o.placeId%}"></i> {%=o.vote%}</button>
@@ -96,20 +99,20 @@
             </div>
         </td>
         }
-        @if(JournweAuthorization.canViewVotesForPlaces(adv.getId)) {
+        @if(auth.canViewVotesForPlaces()) {
         <td class="text-center">{%=(o.voteGroup*5)%}</td>
         <td class="text-center hidden">{%=o.voteCount.YES%}</td>
         <td class="text-center hidden">{%=o.voteCount.MAYBE%}</td>
         <td class="text-center hidden">{%=o.voteCount.NO%}</td>
         <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=o.votePlaceLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=String(o.voteAdventurers[i][j]).split(/\s/)[0]%}</span> {% }} %}</td>
         }
-        @if(JournweAuthorization.canEditPlaces(adv.getId)) {
+        @if(auth.canEditPlaces()) {
         <td class="text-center"><button class="btn btn-delete-place btn-danger"><i class="fa fa-trash-o"></i></button></td>
         }
     </tr>
 </script>
 
 
-
+}
 
 

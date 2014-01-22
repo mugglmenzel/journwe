@@ -1,14 +1,10 @@
-@(adv: models.adventure.Adventure, fileForm: Form[models.adventure.file.JournweFile])
+@(adv: models.adventure.Adventure)
 
 @import models.authorization.JournweAuthorization
-@import models.adventure.file.JournweFile
 
-@import helper._
-@import fieldConstructor._
+    @defining(new JournweAuthorization(adv.getId)){ auth =>
 
-@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
-
-@if(JournweAuthorization.canViewAndDownloadFiles(adv.getId)) {
+@if(auth.canViewAndDownloadFiles()) {
     <script type="text/x-tmpl" id="files-template">
         <tr data-id="{%=o.file.fileName%}">
             <td><a class="btn btn-link" href="{%=o.file.url%}" target="_blank"><i class="fa fa-file"></i> {%=o.file.fileName%}</a></td>
@@ -16,13 +12,6 @@
             <td class="text-center"><button class="btn btn-primary" href="{%=o.file.url%}" target="_blank"><i class="fa fa-cloud-download"></i></button> <button class="btn btn-file-delete btn-danger"><i class="fa fa-trash-o"></i></button></td>
         </tr>
     </script>
-
-
- <!--
-    <div class="row">
-        <div class="pull-left files-loading stash"><i class="fa fa-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
-    </div>
--->
 
     <table id="files-list" class="table table-striped table-hover table-condensed stash">
         <thead>
@@ -40,7 +29,7 @@
 
 }
 
-@if(JournweAuthorization.canUploadFiles(adv.getId)) {
+@if(auth.canUploadFiles()) {
     <div id="files-upload-dropzone" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
         <div class="text-center">
             <p class="lead">@Messages("adventure.files.fileDrop")
@@ -49,3 +38,4 @@
         </div>
     </div>
 }
+    }

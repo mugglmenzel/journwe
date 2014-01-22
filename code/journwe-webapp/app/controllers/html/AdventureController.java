@@ -81,7 +81,7 @@ public class AdventureController extends Controller {
             if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || !SecuredUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
                 return ok(getPublic.render(adv, ins));
             else
-                return ok(getIndex.render(adv, ins, advr, AdventureTimeController.timeForm, controllers.api.json.AdventureFileController.fileForm));
+                return ok(getIndex.render(adv, ins, advr));
         }
     }
 

@@ -83,7 +83,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getParticipants(final String advId) {
-        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+        if (!new JournweAuthorization(advId).canViewAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         try {
@@ -115,7 +115,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getInvitees(final String advId) {
-        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+        if (!new JournweAuthorization(advId).canViewAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         try {
@@ -147,7 +147,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getApplicants(final String advId) {
-        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+        if (!new JournweAuthorization(advId).canViewAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         try {
@@ -180,7 +180,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result participateStatus(final String advId, final String statusStr) {
-        if (!JournweAuthorization.canEditAdventurerParticipationStatus(advId))
+        if (!new JournweAuthorization(advId).canEditAdventurerParticipationStatus())
             return AuthorizationMessage.notAuthorizedResponse();
 
         EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);
@@ -200,7 +200,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result adopt(final String advId, final String userId) {
-        if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
+        if (!new JournweAuthorization(advId).canAcceptAdventurerApplicants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         Adventurer advr = new AdventurerDAO().get(advId, userId);
@@ -229,7 +229,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result deny(final String advId, final String userId) {
-        if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
+        if (!new JournweAuthorization(advId).canAcceptAdventurerApplicants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         new AdventurerDAO().delete(advId, userId);
@@ -298,7 +298,7 @@ public class AdventurePeopleController extends Controller {
 
 
     public static Result invite(String advId) {
-        if (!JournweAuthorization.canInviteAdventurerParticipants(advId))
+        if (!new JournweAuthorization(advId).canInviteAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));

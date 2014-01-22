@@ -46,7 +46,7 @@ public class AdventureTimeController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getTimes(String advId) {
-        if (!JournweAuthorization.canViewDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canViewDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
@@ -83,7 +83,7 @@ public class AdventureTimeController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getFavoriteTime(String advId) {
-        if (!JournweAuthorization.canViewFavoriteDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canViewFavoriteDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
 
         if (new TimeOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
@@ -95,7 +95,7 @@ public class AdventureTimeController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result setFavoriteTime(String advId) {
-        if (!JournweAuthorization.canEditFavoriteDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canEditFavoriteDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         String favId = data.get("favoriteTimeId");
@@ -107,7 +107,7 @@ public class AdventureTimeController extends Controller {
     }
 
     public static Result addTime(String advId) {
-        if (!JournweAuthorization.canEditDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canEditDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm requestData = form().bindFromRequest();
         Logger.info(requestData.data().toString());
@@ -154,7 +154,7 @@ public class AdventureTimeController extends Controller {
     }
 
     public static Result vote(String advId, String timeId) {
-        if (!JournweAuthorization.canVoteForDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canVoteForDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -196,7 +196,7 @@ public class AdventureTimeController extends Controller {
     }
 
     public static Result deleteTime(String advId, String timeId) {
-        if (!JournweAuthorization.canEditFavoriteDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canEditFavoriteDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
 
         new TimeOptionDAO().delete(advId, timeId);

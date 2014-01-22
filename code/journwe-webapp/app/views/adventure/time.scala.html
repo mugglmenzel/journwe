@@ -1,13 +1,9 @@
-@(adv: models.adventure.Adventure, timeForm: play.data.Form[models.adventure.time.TimeOption])
+@(adv: models.adventure.Adventure)
 
 @import models.authorization.JournweAuthorization
-@import models.adventure.time.TimeOption
-@import models.dao.adventure.TimeOptionDAO
 
-@import helper._
-@import fieldConstructor._
 
-@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+@defining(new JournweAuthorization(adv.getId)){ auth =>
 
 <div class="clearfix">
     <div id="times-favorite-time" style="font-size: 20px; margin-bottom: 10px;" class="pull-left">
@@ -26,7 +22,7 @@
     </div>
 </div>
 
-@if(JournweAuthorization.canViewDateAndTime(adv.getId)) {
+@if(auth.canViewDateAndTime()) {
 <table id="times-list" class="table table-striped table-hover stash">
     <thead>
     <tr>
@@ -48,7 +44,7 @@
 <div class="times-loading"><i class="fa fa-spin icon-journwe"></i> @Messages("adventure.general.loading")</div>
 }
 
-@if(JournweAuthorization.canEditDateAndTime(adv.getId)) {
+@if(auth.canEditDateAndTime()) {
 <div id="time-add-form" class="row">
 
         <div class="input-group col-lg-5" style="width: 43%;">
@@ -69,7 +65,7 @@
 
     <script type="text/x-tmpl" id="time-template">
         <tr id="timeoption-item-{%=o.timeId%}" data-timeid="{%=o.timeId%}">
-            @if(JournweAuthorization.canEditFavoriteDateAndTime(adv.getId)) {
+            @if(auth.canEditFavoriteDateAndTime()) {
             <td><button class="btn btn-favorite-time btn-default {%=o.favorite?'btn-success':''%}"><i class="fa fa-star"></i></button></td>
             }
 
@@ -78,7 +74,7 @@
             {% } else { %}
                 <td>{%=formatDate(o.startDate)%} - {%=formatDate(o.endDate)%}</td>
             {% } %}
-            @if(JournweAuthorization.canVoteForDateAndTime(adv.getId)) {
+            @if(auth.canVoteForDateAndTime()) {
             <td>
                 <div class="btn-group">
                     <button id="timeoption-status-{%=o.timeId%}" class="btn btn-default" style="width: 90px" disabled="disabled"><i id="timeoption-status-icon-{%=o.timeId%}"></i> {%=o.vote%}</button>
@@ -93,14 +89,15 @@
                 </div>
             </td>
             }
-            @if(JournweAuthorization.canViewVotesForDateAndTime(adv.getId)) {
+            @if(auth.canViewVotesForDateAndTime()) {
             <td class="text-center">{%=o.voteCount.YES%}</td>
             <td class="text-center">{%=o.voteCount.MAYBE%}</td>
             <td class="text-center">{%=o.voteCount.NO%}</td>
             <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=o.voteTimeLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=o.voteAdventurers[i][j].split(/\s/)[0]%}</span> {% }} %}</td>
             }
-            @if(JournweAuthorization.canEditDateAndTime(adv.getId)) {
+            @if(auth.canEditDateAndTime()) {
             <td class="text-center"><button class="btn btn-delete-time btn-danger"><i class="fa fa-trash-o"></i></button></td>
             }
         </tr>
     </script>
+}
