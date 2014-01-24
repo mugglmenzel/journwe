@@ -63,21 +63,20 @@
     @comment.commentsCommon()
 
 
-    <div class="jrn-container">
+    <div class="jrn-container jrn-no-bottom-round">
         <h2 id="index"><i class="fa fa-info fa fa-for-adventure-title"></i> @Messages("adventure.getScala.adventure.title")</h2>
         <div class="row">
             <div class="col-lg-12">
                 @index(adv, ins)
             </div>
-
-            @if(auth.canViewAdventureComments()) {
-                @comment.widget_comment("index")
-            }
         </div>
         <div class="row jrn-footer">
             <div class="col-lg-12">@options(adv)</div>
         </div>
     </div>
+    @if(auth.canViewAdventureComments()) {
+        @comment.widget_comment("index")
+    }
 
     <hr/>
 
@@ -87,9 +86,7 @@
         <h2 id="discussion"><i class="fa fa-comments fa fa-for-adventure-title"></i> @Messages("adventure.getScala.discussion.title")</h2>
         <div class="row">
             <div class="col-lg-12">
-
                 @comment.widget_wall(adv, "discussion")
-
             </div>
         </div>
     </div>
@@ -110,7 +107,7 @@
     <hr/>
 
     @if(auth.canViewAdventurePlacesWidget()) {
-    <div class="jrn-container">
+    <div class="jrn-container jrn-no-bottom-round">
         <h2 id="places"><i class="fa fa-globe icon-for-adventure-title"></i> @Messages("adventure.getScala.place.title")</h2>
         <div class="row">
             <div class="col-lg-12">
@@ -119,16 +116,17 @@
                 @places(adv)
 
             </div>
-            @if(auth.canViewPlaceComments()) {
-                @comment.widget_comment("places")
-            }
         </div>
     </div>
+    @if(auth.canViewPlaceComments()) {
+        @comment.widget_comment("places")
+    }
+
     <hr/>
     }
 
     @if(auth.canViewAdventureAdventurersWidget()) {
-    <div class="jrn-container">
+    <div class="jrn-container jrn-no-bottom-round">
 
         <h2 id="adventurers"><i class="fa fa-group icon-for-adventure-title"></i> @Messages("adventure.getScala.adventurers.title")</h2>
         <div class="row">
@@ -136,16 +134,17 @@
                 <p class="lead">@Messages("adventure.getScala.adventurers.subtitle")</p>
                 @adventurers(adv, advr)
             </div>
-            @if(auth.canViewAdventurerComments()) {
-                @comment.widget_comment("adventurers")
-            }
         </div>
     </div>
+
+    @if(auth.canViewAdventurerComments()) {
+        @comment.widget_comment("adventurers")
+    }
     <hr/>
     }
 
     @if(auth.canViewAdventureTimeWidget()) {
-    <div class="jrn-container">
+    <div class="jrn-container jrn-no-bottom-round">
         <h2 id="times"><i class="fa fa-calendar icon-for-adventure-title"></i> @Messages("adventure.getScala.time.title")</h2>
         <div class="row">
             <div class="col-lg-12">
@@ -154,16 +153,16 @@
                 @times(adv)
 
             </div>
-            @if(auth.canViewDateAndTimeComments()) {
-                @comment.widget_comment("times")
-            }
         </div>
     </div>
+    @if(auth.canViewDateAndTimeComments()) {
+        @comment.widget_comment("times")
+    }
     <hr/>
     }
 
     @if(auth.canViewAdventureTodoWidget()) {
-    <div class="jrn-container">
+    <div class="jrn-container jrn-no-bottom-round">
         <h2 id="todos"><i class="fa fa-list-ol fa fa-for-adventure-title"></i> @Messages("adventure.getScala.todo.title")<div class="pull-right"><button id="todos-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div class="row">
             <div class="col-lg-12">
@@ -172,16 +171,16 @@
                 @todos(adv, advr)
 
             </div>
-            @if(auth.canViewTodoComments()) {
-                @comment.widget_comment("todos")
-            }
         </div>
     </div>
+    @if(auth.canViewTodoComments()) {
+        @comment.widget_comment("todos")
+    }
     <hr/>
     }
 
     @if(auth.canViewAdventureFilesWidget()) {
-    <div class="jrn-container">
+    <div class="jrn-container jrn-no-bottom-round">
         <h2 id="files"><i class="fa fa-file fa fa-for-adventure-title"></i> @Messages("adventure.getScala.files.title")<div class="pull-right"><button id="files-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div class="row">
             <div class="col-lg-12">
@@ -190,21 +189,19 @@
                 @files(adv)
 
             </div>
-            @if(auth.canViewFilesComments()) {
-                @comment.widget_comment("files")
-            }
         </div>
-
     </div>
     <div style="position: relative; display: block; padding-right: 20px; background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);">
         <div class="row"><small class="pull-right"><a href="http://www.entouragebox.com" target="_blank"><img src="http://www.entouragebox.com/img/logo.png" style="max-height: 30px;"></a></small></div>
     </div>
-
+    @if(auth.canViewFilesComments()) {
+        @comment.widget_comment("files")
+    }
     <hr/>
     }
 
     @if(auth.canViewAdventureOffersWidget()) {
-    <div class="jrn-container">
+    <div class="jrn-container jrn-no-bottom-round">
         <h2 id="offers"><i class="fa fa-suitcase icon-for-adventure-title"></i> @Messages("adventure.getScala.offers.title")</h2>
         <div class="row">
             <div class="col-lg-12">
@@ -220,11 +217,11 @@
                 </table>
 
             </div>
-            @if(auth.canViewOfferComments()) {
-                @comment.widget_comment("offers")
-            }
         </div>
     </div>
+    @if(auth.canViewOfferComments()) {
+        @comment.widget_comment("offers")
+    }
     }
 
     <div id="cloneAdventure" class="modal fade" tabindex="-1" role="dialog">

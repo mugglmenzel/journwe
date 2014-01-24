@@ -810,7 +810,6 @@ require([
                         $('#place-add-comment-input').val("");
                         $('#place-add-button').html('<i class="fa fa-plus"></i>');
                         $('#places-list').show();
-                        refreshComments(adv.id + "places", $("#comments-list-places"));
                     }});
                 });
             } else {

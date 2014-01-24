@@ -55,13 +55,17 @@
 @if(auth.canEditDateAndTime()) {
 <div id="time-add-form" class="row">
 
-        <div class="input-group col-lg-5" style="width: 43%;">
-            <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.start")</span>
-            <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style=""/>
+        <div class="col-lg-5" style="width: 43%;">
+            <div class="input-group col-lg-12">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.start")</span>
+                <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style=""/>
+            </div>
         </div>
-        <div class="input-group col-lg-5" style="width: 43%;">
-            <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.end")</span>
-            <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style=""/>
+        <div class="col-lg-5" style="width: 43%;">
+            <div class="input-group col-lg-12">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.end")</span>
+                <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style=""/>
+            </div>
         </div>
 
         <div class="col-lg-2 text-right" style="width: 14%;">
