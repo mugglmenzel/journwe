@@ -1,7 +1,12 @@
 
 <script id="template-comment" type="text/x-tmpl">
     <div>
-        <div class="comment-text"><i class="fa fa-comment"></i> {%=o.comment.text%}</div>
+
+        <div class="comment-image"><img src="{%=o.user.image%}"/></div>
+        <div class="comment-text">
+        	<i class="fa fa-comment"></i>
+        	<span>{%=o.comment.text%}</span>
+        </div>
         <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.time%}</div>
     </div>
 </script>

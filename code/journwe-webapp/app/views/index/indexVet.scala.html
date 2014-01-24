@@ -18,7 +18,7 @@
 
     <hr>
 
-    <div class="jrn-container" style="margin-top: -20px;">
+    <div class="jrn-container jrn-no-top-round" style="margin-top: -20px;">
         @currentAuth() { auth => @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null) {
                 <p class="lead">
                     @Messages("index.welcome1", new UserDAO().findByAuthUserIdentity(auth).getName())

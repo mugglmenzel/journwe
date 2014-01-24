@@ -149,6 +149,8 @@ h1 .editableform {
 .page-header {
     background: fade(@color_white, 80%);
     padding: 5px 20px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
 }
 
 .jrn-container,
@@ -162,6 +164,11 @@ h1 .editableform {
 
     &.jrn-no-bottom-round {
         border-radius: 5px 5px 0 0;
+    }
+
+
+    &.jrn-no-top-round {
+        border-radius: 0 0 5px 5px;
     }
 
     & h2 {
@@ -393,6 +400,7 @@ table.inspiration {
     max-height: 100%;
     max-height: calc(100% -40px);
     overflow: auto;
+    padding: 3px 0 0 0;
 
     & > * {
         margin-bottom: 10px;
@@ -400,6 +408,43 @@ table.inspiration {
         
         &:last-child {
             margin-bottom: 0;
+        }
+    }
+
+    & .comment-image {
+        width: 24px;
+        height: 24px;
+        overflow: hidden;
+        border-radius: 2px;
+        float: left;
+
+        & img {
+            width: 100%;
+        }
+    }
+
+    & .comment-text {
+        float: left;
+        margin-left: 15px;
+        background: rgba(255,255,255,0.5);
+        padding: 5px 10px;
+        border-radius: 2px;
+        margin-top: -3px;
+
+        & i {
+            position: absolute;
+            border-left: 1px solid rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(255,255,255,0.5);
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ie-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            width: 8px;
+            height: 8px;
+            color: transparent;
+            margin-left: -17px;
+            margin-top: 7px;
         }
     }
 }
@@ -427,7 +472,8 @@ table.inspiration {
 .comment-info {
     color: fadeout(#000, 60%);
     font-size: 12px;
-    margin-left: 17px;
+    margin-left: 40px;
+    clear: both;
 
     & small {
         color: fadeout(#000, 40%);
