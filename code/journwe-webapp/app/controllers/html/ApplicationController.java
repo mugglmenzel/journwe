@@ -163,6 +163,9 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventureController.updatePlaceVoteOpen(),
                         controllers.api.json.routes.javascript.AdventureController.updateTimeVoteOpen(),
                         controllers.api.json.routes.javascript.AdventureController.placeVoteOpen(),
+                        controllers.api.json.routes.javascript.AdventureController.updateCategory(),
+                        controllers.api.json.routes.javascript.AdventureController.updatePublic(),
+                        controllers.api.json.routes.javascript.CategoryController.categoriesOptionsMap(),
                         controllers.api.json.routes.javascript.AdventureEmailController.listEmails(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.getPlaces(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.getFavoritePlace(),
@@ -170,6 +173,13 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventurePlaceController.addPlace(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.vote(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.deletePlace(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.getParticipants(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.getInvitees(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.getApplicants(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.participateStatus(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.adopt(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.deny(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteFacebook(),
                         controllers.api.json.routes.javascript.AdventureTimeController.getTimes(),
                         controllers.api.json.routes.javascript.AdventureTimeController.getFavoriteTime(),
                         controllers.api.json.routes.javascript.AdventureTimeController.setFavoriteTime(),
@@ -183,7 +193,9 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventureTodoController.getTodoAffiliateItems(),
                         controllers.api.json.routes.javascript.AdventureFileController.uploadFile(),
                         controllers.api.json.routes.javascript.AdventureFileController.listFiles(),
-                        controllers.api.json.routes.javascript.AdventureFileController.deleteFile()
+                        controllers.api.json.routes.javascript.AdventureFileController.deleteFile(),
+                        controllers.api.json.routes.javascript.CommentController.saveComment(),
+                        controllers.api.json.routes.javascript.CommentController.listComments()
 
                 ) + ";; return routes;});"
         );

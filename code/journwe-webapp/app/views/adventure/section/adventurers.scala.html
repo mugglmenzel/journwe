@@ -1,256 +1,104 @@
 @(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
-@import models.dao.user.UserDAO
-@import models.adventure.adventurer.EAdventurerParticipation
+    @import models.adventure.adventurer.EAdventurerParticipation
 
-@import models.authorization.JournweAuthorization
-@import models.dao.adventure.AdventurerDAO
+    @import models.authorization.JournweAuthorization
 
+    @defining(new JournweAuthorization(adv.getId)) { auth =>
 
-    @cssForStatus(status:EAdventurerParticipation) = {
-@status match {
-case EAdventurerParticipation.NOTGOING => {label-danger}
-case EAdventurerParticipation.UNDECIDED => {label-warning}
-case EAdventurerParticipation.GOING => {label-info}
-case EAdventurerParticipation.BOOKED => {label-success}
-case EAdventurerParticipation.APPLICANT => {}
-case EAdventurerParticipation.INVITEE => {label-warning}
-}
-}
+        @if(auth.canEditAdventurerParticipationStatus()) {
+            @defining((advr.getParticipationStatus())) { (status) =>
+                @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)) {
+                    <div>
+                        <strong style="vertical-align : middle ;">@Messages("adventure.adventurers.myStat")</strong>
 
-    @defining(new JournweAuthorization(adv.getId)){ auth =>
-
-@if(auth.canEditAdventurerParticipationStatus()) {
-@defining((advr.getParticipationStatus())) { (status) =>
-    @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)){
-<div>
-    <strong style="vertical-align:middle;">@Messages("adventure.adventurers.myStat")</strong>
-
-    <div class="btn-group btn-select-adventurer">
-        <button class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING){active}"
-           href="@api.json.routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.NOTGOING.name())"><i class="fa fa-frown"></i> @Messages("adventure.adventurers.status.notIn")</button>
-        <button class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED){active}"
-           href="@api.json.routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.UNDECIDED.name())"><i class="fa fa-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
-        <button class="btn btn-info @if(status == EAdventurerParticipation.GOING){active}"
-           href="@api.json.routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.GOING.name())"><i class="fa fa-smile"></i> @Messages("adventure.adventurers.status.soIn")</button>
-        <button class="btn btn-success @if(status == EAdventurerParticipation.BOOKED){active}"
-           href="@api.json.routes.AdventurePeopleController.participateStatus(adv.getId(), EAdventurerParticipation.BOOKED.name())"><i class="fa fa-ok"></i> @Messages("adventure.adventurers.status.booked")</button>
-    </div>
-</div>
-    } else {
-        @if(EAdventurerParticipation.APPLICANT.equals(status)) {
-<div>
-    <strong>@Messages("adventure.adventurers.applicant")</strong>
-</div>
-        } else {
-<div>
-    <a class="btn btn-primary" href="@html.routes.AdventurePeopleController.participate(adv.getId())">@Messages("adventure.adventurers.button.participate")</a>
-</div>
-        }
-    }
-}
-
-<div class="spacer20"></div>
-
-<div>
-    <h3>Participants</h3>
-    <div id="adventurers-participants-list" style="overflow: hidden;"></div>
-    <div class="clearfix"></div>
-</div>
-<div>
-    <h3>Invitees</h3>
-    <div id="adventurers-invitees-list" style="overflow: hidden;"></div>
-    <div class="clearfix"></div>
-</div>
-<div>
-    <h3>Applicants</h3>
-    <div id="adventurers-applicants-list" style="overflow: hidden;"></div>
-    <div class="clearfix"></div>
-</div>
-
-<script type="text/x-tmpl" id="adventurer-template">
-    <div data-id="{%=o.id%}" id="adventurers-adventurer-{%=o.id%}" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
-        <a href="{%=o.link%}">
-            <img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=100&height=100&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
-        </a>
-        <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
-            <div style="line-height: 10px;"><a href="{%=o.link%}">{%=String(o.name).replace(new RegExp(' [^ ]*$', 'g'), '')%}</a></div>
-            <div class="overlay text-center">
-                <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>
-            </div>
-        </div>
-    </div>
-</script>
-<script type="text/javascript">
-
-    var cssLabel = {
-        '@EAdventurerParticipation.APPLICANT' : 'default',
-        '@EAdventurerParticipation.INVITEE' : 'warning',
-        '@EAdventurerParticipation.NOTGOING' : 'danger',
-        '@EAdventurerParticipation.UNDECIDED' : 'warning',
-        '@EAdventurerParticipation.GOING' : 'info',
-        '@EAdventurerParticipation.BOOKED' : 'success'
-        };
-
-    $(document).ready(function(){
-        loadParticipants();
-        loadInvitees();
-        loadApplicants();
-    });
-
-    function loadParticipants() {
-        loadAdventurers('@api.json.routes.AdventurePeopleController.getParticipants(adv.getId)', '#adventurers-participants-list');
-    }
-
-    function loadInvitees() {
-        loadAdventurers('@api.json.routes.AdventurePeopleController.getInvitees(adv.getId)', '#adventurers-invitees-list');
-    }
-
-    function loadApplicants() {
-        loadAdventurers('@api.json.routes.AdventurePeopleController.getApplicants(adv.getId)', '#adventurers-applicants-list');
-    }
-
-    function loadAdventurers(endpoint, target) {
-
-        $.get(endpoint, function (advs) {
-            $(target).empty();
-            if(advs != null && advs.length > 0) {
-                for(var i in advs) {
-                    advs[i].cssLabel = cssLabel[advs[i].status];
-                    $(target).append(tmpl('adventurer-template', advs[i]));
-                }
-                $(target).parent().show();
-            } else $(target).parent().hide();
-        });
-    }
-</script>
-
-
-
-@if(auth.canInviteAdventurerParticipants()) {
-<div class="row">
-    <div class="input-group col-lg-6">
-        <div id="people-add-type" class="input-group-btn">
-            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                <i id="people-add-type-icon" class="fa fa-facebook"></i>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li><a data-icon="fa fa-facebook" data-type="text" data-typeahead="on"><i class="fa fa-facebook"></i>
-                    @Messages("adventure.general.label.facebook")</a></li>
-                <li><a data-icon="fa fa-envelope" data-type="email" data-typeahead="off"><i class="fa fa-envelope"></i>
-                    @Messages("adventure.general.label.email")</a></li>
-            </ul>
-        </div>
-        <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
-        <div class="input-group-btn">
-            <button id="people-add-button" class="btn btn-primary btn-add" onclick="addFriend();"><i class="fa fa-plus"></i></button>
-        </div>
-    </div>
-</div>
-}
-
-<script type="text/javascript">
-
-
-    var facebookUsers = {};
-    var facebookUserNames = [];
-
-    function addFriend() {
-        $('#people-add-button i').removeClass("fa-plus").addClass("icon-journwe fa-spin");
-        $.post('@api.json.routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
-            $('#people-add-input').val('');
-            loadInvitees();
-            $('#people-add-button i').removeClass("icon-journwe fa-spin").addClass("fa-plus");
-        });
-    }
-
-    function FacebookFriendTypeahead() {
-        $('#people-add-input').typeahead({
-            name: 'people-typeahead',
-            template: '<p><strong>{%=o.name%}</strong></p>',
-            engine: {_templ: '', compile: function(template){_templ=template; return this;}, render: function(data){return tmpl(_templ,data);}},
-            remote: {
-                url: '@api.json.routes.AdventurePeopleController.autocompleteFacebook?input=%QUERY',
-                filter: function (data) {
-                    facebookUsers = {};
-                    facebookUserNames = [];
-                    $.each(data, function( ix, item ){
-                        if ( $.inArray(item.name, facebookUserNames) > -1 ){
-                            item.nameId = item.name + ' #' + item.id;
-                        } else item.nameId = item.name
-
-                        facebookUserNames.push( {value: item.nameId, name: item.name, tokens: [item.id, item.name]} );
-                        facebookUsers[item.nameId] = item.id;
-                    });
-
-                    return facebookUserNames;
+                        <div class="btn-group btn-select-adventurer">
+                            <button class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING) {active}"
+                            data-status="@EAdventurerParticipation.NOTGOING.name"><i class="fa fa-frown"></i> @Messages("adventure.adventurers.status.notIn")</button>
+                            <button class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED) {active}"
+                            data-status="@EAdventurerParticipation.UNDECIDED.name"><i class="fa fa-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
+                            <button class="btn btn-info @if(status == EAdventurerParticipation.GOING) {active}"
+                            data-status="@EAdventurerParticipation.GOING.name"><i class="fa fa-smile"></i> @Messages("adventure.adventurers.status.soIn")</button>
+                            <button class="btn btn-success @if(status == EAdventurerParticipation.BOOKED) {active}"
+                            data-status="@EAdventurerParticipation.BOOKED.name"><i class="fa fa-ok"></i> @Messages("adventure.adventurers.status.booked")</button>
+                        </div>
+                    </div>
+                } else {
+                    @if(EAdventurerParticipation.APPLICANT.equals(status)) {
+                        <div>
+                            <strong>@Messages("adventure.adventurers.applicant")</strong>
+                        </div>
+                    } else {
+                        <div>
+                            <a class="btn btn-primary" href="@html.routes.AdventurePeopleController.participate(adv.getId())">@Messages("adventure.adventurers.button.participate")</a>
+                        </div>
+                    }
                 }
             }
-        });
+        }
+
+        @if(auth.canViewAdventurerParticipants) {
+            <div class="spacer20"></div>
+
+            <div>
+                <h3>Participants</h3>
+                <div id="adventurers-participants-list" style="overflow : hidden ;"></div>
+                <div class="clearfix"></div>
+            </div>
+            <div>
+                <h3>Invitees</h3>
+                <div id="adventurers-invitees-list" style="overflow : hidden ;"></div>
+                <div class="clearfix"></div>
+            </div>
+            <div>
+                <h3>Applicants</h3>
+                <div id="adventurers-applicants-list" style="overflow : hidden ;"></div>
+                <div class="clearfix"></div>
+            </div>
+
+            <script type="text/x-tmpl" id="adventurer-template">
+                <div data-id="{%=o.id%}" id="adventurers-adventurer-{%=o.id%}" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
+                    <a href="{%=o.link%}">
+                        <img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=100&height=100&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
+                    </a>
+                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
+                        <div style="line-height: 10px;"><a href="{%=o.link%}">
+                            {%=String(o.name).replace(new RegExp(' [^ ]*$', 'g'), '')%}</a></div>
+                        {% if(o.status == 'APPLICANT'){ %}
+                        <button class="btn btn-primary btn-sm btn-adopt" data-id="{%=o.id%}">Adopt</button>
+                        <button class="btn btn-danger btn-sm btn-deny" data-id="{%=o.id%}">Deny</button>
+                        {% } else { %}
+                        <div class="overlay text-center">
+                            <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">
+                                {%=o.status%}</span>
+                        </div>
+                        {% } %}
+                    </div>
+                </div>
+            </script>
+        }
+
+        @if(auth.canInviteAdventurerParticipants()) {
+            <div class="row">
+                <div class="input-group col-lg-6">
+                    <div id="people-add-type" class="input-group-btn">
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i id="people-add-type-icon" class="fa fa-facebook"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a data-icon="fa fa-facebook" data-type="text" data-typeahead="on"><i class="fa fa-facebook"></i>
+                                @Messages("adventure.general.label.facebook")</a></li>
+                            <li><a data-icon="fa fa-envelope" data-type="email" data-typeahead="off"><i class="fa fa-envelope"></i>
+                                @Messages("adventure.general.label.email")</a></li>
+                        </ul>
+                    </div>
+                    <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" onkeypress="if ( event.which == 13 || event.keyCode === 13 ) { addFriend ( ) ; event.preventDefault ( ) ; return false ; } else return true ;" autocomplete="off" class="form-control">
+                    <div class="input-group-btn">
+                        <button id="people-add-button" class="btn btn-primary btn-add" onclick="addFriend ( ) ;"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+
     }
 
-    $(document).ready(function () {
-
-        $('#people-add-type .dropdown-menu a').click(function () {
-            $('#people-add-type-icon').attr('class', $(this).data('icon'));
-            $('#people-add-input').attr('type', $(this).data('type'));
-            if($(this).data('typeahead') == "on") FacebookFriendTypeahead();
-            else $('#people-add-input').typeahead('destroy');
-            $('#people-add-input').focus();
-        });
-
-        FacebookFriendTypeahead();
-
-    });
-
-
-    $(function(){
-
-        $('.btn-select-adventurer button').click(function(){
-            var el = $(this),
-                html = el.html();
-            
-            el.css({width:el.width()+"px"})
-                .html('<i class="fa fa-spin icon-journwe"></i>');
-
-            $.post(el.attr('href'), function(json){
-                var state = json.participationStatus;
-
-                el.css({width:""})
-                    .html(html);
-
-                el.parent().find('.active').removeClass('active');
-                el.addClass('active');
-
-                $('#adventurers-adventurer-'+json.userId)
-                    .find('.label').removeClass().addClass('label label-' + cssLabel[state])
-                    .html(state);
-            });
-            return false;
-        });
-
-
-        $('.btn-adopt').click(function(){
-            var el = $(this),
-                html = el.html();
-            
-            el.css({width:el.width()+"px"})
-                .html('<i class="fa fa-spin icon-journwe"></i>');
-
-            $.post(el.attr('href'), function(json){
-                var state = json.participationStatus;
-
-                /*el.css({width:""})
-                    .html(html);*/
-
-                loadApplicants();
-                loadParticipants();
-
-            });
-            return false;
-        });
-
-    });
-</script>
-}
-}

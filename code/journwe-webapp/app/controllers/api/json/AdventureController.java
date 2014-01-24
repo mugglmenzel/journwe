@@ -91,7 +91,7 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredUser.class)
     public static Result updatePublic(String advId) {
         DynamicForm data = form().bindFromRequest();
-        Boolean publish = new Boolean(data.get("public"));
+        Boolean publish = new Boolean(data.get("publish"));
         Adventure adv = new AdventureDAO().get(advId);
         adv.setPublish(publish);
         new AdventureDAO().save(adv);

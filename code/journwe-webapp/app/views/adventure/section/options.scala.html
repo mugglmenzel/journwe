@@ -4,13 +4,6 @@
 <div class="row">
     <div class="col-lg-4"> @Messages("adventure.options.public") &nbsp;&nbsp;
         <div id="adventure-public-switch" class="make-switch" style="display:inline-block;overflow:hidden;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
-        <script>
-            $('#adventure-public-switch').change(function(){
-                $.post('@api.json.routes.AdventureController.updatePublic(adv.getId)', {public: $(this).find('input:checkbox').prop('checked')}, function(pub){
-                    $(this).find('input:checkbox').prop('checked', pub);
-                });
-            });
-        </script>
         Category:
         <div id="adventure-category-select" class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -18,34 +11,6 @@
             </button>
             <ul class="dropdown-menu" role="menu"></ul>
         </div>
-        <script>
-
-            $(document).ready(function(){
-                updateCategorySelection(null);
-                loadCategoriesOptionsMap();
-            });
-
-            function loadCategoriesOptionsMap() {
-                $.get('@api.json.routes.CategoryController.categoriesOptionsMap()', function (cats){
-                    $('#adventure-category-select ul.dropdown-menu').empty();
-                    if(cats != null && cats.length > 0){
-                        for(var i in cats)
-                            $('#adventure-category-select ul.dropdown-menu').append('<li data-id="' + cats[i].id + '"><a>' + cats[i].name + '</a></li>');
-                        $('#adventure-category-select li').click(function(){
-                            updateCategorySelection($(this).data('id'));
-                        });
-                    }
-                });
-            }
-
-            function updateCategorySelection(catId) {
-                $('#adventure-category-select button i').first().removeClass('hide');
-                $.post('@api.json.routes.AdventureController.updateCategory(adv.getId)', {categoryId: catId}, function (data) {
-                    if(data.name != null && data.name.length > 0) $('#adventure-category-select button span').first().html(data.name);
-                    $('#adventure-category-select button i').first().addClass('hide');
-                });
-            }
-        </script>
     </div>
     <div class="col-lg-3">
         <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="fa fa-facebook"></i> @Messages("adventure.options.facebookpublish")</button>
