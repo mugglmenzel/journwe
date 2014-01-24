@@ -751,7 +751,7 @@ require([
                 $('#amazon-affiliate').modal();
 
                 routes.controllers.api.json.AdventureTodoController.getTodoAffiliateItems(adv.id).ajax({data: {id: id}, success: function (res) {
-                    if (!res.length) $('#amazon-affiliate .modal-content .modal-body .content').first().html('@Messages("adventure.todos.amazon.noItems")');
+                    if (!res.length) $('#amazon-affiliate .modal-content .modal-body .content').first().html(messages['adventure.todos.amazon.noItems']);
 
                     for (var i in res)
                         $('#amazon-affiliate .modal-content .modal-body .content').first().append(tmpl('todo-affiliate-template', res[i]));
