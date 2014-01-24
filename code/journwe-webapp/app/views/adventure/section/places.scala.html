@@ -22,8 +22,6 @@
           <button class="btn btn-default btn-set-reminder-place date" data-id="@adv.getId" data-date="@adv.getPlaceVoteDeadlineFormatted" data-date-format="dd-mm-yyyy"><i class="fa fa-calendar"></i> @if(adv.getPlaceVoteDeadlineFormatted){@adv.getPlaceVoteDeadlineFormatted}else{ Set Deadline }</button>
     </div>
 
-
-
     <div class="pull-right btn-close-place stash hidden">
         @Messages("adventure.general.voting")
         <div class="make-switch">
@@ -90,7 +88,7 @@
                     <li><a onclick="votePlace('NO', 0, '{%=o.placeId%}');"><i class="fa fa-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
                 </ul>
             </div>
-            <div class="rating">
+            <div class="rating rating-place">
                 <input type="radio" class="star" id="{%=o.placeId%}-star5" name="{%=o.placeId%}-rating" value="5" data-id="{%=o.placeId%}" {% if(o.voteGravity == 1){ %}checked{% } %} /><label for="{%=o.placeId%}-star5" title="Rocks!"><i class="fa fa-star"></i></label>
                 <input type="radio" class="star" id="{%=o.placeId%}-star4" name="{%=o.placeId%}-rating" value="4" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.8){ %}checked{% } %} /><label for="{%=o.placeId%}-star4" title="Pretty good"><i class="fa fa-star"></i></label>
                 <input type="radio" class="star" id="{%=o.placeId%}-star3" name="{%=o.placeId%}-rating" value="3" data-id="{%=o.placeId%}" {% if(o.voteGravity == 0.6){ %}checked{% } %} /><label for="{%=o.placeId%}-star3" title="Meh"><i class="fa fa-star"></i></label>

@@ -58,7 +58,7 @@ public class AdventurePlaceController extends Controller {
             places.add(node);
         }
 
-        return ok(Json.toJson(Json.toJson(places)));
+        return ok(Json.toJson(places));
     }
 
     @Security.Authenticated(SecuredUser.class)
@@ -161,14 +161,14 @@ public class AdventurePlaceController extends Controller {
 
         try {
             pref.setVoteGravity(voteGravity != null ? voteGravity : 0.6D);
-            pref.setVote(EPreferenceVote.valueOf(vote));
+            pref.setVote(vote != "" ? EPreferenceVote.valueOf(vote) : EPreferenceVote.MAYBE);
         } catch (IllegalArgumentException e) {
             Logger.error("Got unknown value for vote! value: " + vote);
         }
 
         new PlacePreferenceDAO().save(pref);
 
-        //PlaceOption place = PlaceOption.fromId(pref.getPlaceOptionId());
+        //PlaceOption place = PlaceOption.fromId(pref.getTimeOptionId());
         //place = new PlaceOptionDAO().get(place.getAdventureId(), place.getAddress());
 
         ObjectNode node = placeToJSON(place);

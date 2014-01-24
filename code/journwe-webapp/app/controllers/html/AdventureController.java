@@ -51,8 +51,8 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.adventure.create;
-import views.html.adventure.getIndex;
-import views.html.adventure.getPublic;
+import views.html.adventure.get;
+import views.html.adventure.get_public;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -79,9 +79,9 @@ public class AdventureController extends Controller {
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
             Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
             if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || !SecuredUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
-                return ok(getPublic.render(adv, ins));
+                return ok(get_public.render(adv, ins));
             else
-                return ok(getIndex.render(adv, ins, advr));
+                return ok(get.render(adv, ins, advr, "", null));
         }
     }
 

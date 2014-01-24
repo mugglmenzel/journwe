@@ -110,9 +110,8 @@ require([
 
                 updateFavoritePlace();
 
-                routes.controllers.api.json.AdventureController.placeVoteOpen(adv.id).ajax({success: function (result) {
-                    updatePlaceVoteOpen(result);
-                }});
+                updatePlaceVoteOpen(adv.placeVoteOpen);
+
             }});
         };
 
@@ -153,11 +152,6 @@ require([
                 replace.replaceWith(place).fadeIn();
             else
                 $('#places-list tbody').append(place).fadeIn();
-
-
-            place.find('.rating :radio').click(function (e) {
-                if ($(e.target).is(':checked')) votePlace('', $(e.target).val() / 5, $(e.target).data('id'));
-            });
 
             var marker = new google.maps.Marker({animation: google.maps.Animation.DROP, map: map, position: new google.maps.LatLng(data.lat, data.lng), title: data.address});
             markers[data.placeId] = marker;
@@ -225,12 +219,16 @@ require([
             $('#placeoption-item-' + optId + ' .dropdown-toggle')
                 .html('<i class="fa fa-spin icon-journwe"></i>');
 
-            routes.controllers.api.json.AdventurePlaceController.voteParam(adv.id).ajax({data: {placeId: optId, vote: vote, voteGravity: voteGrav}, success: function (res) {
-                renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
-                updateFavoritePlace();
-                $('#placeoption-item-' + res.placeId + ' .dropdown-toggle')
-                    .html('<i class="fa fa-pencil"></i>');
-            }});
+            routes.controllers.api.json.AdventurePlaceController.vote(adv.id, optId).ajax({
+                data: {
+                    vote: vote, voteGravity: voteGrav
+                },
+                success: function (res) {
+                    renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
+                    updateFavoritePlace();
+                    $('#placeoption-item-' + res.placeId + ' .dropdown-toggle')
+                        .html('<i class="fa fa-pencil"></i>');
+                }});
         };
 
 
@@ -254,42 +252,22 @@ require([
                 $("#time-add-input-end").datepicker('hide');
             });
 
-            $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
             routes.controllers.api.json.AdventureTimeController.getTimes(adv.id).ajax({success: function (result) {
-                if (result.favoriteTime != '') $('#times-favorite-time-name').html(formatDate(result.favoriteTime.startDate) + " - " + formatDate(result.favoriteTime.endDate));
-                $('.btn-close-time').toggle(!!result.favoriteTime);
-
                 $('#times-list tbody').empty();
-                for (var id in result.times) {
-                    renderTimeOption(result.times[id])
+                for (var id in result) {
+                    renderTimeOption(result[id])
                 }
-                if (result.times.length) {
+                if (result.length) {
                     $('#times-list').show();
                 } else {
                     $('#times-list').hide();
                 }
 
                 $('.times-loading').hide();
-                $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+
+                updateFavoriteTime();
 
                 updateTimeVoteOpen(adv.timeVoteOpen);
-            }});
-        };
-
-
-        var setFavoriteTime = function (timeID, el) {
-            $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
-            $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
-            routes.controllers.api.json.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
-                favoriteTime = data;
-                $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
-                $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
-
-                el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
-                $(el).addClass('btn-success');
-                $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
-
-                $('.btn-close-time').show();
             }});
         };
 
@@ -315,9 +293,11 @@ require([
                     $('#times-list tbody').append(time);
                 }
             }
+
             $('#timeoption-status-icon-' + data.timeId).addClass(voteTimeIconCSSClassMap[data.vote]);
             $('#timeoption-status-' + data.timeId).addClass(voteTimeButtonCSSClassMap[data.vote]);
         };
+
 
         var updateTimeVoteOpen = function (data) {
             if (data) {
@@ -329,16 +309,49 @@ require([
             }
         };
 
+        var updateFavoriteTime = function () {
 
-        var voteTime = function (vote, optId) {
+            $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+            $('#times-autofavorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+
+            routes.controllers.api.json.AdventureTimeController.getFavoriteTime(adv.id).ajax({success: function (result) {
+                favoriteTime = result.favorite;
+                if (result.favorite != null) $('#times-favorite-time-name').html(formatDate(result.favorite.startDate) + " - " + formatDate(result.favorite.endDate));
+                if (result.autoFavorite != null)$('#times-autofavorite-time-name').html(formatDate(result.autoFavorite.startDate) + " - " + formatDate(result.autoFavorite.endDate));
+                $('.btn-close-time').toggle(!!result.favorite);
+                $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+                $('#times-autofavorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            }});
+        };
+
+
+        var setFavoriteTime = function (timeID, el) {
+            $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+            $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
+            routes.controllers.api.json.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
+                favoriteTime = data;
+                $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
+                $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+
+                el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
+                $(el).addClass('btn-success');
+                $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
+
+                $('.btn-close-time').show();
+            }});
+        };
+
+
+        var voteTime = function (vote, voteGrav, optId) {
             $('#timeoption-item-' + optId + ' .dropdown-toggle')
                 .html('<i class="fa fa-spin icon-journwe"></i>');
-            routes.controllers.api.json.AdventureTimeController.vote(adv.getId, optId).ajax({
+            routes.controllers.api.json.AdventureTimeController.vote(adv.id, optId).ajax({
                 data: {
-                    vote: vote
+                    vote: vote, voteGravity: voteGrav
                 },
                 success: function (res) {
                     renderTimeOption(res, $('#timeoption-item-' + res.timeId));
+                    updateFavoriteTime();
                     $('#timeoption-item-' + res.timeId + ' .dropdown-toggle')
                         .html('<i class="fa fa-pencil"></i>');
                 }
@@ -575,6 +588,10 @@ require([
                     return false;
                 }
             },
+
+            'click .rating-place :radio': function (e) {
+                if ($(e.target).is(':checked')) votePlace('', $(e.target).val() / 5, $(e.target).data('id'));
+            },
             'change #places-voting-active-switch': function () {
                 routes.controllers.api.json.AdventureController.updatePlaceVoteOpen(adv.id).ajax({data: {voteOpen: $('#places-voting-active-switch').prop('checked')}, success: updatePlaceVoteOpen});
             },
@@ -651,6 +668,9 @@ require([
                         $('#time-add-button').html('<i class="fa fa-plus"></i>');
                         $('#times-list').show();
                     }});
+            },
+            'click .rating-time :radio': function (e) {
+                if ($(e.target).is(':checked')) voteTime('', $(e.target).val() / 5, $(e.target).data('id'));
             },
             'change #times-voting-active-switch': function () {
                 routes.controllers.api.json.AdventureController.updateTimeVoteOpen(adv.id).ajax({data: {voteOpen: $('#times-voting-active-switch').prop('checked')}, success: updateTimeVoteOpen});
