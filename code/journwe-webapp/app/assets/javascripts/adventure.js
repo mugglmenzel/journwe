@@ -2,11 +2,11 @@ require([
     "main",
     "utils",
     "routes",
+    "messages",
     "adventureData",
     "adventurerData",
     "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false!callback"
-], function (main, utils, routes, adv, advr) {
-
+], function (main, utils, routes, messages, adv, advr) {
 
         var now = new Date(),
             today = new Date(now.getFullYear(), now.getMonth(), now.getDate(),

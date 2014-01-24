@@ -319,7 +319,7 @@ public class AdventureController extends Controller {
         DynamicForm advForm = form().bindFromRequest();
         String advId = advForm.get("pk");
         if (advId != null && !"".equals(advId)) {
-            if (!JournweAuthorization.canEditAdventureTitle(advId))
+            if (!new JournweAuthorization(advId).canEditAdventureTitle())
                 return badRequest("You are not authorized to do this.");
             Adventure adv = new AdventureDAO().get(advId);
             String name = advForm.get("name");

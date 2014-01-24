@@ -20,6 +20,7 @@ object ApplicationBuild extends Build {
     "org.igniterealtime.smack" % "smack" % "3.2.1",
     "org.igniterealtime.smack" % "smackx" % "3.2.1",
     "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2"
+    //"com.github.julienrf" %% "play-jsmessages" % "1.5.0"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
@@ -38,6 +39,8 @@ object ApplicationBuild extends Build {
     // Repository for com.github.mumoshu play2-memcached
     // required to resolve `spymemcached`, the plugin's dependency.
     resolvers += "Spy Repository" at "http://files.couchbase.com/maven2"
+    // Repository for jsMessages
+    //resolvers += "julienrf.github.com" at "http://julienrf.github.com/repo/"
   )
 
 }

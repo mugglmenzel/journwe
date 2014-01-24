@@ -189,6 +189,7 @@ GET           /ping                                                        contr
 
 #### Static resources from /public folder to /assets ####
 GET           /assets/javascripts/routes.js                                controllers.html.ApplicationController.routes
+GET           /assets/javascripts/messages.js                               controllers.html.ApplicationController.messages
 GET           /assets/*file                                                controllers.Assets.at(path="/public", file)
 
 #### Signup ####

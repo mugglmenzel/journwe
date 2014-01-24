@@ -20,6 +20,7 @@ import play.mvc.*;
 import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthUser;
 import views.html.account.*;
+import views.html.account.link;
 import views.html.index.index;
 
 import static play.data.Form.form;

@@ -1,52 +1,33 @@
 package controllers.html;
 
-import com.ecwid.mailchimp.MailChimpClient;
-import com.ecwid.mailchimp.MailChimpException;
-import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
-import controllers.routes;
-import models.adventure.Adventure;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredUser;
-import models.auth.SecuredUser;
 import models.category.Category;
-import models.category.CategoryCount;
-import models.category.CategoryHierarchy;
-import models.dao.*;
-import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
-import models.dao.adventure.PlaceOptionDAO;
-import models.dao.adventure.TimeOptionDAO;
-import models.dao.category.CategoryCountDAO;
 import models.dao.category.CategoryDAO;
-import models.dao.category.CategoryHierarchyDAO;
-import models.dao.manytomany.CategoryToInspirationDAO;
 import models.dao.user.UserDAO;
-import models.inspiration.Inspiration;
 import models.user.EUserRole;
-import models.user.Subscriber;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
-import play.Logger;
 import play.Routes;
+import play.api.Play;
 import play.cache.Cache;
-import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.libs.Json;
 import play.mvc.*;
 import providers.MyUsernamePasswordAuthProvider;
 import views.html.*;
-import views.html.index.*;
+import views.html.index.index;
+import views.html.index.indexCat;
+import views.html.index.indexVet;
+import views.html.index.landing;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import static play.data.Form.form;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class ApplicationController extends Controller {
@@ -72,7 +53,8 @@ public class ApplicationController extends Controller {
     }
 
     public static Result categoryIndex(String catId) {
-        if (Category.SUPER_CATEGORY.equals(catId)) return Results.redirect(controllers.html.routes.ApplicationController.index());
+        if (Category.SUPER_CATEGORY.equals(catId))
+            return Results.redirect(controllers.html.routes.ApplicationController.index());
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
 
@@ -160,6 +142,13 @@ public class ApplicationController extends Controller {
             return UsernamePasswordAuthProvider.handleSignup(ctx());
         }
     }
+
+
+    public static Result messages() {
+        response().setContentType("text/javascript");
+        return ok("define(function(){ var messages = " + Json.toJson(scala.collection.JavaConversions.asJavaMap(play.api.i18n.Messages.messages(Play.current()).get(Http.Context.current().lang().code()).get())).toString() + "; return messages;});");
+    }
+
 
     /**
      * Returns a list of all routes to handle in the javascript
