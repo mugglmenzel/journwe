@@ -1,5 +1,4 @@
 require([
-    "main",
     "utils",
     "routes",
     "messages",
@@ -7,7 +6,7 @@ require([
     "adventureData",
     "adventurerData",
     "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false!callback"
-], function (main, utils, routes, messages, comments, adv, advr) {
+], function (utils, routes, messages, comments, adv, advr) {
 
     //Constants
     var now = new Date(),

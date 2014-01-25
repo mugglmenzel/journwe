@@ -107,7 +107,7 @@ public class AccountController extends Controller {
                     ue.getEmail()));
 		}
         // TODO
-        return ok(index.render());
+        return ok(index.render(user));
 		//return redirect(routes.ApplicationController.profile());
 	}
 
@@ -140,7 +140,7 @@ public class AccountController extends Controller {
 			new UserDAO().changePassword(new MyUsernamePasswordAuthUser(user,newPassword,ue.getEmail()),true);
 			flash(ApplicationController.FLASH_MESSAGE_KEY,
 					Messages.get("playauthenticate.change_password.success"));
-            return ok(index.render());
+            return ok(index.render(user));
 		}
 	}
 

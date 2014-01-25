@@ -1,14 +1,10 @@
 @(ins: models.inspiration.Inspiration)
 
-@import models.inspiration.Inspiration
-
-@import play.api.Play.current
-@import models.dao._
 @import java.text.SimpleDateFormat
 
 
 
-<form id="yingyangyong-form" action="@html.routes.AdventureController.save()" method="POST" onsubmit="return validateYingYangYong();">
+<form id="yingyangyong-form" action="@html.routes.AdventureController.save()" method="POST">
 
     <div class="row">
         <div class="col-lg-8">
@@ -16,7 +12,7 @@
             @if(ins != null){<input type="hidden" name="inspirationId" value="@ins.getId">}
         </div>
         <div class="col-lg-4">
-            <button type="submit" class="btn btn-lg btn-success pull-right" onclick="$('#yingyangyong-form').submit();">
+            <button type="submit" class="btn btn-yingyangyong-submit btn-lg btn-success pull-right">
                 @Messages("adventure.general.button.startJournWe") <i class="fa fa-chevron-right fa-fw"></i></button>
         </div>
     </div>
@@ -56,8 +52,8 @@
                     </ul>
 
                     <div class="input-group">
-                        <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" id="place-add-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
-                        <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="fa fa-plus"></i></a></div>
+                        <input id="place-add-input" type="text" placeholder="@Messages("yingyangyong.place.placeholder")" class="input-place-add form-control">
+                        <div class="input-group-btn"><a class="btn btn-primary btn-place-add"><i class="fa fa-plus"></i></a></div>
                     </div>
                     <div class="spacer10"></div>
                     <div style="height: 400px;">
@@ -92,9 +88,9 @@
                                     @Messages("adventure.general.label.email")</a></li>
                             </ul>
                         </div>
-                        <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" onkeypress="if (event.which == 13 || event.keyCode === 13) {addFriend(); event.preventDefault(); return false;} else return true;" autocomplete="off" class="form-control">
+                        <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" autocomplete="off" class="input-people-add form-control">
                         <div class="input-group-btn">
-                            <a class="btn btn-add btn-primary" onclick="addFriend();"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-people-add btn-primary"><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
                     <div class="spacer20"></div>
@@ -105,7 +101,7 @@
                     <div class="spacer20"></div>
                     <div>
                         <span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.publish")</span>
-                        <div><input type="checkbox" id="facebookWall" name="facebookWall" onchange="$('.post-on-facebook').toggle(this.checked)"></div>
+                        <div><input type="checkbox" id="facebookWall" name="facebookWall" ></div>
                         <div class="form-group post-on-facebook" style="display: none; margin-top: 10px;">
                             <label for="facebookWallPost"><i class="fa fa-facebook"></i> @Messages("yingyangyong.adventurers.facebookMessage") </label>
                             <textarea name="facebookWallPost" style="width: 100%; height: 100px;" class="form-control">@Messages("yingyangyong.adventurers.facebookMessage.example")</textarea>
@@ -149,218 +145,15 @@
                         </div>
 
                         <div class="col-lg-2 pull-right">
-                            <a class="btn btn-add btn-primary" onclick="addTime();" style="width: 100%;"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-time-add btn-primary" style="width: 100%;"><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
                     <div class="spacer20"></div>
                     <div class="clearfix">
-                       <a class="btn btn-lg btn-primary pull-right" href="#where-tab" data-toggle="tab">Next <i class="fa fa-angle-right fa-fw"></i></a>
+                       <a class="btn btn-yingyangyong-submit btn-lg btn-success pull-right">@Messages("adventure.general.button.startJournWe") <i class="fa fa-chevron-right fa-fw"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
-<script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
-<script>
-
-    function switchMode() {
-        var icon = $('#yingyangyong');
-        if (icon.is('.where')){
-        icon.removeClass('where').addClass('who');
-        showDialog('who-dialog');
-        } else if(icon.is('.who')){
-        icon.removeClass('who').addClass('when');
-        showDialog('when-dialog');
-        } else if (icon.is('.when')){
-        icon.removeClass('when').addClass('where');
-        showDialog('where-dialog');
-        }
-    };
-
-    function showDialog(dialog) {
-        var dialogs = {
-            'where-dialog' : 'when-dialog',
-            'when-dialog': 'who-dialog',
-            'who-dialog': 'where-dialog'
-            };
-        $('#' + dialogs[dialog]).fadeOut(500, function () {});
-        $('#' + dialog).fadeIn(500);
-
-
-        initialize();
-    }
-
-    function checkShortname() {
-        $.post('@api.json.routes.AdventureController.checkShortname()', { value : $('#shortname').val() },
-            function(check) {
-                $('#shortname-available').html(check.valid ? '<span class="text-success"><i class="fa fa-ok"></i> available.</span>' : '<span class="text-error"><i class="fa fa-warning-sign"></i> not available!</span>' );
-                $('#shortname').attr('aria-invalid', !check.valid);
-                if(!check.valid)
-                    $('#shortname').parents(".control-group").first().addClass('error');
-                else
-                    $('#shortname').parents(".control-group").first().removeClass('error');
-        });
-    }
-
-    function validateYingYangYong() {
-        if($('input[name="name"]').val() == null ||  $('input[name="name"]').val() == '') {
-            $('input[name="name"]').focus();
-            return false;
-        }
-        /*
-        if($('input[name="shortname"]').val() == null ||  $('input[name="shortname"]').val() == '') {
-            $('input[name="shortname"]').focus();
-            return false;
-        }
-        */
-
-        return true;
-    }
-
-
-
-    var map;
-    google.maps.visualRefresh = true;
-
-    function initialize() {
-        if (map){ return; }
-        var mapOptions = {
-            zoom: 15,
-            minZoom: 2,
-            maxZoom: 19,
-            center: new google.maps.LatLng(49.483472, 8.476992),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        map = new google.maps.Map(document.getElementById('where-map'),
-        mapOptions);
-
-        // resetBounds();
-
-    }
-
-    google.maps.event.addDomListener(window, 'load', initialize);
-
-
-    var markers = {};
-
-    function searchPlace() {
-        new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-            var id = 'places-item-' + results[0].geometry.location.lat().toString().replace('.', '_') + '-' + results[0].geometry.location.lng().toString().replace('.', '_');
-            $('#places-list').append('<li id="' + id +'"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label label-success"><i class="fa fa-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-            markers[id] = marker;
-
-            resetBounds();
-            $('#place-add-input').val('');
-        });
-    }
-
-    function resetBounds() {
-        if (!map){ return; }
-        if (!$.isEmptyObject(markers)) {
-            var bounds = new google.maps.LatLngBounds();
-            for(var i in markers) {
-                bounds.extend(markers[i].getPosition());
-            }
-            map.fitBounds(bounds);
-        } else if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            map.setCenter(pos);
-            }, function() {});
-        }
-        google.maps.event.trigger(map, 'resize');
-    }
-
-    function removeMarker(id) {
-        markers[id].setMap(null);
-        delete markers[id];
-        resetBounds();
-        return false;
-    }
-
-    var facebookUsers = {};
-    var facebookUserNames = [];
-
-    var peopleCounter = 0;
-    function addFriend() {
-        var id = 'people-item-' + peopleCounter++;
-        var input = ($('#people-add-input').attr('type') == 'text') ? '<input type="hidden" name="facebook[]" value="' + facebookUsers[$('#people-add-input').val()] + '">' : '<input type="hidden" name="email[]" value="' + $('#people-add-input').val() + '">';
-        $('#people-list').append('<li id="' + id +'">' + input + '<span class="label label-danger"><i class="' + $('#people-add-type').attr('class') + '"></i> ' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
-        $('#people-add-input').val('');
-    }
-
-    function FacebookFriendTypeahead() {
-        $('#people-add-input').typeahead({
-            name: 'people-typeahead',
-            template: '<p><strong>{%=o.name%}</strong></p>',
-            engine: {_templ: '', compile: function(template){_templ=template; return this;}, render: function(data){return tmpl(_templ,data);}},
-            remote: {
-                url: '@api.json.routes.AdventurePeopleController.autocompleteFacebook?input=%QUERY',
-                filter: function (data) {
-                    facebookUsers = {};
-                    facebookUserNames = [];
-                    $.each(data, function( ix, item ){
-                        if ( $.inArray(item.name, facebookUserNames) > -1 ){
-                            item.nameId = item.name + ' #' + item.id;
-                        } else item.nameId = item.name
-
-                        facebookUserNames.push( {value: item.nameId, name: item.name, tokens: [item.id, item.name]} );
-                        facebookUsers[item.nameId] = item.id;
-                    });
-
-                    return facebookUserNames;
-                }
-            }
-        });
-    }
-
-    $('document').ready(function(){
-        $('#people-add-type .dropdown-menu a').click(function () {
-            $('#people-add-type-icon').attr('class', $(this).data('icon'));
-            $('#people-add-input').attr('type', $(this).data('type'));
-            if($(this).data('typeahead') == "on") FacebookFriendTypeahead();
-            else $('#people-add-input').typeahead('destroy');
-            $('#people-add-input').focus();
-        });
-        FacebookFriendTypeahead();
-    });
-
-
-
-    $('document').ready(function () {
-        $("#time-add-input-start").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end" ).datepicker('setStartDate', e.date); $("#time-add-input-start").datepicker('hide');});
-        $("#time-add-input-end").datepicker({startDate: new Date()}).on('changeDate', function(e){$("#time-add-input-end").datepicker('hide');});
-    });
-
-    function addTime() {
-
-        var start = $('#time-add-input-start'),
-            end = $('#time-add-input-end');
-
-        if (!start.val()){
-            start.focus();
-            return false;
-        }
-
-        if (!end.val()){
-            end = start;
-        }
-
-        var id = 'time-item-' + start.val() + '-' + end.val();
-        $('#time-list').append('<li id="' + id +'"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label label-info"><i class="fa fa-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
-
-        start.val('');
-        end.val('');
-    }
-
-</script>
-
-
-@*}*@

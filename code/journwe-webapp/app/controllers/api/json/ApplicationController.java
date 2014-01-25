@@ -2,7 +2,6 @@ package controllers.api.json;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
-import controllers.*;
 import models.adventure.Adventure;
 import models.auth.SecuredUser;
 import models.category.Category;
@@ -92,16 +91,18 @@ public class ApplicationController extends Controller {
                 public String call() throws Exception {
                     List<ObjectNode> results = new ArrayList<ObjectNode>();
                     for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, lastId, count)) {
-                        ObjectNode node = Json.newObject();
-                        node.put("id", adv.getId());
-                        node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-                        node.put("image", adv.getImage());
-                        node.put("name", adv.getName());
-                        node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
-                        node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-                        node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+                        if (adv != null) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", adv.getId());
+                            node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                            node.put("image", adv.getImage());
+                            node.put("name", adv.getName());
+                            node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
+                            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
 
-                        results.add(node);
+                            results.add(node);
+                        }
                     }
                     return Json.toJson(results).toString();
                 }
@@ -127,18 +128,20 @@ public class ApplicationController extends Controller {
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
         for (Adventure adv : new AdventureDAO().listPublicAdventuresByInspiration(inspirationId, lastId, count)) {
-            ObjectNode node = Json.newObject();
-            node.put("id", adv.getId());
-            node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-            node.put("image", adv.getImage());
-            node.put("name", adv.getName());
-            node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
-            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-            node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
-            node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
+            if (adv != null) {
+                ObjectNode node = Json.newObject();
+                node.put("id", adv.getId());
+                node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                node.put("image", adv.getImage());
+                node.put("name", adv.getName());
+                node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
+                node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+                node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
+                node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
 
-            result.add(node);
+                result.add(node);
+            }
         }
 
         return ok(Json.toJson(result));

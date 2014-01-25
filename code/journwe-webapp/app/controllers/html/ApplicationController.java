@@ -40,16 +40,21 @@ public class ApplicationController extends Controller {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
                 && SecuredUser.isAuthorized(usr)) {
-            String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
-            if (new AdventurerDAO().isAdventurer(userId)) return ok(indexVet.render());
-            else return ok(index.render());
+            User user = new UserDAO().findByAuthUserIdentity(usr);
+            if (new AdventurerDAO().isAdventurer(user.getId())) return ok(indexVet.render(user));
+            else return ok(index.render(user));
 
         } else return ok(landing.render());
 
     }
 
     public static Result indexNew() {
-        return ok(index.render());
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
+                && SecuredUser.isAuthorized(usr)) {
+            User user = new UserDAO().findByAuthUserIdentity(usr);
+            return ok(index.render(user));
+        } else return ok(landing.render());
     }
 
     public static Result categoryIndex(String catId) {
@@ -85,6 +90,7 @@ public class ApplicationController extends Controller {
         return ok("pong");
     }
 
+    /*
     //BETA activation
     public static Result joinBeta() {
         if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
@@ -97,9 +103,10 @@ public class ApplicationController extends Controller {
             usr.setRole(EUserRole.BETA);
             new UserDAO().save(usr);
 
-            return ok(index.render());
+            return ok(index.render(usr));
         }
     }
+    */
 
     public static void clearUserCache(final String userId) {
         Cache.remove("user." + userId + ".myadventures");
@@ -157,6 +164,9 @@ public class ApplicationController extends Controller {
         response().setContentType("text/javascript");
         return ok("define(function(){" + // Make it AMD compatible
                 Routes.javascriptRouter("routes",
+                        controllers.api.json.routes.javascript.ApplicationController.getMyAdventures(),
+                        controllers.api.json.routes.javascript.ApplicationController.getPublicAdventures(),
+                        controllers.api.json.routes.javascript.ApplicationController.getCategories(),
                         controllers.api.json.routes.javascript.AdventureController.updateImage(),
                         controllers.api.json.routes.javascript.AdventureController.updatePlaceVoteDeadline(),
                         controllers.api.json.routes.javascript.AdventureController.updateTimeVoteDeadline(),
