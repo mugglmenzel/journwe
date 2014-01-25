@@ -1,4 +1,4 @@
-@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.adventurer.Adventurer, active: String)(description: Html)
+@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.adventurer.Adventurer, user: models.user.User, active: String)(description: Html)
 
 @import models.adventure.adventurer.EAdventurerParticipation
 @import models.authorization.JournweAuthorization
@@ -20,6 +20,7 @@
             <li class="index"><a href="#index"><i
                 class="fa fa-info" title="Overview"></i></a></li>
             <li class="discussion"><a href="#discussion"><i class="fa fa-comments" title="Discussion"></i></a></li>
+            <li class="emails"><a href="#emails"><i class="fa fa-envelope" title="Emails"></i></a></li>
             <li class="places"><a href="#places"><i class="fa fa-globe" title="Place"></i></a></li>
             <li class="adventurers"><a href="#adventurers"><i class="fa fa-group" title="Adventurers"></i></a></li>
             <li class="times"><a href="#times"><i
@@ -75,7 +76,7 @@
         </div>
     </div>
     @if(auth.canViewAdventureComments()) {
-        @comment.widget_comment("index")
+        @comment.widget_comment("index", user)
     }
 
     <hr/>
@@ -94,7 +95,7 @@
     }
 
     <div class="jrn-container">
-        <h2 id="emails"><i class="fa fa-list-ol icon-for-adventure-title"></i> Emails<div class="pull-right"><button id="emails-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
+        <h2 id="emails"><i class="fa fa-envelope icon-for-adventure-title"></i> Emails<div class="pull-right"><button id="emails-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div class="row">
             <div class="col-lg-12">
                 <p class="lead">Eure eigene Emailadresse für dieses JournWe! Sendet und empfangt Emails gemeinsam.</p>
@@ -119,7 +120,7 @@
         </div>
     </div>
     @if(auth.canViewPlaceComments()) {
-        @comment.widget_comment("places")
+        @comment.widget_comment("places", user)
     }
 
     <hr/>
@@ -138,7 +139,7 @@
     </div>
 
     @if(auth.canViewAdventurerComments()) {
-        @comment.widget_comment("adventurers")
+        @comment.widget_comment("adventurers", user)
     }
     <hr/>
     }
@@ -156,7 +157,7 @@
         </div>
     </div>
     @if(auth.canViewDateAndTimeComments()) {
-        @comment.widget_comment("times")
+        @comment.widget_comment("times", user)
     }
     <hr/>
     }
@@ -174,7 +175,7 @@
         </div>
     </div>
     @if(auth.canViewTodoComments()) {
-        @comment.widget_comment("todos")
+        @comment.widget_comment("todos", user)
     }
     <hr/>
     }
@@ -195,7 +196,7 @@
         <div class="row"><small class="pull-right"><a href="http://www.entouragebox.com" target="_blank"><img src="http://www.entouragebox.com/img/logo.png" style="max-height: 30px;"></a></small></div>
     </div>
     @if(auth.canViewFilesComments()) {
-        @comment.widget_comment("files")
+        @comment.widget_comment("files", user)
     }
     <hr/>
     }
@@ -220,7 +221,7 @@
         </div>
     </div>
     @if(auth.canViewOfferComments()) {
-        @comment.widget_comment("offers")
+        @comment.widget_comment("offers", user)
     }
     }
 
@@ -252,10 +253,11 @@
 </div>
     }
 
-@helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = routes.Assets.at("javascripts/adventure").url)
-
-<script>
+<script type="text/javascript">
     define("adventureData", [], @{Html(Json.toJson(adv).toString())});
     define("adventurerData", [], @{Html(Json.toJson(advr).toString())});
 </script>
+<script src="@routes.Assets.at("javascripts/adventure.js").url" type="text/javascript"></script>
+
+
 }

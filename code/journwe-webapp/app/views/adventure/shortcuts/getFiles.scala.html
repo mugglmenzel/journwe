@@ -1,5 +1,5 @@
-@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.adventurer.Adventurer)
+@(adv: models.adventure.Adventure, ins: models.inspiration.Inspiration, advr: models.adventure.adventurer.Adventurer, user: models.user.User)
 
 @import views.html.adventure._
 
-@get(adv, ins, advr, "files"){<span></span>}
+@get(adv, ins, advr, user, "files"){<span></span>}

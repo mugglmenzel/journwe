@@ -81,7 +81,7 @@ public class AdventureController extends Controller {
             if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || !SecuredUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
                 return ok(get_public.render(adv, ins));
             else
-                return ok(get.render(adv, ins, advr, "", null));
+                return ok(get.render(adv, ins, advr, usr, "", null));
         }
     }
 
