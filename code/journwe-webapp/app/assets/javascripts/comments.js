@@ -9,12 +9,13 @@ define([
         routes.controllers.api.json.CommentController.listComments(threadId).ajax({success: function (res) {
             list.html("");
             res.forEach(function (f) {
-                f.time = utils.formatTime(f.comment.timestamp); // Append
+                f.time = utils.formatTime(f.comment.timestamp);
+                f.color = colorOfUser(f.user.name);
                 list.append(tmpl('template-comment', f)).fadeIn();
             });
 
             if (!res.length) {
-                list.append('<div class="empty"><i class="fa fa-envelope"></i> '+messages["adventure.widgetComments.firstComment"]+'</div>');
+                list.append('<div class="empty"><i class="fa fa-envelope"></i> ' + messages["adventure.widgetComments.firstComment"] + '</div>');
             }
         }});
     }
@@ -27,11 +28,16 @@ define([
         routes.controllers.api.json.CommentController.saveComment().ajax({data: {text: val, threadId: threadId}, success: function (f) {
             list.find(".empty").remove();
 
-            f.time = utils.formatTime(f.comment.timestamp); // Append
+            f.time = utils.formatTime(f.comment.timestamp);
+            f.color = colorOfUser(f.user.name);
             list.append(tmpl('template-comment', f)).fadeIn();
             btn.html('<i class="fa fa-plus"></i>');
         }});
-    }
+    };
+
+    var colorOfUser = function (userStr) {
+        return ('#' + ('000000' + (parseInt(parseInt(userStr, 36).toExponential().slice(2, -5), 10) & 0xFFFFFF).toString(16).toUpperCase()).slice(-6));
+    };
 
     utils.on({
         'click .btn-comment-add': function () {
@@ -53,8 +59,9 @@ define([
     });
 
     // Load all comment lists
-    $('.comment-list').each(function(idx,list){refreshComments($(list).data('thread'), $(list))});
-
+    $('.comment-list').each(function (idx, list) {
+        refreshComments($(list).data('thread'), $(list))
+    });
 
 
     // <script id="template-wall" type="text/x-tmpl">
