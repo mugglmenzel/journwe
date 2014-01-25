@@ -14,7 +14,16 @@
     <!-- Only required for left/right tabs -->
     <div class="nav-adventure visible-lg navbar" style=""> <!---->
         <ul id="nav-adventure-list" class="nav nav-pills navbar-nav nav-stacked navbar-left">
-            <li>@adv.getName()</li>
+            <li>
+                @if(auth.canViewAdventureTitle()) {
+                <div class="title-name">
+                    <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+                    data-url="@html.routes.AdventureController.saveEditable()"
+                    data-original-title="Enter adventure name" data-inputclass="input-lg">@adv.getName()</a> <i class="fa fa-pencil muted"></i> <span></span>
+                    @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                </div>
+                }
+            </li>
         </ul>
         <ul id="nav-adventure-list" class="nav nav-pills navbar-nav nav-stacked navbar-right">
             <li class="index"><a href="#index"><i
