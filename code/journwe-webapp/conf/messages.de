@@ -451,3 +451,5 @@ pdf.form.create.title=Diese Adventure-Teile im PDF einfügen:
 pdf.form.create.place=Ort
 pdf.form.create.time=Zeit
 pdf.form.create.todo=TODO Liste
+pdf.form.create.email=E-Mails
+pdf.form.create.file=Dateien

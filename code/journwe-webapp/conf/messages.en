@@ -431,3 +431,5 @@ pdf.form.create.title=Include these Adventure parts in the PDF:
 pdf.form.create.place=Place
 pdf.form.create.time=Time
 pdf.form.create.todo=TODO List
+pdf.form.create.email=Emails
+pdf.form.create.file=Files
