@@ -38,6 +38,7 @@ public class Adventurer implements IAdventureComponentWithUser {
 
     public void setUserIdRangeKey(String userIdRangeKey) {
         this.userIdRangeKey = userIdRangeKey;
+        this.userId = userIdRangeKey;
     }
 
     // We need the GSI to check if a user has already created adventures
@@ -50,6 +51,7 @@ public class Adventurer implements IAdventureComponentWithUser {
 
     public void setUserId(String userId) {
         this.userId = userId;
+        this.userIdRangeKey = userId;
     }
 
     @DynamoDBMarshalling(marshallerClass = ParticipationMarshaller.class)
