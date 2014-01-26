@@ -19,7 +19,8 @@ object ApplicationBuild extends Build {
     "com.rosaloves" % "bitlyj" % "2.0.0",
     "org.igniterealtime.smack" % "smack" % "3.2.1",
     "org.igniterealtime.smack" % "smackx" % "3.2.1",
-    "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2"
+    "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2",
+    "org.apache.pdfbox" % "pdfbox" % "1.8.2"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

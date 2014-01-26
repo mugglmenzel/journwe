@@ -152,6 +152,7 @@ GET           /adventure/:id/index                                         contr
 GET           /adventure/:id/new                                           controllers.html.AdventureController.createFromInspiration(id:String)
 GET           /adventure/:id/delete                                        controllers.html.AdventureController.delete(id:String)
 POST          /adventure/:id/clone                                         controllers.html.CloneController.cloneAndSaveAdventure(id:String)
+POST          /adventure/:id/pdf                                           controllers.html.PdfController.create(id:String)
 
 GET           /adv/:shortname                                              controllers.html.AdventureController.getIndexShortname(shortname:String)
 

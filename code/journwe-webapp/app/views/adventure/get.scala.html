@@ -58,6 +58,8 @@
 
             <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
 
+            <a class="btn btn-primary pull-right" onclick="$('#pdfAdventure').modal();"><i class="fa fa-file-text"></i> @Messages("adventure.general.button.pdf")</a>
+
             <input id="adventure-prime-image-file-input" type="file" class="hide"/>
             <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="fa fa-upload"></i> @Messages("adventure.files.imageUpload")</a>
         </div>
@@ -239,6 +241,11 @@
                 </div>
             </div>
         </div>
+    </div>
+
+
+    <div id="pdfAdventure" class="modal fade" tabindex="-1" role="dialog">
+        @createPDF(adv,new DynamicForm())
     </div>
 
     <div id="leave" class="modal fade" tabindex="-1" role="dialog">

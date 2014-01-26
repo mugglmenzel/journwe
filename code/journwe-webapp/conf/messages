@@ -6,6 +6,7 @@ landing.cta=Subscribe with your email to get notified when we go online!
 #Adventure.general.buttons
 adventure.general.button.join=Join
 adventure.general.button.clone=Clone
+adventure.general.button.pdf=PDF
 adventure.general.button.cancel=Cancel
 adventure.general.button.leave=Leave
 adventure.general.button.reset=Reset
@@ -98,6 +99,15 @@ adventure.files.fileSelect=click here
 adventure.files.fileChange=Change
 adventure.files.fileRemove=Remove
 
+# PDF creation
+pdf.form.create.submit=Create PDF
+pdf.form.create.cancel=Cancel
+pdf.form.create.title=Include these Adventure parts in the PDF:
+pdf.form.create.place=Place
+pdf.form.create.time=Time
+pdf.form.create.todo=TODO List
+pdf.form.create.email=Emails
+pdf.form.create.file=Files
 
 #Notifications
 notifications.digest.name.IMMEDIATELY=Immediately
