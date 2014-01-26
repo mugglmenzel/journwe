@@ -20,6 +20,7 @@ adventure.general.label.time=Zeit
 adventure.general.button.createNew=Neu Anlegen
 adventure.general.button.join=Teilnehmen
 adventure.general.button.clone=Klonen
+adventure.general.button.pdf=PDF
 adventure.general.button.cancel=Abbrechen
 adventure.general.button.leave=Verlassen
 adventure.general.button.reset=Zurücksetzen
@@ -442,3 +443,11 @@ playauthenticate.restricted.secrets=Überall Geheimnisse!
 
 
 ### --- play-authenticate END
+
+# PDF creation
+pdf.form.create.submit=PDF herunterladen
+pdf.form.create.cancel=Abbrechen
+pdf.form.create.title=Diese Adventure-Teile im PDF einfügen:
+pdf.form.create.place=Ort
+pdf.form.create.time=Zeit
+pdf.form.create.todo=TODO Liste
