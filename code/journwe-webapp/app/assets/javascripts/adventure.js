@@ -3,10 +3,10 @@ require([
     "routes",
     "messages",
     "comments",
+    "common/gmaps",
     "adventureData",
-    "adventurerData",
-    "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false!callback"
-], function (utils, routes, messages, comments, adv, advr) {
+    "adventurerData"
+], function (utils, routes, messages, comments, gmaps, adv, advr) {
 
     //Constants
     var now = new Date(),
@@ -193,25 +193,25 @@ require([
     };
 
     var initializeMap = function () {
-        google.maps.visualRefresh = true;
+        gmaps.visualRefresh = true;
         var mapOptions = {
             zoom: 19,
             minZoom: 2,
             maxZoom: 19,
-            center: new google.maps.LatLng(52.467541, 13.324957),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            center: new gmaps.LatLng(52.467541, 13.324957),
+            mapTypeId: gmaps.MapTypeId.ROADMAP
         };
-        map = new google.maps.Map(document.getElementById('place-add-map'), mapOptions);
+        map = new gmaps.Map(document.getElementById('place-add-map'), mapOptions);
     };
 
 
     var resetMapBounds = function () {
-        var bounds = new google.maps.LatLngBounds();
+        var bounds = new gmaps.LatLngBounds();
         for (var i in markers) {
             bounds.extend(markers[i].getPosition());
         }
         map.fitBounds(bounds);
-        google.maps.event.trigger(map, 'resize');
+        gmaps.event.trigger(map, 'resize');
     };
 
     var removeMapMarker = function (id) {
@@ -230,9 +230,9 @@ require([
         else
             $('#places-list tbody').append(place).fadeIn();
 
-        var marker = new google.maps.Marker({animation: google.maps.Animation.DROP, map: map, position: new google.maps.LatLng(data.lat, data.lng), title: data.address});
+        var marker = new gmaps.Marker({animation: gmaps.Animation.DROP, map: map, position: new gmaps.LatLng(data.lat, data.lng), title: data.address});
         markers[data.placeId] = marker;
-        map.setCenter(new google.maps.LatLng(data.lat, data.lng));
+        map.setCenter(new gmaps.LatLng(data.lat, data.lng));
         resetMapBounds();
 
         $('#placeoption-status-icon-' + data.placeId).addClass(votePlaceIconCSSClassMap[data.vote]);
@@ -368,13 +368,15 @@ require([
         loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '#adventurers-applicants-list');
     }
 
-    var loadAdventurers = function (endpoint, target) {
+    var loadAdventurers = function (endpoint, target, template) {
+        template = template ? template : 'adventurer-template';
         endpoint.ajax({success: function (advs) {
             $(target).empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
                     advs[i].cssLabel = adventurerCSSLabel[advs[i].status];
-                    $(target).append(tmpl('adventurer-template', advs[i]));
+                    advs[i].color = utils.colorOfUser(advs[i].name);
+                    $(target).append(tmpl(template, advs[i]));
                 }
                 $(target).parent().show();
             } else $(target).parent().hide();
@@ -383,11 +385,11 @@ require([
 
     var addFriend = function () {
         $('#people-add-button i').removeClass("fa-plus").addClass("icon-journwe fa-spin");
-        $.post('@api.json.routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
+        routes.controllers.api.json.AdventurePeopleController.invite(adv.id).ajax({data: (($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}), success: function () {
             $('#people-add-input').val('');
             loadInvitees();
             $('#people-add-button i').removeClass("icon-journwe fa-spin").addClass("fa-plus");
-        });
+        }});
     }
 
     var changeAdventurerStatus = function (el) {
@@ -598,6 +600,7 @@ require([
 
     var initializeTodos = function () {
         loadUserTodos();
+        loadOtherAdventurers();
         var firstAdvr = $('#todos-adventurers-selection div').first().data('id');
         if (firstAdvr != null) loadAdventurerTodos(firstAdvr);
     };
@@ -605,6 +608,10 @@ require([
     var loadUserTodos = function () {
         loadTodos(advr.userId, '#todos-list', 'todo-template');
     };
+
+    var loadOtherAdventurers = function () {
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getOtherParticipants(adv.id), '#todos-adventurers-selection', 'todos-adventurer-template');
+    }
 
     var loadAdventurerTodos = function (advrId) {
         $('#todos-adventurers-selection > div').removeClass("polaroid-active");
@@ -802,7 +809,7 @@ require([
         'click #place-add-button': function () {
             if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
                 $(this).html('<i class="fa fa-spin icon-journwe"></i>');
-                new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
+                new gmaps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
                     routes.controllers.api.json.AdventurePlaceController.addPlace(adv.id).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
                         renderPlaceOption(res);
                         $('#place-add-input').val("");
@@ -881,6 +888,16 @@ require([
         },
         'click .btn-deny': function () {
             return denyAdventurer($(this));
+        },
+        'click .btn-friend-add': function () {
+            addFriend();
+        },
+        'keypress #people-add-input': function () {
+            if (event.which == 13 || event.keyCode === 13) {
+                addFriend();
+                event.preventDefault();
+                return false;
+            } else return true;
         },
 
         'click .btn-favorite-time': function () {
@@ -1058,7 +1075,7 @@ require([
 
 
     // Init bg
-    if(adv.image != null && adv.image != ''){
+    if (adv.image != null && adv.image != '') {
         $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '")');
     }
 

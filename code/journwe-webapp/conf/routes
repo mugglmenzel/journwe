@@ -45,6 +45,7 @@ POST          /api/json/adventure/check/shortname.json                     contr
 #### Adventure People ####
 GET           /api/json/adventure/:id/adventurers.json                     controllers.api.json.AdventurePeopleController.getAdventurers(id:String)
 GET           /api/json/adventure/:id/participants.json                    controllers.api.json.AdventurePeopleController.getParticipants(id:String)
+GET           /api/json/adventure/:id/coparticipants.json                  controllers.api.json.AdventurePeopleController.getOtherParticipants(id:String)
 GET           /api/json/adventure/:id/invitees.json                        controllers.api.json.AdventurePeopleController.getInvitees(id:String)
 GET           /api/json/adventure/:id/applicants.json                      controllers.api.json.AdventurePeopleController.getApplicants(id:String)
 POST          /api/json/adventure/:id/participate.json/:status             controllers.api.json.AdventurePeopleController.participateStatus(id:String, status:String)
@@ -236,7 +237,7 @@ GET           /lang/:id                                                    contr
 
 
 #### Home Page ####
-GET           /cat/overview                                                  controllers.html.ApplicationController.categoryOverview()
+GET           /cat/overview                                                controllers.html.ApplicationController.categoryOverview()
 GET           /cat/:catId                                                  controllers.html.ApplicationController.categoryIndex(catId:String)
 GET           /new                                                         controllers.html.ApplicationController.indexNew
 GET           /                                                            controllers.html.ApplicationController.index()
