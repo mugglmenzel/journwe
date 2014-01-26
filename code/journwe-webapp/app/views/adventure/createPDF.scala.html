@@ -10,13 +10,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title"><i class="fa fa-file-text"></i> <strong>"@adv.getName()".pdf</strong></h3><br/>
+                <h3 class="modal-title"><i class="fa fa-file-text"></i> <strong>@adv.getName()</strong><strong>.pdf</strong></h3><br/>
                 <fieldset>
                     <strong>@Messages("pdf.form.create.title")</strong>
                     @checkbox(createPdfForm("pdfPlace"), '_label -> Messages("pdf.form.create.place"))
                     @checkbox(createPdfForm("pdfTime"), '_label -> Messages("pdf.form.create.time"))
                     @checkbox(createPdfForm("pdfTodo"), '_label -> Messages("pdf.form.create.todo"))
+                    @checkbox(createPdfForm("pdfEmail"), '_label -> Messages("pdf.form.create.email"))
+                    @checkbox(createPdfForm("pdfFile"), '_label -> Messages("pdf.form.create.file"))
                 </fieldset>
+                <br />
                 <div class="form-actions">
                     <input type="submit" value="@Messages("pdf.form.create.submit")" class="btn btn-primary">
                 </div>
