@@ -13,13 +13,7 @@
 @import com.feth.play.module.pa.providers.AuthProvider.Registry
 
 
-@getNotificationLink(status:ENotificationTopics, ref:String) = {
-    @status match {
-        case ENotificationTopics.ADVENTURE => {@html.routes.AdventureController.getIndex(ref)}
-        case ENotificationTopics.GENERAL => {@html.routes.ApplicationController.index}
-        case ENotificationTopics.USER => {@html.routes.UserController.getProfile(ref)}
-    }
-}
+
 <div>
 
 @currentAuth() { auth =>
@@ -27,31 +21,20 @@
     <div class="row">
         <div class="col-lg-2 col-sm-2 col-xs-2">
             <div class="navbar-text">
-                @if(auth != null && user != null) {
                     <a href="@html.routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">   @*onmouseover="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-journwe-home-select').collapse('hide'); $('#navbar-secondlevel-journwe-home-select').collapse('show');" onmouseout="$('#navbar-secondlevel-journwe-home-select').collapse('show');"*@
                         <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
                             Journ<strong>We</strong>
                         </span>
                     </a>
-                } else {
-                    <a href="@html.routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
-                        <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 20px; vertical-align: text-bottom;">
-                            Journ<strong>We</strong>
-                        </span>
-                    </a>
-                }
             </div>
         </div>
 
         <div class="col-lg-6 col-sm-6 col-xs-6">
             <ul class="nav nav-pills nav-justified">
                 <li><a href="@html.routes.ApplicationController.indexNew()"><i class="fa fa-asterisk"></i> New <img height="14px" src="@routes.Assets.at("img/journwe_logo.png")"></a></li>
-                <li><a href="@html.routes.ApplicationController.categoryIndex(Category.SUPER_CATEGORY)" onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                <li><a href="@html.routes.ApplicationController.categoryIndex(Category.SUPER_CATEGORY)"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>  @*onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-inspiration-categories').collapse('hide'); $('#navbar-secondlevel-inspiration-categories').collapse('toggle');"*@
                 <li><a href="@html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
-                <li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="fa fa-search"></i> Search</a></li>
-                @if(auth != null && user != null && EUserRole.ADMIN.equals(user.getRole)) {
-                <li><a href="@html.routes.ApplicationController.admin()"><i class="fa fa-cogs"></i> Admin</a></li>
-                }
+                @*<li class="disabled hidden"><a onclick="$('#navbar-secondlevel-collapsable > *').not('#navbar-secondlevel-general-search').collapse('hide'); $('#navbar-secondlevel-general-search').collapse('toggle');"><i class="fa fa-search"></i> Search</a></li>*@
             </ul>
         </div>
 
@@ -116,7 +99,6 @@
                                                     loadNotifications(false, lastKey);
                                                 }
                                             }
-                                            //else {alert('scrolltop:' + $(this).scrollTop() + ',scrollheight:' + $(this).prop('scrollHeight') + ',height:' + $(this).height());}
                                             return false;
                                         });
 
@@ -157,7 +139,7 @@
 }
 
 
-
+    @*
     <div id="navbar-secondlevel-collapsable">
             <div class="row collapse" id="navbar-secondlevel-journwe-home-select" data-parent="#navbar-secondlevel-collapsable">
                 <div class="col-lg-12 text-center" style="margin: 10px 0px; line-height: 70px;">
@@ -170,7 +152,7 @@
                     <h4>Categories of Inspirations</h4>
                     <div id="header-categories-loading"><i class="icon-journwe fa fa-spin"></i></div>
                     <ul id="header-categories-list" class="nav nav-pills nav-stacked">
-                        @*
+
                         @defining(new CategoryDAO()){catDAO =>
 
                             @for(cat <- catDAO.allSubcategory(Category.SUPER_CATEGORY)) {
@@ -184,7 +166,7 @@
                             }
 
                         }
-                        *@
+
 
                     </ul>
                     <script type="text/x-tmpl" id="header-category-template">
@@ -222,6 +204,7 @@
             </div>
             -->
     </div>
+    *@
 
 
 </div>
