@@ -38,41 +38,6 @@ import static play.data.Form.form;
 public class ApplicationController extends Controller {
 
 
-    public static Result getCategories(final String superCatId) {
-
-        try {
-            return ok(Cache.getOrElse("subCategoriesOf." + superCatId, new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    List<ObjectNode> results = new ArrayList<ObjectNode>();
-                    for (CategoryHierarchy cat : new CategoryHierarchyDAO().categoryAsSuper(superCatId)) {
-                        CategoryCount cc = new CategoryCountDAO().get(cat.getSubCategoryId());
-                        if (cat != null && cc.getCount() > 0) {
-                            Category c = new CategoryDAO().get(cc.getCategoryId());
-                            if (c != null) {
-                                ObjectNode node = Json.newObject();
-                                node.put("id", c.getId());
-                                node.put("name", c.getName());
-                                node.put("link", controllers.html.routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
-                                node.put("image", c.getImage());
-                                node.put("userCountByAdventure", cc.getCount());
-                                results.add(node);
-                            }
-                        }
-                    }
-
-                    return Json.toJson(results).toString();
-                }
-            }, 24 * 3600)).as("application/json");
-        } catch (Exception e) {
-            Logger.error("Couldn't generate sub-categories of " + superCatId, e);
-            return internalServerError();
-        }
-
-
-    }
-
-
     @Security.Authenticated(SecuredUser.class)
     public static Result getMyAdventures() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());

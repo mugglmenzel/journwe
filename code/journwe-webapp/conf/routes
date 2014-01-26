@@ -15,7 +15,7 @@
 #### Categories ####
 
 GET           /api/json/categories/optionsMap.json                         controllers.api.json.CategoryController.categoriesOptionsMap()
-GET           /api/json/category/:id/categories.json                       controllers.api.json.ApplicationController.getCategories(id:String)
+GET           /api/json/category/:id/categories.json                       controllers.api.json.CategoryController.getCategories(id:String)
 GET           /api/json/category/:id/inspirations.json                     controllers.api.json.ApplicationController.getInspirations(id:String)
 GET           /api/json/category/:id/adventures/public.json                controllers.api.json.ApplicationController.getPublicAdventuresOfCategory(id:String)
 POST          /api/json/category/moveInHierarchy.json                      controllers.api.json.CategoryController.setSuperCategory()
@@ -236,6 +236,7 @@ GET           /lang/:id                                                    contr
 
 
 #### Home Page ####
+GET           /cat/overview                                                  controllers.html.ApplicationController.categoryOverview()
 GET           /cat/:catId                                                  controllers.html.ApplicationController.categoryIndex(catId:String)
 GET           /new                                                         controllers.html.ApplicationController.indexNew
 GET           /                                                            controllers.html.ApplicationController.index()

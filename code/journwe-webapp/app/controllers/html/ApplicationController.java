@@ -57,9 +57,13 @@ public class ApplicationController extends Controller {
         } else return ok(landing.render());
     }
 
+    public static Result categoryOverview() {
+        return categoryIndex(null);
+    }
+
     public static Result categoryIndex(String catId) {
-        if (Category.SUPER_CATEGORY.equals(catId))
-            return Results.redirect(controllers.html.routes.ApplicationController.index());
+        if(catId == null || "".equals(catId)) catId = Category.SUPER_CATEGORY;
+
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
 
@@ -166,7 +170,9 @@ public class ApplicationController extends Controller {
                 Routes.javascriptRouter("routes",
                         controllers.api.json.routes.javascript.ApplicationController.getMyAdventures(),
                         controllers.api.json.routes.javascript.ApplicationController.getPublicAdventures(),
-                        controllers.api.json.routes.javascript.ApplicationController.getCategories(),
+                        controllers.api.json.routes.javascript.ApplicationController.getInspirations(),
+                        controllers.api.json.routes.javascript.CategoryController.getCategories(),
+                        controllers.api.json.routes.javascript.UserController.getNotifications(),
                         controllers.api.json.routes.javascript.AdventureController.updateImage(),
                         controllers.api.json.routes.javascript.AdventureController.updatePlaceVoteDeadline(),
                         controllers.api.json.routes.javascript.AdventureController.updateTimeVoteDeadline(),

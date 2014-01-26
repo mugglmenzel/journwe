@@ -1,5 +1,5 @@
 require([
-    "utils",
+    "common/utils",
     "routes",
     "messages",
     "comments",

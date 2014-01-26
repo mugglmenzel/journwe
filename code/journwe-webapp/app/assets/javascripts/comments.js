@@ -1,5 +1,5 @@
 define([
-    "utils",
+    "common/utils",
     "routes",
     "messages"
 ], function (utils, routes, messages) {

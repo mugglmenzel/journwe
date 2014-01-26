@@ -1,8 +1,8 @@
 define([
-    "utils",
+    "common/utils",
     "routes",
     "messages",
-    "gmaps"
+    "common/gmaps"
 ], function (utils, routes, messages, gmaps) {
 
 

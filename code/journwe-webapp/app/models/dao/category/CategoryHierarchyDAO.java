@@ -54,6 +54,8 @@ public class CategoryHierarchyDAO extends CommonRangeEntityDAO<CategoryHierarchy
     }
 
     public String getSuperCategoryId(String catId) {
+        if(Category.SUPER_CATEGORY.equals(catId)) return Category.SUPER_CATEGORY;
+
         List<CategoryHierarchy> superCats = categoryAsSub(catId);
 
         return superCats.size() > 0 ? superCats.get(0).getSuperCategoryId() : null;
