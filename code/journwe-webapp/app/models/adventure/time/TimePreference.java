@@ -20,6 +20,8 @@ public class TimePreference {
 
     private EPreferenceVote vote = EPreferenceVote.MAYBE;
 
+    private Double voteGravity = 0.6D;
+
 
     @DynamoDBHashKey(attributeName = "timeoptionid")
     public String getTimeOptionId() {
@@ -46,6 +48,15 @@ public class TimePreference {
 
     public void setVote(EPreferenceVote vote) {
         this.vote = vote;
+    }
+
+    @DynamoDBAttribute
+    public Double getVoteGravity() {
+        return voteGravity;
+    }
+
+    public void setVoteGravity(Double voteGravity) {
+        this.voteGravity = voteGravity;
     }
 
     public static class VoteMarshaller extends EnumMarshaller<EPreferenceVote> {

@@ -10,7 +10,7 @@
 
 <div class="footer row">
     <div class="col-lg-8 col-lg-offset-2">
-        <div class="jrn-container clearfix">
+        <div class="jrn-container jrn-no-bottom-round clearfix">
             <div class="row">
                 <div class="col-lg-4">
                     <ul class="nav nav-pills nav-stacked">
@@ -19,10 +19,13 @@
                         <li @if(active == "team"){class="active"}><a href="#team">Team</a></li>
                         <li @if(active == "contact"){class="active"}><a href="#contact">Contact</a></li>
                         <li @if(active == "imprint"){class="active"}><a href="@html.routes.ApplicationController.imprint">Imprint</a> </li>
-                        @currentAuth() {auth => @if(auth != null && new UserDAO().findByAuthUserIdentity(auth) != null && EUserRole.ADMIN.equals(new UserDAO().findByAuthUserIdentity(auth).getRole)){
-                                <li @if(active == "admin"){class="active"}>
-                                    <a href="@html.routes.ApplicationController.admin">Admin</a>
-                                </li>
+                        @currentAuth() {auth =>
+                            @defining(new UserDAO().findByAuthUserIdentity(auth)){ usr =>
+                                @if(auth != null && usr != null && EUserRole.ADMIN.equals(usr.getRole)){
+                                    <li @if(active == "admin"){class="active"}>
+                                        <a href="@html.routes.ApplicationController.admin">Admin</a>
+                                    </li>
+                                }
                             }
                         }
                     </ul>

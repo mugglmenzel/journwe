@@ -1,52 +1,33 @@
 package controllers.html;
 
-import com.ecwid.mailchimp.MailChimpClient;
-import com.ecwid.mailchimp.MailChimpException;
-import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
-import controllers.routes;
-import models.adventure.Adventure;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredUser;
-import models.auth.SecuredUser;
 import models.category.Category;
-import models.category.CategoryCount;
-import models.category.CategoryHierarchy;
-import models.dao.*;
-import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
-import models.dao.adventure.PlaceOptionDAO;
-import models.dao.adventure.TimeOptionDAO;
-import models.dao.category.CategoryCountDAO;
 import models.dao.category.CategoryDAO;
-import models.dao.category.CategoryHierarchyDAO;
-import models.dao.manytomany.CategoryToInspirationDAO;
 import models.dao.user.UserDAO;
-import models.inspiration.Inspiration;
 import models.user.EUserRole;
-import models.user.Subscriber;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
-import play.Logger;
 import play.Routes;
+import play.api.Play;
 import play.cache.Cache;
-import play.data.DynamicForm;
 import play.data.Form;
+import play.i18n.Messages;
 import play.libs.Json;
 import play.mvc.*;
 import providers.MyUsernamePasswordAuthProvider;
 import views.html.*;
-import views.html.index.*;
+import views.html.index.index;
+import views.html.index.indexCat;
+import views.html.index.indexVet;
+import views.html.index.landing;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import static play.data.Form.form;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class ApplicationController extends Controller {
@@ -59,20 +40,30 @@ public class ApplicationController extends Controller {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
                 && SecuredUser.isAuthorized(usr)) {
-            String userId = new UserDAO().findByAuthUserIdentity(usr).getId();
-            if (new AdventurerDAO().isAdventurer(userId)) return ok(indexVet.render());
-            else return ok(index.render());
+            User user = new UserDAO().findByAuthUserIdentity(usr);
+            if (new AdventurerDAO().isAdventurer(user.getId())) return ok(indexVet.render(user));
+            else return ok(index.render(user));
 
         } else return ok(landing.render());
 
     }
 
     public static Result indexNew() {
-        return ok(index.render());
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
+                && SecuredUser.isAuthorized(usr)) {
+            User user = new UserDAO().findByAuthUserIdentity(usr);
+            return ok(index.render(user));
+        } else return ok(landing.render());
+    }
+
+    public static Result categoryOverview() {
+        return categoryIndex(null);
     }
 
     public static Result categoryIndex(String catId) {
-        if (Category.SUPER_CATEGORY.equals(catId)) return Results.redirect(controllers.html.routes.ApplicationController.index());
+        if(catId == null || "".equals(catId)) catId = Category.SUPER_CATEGORY;
+
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
 
@@ -103,6 +94,7 @@ public class ApplicationController extends Controller {
         return ok("pong");
     }
 
+    /*
     //BETA activation
     public static Result joinBeta() {
         if (!PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
@@ -115,9 +107,10 @@ public class ApplicationController extends Controller {
             usr.setRole(EUserRole.BETA);
             new UserDAO().save(usr);
 
-            return ok(index.render());
+            return ok(index.render(usr));
         }
     }
+    */
 
     public static void clearUserCache(final String userId) {
         Cache.remove("user." + userId + ".myadventures");
@@ -161,6 +154,13 @@ public class ApplicationController extends Controller {
         }
     }
 
+
+    public static Result messages() {
+        response().setContentType("text/javascript");
+        return ok("define(function(){ var messages = " + Json.toJson(scala.collection.JavaConversions.asJavaMap(play.api.i18n.Messages.messages(Play.current()).get(Http.Context.current().lang().code()).get())).toString() + "; return messages;});");
+    }
+
+
     /**
      * Returns a list of all routes to handle in the javascript
      */
@@ -168,20 +168,38 @@ public class ApplicationController extends Controller {
         response().setContentType("text/javascript");
         return ok("define(function(){" + // Make it AMD compatible
                 Routes.javascriptRouter("routes",
+                        controllers.api.json.routes.javascript.ApplicationController.getMyAdventures(),
+                        controllers.api.json.routes.javascript.ApplicationController.getPublicAdventures(),
+                        controllers.api.json.routes.javascript.ApplicationController.getInspirations(),
+                        controllers.api.json.routes.javascript.CategoryController.getCategories(),
+                        controllers.api.json.routes.javascript.UserController.getNotifications(),
                         controllers.api.json.routes.javascript.AdventureController.updateImage(),
                         controllers.api.json.routes.javascript.AdventureController.updatePlaceVoteDeadline(),
                         controllers.api.json.routes.javascript.AdventureController.updateTimeVoteDeadline(),
                         controllers.api.json.routes.javascript.AdventureController.updatePlaceVoteOpen(),
                         controllers.api.json.routes.javascript.AdventureController.updateTimeVoteOpen(),
                         controllers.api.json.routes.javascript.AdventureController.placeVoteOpen(),
+                        controllers.api.json.routes.javascript.AdventureController.updateCategory(),
+                        controllers.api.json.routes.javascript.AdventureController.updatePublic(),
+                        controllers.api.json.routes.javascript.CategoryController.categoriesOptionsMap(),
                         controllers.api.json.routes.javascript.AdventureEmailController.listEmails(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.getPlaces(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.getFavoritePlace(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.setFavoritePlace(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.addPlace(),
-                        controllers.api.json.routes.javascript.AdventurePlaceController.voteParam(),
+                        controllers.api.json.routes.javascript.AdventurePlaceController.vote(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.deletePlace(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.getParticipants(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.getOtherParticipants(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.getInvitees(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.getApplicants(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.participateStatus(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.invite(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.adopt(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.deny(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteFacebook(),
                         controllers.api.json.routes.javascript.AdventureTimeController.getTimes(),
+                        controllers.api.json.routes.javascript.AdventureTimeController.getFavoriteTime(),
                         controllers.api.json.routes.javascript.AdventureTimeController.setFavoriteTime(),
                         controllers.api.json.routes.javascript.AdventureTimeController.addTime(),
                         controllers.api.json.routes.javascript.AdventureTimeController.vote(),
@@ -193,7 +211,9 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventureTodoController.getTodoAffiliateItems(),
                         controllers.api.json.routes.javascript.AdventureFileController.uploadFile(),
                         controllers.api.json.routes.javascript.AdventureFileController.listFiles(),
-                        controllers.api.json.routes.javascript.AdventureFileController.deleteFile()
+                        controllers.api.json.routes.javascript.AdventureFileController.deleteFile(),
+                        controllers.api.json.routes.javascript.CommentController.saveComment(),
+                        controllers.api.json.routes.javascript.CommentController.listComments()
 
                 ) + ";; return routes;});"
         );

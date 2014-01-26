@@ -264,7 +264,7 @@ public class ManyToManyDAO<M, N> {
 
             Map<String, List<Object>> batchLoadReturn = dynamoDbMapperHelper.batchLoad(itemsToGet);
             List<Object> toReturn = batchLoadReturn.get(targetTableName);
-            return toReturn;
+            return toReturn != null ? toReturn : new ArrayList<Object>();
 
         } catch (InstantiationException e) {
             Logger.error(e.getMessage());
@@ -276,8 +276,7 @@ public class ManyToManyDAO<M, N> {
             e.printStackTrace();
         }
 
-        return new ArrayList<Object>() {
-        };
+        return new ArrayList<Object>();
     }
 
     protected QueryResult listRelations(String hashKey, String lastKey, int limit, boolean returnM) {

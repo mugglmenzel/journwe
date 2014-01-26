@@ -43,7 +43,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result updateImage(String advId) {
-        if (!JournweAuthorization.canEditAdventureImage(advId))
+        if (!new JournweAuthorization(advId).canEditAdventureImage())
             return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         try {
@@ -91,7 +91,7 @@ public class AdventureController extends Controller {
     @Security.Authenticated(SecuredUser.class)
     public static Result updatePublic(String advId) {
         DynamicForm data = form().bindFromRequest();
-        Boolean publish = new Boolean(data.get("public"));
+        Boolean publish = new Boolean(data.get("publish"));
         Adventure adv = new AdventureDAO().get(advId);
         adv.setPublish(publish);
         new AdventureDAO().save(adv);
@@ -101,7 +101,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result updatePlaceVoteOpen(String advId) {
-        if (!JournweAuthorization.canChangeVoteOnOffForPlaces(advId))
+        if (!new JournweAuthorization(advId).canChangeVoteOnOffForPlaces())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         Boolean openVote = new Boolean(data.get("voteOpen"));
@@ -116,7 +116,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result updatePlaceVoteDeadline(String advId) {
-        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canChangeVoteOnOffForDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         Long deadline = new Long(data.get("voteDeadline"));
@@ -146,7 +146,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result updateTimeVoteOpen(String advId) {
-        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canChangeVoteOnOffForDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         Boolean openVote = new Boolean(data.get("voteOpen"));
@@ -161,7 +161,7 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result updateTimeVoteDeadline(String advId) {
-        if (!JournweAuthorization.canChangeVoteOnOffForDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canChangeVoteOnOffForDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         Long deadline = new Long(data.get("voteDeadline"));

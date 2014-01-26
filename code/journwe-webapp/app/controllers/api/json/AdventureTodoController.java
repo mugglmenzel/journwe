@@ -6,16 +6,20 @@ import com.journwe.productadvertising.webservice.client.ItemSearchRequest;
 import com.journwe.productadvertising.webservice.client.Items;
 import com.journwe.productadvertising.webservice.client.OperationRequest;
 import com.typesafe.config.ConfigFactory;
+import models.adventure.adventurer.Adventurer;
+import models.adventure.adventurer.EAdventurerParticipation;
 import models.adventure.todo.EStatus;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
+import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.TodoDAO;
 import models.dao.user.UserDAO;
 import models.helpers.AWSProductAdvertisingAPIHelper;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
+import play.cache.Cache;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -28,6 +32,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
 
@@ -42,12 +47,14 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getTodos(String advId, String userId) {
-        if (!JournweAuthorization.canViewTodoItem(advId))
+        if (!new JournweAuthorization(advId).canViewTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
         return ok(Json.toJson(new TodoDAO().all(userId, advId)));
 
         //return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
     }
+
+
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getTodoAffiliateItems(String advId) {
@@ -92,7 +99,7 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result addTodo(String id) {
-        if (!JournweAuthorization.canEditTodoItem(id))
+        if (!new JournweAuthorization(id).canEditTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
 
         DynamicForm requestData = form().bindFromRequest();
@@ -111,7 +118,7 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result setTodo(String advId, String tid) {
-        if (!JournweAuthorization.canEditTodoItem(advId))
+        if (!new JournweAuthorization(advId).canEditTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
 
         DynamicForm requestData = form().bindFromRequest();
@@ -128,7 +135,7 @@ public class AdventureTodoController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result deleteTodo(String advId, String tid) {
-        if (!JournweAuthorization.canEditTodoItem(advId))
+        if (!new JournweAuthorization(advId).canEditTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
 
         new TodoDAO().delete(advId, tid);

@@ -1,0 +1,104 @@
+@(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
+    @import models.adventure.adventurer.EAdventurerParticipation
+
+    @import models.authorization.JournweAuthorization
+
+    @defining(new JournweAuthorization(adv.getId)) { auth =>
+
+        @if(auth.canEditAdventurerParticipationStatus()) {
+            @defining((advr.getParticipationStatus())) { (status) =>
+                @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)) {
+                    <div>
+                        <strong style="vertical-align : middle ;">@Messages("adventure.adventurers.myStat")</strong>
+
+                        <div class="btn-group btn-select-adventurer">
+                            <button class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING) {active}"
+                            data-status="@EAdventurerParticipation.NOTGOING.name"><i class="fa fa-frown"></i> @Messages("adventure.adventurers.status.notIn")</button>
+                            <button class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED) {active}"
+                            data-status="@EAdventurerParticipation.UNDECIDED.name"><i class="fa fa-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
+                            <button class="btn btn-info @if(status == EAdventurerParticipation.GOING) {active}"
+                            data-status="@EAdventurerParticipation.GOING.name"><i class="fa fa-smile"></i> @Messages("adventure.adventurers.status.soIn")</button>
+                            <button class="btn btn-success @if(status == EAdventurerParticipation.BOOKED) {active}"
+                            data-status="@EAdventurerParticipation.BOOKED.name"><i class="fa fa-ok"></i> @Messages("adventure.adventurers.status.booked")</button>
+                        </div>
+                    </div>
+                } else {
+                    @if(EAdventurerParticipation.APPLICANT.equals(status)) {
+                        <div>
+                            <strong>@Messages("adventure.adventurers.applicant")</strong>
+                        </div>
+                    } else {
+                        <div>
+                            <a class="btn btn-primary" href="@html.routes.AdventurePeopleController.participate(adv.getId())">@Messages("adventure.adventurers.button.participate")</a>
+                        </div>
+                    }
+                }
+            }
+        }
+
+        @if(auth.canViewAdventurerParticipants) {
+            <div class="spacer20"></div>
+
+            <div>
+                <h3>Participants</h3>
+                <div id="adventurers-participants-list" style="overflow : hidden ;"></div>
+                <div class="clearfix"></div>
+            </div>
+            <div>
+                <h3>Invitees</h3>
+                <div id="adventurers-invitees-list" style="overflow : hidden ;"></div>
+                <div class="clearfix"></div>
+            </div>
+            <div>
+                <h3>Applicants</h3>
+                <div id="adventurers-applicants-list" style="overflow : hidden ;"></div>
+                <div class="clearfix"></div>
+            </div>
+
+            <script type="text/x-tmpl" id="adventurer-template">
+                <div data-id="{%=o.id%}" id="adventurers-adventurer-{%=o.id%}" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px; border-bottom: 2px solid {%=o.color%};">
+                    <a href="{%=o.link%}">
+                        <img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=100&height=100&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
+                    </a>
+                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
+                        <div style="line-height: 10px;"><a href="{%=o.link%}">
+                            {%=String(o.name).replace(new RegExp(' [^ ]*$', 'g'), '')%}</a></div>
+                        {% if(o.status == 'APPLICANT'){ %}
+                        <button class="btn btn-primary btn-sm btn-adopt" data-id="{%=o.id%}">Adopt</button>
+                        <button class="btn btn-danger btn-sm btn-deny" data-id="{%=o.id%}">Deny</button>
+                        {% } else { %}
+                        <div class="overlay text-center">
+                            <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">
+                                {%=o.status%}</span>
+                        </div>
+                        {% } %}
+                    </div>
+                </div>
+            </script>
+        }
+
+        @if(auth.canInviteAdventurerParticipants()) {
+            <div class="row">
+                <div class="input-group col-lg-6">
+                    <div id="people-add-type" class="input-group-btn">
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i id="people-add-type-icon" class="fa fa-facebook"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a data-icon="fa fa-facebook" data-type="text" data-typeahead="on"><i class="fa fa-facebook"></i>
+                                @Messages("adventure.general.label.facebook")</a></li>
+                            <li><a data-icon="fa fa-envelope" data-type="email" data-typeahead="off"><i class="fa fa-envelope"></i>
+                                @Messages("adventure.general.label.email")</a></li>
+                        </ul>
+                    </div>
+                    <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" autocomplete="off" class="form-control">
+                    <div class="input-group-btn">
+                        <button id="people-add-button" class="btn btn-primary btn-friend-add"><i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+        }
+
+    }
+

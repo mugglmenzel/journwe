@@ -2,7 +2,7 @@
  * main.scala.html
  */
 
-require(['utils'], function(utils){
+require(['common/utils'], function(utils){
 
     var lastScrollTop = 0,
         bgr = $('#background'),

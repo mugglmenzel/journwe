@@ -13,7 +13,7 @@ object ApplicationBuild extends Build {
     // javaJdbc,
     javaEbean,
     "com.amazonaws" % "aws-java-sdk" % "1.6.9.1",
-    "com.feth"    %% "play-authenticate" % "0.3.3-SNAPSHOT",
+    "com.feth" %% "play-authenticate" % "0.3.3-SNAPSHOT",
     "com.restfb" % "restfb" % "1.6.12",
     "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5",
     "com.rosaloves" % "bitlyj" % "2.0.0",
@@ -21,6 +21,7 @@ object ApplicationBuild extends Build {
     "org.igniterealtime.smack" % "smackx" % "3.2.1",
     "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2",
     "org.apache.pdfbox" % "pdfbox" % "1.8.2"
+  //"com.github.julienrf" %% "play-jsmessages" % "1.5.0"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

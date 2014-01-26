@@ -83,7 +83,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getParticipants(final String advId) {
-        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+        if (!new JournweAuthorization(advId).canViewAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         try {
@@ -114,8 +114,42 @@ public class AdventurePeopleController extends Controller {
     }
 
     @Security.Authenticated(SecuredUser.class)
+    public static Result getOtherParticipants(final String advId) {
+        if (!new JournweAuthorization(advId).canViewAdventurerParticipants())
+            return AuthorizationMessage.notAuthorizedResponse();
+
+        final User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
+        try {
+            return ok(Cache.getOrElse("adventure." + advId + ".adventurers.participants.others", new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    List<ObjectNode> results = new ArrayList<ObjectNode>();
+                    for (Adventurer advr : new AdventurerDAO().all(advId))
+                        if (advr != null && !usr.getId().equals(advr.getUserId()) && !EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) && !EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", advr.getUserId());
+                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+
+                            User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
+                            node.put("name", usr != null ? usr.getName() : "");
+                            node.put("image", usr != null ? usr.getImage() : null);
+
+                            node.put("status", advr.getParticipationStatus().toString());
+                            results.add(node);
+                        }
+                    return Json.toJson(results).toString();
+                }
+            }, 24 * 3600)).as("application/json");
+        } catch (Exception e) {
+            Logger.error("Couldn't generate participants for adventure " + advId, e);
+            return internalServerError();
+        }
+    }
+
+    @Security.Authenticated(SecuredUser.class)
     public static Result getInvitees(final String advId) {
-        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+        if (!new JournweAuthorization(advId).canViewAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         try {
@@ -147,7 +181,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getApplicants(final String advId) {
-        if (!JournweAuthorization.canViewAdventurerParticipants(advId))
+        if (!new JournweAuthorization(advId).canViewAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         try {
@@ -180,7 +214,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result participateStatus(final String advId, final String statusStr) {
-        if (!JournweAuthorization.canEditAdventurerParticipationStatus(advId))
+        if (!new JournweAuthorization(advId).canEditAdventurerParticipationStatus())
             return AuthorizationMessage.notAuthorizedResponse();
 
         EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);
@@ -200,7 +234,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result adopt(final String advId, final String userId) {
-        if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
+        if (!new JournweAuthorization(advId).canAcceptAdventurerApplicants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         Adventurer advr = new AdventurerDAO().get(advId, userId);
@@ -229,7 +263,7 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result deny(final String advId, final String userId) {
-        if (!JournweAuthorization.canAcceptAdventurerApplicants(advId))
+        if (!new JournweAuthorization(advId).canAcceptAdventurerApplicants())
             return AuthorizationMessage.notAuthorizedResponse();
 
         new AdventurerDAO().delete(advId, userId);
@@ -298,7 +332,7 @@ public class AdventurePeopleController extends Controller {
 
 
     public static Result invite(String advId) {
-        if (!JournweAuthorization.canInviteAdventurerParticipants(advId))
+        if (!new JournweAuthorization(advId).canInviteAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -341,6 +375,7 @@ public class AdventurePeopleController extends Controller {
                 new UserSocialDAO().save(inviteeSoc);
 
 
+                //FIXME: This doesn't work!
                 Adventurer advr = new AdventurerDAO().get(adv.getId(), invitee.getId());
                 if (advr == null) {
                     advr = new Adventurer();
@@ -392,6 +427,7 @@ public class AdventurePeopleController extends Controller {
 
     private static void clearCache(final String advId) {
         Cache.remove("adventure." + advId + ".adventurers.all");
+        Cache.remove("adventure." + advId + ".adventurers.participants.others");
         Cache.remove("adventure." + advId + ".adventurers.participants");
         Cache.remove("adventure." + advId + ".adventurers.invitees");
         Cache.remove("adventure." + advId + ".adventurers.applicants");

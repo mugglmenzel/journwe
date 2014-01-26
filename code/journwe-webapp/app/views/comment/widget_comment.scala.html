@@ -1,53 +1,21 @@
-@(adv: models.adventure.Adventure, topic: String)
+@(topic: String, user: models.user.User)
 
-<div class="comments visible-lg">
+<div class="comments col-lg-12">
 
-	<div id="comments-list-@topic" class="comment-list">
-		<div class="empty"><i class="icon-journwe fa fa-spin"></i> @Messages("adventure.general.loading")</div>
-	</div>	
+    <div class="comment-list comment-list-@topic" data-thread="@topic">
+        <div class="empty"><i class="icon-journwe fa fa-spin"></i> @Messages("adventure.general.loading")</div>
+    </div>
 
-	<div id="input-comment-@topic" class="input-group input-comment">
-	    <input type="text" placeholder="@Messages("adventure.widgetComments.placeholder")" class="form-control input-sm"/>
-	    <div class="input-group-btn"><button id="btn-add-comment-@topic" class="btn btn-default btn-add-comment btn-sm" type="button"><i class="fa fa-plus"></i></button></div>
-	</div>
-
-
-
-	<script>
-
-		$(function(){
-
-			var adventureId = "@adv.getId()",
-				topic = ("@topic"+""),
-				threadId = adventureId+topic,
-				input = $("#input-comment-@topic input"),
-				btn = $("#btn-add-comment-@topic");
-
-			// The container for all comments
-			var list = $("#comments-list-@topic");
-
-
-			// Perform GET
-            refreshComments(threadId, list);
-
-			// Perform POST
-			btn.click(function () {
-                var val;
-
-                // Check if there is a value
-                if (val = (input.val()||"").trim()){
-                    input.val(""); // Reset
-                    addComment(threadId, list, val, btn);
-                }
-            });
-
-			input.keyup(function(e) {
-				if(e.keyCode == 13) {
-					btn.click();
-				}
-			});
-
-
-		});
-	</script>
+    <div class="comment-input">
+        <div class="comment-image"><img src="@user.getImage"/></div>
+        <div class="comment-text">
+            <i class="fa fa-comment"></i>
+            <span>
+                <div class="input-group">
+                    <input type="text" placeholder="@Messages("adventure.widgetComments.placeholder")" class="form-control input-sm"/>
+                    <span class="input-group-btn"><button class="btn btn-default btn-comment-add btn-sm" data-thread="@topic" type="button"><i class="fa fa-plus"></i></button></span>
+                </div>
+            </span>
+        </div>
+    </div>
 </div>

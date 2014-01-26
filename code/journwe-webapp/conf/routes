@@ -15,7 +15,7 @@
 #### Categories ####
 
 GET           /api/json/categories/optionsMap.json                         controllers.api.json.CategoryController.categoriesOptionsMap()
-GET           /api/json/category/:id/categories.json                       controllers.api.json.ApplicationController.getCategories(id:String)
+GET           /api/json/category/:id/categories.json                       controllers.api.json.CategoryController.getCategories(id:String)
 GET           /api/json/category/:id/inspirations.json                     controllers.api.json.ApplicationController.getInspirations(id:String)
 GET           /api/json/category/:id/adventures/public.json                controllers.api.json.ApplicationController.getPublicAdventuresOfCategory(id:String)
 POST          /api/json/category/moveInHierarchy.json                      controllers.api.json.CategoryController.setSuperCategory()
@@ -45,6 +45,7 @@ POST          /api/json/adventure/check/shortname.json                     contr
 #### Adventure People ####
 GET           /api/json/adventure/:id/adventurers.json                     controllers.api.json.AdventurePeopleController.getAdventurers(id:String)
 GET           /api/json/adventure/:id/participants.json                    controllers.api.json.AdventurePeopleController.getParticipants(id:String)
+GET           /api/json/adventure/:id/coparticipants.json                  controllers.api.json.AdventurePeopleController.getOtherParticipants(id:String)
 GET           /api/json/adventure/:id/invitees.json                        controllers.api.json.AdventurePeopleController.getInvitees(id:String)
 GET           /api/json/adventure/:id/applicants.json                      controllers.api.json.AdventurePeopleController.getApplicants(id:String)
 POST          /api/json/adventure/:id/participate.json/:status             controllers.api.json.AdventurePeopleController.participateStatus(id:String, status:String)
@@ -75,6 +76,7 @@ POST          /api/json/adventure/:id/places/vote/deadline.json            contr
 GET           /api/json/adventure/:id/times.json                           controllers.api.json.AdventureTimeController.getTimes(id:String)
 POST          /api/json/adventure/:id/times.json                           controllers.api.json.AdventureTimeController.addTime(id:String)
 DELETE        /api/json/adventure/:id/times.json/:timeId                   controllers.api.json.AdventureTimeController.deleteTime(id:String,timeId:String)
+POST          /api/json/adventure/:id/times/vote.json                      controllers.api.json.AdventureTimeController.voteParam(id:String)
 POST          /api/json/adventure/:id/times/:timeId/vote.json              controllers.api.json.AdventureTimeController.vote(id:String,timeId:String)
 GET           /api/json/adventure/:id/times/favorite.json                  controllers.api.json.AdventureTimeController.getFavoriteTime(id:String)
 POST          /api/json/adventure/:id/times/favorite.json                  controllers.api.json.AdventureTimeController.setFavoriteTime(id:String)
@@ -190,6 +192,7 @@ GET           /ping                                                        contr
 
 #### Static resources from /public folder to /assets ####
 GET           /assets/javascripts/routes.js                                controllers.html.ApplicationController.routes
+GET           /assets/javascripts/messages.js                              controllers.html.ApplicationController.messages
 GET           /assets/*file                                                controllers.Assets.at(path="/public", file)
 
 #### Signup ####
@@ -235,6 +238,7 @@ GET           /lang/:id                                                    contr
 
 
 #### Home Page ####
+GET           /cat/overview                                                controllers.html.ApplicationController.categoryOverview()
 GET           /cat/:catId                                                  controllers.html.ApplicationController.categoryIndex(catId:String)
 GET           /new                                                         controllers.html.ApplicationController.indexNew
 GET           /                                                            controllers.html.ApplicationController.index()

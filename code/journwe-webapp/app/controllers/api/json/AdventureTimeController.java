@@ -3,15 +3,18 @@ package controllers.api.json;
 import com.feth.play.module.pa.PlayAuthenticate;
 import models.adventure.Adventure;
 import models.adventure.EPreferenceVote;
+import models.adventure.place.PlaceOption;
+import models.adventure.place.PlaceOptionRating;
+import models.adventure.place.PlacePreference;
+import models.adventure.time.TimeOptionRating;
 import models.adventure.time.TimePreference;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.dao.adventure.TimePreferenceDAO;
-import models.dao.adventure.AdventureDAO;
-import models.dao.adventure.TimeOptionDAO;
+import models.dao.adventure.*;
 import models.dao.user.UserDAO;
+import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
@@ -26,10 +29,7 @@ import play.mvc.Security;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static play.data.Form.form;
 
@@ -46,56 +46,47 @@ public class AdventureTimeController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getTimes(String advId) {
-        if (!JournweAuthorization.canViewDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canViewDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+
         String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
 
-        List<ObjectNode> times = new ArrayList<ObjectNode>();
         List<TimeOption> timeOptions = new ArrayList<TimeOption>();
         timeOptions.addAll(new TimeOptionDAO().all(advId));
         java.util.Collections.sort(timeOptions);
-        
+
+        List<ObjectNode> times = new ArrayList<ObjectNode>();
+
         for (TimeOption to : timeOptions) {
-            ObjectNode node = Json.newObject();
-            node.put("id", to.getOptionId());
-            node.put("advId", to.getAdventureId());
-            node.put("timeId", to.getTimeId());
-            node.put("startDate", to.getStartDate() != null ? to.getStartDate().getTime() : new Date().getTime());
-            node.put("endDate", to.getEndDate() != null ? to.getEndDate().getTime() : new Date().getTime());
-            TimePreference pref = new TimePreferenceDAO().get(to.getOptionId(), usr.getId());
-            node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-            node.put("voteCount", Json.toJson(new TimePreferenceDAO().counts(to.getOptionId())));
-            node.put("voteAdventurers", Json.toJson(new TimePreferenceDAO().adventurersNames(to.getOptionId())));
-            if (favId != null && to.getTimeId().equals(favId)){
-                node.put("favorite", true);
-            }
+            ObjectNode node = timeToJSON(to);
+            node.put("favorite", favId != null && to.getTimeId().equals(favId));
             times.add(node);
         }
 
-        ObjectNode result = Json.newObject();
-        result.put("times", Json.toJson(times));
-        result.put("favoriteTime", favId != null ? Json.toJson(new TimeOptionDAO().get(advId, favId)) : Json.toJson(""));
-
-
-        return ok(Json.toJson(result));
+        return ok(Json.toJson(times));
     }
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getFavoriteTime(String advId) {
-        if (!JournweAuthorization.canViewFavoriteDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canViewFavoriteDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
 
         if (new TimeOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
         String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
+        TimeOption autoFav = autoFavorite(advId);
+        TimeOption fav = (favId == null) ? autoFav : new TimeOptionDAO().get(advId, favId);
 
-        return favId != null ? ok(Json.toJson(new TimeOptionDAO().get(advId, favId))) : ok(Json.toJson(""));
+        ObjectNode node = Json.newObject();
+        node.put("favorite", Json.toJson(fav));
+        node.put("autoFavorite", Json.toJson(autoFav));
+
+        return ok(node);
     }
 
     @Security.Authenticated(SecuredUser.class)
     public static Result setFavoriteTime(String advId) {
-        if (!JournweAuthorization.canEditFavoriteDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canEditFavoriteDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm data = form().bindFromRequest();
         String favId = data.get("favoriteTimeId");
@@ -103,11 +94,16 @@ public class AdventureTimeController extends Controller {
         adv.setFavoriteTimeId(favId);
         new AdventureDAO().save(adv);
 
-        return ok(Json.toJson(new TimeOptionDAO().get(advId, favId)));
+        if (favId != null && !"".equals(favId)) {
+            new AdventurerNotifier().notifyAdventurers(advId, "Favorite Time is now " + new TimeOptionDAO().get(advId, adv.getFavoriteTimeId()).getStartDate() + ".", "Favorite Time");
+            return ok(Json.toJson(new TimeOptionDAO().get(advId, favId)));
+        } else {
+            return ok(Json.toJson(autoFavorite(advId)));
+        }
     }
 
     public static Result addTime(String advId) {
-        if (!JournweAuthorization.canEditDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canEditDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
         DynamicForm requestData = form().bindFromRequest();
         Logger.info(requestData.data().toString());
@@ -123,22 +119,15 @@ public class AdventureTimeController extends Controller {
             new TimeOptionDAO().save(time);
 
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-
-            TimePreference pref = new TimePreference();
-            pref.setTimeOptionId(time.getOptionId());
-            pref.setAdventurerId(usr.getId());
-            new TimePreferenceDAO().save(pref);
+            if(usr != null) {
+                TimePreference pref = new TimePreference();
+                pref.setTimeOptionId(time.getOptionId());
+                pref.setAdventurerId(usr.getId());
+                new TimePreferenceDAO().save(pref);
+            }
 
             Logger.info("returning start date " + time.getStartDate().toString() + ", " + df.format(time.getStartDate()));
-            ObjectNode node = Json.newObject();
-            node.put("id", time.getOptionId());
-            node.put("advId", time.getAdventureId());
-            node.put("timeId", time.getTimeId());
-            node.put("startDate", time.getStartDate() != null ? time.getStartDate().getTime() : new Date().getTime());
-            node.put("endDate", time.getEndDate() != null ? time.getEndDate().getTime() : new Date().getTime());
-            node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-            node.put("voteCount", Json.toJson(new TimePreferenceDAO().counts(time.getOptionId())));
-            node.put("voteAdventurers", Json.toJson(new TimePreferenceDAO().adventurersNames(time.getOptionId())));
+            ObjectNode node = timeToJSON(time);
 
             // Get sorted index
             List<TimeOption> timeOptions = new ArrayList<TimeOption>();
@@ -153,14 +142,20 @@ public class AdventureTimeController extends Controller {
         }
     }
 
+    @Security.Authenticated(SecuredUser.class)
+    public static Result voteParam(String advId) {
+        return vote(advId, form().bindFromRequest().get("timeId"));
+    }
+
     public static Result vote(String advId, String timeId) {
-        if (!JournweAuthorization.canVoteForDateAndTime(advId))
+        if (!new JournweAuthorization(advId).canVoteForDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         TimeOption time = new TimeOptionDAO().get(advId, timeId);
         String vote = form().bindFromRequest().get("vote").toUpperCase();
+        Double voteGravity = new Double(form().bindFromRequest().get("voteGravity"));
 
         TimePreference pref = new TimePreferenceDAO().get(time.getOptionId(), usr.getId());
         if (pref == null) {
@@ -170,12 +165,33 @@ public class AdventureTimeController extends Controller {
         }
 
         try {
-            pref.setVote(EPreferenceVote.valueOf(vote));
+            pref.setVoteGravity(voteGravity != null ? voteGravity : 0.6D);
+            pref.setVote(vote != "" ? EPreferenceVote.valueOf(vote) : EPreferenceVote.MAYBE);
         } catch (IllegalArgumentException e) {
             Logger.error("Got unknown value for vote! value: " + vote);
         }
 
         new TimePreferenceDAO().save(pref);
+
+        ObjectNode node = timeToJSON(time);
+
+        String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
+        node.put("favorite", favId != null && time.getTimeId().equals(favId));
+
+        return ok(Json.toJson(node));
+    }
+
+    public static Result deleteTime(String advId, String timeId) {
+        if (!new JournweAuthorization(advId).canEditFavoriteDateAndTime())
+            return AuthorizationMessage.notAuthorizedResponse();
+        new TimeOptionDAO().delete(advId, timeId);
+        return ok();
+    }
+
+
+    private static ObjectNode timeToJSON(TimeOption time) {
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        TimePreference pref = new TimePreferenceDAO().get(time.getOptionId(), usr.getId());
 
         ObjectNode node = Json.newObject();
         node.put("id", time.getOptionId());
@@ -184,23 +200,52 @@ public class AdventureTimeController extends Controller {
         node.put("startDate", time.getStartDate() != null ? time.getStartDate().getTime() : new Date().getTime());
         node.put("endDate", time.getEndDate() != null ? time.getEndDate().getTime() : new Date().getTime());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
+        node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0.6D);
         node.put("voteCount", Json.toJson(new TimePreferenceDAO().counts(time.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new TimePreferenceDAO().adventurersNames(time.getOptionId())));
+        node.put("voteGroup", Json.toJson(getTimeGroupRating(time).getRating()));
 
-        String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
-        if (favId != null && time.getTimeId().equals(favId)){
-            node.put("favorite", true);
-        }
-
-        return ok(Json.toJson(node));
+        return node;
     }
 
-    public static Result deleteTime(String advId, String timeId) {
-        if (!JournweAuthorization.canEditFavoriteDateAndTime(advId))
-            return AuthorizationMessage.notAuthorizedResponse();
 
-        new TimeOptionDAO().delete(advId, timeId);
-        return ok();
+    private static TimeOptionRating getTimeGroupRating(TimeOption time) {
+        double sum = 0D;
+        List<TimePreference> prefs = new TimePreferenceDAO().all(time.getOptionId());
+
+        if (prefs.size() == 0)
+            return new TimeOptionRating(time.getTimeId(), 0D);
+
+        for (TimePreference pref : prefs)
+            if (0D >= pref.getVoteGravity() || EPreferenceVote.NO.equals(pref.getVote()))
+                return new TimeOptionRating(time.getTimeId(), 0D);
+            else
+                sum += pref.getVoteGravity();
+
+        return new TimeOptionRating(time.getTimeId(), new Double(sum / prefs.size()));
+    }
+
+    private static TimeOption autoFavorite(String advId) {
+        List<TimeOptionRating> ratings = new ArrayList<TimeOptionRating>();
+        List<TimeOption> timeOptions = new TimeOptionDAO().all(advId);
+
+        if(timeOptions == null || !(timeOptions.size() > 0)) return null;
+
+        for (TimeOption po : timeOptions) {
+            TimeOptionRating rating = getTimeGroupRating(po);
+            if (rating != null && 0D < rating.getRating()) ratings.add(rating);
+        }
+        Logger.debug("List of Ratings: " + ratings);
+
+        String favId = ratings.size() > 0 ? Collections.max(ratings, new Comparator<TimeOptionRating>() {
+            @Override
+            public int compare(TimeOptionRating timeOptionRating, TimeOptionRating timeOptionRating2) {
+                return timeOptionRating.getRating().compareTo(timeOptionRating2.getRating());
+            }
+        }).getTimeOptionId() : timeOptions.iterator().next().getOptionId();
+        Logger.debug("got time autofav with id " + favId);
+
+        return new TimeOptionDAO().get(advId, favId);
     }
 
 }

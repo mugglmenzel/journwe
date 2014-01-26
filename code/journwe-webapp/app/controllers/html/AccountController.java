@@ -20,6 +20,7 @@ import play.mvc.*;
 import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthUser;
 import views.html.account.*;
+import views.html.account.link;
 import views.html.index.index;
 
 import static play.data.Form.form;
@@ -106,7 +107,7 @@ public class AccountController extends Controller {
                     ue.getEmail()));
 		}
         // TODO
-        return ok(index.render());
+        return ok(index.render(user));
 		//return redirect(routes.ApplicationController.profile());
 	}
 
@@ -139,7 +140,7 @@ public class AccountController extends Controller {
 			new UserDAO().changePassword(new MyUsernamePasswordAuthUser(user,newPassword,ue.getEmail()),true);
 			flash(ApplicationController.FLASH_MESSAGE_KEY,
 					Messages.get("playauthenticate.change_password.success"));
-            return ok(index.render());
+            return ok(index.render(user));
 		}
 	}
 

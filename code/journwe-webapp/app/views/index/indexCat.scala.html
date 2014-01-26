@@ -1,25 +1,21 @@
 @(cat:  models.category.Category)
+
 @import models.category.Category
 @import models.dao.category.CategoryHierarchyDAO
 @import models.dao.category.CategoryDAO
+@import play.libs.Json
 
-
-@main(Messages("journwe.subtitle")) {Category @cat.getName
+@main(Messages("journwe.subtitle")) {Category @if(Category.SUPER_CATEGORY.equals(cat.getId)){Overview}else{@cat.getName}
     <small>@Messages("journwe.subtitle")</small>
 } {
 
     @defining(new CategoryHierarchyDAO){ catHierDAO =>
     <div class="nav-category visible-lg" style="">
         <ul id="nav-category-list" class="nav nav-pills nav-stacked">
-            @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@html.routes.ApplicationController.categoryIndex(catSuper.getId)"><i class="icon-circle-arrow-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Home}else{@catSuper.getName}"></i> </a></li>}
-            @*
-            @catHierDAO.categoryAsSuper(cat.getId).map{ catHier =>
-                @defining(new CategoryDAO().get(catHier.getSubCategoryId)){ catSub => <li><a href="@html.routes.ApplicationController.categoryIndex(catSub.getId)"><i class="icon-circle-arrow-down" title="Level Down"></i> @catSub.getName</a></li>}
-            }
-            *@
-            <li><a href="#subcategories"><i class="icon-circle-arrow-down" title="Sub-Categories"></i></a></li>
-            <li><a href="#inspirations"><i class="icon-lightbulb" title="Inspirations"></i></a></li>
-            <li><a href="#publicadventures"><i class="icon-bullhorn" title="Public JournWes"></i></a></li>
+            @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){@html.routes.ApplicationController.categoryOverview()}else{@html.routes.ApplicationController.categoryIndex(catSuper.getId)}"><i class="fa fa-arrow-circle-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Overview}else{@catSuper.getName}"></i> </a></li>}
+            <li><a href="#subcategories"><i class="fa fa-arrow-circle-down" title="Sub-Categories"></i></a></li>
+            <li><a href="#inspirations"><i class="fa fa-lightbulb-o" title="Inspirations"></i></a></li>
+            <li><a href="#publicadventures"><i class="fa fa-bullhorn" title="Public JournWes"></i></a></li>
         </ul>
     </div>
     }
@@ -33,15 +29,15 @@
     @defining(new CategoryDAO()){ catDAO =>
     <div class="jrn-container jrn-subcategory">
 
-        <h2 id="subcategories"><i class="icon-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
+        <h2 id="subcategories"><i class="fa fa-arrow-down"></i> @Messages("admin.category.subcategories") <small>- @catDAO.countSubcategory(cat.getId)</small></h2>
         <div style="">
-            <div id="subcategories-list" style="font-size: 20pt;">
-                <i class="icon-spin icon-journwe"></i>
+            <div id="categories-list" style="font-size: 20pt;">
+                <i class="fa fa-spin icon-journwe"></i>
             </div>
         </div>
         <div class="clearfix"></div>
     </div>
-    <script type="text/x-tmpl" id="subcategory-template">
+    <script type="text/x-tmpl" id="category-template">
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
             <a href="{%=o.link%}">
                 <img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
@@ -54,32 +50,12 @@
             </div>
         </div>
     </script>
-    <script>
-
-        $(document).ready(function () {
-            loadSubCategories();
-        });
-
-        function loadSubCategories() {
-            $.get('@api.json.routes.ApplicationController.getCategories(cat.getId)', function (cats) {
-                if(cats != null && cats.length)
-                    for(var i in cats) {
-                        $('#subcategories-list').append(tmpl('subcategory-template', cats[i]));
-                    }
-                else
-                    $('#subcategories-list').append('No subcategories.')
-
-                $('#subcategories-list i').addClass('stash');
-
-            });
-        }
-    </script>
 
 
     <div class="jrn-container">
-        <h2 id="inspirations"><i class="icon-lightbulb"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirationsByCategory(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="inspirations"><i class="fa fa-lightbulb-o"></i> @Messages("inspiration.text") <small>- @catDAO.countInspirationsByCategory(cat.getId)</small> <div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="">
-            <div id="inspirations-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="inspirations-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>
             <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
@@ -98,101 +74,11 @@
         </div>
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
-    <script type="text/javascript">
-
-        var inspirationsMap;
-        var inspirationsMarkers = [];
-        var inspirationsInfos = [];
-        google.maps.visualRefresh = true;
-
-        function initializeInspirationsMap() {
-            var mapOptions = {
-                zoom: 5,
-                center: new google.maps.LatLng(49.483472, 8.476992),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            inspirationsMap = new google.maps.Map(document.getElementById('inspirations-places-map'), mapOptions);
-        }
-
-        function resetInspirationsBounds() {
-            var bounds = new google.maps.LatLngBounds();
-            for(var i in inspirationsMarkers) {
-                bounds.extend(inspirationsMarkers[i].getPosition());
-            }
-            inspirationsMap.fitBounds(bounds);
-            if(inspirationsMap.getZoom() > 10) inspirationsMap.setZoom(10);
-            google.maps.event.trigger(inspirationsMap, 'resize');
-        }
-
-        $(window).ready(function(){
-            initializeInspirationsMap();
-            loadInspirations(null, true);
-            $('#inspirations-public-button-refresh').click(function () {loadInspirations(null, true);});
-            $('#inspirations-public-load-more-button').click(function () {loadInspirations($('#inspirations-public-list .polaroid').last().data('id'));});
-
-        });
-
-        function loadInspirations(lastId, clear) {
-            $('#inspirations-public-button-refresh i').addClass('icon-spin');
-            $('#inspirations-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
-            $.get('@api.json.routes.ApplicationController.getInspirations(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
-                if(clear) $('#inspirations-public-list').empty();
-                if(advs != null && advs.length > 0) {
-                    for(var i in advs) {
-                        $('#inspirations-public-list').append(tmpl('inspiration-public-template', advs[i]));
-
-                        var insId = advs[i].id;
-
-                        inspirationsMarkers[insId] = new google.maps.Marker({
-                            animation: google.maps.Animation.DROP,
-                            map: inspirationsMap,
-                            position: new google.maps.LatLng(advs[i].lat, advs[i].lng),
-                            title: advs[i].name
-                        });
-                        inspirationsInfos[insId] = new google.maps.InfoWindow({
-                            content: '<a href="' + advs[i].link + '"><h3>' + advs[i].name + '</h3></a>'
-                        });
-                        (function(marker, infowindow){
-                            google.maps.event.addListener(marker, 'click', function() {
-                                infowindow.open(inspirationsMap, marker);
-                            });
-                        })(inspirationsMarkers[insId], inspirationsInfos[insId]);
-
-                        resetInspirationsBounds();
-                    }
-
-                    $('#inspirations-public-list .polaroid').hide().fadeIn().hover(
-                        function(){
-                            $(this).find("div.overlay").slideDown("fast");
-                            inspirationsMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
-                            inspirationsInfos[$(this).data('id')].open(inspirationsMap, inspirationsMarkers[$(this).data('id')]);
-                        },
-                        function(){
-                            $(this).find("div.overlay").slideUp("fast");
-                            inspirationsMarkers[$(this).data('id')].setAnimation(google.maps.Animation.DROP);
-                            inspirationsInfos[$(this).data('id')].close();
-                        }
-                    );
-                } else if(lastId == null) {
-                    $('#inspirations-public-list').html('No inspirations here.');
-                    $('#inspirations-places-map').parent().hide(function(){$(this).remove();});
-                }
-
-                $('#inspirations-public-load-more-button').html('Show More');
-                $('#inspirations-public-button-refresh i').removeClass('icon-spin');
-            });
-        }
-
-
-
-    </script>
-
     <div class="jrn-container">
-        <h2 id="publicadventures"><i class="icon-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="icon-refresh"></i></button></div></h2>
+        <h2 id="publicadventures"><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
 
         <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="icon-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>
             <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
@@ -213,96 +99,10 @@
             </div>
         </div>
     </script>
+
     <script type="text/javascript">
-
-        var adventuresMap;
-        var adventuresMarkers = [];
-        var adventuresInfos = [];
-        google.maps.visualRefresh = true;
-
-        function initializeAdventuresMap() {
-            var mapOptions = {
-                zoom: 5,
-                center: new google.maps.LatLng(49.483472, 8.476992),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            adventuresMap = new google.maps.Map(document.getElementById('adventures-places-map'), mapOptions);
-        }
-
-        function resetAdventuresBounds() {
-            var bounds = new google.maps.LatLngBounds();
-            for(var i in adventuresMarkers) {
-                bounds.extend(adventuresMarkers[i].getPosition());
-            }
-            adventuresMap.fitBounds(bounds);
-            if(adventuresMap.getZoom() > 10) adventuresMap.setZoom(10);
-            google.maps.event.trigger(adventuresMap, 'resize');
-        }
-
-        $(document).ready(function(){
-            initializeAdventuresMap();
-            loadPublicAdventures(null, true);
-
-            $('#adventures-public-button-refresh').click(function () {loadPublicAdventures(null, true);});
-            $('#adventures-public-load-more-button').click(function () {loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));});
-
-        });
-
-        function loadPublicAdventures(lastId, clear) {
-            $('#adventures-public-button-refresh i').addClass('icon-spin');
-            $('#adventures-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
-            $.get('@api.json.routes.ApplicationController.getPublicAdventuresOfCategory(cat.getId)', {lastId: lastId, count: 8} , function (advs) {
-                if (clear) $('#adventures-public-list').empty();
-                if(advs != null && advs.length > 0) {
-                    for(var i in advs) {
-                        $('#adventures-public-list').append(tmpl('adventure-public-template', advs[i]));
-                        var advId = advs[i].id;
-
-                        adventuresMarkers[advId] = new google.maps.Marker({
-                            animation: google.maps.Animation.DROP,
-                            map: adventuresMap,
-                            position: new google.maps.LatLng(advs[i].lat, advs[i].lng),
-                            title: advs[i].name
-                        });
-                        adventuresInfos[advId] = new google.maps.InfoWindow({
-                            content: '<a href="' + advs[i].link + '"><h3>' + advs[i].name + '</h3></a>'
-                        });
-                        (function(marker, infowindow){
-                            google.maps.event.addListener(marker, 'click', function() {
-                                infowindow.open(adventuresMap, marker);
-                            });
-                        })(adventuresMarkers[advId], adventuresInfos[advId]);
-
-                        resetAdventuresBounds();
-
-                    }
-
-                    $('#adventures-public-list .polaroid').hide().fadeIn().hover(
-                        function(){
-                            $(this).find("div.overlay").slideDown("fast");
-                            adventuresMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
-                            adventuresInfos[$(this).data('id')].open(adventuresMap, adventuresMarkers[$(this).data('id')]);
-                        },
-                        function(){
-                            $(this).find("div.overlay").slideUp("fast");
-                            adventuresMarkers[$(this).data('id')].setAnimation(google.maps.Animation.DROP);
-                            adventuresInfos[$(this).data('id')].close();
-                        }
-                    );
-                } else if(lastId == null) {
-                    $('#adventures-public-list').html('No public JournWes here.');
-                    $('#adventures-places-map').parent().hide(function(){$(this).remove();});
-                }
-                $('#adventures-public-load-more-button').html('Show More');
-                $('#adventures-public-button-refresh i').removeClass('icon-spin');
-            });
-        }
+        define("categoryData", [], @{Html(Json.toJson(cat).toString())});
     </script>
 
-    <script>
-        $(document).ready(function () {
-            @if(cat.getImage != null && !"".equals(cat.getImage)){$('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=@cat.getImage()")');}
-        });
-    </script>
-
+    <script src="@routes.Assets.at("javascripts/indexCat.js").url" type="text/javascript"></script>
 }

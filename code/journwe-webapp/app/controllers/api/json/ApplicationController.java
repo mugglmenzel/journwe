@@ -2,7 +2,6 @@ package controllers.api.json;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
-import controllers.*;
 import models.adventure.Adventure;
 import models.auth.SecuredUser;
 import models.category.Category;
@@ -39,41 +38,6 @@ import static play.data.Form.form;
 public class ApplicationController extends Controller {
 
 
-    public static Result getCategories(final String superCatId) {
-
-        try {
-            return ok(Cache.getOrElse("subCategoriesOf." + superCatId, new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    List<ObjectNode> results = new ArrayList<ObjectNode>();
-                    for (CategoryHierarchy cat : new CategoryHierarchyDAO().categoryAsSuper(superCatId)) {
-                        CategoryCount cc = new CategoryCountDAO().get(cat.getSubCategoryId());
-                        if (cat != null && cc.getCount() > 0) {
-                            Category c = new CategoryDAO().get(cc.getCategoryId());
-                            if (c != null) {
-                                ObjectNode node = Json.newObject();
-                                node.put("id", c.getId());
-                                node.put("name", c.getName());
-                                node.put("link", controllers.html.routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
-                                node.put("image", c.getImage());
-                                node.put("userCountByAdventure", cc.getCount());
-                                results.add(node);
-                            }
-                        }
-                    }
-
-                    return Json.toJson(results).toString();
-                }
-            }, 24 * 3600)).as("application/json");
-        } catch (Exception e) {
-            Logger.error("Couldn't generate sub-categories of " + superCatId, e);
-            return internalServerError();
-        }
-
-
-    }
-
-
     @Security.Authenticated(SecuredUser.class)
     public static Result getMyAdventures() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
@@ -92,16 +56,18 @@ public class ApplicationController extends Controller {
                 public String call() throws Exception {
                     List<ObjectNode> results = new ArrayList<ObjectNode>();
                     for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, lastId, count)) {
-                        ObjectNode node = Json.newObject();
-                        node.put("id", adv.getId());
-                        node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-                        node.put("image", adv.getImage());
-                        node.put("name", adv.getName());
-                        node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
-                        node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-                        node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+                        if (adv != null) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", adv.getId());
+                            node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                            node.put("image", adv.getImage());
+                            node.put("name", adv.getName());
+                            node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
+                            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
 
-                        results.add(node);
+                            results.add(node);
+                        }
                     }
                     return Json.toJson(results).toString();
                 }
@@ -127,18 +93,20 @@ public class ApplicationController extends Controller {
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
         for (Adventure adv : new AdventureDAO().listPublicAdventuresByInspiration(inspirationId, lastId, count)) {
-            ObjectNode node = Json.newObject();
-            node.put("id", adv.getId());
-            node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-            node.put("image", adv.getImage());
-            node.put("name", adv.getName());
-            node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
-            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-            node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
-            node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
+            if (adv != null) {
+                ObjectNode node = Json.newObject();
+                node.put("id", adv.getId());
+                node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                node.put("image", adv.getImage());
+                node.put("name", adv.getName());
+                node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
+                node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+                node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
+                node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
 
-            result.add(node);
+                result.add(node);
+            }
         }
 
         return ok(Json.toJson(result));

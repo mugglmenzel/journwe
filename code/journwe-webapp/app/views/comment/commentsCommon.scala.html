@@ -1,39 +1,12 @@
 
 <script id="template-comment" type="text/x-tmpl">
     <div>
-        <div class="comment-text"><i class="fa fa-comment"></i> {%=o.comment.text%}</div>
+
+        <div class="comment-image"><img src="{%=o.user.image%}"/></div>
+        <div class="comment-text" style="border-bottom: 1px solid {%=o.color%};">
+        	<i class="fa fa-comment"></i>
+        	<span>{%=o.comment.text%}</span>
+        </div>
         <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.time%}</div>
     </div>
-</script>
-
-
-<script>
-
-    function refreshComments(threadId, list) {
-        $.get('@api.json.routes.CommentController.listComments("")'+threadId, function(res) {
-            list.html("");
-            res.forEach(function(f) {
-                f.time = formatTime(f.comment.timestamp); // Append
-                list.append(tmpl('template-comment', f)).fadeIn();
-            });
-
-            if (!res.length) {
-                list.append('<div class="empty"><i class="fa fa-envelope"></i> @Messages("adventure.widgetComments.firstComment")</div>');
-            }
-        });
-    }
-
-    function addComment(threadId, list, val, btn){
-
-        btn.html('<i class="fa fa-spin icon-journwe"></i>');
-
-        $.post("@api.json.routes.CommentController.saveComment()", {text: val, threadId: threadId}, function(f) {
-            list.find(".empty").remove();
-
-            f.time = formatTime(f.comment.timestamp); // Append
-            list.append(tmpl('template-comment', f)).fadeIn();
-            btn.html('<i class="fa fa-plus"></i>');
-        });
-    }
-
 </script>
