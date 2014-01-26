@@ -42,6 +42,7 @@ public class UserEmail {
 
     public void setEmailRangeKey(String emailRangeKey) {
         this.emailRangeKey = emailRangeKey;
+        this.email = emailRangeKey;
     }
 
     // GSI is needed because sometimes we need to identify a user by email
@@ -54,6 +55,7 @@ public class UserEmail {
 
     public void setEmail(String email) {
         this.email = email;
+        this.emailRangeKey = email;
     }
 
     @DynamoDBAttribute
