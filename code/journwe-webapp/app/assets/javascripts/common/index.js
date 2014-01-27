@@ -80,16 +80,17 @@ define([
                         $(this).find("div.overlay").slideUp("fast");
                     }
                 );
-                if (advs.length < 10) {
-                    $('.btn-adventures-public-load-more').fadeOut();
-                } else {
-                    $('.btn-adventures-public-load-more').show().html('Show More');
-                }
+
             } else if (lastId == null) {
                 $('#adventures-public-list').html('No public JournWes here.');
                 $('#adventures-places-map').parent().hide(function () {
                     $(this).remove();
                 });
+            }
+            if (advs.length < 10) {
+                $('.btn-adventures-public-load-more').fadeOut();
+            } else {
+                $('.btn-adventures-public-load-more').show().html('Show More');
             }
 
             $('.btn-adventures-public-refresh i').removeClass('fa-spin');

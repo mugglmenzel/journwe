@@ -87,7 +87,7 @@
         </div>
     </div>
     @if(auth.canViewAdventureComments()) {
-        @comment.widget_comment("index", user)
+        @comment.widget_comment(adv.getId + "index", user)
     }
 
     <hr/>
@@ -98,7 +98,7 @@
         <h2 id="discussion"><i class="fa fa-comments fa fa-for-adventure-title"></i> @Messages("adventure.getScala.discussion.title")</h2>
         <div class="row">
             <div class="col-lg-12">
-                @comment.widget_wall(adv, "discussion")
+                @comment.widget_wall(adv.getId + "discussion")
             </div>
         </div>
     </div>
@@ -131,7 +131,7 @@
         </div>
     </div>
     @if(auth.canViewPlaceComments()) {
-        @comment.widget_comment("places", user)
+        @comment.widget_comment(adv.getId + "places", user)
     }
 
     <hr/>
@@ -150,7 +150,7 @@
     </div>
 
     @if(auth.canViewAdventurerComments()) {
-        @comment.widget_comment("adventurers", user)
+        @comment.widget_comment(adv.getId + "adventurers", user)
     }
     <hr/>
     }
@@ -168,7 +168,7 @@
         </div>
     </div>
     @if(auth.canViewDateAndTimeComments()) {
-        @comment.widget_comment("times", user)
+        @comment.widget_comment(adv.getId + "times", user)
     }
     <hr/>
     }
@@ -186,7 +186,7 @@
         </div>
     </div>
     @if(auth.canViewTodoComments()) {
-        @comment.widget_comment("todos", user)
+        @comment.widget_comment(adv.getId + "todos", user)
     }
     <hr/>
     }
@@ -207,7 +207,7 @@
         <div class="row"><small class="pull-right"><a href="http://www.entouragebox.com" target="_blank"><img src="http://www.entouragebox.com/img/logo.png" style="max-height: 30px;"></a></small></div>
     </div>
     @if(auth.canViewFilesComments()) {
-        @comment.widget_comment("files", user)
+        @comment.widget_comment(adv.getId + "files", user)
     }
     <hr/>
     }
@@ -232,7 +232,7 @@
         </div>
     </div>
     @if(auth.canViewOfferComments()) {
-        @comment.widget_comment("offers", user)
+        @comment.widget_comment(adv.getId + "offers", user)
     }
     }
 
@@ -248,9 +248,9 @@
     </div>
 
 
-    <div id="pdfAdventure" class="modal fade" tabindex="-1" role="dialog">
-        @createPDF(adv,new DynamicForm())
-    </div>
+
+    @createPDF(adv,new DynamicForm())
+
 
     <div id="leave" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
