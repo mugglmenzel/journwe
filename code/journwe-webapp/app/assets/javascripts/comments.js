@@ -41,7 +41,7 @@ define([
         'click .btn-comment-add': function () {
             var val,
                 threadId = $(this).data('thread'),
-                input = $(this).closest('.input-comment').find('input:text');
+                input = $(this).closest('.comment-input').find('input:text');
 
             // Check if there is a value
             if (val = (input.val() || "").trim()) {
@@ -51,7 +51,7 @@ define([
         },
         'keyup .comment-input input:text': function (e) {
             if (e.keyCode == 13) {
-                $(this).closest('.input-comment').find('.btn-comment-add').click();
+                $(this).closest('.comment-input').find('.btn-comment-add').click();
             }
         }
     });
