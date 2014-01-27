@@ -263,30 +263,30 @@ require([
 
     var updateFavoritePlace = function () {
 
-        $('#places-favorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
-        $('#places-autofavorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.icon-favorite-place').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.places-autofavorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
         routes.controllers.api.json.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
             favoritePlace = result.favorite;
-            if (result.favorite != null) $('#places-favorite-place-name').html(result.favorite.address);
-            if (result.autoFavorite != null)$('#places-autofavorite-place-name').html(result.autoFavorite.address);
+            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address);
+            if (result.autoFavorite != null)$('.places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
-            $('#places-favorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
-            $('#places-autofavorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            $('.icon-favorite-place').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            $('.places-autofavorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
         }});
     };
 
     var setFavoritePlace = function (placeID, el) {
 
         el.find('i').attr("class", "fa fa-spin icon-journwe");
-        $('#places-favorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.icon-favorite-place').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
         routes.controllers.api.json.AdventurePlaceController.setFavoritePlace(adv.id).ajax({
             data: {favoritePlaceId: placeID},
             success: function (data) {
                 favoritePlace = data;
-                $('#places-favorite-place-name').html(data.address);
-                $('#places-favorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+                $('.places-favorite-place-name').html(data.address);
+                $('.icon-favorite-place').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
                 $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
                 el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
@@ -520,27 +520,27 @@ require([
 
     var updateFavoriteTime = function () {
 
-        $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.icon-favorite-time').removeClass("fa-star").addClass("fa-spin icon-journwe");
         $('#times-autofavorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
         routes.controllers.api.json.AdventureTimeController.getFavoriteTime(adv.id).ajax({success: function (result) {
             favoriteTime = result.favorite;
-            if (result.favorite != null) $('#times-favorite-time-name').html(formatDate(result.favorite.startDate) + " - " + formatDate(result.favorite.endDate));
+            if (result.favorite != null) $('.times-favorite-time-name').html(formatDate(result.favorite.startDate) + " - " + formatDate(result.favorite.endDate));
             if (result.autoFavorite != null)$('#times-autofavorite-time-name').html(formatDate(result.autoFavorite.startDate) + " - " + formatDate(result.autoFavorite.endDate));
             $('.btn-close-time').toggle(!!result.favorite);
-            $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
             $('#times-autofavorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
         }});
     };
 
 
     var setFavoriteTime = function (timeID, el) {
-        $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.icon-favorite-time').removeClass("fa-star").addClass("fa-spin icon-journwe");
         $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
         routes.controllers.api.json.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
             favoriteTime = data;
-            $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
-            $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            $('.times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
+            $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
             el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
             $(el).addClass('btn-success');
