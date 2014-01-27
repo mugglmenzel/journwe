@@ -1,17 +1,14 @@
 package models.auth;
 
+import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.user.AuthUser;
 import models.dao.user.UserDAO;
 import models.user.EUserRole;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.user.AuthUser;
-
-import controllers.routes;
-
-public class SecuredUser extends Security.Authenticator {
+public class SecuredAgencyUser extends Security.Authenticator {
 
 	/*
 	 * (non-Javadoc)
@@ -37,7 +34,7 @@ public class SecuredUser extends Security.Authenticator {
 	 */
 	@Override
 	public Result onUnauthorized(Context ctx) {
-		ctx.flash().put("error", "Nice try, but you need to log in first! Access is restricted to registered users only.");
+		ctx.flash().put("error", "Nice try, but you need to log in first! Access is restricted to travel agencies only.");
 		return redirect(controllers.html.routes.ApplicationController.index());
 	}
 
@@ -46,7 +43,7 @@ public class SecuredUser extends Security.Authenticator {
     }
 
     public static boolean isUser(AuthUser u) {
-        return new UserDAO().findByAuthUserIdentity(u) != null && EUserRole.USER.equals(new UserDAO().findByAuthUserIdentity(u).getRole());
+        return new UserDAO().findByAuthUserIdentity(u) != null && EUserRole.AGENCY.equals(new UserDAO().findByAuthUserIdentity(u).getRole());
 
     }
 
