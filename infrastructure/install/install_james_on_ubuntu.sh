@@ -6,12 +6,10 @@ echo "LC_ALL=\"en_US.UTF-8\"" | sudo tee -a /etc/environment
 source /etc/environment
 sudo apt-get update
 # java7 has some jmx bug problems. use java6!
-sudo apt-get install -qq openjdk-6-jre
-sudo apt-get install -qq openjdk-6-jdk
-sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java" 1
-sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/java-6-openjdk-amd64/bin/javac" 1
-sudo update-alternatives --set java /usr/lib/jvm/java-6-openjdk-amd64/jre/bin/java
-sudo update-alternatives --set javac /usr/lib/jvm/java-6-openjdk-amd64/bin/javac
+# Need Oracle Java for Bond Server
+# which uses com.sun.net.httpserver
+wget https://raw.github.com/markusklems/cassandra_training/master/cluster/install_java_from_url.sh
+sudo sh install_java_from_url.sh 6 https://dl.dropboxusercontent.com/u/6336649/jre6u34-linux-x64.bin
 # make sure the right version is installed: java -version
 sudo apt-get install -qq libc6-i386 libc6-dev-i386
 wget http://mirror.sdunix.com/apache//james/apache-james/3.0beta4/apache-james-3.0-beta4-app.tar.gz
