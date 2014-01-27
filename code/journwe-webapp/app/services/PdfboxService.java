@@ -12,9 +12,12 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
 import org.apache.pdfbox.util.PDFMergerUtility;
 import play.Logger;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +39,7 @@ public class PdfboxService {
     private static int textFontSize = 12;
     private static int afterParagraphSpace = textFontSize;
     private static int afterLineSpace = textFontSize + textFontSize / 1;
-    private static int X = 100;
+    private static int X = 50;
     private static int Y = 800;
     //private static int dinaA4pageHeight = 842; // DIN A4 page height in pt.
 
@@ -57,15 +60,6 @@ public class PdfboxService {
             contentStream.drawString(adventureName);
             contentStream.endText();
             y -= titleFontSize + afterTitleSpace;
-            // ADD PLACE
-            if (po != null) {
-                contentStream.beginText();
-                contentStream.setFont(textFont, textFontSize);
-                contentStream.moveTextPositionByAmount(X, y);
-                contentStream.drawString("Ort: " + po.getAddress());
-                contentStream.endText();
-                y -= textFontSize + afterParagraphSpace;
-            }
             // ADD TIME
             if (to != null) {
                 contentStream.beginText();
@@ -74,6 +68,26 @@ public class PdfboxService {
                 contentStream.drawString("Zeit: " + to.getStartDate() + " - " + to.getEndDate());
                 contentStream.endText();
                 y -= textFontSize + afterParagraphSpace;
+            }
+            // ADD PLACE
+            if (po != null) {
+                contentStream.beginText();
+                contentStream.setFont(textFont, textFontSize);
+                contentStream.moveTextPositionByAmount(X, y);
+                contentStream.drawString("Ort: " + po.getAddress());
+                contentStream.endText();
+                y -= textFontSize + afterParagraphSpace;
+                // Add Map
+                Double lon = po.getLongitude();
+                Double lat = po.getLatitude();
+                int zoom = 15;
+                int width = 500;
+                int height = 500;
+                String imageUrl = "http://ojw.dev.openstreetmap.org/StaticMap/?mode=Export&show=1&lat="+lat+"&lon="+lon+"&z="+zoom+"&w="+width+"&h="+height;
+                PDPixelMap pngImage = getPngImage(document, imageUrl);
+                //int imageHeightInPt = 375; // height * 0.75
+                contentStream.drawImage(pngImage, X, y-height);
+                y -= height + 2* afterParagraphSpace;
             }
             // ADD MY TODOLIST
             if (todos != null && !todos.isEmpty()) {
@@ -170,26 +184,26 @@ public class PdfboxService {
             return true;
         return false;
     }
-//
-//    private static PDPixelMap getPngImage(PDDocument document, String imageUrl) throws IOException {
-//        InputStream is = getImageIS(imageUrl);
-//        BufferedImage image = ImageIO.read(is);
-//        PDPixelMap png = new PDPixelMap(document, image);
-//        is.close();
-//        return png;
-//    }
-//
-//    /**
-//     * Helper.
-//     *
-//     * @param imageUrl
-//     * @return
-//     * @throws IOException
-//     */
-//    private static InputStream getImageIS(String imageUrl) throws IOException {
-//        URL url = new URL(imageUrl);
-//        InputStream is = url.openStream();
-//        return is;
-//    }
+
+    private static PDPixelMap getPngImage(PDDocument document, String imageUrl) throws IOException {
+        InputStream is = getImageIS(imageUrl);
+        BufferedImage image = ImageIO.read(is);
+        PDPixelMap png = new PDPixelMap(document, image);
+        is.close();
+        return png;
+    }
+
+    /**
+     * Helper.
+     *
+     * @param imageUrl
+     * @return
+     * @throws IOException
+     */
+    private static InputStream getImageIS(String imageUrl) throws IOException {
+        URL url = new URL(imageUrl);
+        InputStream is = url.openStream();
+        return is;
+    }
 
 }
