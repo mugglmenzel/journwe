@@ -18,10 +18,7 @@ import play.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -83,7 +80,7 @@ public class PdfboxService {
                 int zoom = 15;
                 int width = 500;
                 int height = 500;
-                String imageUrl = "http://ojw.dev.openstreetmap.org/StaticMap/?mode=Export&show=1&lat="+lat+"&lon="+lon+"&z="+zoom+"&w="+width+"&h="+height;
+                String imageUrl = "http://ojw.dev.openstreetmap.org/StaticMap/?mode=Export&show=1&lat="+lat+"&lon="+lon+"&z="+zoom+"&w="+width+"&h="+height+"&mico1=32140&mlat1="+lat+"&mlon1="+lon;
                 PDPixelMap pngImage = getPngImage(document, imageUrl);
                 //int imageHeightInPt = 375; // height * 0.75
                 contentStream.drawImage(pngImage, X, y-height);
@@ -127,7 +124,7 @@ public class PdfboxService {
         return document;
     }
 
-    public static PDDocument addFiles(PDDocument document, List<JournweFile> files) {
+    public static PDDocument addFilesTest2(PDDocument document, List<JournweFile> files) {
         try {
             PDDocument toReturn = new PDDocument();
             // Prepare merger
@@ -165,6 +162,72 @@ public class PdfboxService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static ByteArrayOutputStream addFilesTest(ByteArrayOutputStream mainPdf) {
+        ByteArrayOutputStream toReturn = new ByteArrayOutputStream();
+        try {
+            // Prepare merger
+            PDFMergerUtility ut = new PDFMergerUtility();
+            ByteArrayInputStream bais = new ByteArrayInputStream(mainPdf.toByteArray());
+            ut.addSource(bais);
+            ut.addSource("Cockcroft.pdf");
+            ut.addSource("JournWe.pdf");
+            Logger.debug("MERGE NOW! 1");
+            ut.setDestinationStream(toReturn);
+            Logger.debug("MERGE NOW! 2");
+            ut.mergeDocuments();
+            bais.close();
+            Logger.debug("MERGED!");
+            return toReturn;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (COSVisitorException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
+    }
+
+    public static ByteArrayOutputStream appendFilesToPDF(ByteArrayOutputStream mainPdf, List<JournweFile> files) {
+        ByteArrayOutputStream toReturn = mainPdf;
+        if (files != null && !files.isEmpty()) {
+        try {
+            // Prepare merger
+            PDFMergerUtility ut = new PDFMergerUtility();
+            ByteArrayInputStream bais = new ByteArrayInputStream(mainPdf.toByteArray());
+            ut.addSource(bais);
+            List<InputStream> inputStreams = new ArrayList<InputStream>();
+            for (JournweFile file : files) {
+                URL url = new URL(file.getUrl());
+                URLConnection urlConn = url.openConnection();
+                // Checking whether the URL contains a PDF
+                String fileType = url.toString().substring(url.toString().length() - 3);
+                if (urlConn.getContentType().equalsIgnoreCase("application/pdf") || fileType.equalsIgnoreCase("pdf")) {
+                    Logger.debug("Attach pdf file " + url);
+                    // Read the PDF from the URL
+                    InputStream pdfIS = url.openStream();
+                    inputStreams.add(pdfIS);
+                    ut.addSource(pdfIS);
+                }
+            }
+            Logger.debug("MERGE NOW! 1");
+            ut.setDestinationStream(toReturn);
+            Logger.debug("MERGE NOW! 2");
+            ut.mergeDocuments();
+            bais.close();
+            Logger.debug("MERGED!");
+            return toReturn;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (COSVisitorException e) {
+            e.printStackTrace();
+        }
+        }
+        return toReturn;
     }
 
     public static void save(PDDocument document, ByteArrayOutputStream output) {

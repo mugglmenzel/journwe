@@ -81,7 +81,6 @@ public class PdfController {
 
         // Create PDF document
         PDDocument document = PdfboxService.create(advName, placeOption, timeOption, todos);
-
         // Save the file in ByteArrayOutputStream
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PdfboxService.save(document, output);
@@ -93,10 +92,8 @@ public class PdfController {
 
         // Include Files in PDF
         if(pdfFileChecked) {
-//            files = new JournweFileDAO().all(advId);
-//            PDDocument document2 = PdfboxService.addFiles(document,files);
-//            output = new ByteArrayOutputStream();
-//            PdfboxService.save(document2, output);
+            files = new JournweFileDAO().all(advId);
+            output= PdfboxService.appendFilesToPDF(output,files);
         }
 
         // Prepare response and return file for download.
