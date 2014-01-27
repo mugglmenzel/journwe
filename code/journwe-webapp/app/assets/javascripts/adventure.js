@@ -116,6 +116,7 @@ require([
     var initializeOptions = function () {
         updateCategorySelection(null);
         loadCategoriesOptionsMap();
+        updateTwitterShareButton();
     };
 
     var loadCategoriesOptionsMap = function () {
@@ -136,6 +137,12 @@ require([
                 if (data.name != null && data.name.length > 0) $('#adventure-category-select button span').first().html(data.name);
                 $('#adventure-category-select button i').first().addClass('hide');
             }});
+    };
+
+    var updateTwitterShareButton = function () {
+        var el = $('.options-twitter-share');
+        if($('#adventure-public-switch').find('input:checkbox').is(':checked')) el.show();
+        else el.hide();
     };
 
 
@@ -773,6 +780,7 @@ require([
                 data: {publish: el.find('input:checkbox').prop('checked')},
                 success: function (pub) {
                     el.find('input:checkbox').prop('checked', pub);
+                    updateTwitterShareButton();
                 }});
         },
         'click #adventure-category-select li': function () {
