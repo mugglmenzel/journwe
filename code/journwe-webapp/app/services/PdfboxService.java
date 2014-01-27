@@ -1,5 +1,6 @@
 package services;
 
+import com.google.common.collect.Lists;
 import models.adventure.email.Message;
 import models.adventure.file.JournweFile;
 import models.adventure.place.PlaceOption;
@@ -23,22 +24,24 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by markus on 26/01/14.
  */
 public class PdfboxService {
-    private static PDFont textFontBold = PDType1Font.TIMES_BOLD;
+    private static PDType1Font textFontBold = PDType1Font.TIMES_BOLD;
     private static int titleFontSize = 16;
     private static int afterTitleSpace = titleFontSize;
-    private static PDFont textFont = PDType1Font.TIMES_ROMAN;
+    private static PDType1Font textFont = PDType1Font.TIMES_ROMAN;
     private static int textFontSize = 12;
     private static int afterParagraphSpace = textFontSize;
     private static int afterLineSpace = textFontSize + textFontSize / 1;
     private static int X = 50;
     private static int Y = 800;
     //private static int dinaA4pageHeight = 842; // DIN A4 page height in pt.
+    private static int paragraphWidth = 200;
 
     public static PDDocument create(final String adventureName, PlaceOption po, TimeOption to, List<Todo> todos) {
         PDDocument document = null;
@@ -124,64 +127,58 @@ public class PdfboxService {
         return document;
     }
 
-    public static PDDocument addFilesTest2(PDDocument document, List<JournweFile> files) {
-        try {
-            PDDocument toReturn = new PDDocument();
-            // Prepare merger
-            PDFMergerUtility ut = new PDFMergerUtility();
-            List<InputStream> inputStreams = new ArrayList<InputStream>();
-            for (JournweFile file : files) {
-                URL url = new URL(file.getUrl());
-                URLConnection urlConn = url.openConnection();
-                // Checking whether the URL contains a PDF
-                String fileType = url.toString().substring(url.toString().length() - 3);
-                if (urlConn.getContentType().equalsIgnoreCase("application/pdf") || fileType.equalsIgnoreCase("pdf")) {
-                    Logger.debug("Attach pdf file " + url);
-                    // Read the PDF from the URL
-                    InputStream pdfIS = url.openStream();
-                    inputStreams.add(pdfIS);
-                    ut.addSource(pdfIS);
-                }
-            }
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            Logger.debug("MERGE NOW! 2");
-            ut.setDestinationStream(output);
-            Logger.debug("MERGE NOW! 3");
-            ut.mergeDocuments();
-            Logger.debug("MERGE NOW!");
-            toReturn.save(output);
-            for(InputStream is : inputStreams)
-                is.close();
-            document.close();
-            return toReturn;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (COSVisitorException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static ByteArrayOutputStream addFilesTest(ByteArrayOutputStream mainPdf) {
+    public static ByteArrayOutputStream appendEmailsToPDF(ByteArrayOutputStream mainPdf, List<Message> emails) {
         ByteArrayOutputStream toReturn = new ByteArrayOutputStream();
         try {
+            // Create a document
+            PDDocument document = new PDDocument();
+            PDPage page;
+            PDPageContentStream contentStream;
+
+            for(Message email : emails) {
+                // Add new page for each email
+                page = new PDPage(PDPage.PAGE_SIZE_A4);
+                document.addPage(page);
+                contentStream = new PDPageContentStream(document, page);
+                // Write email content
+                String subject = email.getSubject();
+                String body = email.getBody();
+                Paragraph subjectParagraph = new PdfboxService.Paragraph(X,Y,subject);
+                subjectParagraph.font = textFontBold;
+                write(contentStream,subjectParagraph);
+                Paragraph bodyParagraph = new PdfboxService.Paragraph(X,Y-40,body);
+                write(contentStream,bodyParagraph);
+                contentStream.close();
+            }
+            ByteArrayOutputStream emailBais = new ByteArrayOutputStream();
+            save(document, emailBais);
+
             // Prepare merger
             PDFMergerUtility ut = new PDFMergerUtility();
             ByteArrayInputStream bais = new ByteArrayInputStream(mainPdf.toByteArray());
             ut.addSource(bais);
-            ut.addSource("Cockcroft.pdf");
-            ut.addSource("JournWe.pdf");
-            Logger.debug("MERGE NOW! 1");
+//            List<InputStream> inputStreams = new ArrayList<InputStream>();
+//            for (JournweFile file : files) {
+//                URL url = new URL(file.getUrl());
+//                URLConnection urlConn = url.openConnection();
+//                // Checking whether the URL contains a PDF
+//                String fileType = url.toString().substring(url.toString().length() - 3);
+//                if (urlConn.getContentType().equalsIgnoreCase("application/pdf") || fileType.equalsIgnoreCase("pdf")) {
+//                    Logger.debug("Attach pdf file " + url);
+//                    // Read the PDF from the URL
+//                    InputStream pdfIS = url.openStream();
+//                    inputStreams.add(pdfIS);
+//                    ut.addSource(pdfIS);
+//                }
+//            }
+            ut.addSource(new ByteArrayInputStream(emailBais.toByteArray()));
+            Logger.debug("MERGE EMAILS 1");
             ut.setDestinationStream(toReturn);
-            Logger.debug("MERGE NOW! 2");
+            Logger.debug("MERGE EMAILS 2");
             ut.mergeDocuments();
             bais.close();
-            Logger.debug("MERGED!");
-            return toReturn;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            emailBais.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (COSVisitorException e) {
@@ -267,6 +264,131 @@ public class PdfboxService {
         URL url = new URL(imageUrl);
         InputStream is = url.openStream();
         return is;
+    }
+
+    private static void write(PDPageContentStream out, Paragraph paragraph) throws IOException {
+        out.beginText();
+        out.appendRawCommands(paragraph.getFontHeight() + " TL\n");
+        out.setFont(paragraph.getFont(), paragraph.getFontSize());
+        out.moveTextPositionByAmount(paragraph.getX(), paragraph.getY());
+        out.setStrokingColor(paragraph.getColor());
+
+        List<String> lines = paragraph.getLines();
+        for (Iterator<String> i = lines.iterator(); i.hasNext(); ) {
+            out.drawString(i.next().trim());
+            if (i.hasNext()) {
+                out.appendRawCommands("T*\n");
+            }
+        }
+        out.endText();
+
+    }
+
+    static private class Paragraph {
+
+        /** position X */
+        private float x;
+
+        /** position Y */
+        private float y;
+
+        /** width of this paragraph */
+        private int width = 500;
+
+        /** text to write */
+        private String text;
+
+        /** font to use */
+        private PDType1Font font = PDType1Font.TIMES_ROMAN;
+
+        /** font size to use */
+        private int fontSize = 12;
+
+        private int color = 0;
+
+        public Paragraph(float x, float y, String text) {
+            this.x = x;
+            this.y = y;
+            this.text = text;
+        }
+
+        /**
+         * Break the text in lines
+         * @return
+         */
+        public List<String> getLines() throws IOException {
+            List<String> result = Lists.newArrayList();
+
+            String[] split = text.split("(?<=\\W)");
+            int[] possibleWrapPoints = new int[split.length];
+            possibleWrapPoints[0] = split[0].length();
+            for ( int i = 1 ; i < split.length ; i++ ) {
+                possibleWrapPoints[i] = possibleWrapPoints[i-1] + split[i].length();
+            }
+
+            int start = 0;
+            int end = 0;
+            for ( int i : possibleWrapPoints ) {
+                float width = font.getStringWidth(text.substring(start,i)) / 1000 * fontSize;
+                if ( start < end && width > this.width ) {
+                    result.add(text.substring(start,end));
+                    start = end;
+                }
+                end = i;
+            }
+            // Last piece of text
+            result.add(text.substring(start));
+            return result;
+        }
+
+        public float getFontHeight() {
+            return font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
+        }
+
+        public Paragraph withWidth(int width) {
+            this.width = width;
+            return this;
+        }
+
+        public Paragraph withFont(PDType1Font font, int fontSize) {
+            this.font = font;
+            this.fontSize = fontSize;
+            return this;
+        }
+
+        public Paragraph withColor(int color) {
+            this.color = color;
+            return this;
+        }
+
+        public int getColor() {
+            return color;
+        }
+
+        public float getX() {
+            return x;
+        }
+
+        public float getY() {
+            return y;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public PDType1Font getFont() {
+            return font;
+        }
+
+        public int getFontSize() {
+            return fontSize;
+        }
+
     }
 
 }

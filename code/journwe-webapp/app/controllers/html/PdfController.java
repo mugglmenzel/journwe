@@ -45,7 +45,7 @@ public class PdfController {
         Boolean pdfPlaceChecked = new Boolean(filledForm.get("pdfPlace"));
         Boolean pdfTimeChecked = new Boolean(filledForm.get("pdfTime"));
         Boolean pdfTodoChecked = new Boolean(filledForm.get("pdfTodo"));
-        Boolean pdfEmailChecked = new Boolean(filledForm.get("emailTodo"));
+        Boolean pdfEmailChecked = new Boolean(filledForm.get("pdfEmail"));
         Boolean pdfFileChecked = new Boolean(filledForm.get("pdfFile"));
         // This user
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
@@ -88,6 +88,7 @@ public class PdfController {
         // Include Emails in PDF
         if(pdfEmailChecked) {
             emails = new AdventureEmailMessageDAO().all(advId);
+            output= PdfboxService.appendEmailsToPDF(output,emails);
         }
 
         // Include Files in PDF
