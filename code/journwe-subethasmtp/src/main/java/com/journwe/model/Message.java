@@ -1,9 +1,6 @@
 package com.journwe.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import java.util.Set;
 
@@ -46,6 +43,14 @@ public class Message {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
+
+
+    @DynamoDBIgnore
+    public String getMessageId() {
+        return getAdventureId() + "-" + getTimestamp();
+    }
+
+
 
     @DynamoDBAttribute
     public String getSender() {
@@ -94,4 +99,5 @@ public class Message {
                 ", attachments=" + attachments +
                 '}';
     }
+
 }
