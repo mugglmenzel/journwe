@@ -9,25 +9,27 @@ import models.category.Category;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.user.UserDAO;
-import models.user.EUserRole;
 import models.user.User;
-import org.codehaus.jackson.node.ObjectNode;
 import play.Routes;
 import play.api.Play;
 import play.cache.Cache;
 import play.data.Form;
-import play.i18n.Messages;
 import play.libs.Json;
-import play.mvc.*;
+import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Result;
+import play.mvc.Security;
 import providers.MyUsernamePasswordAuthProvider;
 import views.html.*;
+import views.html.about;
+import views.html.admin;
+import views.html.imprint;
 import views.html.index.index;
 import views.html.index.indexCat;
 import views.html.index.indexVet;
 import views.html.index.landing;
-
-import java.util.HashSet;
-import java.util.Set;
+import views.html.login;
+import views.html.signup;
 
 
 public class ApplicationController extends Controller {
@@ -62,7 +64,7 @@ public class ApplicationController extends Controller {
     }
 
     public static Result categoryIndex(String catId) {
-        if(catId == null || "".equals(catId)) catId = Category.SUPER_CATEGORY;
+        if (catId == null || "".equals(catId)) catId = Category.SUPER_CATEGORY;
 
         return ok(indexCat.render(new CategoryDAO().get(catId)));
     }
@@ -172,6 +174,9 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.ApplicationController.getPublicAdventures(),
                         controllers.api.json.routes.javascript.ApplicationController.getInspirations(),
                         controllers.api.json.routes.javascript.CategoryController.getCategories(),
+                        controllers.api.json.routes.javascript.InspirationController.getTips(),
+                        controllers.api.json.routes.javascript.InspirationController.getImages(),
+                        controllers.api.json.routes.javascript.InspirationController.addTip(),
                         controllers.api.json.routes.javascript.UserController.getNotifications(),
                         controllers.api.json.routes.javascript.UserController.setMailDigestFrequency(),
                         controllers.api.json.routes.javascript.UserController.getAdventures(),

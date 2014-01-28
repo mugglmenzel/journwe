@@ -1,8 +1,6 @@
 @(ins: models.inspiration.Inspiration)(category:  models.category.Category)
-@import org.hibernate.validator.constraints.URL
-@import models.inspiration.Inspiration
 
-@import models.category.Category
+@import play.libs.Json
 @import java.text.SimpleDateFormat
 
 @main(ins.getName()){ } {
@@ -72,38 +70,10 @@
                     <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false"></div>
                     <div><a href="https://twitter.com/share" class="twitter-share-button" data-url="@html.routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a></div>
                     <div class="g-plusone" data-size="tall" data-annotation="vertical-bubble"></div>
-                    <div><a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(html.routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + "&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8") + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a></div>
+                    <div><a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(html.routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + (if(ins.getImage != null){"&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8")}else{""}) + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a></div>
                 </span>
             </div>
         </div>
-
-
-
-
-
-
-
-
-        <!--
-        @if(ins.getTripAdvisor()){
-            <div class="tripadvisor">
-            @Html(ins.getTripAdvisor())
-            </div>
-        }
-        @if(ins.getPinterest()){
-            <div class="pinterest">
-                <a data-pin-do="embedBoard" href="@ins.getPinterest()" data-pin-scale-width="110"
-                data-pin-scale-height="300" data-pin-board-width="240"></a>
-                <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
-            </div>
-        }
-        <div>
-            <iframe
-            src="http://www.panoramio.com/wapi/template/list.html?tag=@ins.getName&amp;width=900&amp;height=100&amp;columns=15&amp;rows=1&amp;orientation=horizontal"
-            frameborder="0" width="900" height="100" scrolling="no" marginwidth="0" marginheight="0">
-            </iframe>
-        </div>
-        -->
     </div>
 
     <div class="jrn-container">
@@ -118,41 +88,17 @@
                         <div class="comment-info">{%=o.user.name%} <small>-</small> {%=o.tip.created%}</div>
                     </div>
                 </script>
-                <script>
-                    $(document).ready(function(){
-                        loadTips();
-                    });
-                    function loadTips() {
-                        $.get('@api.json.routes.InspirationController.getTips(ins.getId)', function (tips) {
-                            $('#inspiration-tips').empty();
-                            if(tips){
-                                for(var i in tips) {
-                                    tips[i].tip.created = formatTime(tips[i].tip.created);
-                                    $('#inspiration-tips').append(tmpl('inspiration-tip-template', tips[i]));
-                                }
-                            } else $('#inspiration-tips').html('No Tips.');
-                        });
-                    }
-                </script>
             </div>
             <div class="col-lg-12">
                 <input type="text" id="tip-add-text">
                 <button id="tip-add-button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
-                <script>
-                    $('#tip-add-button').click(function(){
-                        $.post('@api.json.routes.InspirationController.addTip(ins.getId)', {tip: $('#tip-add-text').val()}, function(){
-                            $('#tip-add-text').val('');
-                            loadTips();
-                        });
-                    });
-                </script>
             </div>
         </div>
 
     </div>
 
     <div class="jrn-container">
-        <h2 id="photos"><i class="fa fa-picture"></i> @Messages("adventure.general.label.photos") </h2>
+        <h2 id="photos"><i class="fa fa-picture-o"></i> @Messages("adventure.general.label.photos") </h2>
         <div class="row">
             <div class="col-lg-12">
                 <div id="inspiration-photos"></div>
@@ -160,18 +106,6 @@
                     <div class="polaroid" style="position: relative; float: left; width: 20%;">
                        <img style="margin: 0px; width: 100%;" src="{% if(o == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + o)%}{% } %}">
                     </div>
-                </script>
-                <script>
-                    $(document).ready(function(){
-                        $.get('@api.json.routes.InspirationController.getImages(ins.getId)', function (images) {
-                            if(images){
-                                for(var i in images) {
-                                    $('#inspiration-photos').append(tmpl('inspiration-photo-template', images[i]));
-                                }
-                                $('#inspiration-photos .polaroid').last().hide().fadeIn();
-                            } else $('#inspiration-photos').html('No Photos.');
-                        });
-                    });
                 </script>
             </div>
         </div>
@@ -186,31 +120,6 @@
                 <div style="height: 400px; margin-top: 10px;">
                     <div id="inspiration-place-map" style="width: 100%; height: 100%"></div>
                 </div>
-                <script src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY"></script>
-                <script>
-                    var map;
-                    google.maps.visualRefresh = true;
-
-                    function initialize() {
-                        var mapOptions = {
-                            zoom: 5,
-                            center: new google.maps.LatLng(49.483472, 8.476992),
-                            mapTypeId: google.maps.MapTypeId.ROADMAP
-                        };
-                        map = new google.maps.Map(document.getElementById('inspiration-place-map'), mapOptions);
-
-                        var placeLatLng = new google.maps.LatLng(@ins.getPlaceLatitude, @ins.getPlaceLongitude);
-
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: placeLatLng
-                        });
-                        map.setCenter(placeLatLng);
-                        //google.maps.event.trigger(map, 'resize');
-                    }
-
-                    google.maps.event.addDomListener(window, 'load', initialize);
-                </script>
             </div>
         </div>
     </div>
@@ -229,11 +138,14 @@
 
 
     <div class="jrn-container">
-        <h2 id="public-journwes"><i class="fa fa-compass"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
+        <h2 id="public-journwes"><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button class="btn btn-adventures-public-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="">
             <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="clearfix"></div>
-            <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
+            <div class="text-center"><button class="btn btn-adventures-public-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
+        </div>
+        <div style="height: 400px; margin-top: 10px;">
+            <div id="adventures-places-map" style="width: 100%; height: 100%"></div>
         </div>
     </div>
     <script type="text/x-tmpl" id="adventure-public-template">
@@ -249,46 +161,11 @@
             </div>
         </div>
     </script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-
-            loadPublicAdventures(null, true);
-
-            $('#adventures-public-button-refresh').click(function () {loadPublicAdventures(null, true);});
-            $('#adventures-public-load-more-button').click(function () {loadPublicAdventures($('#adventures-public-list .polaroid').last().data('id'));});
-
-        });
-
-        function loadPublicAdventures(lastId, clear) {
-            $('#adventures-public-button-refresh i').addClass('fa fa-spin');
-            $('#adventures-public-load-more-button').html('<i class="fa fa-spin icon-journwe"></i>');
-            $.get('@api.json.routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10, inspirationId: '@ins.getId'} , function (advs) {
-                if (clear) $('#adventures-public-list').empty();
-                for(var i in advs) {
-                    var polaroid = tmpl('adventure-public-template', advs[i]);
-                    $('#adventures-public-list').append(polaroid);
-
-                    $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
-                        function(){
-                            $(this).find("div.overlay").slideDown("fast");
-                        },
-                        function(){
-                            $(this).find("div.overlay").slideUp("fast");
-                        }
-                    );
-
-                }
-                $('#adventures-public-load-more-button').html('Show More');
-                $('#adventures-public-button-refresh i').removeClass('fa fa-spin');
-            });
-        }
-    </script>
-
 </div>
 
-<script>
-    $(document).ready(function () {
-        @if(ins.getImage != null && !"".equals(ins.getImage)){$('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=@ins.getImage()")');}
-    });
+<script type="text/javascript">
+define("inspirationData", [], @{Html(Json.toJson(ins).toString())});
 </script>
+<script src="@routes.Assets.at("javascripts/inspiration.js").url" type="text/javascript"></script>
+
 }

@@ -39,10 +39,10 @@ define([
     };
 
 
-    var loadPublicAdventures = function (lastId, clear) {
+    var loadPublicAdventures = function (lastId, clear, insId) {
         $('.btn-adventures-public-refresh i').addClass('fa-spin');
         $('.btn-adventures-public-load-more').html('<i class="fa fa-spin icon-journwe"></i>');
-        routes.controllers.api.json.ApplicationController.getPublicAdventures().ajax({data: {lastId: lastId, count: 10}, success: function (advs) {
+        routes.controllers.api.json.ApplicationController.getPublicAdventures().ajax({data: {lastId: lastId, count: 10, inspirationId: insId}, success: function (advs) {
             if (clear) $('#adventures-public-list').empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
@@ -159,6 +159,7 @@ define([
     return {
         loadMyAdventures: loadMyAdventures,
         loadPublicAdventures: loadPublicAdventures,
+        publicAdventuresMap: publicAdventuresMap,
         loadCategories: loadCategories
     };
 
