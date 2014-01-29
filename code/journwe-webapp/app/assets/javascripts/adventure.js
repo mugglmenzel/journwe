@@ -5,7 +5,7 @@ require([
     "comments",
     "adventureData",
     "adventurerData",
-    "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false!callback"
+    "common/async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false!callback"
 ], function (utils, routes, messages, comments, adv, advr) {
 
     //Constants

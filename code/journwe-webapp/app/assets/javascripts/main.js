@@ -16,28 +16,8 @@ require(['common/utils'], function(utils){
     }
 
     // Set parallex scrolling
-
-    var requestAnimFrame = (function(){
-      return  window.requestAnimationFrame       ||
-              window.webkitRequestAnimationFrame ||
-              window.mozRequestAnimationFrame    ||
-              function( callback ){
-                window.setTimeout(callback, 1000 / 60);
-              };
-    })();
-
-    var cancelAnimationFrame = (function(){
-      return  window.cancelAnimationFrame || 
-              window.mozCancelAnimationFrame ||
-              function( fn ){
-                window.clearTimeout(fn);
-              };
-    })();
-
-    var timer, top = 130;
-    $(window).scroll(function(event){
-        cancelAnimationFrame(timer);
-        timer = requestAnimFrame(function(){
+    var top = 130;
+    $(window).scroll($.throttle(0, function(event){
 
             var st = $(this).scrollTop();
             // if (st > 200 && st > lastScrollTop){
@@ -48,16 +28,17 @@ require(['common/utils'], function(utils){
             // 
 
             // TODO: Optimize
-            // var offsetHeight = $(document).height() - $(this).height();
-            // if (!utils.isMobile()){
-            //     bgr.css('transform', 'translateY(-'+Math.min(9, Math.max(0, (st/offsetHeight)*9 ))+'%)');
-            // }
+            var offsetHeight = $(document).height() - $(this).height();
+            if (!utils.isMobile()){
+                bgr.css('transform', 'translate3d(0, -'+Math.min(9, Math.max(0, (st/offsetHeight)*9 ))+'%, 0)');
+            }
+
             if ((st > top && lastScrollTop <= top) || (st <= top && lastScrollTop > top)){
                 adv.attr("class", st > top ? "fixed" : "");
-            }  
+            }
             lastScrollTop = st;
-        }.bind(this));
-    });
+        }.bind(this))
+    );
 
 
     // Collapse inspiration

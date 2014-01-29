@@ -102,7 +102,7 @@ define(function(){
         /**
          * Replaces all the link from the text into anchors
          * @param String text
-         @ @return String
+         * @return String
          */
         replaceURLWithHTMLLinks: function(text) {
             var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
