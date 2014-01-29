@@ -155,7 +155,8 @@ h1 .editableform {
 
 .jrn-container,
 #yingyangyong-container {
-  background: none repeat scroll 0 0 fade(@color_white, 90%);
+  // background: none repeat scroll 0 0 fade(@color_white, 90%);
+  background-color: white;
   margin-top: 50px;
   padding: 20px;
   position: relative;
@@ -171,25 +172,27 @@ h1 .editableform {
   }
 
   & h2 {
-    background: fade(@color_white, 30%);
+    // background: fade(@color_white, 30%);
     padding: 20px 20px;
-    border-bottom: 1px solid white;
+    // border-bottom: 1px solid white;
+    border-bottom: 1px solid #333;
     margin: -20px -20px 20px -20px;
+    border-radius: 5px 5px 0 0;
 
     &#index {
-      background: fade(@color_white, 30%);
+
     }
 
     &#places {
-      background: fade(@color_place, 60%);
+      background: fade(@color_place, 20%);
     }
 
     &#adventurers {
-      background: fade(@color_adventurer, 60%);
+      background: fade(@color_adventurer, 20%);
     }
 
     &#times {
-      background: fade(@color_time, 60%);
+      background: fade(@color_time, 20%);
     }
   }
 
@@ -1158,9 +1161,7 @@ h3 {
 }
 
 img.landing {
-  width: 90%;
-  border: 1px solid white;
-  margin-bottom: 50px;
+
 }
 
 .background-container {
