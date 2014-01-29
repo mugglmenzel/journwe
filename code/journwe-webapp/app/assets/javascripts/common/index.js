@@ -39,10 +39,10 @@ define([
     };
 
 
-    var loadPublicAdventures = function (lastId, clear) {
+    var loadPublicAdventures = function (lastId, clear, insId) {
         $('.btn-adventures-public-refresh i').addClass('fa-spin');
         $('.btn-adventures-public-load-more').html('<i class="fa fa-spin icon-journwe"></i>');
-        routes.controllers.api.json.ApplicationController.getPublicAdventures().ajax({data: {lastId: lastId, count: 10}, success: function (advs) {
+        routes.controllers.api.json.ApplicationController.getPublicAdventures().ajax({data: {lastId: lastId, count: 10, inspirationId: insId}, success: function (advs) {
             if (clear) $('#adventures-public-list').empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
@@ -80,16 +80,17 @@ define([
                         $(this).find("div.overlay").slideUp("fast");
                     }
                 );
-                if (advs.length < 10) {
-                    $('.btn-adventures-public-load-more').fadeOut();
-                } else {
-                    $('.btn-adventures-public-load-more').show().html('Show More');
-                }
+
             } else if (lastId == null) {
                 $('#adventures-public-list').html('No public JournWes here.');
                 $('#adventures-places-map').parent().hide(function () {
                     $(this).remove();
                 });
+            }
+            if (advs.length < 10) {
+                $('.btn-adventures-public-load-more').fadeOut();
+            } else {
+                $('.btn-adventures-public-load-more').show().html('Show More');
             }
 
             $('.btn-adventures-public-refresh i').removeClass('fa-spin');
@@ -158,6 +159,7 @@ define([
     return {
         loadMyAdventures: loadMyAdventures,
         loadPublicAdventures: loadPublicAdventures,
+        publicAdventuresMap: publicAdventuresMap,
         loadCategories: loadCategories
     };
 

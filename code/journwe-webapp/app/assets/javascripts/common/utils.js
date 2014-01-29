@@ -107,6 +107,10 @@ define(function(){
         replaceURLWithHTMLLinks: function(text) {
             var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
             return text.replace(exp,"<a href='$1'>$1</a>");
+        },
+
+        colorOfUser: function (userStr) {
+            return ('#' + ('000000' + (parseInt(parseInt(userStr, 36).toExponential().slice(2, -5), 10) & 0xFFFFFF).toString(16).toUpperCase()).slice(-6));
         }
 
     };

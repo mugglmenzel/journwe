@@ -15,7 +15,7 @@
         <table class="table table-striped">
 
         @for(ins <- inspirations) {
-            <tr><td>@ins.getId()</td><td>@ins.getName()</td><td><a href="@InspirationController.getBucketURL(ins.getId)" class="act-primary"><i class="icon-cloud-upload"></i> @Messages("adventure.files.imageUpload") </a> <a href="@html.routes.InspirationController.edit(ins.getId())" class="act-primary"><i class="icon-edit"></i> @Messages("adventure.general.label.edit") </a></td><td><a href="@html.routes.InspirationController.delete(ins.getId())" class="act-danger"><i class="icon-trash"></i> @Messages("adventure.general.label.delete") </a></td></tr>
+            <tr><td>@ins.getId()</td><td>@ins.getName()</td><td><a href="@InspirationController.getBucketURL(ins.getId)" class="act-primary"><i class="fa fa-cloud-upload"></i> @Messages("adventure.files.imageUpload") </a> <a href="@html.routes.InspirationController.edit(ins.getId())" class="act-primary"><i class="fa fa-edit"></i> @Messages("adventure.general.label.edit") </a></td><td><a href="@html.routes.InspirationController.delete(ins.getId())" class="act-danger"><i class="fa fa-trash"></i> @Messages("adventure.general.label.delete") </a></td></tr>
         }
         </table>
     </div>
@@ -51,11 +51,11 @@
                         '_label -> "Category",
                         '_error -> inspForm("categories").error.map(_.withMessage("Please select a Category!"))
                     )
-                    <a class="btn btn-primary" id="inspiration-category-add"><i class="icon-plus"></i></a>
+                    <a class="btn btn-primary" id="inspiration-category-add"><i class="fa fa-plus"></i></a>
                     <script>
                         $('#inspiration-category-add').click(function(){
                             var id =  'inspiration-category-' + $('#inspiration-category select option:selected').val() + '-' + new Date().getTime();
-                             $('#inspiration-categories').append('<li id="' + id + '"><input type="hidden" name="category[]" value="' + $('#inspiration-category select option:selected').val() + '"><span class="label label-info"><i class="icon-file"></i>' + $('#inspiration-category select option:selected').text() + '  &nbsp;<a onclick="$(\'#' + id + '\').remove(); return false;">&times;</a></span> <span class="divider"></span></li>');
+                             $('#inspiration-categories').append('<li id="' + id + '"><input type="hidden" name="category[]" value="' + $('#inspiration-category select option:selected').val() + '"><span class="label label-info"><i class="fa fa-file"></i>' + $('#inspiration-category select option:selected').text() + '  &nbsp;<a onclick="$(\'#' + id + '\').remove(); return false;">&times;</a></span> <span class="divider"></span></li>');
                         });
 
                     </script>
@@ -65,7 +65,7 @@
                     <div>Place</div>
                     <ul id="inspiration-place" class="list-unstyled list-inline">
                         @if(inspForm("placeAddress").value()) {
-                        <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label"><i class="icon-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
+                        <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label"><i class="fa fa-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
                         <script>
                             $(document).ready(function (){
                                 var placeLatLng = new google.maps.LatLng(@inspForm("placeLatitude").value(), @inspForm("placeLongitude").value());
@@ -85,7 +85,7 @@
 
                     <div class="input-group">
                         <input type="text" placeholder="A decent place name" id="inspiration-place-input" onkeypress="if (event.which == 13 || event.keyCode == 13) {searchPlace(); event.preventDefault(); return false;} else return true;" class="form-control">
-                        <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="icon-check"></i></a></div>
+                        <div class="input-group-btn"><a class="btn btn-primary btn-add" onclick="searchPlace();"><i class="fa fa-check"></i></a></div>
                     </div>
                     <div style="height: 400px; margin-top: 10px;">
                         <div id="inspiration-place-map" style="width: 100%; height: 100%"></div>
@@ -170,7 +170,7 @@
                             <input id="inspiration-time-input-end" type="date" name="endDate" placeholder="End Date" style="max-width: 150px;" class="form-control"/>
                         </div>
 
-                        <a class="btn btn-add btn-primary col-lg-1" onclick="addTime();"><i class="icon-check"></i></a>
+                        <a class="btn btn-add btn-primary col-lg-1" onclick="addTime();"><i class="fa fa-check"></i></a>
                     </div>
 
                     <script>

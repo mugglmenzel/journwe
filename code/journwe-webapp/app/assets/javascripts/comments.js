@@ -10,7 +10,7 @@ define([
             list.html("");
             res.forEach(function (f) {
                 f.time = utils.formatTime(f.comment.timestamp);
-                f.color = colorOfUser(f.user.name);
+                f.color = utils.colorOfUser(f.user.name);
                 list.append(tmpl('template-comment', f)).fadeIn();
             });
 
@@ -29,21 +29,19 @@ define([
             list.find(".empty").remove();
 
             f.time = utils.formatTime(f.comment.timestamp);
-            f.color = colorOfUser(f.user.name);
+            f.color = utils.colorOfUser(f.user.name);
             list.append(tmpl('template-comment', f)).fadeIn();
             btn.html('<i class="fa fa-plus"></i>');
         }});
     };
 
-    var colorOfUser = function (userStr) {
-        return ('#' + ('000000' + (parseInt(parseInt(userStr, 36).toExponential().slice(2, -5), 10) & 0xFFFFFF).toString(16).toUpperCase()).slice(-6));
-    };
+
 
     utils.on({
         'click .btn-comment-add': function () {
             var val,
                 threadId = $(this).data('thread'),
-                input = $(this).closest('.input-comment').find('input:text');
+                input = $(this).closest('.comment-input').find('input:text');
 
             // Check if there is a value
             if (val = (input.val() || "").trim()) {
@@ -53,7 +51,7 @@ define([
         },
         'keyup .comment-input input:text': function (e) {
             if (e.keyCode == 13) {
-                $(this).closest('.input-comment').find('.btn-comment-add').click();
+                $(this).closest('.comment-input').find('.btn-comment-add').click();
             }
         }
     });

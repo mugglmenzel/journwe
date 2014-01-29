@@ -6,17 +6,12 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
-import models.adventure.EPreferenceVote;
 import models.adventure.file.JournweFile;
-import models.adventure.place.PlaceOption;
-import models.adventure.place.PlacePreference;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.adventure.JournweFileDAO;
-import models.dao.adventure.PlacePreferenceDAO;
 import models.dao.user.UserDAO;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
@@ -76,7 +71,7 @@ public class AdventureFileController extends Controller {
             journweFile.setUserId(usr.getId());
             String fileName = journweFile.getFileName();
             String s3ObjectKey = generateS3ObjectKey(advId, fileName);
-            String url = DEFAULT_STORAGE_PROVIDER + "/" + s3ObjectKey;
+            String url = DEFAULT_STORAGE_PROVIDER + "/" + java.net.URLEncoder.encode(s3ObjectKey,"UTF-8");
             journweFile.setUrl(url);
             if (!new JournweFileDAO().save(journweFile))
                 throw new Exception("Saving JournweFile in DynamoDB failed!");

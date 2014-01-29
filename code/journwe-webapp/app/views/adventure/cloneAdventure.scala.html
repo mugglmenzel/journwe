@@ -1,22 +1,38 @@
 @(adv: models.adventure.Adventure, cloneAdvForm: DynamicForm)
 
-@import helper._
-@import fieldConstructor._
+    @import helper._
+    @import fieldConstructor._
 
-@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
+    @implicitFieldConstructor = @{
+        FieldConstructor(twitterBootstrapInput.render)
+    }
 
-@form(html.routes.CloneController.cloneAndSaveAdventure(adv.getId()), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
-    <fieldset>
-        @inputText(cloneAdvForm("name"), '_label -> "Adventure name", 'required -> "required")
-        <p>Clone these parts of the original Adventure:</p>
-        <br />
-        @checkbox(cloneAdvForm("cloneAdventurers"), '_label -> "Clone Adventurers?", '_wrapperclass -> "switch")
-        @checkbox(cloneAdvForm("clonePlaceOptions"), '_label -> "Clone Place Options?", '_wrapperclass -> "switch pull-left")
-        @checkbox(cloneAdvForm("cloneTimeOptions"), '_label -> "Clone Time Options?", '_wrapperclass -> "switch pull-left")
-        @checkbox(cloneAdvForm("cloneTodo"), '_label -> "Clone Todo List?", '_wrapperclass -> "switch pull-left")
+    <div id="cloneAdventure" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="modal-title"><i class="fa fa-copy"></i> <strong>@Messages("adventure.general.cloneby")
+                        "@adv.getName()".</strong></h3>
+                </div>
+                @form(html.routes.CloneController.cloneAndSaveAdventure(adv.getId()), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
 
-    </fieldset>
-    <div class="form-actions">
-        <input type="submit" value="Clone the Adventure!" class="btn btn-primary"> | <a href="@html.routes.ApplicationController.index()" class="btn btn-link">Cancel</a>
+                    <div class="modal-body">
+                        <fieldset>
+                            <p class="lead">Clone these parts of the original Adventure:</p>
+                            @inputText(cloneAdvForm("name"), '_label -> "New JournWe name", 'required -> "required")
+                            @checkbox(cloneAdvForm("cloneAdventurers"), '_label -> "Clone Adventurers?")
+                            @checkbox(cloneAdvForm("clonePlaceOptions"), '_label -> "Clone Place Options?")
+                            @checkbox(cloneAdvForm("cloneTimeOptions"), '_label -> "Clone Time Options?")
+                            @checkbox(cloneAdvForm("cloneTodo"), '_label -> "Clone Todo List?")
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-copy"></i> Clone the Adventure!</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
-}

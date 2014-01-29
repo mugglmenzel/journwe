@@ -3,10 +3,10 @@ require([
     "routes",
     "messages",
     "comments",
+    "common/gmaps",
     "adventureData",
-    "adventurerData",
-    "common/async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false!callback"
-], function (utils, routes, messages, comments, adv, advr) {
+    "adventurerData"
+], function (utils, routes, messages, comments, gmaps, adv, advr) {
 
     //Constants
     var now = new Date(),
@@ -83,7 +83,8 @@ require([
             contentType: false,
             processData: false,
             success: function (result) {
-                $('#adventure-prime-image').css('background', 'url(\'http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime() + '\')');
+                $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime() + '")');
+                $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + result.image + '&timestamp='+new Date().getTime() + '")');
                 btn.css({width: ""})
                     .html(btnOriginal);
             }
@@ -116,6 +117,7 @@ require([
     var initializeOptions = function () {
         updateCategorySelection(null);
         loadCategoriesOptionsMap();
+        updateTwitterShareButton();
     };
 
     var loadCategoriesOptionsMap = function () {
@@ -136,6 +138,12 @@ require([
                 if (data.name != null && data.name.length > 0) $('#adventure-category-select button span').first().html(data.name);
                 $('#adventure-category-select button i').first().addClass('hide');
             }});
+    };
+
+    var updateTwitterShareButton = function () {
+        var el = $('.options-twitter-share');
+        if($('#adventure-public-switch').find('input:checkbox').is(':checked')) el.show();
+        else el.hide();
     };
 
 
@@ -193,25 +201,25 @@ require([
     };
 
     var initializeMap = function () {
-        google.maps.visualRefresh = true;
+        gmaps.visualRefresh = true;
         var mapOptions = {
             zoom: 19,
             minZoom: 2,
             maxZoom: 19,
-            center: new google.maps.LatLng(52.467541, 13.324957),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            center: new gmaps.LatLng(52.467541, 13.324957),
+            mapTypeId: gmaps.MapTypeId.ROADMAP
         };
-        map = new google.maps.Map(document.getElementById('place-add-map'), mapOptions);
+        map = new gmaps.Map(document.getElementById('place-add-map'), mapOptions);
     };
 
 
     var resetMapBounds = function () {
-        var bounds = new google.maps.LatLngBounds();
+        var bounds = new gmaps.LatLngBounds();
         for (var i in markers) {
             bounds.extend(markers[i].getPosition());
         }
         map.fitBounds(bounds);
-        google.maps.event.trigger(map, 'resize');
+        gmaps.event.trigger(map, 'resize');
     };
 
     var removeMapMarker = function (id) {
@@ -230,9 +238,9 @@ require([
         else
             $('#places-list tbody').append(place).fadeIn();
 
-        var marker = new google.maps.Marker({animation: google.maps.Animation.DROP, map: map, position: new google.maps.LatLng(data.lat, data.lng), title: data.address});
+        var marker = new gmaps.Marker({animation: gmaps.Animation.DROP, map: map, position: new gmaps.LatLng(data.lat, data.lng), title: data.address});
         markers[data.placeId] = marker;
-        map.setCenter(new google.maps.LatLng(data.lat, data.lng));
+        map.setCenter(new gmaps.LatLng(data.lat, data.lng));
         resetMapBounds();
 
         $('#placeoption-status-icon-' + data.placeId).addClass(votePlaceIconCSSClassMap[data.vote]);
@@ -256,30 +264,30 @@ require([
 
     var updateFavoritePlace = function () {
 
-        $('#places-favorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
-        $('#places-autofavorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.icon-favorite-place').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.places-autofavorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
         routes.controllers.api.json.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
             favoritePlace = result.favorite;
-            if (result.favorite != null) $('#places-favorite-place-name').html(result.favorite.address);
-            if (result.autoFavorite != null)$('#places-autofavorite-place-name').html(result.autoFavorite.address);
+            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address);
+            if (result.autoFavorite != null)$('.places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
-            $('#places-favorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
-            $('#places-autofavorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            $('.icon-favorite-place').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            $('.places-autofavorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
         }});
     };
 
     var setFavoritePlace = function (placeID, el) {
 
         el.find('i').attr("class", "fa fa-spin icon-journwe");
-        $('#places-favorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.icon-favorite-place').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
         routes.controllers.api.json.AdventurePlaceController.setFavoritePlace(adv.id).ajax({
             data: {favoritePlaceId: placeID},
             success: function (data) {
                 favoritePlace = data;
-                $('#places-favorite-place-name').html(data.address);
-                $('#places-favorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+                $('.places-favorite-place-name').html(data.address);
+                $('.icon-favorite-place').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
                 $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
                 el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
@@ -368,13 +376,15 @@ require([
         loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '#adventurers-applicants-list');
     }
 
-    var loadAdventurers = function (endpoint, target) {
+    var loadAdventurers = function (endpoint, target, template) {
+        template = template ? template : 'adventurer-template';
         endpoint.ajax({success: function (advs) {
             $(target).empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
                     advs[i].cssLabel = adventurerCSSLabel[advs[i].status];
-                    $(target).append(tmpl('adventurer-template', advs[i]));
+                    advs[i].color = utils.colorOfUser(advs[i].name);
+                    $(target).append(tmpl(template, advs[i]));
                 }
                 $(target).parent().show();
             } else $(target).parent().hide();
@@ -383,11 +393,11 @@ require([
 
     var addFriend = function () {
         $('#people-add-button i').removeClass("fa-plus").addClass("icon-journwe fa-spin");
-        $.post('@api.json.routes.AdventurePeopleController.invite(adv.getId)', ($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}, function () {
+        routes.controllers.api.json.AdventurePeopleController.invite(adv.id).ajax({data: (($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}), success: function () {
             $('#people-add-input').val('');
             loadInvitees();
             $('#people-add-button i').removeClass("icon-journwe fa-spin").addClass("fa-plus");
-        });
+        }});
     }
 
     var changeAdventurerStatus = function (el) {
@@ -511,27 +521,27 @@ require([
 
     var updateFavoriteTime = function () {
 
-        $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.icon-favorite-time').removeClass("fa-star").addClass("fa-spin icon-journwe");
         $('#times-autofavorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
 
         routes.controllers.api.json.AdventureTimeController.getFavoriteTime(adv.id).ajax({success: function (result) {
             favoriteTime = result.favorite;
-            if (result.favorite != null) $('#times-favorite-time-name').html(formatDate(result.favorite.startDate) + " - " + formatDate(result.favorite.endDate));
+            if (result.favorite != null) $('.times-favorite-time-name').html(formatDate(result.favorite.startDate) + " - " + formatDate(result.favorite.endDate));
             if (result.autoFavorite != null)$('#times-autofavorite-time-name').html(formatDate(result.autoFavorite.startDate) + " - " + formatDate(result.autoFavorite.endDate));
             $('.btn-close-time').toggle(!!result.favorite);
-            $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
             $('#times-autofavorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
         }});
     };
 
 
     var setFavoriteTime = function (timeID, el) {
-        $('#times-favorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        $('.icon-favorite-time').removeClass("fa-star").addClass("fa-spin icon-journwe");
         $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
         routes.controllers.api.json.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
             favoriteTime = data;
-            $('#times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
-            $('#times-favorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            $('.times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
+            $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
             el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
             $(el).addClass('btn-success');
@@ -598,6 +608,7 @@ require([
 
     var initializeTodos = function () {
         loadUserTodos();
+        loadOtherAdventurers();
         var firstAdvr = $('#todos-adventurers-selection div').first().data('id');
         if (firstAdvr != null) loadAdventurerTodos(firstAdvr);
     };
@@ -605,6 +616,10 @@ require([
     var loadUserTodos = function () {
         loadTodos(advr.userId, '#todos-list', 'todo-template');
     };
+
+    var loadOtherAdventurers = function () {
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getOtherParticipants(adv.id), '#todos-adventurers-selection', 'todos-adventurer-template');
+    }
 
     var loadAdventurerTodos = function (advrId) {
         $('#todos-adventurers-selection > div').removeClass("polaroid-active");
@@ -766,6 +781,7 @@ require([
                 data: {publish: el.find('input:checkbox').prop('checked')},
                 success: function (pub) {
                     el.find('input:checkbox').prop('checked', pub);
+                    updateTwitterShareButton();
                 }});
         },
         'click #adventure-category-select li': function () {
@@ -802,7 +818,7 @@ require([
         'click #place-add-button': function () {
             if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
                 $(this).html('<i class="fa fa-spin icon-journwe"></i>');
-                new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
+                new gmaps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
                     routes.controllers.api.json.AdventurePlaceController.addPlace(adv.id).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
                         renderPlaceOption(res);
                         $('#place-add-input').val("");
@@ -881,6 +897,16 @@ require([
         },
         'click .btn-deny': function () {
             return denyAdventurer($(this));
+        },
+        'click .btn-friend-add': function () {
+            addFriend();
+        },
+        'keypress #people-add-input': function () {
+            if (event.which == 13 || event.keyCode === 13) {
+                addFriend();
+                event.preventDefault();
+                return false;
+            } else return true;
         },
 
         'click .btn-favorite-time': function () {
@@ -1058,8 +1084,9 @@ require([
 
 
     // Init bg
-    if(adv.image != null && adv.image != ''){
-        $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '")');
+    if (adv.image != null && adv.image != '') {
+        $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '&timestamp='+new Date().getTime() + '")');
+        $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + adv.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + new Date().getTime() + '")');
     }
 
 

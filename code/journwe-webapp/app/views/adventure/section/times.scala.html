@@ -8,7 +8,7 @@
 @if(auth.canViewDateAndTime()) {
 <div class="clearfix">
     <div id="times-favorite-time" style="font-size: 20px; margin-bottom: 10px;" class="pull-left">
-        <i id="times-favorite-time-icon" class="fa fa-spin icon-journwe"></i> @Messages("adventure.time.favourite") <em><span id="times-favorite-time-name">@Messages("adventure.general.nofavourite.placeholder")</span></em>
+        <i id="times-favorite-time-icon" class="fa fa-spin icon-journwe icon-favorite-time"></i> @Messages("adventure.time.favourite") <em><span class="times-favorite-time-name">@Messages("adventure.general.nofavourite.placeholder")</span></em>
     </div>
 
     @if(auth.canChangeVoteOnOffForDateAndTime()) {

@@ -45,7 +45,7 @@
 
 
     <div class="prime-image">
-        <div id="adventure-prime-image" style="width: 100%; height: 200px; background: url(@if(adv.getImage == null || !auth.canViewAdventureImage()){'http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=Drop+image'}else{'http://i.embed.ly/1/image/crop?height=200&width=1200&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f'}) no-repeat center center transparent; background-size: auto 100%;">
+        <div id="adventure-prime-image" style="width: 100%; height: 200px; background: url('http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=Drop+image') no-repeat center center transparent; background-size: auto 100%;">
         </div>
 
         @if(auth.canViewAdventureTitle()&&false) {
@@ -64,6 +64,8 @@
             }
 
             <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
+
+            <a class="btn btn-primary pull-right" onclick="$('#pdfAdventure').modal();"><i class="fa fa-file-text"></i> @Messages("adventure.general.button.pdf")</a>
 
             <input id="adventure-prime-image-file-input" type="file" class="hide"/>
             <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="fa fa-upload"></i> @Messages("adventure.files.imageUpload")</a>
@@ -85,7 +87,7 @@
         </div>
     </div>
     @if(auth.canViewAdventureComments()) {
-        @comment.widget_comment("index", user)
+        @comment.widget_comment(adv.getId + "index", user)
     }
 
     <hr/>
@@ -96,7 +98,7 @@
         <h2 id="discussion"><i class="fa fa-comments fa fa-for-adventure-title"></i> @Messages("adventure.getScala.discussion.title")</h2>
         <div class="row">
             <div class="col-lg-12">
-                @comment.widget_wall(adv, "discussion")
+                @comment.widget_wall(adv.getId + "discussion")
             </div>
         </div>
     </div>
@@ -129,7 +131,7 @@
         </div>
     </div>
     @if(auth.canViewPlaceComments()) {
-        @comment.widget_comment("places", user)
+        @comment.widget_comment(adv.getId + "places", user)
     }
 
     <hr/>
@@ -148,7 +150,7 @@
     </div>
 
     @if(auth.canViewAdventurerComments()) {
-        @comment.widget_comment("adventurers", user)
+        @comment.widget_comment(adv.getId + "adventurers", user)
     }
     <hr/>
     }
@@ -166,7 +168,7 @@
         </div>
     </div>
     @if(auth.canViewDateAndTimeComments()) {
-        @comment.widget_comment("times", user)
+        @comment.widget_comment(adv.getId + "times", user)
     }
     <hr/>
     }
@@ -184,7 +186,7 @@
         </div>
     </div>
     @if(auth.canViewTodoComments()) {
-        @comment.widget_comment("todos", user)
+        @comment.widget_comment(adv.getId + "todos", user)
     }
     <hr/>
     }
@@ -205,7 +207,7 @@
         <div class="row"><small class="pull-right"><a href="http://www.entouragebox.com" target="_blank"><img src="http://www.entouragebox.com/img/logo.png" style="max-height: 30px;"></a></small></div>
     </div>
     @if(auth.canViewFilesComments()) {
-        @comment.widget_comment("files", user)
+        @comment.widget_comment(adv.getId + "files", user)
     }
     <hr/>
     }
@@ -230,20 +232,18 @@
         </div>
     </div>
     @if(auth.canViewOfferComments()) {
-        @comment.widget_comment("offers", user)
+        @comment.widget_comment(adv.getId + "offers", user)
     }
     }
 
-    <div id="cloneAdventure" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title"><i class="fa fa-copy"></i> <strong>@Messages("adventure.general.cloneby") "@adv.getName()".</strong></h3><br/>
-                    @cloneAdventure(adv,new DynamicForm())
-                </div>
-            </div>
-        </div>
-    </div>
+    }
+
+    @cloneAdventure(adv,new DynamicForm())
+
+
+
+    @createPDF(adv,new DynamicForm())
+
 
     <div id="leave" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -253,14 +253,14 @@
                 </div>
                 <div class="modal-body">@Messages("adventure.general.leaveconfirm") @adv.getName()?</div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" href="@html.routes.AdventurePeopleController.leave(adv.getId())">@Messages("adventure.general.button.leave")</a> <a class="btn"
-                                                                                                                   data-dismiss="modal">@Messages("adventure.general.button.cancel")</a>
+                    <a class="btn btn-danger" href="@html.routes.AdventurePeopleController.leave(adv.getId())">@Messages("adventure.general.button.leave")</a>
+                    <a class="btn btn-default" data-dismiss="modal">@Messages("adventure.general.button.cancel")</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-    }
+
 
 <script type="text/javascript">
     define("adventureData", [], @{Html(Json.toJson(adv).toString())});

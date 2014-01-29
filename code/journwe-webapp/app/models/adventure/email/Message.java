@@ -1,12 +1,8 @@
 package models.adventure.email;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.adventure.IAdventureComponent;
 
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -16,7 +12,7 @@ import java.util.Set;
  * Time: 22:23
  * To change this template use File | Settings | File Templates.
  */
-@DynamoDBTable(tableName = "journwe-james-adventuremail")
+@DynamoDBTable(tableName = "journwe-email-message")
 public class Message implements IAdventureComponent {
 
     private String adventureId;
@@ -28,8 +24,6 @@ public class Message implements IAdventureComponent {
     private String subject;
 
     private String body;
-
-    private Set attachments;
 
     @DynamoDBHashKey
     public String getAdventureId() {
@@ -48,6 +42,14 @@ public class Message implements IAdventureComponent {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
+
+
+    @DynamoDBIgnore
+    public String getMessageId() {
+        return getAdventureId() + "-" + getTimestamp();
+    }
+
+
 
     @DynamoDBAttribute
     public String getSender() {
@@ -76,12 +78,15 @@ public class Message implements IAdventureComponent {
         this.body = body;
     }
 
-    @DynamoDBAttribute
-    public Set getAttachments() {
-        return attachments;
+    @Override
+    public String toString() {
+        return "Message{" +
+                "adventureId='" + adventureId + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", sender='" + sender + '\'' +
+                ", subject='" + subject + '\'' +
+                ", body='" + body + '\'' +
+                '}';
     }
 
-    public void setAttachments(Set attachments) {
-        this.attachments = attachments;
-    }
 }

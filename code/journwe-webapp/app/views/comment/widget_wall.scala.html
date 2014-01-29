@@ -1,4 +1,4 @@
-@(adv: models.adventure.Adventure, topic: String)
+@(topic: String)
 
 <div class="comments comments-wall">
 
@@ -6,7 +6,7 @@
 		<div class="empty"><i class="icon-journwe fa fa-spin"></i> @Messages("adventure.general.loading")</div>
 	</div>	
 
-	<div class="input-group col-lg-8 input-comment" style="margin-top: 20px;">
+	<div class="input-group col-lg-8 comment-input" style="margin-top: 20px;">
 	    <input type="text" placeholder="@Messages("adventure.wallComments.placeholder")" class="form-control"/>
 	    <div class="input-group-btn">
 	    	<button id="btn-add-comment-@topic" class="btn btn-primary btn-comment-add" type="button" data-thread="@topic" ><i class="fa fa-plus"></i></button>

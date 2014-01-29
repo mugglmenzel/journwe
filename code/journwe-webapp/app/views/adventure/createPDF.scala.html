@@ -1,0 +1,37 @@
+@(adv: models.adventure.Adventure, createPdfForm: DynamicForm)
+
+    @import helper._
+    @import fieldConstructor._
+
+    @implicitFieldConstructor = @{
+        FieldConstructor(twitterBootstrapInput.render)
+    }
+
+    <div id="pdfAdventure" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="modal-title"><i class="fa fa-file-text"></i> <strong>@adv.getName()</strong> <strong>
+                            .pdf</strong></h3>
+                </div>
+                @form(html.routes.PdfController.create(adv.getId()), args = 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+                    <div class="modal-body">
+                        <p class="lead">@Messages("pdf.form.create.title")</p>
+                        <fieldset>
+                            @checkbox(createPdfForm("pdfPlace"), '_label -> Messages("pdf.form.create.place"))
+                            @checkbox(createPdfForm("pdfTime"), '_label -> Messages("pdf.form.create.time"))
+                            @checkbox(createPdfForm("pdfTodo"), '_label -> Messages("pdf.form.create.todo"))
+                            @checkbox(createPdfForm("pdfEmail"), '_label -> Messages("pdf.form.create.email"))
+                            @checkbox(createPdfForm("pdfFile"), '_label -> Messages("pdf.form.create.file"))
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-actions">
+                            <input type="submit" class="hidden"> <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-cloud-download"></i> @Messages("pdf.form.create.submit")</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>

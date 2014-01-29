@@ -37,7 +37,7 @@ public class SecuredUser extends Security.Authenticator {
 	 */
 	@Override
 	public Result onUnauthorized(Context ctx) {
-		ctx.flash().put("error", "Nice try, but you need to log in first! Access is restricted to selected BETA users only.");
+		ctx.flash().put("error", "Nice try, but you need to log in first! Access is restricted to registered users only.");
 		return redirect(controllers.html.routes.ApplicationController.index());
 	}
 

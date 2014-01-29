@@ -3,7 +3,7 @@
 
 <div class="row">
     <div class="col-lg-4"> @Messages("adventure.options.public") &nbsp;&nbsp;
-        <div id="adventure-public-switch" class="make-switch" style="display:inline-block;overflow:hidden;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
+        <div id="adventure-public-switch" style="display:inline-block;overflow:hidden;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
         Category:
         <div id="adventure-category-select" class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -16,16 +16,14 @@
         <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="fa fa-facebook"></i> @Messages("adventure.options.facebookpublish")</button>
     </div>
 
-    @if(adv.isPublish){
-        <div class="col-lg-2">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-via="JournWe" @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){data-url="@adv.getShortURL"} data-size="large" data-related="JournWe" data-hashtags="journwe">@Messages("adventure.options.twitter")</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        </div>
-    }
+    <div class="col-lg-2 options-twitter-share stash">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-via="JournWe" @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){data-url="@adv.getShortURL"} data-size="large" data-related="JournWe" data-hashtags="journwe">@Messages("adventure.options.twitter")</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </div>
 
     @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){
         <div class="col-lg-3">
-            <div><a href="@adv.getShortURL" class="btn"><i class="fa fa-link"></i> @adv.getShortURL</a></div>
+            <div><a href="@adv.getShortURL" class="btn"><i class="fa fa-link"></i> @adv.getShortURL.substring(0,25)</a></div>
         </div>
     }
 </div>

@@ -18,17 +18,21 @@ body, body *, .btn, .btn-link {
 }
 
 h1 {
+  font-family: @font-title;
+  font-weight: @font-title-normal;
 
   &, & small {
-    font-weight: @font-thin;
+    font-weight: @font-title-thin;
     margin-bottom: 20px;
   }
 }
 
 h2, h3, h4 {
+  font-family: @font-title;
+  font-weight: @font-title-normal;
 
   &, & small {
-    font-weight: @font-normal;
+    font-weight: @font-title-normal;
     margin-bottom: 20px;
   }
 }
@@ -156,7 +160,7 @@ h1 .editableform {
   padding: 20px;
   position: relative;
   border-radius: 5px;
-  overflow: hidden;
+  //overflow: hidden;
 
   &.jrn-no-bottom-round {
     border-radius: 5px 5px 0 0;
@@ -283,6 +287,8 @@ body > .row-fluid > div.span8 h2 {
 }
 
 .header .brand span {
+  font-family: @font-title;
+  font-weight: @font-title-bold;
   font-size: 20px;
   white-space: nowrap;
 }
