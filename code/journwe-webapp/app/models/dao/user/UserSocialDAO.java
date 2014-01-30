@@ -1,6 +1,10 @@
 package models.dao.user;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.feth.play.module.pa.user.AuthUser;
 import models.dao.common.CommonRangeEntityDAO;
@@ -9,6 +13,7 @@ import models.user.User;
 import models.user.UserSocial;
 import play.Logger;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,33 +30,24 @@ public class UserSocialDAO extends CommonRangeEntityDAO<UserSocial> {
      * @param userId
      * @return
      */
-    public UserSocial findByUserId(String userId) {
-        GSIQuery q = new GSIQuery("journwe-usersocial","userId-index","userId");
-        QueryResult res = q.query(userId);
-        List<Map<String, AttributeValue>> items = res.getItems();
-        Iterator<Map<String, AttributeValue>> itemsIter =
-                items.iterator();
-        String socialId = "";
-        String provider = "";
-        // should have found only one result
-        if(items.size()>1)
-            Logger.warn("In UserSocialDAO.findByUserId(String userId) the query returned more than one item: items.size() = "+items.size());
-        while (itemsIter.hasNext()) {
-            Map<String, AttributeValue> currentItem =
-                    itemsIter.next();
-            Iterator currentItemIter = currentItem.
-                    keySet().iterator();
-            while (currentItemIter.hasNext()) {
-                String attr = (String) currentItemIter.next();
-                if (attr == "socialId" ) {
-                    socialId = currentItem.get(attr).getS();
-                }
-                if (attr == "provider" ) {
-                    provider = currentItem.get(attr).getS();
-                }
-            }
-        }
-        return findBySocialId(provider,socialId);
+    public List<UserSocial> findByUserId(String userId) {
+        UserSocial hashKeyObject = new UserSocial();
+        hashKeyObject.setUserId(userId);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withConsistentRead(false).withIndexName("userId-index").withHashKeyValues(hashKeyObject);
+        return pm.query(UserSocial.class, query);
+    }
+
+    /**
+     * Find UserSocial by its userId (Global Secondary Index).
+     *
+     * @param userId
+     * @return
+     */
+    public UserSocial findByUserIdAndProvider(String provider, String userId) {
+        for(UserSocial us : findByUserId(userId))
+            if(provider.equals(us.getProvider()))
+                return us;
+        return null;
     }
 
     public UserSocial findBySocialId(String provider, String socialId) {

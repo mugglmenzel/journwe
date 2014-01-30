@@ -49,7 +49,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             result = Cache.getOrElse("user.social." + identity.getProvider() + "." + identity.getId(), new Callable<User>() {
                 @Override
                 public User call() throws Exception {
-                    UserSocial social = new UserSocialDAO().get(identity.getId(),identity.getProvider());
+                    UserSocial social = new UserSocialDAO().get(identity.getId(), identity.getProvider());
                     return social != null ? new UserDAO().get(social.getUserId()) : null;
                 }
             }, 3600);
@@ -63,13 +63,13 @@ public class UserDAO extends CommonEntityDAO<User> {
     public User findByAuthUserIdentity(final AuthUserIdentity identity) {
         if (identity == null)
             return null;
-        Logger.debug("AuthUserIdentity: id = "+identity.getId()+" provider = "+identity.getProvider());
+        Logger.debug("AuthUserIdentity: id = " + identity.getId() + " provider = " + identity.getProvider());
         return getAuthUserFind(identity);
     }
 
     /**
      * Find the user by his email address.
-     *
+     * <p/>
      * This method is for example necessary for password recovery.
      *
      * @param email
@@ -103,12 +103,12 @@ public class UserDAO extends CommonEntityDAO<User> {
             Iterator<String> currentItemIter = currentItem.keySet().iterator();
             while (currentItemIter.hasNext()) {
                 String attr = (String) currentItemIter.next();
-                if (attr == "userId" ) {
+                if (attr == "userId") {
                     userId = currentItem.get(attr).getS();
                 }
             }
         }
-        if(userId == null)
+        if (userId == null)
             return null;
         User toReturn = getUser(userId);
         return toReturn;
@@ -117,8 +117,8 @@ public class UserDAO extends CommonEntityDAO<User> {
     public static User findByUsernamePasswordIdentity(
             final UsernamePasswordAuthUser identity) {
         String email = identity.getEmail();
-        Logger.debug("find user by email "+email);
-        if(email!=null)
+        Logger.debug("find user by email " + email);
+        if (email != null)
             return findByEmail(email);
         else {
             Logger.warn("findByUsernamePasswordIdentity(identity) identity.getEmail() is null!");
@@ -227,15 +227,15 @@ public class UserDAO extends CommonEntityDAO<User> {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                UserSocial identity = new UserSocialDAO().findByUserId(userId);
-                Cache.remove("user.social." + identity.getProvider() + "." + identity.getSocialId());
+                for (UserSocial identity : new UserSocialDAO().findByUserId(userId))
+                    Cache.remove("user.social." + identity.getProvider() + "." + identity.getSocialId());
             }
         }).start();
     }
 
     public User create(final AuthUser authUser, final EUserRole role) {
-        if(authUser!=null)
-            Logger.debug("Create new user with id "+authUser.getId());
+        if (authUser != null)
+            Logger.debug("Create new user with id " + authUser.getId());
         else
             Logger.debug("Create new user.");
 
@@ -253,7 +253,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             user.setImage(picture);
         }
 
-        if(new UserDAO().save(user))
+        if (new UserDAO().save(user))
             Logger.debug("Saved user.");
         else
             Logger.error("Saving user in method UserDAO.create failed.");
@@ -295,7 +295,7 @@ public class UserDAO extends CommonEntityDAO<User> {
 
         final UserSocial social = new UserSocial();
         social.setProvider(authUser.getProvider());
-        if(authUser.getProvider().equalsIgnoreCase(MyUsernamePasswordAuthProvider.PROVIDER_KEY))
+        if (authUser.getProvider().equalsIgnoreCase(MyUsernamePasswordAuthProvider.PROVIDER_KEY))
             social.setSocialId(user.getId());
         else
             social.setSocialId(authUser.getId());
@@ -307,8 +307,8 @@ public class UserDAO extends CommonEntityDAO<User> {
         if (authUser instanceof TwitterAuthUser)
             social.setAccessToken(((TwitterAuthUser) authUser).getOAuth1AuthInfo().getAccessToken());
 
-        if(new UserSocialDAO().save(social))
-            Logger.debug("Creating UserSocial with userId = "+social.getUserId() +" and social id = "+ social.getSocialId() +" was successful.");
+        if (new UserSocialDAO().save(social))
+            Logger.debug("Creating UserSocial with userId = " + social.getUserId() + " and social id = " + social.getSocialId() + " was successful.");
         else
             Logger.error("Creating UserSocial failed.");
 
@@ -329,15 +329,15 @@ public class UserDAO extends CommonEntityDAO<User> {
         final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(unverified.getId());
         ue.setValidated(true);
         if (new UserEmailDAO().save(ue)) {
-        if(new UserDAO().save(unverified)) {
-            new TokenActionDAO().deleteByUser(unverified, ETokenType.EMAIL_VERIFICATION);
-        }
+            if (new UserDAO().save(unverified)) {
+                new TokenActionDAO().deleteByUser(unverified, ETokenType.EMAIL_VERIFICATION);
+            }
         }
     }
 
-    public void merge(final AuthUser oldAuthUser,final AuthUser newAuthUser) {
+    public void merge(final AuthUser oldAuthUser, final AuthUser newAuthUser) {
         UserSocialDAO usdao = new UserSocialDAO();
-        UserSocial us = usdao.get(oldAuthUser.getProvider(),oldAuthUser.getId());
+        UserSocial us = usdao.get(oldAuthUser.getProvider(), oldAuthUser.getId());
         final User newUser = new UserDAO().findByAuthUserIdentity(newAuthUser);
         us.setUserId(newUser.getId());
         usdao.save(us);
@@ -351,7 +351,7 @@ public class UserDAO extends CommonEntityDAO<User> {
 
     public void changePassword(final UsernamePasswordAuthUser authUser,
                                final boolean create) {
-        UserSocial us = new UserSocialDAO().findBySocialId(authUser.getProvider(),authUser.getId());
+        UserSocial us = new UserSocialDAO().findBySocialId(authUser.getProvider(), authUser.getId());
         if (us == null) {
             if (create) {
                 us = new UserSocialDAO().create(authUser);
@@ -361,7 +361,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             }
         }
         User u = new UserDAO().findByAuthUserIdentity(authUser);
-        Logger.debug("Set hashed password: "+authUser.getHashedPassword());
+        Logger.debug("Set hashed password: " + authUser.getHashedPassword());
         u.setHashedPassword(authUser.getHashedPassword());
         new UserDAO().save(u);
         us.setUserId(u.getId());
@@ -373,7 +373,7 @@ public class UserDAO extends CommonEntityDAO<User> {
         // You might want to wrap this into a transaction
         this.changePassword(authUser, create);
         User user = new UserDAO().findByAuthUserIdentity(authUser);
-        new TokenActionDAO().deleteByUser(user,ETokenType.PASSWORD_RESET);
+        new TokenActionDAO().deleteByUser(user, ETokenType.PASSWORD_RESET);
     }
 
 }

@@ -38,7 +38,7 @@ public class UserSocial {
         this.provider = provider;
     }
 
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "userId-index")
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = "userId-index")
     public String getUserId() {
         return userId;
     }

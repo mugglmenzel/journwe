@@ -16,7 +16,7 @@ define([
     };
 
     var renderAdventure = function (tmplId, adv) {
-        adv.favoriteTime.startDate = utils.formatDateShort(adv.favoriteTime.startDate);
+        if(adv.favoriteTime != null && adv.favoriteTime.startDate != null) adv.favoriteTime.startDate = utils.formatDateShort(adv.favoriteTime.startDate);
         return $(tmpl(tmplId, adv));
     };
 

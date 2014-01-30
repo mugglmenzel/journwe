@@ -1,5 +1,6 @@
 @(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
-    @import models.adventure.adventurer.EAdventurerParticipation
+@import models.dao.user.UserSocialDAO
+@import models.adventure.adventurer.EAdventurerParticipation
 
     @import models.authorization.JournweAuthorization
 
@@ -81,16 +82,23 @@
             <div class="row">
                 <div class="input-group col-lg-6">
                     <div id="people-add-type" class="input-group-btn">
+                        @defining(new UserSocialDAO().findByUserIdAndProvider("facebook", advr.getUserId)){ fbusr =>
                         <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i id="people-add-type-icon" class="fa fa-facebook"></i>
-                            <span class="caret"></span>
+                            @if(fbusr != null){
+                                <i id="people-add-type-icon" class="fa fa-facebook"></i>
+                                <span class="caret"></span>
+                            } else {
+                                <i id="people-add-type-icon" class="fa fa-envelope"></i>
+                                <span class="caret"></span>
+                            }
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a data-icon="fa fa-facebook" data-type="text" data-typeahead="on"><i class="fa fa-facebook"></i>
-                                @Messages("adventure.general.label.facebook")</a></li>
+                            @if(fbusr != null){<li><a data-icon="fa fa-facebook" data-type="text" data-typeahead="on"><i class="fa fa-facebook"></i>
+                                @Messages("adventure.general.label.facebook")</a></li>}
                             <li><a data-icon="fa fa-envelope" data-type="email" data-typeahead="off"><i class="fa fa-envelope"></i>
                                 @Messages("adventure.general.label.email")</a></li>
                         </ul>
+                        }
                     </div>
                     <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" autocomplete="off" class="form-control">
                     <div class="input-group-btn">

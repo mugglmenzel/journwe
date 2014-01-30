@@ -151,7 +151,7 @@ public class AdventureController extends Controller {
 
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        UserSocial us = new UserSocialDAO().findByUserId(usr.getId());
+        UserSocial us = new UserSocialDAO().findByUserId(usr.getId()).get(0);
 
         // ADVENTURER
         Adventurer advr = new Adventurer();
