@@ -40,7 +40,7 @@ import java.util.Date;
  */
 public class JournWeSMTPServer {
 
-    private static BasicAWSCredentials credentials = new BasicAWSCredentials("AKIAIZHEDHEBQSHDQGCA", "DOxVc+qo/K0pGUZP7uoksKPPuAZsLa2gH89CFgmO");
+    private static BasicAWSCredentials credentials = new BasicAWSCredentials("AKIAJGCLA5GISOJ6UVZA", "UW3EB5LRrsTwkpTdRR/zU11v2xtMx919TLYIbsYM");
     private static DynamoDBMapper dynamo;
     private static AmazonS3Client s3;
     private static String s3bucketName = "journwe-email-attachments";
@@ -54,7 +54,7 @@ public class JournWeSMTPServer {
 
         //DYNAMO
         final AmazonDynamoDBClient client = new AmazonDynamoDBClient(credentials);
-        client.setEndpoint("dynamodb.eu-west-1.amazonaws.com");
+        client.setEndpoint("dynamodb.us-east-1.amazonaws.com");
         dynamo = new DynamoDBMapper(client);
 
         //S3
