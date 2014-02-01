@@ -23,7 +23,7 @@
 
     @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){
         <div class="col-lg-3">
-            <div><a href="@adv.getShortURL" class="btn"><i class="fa fa-link"></i> @adv.getShortURL.substring(0,25)</a></div>
+            <div><a href="@adv.getShortURL" class="btn"><i class="fa fa-link"></i> @if(adv.getShortURL.length > 25){@adv.getShortURL.substring(0,25)}else{@adv.getShortURL}</a></div>
         </div>
     }
 </div>

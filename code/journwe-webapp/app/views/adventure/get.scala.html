@@ -34,18 +34,16 @@
             <li class="adventurers"><a href="#adventurers"><i class="fa fa-group" title="Adventurers"></i></a></li>
             <li class="times"><a href="#times"><i
                 class="fa fa-calendar" title="Date &amp; Time"></i></a></li>
-
-            @*<li class="messages"><a href="#messages"><i class="fa fa-envelope" title="Messages"></i></a></li>*@
             <li class="todos"><a href="#todos"><i
                 class="fa fa-list-ol" title="Todos"></i></a></li>
             <li class="files"><a href="#files"><i class="fa fa-file" title="Files"></i></a></li>
-            <li class="offers"><a href="#offers"><i class="fa fa-suitcase" title="Offers"></i></a></li>
+            @*<li class="offers"><a href="#offers"><i class="fa fa-suitcase" title="Offers"></i></a></li>*@
         </ul>
     </div>
 
 
     <div class="prime-image">
-        <div id="adventure-prime-image" style="width: 100%; height: 200px; background: url('http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=Drop+image') no-repeat center center transparent; background-size: auto 100%;">
+        <div id="adventure-prime-image" style="width: 100%; height: 200px; background: url('http://www.placehold.it/1250x200/AAAAAA/EFEFEF&text=Drop+image') no-repeat center center transparent; background-size: auto 100%;">
         </div>
 
         @if(auth.canViewAdventureTitle()&&false) {
@@ -212,6 +210,7 @@
     <hr/>
     }
 
+    @*
     @if(auth.canViewAdventureOffersWidget()) {
     <div class="jrn-container jrn-no-bottom-round">
         <h2 id="offers"><i class="fa fa-suitcase icon-for-adventure-title"></i> @Messages("adventure.getScala.offers.title")</h2>
@@ -235,6 +234,7 @@
         @comment.widget_comment(adv.getId + "offers", user)
     }
     }
+    *@
 
     }
 
@@ -259,6 +259,22 @@
             </div>
         </div>
     </div>
+
+    <div id="amazon-affiliate" class="modal fade" tabindex="-1" role="dialog" style="color: black; z-index: 999;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title"> @Messages("adventure.todos.amazon.title") </h3>
+                </div>
+                <div class="modal-body"><div><i class="icon-journwe fa fa-spin"></i></div> <div class="content"></div></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> @Messages("adventure.general.button.close")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 

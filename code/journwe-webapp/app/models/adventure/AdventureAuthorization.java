@@ -6,8 +6,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import models.dao.helpers.EnumMarshaller;
 
+import java.io.Serializable;
+
 @DynamoDBTable(tableName = "journwe-adventure-authorization")
-public class AdventureAuthorization {
+public class AdventureAuthorization implements Serializable {
+
 
     private String adventureId;
 

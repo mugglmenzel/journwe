@@ -30,6 +30,9 @@ object ApplicationBuild extends Build {
     // Require JS
     requireJs += "main.js",
     requireJs += "adventure.js",
+    requireJs += "inspiration.js",
+    requireJs += "user.js",
+    requireJsShim += "build.js",
 
     // Repository for easy mail (used in authenticate)
     resolvers += Resolver.url("play-easymail (release)", url("http://joscha.github.com/play-easymail/repo/releases/"))(Resolver.ivyStylePatterns),

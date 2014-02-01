@@ -19,28 +19,6 @@
             </div>
         </section>
 
-    @*
-        <div class="text-center jrn-container clearfix" style="margin-top: 5px;">
-
-            <p class="lead">@Html(Messages("landing.cta"))</p>
-
-
-            <form action="@html.routes.ApplicationController.subscribe()" class=" col-lg-6 col-lg-offset-3">
-                <fieldset>
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                        <input class="form-control input-lg" name="email" type="email" required>
-                        <span class="input-group-btn">
-                            <input class="btn btn-success btn-lg" type="submit" value="Subscribe!"/>
-                        </span>
-                    </div>
-                </fieldset>
-            </form>
-
-
-        </div>
-    *@
-
          @quickintro()
 
         <div class="jrn-container">
@@ -68,7 +46,7 @@
 
             <div class="row landing-statement">
                 <div class="col-lg-6 col-lg-offset-1 landing" style="">
-                    <img src="/assets/img/landing/landing_files.png"/>
+                    <img src="/assets/img/landing/landing_files2.png"/>
                 </div>
                 <div class="col-lg-4">
                     <h4>@Messages("landing.featureH3")</h4>
@@ -126,7 +104,7 @@
             <div class="row landing-statement"></div>
         </div>
 
-
+        @*
         <div class="jrn-container">
             <h2>@Messages("landing.story")</h2>
             
@@ -328,5 +306,8 @@
                 });
                 }
             </script>
-        </div>  
+        </div>
+
+
+        *@
     }

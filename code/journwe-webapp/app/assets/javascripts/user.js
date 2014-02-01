@@ -12,7 +12,7 @@ require([
 
             if (clear) $('#adventures-user-list').empty();
             for (var i in advs.adventures) {
-                advs.adventures[i].favoriteTime.startDate = utils.formatDateShort(advs.adventures[i].favoriteTime.startDate);
+                if(advs.adventures[i].favoriteTime != null && advs.adventures[i].favoriteTime.startDate != null) advs.adventures[i].favoriteTime.startDate = utils.formatDateShort(advs.adventures[i].favoriteTime.startDate);
                 $('#adventures-user-list').append(tmpl('adventure-user-template', advs.adventures[i]));
             }
 
