@@ -25,6 +25,8 @@ public class Adventure {
 
     private String image;
 
+    private String imageTimestamp;
+
     private String shortURL;
 
     private boolean publish = false;
@@ -112,6 +114,15 @@ public class Adventure {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @DynamoDBAttribute
+    public String getImageTimestamp() {
+        return imageTimestamp;
+    }
+
+    public void setImageTimestamp(String imageTimestamp) {
+        this.imageTimestamp = imageTimestamp;
     }
 
     @DynamoDBAttribute

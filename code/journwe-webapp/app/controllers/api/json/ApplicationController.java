@@ -61,11 +61,12 @@ public class ApplicationController extends Controller {
                             node.put("id", adv.getId());
                             node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
                             node.put("image", adv.getImage());
+                            node.put("imageTimestamp", adv.getImageTimestamp());
                             node.put("name", adv.getName());
                             node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
                             node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
                             node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-
+                            node.put("status", new AdventurerDAO().get(adv.getId(), userId).getParticipationStatus().name());
                             results.add(node);
                         }
                     }

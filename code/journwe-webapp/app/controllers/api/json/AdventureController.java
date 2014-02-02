@@ -61,6 +61,7 @@ public class AdventureController extends Controller {
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 adv.setImage(s3.getResourceUrl(S3_BUCKET_ADVENTURE_IMAGES,
                         adv.getId()));
+                adv.setImageTimestamp(new Long(new Date().getTime()).toString());
             }
 
             new AdventureDAO().save(adv);
@@ -70,6 +71,7 @@ public class AdventureController extends Controller {
 
         ObjectNode node = Json.newObject();
         node.put("image", adv.getImage());
+        node.put("imageTimestamp", adv.getImageTimestamp());
         return ok(Json.toJson(node));
     }
 
