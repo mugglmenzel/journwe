@@ -8,7 +8,7 @@
 @if(auth.canViewPlaces()) {
 <div class="clearfix">
     @if(auth.canViewFavoritePlace()) {
-    <div id="places-favorite-place" class="pull-left" style="font-size: 20px; margin-bottom: 10px;">
+    <div id="places-favorite-place" class="pull-left" style="margin-bottom: 10px; margin-top: 7px;">
         <i class="fa fa-spin icon-journwe icon-favorite-place"></i> @Messages("adventure.places.favourite") <em><span class="places-favorite-place-name">@Messages("adventure.general.nofavourite.placeholder")</span></em>
     </div>
     }
@@ -36,7 +36,7 @@
         <tr>
             <th>@Messages("adventure.general.favourite")</th>
             <th>@Messages("adventure.places.location")</th>
-            <th style="width: 90px;">@Messages("adventure.general.yourvote")</th>
+            <th style="width: 95px;">@Messages("adventure.general.yourvote")</th>
             <th class="text-center" style="width: 100px;">Group Rating</th>
             <th class="text-center hidden">@Messages("adventure.general.yes")</th>
             <th class="text-center hidden">@Messages("adventure.general.maybe")</th>

@@ -22,7 +22,7 @@ define([
 
 
     var loadMyAdventures = function (lastId, clear) {
-        $('.btn-adventures-my-refresh i').addClass('fa-spin');
+        utils.setSpinning($('.btn-adventures-my-refresh i'));
         $('.btn-adventures-my-load-more').html('<i class="fa fa-spin icon-journwe"></i>');
         routes.controllers.api.json.ApplicationController.getMyAdventures().ajax({data: {lastId: lastId, count: 10}, success: function (advs) {
             if (clear) $('#adventures-my-list').empty();
@@ -34,13 +34,13 @@ define([
             } else {
                 $('.btn-adventures-my-load-more').show().html('Show More');
             }
-            $('.btn-adventures-my-refresh i').removeClass('fa-spin');
+            utils.resetSpinning($('.btn-adventures-my-refresh i'));
         }});
     };
 
 
     var loadPublicAdventures = function (lastId, clear, insId) {
-        $('.btn-adventures-public-refresh i').addClass('fa-spin');
+        utils.setSpinning($('.btn-adventures-public-refresh i'));
         $('.btn-adventures-public-load-more').html('<i class="fa fa-spin icon-journwe"></i>');
         routes.controllers.api.json.ApplicationController.getPublicAdventures().ajax({data: {lastId: lastId, count: 10, inspirationId: insId}, success: function (advs) {
             if (clear) $('#adventures-public-list').empty();
@@ -93,14 +93,14 @@ define([
                 $('.btn-adventures-public-load-more').show().html('Show More');
             }
 
-            $('.btn-adventures-public-refresh i').removeClass('fa-spin');
+            utils.resetSpinning($('.btn-adventures-public-refresh i'));
         }});
     };
 
     var loadCategories = function (lastId, clear, superCatId) {
         superCatId = superCatId ? superCatId : 'SUPER';
 
-        $('.btn-categories-refresh i').addClass('fa-spin');
+        utils.setSpinning($('.btn-categories-refresh i'));
         $('.btn-categories-load-more').html('<i class="fa fa-spin icon-journwe"></i>');
         routes.controllers.api.json.CategoryController.getCategories(superCatId).ajax({data: {lastId: lastId, count: 10}, success: function (cats) {
             if (clear) $('#categories-list').empty();
@@ -113,7 +113,7 @@ define([
             } else {
                 $('.btn-categories-load-more').show().html('Show More');
             }
-            $('.btn-categories-refresh i').removeClass('fa-spin');
+            utils.resetSpinning($('.btn-categories-refresh i'));
         }});
     };
 

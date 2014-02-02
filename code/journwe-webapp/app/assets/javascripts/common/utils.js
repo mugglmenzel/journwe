@@ -86,6 +86,27 @@ define(function(){
         },
 
         /**
+         * Formats a date in the format dd.MM.YYYY
+         * @param Date|Int
+         */
+        formatDateLong: function(time){
+            time = time instanceof Date ? time : new Date(parseInt(time, 10));
+
+            // Todo Use better formating
+            return two(time.getDate())
+                + "."
+                + two(time.getMonth()+1)
+                + "."
+                + time.getFullYear()
+                + " "
+                + two(time.getHours())
+                + ":"
+                + two(time.getMinutes())
+                + ":"
+                + two(time.getSeconds());
+        },
+
+        /**
          * Formats a date in the format dd.MM.YY
          * @param Date|Int
          */
@@ -112,6 +133,19 @@ define(function(){
 
         colorOfUser: function (userStr) {
             return ('#' + ('000000' + (parseInt(parseInt(userStr, 36).toExponential().slice(2, -5), 10) & 0xFFFFFF).toString(16).toUpperCase()).slice(-6));
+        },
+
+        setSpinning: function(el) {
+            $(el).addClass('fa fa-spin');
+        }                                ,
+        resetSpinning: function(el) {
+            $(el).removeClass('fa-spin');
+        },
+        setStash: function(el) {
+            $(el).addClass('stash');
+        },
+        resetStash: function(el) {
+            $(el).removeClass('stash');
         }
 
     };

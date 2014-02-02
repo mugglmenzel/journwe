@@ -6,7 +6,7 @@ require([
 
 
     var loadUserAdventures = function (clear) {
-        $('#adventures-user-list i').removeClass('stash');
+        utils.resetStash($('#adventures-user-list i'));
         routes.controllers.api.json.UserController.getAdventures(user.id).ajax({data: {count: 10}, success: function (advs) {
             $('#adventures-user-count').html(advs.count);
 
@@ -24,7 +24,7 @@ require([
                     $(this).find("div.overlay").slideUp("fast");
                 }
             );
-            $('#adventures-user-list i').addClass('stash');
+            utils.setStash($('#adventures-user-list i'));
         }});
     };
 

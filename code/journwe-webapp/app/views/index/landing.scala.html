@@ -5,7 +5,13 @@
 
     @main(Messages("journwe.subtitle")) { }{
         <section class="jrn-container text-center headline">
-            <div class="text-success">JournWe - Travel together.</div>
+            <div class="text-success">
+                <div>
+                    <img src="@routes.Assets.at("img/favicon_256x256.png")" alt="">
+                    Journ<strong>We</strong>
+                </div>
+                <div>Travel together.</div>
+            </div>
             <div class="btn-group user-login">
                 <a class="btn btn-lg btn-success" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Start Now</a>
                 <button class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">

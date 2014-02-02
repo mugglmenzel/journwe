@@ -1,8 +1,9 @@
 @(ins: models.inspiration.Inspiration)
 
 @import java.text.SimpleDateFormat
-
-
+@import com.feth.play.module.pa.PlayAuthenticate
+@import models.dao.user.UserDAO
+@import models.dao.user.UserSocialDAO
 
 <form id="yingyangyong-form" action="@html.routes.AdventureController.save()" method="POST">
 
@@ -76,18 +77,27 @@
                     <ul id="people-list" class="list-unstyled list-inline"></ul>
 
                     <div class="input-group">
+                        @defining(PlayAuthenticate.getUser(Http.Context.current())){playusr =>
+                        @defining(new UserDAO().findByAuthUserIdentity(playusr)){ usr =>
                         <div id="people-add-type" class="input-group-btn">
                             <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
+                                @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId) != null){
                                 <i id="people-add-type-icon" class="fa fa-facebook fa-fw"></i>
+                                } else {
+                                <i id="people-add-type-icon" class="fa fa-envelope fa-fw"></i>
+                                }
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
+                                @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId) != null){
                                 <li><a data-icon="fa fa-facebook fa-fw" data-type="text" data-typeahead="on"><i class="fa fa-facebook fa-fw"></i>
                                     @Messages("adventure.general.label.facebook")</a></li>
+                                }
                                 <li><a data-icon="fa fa-envelope fa-fw" data-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
                                     @Messages("adventure.general.label.email")</a></li>
                             </ul>
                         </div>
+                        }}
                         <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" autocomplete="off" class="input-people-add form-control">
                         <div class="input-group-btn">
                             <a class="btn btn-people-add btn-primary"><i class="fa fa-plus"></i></a>

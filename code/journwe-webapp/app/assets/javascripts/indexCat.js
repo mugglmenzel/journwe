@@ -33,7 +33,7 @@ require([
 
 
     var loadInspirations = function (lastId, clear) {
-        $('#inspirations-public-button-refresh i').addClass('icon-spin');
+        utils.setSpinning($('#inspirations-public-button-refresh i'));
         $('#inspirations-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
         routes.controllers.api.json.ApplicationController.getInspirations(cat.id).ajax({data: {lastId: lastId, count: 8}, success: function (advs) {
             if (clear) $('#inspirations-public-list').empty();
@@ -81,7 +81,7 @@ require([
             }
 
             $('#inspirations-public-load-more-button').html('Show More');
-            $('#inspirations-public-button-refresh i').removeClass('icon-spin');
+            utils.resetSpinning($('#inspirations-public-button-refresh i'));
         }});
     };
 

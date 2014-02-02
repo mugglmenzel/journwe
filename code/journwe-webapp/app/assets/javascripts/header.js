@@ -12,7 +12,7 @@ require([
         }});
 
         var loadNotifications = function (clear, lastId) {
-            if (clear) $(pop_content).find('i.loading-top').removeClass('stash');
+            if (clear) utils.resetStash($(pop_content).find('i.loading-top'));
             routes.controllers.api.json.UserController.getNotifications().ajax({data: {lastId: lastId, count: 5}, success: function (d) {
                 if (clear) $(pop_content).find('.notifications-list').empty();
                 for (var i in d)
@@ -39,7 +39,7 @@ require([
 
                 pop_content_loaded = true;
 
-                $(pop_content).find('i').addClass('stash');
+                utils.setStash($(pop_content).find('i'));
             }});
 
         }

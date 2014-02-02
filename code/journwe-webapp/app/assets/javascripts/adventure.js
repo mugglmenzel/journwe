@@ -131,12 +131,12 @@ require([
     };
 
     var updateCategorySelection = function (catId) {
-        $('#adventure-category-select button i').first().removeClass('hide');
+        utils.resetStash($('#adventure-category-select button i'));
         routes.controllers.api.json.AdventureController.updateCategory(adv.id).ajax({
             data: {categoryId: catId},
             success: function (data) {
                 if (data.name != null && data.name.length > 0) $('#adventure-category-select button span').first().html(data.name);
-                $('#adventure-category-select button i').first().addClass('hide');
+                utils.setStash($('#adventure-category-select button i'));
             }});
     };
 
@@ -150,7 +150,7 @@ require([
     //EMAILS
 
     var loadEmails = function () {
-        $('#emails-button-refresh i').addClass("fa-spin");
+        utils.setSpinning($('#emails-button-refresh i'));
 
         routes.controllers.api.json.AdventureEmailController.listEmails(adv.id).ajax({success: function (emails) {
             $('#emails-list tbody').empty();
@@ -164,12 +164,14 @@ require([
                 $('#emails-list').hide();
             }
 
-            $('#emails-button-refresh i').removeClass("fa-spin");
+            utils.resetSpinning($('#emails-button-refresh i'));
         }});
     };
 
 
     var renderEmail = function (data, replace) {
+        if(data.timestamp != null) data.timestamp = utils.formatDateLong(data.timestamp);
+
         if (replace)
             replace.replaceWith(tmpl('emails-template', data)).fadeIn();
         else
@@ -300,10 +302,6 @@ require([
 
     var votePlace = function (vote, voteGrav, optId) {
 
-        // Spin
-        $('#placeoption-item-' + optId + ' .dropdown-toggle')
-            .html('<i class="fa fa-spin icon-journwe"></i>');
-
         routes.controllers.api.json.AdventurePlaceController.vote(adv.id, optId).ajax({
             data: {
                 vote: vote, voteGravity: voteGrav
@@ -311,8 +309,6 @@ require([
             success: function (res) {
                 renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
                 updateFavoritePlace();
-                $('#placeoption-item-' + res.placeId + ' .dropdown-toggle')
-                    .html('<i class="fa fa-pencil"></i>');
             }});
     };
 
@@ -628,7 +624,7 @@ require([
     };
 
     var loadTodos = function (userId, target, template) {
-        $('#todos-button-refresh i').addClass("fa-spin");
+        utils.setSpinning($('#todos-button-refresh i'));
         routes.controllers.api.json.AdventureTodoController.getTodos(adv.id, userId).ajax({success: function (results) {
             $(target + ' tbody').empty();
 
@@ -640,7 +636,7 @@ require([
             else
                 $(target).hide();
 
-            $('#todos-button-refresh i').removeClass("fa-spin");
+            utils.resetSpinning($('#todos-button-refresh i'));
         }});
     };
 
@@ -685,7 +681,7 @@ require([
 
     var loadFiles = function () {
         //$('.files-loading').show();
-        $('#files-button-refresh i').addClass("fa-spin");
+        utils.setSpinning($('#files-button-refresh i'));
 
         routes.controllers.api.json.AdventureFileController.listFiles(adv.id).ajax({success: function (files) {
             $('#files-list tbody').empty();
@@ -700,7 +696,7 @@ require([
             }
 
             //$('.files-loading').hide();
-            $('#files-button-refresh i').removeClass("fa-spin");
+            utils.resetSpinning($('#files-button-refresh i'));
         }});
     };
 
