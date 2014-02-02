@@ -170,6 +170,8 @@ require([
 
 
     var renderEmail = function (data, replace) {
+        if(data.timestamp != null) data.timestamp = utils.formatDateLong(data.timestamp);
+
         if (replace)
             replace.replaceWith(tmpl('emails-template', data)).fadeIn();
         else
