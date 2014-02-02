@@ -181,10 +181,10 @@ public class MyUsernamePasswordAuthProvider
     protected com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.LoginResult loginUser(
             final MyLoginUsernamePasswordAuthUser authUser) {
         final User u = new UserDAO().findByUsernamePasswordIdentity(authUser);
-        final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(u.getId());
         if (u == null) {
             return LoginResult.NOT_FOUND;
         } else {
+            final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(u.getId());
             Logger.debug("MyUsernamePasswordAuthProvider: Login user with id " + u.getId());
             authUser.setUserId(u.getId());
             if (ue == null) {
