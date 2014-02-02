@@ -112,6 +112,13 @@ define(function(){
 
         colorOfUser: function (userStr) {
             return ('#' + ('000000' + (parseInt(parseInt(userStr, 36).toExponential().slice(2, -5), 10) & 0xFFFFFF).toString(16).toUpperCase()).slice(-6));
+        },
+
+        setSpinning: function(el) {
+            $(el).addClass('fa fa-spin');
+        }                                ,
+        resetSpinning: function(el) {
+            $(el).removeClass('fa-spin');
         }
 
     };
