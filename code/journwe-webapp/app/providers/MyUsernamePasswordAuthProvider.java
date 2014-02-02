@@ -15,10 +15,8 @@ import controllers.html.ApplicationController;
 import models.dao.user.TokenActionDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
-import models.user.ETokenType;
-import models.user.EUserRole;
-import models.user.User;
-import models.user.UserEmail;
+import models.dao.user.UserSocialDAO;
+import models.user.*;
 import play.Application;
 import play.Logger;
 import play.data.Form;
@@ -28,6 +26,7 @@ import play.data.validation.Constraints.Required;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Call;
+import play.mvc.Http;
 import play.mvc.Http.Context;
 
 import java.lang.reflect.InvocationTargetException;
@@ -150,11 +149,26 @@ public class MyUsernamePasswordAuthProvider
             final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(u.getId());
             if (ue != null) {
                 if (ue.isValidated()) {
+                    Logger.debug("SignupResult.USER_EXISTS");
                     // This user exists, has its email validated and is active
                     return SignupResult.USER_EXISTS;
                 } else {
+                    Logger.debug("SignupResult.USER_EXISTS_UNVERIFIED");
                     // this user exists, is active but has not yet validated its
                     // email
+                    if(user.getId()==null) {
+                        // Facebook and other social users have "validated == 0"
+                        // Create MyUsernamePasswordAuthUser user
+                        String userId = u.getId();
+                        UserSocial us = new UserSocial();
+                        us.setProvider("password");
+                        us.setSocialId(userId);
+                        us.setUserId(userId);
+                        new UserSocialDAO().save(us);
+                        // set id of AuthUser
+                        user.setUserId(userId);
+                        PlayAuthenticate.storeUser(Http.Context.current().session(),user);
+                    }
                     return SignupResult.USER_EXISTS_UNVERIFIED;
                 }
             }
@@ -168,7 +182,20 @@ public class MyUsernamePasswordAuthProvider
         new UserDAO().save(newUser);
 
         // Remember the user id for login
-        user.setUserId(newUser.getId());
+        String userId = newUser.getId();
+        user.setUserId(userId);
+        UserSocial us = new UserSocial();
+        us.setProvider("password");
+        us.setSocialId(userId);
+        us.setUserId(userId);
+        new UserSocialDAO().save(us);
+
+        Logger.debug("Signup: Created new user with id "+userId);
+
+        // Store newly created user in session.
+        PlayAuthenticate.storeUser(Http.Context.current().session(),user);
+
+        Logger.debug("Stored in cache the user with id "+PlayAuthenticate.getUser(Http.Context.current()));
 
         // Usually the email should be verified before allowing login, however
         // if you return
@@ -221,7 +248,7 @@ public class MyUsernamePasswordAuthProvider
             final MySignup signup, final Context ctx) {
         // TODO
         MyUsernamePasswordAuthUser toReturn = new MyUsernamePasswordAuthUser(signup);
-        Logger.debug("buildSignupAuthUser() -> MyUsernamePasswordAuthUser.id = " + toReturn.getId());
+        Logger.debug("MyUsernamePasswordAuthUser buildSignupAuthUser() -> MyUsernamePasswordAuthUser.id = " + toReturn.getId());
         return toReturn;
     }
 
@@ -231,7 +258,7 @@ public class MyUsernamePasswordAuthProvider
         // TODO
         MyLoginUsernamePasswordAuthUser toReturn = new MyLoginUsernamePasswordAuthUser(login.getPassword(),
                 login.getEmail(), login.getUserId());
-        Logger.debug("buildLoginAuthUser() -> MyLoginUsernamePasswordAuthUser.id = " + toReturn.getId());
+        Logger.debug("MyLoginUsernamePasswordAuthUser buildLoginAuthUser() -> MyLoginUsernamePasswordAuthUser.id = " + toReturn.getId());
         return toReturn;
     }
 
@@ -285,7 +312,8 @@ public class MyUsernamePasswordAuthProvider
     @Override
     protected String generateVerificationRecord(
             final MyUsernamePasswordAuthUser user) {
-        return generateVerificationRecord(new UserDAO().findByAuthUserIdentity(user));
+        User u = new UserDAO().findByAuthUserIdentity(user);
+        return generateVerificationRecord(u);
     }
 
     protected String generateVerificationRecord(final User user) {
@@ -412,12 +440,15 @@ public class MyUsernamePasswordAuthProvider
 
     public void sendVerifyEmailMailingAfterSignup(final User user,
                                                   final Context ctx) {
-
-        final String subject = getVerifyEmailMailingSubjectAfterSignup(user,
-                ctx);
-        final String token = generateVerificationRecord(user);
-        final Body body = getVerifyEmailMailingBodyAfterSignup(token, user, ctx);
-        sendSESMail(subject, body, getEmailName(user));
+        if (user != null) {
+            final String subject = getVerifyEmailMailingSubjectAfterSignup(user,
+                    ctx);
+            final String token = generateVerificationRecord(user);
+            final Body body = getVerifyEmailMailingBodyAfterSignup(token, user, ctx);
+            sendSESMail(subject, body, getEmailName(user));
+        } else {
+            Logger.warn("Aborted sending verification-email mailing because supplied user is null.");
+        }
     }
 
     private String getEmailName(final User user) {
