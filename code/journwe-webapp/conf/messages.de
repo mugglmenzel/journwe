@@ -385,7 +385,6 @@ playauthenticate.link.account.ok=OK
 # play-authenticate: SignupController folder translations
 
 playauthenticate.verify.email.title=E-Mail-Adresse bestätigen
-playauthenticate.verify.email.requirement=Du musst deine E-Mail-Adresse bestätigen, bevor du PlayAuthenticate nutzen kannst.
 playauthenticate.verify.email.cta=Eine E-Mail wurde zur registrierten E-Mail-Adresse versandt. Bitte öffne sie und klicke auf den enthaltenen Link, um deinen Account zu aktivieren.
 
 playauthenticate.password.reset.title=Passwort zurücksetzen
@@ -395,8 +394,6 @@ playauthenticate.password.forgot.title=Passwort vergessen
 playauthenticate.password.forgot.cta=Informationen zum Zurücksetzen versenden
 
 playauthenticate.oauth.access.denied.title=OAuth-Zugriff abgelehnt
-playauthenticate.oauth.access.denied.explanation=Wenn du PlayAuthenticate mit OAuth nutzen möchtest, musst du die Verbindung akzeptieren.
-playauthenticate.oauth.access.denied.alternative=Falls du dies lieber nicht tun möchtest, kannst du dich auch
 playauthenticate.oauth.access.denied.alternative.cta=mit Benutzername und Passwort registrieren
 
 playauthenticate.token.error.title=Token-Fehler
@@ -406,41 +403,18 @@ playauthenticate.user.exists.title=Benutzer vorhanden
 playauthenticate.user.exists.message=Dieser Benutzer existiert bereits.
 
 # play-authenticate: Navigation
-playauthenticate.navigation.profile=Profil
-playauthenticate.navigation.link_more=Mehr Zugänge verknüpfen
-playauthenticate.navigation.logout=Abmelden
 playauthenticate.navigation.login=Anmelden
 playauthenticate.navigation.home=Startseite
-playauthenticate.navigation.restricted=Geschützte Seite
 playauthenticate.navigation.signup=Registrieren
-
-# play-authenticate: Handler
-playauthenticate.handler.loginfirst=Du musst dich zuerst anmelden um ''{0}'' anzuzeigen
-
 
 # play-authenticate: Profile
 playauthenticate.profile.title=Benutzerprofil
 playauthenticate.profile.mail=Dein Name lautet {0} und deine E-Mail-Adresse ist {1}!
 playauthenticate.profile.unverified=unverifiziert - Klicke um zu bestätigen
-playauthenticate.profile.verified=verifiziert
-playauthenticate.profile.providers_many=Es sind {0} Konten mit deinem Benutzer verknüpft:
-playauthenticate.profile.providers_one=Es ist ein Konto mit deinem Benutzer verknüpft:
-playauthenticate.profile.logged=Du bist momentan eingeloggt mit:
-playauthenticate.profile.session=Deine Benutzer-Identifikation ist {0} und deine Sitzung läuft {1} ab
-playauthenticate.profile.session_endless=Deine Benutzer-Identifikation ist {0} und deine Sitzung läuft nie ab
-playauthenticate.profile.password_change=Ändere/setze ein Passwort für deinen Benutzer
 
 # play-authenticate - sample: Index page
-playauthenticate.index.title=Willkommen bei PlayAuthenticate
-playauthenticate.index.intro=PlayAuthenticate Beispiel-Applikation
-playauthenticate.index.intro_2=Dies ist eine Blaupause für eine einfache Applikation mit Authentifikation.
-playauthenticate.index.intro_3=Schau dir die Navigation oben an, um einfache Beispielseiten inklusive der unterstützten Authentifikationsmethoden zu sehen.
+playauthenticate.index.title=Willkommen bei JournWe
 playauthenticate.index.heading=Überschrift
-playauthenticate.index.details=Details anzeigen
-
-# play-authenticate - sample: Restricted page
-playauthenticate.restricted.secrets=Überall Geheimnisse!
-
 
 ### --- play-authenticate END
 
