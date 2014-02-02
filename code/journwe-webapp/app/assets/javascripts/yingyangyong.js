@@ -109,7 +109,7 @@ define([
     var addFriend = function () {
         var id = 'people-item-' + peopleCounter++;
         var input = ($('#people-add-input').attr('type') == 'text') ? '<input type="hidden" name="facebook[]" value="' + facebookUsers[$('#people-add-input').val()] + '">' : '<input type="hidden" name="email[]" value="' + $('#people-add-input').val() + '">';
-        $('#people-list').append('<li id="' + id + '">' + input + '<span class="label label-danger"><i class="' + $('#people-add-type').attr('class') + '"></i> ' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        $('#people-list').append('<li id="' + id + '">' + input + '<span class="label label-danger"><i class="' + $('#people-add-type-icon').attr('class') + '"></i> ' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
         $('#people-add-input').val('');
     }
 

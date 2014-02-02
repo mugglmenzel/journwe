@@ -119,6 +119,12 @@ define(function(){
         }                                ,
         resetSpinning: function(el) {
             $(el).removeClass('fa-spin');
+        },
+        setStash: function(el) {
+            $(el).addClass('stash');
+        },
+        resetStash: function(el) {
+            $(el).removeClass('stash');
         }
 
     };
