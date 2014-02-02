@@ -1032,23 +1032,23 @@ require([
         },
 
         'click #todos-list tbody .btn-affiliate, #todos-adventurers-list tbody .btn-affiliate': function (e) {
-            e.preventDefault();
-
             var a = $(this),
                 tr = a.parents('.todo-entry'),
                 id = tr.data('id');
 
-            $('#amazon-affiliate .modal-content .modal-body .content').first().empty();
-            $('#amazon-affiliate .modal-content .modal-body .fa-spin').first().removeClass('stash');
-            $('#amazon-affiliate').modal();
+            //$('#amazon-affiliate .modal-content .modal-body .content').first().empty();
+            $('#amazon-affiliate .modal-content .modal-body .affiliate-loading i').removeClass('stash');
+            $('#amazon-affiliate').modal('show');
 
             routes.controllers.api.json.AdventureTodoController.getTodoAffiliateItems(adv.id).ajax({data: {id: id}, success: function (res) {
-                if (!res.length) $('#amazon-affiliate .modal-content .modal-body .content').first().html(messages['adventure.todos.amazon.noItems']);
+                if (!res.length) $('#amazon-affiliate .modal-content .modal-body .content').html(messages['adventure.todos.amazon.noItems']);
+
 
                 for (var i in res)
-                    $('#amazon-affiliate .modal-content .modal-body .content').first().append(tmpl('todo-affiliate-template', res[i]));
+                    $('#amazon-affiliate .modal-content .modal-body .content').append(tmpl('todo-affiliate-template', res[i]));
 
-                $('#amazon-affiliate .modal-content .modal-body .fa-spin').first().addClass('stash');
+
+                $('#amazon-affiliate .modal-content .modal-body .affiliate-loading i').addClass('stash');
             }});
         },
 

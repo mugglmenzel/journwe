@@ -7,9 +7,10 @@
 @if(auth.canViewAndDownloadFiles()) {
     <script type="text/x-tmpl" id="files-template">
         <tr data-id="{%=o.file.fileName%}">
-            <td><a class="btn btn-link" href="{%=o.file.url%}" target="_blank"><i class="fa fa-file"></i> {%=o.file.fileName%}</a></td>
+            <td style="width:100%;"><a class="btn btn-link" href="{%=o.file.url%}" target="_blank"><i class="fa fa-file"></i> {%=o.file.fileName%}</a></td>
             <td><span class="label label-info" title="{%=o.user.name%}">{%=String(o.user.name).split(/\s/)[0]%}</span></td>
-            <td class="text-center"><button class="btn btn-primary" href="{%=o.file.url%}" target="_blank"><i class="fa fa-cloud-download"></i></button> <button class="btn btn-file-delete btn-danger"><i class="fa fa-trash-o"></i></button></td>
+            <td class="text-center"><button class="btn btn-primary" href="{%=o.file.url%}" target="_blank"><i class="fa fa-cloud-download"></i></button></td>
+            <td class="text-center"><button class="btn btn-file-delete btn-danger"><i class="fa fa-trash-o"></i></button></td>
         </tr>
     </script>
 
@@ -19,6 +20,7 @@
                 <th>@Messages("adventure.files.fileName")</th>
                 <th>@Messages("adventure.files.uploadedBy")</th>
                 <!--<th>@Messages("adventure.files.downloadBy")</th>-->
+                <th class="text-center"></th>
                 <th class="text-center">@Messages("adventure.general.listactions")</th>
             </tr>
         </thead>

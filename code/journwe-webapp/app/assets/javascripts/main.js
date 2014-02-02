@@ -2,7 +2,7 @@
  * main.scala.html
  */
 
-require(['common/utils'], function(utils){
+require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/2.0.0/js/bootstrap-switch.min.js'], function(utils){
 
     var lastScrollTop = 0,
         bgr = $('#background'),
@@ -54,4 +54,8 @@ require(['common/utils'], function(utils){
 
     // Init bootstrap switch
     $('input[type="checkbox"],[type="radio"]').not('.star').bootstrapSwitch();
+
+    //Flash Modals
+    $('.modal-auto-load').modal();
+
 });

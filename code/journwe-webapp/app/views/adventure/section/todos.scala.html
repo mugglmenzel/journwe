@@ -11,7 +11,9 @@
                     <tr>
                         <th colspan="2">@Messages("adventure.todos.listheading")</th>
                         <th></th>
+                        @if(auth.canEditTodoItem()) {
                         <th class="text-center">@Messages("adventure.general.listactions")</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -55,9 +57,9 @@
         <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.todoId%}">
             <td><button class="btn btn-primary btn-check"><i class="fa fa{% if(o.status == '@EStatus.COMPLETE'){ %}{%=String('-check')%}{% } %}-square-o"></i></button></td>
             <td style="width:100%;">{%=o.title%}</td>
-            <td><a class="btn btn-link btn-affiliate"> @Messages("adventure.todos.amazon.purchase") </a></td>
+            <td class="text-center"><a class="btn btn-success btn-affiliate"><i class="fa fa-shopping-cart"></i></a></td>
             @if(auth.canEditTodoItem()) {
-                <td class="text-center"><button class="btn btn-danger btn-delete"><i class="fa fa-trash-o"></i></button></td>
+            <td class="text-center"><button class="btn btn-danger btn-delete"><i class="fa fa-trash-o"></i></button></td>
             }
         </tr>
     </script>
@@ -75,12 +77,12 @@
         <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.todoId%}">
             <td><i class="fa fa-{% if(o.status == '@EStatus.COMPLETE'){ %}{%=String('-check')%}{% } %}-square-o"></i></td>
             <td style="width:100%;">{%=o.title%}</td>
-            <td><a class="btn btn-link btn-affiliate"> @Messages("adventure.todos.amazon.purchase") </a></td>
+            <td><a class="btn btn-success btn-affiliate"><i class="fa fa-shopping-cart"></i></a></td>
             <td class="text-center"><button class="btn btn-primary btn-copy" title="Copy todo to my list."><i class="fa fa-plus"></i></button></td>
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-affiliate-template">
-        <div class="media" style="max-height: 200px">
+        <li class="media" style="max-height: 200px">
             <a class="pull-left" href="{%=o.url%}" target="_blank">
                 <img class="media-object" src="{%=o.image%}" alt="{%=o.title%} thumbnail" style="width: 100px;">
             </a>
@@ -88,8 +90,23 @@
                 <h4 class="media-heading"><a class="pull-left" href="{%=o.url%}" target="_blank">{%=o.title%}</a>
                     {%=o.price%}</h4>
                 {%=o.description%} <a href="{%=o.url%}" target="_blank"> @Messages("adventure.general.button.more") </a>
-    </div>
-    </div>
+            </div>
+        </li>
     </script>
+
+    <div id="amazon-affiliate" class="modal fade bs-modal-lg" tabindex="-1" role="dialog" style="color: black;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title"> @Messages("adventure.todos.amazon.title") </h3>
+                </div>
+                <div class="modal-body"><div class="affiliate-loading"><i class="icon-journwe fa fa-spin"></i></div> <ul class="content media-list"></ul></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> @Messages("adventure.general.button.close")</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     }
