@@ -308,6 +308,7 @@ playauthenticate.accounts.merge.success=Accounts merged successfully
 
 playauthenticate.verify_email.error.already_validated=Your e-mail has already been validated.
 playauthenticate.verify_email.error.set_email_first=You need to set an e-mail address first.
+playauthenticate.verify_email.error.user_null=User cannot be created with this e-mail address.
 playauthenticate.verify_email.message.instructions_sent=Instructions on how to verify your e-mail address have been sent to {0}.
 playauthenticate.verify_email.success=E-mail address ({0}) successfully verified.
 

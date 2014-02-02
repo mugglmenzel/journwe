@@ -325,7 +325,8 @@ playauthenticate.accounts.link.success=Das Konto wurde erfolgreich verknüpft.
 playauthenticate.accounts.merge.success=Die Konten wurden erfolgreich zusammengeführt.
 
 playauthenticate.verify_email.error.already_validated=Deine E-Mail-Adresse wurde bereits verifiziert.
-playauthenticate.verify_email.error.set_email_first=Du musst zuerst eine E-Mail-Adresse definieren.
+playauthenticate.verify_email.error.set_email_first=Du musst zuerst eine E-Mail-Adresse setzen.
+playauthenticate.verify_email.error.user_null=Nutzer mit dieser E-Mail Adresse kann nicht angelegt werden.
 playauthenticate.verify_email.message.instructions_sent=Instruktionen zur Bestätigung deiner E-Mail-Adresse wurden an {0} gesendet.
 playauthenticate.verify_email.success=E-Mail-Adresse ({0}) wurde erfolgreich verifiziert.
 
@@ -355,7 +356,6 @@ playauthenticate.login.password.placeholder=Passwort
 playauthenticate.login.now=Jetzt anmelden
 playauthenticate.login.forgot.password=Passwort vergessen?
 playauthenticate.login.oauth=oder melde dich mit einem der folgenden Dienste an:
-playauthenticate.login.register=Registrieren
 playauthenticate.login.or=oder
 
 playauthenticate.signup.title=Registrierung
