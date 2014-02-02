@@ -10,6 +10,7 @@
 body, body *, .btn, .btn-link {
   font-family: @font;
   font-weight: @font-normal;
+  font-size: 16px;
 
   & b,
   body strong {
@@ -20,6 +21,7 @@ body, body *, .btn, .btn-link {
 h1 {
   font-family: @font-title;
   font-weight: @font-title-normal;
+  font-size: 32px;
 
   &, & small {
     font-weight: @font-title-thin;
@@ -30,11 +32,16 @@ h1 {
 h2, h3, h4 {
   font-family: @font-title;
   font-weight: @font-title-normal;
+  font-size: 24px;
 
   &, & small {
     font-weight: @font-title-normal;
     margin-bottom: 20px;
   }
+}
+
+h2 {
+  font-size: 28px;
 }
 
 a {
@@ -199,12 +206,38 @@ h1 .editableform {
   &.headline {
     vertical-align: middle;
     height: 400;
-    background: none;
+    background: rgba(0,0,0,0.4);
+    padding-bottom: 30px;
 
     & .text-success {
-      font-size: 68px;
-      font-weight: @font-bold;
-      text-shadow: 0 0 20px white, 0 0 5px white, 0 0 3px white;
+      text-shadow: -1px 1px 10px black;
+      margin-bottom: 20px;
+
+      & div:first-child {
+        font-size: 68px;
+        color: white;
+        font-family: @font-title; 
+        font-weight: @font-title-bold;
+
+        & img {
+          height: 128px;
+          vertical-align: text-bottom;
+          position: absolute;
+          left: 18%;
+          top: 38px;
+        }
+
+        & strong {
+          font-weight: @font-title-thin;
+          font-size: 60px; 
+        }
+      }
+
+      & div:last-child {
+        font-size: 40px;
+        font-weight: @font-bold;
+        color: white;
+      }
     }
 
     & .dropdown-menu {
@@ -882,6 +915,7 @@ h3 {
 
   & * {
     color: #333;
+    font-size: 14px;
   }
 
   & .navbar-text {
