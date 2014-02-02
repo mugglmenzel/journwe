@@ -58,12 +58,11 @@
             @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
                 <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
             } else {
-                <a class="btn btn-danger pull-right" onclick="$('#leave').modal('show');"><i class="fa fa-unlink"></i> @Messages("adventure.general.button.leave")</a>
+                <a class="btn btn-danger pull-right" data-toggle="modal" data-target="#leave"><i class="fa fa-unlink"></i> @Messages("adventure.general.button.leave")</a>
             }
 
-            <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal('show');"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
-
-            <a class="btn btn-primary pull-right" onclick="$('#pdfAdventure').modal('show');"><i class="fa fa-file-text"></i> @Messages("adventure.general.button.pdf")</a>
+            <a class="btn btn-primary pull-right" data-toggle="modal" data-target="#cloneAdventure"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
+            <a class="btn btn-primary pull-right" data-toggle="modal" data-target="#pdfAdventure"><i class="fa fa-file-text"></i> @Messages("adventure.general.button.pdf")</a>
 
             <input id="adventure-prime-image-file-input" type="file" class="hide"/>
             <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$('#adventure-prime-image-file-input').click();"><i class="fa fa-upload"></i> @Messages("adventure.files.imageUpload")</a>
@@ -238,14 +237,27 @@
 
     }
 
+
+    <div id="amazon-affiliate" class="modal fade in" tabindex="-1" role="dialog" style="color: black;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title"> @Messages("adventure.todos.amazon.title") </h3>
+                </div>
+                <div class="modal-body"><span class="affiliate-loading lead"><i class="fa fa-spin icon-journwe"></i></span> <ul class="content media-list"></ul></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">@Messages("adventure.general.button.close")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @cloneAdventure(adv,new DynamicForm())
-
-
 
     @createPDF(adv,new DynamicForm())
 
-
-    <div id="leave" class="modal fade" tabindex="-1" role="dialog">
+    <div id="leave" class="modal fade in" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -259,6 +271,8 @@
             </div>
         </div>
     </div>
+
+
 
 </div>
 

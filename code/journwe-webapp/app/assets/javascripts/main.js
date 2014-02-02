@@ -3,7 +3,7 @@
  */
 
 require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/2.0.0/js/bootstrap-switch.min.js'], function(utils){
-
+    /*
     var lastScrollTop = 0,
         bgr = $('#background'),
         adv = $('#adventure-container');
@@ -39,13 +39,7 @@ require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switc
             lastScrollTop = st;
         }.bind(this))
     );
-
-
-    // Collapse inspiration
-    $('#navbar-secondlevel-collapsable .collapse').collapse({
-        toggle: false
-    });
-
+    */
 
     // Init drop behaviour
     jQuery.event.props.push('dataTransfer');

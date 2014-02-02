@@ -57,7 +57,7 @@
         <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.todoId%}">
             <td><button class="btn btn-primary btn-check"><i class="fa fa{% if(o.status == '@EStatus.COMPLETE'){ %}{%=String('-check')%}{% } %}-square-o"></i></button></td>
             <td style="width:100%;">{%=o.title%}</td>
-            <td class="text-center"><a class="btn btn-success btn-affiliate"><i class="fa fa-shopping-cart"></i></a></td>
+            <td class="text-center"><a class="btn btn-success btn-affiliate" data-toggle="modal" data-target="#amazon-affiliate"><i class="fa fa-shopping-cart"></i></a></td>
             @if(auth.canEditTodoItem()) {
             <td class="text-center"><button class="btn btn-danger btn-delete"><i class="fa fa-trash-o"></i></button></td>
             }
@@ -82,31 +82,17 @@
         </tr>
     </script>
     <script type="text/x-tmpl" id="todo-affiliate-template">
-        <li class="media" style="max-height: 200px">
+        <li class="media" style="margin-bottom: 20px;">
             <a class="pull-left" href="{%=o.url%}" target="_blank">
-                <img class="media-object" src="{%=o.image%}" alt="{%=o.title%} thumbnail" style="width: 100px;">
+                <img class="media-object" src="{% if(!o.image || o.image == null || o.image == '') { %}{%=String('http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=o.image%}{% } %}" alt="{%=o.title%} thumbnail" style="width: 100px;">
             </a>
             <div class="media-body">
-                <h4 class="media-heading"><a class="pull-left" href="{%=o.url%}" target="_blank">{%=o.title%}</a>
-                    {%=o.price%}</h4>
-                {%=o.description%} <a href="{%=o.url%}" target="_blank"> @Messages("adventure.general.button.more") </a>
+                <h4 class="media-heading clearfix"><a class="pull-left" href="{%=o.url%}" target="_blank">{%=o.title%}</a>
+                    <span class="pull-right">{%=o.price%}</span></h4>
+                <div style="max-height: 150px; overflow: hidden;"><p>{%=o.description%}</p></div>
+                <div class="pull-right"><a href="{%=o.url%}" class="btn btn-link text-info" target="_blank"> @Messages("adventure.general.button.more") </a></div>
             </div>
         </li>
     </script>
-
-    <div id="amazon-affiliate" class="modal fade bs-modal-lg" tabindex="-1" role="dialog" style="color: black;">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title"> @Messages("adventure.todos.amazon.title") </h3>
-                </div>
-                <div class="modal-body"><div class="affiliate-loading"><i class="icon-journwe fa fa-spin"></i></div> <ul class="content media-list"></ul></div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> @Messages("adventure.general.button.close")</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     }

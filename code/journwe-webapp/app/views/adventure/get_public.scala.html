@@ -67,10 +67,6 @@
             <div class="clearfix"></div>
         </div>
 
-        <div>
-            @quickintro()
-        </div>
-
         <script type="text/x-tmpl" id="adventurer-template">
             <div data-id="{%=o.id%}" id="adventurers-adventurer-{%=o.id%}" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
                 <a href="{%=o.link%}">
@@ -128,6 +124,7 @@
     </div>
 
 </div>
+@quickintro()
 
 <script>
 $(document).ready(function () {
