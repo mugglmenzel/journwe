@@ -324,6 +324,7 @@ languages.de=Deutsch
 playauthenticate.accounts.link.success=Das Konto wurde erfolgreich verknüpft.
 playauthenticate.accounts.merge.success=Die Konten wurden erfolgreich zusammengeführt.
 
+playauthenticate.verify.email.requirement=Du musst deine E-Mail-Adresse bestätigen, bevor du JournWe.com nutzen kannst.
 playauthenticate.verify_email.error.already_validated=Deine E-Mail-Adresse wurde bereits verifiziert.
 playauthenticate.verify_email.error.set_email_first=Du musst zuerst eine E-Mail-Adresse setzen.
 playauthenticate.verify_email.error.user_null=Nutzer mit dieser E-Mail Adresse kann nicht angelegt werden.
@@ -342,9 +343,9 @@ playauthenticate.change_password.success=Das Passwort wurde erfolgreich geänder
 playauthenticate.password.signup.error.passwords_not_same=Die Passwörter stimmen nicht überein.
 playauthenticate.password.login.unknown_user_or_pw=Der Benutzer wurde nicht gefunden oder das Passwort stimmt nicht überein.
 
-playauthenticate.password.verify_signup.subject=PlayAuthenticate: Vervollständige deine Anmeldung
-playauthenticate.password.verify_email.subject=PlayAuthenticate: E-Mail-Adresse bestätigen
-playauthenticate.password.reset_email.subject=PlayAuthenticate: Anleitung zum Passwortzurücksetzen
+playauthenticate.password.verify_signup.subject=JournWe: Vervollständige deine Anmeldung
+playauthenticate.password.verify_email.subject=JournWe: E-Mail-Adresse bestätigen
+playauthenticate.password.reset_email.subject=JournWe: Anleitung zum Passwortzurücksetzen
 
 # play-authenticate: Additional translations
 
