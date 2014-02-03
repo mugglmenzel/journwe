@@ -47,7 +47,7 @@ public class UserEmail {
 
     // GSI is needed because sometimes we need to identify a user by email
     // for example for password-recovery
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName =
+    @DynamoDBIndexHashKey(globalSecondaryIndexName =
             "email-index")
     public String getEmail() {
         return email;

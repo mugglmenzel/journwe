@@ -144,10 +144,15 @@ public class MyUsernamePasswordAuthProvider
 
     @Override
     protected com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.SignupResult signupUser(final MyUsernamePasswordAuthUser user) {
+        // Finds a user if emailuser with this email exists.
         final User u = new UserDAO().findByUsernamePasswordIdentity(user);
+        // A user with this email has been found.
         if (u != null) {
+            // Get the primary email (as he might have multiple email addresses).
             final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(u.getId());
             if (ue != null) {
+                // Wanted to sign up a user that already exists?
+                // Try the Forgot Password? Link.
                 if (ue.isValidated()) {
                     Logger.debug("SignupResult.USER_EXISTS");
                     // This user exists, has its email validated and is active
@@ -155,47 +160,45 @@ public class MyUsernamePasswordAuthProvider
                 } else {
                     Logger.debug("SignupResult.USER_EXISTS_UNVERIFIED");
                     // this user exists, is active but has not yet validated its
-                    // email
-                    if(user.getId()==null) {
-                        // Facebook and other social users have "validated == 0"
-                        // Create MyUsernamePasswordAuthUser user
-                        String userId = u.getId();
-                        UserSocial us = new UserSocial();
-                        us.setProvider("password");
-                        us.setSocialId(userId);
-                        us.setUserId(userId);
-                        new UserSocialDAO().save(us);
-                        // set id of AuthUser
-                        user.setUserId(userId);
-                        PlayAuthenticate.storeUser(Http.Context.current().session(),user);
-                    }
-                    return SignupResult.USER_EXISTS_UNVERIFIED;
+                    // email.
+                    // One reason ist, that the user has created an account but never
+                    // verified his email.
+                    // Another reason for this to happen can be that a user tries to register who has already
+                    // signed up with a Facebook account (or other social media) that has this
+                    // email. Facebook (and other social users) have "validated == 0" when they
+                    // sign up. We need to validate their email before we can allow them to use this email.
+//                    if(user.getId()==null) {
+//                        // Create a password-user with the id of the facebook user.
+//                        String userId = u.getId();
+//                        UserSocial us = new UserSocial();
+//                        us.setProvider("password");
+//                        us.setSocialId(userId);
+//                        us.setUserId(userId);
+//                        new UserSocialDAO().save(us);
+//                        // Save user's hashed password
+//                        u.setHashedPassword(user.getHashedPassword());
+//                        new UserDAO().save(u);
+//
+//                        // Problem with the following code:
+//                        // the user captures the account for which he claimed
+//                        // the email address
+//                        // SECURITY PROBLEM !!!
+//                        //user.setUserId(userId);
+//                        //PlayAuthenticate.storeUser(Http.Context.current().session(),user);
+//                    }
+//                    return SignupResult.USER_EXISTS_UNVERIFIED;
                 }
             }
         }
-        // The user either does not exist or is inactive - create a new one
-        // TODO
-        // why? -> @SuppressWarnings("unused")
+        // The user either does not exist or is inactive - create a new one.
+        // Using this method also creates the password-UserSocial.
         final User newUser = new UserDAO().create(user, EUserRole.USER);
         // save the password-hash
         newUser.setHashedPassword(user.getHashedPassword());
         new UserDAO().save(newUser);
-
-        // Remember the user id for login
-        String userId = newUser.getId();
-        user.setUserId(userId);
-        UserSocial us = new UserSocial();
-        us.setProvider("password");
-        us.setSocialId(userId);
-        us.setUserId(userId);
-        new UserSocialDAO().save(us);
-
-        Logger.debug("Signup: Created new user with id "+userId);
-
-        // Store newly created user in session.
+        user.setUserId(newUser.getId());
+        // Update the session
         PlayAuthenticate.storeUser(Http.Context.current().session(),user);
-
-        Logger.debug("Stored in cache the user with id "+PlayAuthenticate.getUser(Http.Context.current()));
 
         // Usually the email should be verified before allowing login, however
         // if you return
@@ -440,15 +443,18 @@ public class MyUsernamePasswordAuthProvider
 
     public void sendVerifyEmailMailingAfterSignup(final User user,
                                                   final Context ctx) {
-        if (user != null) {
-            final String subject = getVerifyEmailMailingSubjectAfterSignup(user,
+        Logger.debug("sendVerifyEmailMailingAfterSignup for user "+user);
+        if(user!=null)
+            Logger.debug("with userid "+user.getId());
+//        if (user != null) {
+        final String subject = getVerifyEmailMailingSubjectAfterSignup(user,
                     ctx);
-            final String token = generateVerificationRecord(user);
-            final Body body = getVerifyEmailMailingBodyAfterSignup(token, user, ctx);
+        final String token = generateVerificationRecord(user);
+        final Body body = getVerifyEmailMailingBodyAfterSignup(token, user, ctx);
             sendSESMail(subject, body, getEmailName(user));
-        } else {
-            Logger.warn("Aborted sending verification-email mailing because supplied user is null.");
-        }
+//        } else {
+//            Logger.warn("Aborted sending verification-email mailing because supplied user is null.");
+//        }
     }
 
     private String getEmailName(final User user) {

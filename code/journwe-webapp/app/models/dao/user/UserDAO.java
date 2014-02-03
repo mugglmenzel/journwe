@@ -1,7 +1,9 @@
 package models.dao.user;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.model.*;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.MailChimpObject;
@@ -13,7 +15,6 @@ import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.SubscriberDAO;
 import models.dao.common.CommonEntityDAO;
-import models.dao.common.PersistenceHelper;
 import models.user.*;
 import play.Logger;
 import play.cache.Cache;
@@ -21,10 +22,7 @@ import play.mvc.Controller;
 import providers.MyUsernamePasswordAuthProvider;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class UserDAO extends CommonEntityDAO<User> {
@@ -76,41 +74,27 @@ public class UserDAO extends CommonEntityDAO<User> {
      * @return
      */
     public static User findByEmail(final String email) {
+        User toReturn = null;
         if (email == null || email.isEmpty())
             return null;
         UserEmail key = new UserEmail();
         key.setEmail(email);
+        key.setEmailRangeKey(email);
 
-        /* proposal:
-        List<UserEmail> items = pm.query(UserEmail.class, new DynamoDBQueryExpression<UserEmail>().withHashKeyValues(key).withIndexName("email-index").withRangeKeyCondition("email", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withS(email))))
-        */
-
-
-        QueryRequest queryRequest = new QueryRequest()
-                .withTableName("journwe-useremail")
-                .withIndexName("email-index");
-        HashMap<String, Condition> keyConditions = new HashMap<String, Condition>();
-        keyConditions.put("email", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withS(email)));
-        queryRequest.setKeyConditions(keyConditions);
-        queryRequest.setSelect(Select.ALL_PROJECTED_ATTRIBUTES);
-        AmazonDynamoDB dynamoDbClient = PersistenceHelper.getDynamoDBClient();
-        QueryResult queryResult = dynamoDbClient.query(queryRequest);
-        List<Map<String, AttributeValue>> items = queryResult.getItems();
-        Iterator<Map<String, AttributeValue>> itemsIter = items.iterator();
-        String userId = null;
-        while (itemsIter.hasNext()) {
-            Map<String, AttributeValue> currentItem = itemsIter.next();
-            Iterator<String> currentItemIter = currentItem.keySet().iterator();
-            while (currentItemIter.hasNext()) {
-                String attr = (String) currentItemIter.next();
-                if (attr == "userId") {
-                    userId = currentItem.get(attr).getS();
-                }
+        // Query users by email address.
+        List<UserEmail> emails = pm.query(UserEmail.class,
+                new DynamoDBQueryExpression<UserEmail>().
+                withHashKeyValues(key).withIndexName("email-index").
+                        withConsistentRead(false));
+        for (UserEmail ue : emails) {
+            String userId = ue.getUserId();
+            List<UserSocial> socialists = new UserSocialDAO().findByUserId(userId);
+            for (UserSocial us : socialists) {
+                // Only return the user with password-usersocial.
+                if (us.getProvider().equalsIgnoreCase("password"))
+                    return getUser(userId);
             }
         }
-        if (userId == null)
-            return null;
-        User toReturn = getUser(userId);
         return toReturn;
     }
 
