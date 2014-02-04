@@ -1,7 +1,15 @@
 #journwe
 journwe.subtitle=Auf ins Abenteuer.
-landing.welcometext=JournWe ist das Beste seit geschnitten Brot. Planen und Organisieren von Gruppenreise - der pure Horror? Nicht mit JournWe. Einloggen, Reise eintragen, Freunde einladen, Cocktail schlürfen. Fertig.
+landing.welcometext=Alleine reisen ist doof. Starte ein JournWe. Einloggen, Reise eintragen, Freunde via Facebook oder E-Mail einladen - und zusammen verreisen.
 landing.cta=Subscribe mit Deiner Email-Adresse. Wir benachrichtigen Dich, wenn wir Online gehen. Kein Spam, versprochen!
+landing.invite.heading=Freunde einladen
+landing.invite.subtitle=Starte ein JournWe, lade Freunde ein und gestaltet zusammen einen Ausflug.
+landing.placetime.heading=Über Ort und Zeit abstimmen
+landing.placetime.subtitle=Stimmt euch ab: Wohin soll es gehen? Wann haben alle Zeit?
+landing.organize.heading=Reise organisieren
+landing.organize.subtitle=In eurem JournWe könnt ihr E-Mails und Dokumente sharen, TODO Listen anlegen und Kommentare schreiben.
+landing.fun.heading=Spaß haben!
+landing.fun.subtitle=Alleine reisen ist langweilig. Gemeinsam reisen macht Spaß.
 
 #Adventure.general.labels
 adventure.general.label.facebook=Facebook

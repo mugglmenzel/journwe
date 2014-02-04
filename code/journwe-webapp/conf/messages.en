@@ -1,7 +1,15 @@
 #journwe
 journwe.subtitle=where adventurers meet...
-landing.welcometext=JournWe helps you to start adventures with people you want to be your fellow adventurers. Find new friends to join your travel adventures or convince your friends on facebook to join an adventure.
+landing.welcometext=Travelling alone is boring. Start a new JournWe, invite your friends via facebook or e-mail. Travel together!
 landing.cta=Subscribe with your email to get notified when we go online!
+landing.invite.heading=Invite friends
+landing.invite.subtitle=Start a JournWe, invite friends, and organize a trip together.
+landing.placetime.heading=Vote for place and time
+landing.placetime.subtitle=Make a decision: Where to go? When does everybody have time?
+landing.organize.heading=Get organized
+landing.organize.subtitle=Use JournWe to share e-mails, documents, and your thoughts.
+landing.fun.heading=Have fun!
+landing.fun.subtitle=Traveling alone is boring. Travel with your friends and have fun together.
 
 #Adventure.general.labels
 adventure.general.label.facebook=Facebook
