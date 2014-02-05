@@ -196,6 +196,7 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventurePlaceController.addPlace(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.vote(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.deletePlace(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.getAdventurers(),
                         controllers.api.json.routes.javascript.AdventurePeopleController.getParticipants(),
                         controllers.api.json.routes.javascript.AdventurePeopleController.getOtherParticipants(),
                         controllers.api.json.routes.javascript.AdventurePeopleController.getInvitees(),

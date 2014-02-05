@@ -30,8 +30,8 @@
                 class="fa fa-info" title="Overview"></i></a></li>
             <li class="discussion"><a href="#discussion"><i class="fa fa-comments" title="Discussion"></i></a></li>
             <li class="emails"><a href="#emails"><i class="fa fa-envelope" title="Emails"></i></a></li>
-            <li class="places"><a href="#places"><i class="fa fa-globe" title="Place"></i></a></li>
             <li class="adventurers"><a href="#adventurers"><i class="fa fa-group" title="Adventurers"></i></a></li>
+            <li class="places"><a href="#places"><i class="fa fa-globe" title="Place"></i></a></li>
             <li class="times"><a href="#times"><i
                 class="fa fa-calendar" title="Date &amp; Time"></i></a></li>
             <li class="todos"><a href="#todos"><i
@@ -115,6 +115,24 @@
     </div>
     <hr/>
 
+    @if(auth.canViewAdventureAdventurersWidget()) {
+        <div class="jrn-container jrn-no-bottom-round">
+
+            <h2 id="adventurers"><i class="fa fa-group icon-for-adventure-title"></i> @Messages("adventure.getScala.adventurers.title")</h2>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="lead">@Messages("adventure.getScala.adventurers.subtitle")</p>
+                    @adventurers(adv, advr)
+                </div>
+            </div>
+        </div>
+
+        @if(auth.canViewAdventurerComments()) {
+            @comment.widget_comment(adv.getId + "adventurers", user)
+        }
+        <hr/>
+    }
+
     @if(auth.canViewAdventurePlacesWidget()) {
     <div class="jrn-container jrn-no-bottom-round">
         <h2 id="places"><i class="fa fa-globe icon-for-adventure-title"></i> @Messages("adventure.getScala.place.title")</h2>
@@ -134,23 +152,7 @@
     <hr/>
     }
 
-    @if(auth.canViewAdventureAdventurersWidget()) {
-    <div class="jrn-container jrn-no-bottom-round">
 
-        <h2 id="adventurers"><i class="fa fa-group icon-for-adventure-title"></i> @Messages("adventure.getScala.adventurers.title")</h2>
-        <div class="row">
-            <div class="col-lg-12">
-                <p class="lead">@Messages("adventure.getScala.adventurers.subtitle")</p>
-                @adventurers(adv, advr)
-            </div>
-        </div>
-    </div>
-
-    @if(auth.canViewAdventurerComments()) {
-        @comment.widget_comment(adv.getId + "adventurers", user)
-    }
-    <hr/>
-    }
 
     @if(auth.canViewAdventureTimeWidget()) {
     <div class="jrn-container jrn-no-bottom-round">
