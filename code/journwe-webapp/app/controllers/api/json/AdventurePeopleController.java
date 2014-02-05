@@ -19,6 +19,7 @@ import models.dao.*;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.inspiration.InspirationDAO;
+import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserSocialDAO;
 import models.helpers.JournweFacebookChatClient;
@@ -251,6 +252,11 @@ public class AdventurePeopleController extends Controller {
         authorization.setUserId(userId);
         authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
         new AdventureAuthorizationDAO().save(authorization);
+
+        // Save Adventure-to-User relationship
+        Adventure adv = new AdventureDAO().get(advId);
+        User usr = new UserDAO().get(userId);
+        new AdventureToUserDAO().createManyToManyRelationship(adv,usr);
 
         clearCache(advId);
         ApplicationController.clearUserCache(userId);
