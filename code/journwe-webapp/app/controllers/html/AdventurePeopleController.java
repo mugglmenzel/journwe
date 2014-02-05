@@ -43,9 +43,6 @@ public class AdventurePeopleController extends Controller {
         } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
             advr.setParticipationStatus(EAdventurerParticipation.GOING);
             new AdventurerDAO().save(advr);
-            // Save Adventure-to-User relationship
-            Adventure adv = new AdventureDAO().get(advId);
-            new AdventureToUserDAO().createManyToManyRelationship(adv,usr);
         }
         clearCache(advId);
         ApplicationController.clearUserCache(usr.getId());
@@ -61,9 +58,6 @@ public class AdventurePeopleController extends Controller {
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
 
         new AdventurerDAO().delete(advr);
-        // Delete Adventure-to-User relationship
-        Adventure adv = new AdventureDAO().get(advId);
-        new AdventureToUserDAO().deleteManyToManyRelationship(adv,usr);
 
         clearCache(advId);
         ApplicationController.clearUserCache(usr.getId());

@@ -6,9 +6,11 @@ import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import models.adventure.Adventure;
 import models.dao.common.AdventureComponentDAO;
 import models.adventure.adventurer.Adventurer;
+import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.manytomany.ManyToManyCountQuery;
 import models.dao.manytomany.ManyToManyListQuery;
 import models.dao.queries.GSIQuery;
+import models.dao.user.UserDAO;
 import models.user.User;
 import models.user.UserSocial;
 import play.Logger;
@@ -27,10 +29,28 @@ public class AdventurerDAO extends AdventureComponentDAO<Adventurer> {
     private ManyToManyListQuery<Adventure, User> adventureToUserListQuery;
     private ManyToManyCountQuery<Adventure, User> adventureToUserCountQuery;
 
+    AdventureToUserDAO advToUserDAO = new AdventureToUserDAO();
+
     public AdventurerDAO() {
         super(Adventurer.class);
         adventureToUserListQuery = new ManyToManyListQuery<Adventure, User>(Adventure.class,User.class);
         adventureToUserCountQuery = new ManyToManyCountQuery<Adventure, User>(Adventure.class,User.class);
+    }
+
+    public boolean save(Adventurer advr) {
+        // Create many-to-many Adventure-to-User relationship
+        Adventure adv = new AdventureDAO().get(advr.getAdventureId());
+        User usr = new UserDAO().get(advr.getUserId());
+        advToUserDAO.createManyToManyRelationship(adv, usr);
+        return super.save(advr);
+    }
+
+    public boolean delete(Adventurer advr) {
+        // Delete many-to-many Adventure-to-User relationship
+        Adventure adv = new AdventureDAO().get(advr.getAdventureId());
+        User usr = new UserDAO().get(advr.getUserId());
+        new AdventureToUserDAO().deleteManyToManyRelationship(adv,usr);
+        return super.delete(advr);
     }
 
     /**

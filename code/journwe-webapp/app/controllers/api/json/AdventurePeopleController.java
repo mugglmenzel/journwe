@@ -397,9 +397,6 @@ public class AdventurePeopleController extends Controller {
                 authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
                 new AdventureAuthorizationDAO().save(authorization);
 
-                // Save Adventure-to-User relationship
-                new AdventureToUserDAO().createManyToManyRelationship(adv,usr);
-
                 clearCache(advId);
                 ApplicationController.clearUserCache(invitee.getId());
 
