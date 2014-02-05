@@ -1,9 +1,6 @@
 package models.dao.user;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.MailChimpObject;
@@ -84,7 +81,7 @@ public class UserDAO extends CommonEntityDAO<User> {
         // Query users by email address.
         List<UserEmail> emails = pm.query(UserEmail.class,
                 new DynamoDBQueryExpression<UserEmail>().
-                withHashKeyValues(key).withIndexName("email-index").
+                        withHashKeyValues(key).withIndexName("email-index").
                         withConsistentRead(false));
         for (UserEmail ue : emails) {
             String userId = ue.getUserId();
@@ -118,7 +115,7 @@ public class UserDAO extends CommonEntityDAO<User> {
 
 
     public void update(final AuthUser authUser, final AuthUserIdentity identity) {
-        UserSocial social = new UserSocialDAO().get(identity.getProvider(), identity.getId());
+        UserSocial social = new UserSocialDAO().get(identity.getId(), identity.getProvider());
         if (social != null && authUser != null) {
             User user = new UserDAO().get(social.getUserId());
             boolean updateCache = false;
@@ -139,7 +136,7 @@ public class UserDAO extends CommonEntityDAO<User> {
             if (authUser instanceof EmailIdentity) {
                 UserEmail userEmail = new UserEmailDAO().getPrimaryEmailOfUser(social.getUserId());
                 if (userEmail == null || !userEmail.equals(((EmailIdentity) authUser).getEmail())) {
-                    UserEmail email = new UserEmailDAO().get(social.getUserId());
+                    UserEmail email = new UserEmailDAO().get(social.getUserId(), ((EmailIdentity) authUser).getEmail());
 
                     if (email == null) {
                         email = new UserEmail();
@@ -149,26 +146,28 @@ public class UserDAO extends CommonEntityDAO<User> {
                         email.setPrimary(userEmail == null);
                         new UserEmailDAO().save(email);
 
-                        Subscriber sub = new Subscriber();
-                        sub.setEmail(email.getEmail());
-                        new SubscriberDAO().save(sub);
-                        try {
-                            ListSubscribeMethod listSubscribeMethod = new ListSubscribeMethod();
-                            listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
-                            listSubscribeMethod.id = "c18d5a32fb";
-                            listSubscribeMethod.email_address = sub.getEmail();
-                            MailChimpObject merge_vars = new MailChimpObject();
-                            merge_vars.put("FNAME", user.getName());
-                            listSubscribeMethod.merge_vars = merge_vars;
-                            listSubscribeMethod.double_optin = false;
-                            listSubscribeMethod.update_existing = true;
-                            listSubscribeMethod.send_welcome = true;
+                        if (userEmail == null) {
+                            Subscriber sub = new Subscriber();
+                            sub.setEmail(email.getEmail());
+                            new SubscriberDAO().save(sub);
+                            try {
+                                ListSubscribeMethod listSubscribeMethod = new ListSubscribeMethod();
+                                listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
+                                listSubscribeMethod.id = "c18d5a32fb";
+                                listSubscribeMethod.email_address = sub.getEmail();
+                                MailChimpObject merge_vars = new MailChimpObject();
+                                merge_vars.put("FNAME", user.getName());
+                                listSubscribeMethod.merge_vars = merge_vars;
+                                listSubscribeMethod.double_optin = false;
+                                listSubscribeMethod.update_existing = true;
+                                listSubscribeMethod.send_welcome = true;
 
-                            new MailChimpClient().execute(listSubscribeMethod);
-                        } catch (IOException e) {
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                        } catch (MailChimpException e) {
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                                new MailChimpClient().execute(listSubscribeMethod);
+                            } catch (IOException e) {
+                                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                            } catch (MailChimpException e) {
+                                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                            }
                         }
                     }
                 }
@@ -207,7 +206,7 @@ public class UserDAO extends CommonEntityDAO<User> {
         clearCache(user.getId());
     }
 
-    private void clearCache(final String userId) {
+    public void clearCache(final String userId) {
         new Thread(new Runnable() {
             @Override
             public void run() {

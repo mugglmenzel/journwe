@@ -1,6 +1,7 @@
 package controllers.html;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.providers.AuthProvider;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
 import models.auth.SecuredAdminUser;
@@ -9,7 +10,9 @@ import models.category.Category;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.user.UserDAO;
+import models.dao.user.UserSocialDAO;
 import models.user.User;
+import models.user.UserSocial;
 import play.Routes;
 import play.api.Play;
 import play.cache.Cache;
@@ -116,6 +119,7 @@ public class ApplicationController extends Controller {
 
     public static void clearUserCache(final String userId) {
         Cache.remove("user." + userId + ".myadventures");
+        new UserDAO().clearCache(userId);
     }
 
     // For JournWe non-thirdparty signup and login
@@ -136,6 +140,17 @@ public class ApplicationController extends Controller {
             return UsernamePasswordAuthProvider.handleLogin(ctx());
         }
     }
+
+    public static Result doLogout() {
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
+            User user = new UserDAO().findByAuthUserIdentity(usr);
+            if(user != null) clearUserCache(user.getId());
+        }
+
+        return com.feth.play.module.pa.controllers.Authenticate.logout();
+    }
+
 
     public static Result signup() {
         return ok(signup.render(MyUsernamePasswordAuthProvider.SIGNUP_FORM));

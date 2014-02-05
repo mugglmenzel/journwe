@@ -75,7 +75,7 @@ public class ApplicationController extends Controller {
             };
 
 
-            return ok(count == 10 && lastId == null ?
+            return ok(count == 10 && (lastId == null || "".equals(lastId)) ?
                     Cache.getOrElse("user." + userId + ".myadventures", resultsCallable, 24 * 3600)
                     : resultsCallable.call()).as("application/json");
 

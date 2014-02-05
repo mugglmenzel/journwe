@@ -208,7 +208,7 @@ POST          /login                                                       contr
 GET           /login/password/forgot                                       controllers.html.SignupController.forgotPassword(email: String ?= "")
 GET           /login/password/forgot/:email                                controllers.html.SignupController.forgotPassword(email: String)
 POST          /login/password/forgot                                       controllers.html.SignupController.doForgotPassword
-GET           /logout                                                      com.feth.play.module.pa.controllers.Authenticate.logout
+GET           /logout                                                      controllers.html.ApplicationController.doLogout
 
 #GET           /authenticate/:provider/denied                 controllers.SignupControllerController.oAuthDenied(provider: String)
 

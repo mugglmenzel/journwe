@@ -43,7 +43,7 @@ public class Adventurer implements IAdventureComponentWithUser {
 
     // We need the GSI to check if a user has already created adventures
     // to identify new users who need more guidance through the website
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName =
+    @DynamoDBIndexHashKey(globalSecondaryIndexName =
             "userId-index")
     public String getUserId() {
         return userId;
