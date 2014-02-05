@@ -43,7 +43,7 @@ public class AdventurerDAO extends AdventureComponentDAO<Adventurer> {
         Adventurer hashKeyObject = new Adventurer();
         hashKeyObject.setUserId(userId);
         DynamoDBQueryExpression query = new DynamoDBQueryExpression().withConsistentRead(false).withIndexName("userId-index").withHashKeyValues(hashKeyObject);
-        return pm.query(Adventurer.class, query).size() > 0;
+        return pm.count(Adventurer.class, query) > 0;
     }
 
     public List<Adventure> listAdventuresByUser(String userId, String lastAdventureKey, int limit) {
