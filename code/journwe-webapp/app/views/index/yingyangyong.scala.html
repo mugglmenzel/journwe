@@ -4,6 +4,7 @@
 @import com.feth.play.module.pa.PlayAuthenticate
 @import models.dao.user.UserDAO
 @import models.dao.user.UserSocialDAO
+@import play.libs.Json
 
 <form id="yingyangyong-form" action="@html.routes.AdventureController.save()" method="POST">
 
@@ -35,25 +36,17 @@
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px;">
                     <h1><i class="fa fa-globe"></i> @Messages("yingyangyong.place")</h1>
 
-                    <ul id="places-list" class="list-unstyled list-inline">
-                    @if(ins != null && ins.getPlaceAddress != null) {
-                        <li id="places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")"><input type="hidden" name="place[]" value="@ins.getPlaceAddress/@ins.getPlaceLatitude/@ins.getPlaceLongitude"><span class="label label-success"><i class="fa fa-map-marker"></i> @ins.getPlaceAddress &nbsp;<a href="#" onclick="$('#places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")').remove(); removeMarker('places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")'); return false;">&times;</a></span> <span class="divider"></span></li>
-                        <script>
-                        $('document').ready(function () {
-                        var marker = new google.maps.Marker({
-                        map: map,
-                        position: new google.maps.LatLng(@ins.getPlaceLatitude, @ins.getPlaceLongitude)
-                        });
-                        var id = 'places-item-@ins.getPlaceLatitude.toString.replace(".", "_")-@ins.getPlaceLongitude.toString().replace(".", "_")';
-                        markers[id] = marker;
-
-                        });
-                        </script>
-                    }
-                    </ul>
+                    <ul class="list-unstyled list-inline list-places"></ul>
+                    <script type="text/x-tmpl" id="item-place-template">
+                        <li class="item-place" data-id="item-place-{%=o.placeLatitude.toString.replace('.', '_')%}-{%=o.placeLongitude.toString().replace('.', '_')%}">
+                            <input type="hidden" name="place[]" value="{%=o.placeAddress$}/{%=o.placeLatitude%}/{%=o.placeLongitude%}">
+                            <span class="label label-success"><i class="fa fa-map-marker"></i> {%=o.placeAddress%} &nbsp;<a class="item-place-remove">&times;</a></span>
+                            <span class="divider"></span>
+                        </li>
+                    </script>
 
                     <div class="input-group">
-                        <input id="place-add-input" type="text" placeholder="@Messages("yingyangyong.place.placeholder")" class="input-place-add form-control">
+                        <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" class="input-place-add form-control">
                         <div class="input-group-btn"><a class="btn btn-primary btn-place-add"><i class="fa fa-plus"></i></a></div>
                     </div>
                     <div class="spacer10"></div>
@@ -74,7 +67,14 @@
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
                     <h1><i class="fa fa-group"></i> @Messages("yingyangyong.adventurers")</h1>
 
-                    <ul id="people-list" class="list-unstyled list-inline"></ul>
+                    <ul class="list-unstyled list-inline list-people"></ul>
+                    <script type="text/x-tmpl" id="item-friend-template">
+                        <li class="item-friend">
+                            <input type="hidden" name="{%=o.type%}[]" value="{%=o.socialId%}">
+                            <span class="label label-danger"><i class="{%=o.iconCss}"></i> {%=o.name%} &nbsp;<a class="item-friend-remove">&times;</a></span>
+                            <span class="divider"></span>
+                        </li>
+                    </script>
 
                     <div class="input-group">
                         @defining(PlayAuthenticate.getUser(Http.Context.current())){playusr =>
@@ -82,18 +82,18 @@
                         <div id="people-add-type" class="input-group-btn">
                             <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
                                 @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId) != null){
-                                <i id="people-add-type-icon" class="fa fa-facebook fa-fw"></i>
+                                <i id="people-add-type-icon" class="fa fa-facebook fa-fw" data-social-type="facebook"></i>
                                 } else {
-                                <i id="people-add-type-icon" class="fa fa-envelope fa-fw"></i>
+                                <i id="people-add-type-icon" class="fa fa-envelope fa-fw" data-social-type="email"></i>
                                 }
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId) != null){
-                                <li><a data-icon="fa fa-facebook fa-fw" data-type="text" data-typeahead="on"><i class="fa fa-facebook fa-fw"></i>
+                                <li><a data-icon="fa fa-facebook fa-fw" data-social-type="facebook" data-input-type="text" data-typeahead="on"><i class="fa fa-facebook fa-fw"></i>
                                     @Messages("adventure.general.label.facebook")</a></li>
                                 }
-                                <li><a data-icon="fa fa-envelope fa-fw" data-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
+                                <li><a data-icon="fa fa-envelope fa-fw" data-social-type="email" data-input-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
                                     @Messages("adventure.general.label.email")</a></li>
                             </ul>
                         </div>
@@ -130,13 +130,15 @@
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
                     <h1><i class="fa fa-calendar"></i> @Messages("yingyangyong.time") </h1>
 
-                    <ul id="time-list" class="list-unstyled list-inline">
-                    @if(ins != null && ins.getTimeStart != null) {
-                        @defining(new SimpleDateFormat("yyyy-MM-dd")){sdf =>
-                            <li id="time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)"><input type="hidden" name="time[]" value="@sdf.format(ins.getTimeStart),@sdf.format(ins.getTimeEnd)"><span class="label label-info"><i class="fa fa-time"></i> @sdf.format(ins.getTimeStart) to @sdf.format(ins.getTimeEnd) &nbsp;<a href="#" onclick="$('#time-item-@sdf.format(ins.getTimeStart)-@sdf.format(ins.getTimeEnd)').remove();">&times;</a></span> <span class="divider"></span></li>
-                        }
-                    }
-                    </ul>
+                    <ul id="time-list" class="list-unstyled list-inline"></ul>
+
+                    <script type="text/x-tmpl" id="item-time-template">
+                        <li class="item-time">
+                            <input type="hidden" name="time[]" value="{%=o.timeStart%},{%=o.timeEnd%}">
+                            <span class="label label-info"><i class="fa fa-time"></i> {%=o.timeStart%} to {%=o.timeEnd%} &nbsp;<a class="item-time-remove">&times;</a></span>
+                            <span class="divider"></span>
+                        </li>
+                    </script>
 
                     <div class="row">
 
@@ -167,3 +169,9 @@
         </div>
     </div>
 </form>
+
+<script type="text/javascript">
+    define("inspirationData", [], @{Html(Json.toJson(ins).toString())});
+</script>
+
+

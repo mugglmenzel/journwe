@@ -20,11 +20,13 @@
 
             <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
 
+            @*
             @currentAuth() { auth =>
                 @if(auth != null) {
                     <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
                 }
             }
+            *@
 
         </div>
     </div>

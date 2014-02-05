@@ -2,14 +2,14 @@ define([
     "common/utils",
     "routes",
     "messages",
-    "common/gmaps"
-], function (utils, routes, messages, gmaps) {
+    "common/gmaps",
+    "inspirationData"
+], function (utils, routes, messages, gmaps, ins) {
 
 
     var map, markers = {};
     var facebookUsers = {},
-        facebookUserNames = [],
-        peopleCounter = 0;
+        facebookUserNames = [];
 
 
     var initialize = function () {
@@ -22,13 +22,20 @@ define([
             zoom: 15,
             minZoom: 2,
             maxZoom: 19,
-            center: new google.maps.LatLng(49.483472, 8.476992),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            center: new gmaps.LatLng(49.483472, 8.476992),
+            mapTypeId: gmaps.MapTypeId.ROADMAP
         };
         map = new gmaps.Map(document.getElementById('where-map'),
             mapOptions);
 
-        facebookFriendTypeahead();
+        friendTypeahead();
+
+        //load inspiration
+        if (ins != null) {
+            renderPlace(ins);
+            renderTime(ins);
+        }
+
     };
 
 
@@ -64,18 +71,25 @@ define([
 
     var searchPlace = function () {
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-            var id = 'places-item-' + results[0].geometry.location.lat().toString().replace('.', '_') + '-' + results[0].geometry.location.lng().toString().replace('.', '_');
-            $('#places-list').append('<li id="' + id + '"><input type="hidden" name="place[]" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label label-success"><i class="fa fa-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-            markers[id] = marker;
-
-            resetBounds();
-            $('#place-add-input').val('');
+            var ins = {
+                placeLatitude: results[0].geometry.location.lat(),
+                placeLongitude: results[0].geometry.location.lng(),
+                placeAddress: results[0].formatted_address
+            };
+            renderPlace(ins);
+            $('.input-place-add').val('');
         });
+    };
+
+    var renderPlace = function (data) {
+        $('.list-places').append(tmpl('item-place-template', data));
+
+        markers['item-place-' + data.placeLatitude.toString.replace('.', '_') + '-' + data.placeLongitude.toString().replace('.', '_')] = new gmaps.Marker({
+            map: map,
+            position: new gmaps.LatLng(data.placeLatitude, data.placeLongitude)
+        });
+
+        resetBounds();
     };
 
     var resetBounds = function () {
@@ -103,44 +117,66 @@ define([
         delete markers[id];
         resetBounds();
         return false;
-    }
+    };
 
 
     var addFriend = function () {
-        var id = 'people-item-' + peopleCounter++;
-        var input = ($('#people-add-input').attr('type') == 'text') ? '<input type="hidden" name="facebook[]" value="' + facebookUsers[$('#people-add-input').val()] + '">' : '<input type="hidden" name="email[]" value="' + $('#people-add-input').val() + '">';
-        $('#people-list').append('<li id="' + id + '">' + input + '<span class="label label-danger"><i class="' + $('#people-add-type-icon').attr('class') + '"></i> ' + $('#people-add-input').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        var ins = {
+            socialId: getSocialIdByType($('#people-add-type-icon').data('social-type')),
+            type: $('#people-add-type-icon').data('social-type'),
+            iconCss: $('#people-add-type-icon').attr('class')
+        };
+
+        renderFriend(ins);
+
         $('#people-add-input').val('');
-    }
+    };
 
-    var facebookFriendTypeahead = function () {
-        $('.input-people-add').typeahead({
-            name: 'people-typeahead',
-            template: '<p><strong>{%=o.name%}</strong></p>',
-            engine: {_templ: '', compile: function (template) {
-                _templ = template;
-                return this;
-            }, render: function (data) {
-                return tmpl(_templ, data);
-            }},
-            remote: {
-                url: routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL() + '?input=%QUERY',
-                filter: function (data) {
-                    facebookUsers = {};
-                    facebookUserNames = [];
-                    $.each(data, function (ix, item) {
-                        if ($.inArray(item.name, facebookUserNames) > -1) {
-                            item.nameId = item.name + ' #' + item.id;
-                        } else item.nameId = item.name
+    var renderFriend = function (data) {
+        $('.list-people').append(tmpl('item-friend-template', data));
+    };
 
-                        facebookUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
-                        facebookUsers[item.nameId] = item.id;
-                    });
 
-                    return facebookUserNames;
+    var getSocialIdByType = function (type) {
+        if (type === 'facebook') return facebookUsers[$('#people-add-input').val()];
+        if (type === 'email') return   $('#people-add-input').val();
+        return '';
+    };
+
+    var friendTypeahead = function () {
+        var type = $('#people-add-type-icon').data('social-type'),
+            route = '';
+
+        if(type === 'facebook') route =  routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL();
+
+        if(route != '')
+            $('.input-people-add').typeahead({
+                name: 'people-typeahead',
+                template: '<p><strong>{%=o.name%}</strong></p>',
+                engine: {_templ: '', compile: function (template) {
+                    _templ = template;
+                    return this;
+                }, render: function (data) {
+                    return tmpl(_templ, data);
+                }},
+                remote: {
+                    url: route + '?input=%QUERY',
+                    filter: function (data) {
+                        facebookUsers = {};
+                        facebookUserNames = [];
+                        $.each(data, function (ix, item) {
+                            if ($.inArray(item.name, facebookUserNames) > -1) {
+                                item.nameId = item.name + ' #' + item.id;
+                            } else item.nameId = item.name
+
+                            facebookUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
+                            facebookUsers[item.nameId] = item.id;
+                        });
+
+                        return facebookUserNames;
+                    }
                 }
-            }
-        });
+            });
     };
 
     var addTime = function () {
@@ -157,11 +193,19 @@ define([
             end = start;
         }
 
-        var id = 'time-item-' + start.val() + '-' + end.val();
-        $('#time-list').append('<li id="' + id + '"><input type="hidden" name="time[]" value="' + start.val() + ',' + end.val() + '"><span class="label label-info"><i class="fa fa-time"></i> ' + start.val() + ' to ' + end.val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+        var ins = {
+            timeStart: start.val(),
+            timeEnd: end.val()
+        };
+
+        renderTime(ins);
 
         start.val('');
         end.val('');
+    };
+
+    var renderTime = function (data) {
+        $('.list-times').append(tmpl('item-time-template', data));
     };
 
     utils.on({
@@ -173,6 +217,12 @@ define([
             $('#yingyangyong-form').submit();
         },
 
+        'click .item-place-remove': function () {
+            var li = $(this).closest('.item-place');
+            removeMarker(li.data('id'));
+            li.remove();
+            return false;
+        },
         'click .btn-place-add': function () {
             searchPlace();
         },
@@ -184,6 +234,10 @@ define([
             } else return true;
         },
 
+        'click .item-friend-remove': function () {
+            $(this).closest('.item-friend').remove();
+            return false;
+        },
         'click .btn-people-add': function () {
             addFriend();
         },
@@ -196,8 +250,9 @@ define([
         },
         'click #people-add-type .dropdown-menu a': function () {
             $('#people-add-type-icon').attr('class', $(this).data('icon'));
-            $('#people-add-input').attr('type', $(this).data('type'));
-            if ($(this).data('typeahead') == "on") facebookFriendTypeahead();
+            $('#people-add-type-icon').data('social-type', $(this).data('social-type'));
+            $('#people-add-input').attr('type', $(this).data('input-type'));
+            if ($(this).data('typeahead') == "on") friendTypeahead();
             else $('#people-add-input').typeahead('destroy');
             $('#people-add-input').focus();
         },
@@ -205,6 +260,10 @@ define([
             $('.post-on-facebook').toggle($(this).is(':checked'));
         },
 
+        'click .item-time-remove': function () {
+            $(this).closest('.item-time').remove();
+            return false;
+        },
         'click .btn-time-add': function () {
             addTime();
         }
