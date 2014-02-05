@@ -79,16 +79,16 @@
         }
 
         @if(auth.canInviteAdventurerParticipants()) {
-            <div class="row">
+            <div class="">
                 <div class="input-group col-lg-6">
                     <div id="people-add-type" class="input-group-btn">
                         @defining(new UserSocialDAO().findByUserIdAndProvider("facebook", advr.getUserId)){ fbusr =>
                         <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                             @if(fbusr != null){
-                                <i id="people-add-type-icon" class="fa fa-facebook"></i>
+                                <i id="people-add-type-icon" class="fa fa-fw fa-facebook"></i>
                                 <span class="caret"></span>
                             } else {
-                                <i id="people-add-type-icon" class="fa fa-envelope"></i>
+                                <i id="people-add-type-icon" class="fa fa-fw fa-envelope"></i>
                                 <span class="caret"></span>
                             }
                         </a>
@@ -100,7 +100,7 @@
                         </ul>
                         }
                     </div>
-                    <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" autocomplete="off" class="form-control">
+                    <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" autocomplete="off" class="form-control" style="top: 2px; height: 36px;">
                     <div class="input-group-btn">
                         <button id="people-add-button" class="btn btn-primary btn-friend-add"><i class="fa fa-plus"></i></button>
                     </div>

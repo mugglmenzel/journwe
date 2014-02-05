@@ -15,7 +15,7 @@ require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switc
         bgr.css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=http%3A%2F%2Fwww.journwe.com%2Fassets%2Fimg%2Fbg%2F' + images[Math.floor(Math.random() * images.length)] + '")');
     }
 
-    /*
+    
     // Set parallex scrolling
     var top = 130;
     $(window).scroll($.throttle(0, function(event){
@@ -29,10 +29,10 @@ require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switc
             // 
 
             // TODO: Optimize
-            var offsetHeight = $(document).height() - $(this).height();
-            if (!utils.isMobile()){
-                bgr.css('transform', 'translate3d(0, -'+Math.min(9, Math.max(0, (st/offsetHeight)*9 ))+'%, 0)');
-            }
+            // var offsetHeight = $(document).height() - $(this).height();
+            // if (!utils.isMobile()){
+            //     bgr.css('transform', 'translate3d(0, -'+Math.min(9, Math.max(0, (st/offsetHeight)*9 ))+'%, 0)');
+            // }
 
             if ((st > top && lastScrollTop <= top) || (st <= top && lastScrollTop > top)){
                 adv.attr("class", st > top ? "fixed" : "");
@@ -40,7 +40,7 @@ require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switc
             lastScrollTop = st;
         }.bind(this))
     );
-    */
+
 
     // Init drop behaviour
     jQuery.event.props.push('dataTransfer');

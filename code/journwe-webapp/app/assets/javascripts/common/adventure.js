@@ -734,9 +734,11 @@ define([
 
             var section = $(this).attr('href');
 
-            $('html, body').animate({
-                scrollTop: $(section).offset().top - 100
-            }, 'slow');
+            if ($(section).length){
+                $('html, body').animate({
+                    scrollTop: $(section).offset().top - 95
+                }, 'slow');
+            }
 
             return false;
         },
