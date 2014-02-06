@@ -443,6 +443,7 @@ define([
             .html('<i class="fa fa-spin icon-journwe"></i>');
 
         routes.controllers.api.json.AdventurePeopleController.deny(adv.id, el.data('id')).ajax({success: function (json) {
+            loadInvitees();
             loadApplicants();
         }});
         return false;

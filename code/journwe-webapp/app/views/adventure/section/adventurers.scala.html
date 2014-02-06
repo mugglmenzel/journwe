@@ -14,13 +14,13 @@
 
                         <div class="btn-group btn-select-adventurer">
                             <button class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING) {active}"
-                            data-status="@EAdventurerParticipation.NOTGOING.name"><i class="fa fa-frown"></i> @Messages("adventure.adventurers.status.notIn")</button>
+                            data-status="@EAdventurerParticipation.NOTGOING.name"><i class="fa fa-frown-o"></i> @Messages("adventure.adventurers.status.notIn")</button>
                             <button class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED) {active}"
                             data-status="@EAdventurerParticipation.UNDECIDED.name"><i class="fa fa-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
                             <button class="btn btn-info @if(status == EAdventurerParticipation.GOING) {active}"
-                            data-status="@EAdventurerParticipation.GOING.name"><i class="fa fa-smile"></i> @Messages("adventure.adventurers.status.soIn")</button>
+                            data-status="@EAdventurerParticipation.GOING.name"><i class="fa fa-smile-o"></i> @Messages("adventure.adventurers.status.soIn")</button>
                             <button class="btn btn-success @if(status == EAdventurerParticipation.BOOKED) {active}"
-                            data-status="@EAdventurerParticipation.BOOKED.name"><i class="fa fa-ok"></i> @Messages("adventure.adventurers.status.booked")</button>
+                            data-status="@EAdventurerParticipation.BOOKED.name"><i class="fa fa-check"></i> @Messages("adventure.adventurers.status.booked")</button>
                         </div>
                     </div>
                 } else {
@@ -66,6 +66,8 @@
                             {%=String(o.name).replace(new RegExp(' [^ ]*$', 'g'), '')%}</a></div>
                         {% if(o.status == 'APPLICANT'){ %}
                         <button class="btn btn-primary btn-sm btn-adopt" data-id="{%=o.id%}">Adopt</button>
+                        {% } %}
+                        {% if(o.status == 'APPLICANT' || o.status == 'INVITEE'){ %}
                         <button class="btn btn-danger btn-sm btn-deny" data-id="{%=o.id%}">Deny</button>
                         {% } else { %}
                         <div class="overlay text-center">
