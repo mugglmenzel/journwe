@@ -160,8 +160,8 @@ public class AdventurePlaceController extends Controller {
         }
 
         try {
-            pref.setVoteGravity(voteGravity != null ? voteGravity : 0.6D);
-            pref.setVote(vote != "" ? EPreferenceVote.valueOf(vote) : EPreferenceVote.MAYBE);
+            pref.setVoteGravity(voteGravity != null ? voteGravity : 0.5D);
+            pref.setVote(vote != null && !"".equals(vote) ? EPreferenceVote.valueOf(vote) : EPreferenceVote.MAYBE);
         } catch (IllegalArgumentException e) {
             Logger.error("Got unknown value for vote! value: " + vote);
         }

@@ -834,7 +834,17 @@ define([
         },
 
         'click .rating-place :radio': function (e) {
-            if ($(e.target).is(':checked')) votePlace('', $(e.target).val() / 5, $(e.target).data('id'));
+            var vote = 'MAYBE';
+            switch($(e.target).val()){
+                case '1':
+                case '2':
+                    vote = 'NO';
+                    break;
+                case '5':
+                case '6':
+                    vote = 'YES';
+            };
+            if ($(e.target).is(':checked')) votePlace(vote, $(e.target).val() / 6, $(e.target).data('id'));
         },
         'change #places-voting-active-switch': function () {
             routes.controllers.api.json.AdventureController.updatePlaceVoteOpen(adv.id).ajax({data: {voteOpen: $('#places-voting-active-switch').prop('checked')}, success: updatePlaceVoteOpen});
@@ -942,7 +952,18 @@ define([
                 }});
         },
         'click .rating-time :radio': function (e) {
-            if ($(e.target).is(':checked')) voteTime('', $(e.target).val() / 5, $(e.target).data('id'));
+            var vote = 'MAYBE';
+            switch($(e.target).val()){
+                case '1':
+                case '2':
+                    vote = 'NO';
+                    break;
+                case '5':
+                case '6':
+                    vote = 'YES';
+            };
+
+            if ($(e.target).is(':checked')) voteTime(vote, $(e.target).val() / 6, $(e.target).data('id'));
         },
         'change #times-voting-active-switch': function () {
             routes.controllers.api.json.AdventureController.updateTimeVoteOpen(adv.id).ajax({data: {voteOpen: $('#times-voting-active-switch').prop('checked')}, success: updateTimeVoteOpen});
