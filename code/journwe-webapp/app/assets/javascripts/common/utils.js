@@ -121,6 +121,15 @@ define(function(){
                 + (""+time.getYear()).substr(1,2);
         },
 
+        formatDateSDF: function(time) {
+            time = time instanceof Date ? time : new Date(parseInt(time, 10));
+            return time.getFullYear()
+                + "-"
+                + two(time.getMonth()+1)
+                + "-"
+                + two(time.getDate());
+        },
+
         /**
          * Replaces all the link from the text into anchors
          * @param String text

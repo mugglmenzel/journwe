@@ -13,7 +13,6 @@
         </div>
     </div>
 
-
     <hr>
 
     <div class="jrn-container jrn-no-top-round" style="margin-top: -20px;">
@@ -55,25 +54,30 @@
                 </button>
             </div>
         </div>
-        <div class="jumbotron row">
-            <div class="col-lg-9"><p class="lead">Hol dir Inspirationen für dein nächstes JournWe.</p></div>
-            <div class="col-lg-3 text-center">
-                <button class="btn btn-link btn-yingyangyong-start">
-                    <img src='@routes.Assets.at("img/journwe_logo.png").absoluteURL()' height="75"><br>
-                    <p class="lead"><i class="fa fa-lightbulb"></i> Auf zum Atem! </p>
-                </button>
-            </div>
-        </div>
-    </div>
+     </div>
 
 
     <div class="jrn-container">
-        <h2><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success"><i class="fa fa-refresh"></i></button></div></h2>
+        <p class="lead">
+           @Messages("inspiration.getInspired")
+        </p>
+
+        <h3><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
 
         <div style="">
             <div id="categories-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
         </div>
         <div class="clearfix"></div>
+
+
+        <h3><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button class="btn btn-adventures-public-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
+        <div style="background-color: rgba(245,245,245,0.6);">
+            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div class="text-center"><button class="btn btn-adventures-public-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
+        </div>
+        <div style="height: 400px; margin-top: 10px;">
+            <div id="adventures-places-map" style="width: 100%; height: 100%"></div>
+        </div>
     </div>
     <script type="text/x-tmpl" id="category-template">
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
@@ -88,45 +92,19 @@
             </div>
         </div>
     </script>
-
-    <div class="jrn-container">
-        <h2><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button class="btn btn-adventures-public-refresh btn-success"><i class="fa fa-refresh"></i></button></div></h2>
-
-        <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-            <div class="text-center"><button class="btn btn-adventures-public-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
-        </div>
-        <div style="height: 400px; margin-top: 10px;">
-            <div id="adventures-places-map" style="width: 100%; height: 100%"></div>
-        </div>
-    </div>
     <script type="text/x-tmpl" id="adventure-public-template">
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
-            <a href="{%=o.link%}"><img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp='+new Date().getTime())%}{% } %}"></a>
+            <a href="{%=o.link%}"><img class="img-rounded" style="margin: 0px; width: 204px; height: 204px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
             <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                 <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
                 <div class="overlay text-center" style="display: none;">
                     <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
                     <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
-                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=o.favoriteTime.startDate%} {% } else { %} ? {% } %}</span>
+                    <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
                 </div>
             </div>
         </div>
     </script>
 
-    <div id="leave" class="modal fade" tabindex="-1" role="dialog" onfocus="$('#leave-question').html('Sure, you want to leave ' + $('#leave').data('adventure-name') + '?')">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="leave-question"> @Messages("adventure.general.leaveconfirm") </h3>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-danger" onclick="window.location.href = $('#leave').data('leave-link')"> @Messages("adventure.general.button.leave") </a> <a class="btn btn-default"
-                data-dismiss="modal"> @Messages("adventure.general.button.cancel") </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="@routes.Assets.at("javascripts/index.js").url" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/indexVet.js").url" type="text/javascript"></script>
 }

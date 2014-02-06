@@ -4,16 +4,10 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import models.adventure.Adventure;
 import models.auth.SecuredUser;
-import models.category.Category;
-import models.category.CategoryCount;
-import models.category.CategoryHierarchy;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.TimeOptionDAO;
-import models.dao.category.CategoryCountDAO;
-import models.dao.category.CategoryDAO;
-import models.dao.category.CategoryHierarchyDAO;
 import models.dao.manytomany.CategoryToInspirationDAO;
 import models.dao.user.UserDAO;
 import models.inspiration.Inspiration;
@@ -189,34 +183,30 @@ public class ApplicationController extends Controller {
                 @Override
                 public String call() throws Exception {
                     final Date now = new Date();
+                    boolean more = true;
 
                     List<ObjectNode> results = new ArrayList<ObjectNode>();
-
-                    String lastInspirationId = lastId;
-
-                    boolean more = true;
-                    if (count > 0)
+                    if (count > 0) {
                         while (more) {
-                            List<Inspiration> inspirations = new CategoryToInspirationDAO().listN(catId, lastInspirationId, count);
-                            more = inspirations.size() > 0;
-                            for (Inspiration ins : inspirations) {
-                                if (more) {
-                                    if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
-                                        ObjectNode node = Json.newObject();
-                                        node.put("id", ins.getId());
-                                        node.put("link", controllers.html.routes.InspirationController.get(ins.getId()).absoluteURL(request()));
-                                        node.put("image", ins.getImage());
-                                        node.put("name", ins.getName());
-                                        node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
-                                        node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
+                            List<Inspiration> inspirations = new CategoryToInspirationDAO().listN(catId, lastId, count);
+                            Logger.debug("inspirations found:" + inspirations);
 
-                                        results.add(node);
-                                        more = results.size() < count;
-                                    }
-                                    lastInspirationId = ins.getId();
+                            for (Inspiration ins : inspirations)
+                                if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
+                                    ObjectNode node = Json.newObject();
+                                    node.put("id", ins.getId());
+                                    node.put("link", controllers.html.routes.InspirationController.get(ins.getId()).absoluteURL(request()));
+                                    node.put("image", ins.getImage());
+                                    node.put("name", ins.getName());
+                                    node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
+                                    node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
+
+                                    results.add(node);
                                 }
-                            }
+                            more = results.size() < count && inspirations.size() >= count;
                         }
+
+                    }
                     return Json.toJson(results).toString();
                 }
             }, 24 * 3600)).as("application/json");

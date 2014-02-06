@@ -38,15 +38,15 @@
 
                     <ul class="list-unstyled list-inline list-places"></ul>
                     <script type="text/x-tmpl" id="item-place-template">
-                        <li class="item-place" data-id="item-place-{%=o.placeLatitude.toString.replace('.', '_')%}-{%=o.placeLongitude.toString().replace('.', '_')%}">
-                            <input type="hidden" name="place[]" value="{%=o.placeAddress$}/{%=o.placeLatitude%}/{%=o.placeLongitude%}">
+                        <li class="item-place" data-id="{%=o.id%}">
+                            <input type="hidden" name="place[]" value="{%=o.placeAddress%}/{%=o.placeLatitude%}/{%=o.placeLongitude%}">
                             <span class="label label-success"><i class="fa fa-map-marker"></i> {%=o.placeAddress%} &nbsp;<a class="item-place-remove">&times;</a></span>
                             <span class="divider"></span>
                         </li>
                     </script>
 
                     <div class="input-group">
-                        <input type="text" placeholder="@Messages("yingyangyong.place.placeholder")" class="input-place-add form-control">
+                        <input id="place-add-input" type="text" placeholder="@Messages("yingyangyong.place.placeholder")" class="input-place-add form-control">
                         <div class="input-group-btn"><a class="btn btn-primary btn-place-add"><i class="fa fa-plus"></i></a></div>
                     </div>
                     <div class="spacer10"></div>
@@ -71,7 +71,7 @@
                     <script type="text/x-tmpl" id="item-friend-template">
                         <li class="item-friend">
                             <input type="hidden" name="{%=o.type%}[]" value="{%=o.socialId%}">
-                            <span class="label label-danger"><i class="{%=o.iconCss}"></i> {%=o.name%} &nbsp;<a class="item-friend-remove">&times;</a></span>
+                            <span class="label label-danger"><i class="{%=o.iconCss%}"></i> {%=o.name%} &nbsp;<a class="item-friend-remove">&times;</a></span>
                             <span class="divider"></span>
                         </li>
                     </script>
@@ -130,7 +130,7 @@
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
                     <h1><i class="fa fa-calendar"></i> @Messages("yingyangyong.time") </h1>
 
-                    <ul id="time-list" class="list-unstyled list-inline"></ul>
+                    <ul class="list-unstyled list-inline list-times"></ul>
 
                     <script type="text/x-tmpl" id="item-time-template">
                         <li class="item-time">
@@ -141,8 +141,6 @@
                     </script>
 
                     <div class="row">
-
-
                         <div class="col-lg-5">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.start")</span>
@@ -171,7 +169,7 @@
 </form>
 
 <script type="text/javascript">
-    define("inspirationData", [], @{Html(Json.toJson(ins).toString())});
+    define("inspirationData", [], @{Html(if(ins != null){Json.toJson(ins).toString}else{Json.newObject().toString})});
 </script>
 
 

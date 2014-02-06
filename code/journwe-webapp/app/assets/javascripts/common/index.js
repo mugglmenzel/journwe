@@ -11,8 +11,17 @@ define([
         publicAdventuresInfos = [];
 
 
-    var initialize = function () {
+    var initializePublicAdventures = function () {
         initializePublicAdventuresMap();
+        loadPublicAdventures(null, true);
+    };
+
+    var initializeMyAdventures = function () {
+        loadMyAdventures(null, true);
+    };
+
+    var initializeCategories = function () {
+        loadCategories(null, true);
     };
 
     var renderAdventure = function (tmplId, adv) {
@@ -135,9 +144,6 @@ define([
     };
 
 
-    initialize();
-
-
     utils.on({
         'click .btn-adventure-my-refresh': function () {
             loadMyAdventures(null, true);
@@ -157,10 +163,9 @@ define([
     });
 
     return {
-        loadMyAdventures: loadMyAdventures,
-        loadPublicAdventures: loadPublicAdventures,
-        publicAdventuresMap: publicAdventuresMap,
-        loadCategories: loadCategories
+        initializeMyAdventures: initializeMyAdventures,
+        initializePublicAdventures: initializePublicAdventures,
+        initializeCategories: initializeCategories
     };
 
 });

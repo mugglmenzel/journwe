@@ -87,8 +87,22 @@ public class ManyToManyDAO<M, N> {
     /**
      * List all M objects that belong to primary key hashId after range key lastRangeId.
      */
+    public Integer countM(String hashId, String lastRangeId) {
+        return count(hashId, lastRangeId, -1, true);
+    }
+
+    /**
+     * List all M objects that belong to primary key hashId after range key lastRangeId.
+     */
     public List<M> listM(String hashId, String lastRangeId, int limit) {
         return (List<M>) list(hashId, lastRangeId, limit, true);
+    }
+
+    /**
+     * List all N objects that belong to primary key hashId after range key lastRangeId.
+     */
+    public Integer countN(String hashId, String lastRangeId) {
+        return count(hashId, lastRangeId, -1, false);
     }
 
     /**
@@ -217,34 +231,36 @@ public class ManyToManyDAO<M, N> {
      * @param limit   Max size of the list that is returned.
      * @return
      */
+    protected Integer count(String hashKey, String lastKey, int limit, boolean returnM) {
+        // First Query
+        QueryResult firstResult = listRelations(hashKey, lastKey, limit, returnM);
+
+        return firstResult.getCount();
+    }
+
+            /**
+             * @param hashKey The primary hashKey of the relationships
+             * @param lastKey The last range key from the previous query.
+             * @param limit   Max size of the list that is returned.
+             * @return
+             */
     protected List<Object> list(String hashKey, String lastKey, int limit, boolean returnM) {
         try {
-            // Prepare the input parameters for the queries
-            String targetTableName = "";
-            String objectIdName = "";
-            String setterMethodName = "";
-            Method setterMethod = null;
-            if (returnM) {
-                targetTableName = mTableName;
-                objectIdName = dynamoDbMapperHelper.getPrimaryHashKeyName(clazzM);
-                setterMethodName = "set" + (objectIdName.substring(0, 1)).toUpperCase() + objectIdName.substring(1);
-                // Prepare setter method, so we can execute the batchLoad via dynamodbmapper
-                setterMethod = clazzM.getMethod(setterMethodName, String.class);
-            } else {
-                // if we want to return N-type objects, we must reverse every input parameter
-                targetTableName = nTableName;
-                objectIdName = dynamoDbMapperHelper.getPrimaryHashKeyName(clazzN);
-                setterMethodName = "set" + (objectIdName.substring(0, 1)).toUpperCase() + objectIdName.substring(1);
-                // Prepare setter method, so we can execute the batchLoad via dynamodbmapper
-                setterMethod = clazzN.getMethod(setterMethodName, String.class);
-            }
-            // Done preparing the query input parameters.
-
-
             // First Query
             QueryResult firstResult = listRelations(hashKey, lastKey, limit, returnM);
 
+
             // Second: batchLoad.
+
+            // Prepare the input parameters for the queries
+            String targetTableName = returnM ? mTableName : nTableName;
+            String objectIdName = dynamoDbMapperHelper.getPrimaryHashKeyName(returnM ? clazzM : clazzN);
+            String setterMethodName = "set" + (objectIdName.substring(0, 1)).toUpperCase() + objectIdName.substring(1);
+            // Prepare setter method, so we can execute the batchLoad via dynamodbmapper
+            Method setterMethod = (returnM ? clazzM : clazzN).getMethod(setterMethodName, String.class);
+
+            // Done preparing the query input parameters.
+
 
             // Extract the hashid value from each QueryResult item
             // and put them into objects so that the dynamodbmapper
@@ -254,9 +270,9 @@ public class ManyToManyDAO<M, N> {
                 // Create new object instance
                 Object obj = null;
                 if (returnM) {
-                    obj = extractObject(item, clazzM, setterMethod);
+                    obj = extractObject(item, clazzM, setterMethod,returnM);
                 } else {
-                    obj = extractObject(item, clazzN, setterMethod);
+                    obj = extractObject(item, clazzN, setterMethod,returnM);
                 }
                 // put the object into the list for batch loading.
                 itemsToGet.add(obj);
@@ -279,23 +295,13 @@ public class ManyToManyDAO<M, N> {
         return new ArrayList<Object>();
     }
 
-    protected QueryResult listRelations(String hashKey, String lastKey, int limit, boolean returnM) {
-        // Prepare the input parameters for the queries
-        String hashIdName = "";
-        String rangeIdName = "";
-        String relationTableName = "";
+    private QueryRequest prepareQueryRequest(String hashKey, String lastKey, int limit, boolean returnM) {
         if(lastKey==null)
             lastKey = "";
-        if (returnM) {
-            hashIdName = nHashIdName;
-            rangeIdName = mHashIdName;
-            relationTableName = nToMTableName;
-        } else {
-            // if we want to return N-type objects, we must reverse every input parameter
-            hashIdName = mHashIdName;
-            rangeIdName = nHashIdName;
-            relationTableName = mToNTableName;
-        }
+        String hashIdName = returnM ? nHashIdName : mHashIdName;
+        String rangeIdName = returnM ? mHashIdName : nHashIdName;
+        String relationTableName = returnM ? nToMTableName : mToNTableName;
+
         // Done preparing the query input parameters.
 
         // Prepare and execute the first DynamoDB Query
@@ -309,8 +315,8 @@ public class ManyToManyDAO<M, N> {
         // An AttributeValue may not contain an empty string.
         if(lastKey !=null && !lastKey.equals("")) {
             Condition rangeKeyCondition = new Condition()
-                .withComparisonOperator(ComparisonOperator.GT.toString())
-                .withAttributeValueList(new AttributeValue().withS(lastKey));
+                    .withComparisonOperator(ComparisonOperator.GT.toString())
+                    .withAttributeValueList(new AttributeValue().withS(lastKey));
             keyConditions.put(rangeIdName, rangeKeyCondition);
         }
 
@@ -320,16 +326,26 @@ public class ManyToManyDAO<M, N> {
         // Set the limit.
         if (limit > 0)
             queryRequest.setLimit(limit);
+
+        Logger.trace("Table "+relationTableName+" with hash key "+hashKey+" and with range key "+lastKey);
+
+        return queryRequest;
+    }
+
+    protected QueryResult listRelations(String hashKey, String lastKey, int limit, boolean returnM) {
+        // Prepare the input parameters for the queries
+        QueryRequest queryRequest = prepareQueryRequest(hashKey, lastKey, limit, returnM);
+
         // Query now
-        Logger.debug("Table "+relationTableName+" with hash key "+hashKey+" and with range key "+lastKey);
         QueryResult result = dynamoDB.query(queryRequest);
         return result;
     }
 
-    private Object extractObject(Map<String, AttributeValue> item, Class clazz, Method setterMethod) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+
+    private Object extractObject(Map<String, AttributeValue> item, Class clazz, Method setterMethod, boolean returnM) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         Object obj = clazz.newInstance();
         // Invoke setHashId method
-        AttributeValue attrVal = item.get(mHashIdName);
+        AttributeValue attrVal = item.get(returnM ? mHashIdName : nHashIdName);
         String hashIdVal = attrVal.getS();
         //Logger.debug("Invoking method " + setterMethodName + " with hash id value " + hashIdVal);
         setterMethod.invoke(obj, hashIdVal);

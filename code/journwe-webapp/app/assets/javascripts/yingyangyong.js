@@ -31,7 +31,10 @@ define([
         friendTypeahead();
 
         //load inspiration
-        if (ins != null) {
+        if (ins != null && ins.id != null) {
+            ins.timeStart = utils.formatDateSDF(ins.timeStart);
+            ins.timeEnd = utils.formatDateSDF(ins.timeEnd);
+
             renderPlace(ins);
             renderTime(ins);
         }
@@ -72,6 +75,7 @@ define([
     var searchPlace = function () {
         new google.maps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
             var ins = {
+                id: 'item-place-' + String(results[0].geometry.location.lat()).replace('.', '_') + '-' + String(results[0].geometry.location.lng()).replace('.', '_'),
                 placeLatitude: results[0].geometry.location.lat(),
                 placeLongitude: results[0].geometry.location.lng(),
                 placeAddress: results[0].formatted_address
@@ -82,9 +86,10 @@ define([
     };
 
     var renderPlace = function (data) {
+
         $('.list-places').append(tmpl('item-place-template', data));
 
-        markers['item-place-' + data.placeLatitude.toString.replace('.', '_') + '-' + data.placeLongitude.toString().replace('.', '_')] = new gmaps.Marker({
+        markers[data.id] = new gmaps.Marker({
             map: map,
             position: new gmaps.LatLng(data.placeLatitude, data.placeLongitude)
         });
@@ -123,6 +128,7 @@ define([
     var addFriend = function () {
         var ins = {
             socialId: getSocialIdByType($('#people-add-type-icon').data('social-type')),
+            name: $('#people-add-input').val(),
             type: $('#people-add-type-icon').data('social-type'),
             iconCss: $('#people-add-type-icon').attr('class')
         };

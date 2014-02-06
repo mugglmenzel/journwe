@@ -39,7 +39,7 @@
                         @if(inspForm("id").value()){
                             @defining(new CategoryToInspirationDAO()){ c2idao =>
                                 @c2idao.getOptions(inspForm("id").value()).map{cat =>
-                                    <li id="inspiration-category-@cat._1"><input type="hidden" name="category[]" value="@cat._1"><span class="label label-info"><i class="icon-file"></i> @cat._2 &nbsp;<a onclick="$('#inspiration-category-@cat._1').remove(); return false;">&times;</a></span> <span class="divider"></span></li>
+                                    <li id="inspiration-category-@cat._1"><input type="hidden" name="category[]" value="@cat._1"><span class="label label-primary"><i class="icon-file"></i> @cat._2 &nbsp;<a onclick="$('#inspiration-category-@cat._1').remove(); return false;">&times;</a></span> <span class="divider"></span></li>
                                 }
                             }
                         }</ul>
@@ -55,7 +55,7 @@
                     <script>
                         $('#inspiration-category-add').click(function(){
                             var id =  'inspiration-category-' + $('#inspiration-category select option:selected').val() + '-' + new Date().getTime();
-                             $('#inspiration-categories').append('<li id="' + id + '"><input type="hidden" name="category[]" value="' + $('#inspiration-category select option:selected').val() + '"><span class="label label-info"><i class="fa fa-file"></i>' + $('#inspiration-category select option:selected').text() + '  &nbsp;<a onclick="$(\'#' + id + '\').remove(); return false;">&times;</a></span> <span class="divider"></span></li>');
+                             $('#inspiration-categories').append('<li id="' + id + '"><input type="hidden" name="category[]" value="' + $('#inspiration-category select option:selected').val() + '"><span class="label label-primary"><i class="fa fa-file"></i>' + $('#inspiration-category select option:selected').text() + '  &nbsp;<a onclick="$(\'#' + id + '\').remove(); return false;">&times;</a></span> <span class="divider"></span></li>');
                         });
 
                     </script>
@@ -65,7 +65,7 @@
                     <div>Place</div>
                     <ul id="inspiration-place" class="list-unstyled list-inline">
                         @if(inspForm("placeAddress").value()) {
-                        <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label"><i class="fa fa-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
+                        <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label label-success"><i class="fa fa-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
                         <script>
                             $(document).ready(function (){
                                 var placeLatLng = new google.maps.LatLng(@inspForm("placeLatitude").value(), @inspForm("placeLongitude").value());
@@ -115,7 +115,7 @@
                         function searchPlace() {
                             new google.maps.Geocoder().geocode({'address': $('#inspiration-place-input').val()}, function (results, status) {
                                 var id = 'inspiration-place';
-                                $('#inspiration-place').html('<li id="' + id +'"><input type="hidden" name="place" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
+                                $('#inspiration-place').html('<li id="' + id +'"><input type="hidden" name="place" value="' + results[0].formatted_address + '/' + results[0].geometry.location.lat().toString() + '/' + results[0].geometry.location.lng().toString() + '"><span class="label label-success"><i class="icon-map-marker"></i> ' + results[0].formatted_address + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove(); removeMarker(\'' + id + '\'); return false;">&times;</a></span> <span class="divider"></span></li>');
                                 map.setCenter(results[0].geometry.location);
                                 var marker = new google.maps.Marker({
                                     map: map,
@@ -156,7 +156,7 @@
                     <div> @Messages("adventure.general.label.time") </div>
                     <ul id="inspiration-time" class="list-unstyled list-inline">
                         @if(inspForm("timeStart").value()) {
-                            <li id="inspiration-time"><input type="hidden" name="time" value="@inspForm("timeStart").value(),@inspForm("timeEnd").value()"><span class="label"><i class="icon-time"></i> @inspForm("timeStart").value() to @inspForm("timeEnd").value() &nbsp;<a href="#" onclick="$('#inspiration-time').remove();">&times;</a></span> <span class="divider"></span></li>
+                            <li id="inspiration-time"><input type="hidden" name="time" value="@inspForm("timeStart").value(),@inspForm("timeEnd").value()"><span class="label label-info"><i class="icon-time"></i> @inspForm("timeStart").value() to @inspForm("timeEnd").value() &nbsp;<a href="#" onclick="$('#inspiration-time').remove();">&times;</a></span> <span class="divider"></span></li>
                         }
                     </ul>
 
@@ -179,7 +179,7 @@
 
                         function addTime() {
                             var id = 'inspiration-time';
-                            $('#inspiration-time').html('<li id="' + id +'"><input type="hidden" name="time" value="' + $('#inspiration-time-input-start').val() + ',' + $('#inspiration-time-input-end').val() + '"><span class="label"><i class="icon-time"></i> ' + $('#inspiration-time-input-start').val() + ' to ' + $('#inspiration-time-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
+                            $('#inspiration-time').html('<li id="' + id +'"><input type="hidden" name="time" value="' + $('#inspiration-time-input-start').val() + ',' + $('#inspiration-time-input-end').val() + '"><span class="label label-info"><i class="icon-time"></i> ' + $('#inspiration-time-input-start').val() + ' to ' + $('#inspiration-time-input-end').val() + ' &nbsp;<a href="#" onclick="$(\'#' + id + '\').remove();">&times;</a></span> <span class="divider"></span></li>');
                             $('#inspiration-time-input-start').val('');
                             $('#inspiration-time-input-end').val('');
                         }
