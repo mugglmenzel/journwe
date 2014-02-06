@@ -170,9 +170,9 @@ public class ApplicationController extends Controller {
     public static Result getInspirations(final String catId) {
         DynamicForm data = form().bindFromRequest();
         final String lastId = data.get("lastId");
-        int countParam = 10;
+        int countParam = 8;
         try {
-            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
+            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 8;
         } catch (Exception e) {
             return badRequest("Count is not a number.");
         }

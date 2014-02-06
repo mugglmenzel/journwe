@@ -11,17 +11,17 @@ define([
         publicAdventuresInfos = [];
 
 
-    var initializePublicAdventures = function () {
+    var initializePublicAdventures = function (lastId) {
         initializePublicAdventuresMap();
-        loadPublicAdventures(null, true);
+        loadPublicAdventures(lastId, true);
     };
 
-    var initializeMyAdventures = function () {
-        loadMyAdventures(null, true);
+    var initializeMyAdventures = function (lastId) {
+        loadMyAdventures(lastId, true);
     };
 
-    var initializeCategories = function () {
-        loadCategories(null, true);
+    var initializeCategories = function (lastId, superCatId) {
+        loadCategories(lastId, true, superCatId);
     };
 
     var renderAdventure = function (tmplId, adv) {

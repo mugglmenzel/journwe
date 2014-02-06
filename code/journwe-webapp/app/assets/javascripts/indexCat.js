@@ -12,13 +12,13 @@ require([
 
 
     var initialize = function () {
+
+        index.initializeCategories(null, cat.id);
+
         initializeInspirationsMap();
-
-        index.loadCategories(null, true, cat.id);
-
         loadInspirations(null, true);
 
-        index.loadPublicAdventures(null, true);
+        index.initializePublicAdventures();
     };
 
     var initializeInspirationsMap = function () {
