@@ -1,20 +1,21 @@
 package controllers.html;
 
 import com.feth.play.module.pa.PlayAuthenticate;
-import models.adventure.Adventure;
+import com.feth.play.module.pa.providers.AuthProvider;
 import models.adventure.adventurer.Adventurer;
 import models.adventure.adventurer.EAdventurerParticipation;
 import models.auth.SecuredUser;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
-import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserDAO;
 import models.user.User;
 import play.cache.Cache;
+import play.data.DynamicForm;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import providers.MyUsernamePasswordAuthProvider;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,28 +28,35 @@ public class AdventurePeopleController extends Controller {
 
 
     //TODO: Create JSON API version of participate
-    @Security.Authenticated(SecuredUser.class)
     public static Result participate(final String advId) {
 
+        String provider = DynamicForm.form().get("provider");
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
-        Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
-        if (advr == null) {
-            advr = new Adventurer();
-            advr.setUserId(usr.getId());
-            advr.setAdventureId(advId);
-            advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
-            new AdventurerDAO().save(advr);
+        if (usr != null) {
+            Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+            if (advr == null) {
+                advr = new Adventurer();
+                advr.setUserId(usr.getId());
+                advr.setAdventureId(advId);
+                advr.setParticipationStatus(EAdventurerParticipation.APPLICANT);
+                new AdventurerDAO().save(advr);
 
-        } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
-            advr.setParticipationStatus(EAdventurerParticipation.GOING);
-            new AdventurerDAO().save(advr);
+            } else if (EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
+                advr.setParticipationStatus(EAdventurerParticipation.GOING);
+                new AdventurerDAO().save(advr);
+            }
+            clearCache(advId);
+            ApplicationController.clearUserCache(usr.getId());
+            return AdventureController.getIndex(advId);
+        } else if (provider != null && !"".equals(provider)) {
+            AuthProvider prov = AuthProvider.Registry.get(provider);
+            if (prov != null) return redirect(prov.getUrl());
         }
-        clearCache(advId);
-        ApplicationController.clearUserCache(usr.getId());
 
+        flash("info", "You need to be logged in to join a JournWe.");
 
-        return AdventureController.getIndex(advId);
+        return ok(views.html.login.render(MyUsernamePasswordAuthProvider.LOGIN_FORM));
     }
 
     //TODO: Create JSON API version of leave

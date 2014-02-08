@@ -296,7 +296,7 @@ public class AdventurePeopleController extends Controller {
     }
     */
 
-
+    @Security.Authenticated(SecuredUser.class)
     public static Result postOnMyFacebookWall(String advId) {
         Adventure adv = new AdventureDAO().get(advId);
         Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
@@ -336,7 +336,7 @@ public class AdventurePeopleController extends Controller {
     }
     */
 
-
+    @Security.Authenticated(SecuredUser.class)
     public static Result invite(String advId) {
         if (!new JournweAuthorization(advId).canInviteAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
@@ -409,6 +409,7 @@ public class AdventurePeopleController extends Controller {
         return badRequest();
     }
 
+    @Security.Authenticated(SecuredUser.class)
     public static Result autocompleteFacebook() {
         DynamicForm form = form().bindFromRequest();
         String input = form.get("input");

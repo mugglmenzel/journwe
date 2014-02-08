@@ -191,10 +191,10 @@ POST          /test/fb/message/send                                        contr
 GET           /ping                                                        controllers.html.ApplicationController.ping
 
 #### Static resources from /public folder to /assets ####
-GET           /assets/javascripts-min/routes.js                    controllers.html.ApplicationController.routes
-GET           /assets/javascripts-min/messages.js                  controllers.html.ApplicationController.messages
-GET           /assets/javascripts/routes.js                    controllers.html.ApplicationController.routes
-GET           /assets/javascripts/messages.js                  controllers.html.ApplicationController.messages
+GET           /assets/javascripts-min/routes.js                            controllers.html.ApplicationController.routes
+GET           /assets/javascripts-min/messages.js                          controllers.html.ApplicationController.messages
+GET           /assets/javascripts/routes.js                                controllers.html.ApplicationController.routes
+GET           /assets/javascripts/messages.js                              controllers.html.ApplicationController.messages
 
 GET           /assets/*file                                                controllers.Assets.at(path="/public", file)
 

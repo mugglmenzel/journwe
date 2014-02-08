@@ -99,7 +99,7 @@
         </td>
         }
         @if(auth.canViewVotesForPlaces()) {
-        <td class="text-center">{%=(o.voteGroup*6)%}</td>
+        <td class="text-center">{%=o.voteGroup%}</td>
         <td class="text-center hidden">{%=o.voteCount.YES%}</td>
         <td class="text-center hidden">{%=o.voteCount.MAYBE%}</td>
         <td class="text-center hidden">{%=o.voteCount.NO%}</td>

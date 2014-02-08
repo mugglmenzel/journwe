@@ -1,5 +1,6 @@
 @(loginForm: Form[_])
 
+@import com.feth.play.module.pa.views.html._
 @import helper._
 @import helper.twitterBootstrap._
 
@@ -7,7 +8,7 @@
 
 <div class="jrn-container" style="margin-top:-20px;">
   <div id="login" class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-5">
       @* Display proprietary login form *@
     	@helper.form(html.routes.ApplicationController.doLogin) {
     	
@@ -35,6 +36,13 @@
         <a href="javascript:void(0);" onclick="window.location.href = '@html.routes.SignupController.forgotPassword("")'+($('#email').val()?'/'+$('#email').val():'');">@Messages("playauthenticate.login.forgot.password")</a>
 
     	}
+    </div>
+    <div class="col-lg-7">
+        <ul class="nav nav-pills nav-stacked ">
+            @forProviders() { p =>
+                <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+            }
+        </ul>
     </div>
   </div>
 </div>

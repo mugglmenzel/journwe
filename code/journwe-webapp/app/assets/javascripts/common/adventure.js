@@ -229,7 +229,7 @@ define([
     };
 
     var renderPlaceOption = function (data, replace) {
-        data.voteGroup = round(data.voteGroup*100)/100;
+        data.voteGroup = Math.round(data.voteGroup*6*100)/100;
         var place = $(tmpl('place-template', $.extend({
             votePlaceLabelCSSClassMap: votePlaceLabelCSSClassMap
         }, data)));
@@ -482,7 +482,7 @@ define([
     };
 
     var renderTimeOption = function (data, replace) {
-        data.voteGroup = round(data.voteGroup*100)/100;
+        data.voteGroup = Math.round(data.voteGroup*6*100)/100;
         var time = $(tmpl('time-template', $.extend({
             voteTimeLabelCSSClassMap: voteTimeLabelCSSClassMap
         }, data)));

@@ -110,7 +110,7 @@
             </td>
             }
             @if(auth.canViewVotesForDateAndTime()) {
-            <td class="text-center">{%=(o.voteGroup*5)%}</td>
+            <td class="text-center">{%=o.voteGroup%}</td>
             <td class="text-center hidden">{%=o.voteCount.YES%}</td>
             <td class="text-center hidden">{%=o.voteCount.MAYBE%}</td>
             <td class="text-center hidden">{%=o.voteCount.NO%}</td>
