@@ -18,7 +18,18 @@
 
         <div class="toolbar">
 
-            <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
+            <div class="btn-group pull-right">
+                <a class="btn btn-participate btn-success" href="@html.routes.AdventurePeopleController.participateFacebook(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join") (via Facebook)</a>
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="@html.routes.AdventurePeopleController.participate(adv.getId(), "journwe")"><i class="fa fa-user fa-fw"></i> @Messages("adventure.general.button.join") (via JournWe)</a></li>
+                    @forProviders() { p =>
+                        <li><a class="btn-participate" href="@html.routes.AdventurePeopleController.participate(adv.getId(), p.getKey)"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @Messages("adventure.general.button.join") (via @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase))</a></li>
+                    }
+                </ul>
+            </div>
 
             @*
             @currentAuth() { auth =>

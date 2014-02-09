@@ -26,11 +26,13 @@ import providers.MyUsernamePasswordAuthProvider;
  */
 public class AdventurePeopleController extends Controller {
 
+    public static Result participateFacebook(final String advId) {
+        return participate(advId, "facebook");
+    }
 
     //TODO: Create JSON API version of participate
-    public static Result participate(final String advId) {
+    public static Result participate(final String advId, final String provider) {
 
-        String provider = DynamicForm.form().get("provider");
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         if (usr != null) {
@@ -52,6 +54,8 @@ public class AdventurePeopleController extends Controller {
         } else if (provider != null && !"".equals(provider)) {
             AuthProvider prov = AuthProvider.Registry.get(provider);
             if (prov != null) return redirect(prov.getUrl());
+            else if("journwe".equals(provider))
+                return ok(views.html.login.render(MyUsernamePasswordAuthProvider.LOGIN_FORM));
         }
 
         flash("info", "You need to be logged in to join a JournWe.");

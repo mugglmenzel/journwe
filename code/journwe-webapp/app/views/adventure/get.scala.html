@@ -56,7 +56,7 @@
         }
         <div class="toolbar">
             @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
-                <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participate(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
+                <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participateFacebook(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
             } else {
                 <a class="btn btn-danger pull-right" data-toggle="modal" data-target="#leave"><i class="fa fa-unlink"></i> @Messages("adventure.general.button.leave")</a>
             }

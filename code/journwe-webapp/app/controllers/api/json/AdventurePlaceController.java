@@ -113,6 +113,8 @@ public class AdventurePlaceController extends Controller {
             return badRequest();
         }
         new PlaceOptionDAO().save(place);
+        new AdventurerNotifier().notifyAdventurers(advId, "The new place option " + place.getAddress() + " has been added.", "New Place Option");
+
 
         User user = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Comment comment = new Comment();
@@ -167,6 +169,7 @@ public class AdventurePlaceController extends Controller {
         }
 
         new PlacePreferenceDAO().save(pref);
+        new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " voted on place option " + place.getAddress() + ".", "Vote Place Option");
 
         //PlaceOption place = PlaceOption.fromId(pref.getTimeOptionId());
         //place = new PlaceOptionDAO().get(place.getAdventureId(), place.getAddress());

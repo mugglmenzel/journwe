@@ -16,6 +16,7 @@ import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.TodoDAO;
 import models.dao.user.UserDAO;
 import models.helpers.AWSProductAdvertisingAPIHelper;
+import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
@@ -98,8 +99,8 @@ public class AdventureTodoController extends Controller {
     }
 
     @Security.Authenticated(SecuredUser.class)
-    public static Result addTodo(String id) {
-        if (!new JournweAuthorization(id).canEditTodoItem())
+    public static Result addTodo(String advId) {
+        if (!new JournweAuthorization(advId).canEditTodoItem())
             return AuthorizationMessage.notAuthorizedResponse();
 
         DynamicForm requestData = form().bindFromRequest();
@@ -107,11 +108,12 @@ public class AdventureTodoController extends Controller {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         models.adventure.todo.Todo todo = new models.adventure.todo.Todo();
-        todo.setAdventureId(id);
+        todo.setAdventureId(advId);
         todo.setUserId(usr.getId());
         todo.setTitle(requestData.get("title"));
 
         new TodoDAO().save(todo);
+        new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " added the todo item " + todo.getTitle() + " to the todo list.", "Todo Item Added");
 
         return ok(Json.toJson(todo));
     }

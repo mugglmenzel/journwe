@@ -160,7 +160,8 @@ GET           /adv/:shortname                                              contr
 
 
 #### Adventure People ####
-GET           /adventure/:id/participate.json                              controllers.html.AdventurePeopleController.participate(id:String)
+GET           /adventure/:id/:provider/participate.json                    controllers.html.AdventurePeopleController.participate(id:String, provider:String)
+GET           /adventure/:id/participate.json                              controllers.html.AdventurePeopleController.participateFacebook(id:String)
 GET           /api/json/adventure/:id/leave.json                           controllers.html.AdventurePeopleController.leave(id:String)
 
 

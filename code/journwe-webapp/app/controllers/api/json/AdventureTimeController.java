@@ -117,6 +117,7 @@ public class AdventureTimeController extends Controller {
             time.setStartDate(df.parse(requestData.get("startDate")));
             time.setEndDate(df.parse(requestData.get("endDate")));
             new TimeOptionDAO().save(time);
+            new AdventurerNotifier().notifyAdventurers(advId, "The new time option " + df.format(time.getStartDate()) + (time.getStartDate().equals(time.getEndDate()) ?  "-" + df.format(time.getEndDate()) : "") + " has been added.", "New Time Option");
 
             User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             if(usr != null) {
@@ -147,6 +148,7 @@ public class AdventureTimeController extends Controller {
         return vote(advId, form().bindFromRequest().get("timeId"));
     }
 
+    @Security.Authenticated(SecuredUser.class)
     public static Result vote(String advId, String timeId) {
         if (!new JournweAuthorization(advId).canVoteForDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
@@ -172,6 +174,9 @@ public class AdventureTimeController extends Controller {
         }
 
         new TimePreferenceDAO().save(pref);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " voted on time option " + df.format(time.getStartDate()) + (time.getStartDate().equals(time.getEndDate()) ?  "-" + df.format(time.getEndDate()) : "") + ".", "Vote Time Option");
+
 
         ObjectNode node = timeToJSON(time);
 

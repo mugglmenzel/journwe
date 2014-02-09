@@ -13,6 +13,7 @@ import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.adventure.JournweFileDAO;
 import models.dao.user.UserDAO;
+import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
@@ -81,6 +82,7 @@ public class AdventureFileController extends Controller {
             upload.waitForCompletion();
             s3.setObjectAcl(S3_BUCKET, s3ObjectKey, CannedAccessControlList.PublicRead);
             flash("success", "Your files is uploading now and can be downloaded, soon...");
+            new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " uploaded the file " + journweFile.getFileName() + ".", "File Upload");
             return ok(fileToJSON(journweFile));
         } catch (Exception e) {
             Logger.error("Failed uploading!", e);

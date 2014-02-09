@@ -25,6 +25,7 @@ import models.dao.user.UserSocialDAO;
 import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
 import models.inspiration.Inspiration;
+import models.notifications.helper.AdventurerNotifier;
 import models.user.EUserRole;
 import models.user.User;
 import models.user.UserSocial;
@@ -225,6 +226,7 @@ public class AdventurePeopleController extends Controller {
         if (advr != null) {
             advr.setParticipationStatus(status);
             new AdventurerDAO().save(advr);
+            new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " changed the participation status to " + status.name() + ".", "Participation Status");
 
             clearCache(advId);
         }
