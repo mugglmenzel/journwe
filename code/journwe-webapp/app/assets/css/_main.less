@@ -217,7 +217,7 @@ h1 .editableform {
   &.headline {
     vertical-align: middle;
     height: 400;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     padding-bottom: 30px;
 
     & .text-success {
@@ -227,7 +227,7 @@ h1 .editableform {
       & div:first-child {
         font-size: 68px;
         color: white;
-        font-family: @font-title; 
+        font-family: @font-title;
         font-weight: @font-title-thin;
 
         & img {
@@ -240,7 +240,7 @@ h1 .editableform {
 
         & strong {
           font-weight: @font-title-bold;
-          font-size: 68px; 
+          font-size: 68px;
         }
       }
 
@@ -522,27 +522,27 @@ table.inspiration {
     padding: 5px 0 0 0;
 
     & > .comment-image {
-        margin-left: 5px;
-        margin-top: 5px;
+      margin-left: 5px;
+      margin-top: 5px;
     }
 
     & .comment-text {
-        width: 80%;
-        margin-left: 15px;
-        margin-top: -5px;
-        padding: 5px;
+      width: 80%;
+      margin-left: 15px;
+      margin-top: -5px;
+      padding: 5px;
 
-        & > i {
-            margin-top: 15px;
-            margin-left: -12px;
-        }
+      & > i {
+        margin-top: 15px;
+        margin-left: -12px;
+      }
     }
   }
 }
 
 .comments-wall {
-    background: none;
-    padding: 0;
+  background: none;
+  padding: 0;
 
   & .comment-list {
     max-height: none;
@@ -919,6 +919,14 @@ h3 {
     bottom: 20px;
     white-space: nowrap;
     display: inline;
+
+    & .btn-group>.btn:first-child {
+      margin-left: 0;
+    }
+
+    & .btn-group .btn+.btn, .btn-group .btn+.btn-group, .btn-group .btn-group+.btn, .btn-group .btn-group+.btn-group {
+      margin-left: -1px;
+    }
 
     & .btn {
       margin-left: 5px;

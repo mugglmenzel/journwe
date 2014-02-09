@@ -16,14 +16,6 @@ define([
     var votePlaceIconCSSClassMap = {'YES': 'fa fa-thumbs-up', 'NO': 'fa fa-thumbs-down', 'MAYBE': 'fa fa-question'},
         votePlaceButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'},
         votePlaceLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
-    var adventurerCSSLabel = {
-        'APPLICANT': 'default',
-        'INVITEE': 'warning',
-        'NOTGOING': 'danger',
-        'UNDECIDED': 'warning',
-        'GOING': 'info',
-        'BOOKED': 'success'
-    };
     var voteTimeIconCSSClassMap = {'YES': 'fa fa-thumbs-up', 'NO': 'fa fa-thumbs-down', 'MAYBE': 'fa fa-question'},
         voteTimeButtonCSSClassMap = {'YES': 'btn-success', 'NO': 'btn-danger', 'MAYBE': 'btn-warning'},
         voteTimeLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
@@ -381,7 +373,7 @@ define([
             $(target).empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
-                    advs[i].cssLabel = adventurerCSSLabel[advs[i].status];
+                    advs[i].cssLabel = utils.adventurerCSSLabel[advs[i].status];
                     advs[i].color = utils.colorOfUser(advs[i].name);
                     $(target).append(tmpl(template, advs[i]));
                 }
@@ -415,7 +407,7 @@ define([
             el.addClass('active');
 
             $('#adventurers-adventurer-' + json.userId)
-                .find('.label').removeClass().addClass('label label-' + adventurerCSSLabel[state])
+                .find('.label').removeClass().addClass('label label-' + utils.adventurerCSSLabel[state])
                 .html(state);
         }});
         return false;

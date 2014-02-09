@@ -11,9 +11,9 @@ define([
         publicAdventuresInfos = [];
 
 
-    var initializePublicAdventures = function (lastId) {
+    var initializePublicAdventures = function (lastId, insId) {
         initializePublicAdventuresMap();
-        loadPublicAdventures(lastId, true);
+        loadPublicAdventures(lastId, true, insId);
     };
 
     var initializeMyAdventures = function (lastId) {
@@ -26,6 +26,7 @@ define([
 
     var renderAdventure = function (tmplId, adv) {
         if(adv.favoriteTime != null && adv.favoriteTime.startDate != null) adv.favoriteTime.startDate = utils.formatDateShort(adv.favoriteTime.startDate);
+        if(adv.status != null) adv.cssLabel = utils.adventurerCSSLabel[adv.status];
         return $(tmpl(tmplId, adv));
     };
 

@@ -28,19 +28,20 @@
             <div class="text-center"><button class="btn btn-adventures-my-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
             <script type="text/x-tmpl" id="adventure-my-template">
                 <div class="adventure-entry pull-left" data-id="{%=o.id%}" style="width: 20%; padding: 5px;">
-                    <div><a href="{%=o.link%}"><h4>{%=o.name%}</h4></a></div>
+                    <div><a href="{%=o.link%}"><h4 title="{%=o.name%}">{% if(o.name.length > 18){ %}{%=String(o.name.substring(0,16) + '...')%}{% } else { %}{%=o.name%}{% } %}</h4></a></div>
                     <div style="margin-bottom: 5px">
                         <div class="label" style="width: 100%; background-color: rgba(184, 246, 145, 1);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</div>
                         <div class="label" style="width: 100%; background-color: rgba(235, 114, 104, 1);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</div>
                         <div class="label" style="width: 100%; background-color: rgba(152, 229, 251, 1);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=o.favoriteTime.startDate%} {% } else { %} ? {% } %}</div>
                     </div>
-                    <div class="text-center">
+                    <div class="text-center" style="position: relative;">
                         <a href="{%=o.link%}">
                             <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=200&height=200&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp='+o.imageTimestamp)%}{% } %}">
                         </a>
-                    </div>
-                    <div>
-                        <div class="label">{%=o.status%}</div>
+                        <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                            <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>
+                        </div>
+
                     </div>
                 </div>
             </script>
@@ -58,9 +59,9 @@
 
 
     <div class="jrn-container">
-        <p class="lead">
+        <h1>
            @Messages("inspiration.getInspired")
-        </p>
+        </h1>
 
         <h3><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
 

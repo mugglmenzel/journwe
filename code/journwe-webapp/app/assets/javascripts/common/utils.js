@@ -13,7 +13,14 @@ define(function(){
 
 
     return {
-
+        adventurerCSSLabel: {
+            'APPLICANT': 'default',
+            'INVITEE': 'warning',
+            'NOTGOING': 'danger',
+            'UNDECIDED': 'warning',
+            'GOING': 'info',
+            'BOOKED': 'success'
+        },
         /**
          * Returns the last string of the path
          * @return String

@@ -13,7 +13,7 @@ require([
         loadImages();
         initializePlaceMap();
 
-        index.loadPublicAdventures(null, true, ins.id);
+        index.initializePublicAdventures(null, ins.id);
     };
 
     var loadTips = function () {
