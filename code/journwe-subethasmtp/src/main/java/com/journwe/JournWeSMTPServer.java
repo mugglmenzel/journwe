@@ -1,19 +1,19 @@
 package com.journwe;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.event.ProgressEvent;
 import com.amazonaws.event.ProgressListener;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
-import com.journwe.model.Adventure;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
+import com.amazonaws.services.simpleemail.model.*;
+import com.journwe.model.*;
 import com.journwe.model.Message;
-import com.journwe.model.MessageAttachment;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +27,12 @@ import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,6 +46,7 @@ public class JournWeSMTPServer {
     private static BasicAWSCredentials credentials = new BasicAWSCredentials("AKIAJGCLA5GISOJ6UVZA", "UW3EB5LRrsTwkpTdRR/zU11v2xtMx919TLYIbsYM");
     private static DynamoDBMapper dynamo;
     private static AmazonS3Client s3;
+    private static AmazonSimpleEmailServiceClient ses;
     private static String s3bucketName = "journwe-email-attachments";
 
     private static Logger logger = LoggerFactory.getLogger(JournWeSMTPServer.class);
@@ -58,7 +62,10 @@ public class JournWeSMTPServer {
         dynamo = new DynamoDBMapper(client);
 
         //S3
-        s3 = new AmazonS3Client(credentials, new ClientConfiguration().withProtocol(Protocol.HTTP));
+        s3 = new AmazonS3Client(credentials);
+
+        //SES
+        ses = new AmazonSimpleEmailServiceClient(credentials);
 
 
         //SMTP SERVER
@@ -71,13 +78,17 @@ public class JournWeSMTPServer {
 
             @Override
             public void deliver(String from, String recipient, InputStream data) throws TooMuchDataException, IOException {
-                Message msg = new Message();
-                msg.setAdventureId(recipient.substring(0, recipient.indexOf("@")));
-                msg.setSender(from);
-                msg.setBody("");
 
                 try {
                     MimeMessage mimemsg = new MimeMessage(Session.getDefaultInstance(System.getProperties()), data);
+
+
+                    //Save Message
+                    Message msg = new Message();
+                    msg.setAdventureId(recipient.substring(0, recipient.indexOf("@")));
+                    msg.setSender(from);
+                    msg.setBody("");
+
                     msg.setSubject(mimemsg.getSubject());
 
                     if (mimemsg.getReceivedDate() != null)
@@ -88,11 +99,41 @@ public class JournWeSMTPServer {
 
                     dynamo.save(msg);
                     logger.info("Saved Message " + msg.getMessageId());
+
+
+
+
+                    //Forward message
+                    Destination dest = new Destination();
+
+                    Adventurer hashKey = new Adventurer();
+                    hashKey.setAdventureId(msg.getAdventureId());
+                    DynamoDBQueryExpression<Adventurer> queryAdvr = new DynamoDBQueryExpression<Adventurer>().withHashKeyValues(hashKey);
+
+                    for (Adventurer advr : dynamo.query(Adventurer.class, queryAdvr)) {
+
+                        UserEmail ue = new UserEmail();
+                        ue.setUserId(advr.getUserId());
+                        DynamoDBQueryExpression queryEmail = new DynamoDBQueryExpression().withHashKeyValues(ue);
+
+                        Iterator<UserEmail> results = dynamo.query(UserEmail.class, queryEmail).iterator();
+                        UserEmail result = null;
+                        while (results.hasNext()) {
+                            result = results.next();
+                            if (result.isPrimary()) break;
+                        }
+
+                        if (result != null) dest.getBccAddresses().add(result.getEmail());
+                    }
+
+                    ses.sendEmail(new SendEmailRequest().withDestination(dest).withMessage(new com.amazonaws.services.simpleemail.model.Message().withSubject(new Content().withData(msg.getSubject())).withBody(new Body().withHtml(new Content().withData(msg.getBody())).withText(new Content().withData(msg.getBody())))));
+
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
 
             }
 

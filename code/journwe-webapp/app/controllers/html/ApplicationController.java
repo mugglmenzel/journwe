@@ -53,13 +53,17 @@ public class ApplicationController extends Controller {
 
     }
 
+
     public static Result indexNew() {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
                 && SecuredUser.isAuthorized(usr)) {
             User user = new UserDAO().findByAuthUserIdentity(usr);
             return ok(index.render(user));
-        } else return ok(landing.render());
+        } else {
+            flash("info", "Please login to start a JournWe.");
+            return ok(landing.render());
+        }
     }
 
     public static Result categoryOverview() {
