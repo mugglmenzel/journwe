@@ -1,11 +1,13 @@
 @(adv: models.adventure.Adventure)
 
+    Your email address is: @adv.getId()@@journwe.com
 
     <script type="text/x-tmpl" id="emails-template">
         <tr>
             <td><span class="label label-info" title="{%=o.sender%}">{%=o.sender%}</span></td>
             <td>{%=o.subject%}</td>
             <td>{%=o.timestamp%}</td>
+            <td><a href="mailto:{%=o.sender%}?subject={%=o.subject%}">Reply</a> </td>
         </tr>
     </script>
 
@@ -15,6 +17,7 @@
                 <th>Sender</th>
                 <th>Subject</th>
                 <th>Date</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
