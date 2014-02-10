@@ -13,7 +13,7 @@ landing.fun.subtitle=Traveling alone is boring. Travel with your friends and hav
 landing.beta.title=Beta Phase
 landing.beta.text=We have launched JournWe.com in an early stage to give you an idea what you can do with it. However, please be aware that JournWe.com is still an early-stage startup company. Although we are constantly improving and testing our software, it is possible that there are still a few bugs left. You are welcome to try out JournWe.com but please know that we might make disruptive changes that can affect usability of the site at any given time.
 landing.b2b.title=Investors and Partners
-landing.b2b.text=We are looking for investors and partners that can help us to make JournWe.com the no. 1 online group travel platform. We are particularly interested in contacts to consolidators and travel technology companies that can help us to implement features for online group travel booking.
+landing.b2b.text=We are looking for investors and partners that can help us to make JournWe.com the no. 1 online group travel platform. We are particularly interested in contacts to consolidators and travel technology companies that can help us to implement features for online group travel booking.<br/><a class="btn btn-default" href="/contact">Contact</a>
 
 #Adventure.general.labels
 adventure.general.label.facebook=Facebook
