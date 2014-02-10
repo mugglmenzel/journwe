@@ -1,0 +1,33 @@
+@(contactForm: Form[_])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main(Messages("journwe.subtitle")){Contact}{
+<div class="jrn-container" style="margin-top:-20px;">
+@helper.form(html.routes.ApplicationController.contactForm) {
+    @helper.inputText(contactForm("name"),
+        '_label -> "Name",
+        'class -> "form-control")
+
+    @helper.inputText(contactForm("email"),
+        '_label -> "Email",
+        'class -> "form-control",
+        'required -> true,
+        'type -> "email")
+
+    @helper.inputText(contactForm("subject"),
+        '_label -> "Subject",
+        'class -> "form-control",
+        'required -> true)
+
+    @helper.textarea(contactForm("text"),
+        '_label -> "Text",
+        'class -> "form-control",
+        'required -> true)
+
+    <input type="submit" value="Send" class="btn btn-primary">
+
+}
+</div>
+}("contact")

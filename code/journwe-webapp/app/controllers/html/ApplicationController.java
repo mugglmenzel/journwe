@@ -1,18 +1,20 @@
 package controllers.html;
 
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
+import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.providers.AuthProvider;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
+import com.typesafe.config.ConfigFactory;
+import models.admin.Contact;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredUser;
 import models.category.Category;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.user.UserDAO;
-import models.dao.user.UserSocialDAO;
 import models.user.User;
-import models.user.UserSocial;
 import play.Routes;
 import play.api.Play;
 import play.cache.Cache;
@@ -26,6 +28,7 @@ import providers.MyUsernamePasswordAuthProvider;
 import views.html.*;
 import views.html.about;
 import views.html.admin;
+import views.html.contact;
 import views.html.imprint;
 import views.html.index.index;
 import views.html.index.indexCat;
@@ -82,6 +85,24 @@ public class ApplicationController extends Controller {
 
     public static Result about() {
         return ok(about.render());
+    }
+
+    public static Result contact() {
+        return ok(contact.render(new Form(Contact.class)));
+    }
+
+    public static Result contactForm() {
+        Form<Contact> form = new Form(Contact.class).bindFromRequest();
+        if (!form.hasErrors()) {
+            Contact ct = form.get();
+            new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
+                    ConfigFactory.load().getString("aws.accessKey"),
+                    ConfigFactory.load().getString("aws.secretKey"))).sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses("info@journwe-company.com")).withSource("contact@journwe.com").withReplyToAddresses(ct.getName() + "<" + ct.getEmail() + ">").withMessage(new Message().withSubject(new Content().withData(ct.getSubject())).withBody(new Body().withText(new Content().withData(ct.getText() + "\n\nName: " + ct.getName())))));
+            flash("success", "Your Email has been sent. We'll contact you shortly.");
+            return redirect(routes.ApplicationController.contact());
+        } else
+            return ok(contact.render(form));
+
     }
 
     @Security.Authenticated(SecuredAdminUser.class)
@@ -149,7 +170,7 @@ public class ApplicationController extends Controller {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())) {
             User user = new UserDAO().findByAuthUserIdentity(usr);
-            if(user != null) clearUserCache(user.getId());
+            if (user != null) clearUserCache(user.getId());
         }
 
         return com.feth.play.module.pa.controllers.Authenticate.logout();

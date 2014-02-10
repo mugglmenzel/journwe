@@ -9,6 +9,7 @@
 <div class="jrn-container" style="margin-top:-20px;">
   <div id="login" class="row">
     <div class="col-lg-5">
+        <p class="lead">Login with your JournWe Account:</p>
       @* Display proprietary login form *@
     	@helper.form(html.routes.ApplicationController.doLogin) {
     	
@@ -37,7 +38,8 @@
 
     	}
     </div>
-    <div class="col-lg-7">
+    <div class="col-lg-5 col-lg-offset-2">
+        <p class="lead">Login with your Social Network Account:</p>
         <ul class="nav nav-pills nav-stacked ">
             @forProviders() { p =>
                 <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>

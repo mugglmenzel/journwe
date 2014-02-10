@@ -1,9 +1,6 @@
-@import play.mvc.Controller._
-
 @main(Messages("journwe.subtitle")){@Messages("imprint.title")}{
 
 <div class="jrn-container">
-    <h2>@Messages("imprint.title")</h2>
     <div class="spacer30"></div>
     <p class="lead">@Messages("imprint.player1")<sup>1</sup>@Messages("imprint.player2")<sup>2</sup>@Messages("imprint.player4")<sup>3</sup>.</p>
 
@@ -26,7 +23,7 @@
         <abbr title="Email">E</abbr>: <a href="mailto:seppel@@journwe-company.com">seppel@@journwe-company.com</a>
     </address>
 
-    <small>@Html(@Messages("imprint.copyright"))
+    <small>@Html(Messages("imprint.copyright"))
     </small>
     <div class="spacer30"></div>
 
@@ -35,5 +32,15 @@
         <small>@Messages("imprint.disclaimer.source")</small>
         <br>@Messages("imprint.disclaimer.text")
     </p>
+
+    <h3>@Messages("imprint.material")</h3>
+    <p>
+        @Messages("imprint.material.intro")<br/>
+        <ul>
+            <li>http://www.flickr.com/photos/bevgoodwin/9149946164/</li>
+            <li>http://www.flickr.com/photos/43423301@@N07/6211148984/</li>
+            <li>http://www.flickr.com/photos/31346890@@N04/5876319086/</li>
+        </ul>
+    </p>
 </div>
-}
+}("imprint")

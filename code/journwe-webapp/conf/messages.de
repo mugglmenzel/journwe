@@ -306,6 +306,9 @@ imprint.disclaimer.text=Haftung für Inhalte. \
   Ihre Datenschutzeinstellungen bei Twitter können Sie in den Konto-Einstellungen unter http://twitter.com/account/settings ändern. \
   Es werden Plugins des Sozialen Netzwerks "Foursquare" eingesetzt. Weitere Informationen finden Sie auf https://de.foursquare.com/legal/privacy.
 
+imprint.material=Material
+imprint.material.intro=Wir nutzen Bilder aus den folgenden Quellen:
+
 #example Texts
 yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow adventurer on this magnificent JournWe.
 

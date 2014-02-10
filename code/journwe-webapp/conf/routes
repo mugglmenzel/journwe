@@ -237,6 +237,8 @@ GET           /authenticate/:provider/denied                               contr
 # GET           /subscribe                                     controllers.html.ApplicationController.subscribe()
 GET           /imprint                                                     controllers.html.ApplicationController.imprint
 GET           /about                                                       controllers.html.ApplicationController.about
+POST          /contact/send                                                controllers.html.ApplicationController.contactForm()
+GET           /contact                                                     controllers.html.ApplicationController.contact()
 GET           /admin                                                       controllers.html.ApplicationController.admin()
 GET           /lang/:id                                                    controllers.html.ApplicationController.changeLanguage(id:String)
 
