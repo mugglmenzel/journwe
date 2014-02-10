@@ -270,18 +270,11 @@ public class AdventureController extends Controller {
         }
 
 
-        // CREATE ADVENTURE EMAIL ADDRESS
-        AmazonSQS sqs = new AmazonSQSClient(credentials);
-        sqs.sendMessage(new SendMessageRequest().withQueueUrl("journwe-email-bond").withMessageBody(adv.getId()));
-        AmazonSNS sns = new AmazonSNSClient(credentials);
-        sns.publish(new PublishRequest().withTopicArn("arn:aws:sns:us-east-1:561785394163:journwe-email-bond").withSubject("Wake Up, Bond!").withMessage("New Email Addresses!"));
-
-
         try {
             UserEmail primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(usr.getId());
             if (primaryEmail != null) {
                 AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(credentials);
-                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail(), adv.getId() + "@journwe.com")).withMessage(new Message().withSubject(new Content().withData("Your new Adventure " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, We created the adventure " + adv.getName() + " for you! Share it with " + shortURL + ". ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(adv.getId() + "@journwe.com")).withMessage(new Message().withSubject(new Content().withData("Your new JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey,\n\n We created the JournWe " + adv.getName() + " for you!\n Share it with " + shortURL + ". ")))).withSource(adv.getId() + "@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
                 //The adventure's email address is " + advShortname.getShortname() + "@adventure.journwe.com.
                 //advShortname.getShortname() + "@adventure.journwe.com"
             }

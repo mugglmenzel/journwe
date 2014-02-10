@@ -30,7 +30,6 @@ public class AdventureEmailController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result listEmails(String adventureId) {
-        activate(adventureId);
         List<Message> messages = new AdventureEmailMessageDAO().all(adventureId);
 //        for(JournweFile file : files) {
 //            Long newExpirationTimeInMillis = new Long(DateTime.now().getMillis()+EXPIRATION_TIME_IN_SECONDS);
@@ -42,17 +41,4 @@ public class AdventureEmailController extends Controller {
         return ok(Json.toJson(messages));
     }
 
-    @Security.Authenticated(SecuredUser.class)
-    public static Result activateEmails(String advId) {
-        activate(advId);
-        return ok();
-    }
-
-
-    private static void activate(String advId) {
-        AmazonSQS sqs = new AmazonSQSClient(credentials);
-        sqs.sendMessage(new SendMessageRequest().withQueueUrl("journwe-email-bond").withMessageBody(advId));
-        AmazonSNS sns = new AmazonSNSClient(credentials);
-        sns.publish(new PublishRequest().withTopicArn("arn:aws:sns:us-east-1:561785394163:journwe-email-bond").withSubject("Wake Up, Bond!").withMessage("New Email Addresses!"));
-    }
 }

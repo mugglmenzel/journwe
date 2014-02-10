@@ -392,16 +392,12 @@ define([
     }
 
     var changeAdventurerStatus = function (el) {
-        var html = el.html();
-
-        el.css({width: el.width() + "px"})
-            .html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning(el);
 
         routes.controllers.api.json.AdventurePeopleController.participateStatus(adv.id, el.data('status')).ajax({success: function (json) {
             var state = json.participationStatus;
 
-            el.css({width: ""})
-                .html(html);
+            utils.resetReplaceSpinning(el);
 
             el.parent().find('.active').removeClass('active');
             el.addClass('active');
@@ -414,10 +410,7 @@ define([
     };
 
     var adoptAdventurer = function (el) {
-        var html = el.html();
-
-        el.css({width: el.width() + "px"})
-            .html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning(el);
 
         routes.controllers.api.json.AdventurePeopleController.adopt(adv.id, el.data('id')).ajax({success: function (json) {
             var state = json.participationStatus;
@@ -425,6 +418,7 @@ define([
             loadApplicants();
             loadParticipants();
 
+            utils.resetReplaceSpinning(el);
         }});
         return false;
     };
