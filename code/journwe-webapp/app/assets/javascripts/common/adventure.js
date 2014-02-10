@@ -46,6 +46,10 @@ define([
         });
     };
 
+    var initNavigation = function () {
+        $('.nav-adventure-list a').tooltip();
+    }
+
 
     //TOOLBAR
 
@@ -718,13 +722,15 @@ define([
 
     utils.on({
         // Click on navigation to scroll to it
-        'click .nav-adventure a': function () {
+        'click .nav-adventure-list a': function () {
 
             var section = $(this).attr('href');
 
             if ($(section).length){
                 $('.jrn-adventure-section').addClass('stash').hide();
                 $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn();
+                $('.nav-adventure-list li').removeClass('active');
+                $(this).closest('li').addClass('active');
 
                 /*
                 $('html, body').animate({
@@ -1114,6 +1120,7 @@ define([
     return {
         initBackground: initBackground,
         initScrollspy: initScrollspy,
+        initNavigation: initNavigation,
         initializeMap: initializeMap,
         loadEmails: loadEmails,
         initializeIndex: initializeIndex,
