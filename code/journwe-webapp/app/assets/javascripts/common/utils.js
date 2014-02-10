@@ -5,7 +5,8 @@
  */
 
 define(function(){
-    
+
+    var spinnerTempStore = [];
 
     // Formats an int to a string with a leading zero
     var two = function(r){ return (r < 10 ? "0" : "")+r; },
@@ -162,6 +163,12 @@ define(function(){
         },
         resetStash: function(el) {
             $(el).removeClass('stash');
+        },
+        setReplaceSpinning: function(el) {
+
+        },
+        resetReplaceSpinning: function(el) {
+
         }
 
     };

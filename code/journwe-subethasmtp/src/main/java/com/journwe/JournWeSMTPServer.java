@@ -11,7 +11,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
-import com.amazonaws.services.simpleemail.model.*;
+import com.amazonaws.services.simpleemail.model.RawMessage;
+import com.amazonaws.services.simpleemail.model.SendRawEmailRequest;
 import com.journwe.model.*;
 import com.journwe.model.Message;
 import org.apache.commons.io.IOUtils;
@@ -22,10 +23,8 @@ import org.subethamail.smtp.helper.SimpleMessageListener;
 import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.Session;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -82,7 +81,6 @@ public class JournWeSMTPServer {
                 try {
                     MimeMessage mimemsg = new MimeMessage(Session.getDefaultInstance(System.getProperties()), data);
 
-
                     //Save Message
                     Message msg = new Message();
                     msg.setAdventureId(recipient.substring(0, recipient.indexOf("@")));
@@ -101,10 +99,7 @@ public class JournWeSMTPServer {
                     logger.info("Saved Message " + msg.getMessageId());
 
 
-
-
                     //Forward message
-                    Destination dest = new Destination();
 
                     Adventurer hashKey = new Adventurer();
                     hashKey.setAdventureId(msg.getAdventureId());
@@ -123,10 +118,21 @@ public class JournWeSMTPServer {
                             if (result.isPrimary()) break;
                         }
 
-                        if (result != null) dest.getBccAddresses().add(result.getEmail());
+                        if (result != null) {
+                            mimemsg.setFrom(new InternetAddress(recipient));
+                            mimemsg.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(result.getEmail()));
+                            mimemsg.setReplyTo(new Address[]{new InternetAddress(from), new InternetAddress(recipient)});
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            mimemsg.writeTo(outputStream);
+                            RawMessage rawMessage = new RawMessage(ByteBuffer.wrap(outputStream.toByteArray()));
+
+                            ses.sendRawEmail(new SendRawEmailRequest().withRawMessage(rawMessage).withDestinations(result.getEmail()).withSource(msg.getAdventureId() + "@journwe.com"));
+                        }
                     }
 
-                    ses.sendEmail(new SendEmailRequest().withDestination(dest).withMessage(new com.amazonaws.services.simpleemail.model.Message().withSubject(new Content().withData(msg.getSubject())).withBody(new Body().withHtml(new Content().withData(msg.getBody())).withText(new Content().withData(msg.getBody())))));
+                    logger.info("Forwarded Message " + msg.getMessageId());
+
+                    //ses.sendEmail(new SendEmailRequest().withDestination(dest).withMessage(new com.amazonaws.services.simpleemail.model.Message().withSubject(new Content().withData(msg.getSubject())).withBody(new Body().withHtml(new Content().withData(msg.getBody())).withText(new Content().withData(msg.getBody())))));
 
                 } catch (MessagingException e) {
                     e.printStackTrace();
@@ -186,21 +192,21 @@ public class JournWeSMTPServer {
                 InputStream is = part.getInputStream();
 
                 final String s3ObjectName = msg.getMessageId() + "/" + part.getFileName();
-                logger.info("S3 Object Name: " + s3ObjectName);
+                logger.debug("S3 Object Name: " + s3ObjectName);
 
                 ObjectMetadata metadata = new ObjectMetadata();
                 Long contentLength = Long.valueOf(IOUtils.toByteArray(is).length);
                 metadata.setContentLength(contentLength);
                 metadata.setContentType(part.getContentType().contains(";") ? part.getContentType().substring(0, part.getContentType().indexOf(";")) : part.getContentType());
                 is.reset();
-                logger.info("Set S3 File Meta-data to length: " + contentLength + ", and content-type: " + part.getContentType());
+                logger.debug("Set S3 File Meta-data to length: " + contentLength + ", and content-type: " + part.getContentType());
 
                 TransferManager tx = new TransferManager(s3);
                 Upload upload = tx.upload(s3bucketName, s3ObjectName, is, metadata);
                 upload.addProgressListener(new ProgressListener() {
                     @Override
                     public void progressChanged(ProgressEvent progressEvent) {
-                        logger.info("Uploaded " + progressEvent.getBytesTransferred() + " bytes of " + s3ObjectName);
+                        logger.debug("Uploaded " + progressEvent.getBytesTransferred() + " bytes of " + s3ObjectName);
                     }
                 });
             }
