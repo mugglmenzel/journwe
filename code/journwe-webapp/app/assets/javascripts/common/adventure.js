@@ -723,9 +723,14 @@ define([
             var section = $(this).attr('href');
 
             if ($(section).length){
+                $('.jrn-adventure-section').addClass('stash').hide();
+                $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn();
+
+                /*
                 $('html, body').animate({
                     scrollTop: $(section).offset().top - 95
                 }, 'slow');
+                */
             }
 
             return false;
