@@ -20,7 +20,7 @@ public class TimePreference {
 
     private EPreferenceVote vote = EPreferenceVote.MAYBE;
 
-    private Double voteGravity = 0.6D;
+    private Double voteGravity = 0.5D;
 
 
     @DynamoDBHashKey(attributeName = "timeoptionid")

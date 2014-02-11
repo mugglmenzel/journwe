@@ -40,9 +40,10 @@ define([
     };
 
     var initScrollspy = function () {
-        // $('body').scrollspy({offset: 100}).on('activate', function (evt) {
-        //     // $('.row.active').removeClass('active');
-        //     // $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
+        // $('body').scrollspy({offset: ($('.nav-adventure').first().offset().top + $('.nav-adventure').first().height())});
+        //     .on('activate', function (evt) {
+        //     $('.row.active').removeClass('active');
+        //     $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
         // });
     };
 
@@ -253,6 +254,7 @@ define([
             $('#places-list button, .btn-set-reminder-place').prop('disabled', false);
             $('#place-add-form').fadeIn();
         } else {
+            $(".btn-set-close-place").removeClass("btn-success").html('Reopen');
             $('#places-list button, .btn-set-reminder-place').prop('disabled', true);
             $('#place-add-form').fadeOut();
         }
@@ -501,9 +503,12 @@ define([
 
     var updateTimeVoteOpen = function (data) {
         if (data) {
+            var time = favoriteTime && (utils.formatDateShort(favoriteTime.startDate) + '-' + utils.formatDateShort(favoriteTime.endDate));
+            $(".btn-set-close-time").addClass("btn-success").html('<i class="fa fa-ok"></i> Close' + (time ? ' with ' + time : ''));
             $('#times-list button').prop('disabled', false);
             $('#time-add-form').fadeIn();
         } else {
+            $(".btn-set-close-time").removeClass("btn-success").html('Reopen');
             $('#times-list button').prop('disabled', true);
             $('#time-add-form').fadeOut();
         }
@@ -516,8 +521,8 @@ define([
 
         routes.controllers.api.json.AdventureTimeController.getFavoriteTime(adv.id).ajax({success: function (result) {
             favoriteTime = result.favorite;
-            if (result.favorite != null) $('.times-favorite-time-name').html(formatDate(result.favorite.startDate) + " - " + formatDate(result.favorite.endDate));
-            if (result.autoFavorite != null)$('#times-autofavorite-time-name').html(formatDate(result.autoFavorite.startDate) + " - " + formatDate(result.autoFavorite.endDate));
+            if (result.favorite != null) $('.times-favorite-time-name').html(utils.formatDate(result.favorite.startDate) + " - " + utils.formatDate(result.favorite.endDate));
+            if (result.autoFavorite != null)$('#times-autofavorite-time-name').html(utils.formatDate(result.autoFavorite.startDate) + " - " + utils.formatDate(result.autoFavorite.endDate));
             $('.btn-close-time').toggle(!!result.favorite);
             $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
             $('#times-autofavorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
@@ -530,7 +535,7 @@ define([
         $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
         routes.controllers.api.json.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
             favoriteTime = data;
-            $('.times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
+            $('.times-favorite-time-name').html(utils.formatDate(data.startDate) + " - " + utils.formatDate(data.endDate));
             $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
             el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
@@ -728,10 +733,9 @@ define([
 
             if ($(section).length){
                 // $('.jrn-adventure-section').addClass('stash').hide();
-                // $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn('100');
+                // $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn(200);
                 // $('.nav-adventure-list li').removeClass('active');
                 // $(this).closest('li').addClass('active');
-
 
                 var sec = $(section).closest('.jrn-adventure-section'),
                     li = $(this).closest('li');
@@ -747,7 +751,9 @@ define([
                     li.removeClass('active');
                 }
 
-
+                // $('html, body').animate({
+                //     scrollTop: $(section).closest('.jrn-adventure-section').offset().top - 150
+                // }, 'slow');
 
             }
 
@@ -871,13 +877,6 @@ define([
         },
 
 
-        'changeDate .btn-set-reminder-time': function (e) {
-            deadline(
-                $(this),
-                e.date,
-                routes.controllers.api.json.AdventureController.updateTimeVoteDeadline
-            );
-        },
 
         'click .btn-favorite-place': function () {
             setFavoritePlace($(this).closest('tr').data('placeid'), $(this));
@@ -891,12 +890,12 @@ define([
             var btn = $(this),
                 open = btn.is(".btn-success");
 
-            btn.find('i').attr("class", "fa fa-spin icon-journwe");
+            utils.setReplaceSpinning(btn);
 
             routes.controllers.api.json.AdventureController.updatePlaceVoteOpen(adv.id).ajax({
                 data: {voteOpen: !open},
                 success: function (data) {
-                    btn.find('i').attr("class", "fa fa-ok");
+                    utils.resetReplaceSpinning(btn);
                     updatePlaceVoteOpen(data);
                 }
             });
@@ -978,6 +977,29 @@ define([
         },
         'change #times-voting-active-switch': function () {
             routes.controllers.api.json.AdventureController.updateTimeVoteOpen(adv.id).ajax({data: {voteOpen: $('#times-voting-active-switch').prop('checked')}, success: updateTimeVoteOpen});
+        },
+        'changeDate .btn-set-reminder-time': function (e) {
+            deadline(
+                $(this),
+                e.date,
+                routes.controllers.api.json.AdventureController.updateTimeVoteDeadline
+            );
+        },
+
+        'click .btn-set-close-time': function () {
+
+            var btn = $(this),
+                open = btn.is(".btn-success");
+
+            utils.setReplaceSpinning(btn);
+
+            routes.controllers.api.json.AdventureController.updateTimeVoteOpen(adv.id).ajax({
+                data: {voteOpen: !open},
+                success: function (data) {
+                    utils.resetReplaceSpinning(btn);
+                    updateTimeVoteOpen(data);
+                }
+            });
         },
 
 

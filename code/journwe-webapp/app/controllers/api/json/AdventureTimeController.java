@@ -205,7 +205,7 @@ public class AdventureTimeController extends Controller {
         node.put("startDate", time.getStartDate() != null ? time.getStartDate().getTime() : new Date().getTime());
         node.put("endDate", time.getEndDate() != null ? time.getEndDate().getTime() : new Date().getTime());
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-        node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0.6D);
+        node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0.5D);
         node.put("voteCount", Json.toJson(new TimePreferenceDAO().counts(time.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new TimePreferenceDAO().adventurersNames(time.getOptionId())));
         node.put("voteGroup", Json.toJson(getTimeGroupRating(time).getRating()));
