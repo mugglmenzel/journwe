@@ -80,7 +80,11 @@ require([
                 });
             }
 
-            $('#inspirations-public-load-more-button').html('Show More');
+            if (advs.length == 8){
+                $('#inspirations-public-load-more-button').html('Show More');
+            } else {
+                $('#inspirations-public-load-more-button').hide();
+            }
             utils.resetSpinning($('#inspirations-public-button-refresh i'));
         }});
     };

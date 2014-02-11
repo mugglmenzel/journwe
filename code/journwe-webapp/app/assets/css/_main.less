@@ -49,6 +49,14 @@ h2 {
   & i {
     margin-right: 10px;
   }
+
+  & button {
+
+    &, & i {
+      margin: 0;
+      font-size: 16px;
+    }
+  }
 }
 
 a {
@@ -169,6 +177,10 @@ h1 .editableform {
   padding: 5px 20px;
   border-radius: 5px 5px 0 0;
   overflow: hidden;
+
+  &.page-header-round {
+    border-radius: 5px;
+  }
 }
 
 .jrn-container,
@@ -1210,6 +1222,11 @@ h3 {
   max-width: 100%;
   font-size: 14px;
   height: 36px;
+}
+
+.input-lg {
+  font-size: 16px;
+  height: 44px; 
 }
 
 .btn-adopt {

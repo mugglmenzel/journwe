@@ -98,9 +98,9 @@ define([
                 });
             }
             if (advs.length < 10) {
-                $('.btn-adventures-public-load-more').fadeOut();
+                $('.btn-adventures-public-load-more, #adventures-public-load-more-button').fadeOut();
             } else {
-                $('.btn-adventures-public-load-more').show().html('Show More');
+                $('.btn-adventures-public-load-more, #adventures-public-load-more-button').show().html('Show More');
             }
 
             utils.resetSpinning($('.btn-adventures-public-refresh i'));
