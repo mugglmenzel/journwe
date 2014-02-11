@@ -17,8 +17,11 @@ require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switc
 
     
     // Set parallex scrolling
-    var top = 130;
+    var top;
     $(window).scroll($.throttle(0, function(event){
+            if ("undefined" == typeof top){
+                top = $(".nav-adventure").offset().top+1;
+            }
 
             var st = $(this).scrollTop();
             // if (st > 200 && st > lastScrollTop){

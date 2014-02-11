@@ -40,10 +40,10 @@ define([
     };
 
     var initScrollspy = function () {
-        $('body').scrollspy({offset: 100}).on('activate', function (evt) {
-            $('.row.active').removeClass('active');
-            $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
-        });
+        // $('body').scrollspy({offset: 100}).on('activate', function (evt) {
+        //     // $('.row.active').removeClass('active');
+        //     // $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
+        // });
     };
 
     var initNavigation = function () {
@@ -727,15 +727,27 @@ define([
             var section = $(this).attr('href');
 
             if ($(section).length){
-                $('.jrn-adventure-section').addClass('stash').hide();
-                $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn('100');
-                $('.nav-adventure-list li').removeClass('active');
-                $(this).closest('li').addClass('active');
+                // $('.jrn-adventure-section').addClass('stash').hide();
+                // $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn('100');
+                // $('.nav-adventure-list li').removeClass('active');
+                // $(this).closest('li').addClass('active');
 
 
-                $('html, body').animate({
-                    scrollTop: $(section).offset().top - 95
-                }, 'slow');
+                var sec = $(section).closest('.jrn-adventure-section'),
+                    li = $(this).closest('li');
+                if (!sec.is(":visible")){
+                    sec.removeClass('stash').fadeIn('100');
+                    li.addClass('active');
+
+                    $('html, body').animate({
+                        scrollTop: $(section).offset().top - 150
+                    }, 'slow');
+                } else {
+                    sec.fadeOut('100');
+                    li.removeClass('active');
+                }
+
+
 
             }
 
