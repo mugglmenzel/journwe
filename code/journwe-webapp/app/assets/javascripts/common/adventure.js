@@ -476,7 +476,8 @@ define([
     var renderTimeOption = function (data, replace) {
         data.voteGroup = Math.round(data.voteGroup*6*100)/100;
         var time = $(tmpl('time-template', $.extend({
-            voteTimeLabelCSSClassMap: voteTimeLabelCSSClassMap
+            voteTimeLabelCSSClassMap: voteTimeLabelCSSClassMap,
+            formatDate: utils.formatDate
         }, data)));
 
         if (replace) {

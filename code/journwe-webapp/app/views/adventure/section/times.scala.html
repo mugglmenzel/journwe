@@ -82,9 +82,9 @@
             }
 
             {% if (o.startDate == o.endDate){ %}
-                <td>{%=formatDate(o.startDate)%}</td>
+                <td>{%=o.formatDate(o.startDate)%}</td>
             {% } else { %}
-                <td>{%=formatDate(o.startDate)%} - {%=formatDate(o.endDate)%}</td>
+                <td>{%=o.formatDate(o.startDate)%} - {%=o.formatDate(o.endDate)%}</td>
             {% } %}
             @if(auth.canVoteForDateAndTime()) {
             <td>
