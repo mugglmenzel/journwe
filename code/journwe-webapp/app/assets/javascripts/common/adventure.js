@@ -40,7 +40,7 @@ define([
     };
 
     var initScrollspy = function () {
-        $('body').scrollspy({offset: $('.nav-adventure').first().offset().top});
+        $('body').scrollspy({offset: ($('.nav-adventure').first().offset().top + $('.nav-adventure').first().height())});
             /*.on('activate', function (evt) {
             $('.row.active').removeClass('active');
             $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
@@ -254,6 +254,7 @@ define([
             $('#places-list button, .btn-set-reminder-place').prop('disabled', false);
             $('#place-add-form').fadeIn();
         } else {
+            $(".btn-set-close-place").removeClass("btn-success").html('Reopen');
             $('#places-list button, .btn-set-reminder-place').prop('disabled', true);
             $('#place-add-form').fadeOut();
         }
@@ -502,11 +503,12 @@ define([
 
     var updateTimeVoteOpen = function (data) {
         if (data) {
-            var time = favoriteTime && (utils.formatDate(favoriteTime.startDate) + '-' + utils.formatDate(favoriteTime.endDate));
+            var time = favoriteTime && (utils.formatDateShort(favoriteTime.startDate) + '-' + utils.formatDateShort(favoriteTime.endDate));
             $(".btn-set-close-time").addClass("btn-success").html('<i class="fa fa-ok"></i> Close' + (time ? ' with ' + time : ''));
             $('#times-list button').prop('disabled', false);
             $('#time-add-form').fadeIn();
         } else {
+            $(".btn-set-close-time").removeClass("btn-success").html('Reopen');
             $('#times-list button').prop('disabled', true);
             $('#time-add-form').fadeOut();
         }
@@ -533,7 +535,7 @@ define([
         $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
         routes.controllers.api.json.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
             favoriteTime = data;
-            $('.times-favorite-time-name').html(formatDate(data.startDate) + " - " + formatDate(data.endDate));
+            $('.times-favorite-time-name').html(utils.formatDate(data.startDate) + " - " + utils.formatDate(data.endDate));
             $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
             el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
