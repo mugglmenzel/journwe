@@ -732,11 +732,11 @@ define([
                 $('.nav-adventure-list li').removeClass('active');
                 $(this).closest('li').addClass('active');
 
-                /*
+
                 $('html, body').animate({
                     scrollTop: $(section).offset().top - 95
                 }, 'slow');
-                */
+
             }
 
             return false;

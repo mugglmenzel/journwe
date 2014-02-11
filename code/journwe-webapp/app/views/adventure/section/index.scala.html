@@ -8,6 +8,7 @@
     <div class="row" style="border-bottom: 1px solid #333333;">
         <div class="col-lg-2"><h4><i class="fa fa-list-alt"></i> Description</h4></div>
         <div class="col-lg-10">
+            <p class="lead">You are in this JournWe to <span class="places-favorite-place-name"></span> on <span class="times-favorite-time-name"></span>. Have some fun, guys!</p>
             @if(auth.canViewAdventureDescription()) {
                 <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
                     data-url="@html.routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="form-control" data-showbuttons="bottom"
@@ -22,18 +23,4 @@
         </div>
     </div>
     }
-
-    <div class="row">
-    <div class="col-lg-2">
-        <h4><i class="fa fa-globe"></i> Destination</h4>
-    </div>
-    <div class="col-lg-10"><span class="places-favorite-place-name"></span></div>
-</div>
-<div class="row" style="border-bottom: 1px solid #333333;">
-    <div class="col-lg-2">
-        <h4><i class="fa fa-calendar"></i> Time</h4>
-    </div>
-    <div class="col-lg-10"><span class="times-favorite-time-name"></span></div>
-</div>
-
 
