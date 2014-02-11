@@ -7,6 +7,7 @@ import models.auth.SecuredUser;
 import models.dao.adventure.CommentDAO;
 import models.dao.adventure.CommentThreadDAO;
 import models.dao.user.UserDAO;
+import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
 import org.codehaus.jackson.node.ObjectNode;
 import org.joda.time.DateTime;
@@ -38,6 +39,9 @@ public class CommentController extends Controller {
             comment.setTimestamp(new Long(DateTime.now().getMillis()));
             comment.setUserId(user.getId());
 			if (new CommentDAO().save(comment)) {
+                Logger.debug("comment on adventure " + comment.getAdventureId());
+                new AdventurerNotifier().notifyAdventurers(comment.getAdventureId(), user.getName() + " wrote a comment.", "Comment");
+
                 ObjectNode result = Json.newObject();
                 result.put("comment", Json.toJson(comment));
                 result.put("user", Json.toJson(new UserDAO().get(comment.getUserId())));

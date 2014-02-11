@@ -19,8 +19,6 @@ public class Notification {
 
     private Date created = new Date();
 
-    private String adventureId;
-
     private ENotificationTopics topic;
 
     private String topicRef;
@@ -49,14 +47,6 @@ public class Notification {
 
     public void setCreated(Date created) {
         this.created = created;
-    }
-
-    public String getAdventureId() {
-        return adventureId;
-    }
-
-    public void setAdventureId(String adventureId) {
-        this.adventureId = adventureId;
     }
 
     @DynamoDBMarshalling(marshallerClass = NotificationTopicMarshaller.class)

@@ -24,6 +24,13 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@html.routes.InspirationController.createAdventure(ins.getId)"> @Messages("adventure.getScala.start", ins.getName()) </a></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <h4><i class="fa fa-list-alt"></i> Description</h4>
+            </div>
+            <div class="col-lg-10">
                 @if(ins.getDescription != null){
                     <p>@Html(ins.getDescription())</p>
                 }
@@ -39,7 +46,12 @@
                     </div>
                 }
             </div>
-            <div class="social text-center">
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <h4><i class="fa fa-heart-o"></i> Share</h4>
+            </div>
+            <div class="col-lg-10">
                 <div id="fb-root"></div>
                 <script>(function(d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
@@ -66,12 +78,18 @@
                 }(document));
                 </script>
 
-                <span class="pull-right">
+                <div class="pull-left" style="bottom: 0px;">
                     <div class="fb-like" data-width="50" data-layout="box_count" data-show-faces="false" data-send="false"></div>
+                </div>
+                <div class="pull-left" style="bottom: 0px;">
                     <div><a href="https://twitter.com/share" class="twitter-share-button" data-url="@html.routes.InspirationController.get(ins.getId).absoluteURL()" data-via="JournWe" data-related="JournWe" data-count="vertical">Tweet</a></div>
+                </div>
+                <div class="pull-left" style="bottom: 0px;">
                     <div class="g-plusone" data-size="tall" data-annotation="vertical-bubble"></div>
+                </div>
+                <div class="pull-left" style="bottom: 0px;">
                     <div><a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(html.routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + (if(ins.getImage != null){"&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8")}else{""}) + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a></div>
-                </span>
+                </div>
             </div>
         </div>
     </div>

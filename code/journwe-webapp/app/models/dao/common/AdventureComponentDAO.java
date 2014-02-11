@@ -20,13 +20,7 @@ public abstract class AdventureComponentDAO<T extends IAdventureComponent> exten
     public List<T> all(final String advId) {
         DynamoDBQueryExpression<T> qe = getQueryExpression(advId);
         List<T> result = pm.query(clazz, qe);
-        if(result != null)	{
-            // return the results
-            return result;
-        } else {
-            // ... else: return an empty list
-            return new ArrayList<T>();
-        }
+        return result != null ? result : new ArrayList<T>();
     }
 
     public int count(final String advId) {

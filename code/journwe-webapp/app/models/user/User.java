@@ -24,7 +24,7 @@ public class User implements Serializable {
 
     private EUserRole role = EUserRole.USER;
 
-    private ENotificationFrequency notificationDigest = ENotificationFrequency.IMMEDIATELY;
+    private ENotificationFrequency notificationDigest = ENotificationFrequency.DAILY;
 
     private Date lastDigest = new Date();
 

@@ -1,11 +1,8 @@
 package models.adventure.comment;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import models.adventure.IAdventureComponentWithUser;
 import play.data.validation.Constraints.Required;
-
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 /**
  * The comment model with range key = threadId and secondary index = timestamp.
@@ -13,7 +10,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
  * @author markus
  */
 @DynamoDBTable(tableName = "journwe-comment")
-public class Comment {
+public class Comment implements IAdventureComponentWithUser {
 
     @Required
     private String threadId;
@@ -25,6 +22,14 @@ public class Comment {
     @Required
     private String text;
 
+    @DynamoDBIgnore
+    public String getAdventureId() {
+        return threadId.indexOf("_") > -1 ? threadId.substring(0, threadId.indexOf("_")) : null;
+    }
+
+    public void setAdventureId(String adventureId) {
+        threadId = adventureId + "" + (threadId.indexOf("_") > -1 ? threadId.substring(threadId.indexOf("_")) : "");
+    }
 
     @DynamoDBHashKey(attributeName = "threadId")
     @DynamoDBAttribute

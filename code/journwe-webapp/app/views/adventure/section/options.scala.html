@@ -2,16 +2,20 @@
 
 
 <div class="row">
-    <div class="col-lg-2"><h4>Share</h4></div>
+    <div class="col-lg-2"><h4><i class="fa fa-share"></i> Share</h4></div>
     <div class="col-lg-10">
         @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){
             <a href="@adv.getShortURL" class="btn"><i class="fa fa-link"></i> @if(adv.getShortURL.length > 25){@adv.getShortURL.substring(0,25)}else{@adv.getShortURL}</a>
-            <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="fa fa-facebook"></i> @Messages("adventure.options.facebookpublish")</button>
         }
+        <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="fa fa-facebook"></i> @Messages("adventure.options.facebookpublish")</button>
+        <div class="options-twitter-share stash">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="JournWe" @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){data-url="@adv.getShortURL"} data-size="large" data-related="JournWe" data-hashtags="journwe">@Messages("adventure.options.twitter")</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-2"><h4>Publish</h4></div>
+    <div class="col-lg-2"><h4><i class="fa fa-bullhorn"></i> Publish</h4></div>
     <div class="col-lg-10">
         @Messages("adventure.options.public")<div id="adventure-public-switch" style="display:inline-block;overflow:hidden;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
         Category:
@@ -20,10 +24,6 @@
                 <i class="fa fa-spin icon-journwe stash"></i> <span>No Category</span> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu"></ul>
-        </div>
-        <div class="options-twitter-share stash">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-via="JournWe" @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){data-url="@adv.getShortURL"} data-size="large" data-related="JournWe" data-hashtags="journwe">@Messages("adventure.options.twitter")</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
     </div>
 </div>

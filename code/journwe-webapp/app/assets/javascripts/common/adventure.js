@@ -728,7 +728,7 @@ define([
 
             if ($(section).length){
                 $('.jrn-adventure-section').addClass('stash').hide();
-                $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn();
+                $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn('100');
                 $('.nav-adventure-list li').removeClass('active');
                 $(this).closest('li').addClass('active');
 
