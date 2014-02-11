@@ -1,11 +1,12 @@
-@(adv: models.adventure.Adventure)
+@(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
 
+    @import models.adventure.adventurer.EAdventurerParticipation
 
 <div class="row">
-    <div class="col-lg-2"><h4><i class="fa fa-share"></i> Share</h4></div>
-    <div class="col-lg-10">
+    <div class="col-lg-12"><h4><i class="fa fa-share"></i> Share</h4></div>
+    <div class="col-lg-12">
         @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){
-            <a href="@adv.getShortURL" class="btn"><i class="fa fa-link"></i> @if(adv.getShortURL.length > 25){@adv.getShortURL.substring(0,25)}else{@adv.getShortURL}</a>
+           <a href="@adv.getShortURL" class="btn btn-default"><i class="fa fa-globe"></i> @adv.getShortURL</a>
         }
         <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="fa fa-facebook"></i> @Messages("adventure.options.facebookpublish")</button>
         <div class="options-twitter-share stash">
@@ -14,16 +15,52 @@
         </div>
     </div>
 </div>
+
+    <br/>
+    <br/>
 <div class="row">
-    <div class="col-lg-2"><h4><i class="fa fa-bullhorn"></i> Publish</h4></div>
-    <div class="col-lg-10">
-        @Messages("adventure.options.public")<div id="adventure-public-switch" style="display:inline-block;overflow:hidden;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
-        Category:
-        <div id="adventure-category-select" class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-spin icon-journwe stash"></i> <span>No Category</span> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu"></ul>
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4><i class="fa fa-bullhorn"></i> Publish</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                @Messages("adventure.options.public")<div id="adventure-public-switch" style="display:inline-block;overflow:hidden;margin-top: 0px; margin-bottom: -14px;margin-left: 5px;margin-right: 15px;"><input type="checkbox" @if(adv.isPublish){checked="checked"}></div>
+                Category:
+                <div id="adventure-category-select" class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-spin icon-journwe stash"></i> <span>No Category</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4>Actions</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+
+                <a class="btn btn-default" data-toggle="modal" data-target="#pdfAdventure"><i class="fa fa-file-text"></i> @Messages("adventure.general.button.pdf")</a>
+
+                <input id="adventure-prime-image-file-input" type="file" class="hide"/>
+                <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload" onclick="$ ( '#adventure-prime-image-file-input' ).click ( ) ;"><i class="fa fa-upload"></i> @Messages("adventure.files.imageUpload")</a>
+                
+                <a class="btn btn-default" data-toggle="modal" data-target="#cloneAdventure"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
+                
+                @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
+                    <a class="btn btn-participate btn-success" href="@html.routes.AdventurePeopleController.participateFacebook(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
+                } else {
+                    <a class="btn btn-danger" data-toggle="modal" data-target="#leave"><i class="fa fa-unlink"></i> @Messages("adventure.general.button.leave")</a>
+                }
+            </div>
         </div>
     </div>
 </div>

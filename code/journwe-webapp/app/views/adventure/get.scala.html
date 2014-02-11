@@ -17,24 +17,7 @@
                 <div class="jrn-container">
                     <h2 id="index"><i class="fa fa-info fa fa-for-adventure-title"></i> @Messages("adventure.getScala.adventure.title")</h2>
                         @index(adv, ins)
-                        @options(adv)
-                        <div class="row toolbar">
-                            <div class="col-lg-2"><h4>Actions</h4></div>
-                            <div class="col-lg-10">
-                                @if(EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus)) {
-                                    <a class="btn btn-participate btn-success pull-right" href="@html.routes.AdventurePeopleController.participateFacebook(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join")</a>
-                                } else {
-                                    <a class="btn btn-danger pull-right" data-toggle="modal" data-target="#leave"><i class="fa fa-unlink"></i> @Messages("adventure.general.button.leave")</a>
-                                }
-
-                                <a class="btn btn-default pull-right" data-toggle="modal" data-target="#cloneAdventure"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
-                                <a class="btn btn-default pull-right" data-toggle="modal" data-target="#pdfAdventure"><i class="fa fa-file-text"></i> @Messages("adventure.general.button.pdf")</a>
-
-                                <input id="adventure-prime-image-file-input" type="file" class="hide"/>
-                                <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload pull-right" onclick="$ ( '#adventure-prime-image-file-input' ).click ( ) ;"><i class="fa fa-upload"></i> @Messages("adventure.files.imageUpload")</a>
-                            </div>
-                        </div>
-
+                        @options(adv, advr)
                 </div>
 
                 <div class="nav-adventure visible-lg navbar" style=""> <!---->
