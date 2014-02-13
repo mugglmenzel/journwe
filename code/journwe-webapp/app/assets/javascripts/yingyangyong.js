@@ -59,10 +59,12 @@ define([
      */
 
     var validateYingYangYong = function () {
+        /*
         if ($('input[name="name"]').val() == null || $('input[name="name"]').val() == '') {
             $('input[name="name"]').focus();
             return false;
         }
+        */
         /*
          if($('input[name="shortname"]').val() == null ||  $('input[name="shortname"]').val() == '') {
          $('input[name="shortname"]').focus();

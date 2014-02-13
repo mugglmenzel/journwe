@@ -115,7 +115,7 @@ public class AdventureController extends Controller {
         DynamicForm filledForm = advForm.bindFromRequest();
 
         Adventure adv = new Adventure();
-        adv.setName(filledForm.get("name"));
+        adv.setName(filledForm.get("name") != null && !"".equals(filledForm.get("name")) ? filledForm.get("name") : "Your JournWe");
         new AdventureDAO().save(adv);
 
         if (filledForm.get("inspirationId") != null) {

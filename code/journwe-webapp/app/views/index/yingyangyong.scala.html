@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <input type="text" name="name" placeholder="@Messages("yingyangyong.name.placeholder")" required="required" class="input input-lg form-control">
+            <input type="text" name="name" placeholder="@Messages("yingyangyong.name.placeholder")" class="input input-lg form-control">
             @if(ins != null){<input type="hidden" name="inspirationId" value="@ins.getId">}
         </div>
         <div class="col-lg-4">
@@ -37,9 +37,15 @@
                     <h1><i class="fa fa-globe"></i> @Messages("yingyangyong.place")</h1>
                     <p class="lead">Add all destinations you want to consider in your JournWe&#8482;.</p>
 
-                    <ul class="list-unstyled list-inline list-places">
-                        <span class="text-muted">Your destinations:</span>
-                    </ul>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <span class="text-muted">Your destinations:</span>
+                        </div>
+                        <div class="col-lg-9">
+                            <ul class="list-unstyled list-inline list-places"></ul>
+                        </div>
+                    </div>
+
                     <script type="text/x-tmpl" id="item-place-template">
                         <li class="item-place" data-id="{%=o.id%}">
                             <input type="hidden" name="place[]" value="{%=o.placeAddress%}/{%=o.placeLatitude%}/{%=o.placeLongitude%}">
@@ -71,9 +77,17 @@
                     <h1><i class="fa fa-group"></i> @Messages("yingyangyong.adventurers")</h1>
                     <p class="lead">Add all friends that should know of this JournWe&#8482;.</p>
 
-                    <ul class="list-unstyled list-inline list-people">
-                        <span class="text-muted">Your friends:</span>
-                    </ul>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <span class="text-muted">Your friends:</span>
+                        </div>
+                        <div class="col-lg-9">
+                            <ul class="list-unstyled list-inline list-people"></ul>
+                        </div>
+                    </div>
+
+
+
                     <script type="text/x-tmpl" id="item-friend-template">
                         <li class="item-friend">
                             <input type="hidden" name="{%=o.type%}[]" value="{%=o.socialId%}">
@@ -137,9 +151,15 @@
                     <h1><i class="fa fa-calendar"></i> @Messages("yingyangyong.time") </h1>
                     <p class="lead">Add all time slots available for this JournWe&#8482;.</p>
 
-                    <ul class="list-unstyled list-inline list-times">
-                        <span class="text-muted">Your time slots:</span>
-                    </ul>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <span class="text-muted">Your time slots:</span>
+                        </div>
+                        <div class="col-lg-9">
+                            <ul class="list-unstyled list-inline list-times"></ul>
+                        </div>
+                    </div>
+
 
                     <script type="text/x-tmpl" id="item-time-template">
                         <li class="item-time">
