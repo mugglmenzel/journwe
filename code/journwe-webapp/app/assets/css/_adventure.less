@@ -208,6 +208,19 @@
     .hint {
         color: gray;
         font-style: italic;
+
+        & i {
+            display: none;
+
+            .uploading & {
+                display: inline-block;
+            }
+        }
+
+        .hover & {
+            color: black;
+            font-weight: bold;
+        }
     }
 
     .timeline-entry {

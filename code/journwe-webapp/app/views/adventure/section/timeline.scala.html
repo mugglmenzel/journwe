@@ -22,7 +22,7 @@
 			</div>
 			
 			<div class="timeline-content">
-				{%= o.file.fileName %}
+				<a href="{%= o.file.url %}" target="_blank">{%= o.file.fileName %}</a>
 			</div>
 			
 			<div class="timeline-info"><span class="author">{%= o.user.name %}</span></div>
@@ -30,7 +30,7 @@
     </script>
 
 
-    <div>
+    <div class="files-upload-dropzone file-upload-timeline">
     	<div class="timeline-line"></div>
 
 	    <div class="timeline-add">
@@ -46,7 +46,8 @@
 				</div>
 
 				<div class="timeline-content-left hint">
-					Drop a file here or 
+					<i class="fa fa-spin icon-journwe"></i> 
+					Drop a file here or
 				</div>
 			</div>
 	    </div>

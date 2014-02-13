@@ -32,7 +32,7 @@
 }
 
 @if(auth.canUploadFiles()) {
-    <div id="files-upload-dropzone" ondragleave="$('#files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('#files-upload-dropzone').addClass('hover'); return false;">
+    <div class="files-upload-dropzone" ondragleave="$('.files-upload-dropzone').removeClass('hover'); return false;" ondragenter="$('.files-upload-dropzone').addClass('hover'); return false;">
         <div class="text-center">
             <p class="lead">@Messages("adventure.files.fileDrop")
                 <input id="files-file-input" type="file" class="hide"/><button class="btn btn-file-upload"><i class="fa fa-cloud-upload"></i> @Messages("adventure.files.fileUpload")</button>

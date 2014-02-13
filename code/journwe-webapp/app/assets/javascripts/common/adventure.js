@@ -28,7 +28,8 @@ define([
     var map,
         markers = [];
     var facebookUsers = {};
-    var facebookUserNames = [];
+    var facebookUserNames = [],
+        _timer;
 
 
     // Init bg & scrollspy
@@ -579,6 +580,9 @@ define([
 
     //TIMELINE
     var initializeTimeline = function(){
+
+        $("#timeline-button-refresh i").addClass("fa-spin");
+
         routes.controllers.api.json.TimelineController.get(adv.id).ajax({success: function (result) {
             
             var t = $('.timeline').empty();
@@ -586,6 +590,8 @@ define([
             $.each(result, function(i, res){
                 t.append(renderTimeline(res));
             });
+
+            $("#timeline-button-refresh i").removeClass("fa-spin");
         }});
     };
 
@@ -675,11 +681,13 @@ define([
         loadFiles();
     };
 
-    var uploadFiles = function (files) {
+    var uploadFiles = function (files, target) {
         var btn = $('#files-upload-dropzone .btn-upload'),
             btnOriginal = btn.html();
         btn.css({width: btn.css('width')})
             .html('<i class="fa fa-spin icon-journwe"></i>');
+
+        target.addClass("uploading");
 
         for (var i = 0; i < files.length; i++) {
             var data = new FormData();
@@ -694,7 +702,14 @@ define([
                 success: function (result) {
                     btn.css({width: ""})
                         .html(btnOriginal);
-                    loadFiles();
+                    target.removeClass("uploading");
+            
+                    if (target.closest('.file-upload-timeline').length){
+                        result.type = "file";
+                        $('.timeline').prepend(renderTimeline(result));
+                    } else {
+                        loadFiles();
+                    }
                 }
             });
         }
@@ -830,6 +845,10 @@ define([
 
         'click #emails-button-refresh': function () {
             loadEmails();
+        },
+
+        'click #timeline-button-refresh': function () {
+            initializeTimeline();
         },
 
         'keydown #place-add-input': function (e) {
@@ -1133,13 +1152,13 @@ define([
         'click #files-button-refresh': function () {
             loadFiles();
         },
-        'drop #files-upload-dropzone': function (event) {
+        'drop .files-upload-dropzone': function (event) {
             event.stopPropagation();
             event.preventDefault();
 
-            uploadFiles(event.target.files || event.dataTransfer.files);
+            uploadFiles(event.target.files || event.dataTransfer.files, $(this));
 
-            $('#files-upload-dropzone').removeClass('hover');
+            $('.files-upload-dropzone').removeClass('hover');
             return false;
         },
         'click .btn-file-delete': function () {
@@ -1183,6 +1202,20 @@ define([
             if (e.keyCode == 13) {
                 $(this).closest('.timeline-content').find('.btn-comment-add').click();
             }
+        },
+
+        'dragenter .files-upload-dropzone': function(evt){
+            window.clearTimeout(_timer);
+            window.setTimeout(function(){
+                window.clearTimeout(_timer);
+                $(this).addClass("hover");
+            }.bind(this), 10);
+        },
+
+        'dragleave .files-upload-dropzone': function(evt){
+            _timer = window.setTimeout(function(){
+                $(this).removeClass("hover");
+            }.bind(this), 100);
         }
 
 
