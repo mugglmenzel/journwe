@@ -185,3 +185,100 @@
 #times-favorite-time {
     font-weight: @font-bold;
 }
+
+
+.timeline-line {
+    background: #BBB;
+    border: 2px solid lighten(#BBB, 5%);
+    height: 100%;
+    position: absolute;
+    width: 6px;
+    left: 50%;
+    margin-left: -3px;
+    border-radius: 2px;
+}
+
+.timeline, .timeline-add {
+    padding: 10px 0;
+
+    & > div + div {
+        margin-top: 20px;
+    }
+
+    .hint {
+        color: gray;
+        font-style: italic;
+    }
+
+    .timeline-entry {
+        width: 50%;
+        left: 50%;
+        padding-left: 40px;
+        position: relative;
+
+        &.timeline-left {
+            left: 0;
+            text-align: right;
+            padding-left: 0;
+            padding-right: 40px;
+
+            .timeline-icon {
+                left: auto;
+                right: -21px;
+
+                &.timeline-small {
+                    left: auto;
+                    right: -16px;
+                }
+            }
+        }
+
+        .timeline-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 21px;
+            overflow: hidden;
+            position: absolute;
+            left: -21px;
+            border: 5px solid rgba(168, 168, 168, 0.7);
+
+            img {
+                width: 100%;
+            }
+
+            &.timeline-small {
+                width: 32px;
+                height: 32px;
+                border-width: 4px;
+                left: -16px;
+                margin-top: 5px;
+            }
+        }
+
+        .timeline-content {
+
+        }
+
+        .timeline-content-left {
+            position: absolute;
+            left: -100%;
+            top: 0;
+            text-align: right;
+            width: 100%;
+            padding-right: 40px;
+            padding-top: 7px;
+        }
+
+        .timeline-info * {
+            font-size: 12px;
+            color: gray;
+        }
+    }
+
+}
+
+.timeline-add {
+    .input-group {
+        top: 2px;
+    }
+}

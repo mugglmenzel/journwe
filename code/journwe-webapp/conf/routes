@@ -106,6 +106,9 @@ DELETE        /api/json/adventure/:id/files.json/:fileName                 contr
 
 GET           /api/json/adventure/:id/emails.json                          controllers.api.json.AdventureEmailController.listEmails(id:String)
 
+#### Adventure Timeline ####
+
+GET           /api/json/adventure/:id/timeline.json                        controllers.api.json.TimelineController.get(id:String)
 
 
 #### Comments ####

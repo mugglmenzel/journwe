@@ -474,6 +474,8 @@ define([
         }});
     };
 
+
+
     var renderTimeOption = function (data, replace) {
         data.voteGroup = Math.round(data.voteGroup*6*100)/100;
         var time = $(tmpl('time-template', $.extend({
@@ -573,6 +575,24 @@ define([
             });
         }
         });
+    };
+
+    //TIMELINE
+    var initializeTimeline = function(){
+        routes.controllers.api.json.TimelineController.get(adv.id).ajax({success: function (result) {
+            
+            var t = $('.timeline').empty();
+
+            $.each(result, function(i, res){
+                t.append(renderTimeline(res));
+            });
+        }});
+    };
+
+    var renderTimeline = function(time){
+        return $('<div></div>').html(tmpl('timeline-template-'+time.type, $.extend({
+
+        }, time)));
     };
 
 
@@ -1164,6 +1184,7 @@ define([
         initializePlaces: initializePlaces,
         initializePeople: initializePeople,
         initializeTime: initializeTime,
+        initializeTimeline: initializeTimeline,
         initializeTodos: initializeTodos,
         initializeFiles: initializeFiles,
         loadAllAdventurers: loadAllAdventurers

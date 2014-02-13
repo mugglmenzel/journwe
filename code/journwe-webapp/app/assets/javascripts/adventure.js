@@ -19,5 +19,6 @@ require([
     adventure.initializeTime();
     adventure.initializeTodos();
     adventure.initializeFiles();
+    adventure.initializeTimeline();
 
 });

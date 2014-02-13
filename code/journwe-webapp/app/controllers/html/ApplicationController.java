@@ -260,6 +260,7 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventureFileController.uploadFile(),
                         controllers.api.json.routes.javascript.AdventureFileController.listFiles(),
                         controllers.api.json.routes.javascript.AdventureFileController.deleteFile(),
+                        controllers.api.json.routes.javascript.TimelineController.get(),
                         controllers.api.json.routes.javascript.CommentController.saveComment(),
                         controllers.api.json.routes.javascript.CommentController.listComments()
                 ) + ";; return routes;});");

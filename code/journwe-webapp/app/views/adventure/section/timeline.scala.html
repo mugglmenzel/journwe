@@ -1,0 +1,57 @@
+@(adv: models.adventure.Adventure, user: models.user.User)
+
+
+    <script type="text/x-tmpl" id="timeline-template-comment">
+		<div class="timeline-entry timeline-right">
+			<div class="timeline-icon">
+				<img src="{%= o.user.image %}">
+			</div>
+			
+			<div class="timeline-content">
+				{%= o.comment.text %}
+			</div>
+			
+			<div class="timeline-info"><span class="author">{%= o.user.name %}</span></div>
+		</div>
+    </script>
+
+    <script type="text/x-tmpl" id="timeline-template-file">
+		<div class="timeline-entry timeline-left">
+			<div class="timeline-icon timeline-small">
+				<img src="{%= o.user.image %}">
+			</div>
+			
+			<div class="timeline-content">
+				{%= o.file.fileName %}
+			</div>
+			
+			<div class="timeline-info"><span class="author">{%= o.user.name %}</span></div>
+		</div>
+    </script>
+
+
+    <div>
+    	<div class="timeline-line"></div>
+
+	    <div class="timeline-add">
+	    	<div class="timeline-entry">
+				<div class="timeline-icon">
+					<img src="@user.getImage">
+				</div>
+				<div class="timeline-content">
+					<div class="input-group">
+	                    <input type="text" placeholder="@Messages("adventure.widgetComments.placeholder")" class="form-control input-sm"/>
+	                    <span class="input-group-btn"><button class="btn btn-default btn-comment-add btn-sm" type="button"><i class="fa fa-plus"></i></button></span>
+	                </div>
+				</div>
+
+				<div class="timeline-content-left hint">
+					Drop a file here or 
+				</div>
+			</div>
+	    </div>
+
+	    <div class="timeline">
+
+	    </div>
+    </div>
