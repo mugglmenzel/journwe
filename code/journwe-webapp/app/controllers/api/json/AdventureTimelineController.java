@@ -51,7 +51,7 @@ public class AdventureTimelineController extends Controller {
             results.add(result);
         }
 
-        for(Comment c : new CommentDAO().getComments(adventureId+"_discussion")) {
+        for(Comment c : new CommentDAO().getCommentsNewest(adventureId+"_discussion")) {
             result = Json.newObject();
             result.put("type", "comment");
             result.put("comment", Json.toJson(c));

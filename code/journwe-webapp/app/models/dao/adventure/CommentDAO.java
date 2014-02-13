@@ -28,5 +28,12 @@ public class CommentDAO extends CommonRangeEntityDAO<Comment> {
         DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(hashKey);
         return pm.query(Comment.class, query);
 	}
+
+    public List<Comment> getCommentsNewest(final String threadId) {
+        Comment hashKey = new Comment();
+        hashKey.setThreadId(threadId);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(hashKey).withScanIndexForward(false);
+        return pm.query(Comment.class, query);
+    }
 	
 }
