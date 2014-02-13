@@ -22,6 +22,8 @@ import views.html.comment.createComment;
 import views.html.comment.listThreads;
 import models.adventure.file.JournweFile;
 import models.dao.adventure.JournweFileDAO;
+import models.dao.adventure.AdventureEmailMessageDAO;
+import models.adventure.email.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,19 @@ public class AdventureTimelineController extends Controller {
 	public static Result get(String adventureId) {
         List<ObjectNode> results = new ArrayList<ObjectNode>();
         ObjectNode result;
+
+        Message msg = new Message();
+        msg.setSender("willi@journwe.com");
+        msg.setSubject("This is a dummy mail");
+        msg.setBody("Hey Developer, please remove this dummy email from the TimelineController.!!!");
+        // new Message[]{msg}
+
+        for (Message m : new AdventureEmailMessageDAO().all(adventureId)){
+            result = Json.newObject();
+            result.put("type", "email");
+            result.put("email", Json.toJson(m));
+            results.add(result);
+        }
 
         for(Comment c : new CommentDAO().getComments(adventureId+"_discussion")) {
             result = Json.newObject();

@@ -235,12 +235,12 @@
             padding-left: 0;
             padding-right: 40px;
 
-            .timeline-icon {
-                left: auto;
+            .timeline-icon,
+            .timeline-i {
+                left: auto !important;
                 right: -21px;
 
                 &.timeline-small {
-                    left: auto;
                     right: -16px;
                 }
             }
@@ -249,22 +249,46 @@
         .timeline-icon {
             width: 42px;
             height: 42px;
-            border-radius: 21px;
             overflow: hidden;
             position: absolute;
             left: -21px;
-            border: 5px solid rgba(168, 168, 168, 0.7);
 
             img {
                 width: 100%;
+                border: 5px solid rgba(168, 168, 168, 0.7);
+                border-radius: 21px;
             }
 
-            &.timeline-small {
+            &.timeline-small,
+            &.timeline-i {
                 width: 32px;
                 height: 32px;
-                border-width: 4px;
                 left: -16px;
                 margin-top: 5px;
+                vertical-align: middle;
+                text-align: center;
+                line-height: 24px;
+
+                img, i {
+                    border-width: 4px;
+                }
+
+                i {
+                    background: #3385bc;
+                    color: white;
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    vertical-align: middle;
+                    line-height: 24px;
+                    font-size: 12px;
+                }
+            }
+
+            &.timeline-i {
+                border: 4px solid rgba(168, 168, 168, 0.7);
+                border-radius: 20px;
+                overflow: hidden;
             }
         }
 

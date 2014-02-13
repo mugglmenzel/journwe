@@ -30,6 +30,21 @@
     </script>
 
 
+    <script type="text/x-tmpl" id="timeline-template-email">
+		<div class="timeline-entry timeline-left">
+			<div class="timeline-icon timeline-i timeline-small">
+				<i class="fa fa-envelope-o"></i>
+			</div>
+			
+			<div class="timeline-content">
+				{%= o.email.body %}
+			</div>
+			
+			<div class="timeline-info"><span class="subject">{%= o.email.subject %}</span> <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span> <span class="author">{%= o.email.sender %}</span></div>
+		</div>
+    </script>
+
+
     <div class="files-upload-dropzone file-upload-timeline">
     	<div class="timeline-line"></div>
 
