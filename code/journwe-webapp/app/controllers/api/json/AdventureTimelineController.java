@@ -25,7 +25,7 @@ public class AdventureTimelineController extends Controller {
         List<ObjectNode> results = new ArrayList<ObjectNode>();
         ObjectNode result;
 
-        for (Message m : new AdventureEmailMessageDAO().all(adventureId)) {
+        for (Message m : new AdventureEmailMessageDAO().allNewest(adventureId)) {
             result = Json.newObject();
             result.put("type", "email");
             result.put("email", Json.toJson(m));
