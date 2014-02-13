@@ -16,13 +16,13 @@ dist
 # Ignore Play! working directory #
 db
 eclipse
-log
-logs
+/log
+/logs
 modules
 precompiled
-project/project
-project/target
-target
+/project/project
+/project/target
+/target
 tmp
 test-result
 server.pid
