@@ -38,12 +38,6 @@ public class AdventureTimelineController extends Controller {
         List<ObjectNode> results = new ArrayList<ObjectNode>();
         ObjectNode result;
 
-        Message msg = new Message();
-        msg.setSender("willi@journwe.com");
-        msg.setSubject("This is a dummy mail");
-        msg.setBody("Hey Developer, please remove this dummy email from the TimelineController.!!!");
-        // new Message[]{msg}
-
         for (Message m : new AdventureEmailMessageDAO().all(adventureId)){
             result = Json.newObject();
             result.put("type", "email");
