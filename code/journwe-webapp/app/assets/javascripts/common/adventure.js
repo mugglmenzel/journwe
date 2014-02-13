@@ -207,6 +207,7 @@ define([
             mapTypeId: gmaps.MapTypeId.ROADMAP
         };
         map = new gmaps.Map(document.getElementById('place-add-map'), mapOptions);
+        new gmaps.places.Autocomplete(document.getElementById('place-add-input'));
     };
 
 
@@ -250,11 +251,11 @@ define([
 
         if (open) {
             var address = favoritePlace && favoritePlace.address.split(",")[0];
-            $(".btn-set-close-place").addClass("btn-success").html('<i class="fa fa-ok"></i> Close' + (address ? ' with ' + address : ''));
+            $(".btn-set-close-place").removeClass('btn-default').addClass("btn-success").html('<i class="fa fa-ok"></i> Close' + (address ? ' with ' + address : ''));
             $('#places-list button, .btn-set-reminder-place').prop('disabled', false);
             $('#place-add-form').fadeIn();
         } else {
-            $(".btn-set-close-place").removeClass("btn-success").html('Reopen');
+            $(".btn-set-close-place").removeClass("btn-success").addClass('btn-default').html('Reopen');
             $('#places-list button, .btn-set-reminder-place').prop('disabled', true);
             $('#place-add-form').fadeOut();
         }
@@ -505,11 +506,11 @@ define([
     var updateTimeVoteOpen = function (data) {
         if (data) {
             var time = favoriteTime && (utils.formatDateShort(favoriteTime.startDate) + '-' + utils.formatDateShort(favoriteTime.endDate));
-            $(".btn-set-close-time").addClass("btn-success").html('<i class="fa fa-ok"></i> Close' + (time ? ' with ' + time : ''));
+            $(".btn-set-close-time").addClass("btn-success").removeClass('btn-default').html('<i class="fa fa-ok"></i> Close' + (time ? ' with ' + time : ''));
             $('#times-list button').prop('disabled', false);
             $('#time-add-form').fadeIn();
         } else {
-            $(".btn-set-close-time").removeClass("btn-success").html('Reopen');
+            $(".btn-set-close-time").removeClass("btn-success").addClass('btn-default').html('Reopen');
             $('#times-list button').prop('disabled', true);
             $('#time-add-form').fadeOut();
         }

@@ -22,9 +22,9 @@
 
     <div style="margin-left: 15px;">
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a style="background-color: #78a942;" href="#where-tab" data-toggle="tab">Where?</a></li>
-            <li><a style="background-color: #eb3d00;" href="#who-tab" data-toggle="tab">Who?</a></li>
-            <li><a style="background-color: #00d1fb;" href="#when-tab" data-toggle="tab">When?</a></li>
+            <li class="active"><a style="background-color: #78a942;" href="#where-tab" data-toggle="tab"><i class="fa fa-globe"></i> Where?</a></li>
+            <li><a style="background-color: #eb3d00;" href="#who-tab" data-toggle="tab"><i class="fa fa-group"></i> Who?</a></li>
+            <li><a style="background-color: #00d1fb;" href="#when-tab" data-toggle="tab"><i class="fa fa-calendar"></i> When?</a></li>
         </ul>
     </div>
 
@@ -35,8 +35,11 @@
             <div style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-bottom: 20px">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px;">
                     <h1><i class="fa fa-globe"></i> @Messages("yingyangyong.place")</h1>
+                    <p class="lead">Add all destinations you want to consider in your JournWe&#8482;.</p>
 
-                    <ul class="list-unstyled list-inline list-places"></ul>
+                    <ul class="list-unstyled list-inline list-places">
+                        <span class="text-muted">Your destinations:</span>
+                    </ul>
                     <script type="text/x-tmpl" id="item-place-template">
                         <li class="item-place" data-id="{%=o.id%}">
                             <input type="hidden" name="place[]" value="{%=o.placeAddress%}/{%=o.placeLatitude%}/{%=o.placeLongitude%}">
@@ -66,8 +69,11 @@
             <div style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-bottom: 20px;">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
                     <h1><i class="fa fa-group"></i> @Messages("yingyangyong.adventurers")</h1>
+                    <p class="lead">Add all friends that should know of this JournWe&#8482;.</p>
 
-                    <ul class="list-unstyled list-inline list-people"></ul>
+                    <ul class="list-unstyled list-inline list-people">
+                        <span class="text-muted">Your friends:</span>
+                    </ul>
                     <script type="text/x-tmpl" id="item-friend-template">
                         <li class="item-friend">
                             <input type="hidden" name="{%=o.type%}[]" value="{%=o.socialId%}">
@@ -129,8 +135,11 @@
             <div style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-bottom: 20px;">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
                     <h1><i class="fa fa-calendar"></i> @Messages("yingyangyong.time") </h1>
+                    <p class="lead">Add all time slots available for this JournWe&#8482;.</p>
 
-                    <ul class="list-unstyled list-inline list-times"></ul>
+                    <ul class="list-unstyled list-inline list-times">
+                        <span class="text-muted">Your time slots:</span>
+                    </ul>
 
                     <script type="text/x-tmpl" id="item-time-template">
                         <li class="item-time">

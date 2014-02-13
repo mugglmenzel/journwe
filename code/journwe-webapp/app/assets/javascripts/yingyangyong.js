@@ -28,6 +28,8 @@ define([
         map = new gmaps.Map(document.getElementById('where-map'),
             mapOptions);
 
+        new gmaps.places.Autocomplete(document.getElementById('place-add-input'));
+
         friendTypeahead();
 
         //load inspiration

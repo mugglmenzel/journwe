@@ -1,4 +1,4 @@
-define(['common/async!https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false'],
+define(['common/async!https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false'],
     function () {
         // return the gmaps namespace for brevity
         return $.extend({resetBounds: function(map, markers){
