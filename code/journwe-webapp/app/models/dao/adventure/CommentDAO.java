@@ -2,6 +2,7 @@ package models.dao.adventure;
 
 import java.util.List;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import models.adventure.comment.Comment;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -22,10 +23,10 @@ public class CommentDAO extends CommonRangeEntityDAO<Comment> {
 	 * Get the list of comments that belong to the thread, sorted by timestamp.
 	 */
 	public List<Comment> getComments(final String threadId) {
-        DynamoDBScanExpression scan = new DynamoDBScanExpression();
-        scan.addFilterCondition("threadId", new Condition().withAttributeValueList(new AttributeValue(threadId)).withComparisonOperator(ComparisonOperator.EQ));
-        PaginatedScanList<Comment> scanResult = pm.scan(Comment.class, scan);
-        return scanResult;
+        Comment hashKey = new Comment();
+        hashKey.setThreadId(threadId);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withHashKeyValues(hashKey);
+        return pm.query(Comment.class, query);
 	}
 	
 }

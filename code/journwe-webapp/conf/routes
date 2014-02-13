@@ -108,7 +108,7 @@ GET           /api/json/adventure/:id/emails.json                          contr
 
 #### Adventure Timeline ####
 
-GET           /api/json/adventure/:id/timeline.json                        controllers.api.json.TimelineController.get(id:String)
+GET           /api/json/adventure/:id/timeline.json                        controllers.api.json.AdventureTimelineController.get(id:String)
 
 
 #### Comments ####

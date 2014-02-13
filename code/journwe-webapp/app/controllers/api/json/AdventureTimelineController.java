@@ -28,7 +28,7 @@ import java.util.List;
 
 import static play.data.Form.form;
 
-public class TimelineController extends Controller {
+public class AdventureTimelineController extends Controller {
 
 	
 	@Security.Authenticated(SecuredUser.class)

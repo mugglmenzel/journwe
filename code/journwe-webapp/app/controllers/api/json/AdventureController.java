@@ -7,6 +7,10 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.*;
+import models.adventure.log.AdventureLogger;
+import models.adventure.log.EAdventureLogSection;
+import models.adventure.log.EAdventureLogTopic;
+import models.adventure.log.EAdventureLogType;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
@@ -65,6 +69,7 @@ public class AdventureController extends Controller {
             }
 
             new AdventureDAO().save(adv);
+            AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.BACKGROUND_UPLOAD, EAdventureLogSection.ALL, image.getFilename());
         } catch (Exception e) {
             return badRequest();
         }
@@ -86,6 +91,7 @@ public class AdventureController extends Controller {
             // Save Adventure-to-Category relationship
             new AdventureToCategoryDAO().createManyToManyRelationship(adv,result);
             new CategoryDAO().save(result);
+            AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.CATEGORY_CHANGED, EAdventureLogSection.ALL, result.getName());
         }
         return ok(Json.toJson(result));
     }
@@ -97,6 +103,7 @@ public class AdventureController extends Controller {
         Adventure adv = new AdventureDAO().get(advId);
         adv.setPublish(publish);
         new AdventureDAO().save(adv);
+        AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.PUBLISH_CHANGE, EAdventureLogSection.ALL, publish.toString());
 
         return ok(Json.toJson(adv.isPublish()));
     }
@@ -111,6 +118,7 @@ public class AdventureController extends Controller {
         adv.setPlaceVoteOpen(openVote);
         new AdventureDAO().save(adv);
 
+        AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.PLACE_VOTE_OPEN, EAdventureLogSection.PLACES, openVote.toString());
         new AdventurerNotifier().notifyAdventurers(advId, "The Place Vote is now " + (adv.getPlaceVoteOpen() ? "open" : "closed") + ".", "Place Vote");
 
         return ok(Json.toJson(adv.getPlaceVoteOpen()));
@@ -132,6 +140,7 @@ public class AdventureController extends Controller {
         rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
         new AdventureReminderDAO().save(rem);
 
+        AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.PLACE_DEADLINE, EAdventureLogSection.PLACES, deadline.toString());
         new AdventurerNotifier().notifyAdventurers(advId, "Please adhere to the place voting deadline!", "Place Vote");
 
         return ok(Json.toJson(adv.getPlaceVoteDeadline()));
@@ -156,6 +165,7 @@ public class AdventureController extends Controller {
         adv.setTimeVoteOpen(openVote);
         new AdventureDAO().save(adv);
 
+        AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.TIME_VOTE_OPEN, EAdventureLogSection.TIMES, openVote.toString());
         new AdventurerNotifier().notifyAdventurers(advId, "The Time Vote is now " + (adv.getTimeVoteOpen() ? "open" : "closed") + ".", "Time Vote");
 
         return ok(Json.toJson(adv.getTimeVoteOpen()));
@@ -177,6 +187,7 @@ public class AdventureController extends Controller {
         rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
         new AdventureReminderDAO().save(rem);
 
+        AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.TIME_DEADLINE, EAdventureLogSection.TIMES, deadline.toString());
         new AdventurerNotifier().notifyAdventurers(advId, "Please adhere to the time voting deadline!", "Time Vote");
 
         return ok(Json.toJson(adv.getTimeVoteDeadline()));

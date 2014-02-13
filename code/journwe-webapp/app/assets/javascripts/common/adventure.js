@@ -583,7 +583,7 @@ define([
 
         $("#timeline-button-refresh i").addClass("fa-spin");
 
-        routes.controllers.api.json.TimelineController.get(adv.id).ajax({success: function (result) {
+        routes.controllers.api.json.AdventureTimelineController.get(adv.id).ajax({success: function (result) {
             
             var t = $('.timeline').empty();
 
