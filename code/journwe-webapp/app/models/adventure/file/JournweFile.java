@@ -10,6 +10,8 @@ public class JournweFile implements IAdventureComponentWithUser {
 
     private String adventureId;
 
+    private Long timestamp;
+
     @JournweCloneable
     @Required
     private String fileName;
@@ -37,6 +39,15 @@ public class JournweFile implements IAdventureComponentWithUser {
     @DynamoDBRangeKey(attributeName = "fileName")
     public String getFileName() {
         return fileName;
+    }
+
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "timestamp-index")
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 
     @DynamoDBAttribute
