@@ -22,7 +22,7 @@ public class JournweFileDAO extends AdventureComponentDAO<JournweFile> {
         JournweFile key = new JournweFile();
         key.setAdventureId(advId);
 
-        return pm.query(JournweFile.class, new DynamoDBQueryExpression<JournweFile>().withHashKeyValues(key).withIndexName("timestamp-index").withScanIndexForward(false));
+        return pm.query(JournweFile.class, new DynamoDBQueryExpression<JournweFile>().withHashKeyValues(key).withIndexName("timestamp-index").withRangeKeyCondition("timestamp", new Condition().withComparisonOperator(ComparisonOperator.GT).withAttributeValueList(new AttributeValue().withN("0"))).withScanIndexForward(false));
 
     }
 
