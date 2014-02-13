@@ -1155,6 +1155,34 @@ define([
         },
         'click .btn-file-upload': function () {
             $('#files-file-input').click();
+        },
+
+
+        'click .btn-comment-add': function () {
+            var val,
+                btn = $(this),
+                input = btn.closest('.timeline-content').find('input:text'),
+                threadId = adv.id+"_discussion";
+
+            // Check if there is a value
+            if (val = (input.val() || "").trim()) {
+                input.val(""); // Reset
+                var list = $('.comment-list-' + threadId);
+
+                btn.html('<i class="fa fa-spin icon-journwe"></i>');
+
+                routes.controllers.api.json.CommentController.saveComment().ajax({data: {text: val, threadId: threadId}, success: function (f) {
+                    f.type = "comment";
+                    $('.timeline').prepend(renderTimeline(f));
+                    btn.html('<i class="fa fa-plus"></i>');
+                }});
+                
+            }
+        },
+        'keyup .timeline-content input:text': function (e) {
+            if (e.keyCode == 13) {
+                $(this).closest('.timeline-content').find('.btn-comment-add').click();
+            }
         }
 
 
