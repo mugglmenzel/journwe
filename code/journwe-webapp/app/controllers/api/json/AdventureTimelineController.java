@@ -3,8 +3,10 @@ package controllers.api.json;
 import models.adventure.comment.Comment;
 import models.adventure.email.Message;
 import models.adventure.file.JournweFile;
+import models.adventure.log.AdventureLogEntry;
 import models.auth.SecuredUser;
 import models.dao.adventure.AdventureEmailMessageDAO;
+import models.dao.adventure.AdventureLogDAO;
 import models.dao.adventure.CommentDAO;
 import models.dao.adventure.JournweFileDAO;
 import models.dao.user.UserDAO;
@@ -26,6 +28,15 @@ public class AdventureTimelineController extends Controller {
     public static Result get(String adventureId) {
         List<ObjectNode> results = new ArrayList<ObjectNode>();
         ObjectNode result;
+
+        for (AdventureLogEntry l : new AdventureLogDAO().allNewest(adventureId)) {
+            result = Json.newObject();
+            result.put("type", "log");
+            result.put("log", Json.toJson(l));
+            result.put("user", Json.toJson(new UserDAO().get(l.getUserId())));
+            result.put("timestamp", l.getTimestamp());
+            results.add(result);
+        }
 
         for (Message m : new AdventureEmailMessageDAO().allNewest(adventureId)) {
             result = Json.newObject();
@@ -53,10 +64,11 @@ public class AdventureTimelineController extends Controller {
             results.add(result);
         }
 
+
         Collections.sort(results, new Comparator<ObjectNode>() {
             @Override
             public int compare(ObjectNode jsonNode1, ObjectNode jsonNode2) {
-                return new Long(jsonNode1.get("timestamp").getLongValue()).compareTo(jsonNode2.get("timestamp").getLongValue());
+                return new Long(jsonNode2.get("timestamp").getLongValue()).compareTo(jsonNode1.get("timestamp").getLongValue());
             }
         });
 

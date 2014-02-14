@@ -16,7 +16,7 @@ public class Message {
 
     private String adventureId;
 
-    private String timestamp;
+    private Long timestamp;
 
     private String sender;
 
@@ -36,11 +36,11 @@ public class Message {
     }
 
     @DynamoDBRangeKey
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 

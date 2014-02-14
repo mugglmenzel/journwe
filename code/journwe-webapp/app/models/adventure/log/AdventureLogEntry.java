@@ -25,13 +25,16 @@ public class AdventureLogEntry implements IAdventureComponent {
 
     private EAdventureLogSection section;
 
+    private String userId;
+
     private String data;
 
     public AdventureLogEntry() {
     }
 
-    public AdventureLogEntry(String adventureId, Long timestamp, EAdventureLogType type, EAdventureLogTopic topic, EAdventureLogSection section, String data) {
+    public AdventureLogEntry(String adventureId, String userId, Long timestamp, EAdventureLogType type, EAdventureLogTopic topic, EAdventureLogSection section, String data) {
         this.adventureId = adventureId;
+        this.userId = userId;
         this.timestamp = timestamp;
         this.type = type;
         this.topic = topic;
@@ -86,6 +89,15 @@ public class AdventureLogEntry implements IAdventureComponent {
 
     public void setSection(EAdventureLogSection section) {
         this.section = section;
+    }
+
+    @DynamoDBAttribute
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @DynamoDBAttribute

@@ -66,7 +66,7 @@
                 <div class="jrn-adventure-section">
                     <div class="jrn-container">
                         <h2 id="timeline"><i class="fa fa-bolt icon-for-adventure-title"></i>
-                            Timeline<div class="pull-right"><button id="timeline-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
+                            Timeline<div class="pull-right"><button id="" class="btn btn-success btn-timeline-refresh"><i class="fa fa-refresh"></i></button></div></h2>
                         <div class="row">
                             <div class="col-lg-12">
                                 @timeline(adv, user)
@@ -262,6 +262,23 @@
         @cloneAdventure(adv, new DynamicForm())
 
         @createPDF(adv, new DynamicForm())
+
+
+        <div id="upload-progress" class="modal fade in" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title"><i class="fa fa-spin fa-spinner"></i> Uploading</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="progress progress-striped active">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div id="leave" class="modal fade in" tabindex="-1" role="dialog">
             <div class="modal-dialog">

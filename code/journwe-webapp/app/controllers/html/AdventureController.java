@@ -6,27 +6,27 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
-import com.amazonaws.services.sns.AmazonSNS;
-import com.amazonaws.services.sns.AmazonSNSClient;
-import com.amazonaws.services.sns.model.PublishRequest;
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSClient;
-import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.api.json.AdventureFileController;
-import controllers.api.json.AdventureTimeController;
-import controllers.routes;
-import models.adventure.*;
+import models.adventure.Adventure;
+import models.adventure.AdventureAuthorization;
+import models.adventure.AdventureShortname;
+import models.adventure.EAuthorizationRole;
 import models.adventure.adventurer.Adventurer;
 import models.adventure.adventurer.EAdventurerParticipation;
+import models.adventure.log.AdventureLogger;
+import models.adventure.log.EAdventureLogSection;
+import models.adventure.log.EAdventureLogTopic;
+import models.adventure.log.EAdventureLogType;
 import models.adventure.place.PlaceOption;
 import models.adventure.time.TimeOption;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredUser;
 import models.authorization.JournweAuthorization;
-import models.dao.*;
+import models.dao.AdventureAuthorizationDAO;
+import models.dao.AdventureShortnameDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
@@ -290,7 +290,7 @@ public class AdventureController extends Controller {
         }
 
         // Save Adventure-to-User relationship
-        new AdventureToUserDAO().createManyToManyRelationship(adv,usr);
+        new AdventureToUserDAO().createManyToManyRelationship(adv, usr);
 
         // Save the creator as default owner of the adventure
         AdventureAuthorization authorization = new AdventureAuthorization();
@@ -316,10 +316,12 @@ public class AdventureController extends Controller {
                 return badRequest("You are not authorized to do this.");
             Adventure adv = new AdventureDAO().get(advId);
             String name = advForm.get("name");
-            if ("adventureName".equals(name))
+            if ("adventureName".equals(name)) {
                 adv.setName(advForm.get("value"));
-            else if ("adventureDescription".equals(name)) {
+                AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.NAME_CHANGE, EAdventureLogSection.ALL, adv.getName());
+            } else if ("adventureDescription".equals(name)) {
                 adv.setDescription(advForm.get("value"));
+                AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.DESCRIPTION_CHANGE, EAdventureLogSection.ALL, adv.getDescription());
             }
             new AdventureDAO().save(adv);
         }
@@ -348,7 +350,6 @@ public class AdventureController extends Controller {
 
         return redirect(controllers.html.routes.ApplicationController.index());
     }
-
 
 
 }

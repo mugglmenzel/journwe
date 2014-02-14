@@ -9,6 +9,7 @@ import models.adventure.file.JournweFile;
 import models.adventure.log.AdventureLogEntry;
 import models.dao.common.AdventureComponentDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JournweFileDAO extends AdventureComponentDAO<JournweFile> {
@@ -22,7 +23,23 @@ public class JournweFileDAO extends AdventureComponentDAO<JournweFile> {
         JournweFile key = new JournweFile();
         key.setAdventureId(advId);
 
-        return pm.query(JournweFile.class, new DynamoDBQueryExpression<JournweFile>().withHashKeyValues(key).withIndexName("timestamp-index").withRangeKeyCondition("timestamp", new Condition().withComparisonOperator(ComparisonOperator.GT).withAttributeValueList(new AttributeValue().withN("0"))).withScanIndexForward(false));
+        return pm.query(JournweFile.class, new DynamoDBQueryExpression<JournweFile>().withHashKeyValues(key).withIndexName("timestamp-index").withScanIndexForward(false));
+    }
+
+
+    public List<JournweFile> allImages(String advId) {
+        JournweFile key = new JournweFile();
+        key.setAdventureId(advId);
+
+        String[] imageFileEndings = new String[]{"jpg", "jpeg", "png", "gif"};
+
+        List<AttributeValue> fileEndings = new ArrayList<AttributeValue>();
+        for(String ending : imageFileEndings) {
+            fileEndings.add(new AttributeValue(ending.toLowerCase()));
+            fileEndings.add(new AttributeValue(ending.toUpperCase()));
+        }
+
+        return pm.query(JournweFile.class, new DynamoDBQueryExpression<JournweFile>().withHashKeyValues(key).withRangeKeyCondition("fileName", new Condition().withComparisonOperator(ComparisonOperator.CONTAINS).withAttributeValueList(fileEndings)).withScanIndexForward(false));
 
     }
 

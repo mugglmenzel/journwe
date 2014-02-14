@@ -228,7 +228,7 @@ define([
     };
 
     var renderPlaceOption = function (data, replace) {
-        data.voteGroup = Math.round(data.voteGroup*6*100)/100;
+        data.voteGroup = Math.round(data.voteGroup * 6 * 100) / 100;
         var place = $(tmpl('place-template', $.extend({
             votePlaceLabelCSSClassMap: votePlaceLabelCSSClassMap
         }, data)));
@@ -476,9 +476,8 @@ define([
     };
 
 
-
     var renderTimeOption = function (data, replace) {
-        data.voteGroup = Math.round(data.voteGroup*6*100)/100;
+        data.voteGroup = Math.round(data.voteGroup * 6 * 100) / 100;
         var time = $(tmpl('time-template', $.extend({
             voteTimeLabelCSSClassMap: voteTimeLabelCSSClassMap,
             formatDate: utils.formatDate
@@ -579,24 +578,24 @@ define([
     };
 
     //TIMELINE
-    var initializeTimeline = function(){
+    var initializeTimeline = function () {
 
-        $("#timeline-button-refresh i").addClass("fa-spin");
+        utils.setSpinning($(".btn-timeline-refresh i"));
 
         routes.controllers.api.json.AdventureTimelineController.get(adv.id).ajax({success: function (result) {
-            
+
             var t = $('.timeline').empty();
 
-            $.each(result, function(i, res){
+            $.each(result, function (i, res) {
                 t.append(renderTimeline(res));
             });
 
-            $("#timeline-button-refresh i").removeClass("fa-spin");
+            utils.resetSpinning($(".btn-timeline-refresh i"));
         }});
     };
 
-    var renderTimeline = function(time){
-        return $('<div></div>').html(tmpl('timeline-template-'+time.type, $.extend({
+    var renderTimeline = function (time) {
+        return $('<div></div>').html(tmpl('timeline-template-' + time.type, $.extend({
 
         }, time)));
     };
@@ -682,10 +681,8 @@ define([
     };
 
     var uploadFiles = function (files, target) {
-        var btn = $('#files-upload-dropzone .btn-upload'),
-            btnOriginal = btn.html();
-        btn.css({width: btn.css('width')})
-            .html('<i class="fa fa-spin icon-journwe"></i>');
+        var btn = $('.files-upload-dropzone .btn-upload');
+        utils.setReplaceSpinning(btn);
 
         target.addClass("uploading");
 
@@ -699,12 +696,30 @@ define([
                 cache: false,
                 contentType: false,
                 processData: false,
+                xhr: function () {
+                    var xhr = $.ajaxSettings.xhr();
+                    if (xhr.upload) {
+                        $(xhr.upload).bind('progress', function (e) {
+                            var oe = e.originalEvent;
+                            // Make sure the progress event properties get copied over:
+                            e.lengthComputable = oe.lengthComputable;
+                            e.loaded = oe.loaded;
+                            e.total = oe.total;
+                            if (e.lengthComputable) {
+                                var percent = Math.floor(e.loaded / e.total * 100);
+                                $('#upload-progress').modal('show');
+                                $('#upload-progress .progress-bar').css('width', percent + '%').html(percent + '%');
+                            }
+                        });
+                    }
+                    return xhr;
+                },
                 success: function (result) {
-                    btn.css({width: ""})
-                        .html(btnOriginal);
+                    utils.resetReplaceSpinning(btn);
                     target.removeClass("uploading");
-            
-                    if (target.closest('.file-upload-timeline').length){
+                    $('#upload-progress').modal('hide');
+
+                    if (target.closest('.file-upload-timeline').length) {
                         result.type = "file";
                         $('.timeline').prepend(renderTimeline(result));
                     } else {
@@ -747,14 +762,23 @@ define([
 
     var deleteFile = function (fileName, el) {
 
-        $(el).html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning(el);
 
         routes.controllers.api.json.AdventureFileController.deleteFile(adv.id, fileName).ajax({
             success: function () {
-                var tr = $(el).parents('tr');
-                tr.fadeOut(function () {
-                    tr.remove();
-                });
+                utils.resetReplaceSpinning(el);
+
+                var tr = $(el).closest('tr');
+                if (tr.length)
+                    tr.fadeOut(function () {
+                        tr.remove();
+                    });
+
+                var te = $(el).closest('.timeline-entry');
+                if (te.length)
+                    te.fadeOut(function () {
+                        te.remove();
+                    });
             }
         });
     };
@@ -768,7 +792,7 @@ define([
 
             var section = $(this).attr('href');
 
-            if ($(section).length){
+            if ($(section).length) {
                 // $('.jrn-adventure-section').addClass('stash').hide();
                 // $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn(200);
                 // $('.nav-adventure-list li').removeClass('active');
@@ -776,7 +800,7 @@ define([
 
                 var sec = $(section).closest('.jrn-adventure-section'),
                     li = $(this).closest('li');
-                if (!sec.is(":visible")){
+                if (!sec.is(":visible")) {
                     sec.removeClass('stash').fadeIn('100');
                     li.addClass('active');
 
@@ -847,7 +871,7 @@ define([
             loadEmails();
         },
 
-        'click #timeline-button-refresh': function () {
+        'click .btn-timeline-refresh': function () {
             initializeTimeline();
         },
 
@@ -893,7 +917,7 @@ define([
 
         'click .rating-place :radio': function (e) {
             var vote = 'MAYBE';
-            switch($(e.target).val()){
+            switch ($(e.target).val()) {
                 case '1':
                 case '2':
                     vote = 'NO';
@@ -901,7 +925,8 @@ define([
                 case '5':
                 case '6':
                     vote = 'YES';
-            };
+            }
+            ;
             if ($(e.target).is(':checked')) votePlace(vote, $(e.target).val() / 6, $(e.target).data('id'));
         },
         'change #places-voting-active-switch': function () {
@@ -916,7 +941,6 @@ define([
                 routes.controllers.api.json.AdventureController.updatePlaceVoteDeadline
             );
         },
-
 
 
         'click .btn-favorite-place': function () {
@@ -1004,7 +1028,7 @@ define([
         },
         'click .rating-time :radio': function (e) {
             var vote = 'MAYBE';
-            switch($(e.target).val()){
+            switch ($(e.target).val()) {
                 case '1':
                 case '2':
                     vote = 'NO';
@@ -1012,7 +1036,8 @@ define([
                 case '5':
                 case '6':
                     vote = 'YES';
-            };
+            }
+            ;
 
             if ($(e.target).is(':checked')) voteTime(vote, $(e.target).val() / 6, $(e.target).data('id'));
         },
@@ -1162,7 +1187,7 @@ define([
             return false;
         },
         'click .btn-file-delete': function () {
-            deleteFile($(this).closest('tr').data('id'), $(this));
+            deleteFile($(this).data('id'), $(this));
         },
         'change #files-file-input': function () {
             var inputFile = $('#files-file-input'),
@@ -1181,7 +1206,7 @@ define([
             var val,
                 btn = $(this),
                 input = btn.closest('.timeline-content').find('input:text'),
-                threadId = adv.id+"_discussion";
+                threadId = adv.id + "_discussion";
 
             // Check if there is a value
             if (val = (input.val() || "").trim()) {
@@ -1195,7 +1220,7 @@ define([
                     $('.timeline').prepend(renderTimeline(f));
                     btn.html('<i class="fa fa-plus"></i>');
                 }});
-                
+
             }
         },
         'keyup .timeline-content input:text': function (e) {
@@ -1204,16 +1229,16 @@ define([
             }
         },
 
-        'dragenter .files-upload-dropzone': function(evt){
+        'dragenter .files-upload-dropzone': function (evt) {
             window.clearTimeout(_timer);
-            window.setTimeout(function(){
+            window.setTimeout(function () {
                 window.clearTimeout(_timer);
                 $(this).addClass("hover");
             }.bind(this), 10);
         },
 
-        'dragleave .files-upload-dropzone': function(evt){
-            _timer = window.setTimeout(function(){
+        'dragleave .files-upload-dropzone': function (evt) {
+            _timer = window.setTimeout(function () {
                 $(this).removeClass("hover");
             }.bind(this), 100);
         }

@@ -90,8 +90,8 @@ public class JournWeSMTPServer {
                     msg.setSubject(mimemsg.getSubject());
 
                     if (mimemsg.getReceivedDate() != null)
-                        msg.setTimestamp(new Long(mimemsg.getReceivedDate().getTime()).toString());
-                    else msg.setTimestamp(new Long(new Date().getTime()).toString());
+                        msg.setTimestamp(mimemsg.getReceivedDate().getTime());
+                    else msg.setTimestamp(new Date().getTime());
 
                     processPart(msg, mimemsg);
 
@@ -173,8 +173,13 @@ public class JournWeSMTPServer {
                         dynamo.save(attachment);
 
                     } else if (part.getContent() != null && part.getContent() instanceof String) {
-                        logger.debug("Appending Text: " + ((String) part.getContent()).trim());
-                        msg.setBody(msg.getBody() + (String) part.getContent());
+                        if (part.isMimeType("text/html") && "".equals(msg.getBody())) {
+                            logger.debug("Filling Body: " + ((String) part.getContent()).trim());
+                            msg.setBody((String) part.getContent());
+                        } else if (part.isMimeType("text/plain")) {
+                            logger.debug("Filling Body: " + ((String) part.getContent()).trim());
+                            msg.setBody((String) part.getContent());
+                        }
                     }
                 }
             }

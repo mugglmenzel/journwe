@@ -1,5 +1,6 @@
 package controllers.api.json;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -25,7 +26,11 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -62,7 +67,7 @@ public class AdventureFileController extends Controller {
 
             Http.MultipartFormData body = request().body().asMultipartFormData();
             Http.MultipartFormData.FilePart uploadFile = body.getFile("uploadFile");
-            if(uploadFile == null) return badRequest();
+            if (uploadFile == null) return badRequest();
 
             File file = uploadFile.getFile();
 
@@ -70,9 +75,10 @@ public class AdventureFileController extends Controller {
             journweFile.setAdventureId(advId);
             journweFile.setStorageProvider(DEFAULT_STORAGE_PROVIDER);
             journweFile.setUserId(usr.getId());
+            journweFile.setTimestamp(new Date().getTime());
             String fileName = journweFile.getFileName();
             String s3ObjectKey = generateS3ObjectKey(advId, fileName);
-            String url = DEFAULT_STORAGE_PROVIDER + "/" + java.net.URLEncoder.encode(s3ObjectKey,"UTF-8");
+            String url = DEFAULT_STORAGE_PROVIDER + "/" + java.net.URLEncoder.encode(s3ObjectKey, "UTF-8");
             journweFile.setUrl(url);
             if (!new JournweFileDAO().save(journweFile))
                 throw new Exception("Saving JournweFile in DynamoDB failed!");
@@ -81,17 +87,13 @@ public class AdventureFileController extends Controller {
             Upload upload = tx.upload(S3_BUCKET, s3ObjectKey, file);
             upload.waitForCompletion();
             s3.setObjectAcl(S3_BUCKET, s3ObjectKey, CannedAccessControlList.PublicRead);
-            flash("success", "Your files is uploading now and can be downloaded, soon...");
             new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " uploaded the file " + journweFile.getFileName() + ".", "File Upload");
             return ok(fileToJSON(journweFile));
         } catch (Exception e) {
             Logger.error("Failed uploading!", e);
-            flash("error",
-                    "File upload has failed. Sorry. Please try again later.");
             return internalServerError();
         }
     }
-
 
 
     @Security.Authenticated(SecuredUser.class)
@@ -100,8 +102,8 @@ public class AdventureFileController extends Controller {
             return AuthorizationMessage.notAuthorizedResponse();
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
-        for(JournweFile f : new JournweFileDAO().all(adventureId))
-                result.add(fileToJSON(f));
+        for (JournweFile f : new JournweFileDAO().all(adventureId))
+            result.add(fileToJSON(f));
 
 //        for(JournweFile file : files) {
 //            Long newExpirationTimeInMillis = new Long(DateTime.now().getMillis()+EXPIRATION_TIME_IN_SECONDS);
@@ -119,12 +121,27 @@ public class AdventureFileController extends Controller {
     public static Result deleteFile(String advId, String fileId) {
         if (!new JournweAuthorization(advId).canDeleteFiles())
             return AuthorizationMessage.notAuthorizedResponse();
+
+        try {
+            fileId = URLDecoder.decode(fileId, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            Logger.debug("Could not decode file id.");
+        }
+
         JournweFile journweFile = new JournweFileDAO().get(advId, fileId);
+        if(journweFile == null) return badRequest();
 
         AmazonS3Client s3 = new AmazonS3Client(credentials);
-        s3.deleteObject(S3_BUCKET, advId + "/" + journweFile.getFileName());
-
-        new JournweFileDAO().delete(journweFile);
+        try {
+            if (s3.doesBucketExist(S3_BUCKET) && s3.getObjectMetadata(S3_BUCKET, advId + "/" + journweFile.getFileName()) != null)
+                s3.deleteObject(S3_BUCKET, advId + "/" + journweFile.getFileName());
+            new JournweFileDAO().delete(journweFile);
+        } catch (AmazonServiceException ae) {
+            if (404 == ae.getStatusCode())
+                new JournweFileDAO().delete(journweFile);
+            else
+                return internalServerError();
+        }
 
 
         return ok();

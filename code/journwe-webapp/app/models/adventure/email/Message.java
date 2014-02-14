@@ -17,7 +17,7 @@ public class Message implements IAdventureComponent {
 
     private String adventureId;
 
-    private String timestamp;
+    private Long timestamp;
 
     private String sender;
 
@@ -35,11 +35,11 @@ public class Message implements IAdventureComponent {
     }
 
     @DynamoDBRangeKey
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
