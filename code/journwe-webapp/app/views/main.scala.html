@@ -66,7 +66,8 @@
 		</header>
 
 		<div class="main row">
-			<div class="col-lg-8 col-lg-offset-2">
+            <div class="col-lg-2 file-dropzone"></div>
+			<div class="col-lg-8">
 				@if(!headerText.toString().equals(" ")){
 					<div class="page-header">
 						<h1>@headerText</h1>
@@ -75,6 +76,7 @@
 
 				@content
 			</div>
+            <div class="col-lg-2 file-dropzone"></div>
 		</div>
 
 		<!-- TOP NAVIGATION -->

@@ -67,8 +67,7 @@ define([
     var uploadPrimeImage = function (files) {
         var btn = $('#adventure-prime-image-upload-button'),
             btnOriginal = btn.html();
-        btn.css({width: btn.css('width')})
-            .html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning(btn);
 
         var data = new FormData();
         data.append(files[0].name, files[0])
@@ -81,8 +80,7 @@ define([
             success: function (result) {
                 $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + result.imageTimestamp + '")');
                 $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + result.image + '&timestamp=' + result.imageTimestamp + '")');
-                btn.css({width: ""})
-                    .html(btnOriginal);
+                utils.resetReplaceSpinning(btn);
             }
         });
 
@@ -829,6 +827,9 @@ define([
                 .html('<i class="fa fa-spin icon-journwe"></i>');
 
             return true;
+        },
+        'drop .file-dropzone': function (event) {
+            processDroppedPrimeImage(event);
         },
         'drop #adventure-prime-image': function (event) {
             processDroppedPrimeImage(event);
