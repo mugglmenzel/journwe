@@ -93,7 +93,7 @@ define([
     var initializeIndex = function () {
         $.fn.editable.defaults.mode = 'inline';
         $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-journwe fa fa-spin"></i></div>';
-        $('#adventureName').editable();
+        $('.adventureName').editable();
 
 
         // After saving via x-editable, replace those links as well

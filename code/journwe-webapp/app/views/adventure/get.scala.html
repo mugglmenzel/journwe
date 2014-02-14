@@ -15,7 +15,17 @@
                 @comment.commentsCommon()
 
                 <div class="jrn-container">
-                    <h2 id="index"><i class="fa fa-info fa fa-for-adventure-title"></i> @Messages("adventure.getScala.adventure.title")</h2>
+                    <h2 id="index"><i class="fa fa-info fa fa-for-adventure-title"></i>
+                        <span class="title-name">
+                            <a href="#" class="adventureName" data-type="text" data-pk="@adv.getId()"
+                                data-url="@html.routes.AdventureController.saveEditable()"
+                                data-original-title="Enter adventure name" data-inputclass="input-lg">@adv.getName()</a> <i class="fa fa-pencil muted"></i> <span></span>
+                            @if(ins != null) {
+                                <small>
+                                    - <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>
+                            }
+                        </span>
+                    </h2>
                         @index(adv, ins)
                         @options(adv, advr)
                 </div>
@@ -27,7 +37,7 @@
                         <li>
                         @if(auth.canViewAdventureTitle()) {
                             <div class="title-name">
-                                <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+                                <a href="#" class="adventureName" data-type="text" data-pk="@adv.getId()"
                                 data-url="@html.routes.AdventureController.saveEditable()"
                                 data-original-title="Enter adventure name" data-inputclass="input-lg">@adv.getName()</a> <i class="fa fa-pencil muted"></i> <span></span>
                                 @if(ins != null) {
