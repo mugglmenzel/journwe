@@ -108,7 +108,11 @@ GET           /api/json/adventure/:id/emails.json                          contr
 
 #### Adventure Timeline ####
 
-GET           /api/json/adventure/:id/timeline.json                        controllers.api.json.AdventureTimelineController.get(id:String)
+GET           /api/json/adventure/:id/timeline/all.json                    controllers.api.json.AdventureTimelineController.get(id:String)
+GET           /api/json/adventure/:id/timeline/logs.json                   controllers.api.json.AdventureTimelineController.getLogs(id:String)
+GET           /api/json/adventure/:id/timeline/emails.json                 controllers.api.json.AdventureTimelineController.getEmails(id:String)
+GET           /api/json/adventure/:id/timeline/comments.json               controllers.api.json.AdventureTimelineController.getComments(id:String)
+GET           /api/json/adventure/:id/timeline/files.json                  controllers.api.json.AdventureTimelineController.getFiles(id:String)
 
 
 #### Comments ####

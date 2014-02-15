@@ -1,8 +1,8 @@
 package models.helpers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import models.adventure.weather.Weather;
 import models.adventure.weather.WeatherPeriod;
-import org.codehaus.jackson.JsonNode;
 import play.libs.Json;
 
 import java.io.BufferedReader;
@@ -35,8 +35,8 @@ public class WeatherFactory {
                 JsonNode period = periods.next();
                 WeatherPeriod wp = new WeatherPeriod();
                 JsonNode date = period.get("date");
-                String month = date.get("month").getIntValue() + "";
-                String day = date.get("day").getIntValue() + "";
+                String month = date.get("month").asInt() + "";
+                String day = date.get("day").asInt() + "";
 
                 if (month.length() == 1) {
                     month = "0" + month;
@@ -45,11 +45,11 @@ public class WeatherFactory {
                     day = "0" + day;
                 }
 
-                wp.setTemperature(period.get("high").get("celsius").getTextValue());
-                wp.setLowTemperature(period.get("low").get("celsius").getTextValue());
-                wp.setIcon(period.get("icon").getTextValue().replaceAll("chance", "").replaceAll("nt_", ""));
-                wp.setCondition(period.get("conditions").getTextValue());
-                wp.setDate(day + "." + month + "." + date.get("year").getIntValue());
+                wp.setTemperature(period.get("high").get("celsius").asText());
+                wp.setLowTemperature(period.get("low").get("celsius").asText());
+                wp.setIcon(period.get("icon").asText().replaceAll("chance", "").replaceAll("nt_", ""));
+                wp.setCondition(period.get("conditions").asText());
+                wp.setDate(day + "." + month + "." + date.get("year").asInt());
                 weather.add(wp);
             }
         }

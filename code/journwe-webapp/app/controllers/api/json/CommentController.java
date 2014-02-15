@@ -9,7 +9,7 @@ import models.dao.adventure.CommentThreadDAO;
 import models.dao.user.UserDAO;
 import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.joda.time.DateTime;
 import play.Logger;
 import play.data.Form;

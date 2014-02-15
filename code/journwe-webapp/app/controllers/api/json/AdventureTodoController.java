@@ -18,7 +18,7 @@ import models.dao.user.UserDAO;
 import models.helpers.AWSProductAdvertisingAPIHelper;
 import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.cache.Cache;
 import play.data.DynamicForm;

@@ -12,7 +12,7 @@ import models.category.CategoryHierarchy;
 import models.dao.category.CategoryCountDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.category.CategoryHierarchyDAO;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.cache.Cache;
 import play.data.DynamicForm;

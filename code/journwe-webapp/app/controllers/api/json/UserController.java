@@ -1,7 +1,7 @@
 package controllers.api.json;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
-import controllers.routes;
 import models.adventure.Adventure;
 import models.auth.SecuredUser;
 import models.dao.NotificationDAO;
@@ -13,8 +13,6 @@ import models.dao.user.UserDAO;
 import models.notifications.ENotificationFrequency;
 import models.notifications.Notification;
 import models.user.User;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
@@ -22,7 +20,6 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.user.get;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +58,7 @@ public class UserController extends Controller {
         Logger.debug("getting notifications for " + lastId + "," + count);
 
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        List<JsonNode> results = new ArrayList<JsonNode>();
+        List<ObjectNode> results = new ArrayList<ObjectNode>();
         List<Notification> all = new NotificationDAO().all(usr.getId(), lastId, count);
         for (Notification c : all) {
             ObjectNode node = Json.newObject();

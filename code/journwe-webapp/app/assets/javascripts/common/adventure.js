@@ -577,10 +577,33 @@ define([
 
     //TIMELINE
     var initializeTimeline = function () {
+        loadTimelineAll();
+    };
 
+    var loadTimelineAll = function () {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.get(adv.id));
+    };
+
+    var loadTimelineLogs = function () {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getLogs(adv.id));
+    };
+
+    var loadTimelineEmails = function () {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getEmails(adv.id));
+    };
+
+    var loadTimelineComments = function () {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getComments(adv.id));
+    };
+
+    var loadTimelineFiles = function () {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getFiles(adv.id));
+    };
+
+    var loadTimeline = function (route) {
         utils.setSpinning($(".btn-timeline-refresh i"));
 
-        routes.controllers.api.json.AdventureTimelineController.get(adv.id).ajax({success: function (result) {
+        route.ajax({success: function (result) {
 
             var t = $('.timeline').empty();
 
@@ -590,7 +613,7 @@ define([
 
             utils.resetSpinning($(".btn-timeline-refresh i"));
         }});
-    };
+    }
 
     var renderTimeline = function (time) {
         return $('<div></div>').html(tmpl('timeline-template-' + time.type, $.extend({
@@ -874,6 +897,9 @@ define([
 
         'click .btn-timeline-refresh': function () {
             initializeTimeline();
+        },
+        'click .btn-timeline-filter-emails': function () {
+            loadTimelineEmails();
         },
 
         'keydown #place-add-input': function (e) {

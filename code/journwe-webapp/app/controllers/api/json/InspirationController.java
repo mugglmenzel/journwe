@@ -20,7 +20,7 @@ import models.dao.user.UserDAO;
 import models.dao.user.UserSocialDAO;
 import models.inspiration.Inspiration;
 import models.inspiration.InspirationTip;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;

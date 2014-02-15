@@ -29,7 +29,7 @@ import models.notifications.helper.AdventurerNotifier;
 import models.user.EUserRole;
 import models.user.User;
 import models.user.UserSocial;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.cache.Cache;
 import play.data.DynamicForm;

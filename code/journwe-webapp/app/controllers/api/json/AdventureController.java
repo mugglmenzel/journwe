@@ -21,7 +21,7 @@ import models.dao.adventure.AdventureDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.manytomany.AdventureToCategoryDAO;
 import models.notifications.helper.AdventurerNotifier;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;

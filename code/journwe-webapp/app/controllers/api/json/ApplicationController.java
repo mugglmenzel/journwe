@@ -11,7 +11,7 @@ import models.dao.adventure.TimeOptionDAO;
 import models.dao.manytomany.CategoryToInspirationDAO;
 import models.dao.user.UserDAO;
 import models.inspiration.Inspiration;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.cache.Cache;
 import play.data.DynamicForm;
