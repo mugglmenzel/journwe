@@ -898,8 +898,20 @@ define([
         'click .btn-timeline-refresh': function () {
             initializeTimeline();
         },
+        'click .btn-timeline-filter-all': function () {
+            loadTimelineAll();
+        },
+        'click .btn-timeline-filter-logs': function () {
+            loadTimelineLogs();
+        },
         'click .btn-timeline-filter-emails': function () {
             loadTimelineEmails();
+        },
+        'click .btn-timeline-filter-comments': function () {
+            loadTimelineComments();
+        },
+        'click .btn-timeline-filter-files': function () {
+            loadTimelineFiles();
         },
 
         'keydown #place-add-input': function (e) {
