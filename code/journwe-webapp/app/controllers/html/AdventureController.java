@@ -295,6 +295,7 @@ public class AdventureController extends Controller {
         }
 
         if ("on".equals(filledForm.get("facebookWall"))) {
+            UserSocial us = new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId());
             JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
             Logger.info(filledForm.get("facebookWallPost") + " " + shortURL);
             fb.publishLinkOnMyFeed(filledForm.get("facebookWallPost"), shortURL);
