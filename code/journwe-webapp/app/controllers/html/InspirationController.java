@@ -135,8 +135,8 @@ public class InspirationController extends Controller {
                         if (split != null && split.length > 1) {
                             InspirationURL url = new InspirationURL();
                             url.setInspirationId(ins.getId());
-                            url.setUrl(line.split(" ")[0]);
-                            url.setUrl(line.substring(line.indexOf(" ")));
+                            url.setUrl(split[0]);
+                            url.setDescription(line.substring(line.indexOf(" ")));
                             new InspirationURLDAO().save(url);
                         }
                     }
