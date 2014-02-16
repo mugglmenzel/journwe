@@ -157,7 +157,9 @@ define([
         var type = $('#people-add-type-icon').data('social-type'),
             route = '';
 
-        if(type === 'facebook') route =  routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL();
+        if(type === 'facebook') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL();
+        if(type === 'foursquare') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFoursquare().absoluteURL();
+
 
         if(route != '')
             $('.input-people-add').typeahead({

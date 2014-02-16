@@ -3,19 +3,26 @@ package controllers.api.json;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.providers.oauth2.OAuth2AuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
-import controllers.html.*;
-import controllers.routes;
-import models.adventure.*;
+import fi.foyt.foursquare.api.FoursquareApi;
+import fi.foyt.foursquare.api.FoursquareApiException;
+import fi.foyt.foursquare.api.io.DefaultIOHandler;
+import models.adventure.Adventure;
+import models.adventure.AdventureAuthorization;
+import models.adventure.AdventureShortname;
+import models.adventure.EAuthorizationRole;
 import models.adventure.adventurer.Adventurer;
 import models.adventure.adventurer.EAdventurerParticipation;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.dao.*;
+import models.dao.AdventureAuthorizationDAO;
+import models.dao.AdventureShortnameDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.inspiration.InspirationDAO;
@@ -29,7 +36,6 @@ import models.notifications.helper.AdventurerNotifier;
 import models.user.EUserRole;
 import models.user.User;
 import models.user.UserSocial;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.cache.Cache;
 import play.data.DynamicForm;
@@ -258,7 +264,7 @@ public class AdventurePeopleController extends Controller {
         // Save Adventure-to-User relationship
         Adventure adv = new AdventureDAO().get(advId);
         User usr = new UserDAO().get(userId);
-        new AdventureToUserDAO().createManyToManyRelationship(adv,usr);
+        new AdventureToUserDAO().createManyToManyRelationship(adv, usr);
 
         clearCache(advId);
         ApplicationController.clearUserCache(userId);
@@ -423,12 +429,41 @@ public class AdventurePeopleController extends Controller {
         List<JsonObject> friends = fb.getMyFriendsAsJson();
 
         for (JsonObject friend : friends)
-            if (friend.getString("name").contains(input)) {
+            if (friend.getString("name").toLowerCase().contains(input.toLowerCase())) {
                 ObjectNode node = Json.newObject();
                 node.put("id", friend.getString("id"));
                 node.put("name", friend.getString("name"));
                 results.add(node);
             }
+
+        return ok(Json.toJson(results));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result autocompleteFoursquare() {
+        DynamicForm form = form().bindFromRequest();
+        String input = form.get("input");
+        List<ObjectNode> results = new ArrayList<ObjectNode>();
+
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        UserSocial us = new UserSocialDAO().findBySocialId("foursquare", usr.getId());
+
+        try {
+            Logger.debug("connecting to foursquare with " + ConfigFactory.load().getString("play-authenticate.foursquare.clientId") + " -> " + ConfigFactory.load().getString("play-authenticate.foursquare.clientSecret") + " -> " + OAuth2AuthProvider.Registry.get("foursquare").getUrl());
+            FoursquareApi four = new FoursquareApi(ConfigFactory.load().getString("play-authenticate.foursquare.clientId"), ConfigFactory.load().getString("play-authenticate.foursquare.clientSecret"), OAuth2AuthProvider.Registry.get("foursquare").getUrl(), us.getAccessToken(), new DefaultIOHandler());
+            fi.foyt.foursquare.api.Result<fi.foyt.foursquare.api.entities.UserGroup> friends = four.usersFriends(us.getSocialId());
+            Logger.debug("foursquare api request returned " + friends);
+
+            for (fi.foyt.foursquare.api.entities.CompactUser friend : friends.getResult().getItems())
+                if (new String(friend.getFirstName() + friend.getLastName()).toLowerCase().contains(input.toLowerCase())) {
+                    ObjectNode node = Json.newObject();
+                    node.put("id", friend.getId());
+                    node.put("name", friend.getFirstName() + " " + friend.getLastName());
+                    results.add(node);
+                }
+        } catch (FoursquareApiException e) {
+            Logger.error("Could not fetch friends from Foursquare!");
+        }
 
         return ok(Json.toJson(results));
     }

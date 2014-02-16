@@ -113,6 +113,11 @@
                                 <li><a data-icon="fa fa-facebook fa-fw" data-social-type="facebook" data-input-type="text" data-typeahead="on"><i class="fa fa-facebook fa-fw"></i>
                                     @Messages("adventure.general.label.facebook")</a></li>
                                 }
+                                @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("foursquare", usr.getId) != null){
+                                    <li><a data-icon="fa fa-foursquare fa-fw" data-social-type="foursquare" data-input-type="text" data-typeahead="on"><i class="fa fa-foursquare fa-fw"></i>
+                                        @Messages("adventure.general.label.foursquare")</a></li>
+                                }
+
                                 <li><a data-icon="fa fa-envelope fa-fw" data-social-type="email" data-input-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
                                     @Messages("adventure.general.label.email")</a></li>
                             </ul>
