@@ -580,27 +580,32 @@ define([
         loadTimelineAll();
     };
 
-    var loadTimelineAll = function () {
-        loadTimeline(routes.controllers.api.json.AdventureTimelineController.get(adv.id));
+    var loadTimelineAll = function (el) {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.get(adv.id), el);
     };
 
-    var loadTimelineLogs = function () {
-        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getLogs(adv.id));
+    var loadTimelineLogs = function (el) {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getLogs(adv.id), el);
     };
 
-    var loadTimelineEmails = function () {
-        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getEmails(adv.id));
+    var loadTimelineEmails = function (el) {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getEmails(adv.id), el);
     };
 
-    var loadTimelineComments = function () {
-        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getComments(adv.id));
+    var loadTimelineComments = function (el) {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getComments(adv.id), el);
     };
 
-    var loadTimelineFiles = function () {
-        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getFiles(adv.id));
+    var loadTimelineFiles = function (el) {
+        loadTimeline(routes.controllers.api.json.AdventureTimelineController.getFiles(adv.id), el);
     };
 
-    var loadTimeline = function (route) {
+    var loadTimeline = function (route, el) {
+        if (el){
+            el.parent().find(".active").removeClass("active");
+            el.addClass("active");
+        }
+
         utils.setSpinning($(".btn-timeline-refresh i"));
 
         route.ajax({success: function (result) {
@@ -899,19 +904,19 @@ define([
             initializeTimeline();
         },
         'click .btn-timeline-filter-all': function () {
-            loadTimelineAll();
+            loadTimelineAll($(this));
         },
         'click .btn-timeline-filter-logs': function () {
-            loadTimelineLogs();
+            loadTimelineLogs($(this));
         },
         'click .btn-timeline-filter-emails': function () {
-            loadTimelineEmails();
+            loadTimelineEmails($(this));
         },
         'click .btn-timeline-filter-comments': function () {
-            loadTimelineComments();
+            loadTimelineComments($(this));
         },
         'click .btn-timeline-filter-files': function () {
-            loadTimelineFiles();
+            loadTimelineFiles($(this));
         },
 
         'keydown #place-add-input': function (e) {
