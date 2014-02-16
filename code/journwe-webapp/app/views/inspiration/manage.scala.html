@@ -30,6 +30,7 @@
                 }
                 @inputText(inspForm("name"), '_label -> "Inspiration name", 'placeholder -> "Name", 'required -> "")
                 @textarea(inspForm("description"), '_label -> "Description", 'placeholder -> "Some text", 'class -> "editor editor-html ckeditor")
+                @textarea(inspForm("urls"), '_label -> "URL List", 'placeholder -> "http://example.com/foo/bar A description")
                 @inputFile(inspForm("image"), '_label -> "Image")(FieldConstructor(twitterBootstrapInputImgUpload.render), Lang.apply("en-US"))
                 @textarea(inspForm("tripAdvisor"), '_label -> "TripAdvisor Snipped (see http://www.tripadvisor.com/Widgets)", 'placeholder -> "Some text")
                 @inputText(inspForm("pinterest"), '_label -> "Pinterest URL", 'placeholder -> "Pinterest")

@@ -233,6 +233,7 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.CategoryController.getCategories(),
                         controllers.api.json.routes.javascript.CategoryController.categoriesOptionsMap(),
                         controllers.api.json.routes.javascript.CategoryController.getInspirations(),
+                        controllers.api.json.routes.javascript.InspirationController.getUrls(),
                         controllers.api.json.routes.javascript.InspirationController.getTips(),
                         controllers.api.json.routes.javascript.InspirationController.getImages(),
                         controllers.api.json.routes.javascript.InspirationController.addTip(),

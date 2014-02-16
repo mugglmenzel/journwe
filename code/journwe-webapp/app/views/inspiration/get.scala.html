@@ -45,6 +45,13 @@
                     }
                     </div>
                 }
+
+                <ul class="list-inspiration-urls"></ul>
+                <script type="text/x-tmpl" id="inspiration-url-template">
+                    <li>
+                        <a class="btn btn-link" href="{%=o.url%}">{%=o.description%}</a>
+                    </li>
+                </script>
             </div>
         </div>
         <div class="row">
@@ -98,7 +105,7 @@
         <h2 id="tips"><i class="fa fa-thumbs-up"></i> Tips</h2>
         <div class="row">
             <div class="col-lg-12">
-                <div id="inspiration-tips"></div>
+                <div class="list-inspiration-tips"></div>
                 <script type="text/x-tmpl" id="inspiration-tip-template">
                     <div>
                         <img class="pull-left" style="margin-right: 10px; max-height: 24pt;" src="{%=o.user.image%}">

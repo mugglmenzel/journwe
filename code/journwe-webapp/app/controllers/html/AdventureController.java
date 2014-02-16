@@ -13,10 +13,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
-import com.google.api.services.plusDomains.PlusDomains;
-import com.google.api.services.plusDomains.model.Acl;
-import com.google.api.services.plusDomains.model.Activity;
-import com.google.api.services.plusDomains.model.PlusDomainsAclentryResource;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.api.json.AdventureFileController;
@@ -66,8 +62,6 @@ import views.html.adventure.get_public;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static com.rosaloves.bitlyj.Bitly.shorten;
@@ -244,19 +238,16 @@ public class AdventureController extends Controller {
                         String inviteeId = filledForm.data().get(key);
                         GoogleCredential credential = new GoogleCredential.Builder().setClientSecrets(ConfigFactory.load().getString("play-authenticate.google.clientId"), ConfigFactory.load().getString("play-authenticate.google.clientSecret")).setTransport(new NetHttpTransport()).setJsonFactory(new JacksonFactory()).build().setFromTokenResponse(new TokenResponse().setAccessToken(us.getAccessToken()));
 
-                        List<PlusDomainsAclentryResource> acls = new ArrayList<PlusDomainsAclentryResource>();
-                        acls.add(new PlusDomainsAclentryResource().setType("person").setId(inviteeId));
-                        Activity act = new Activity();
-                        act.
-                                setObject(new Activity.PlusDomainsObject().setContent("You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ")).
-                                setActor(new Activity.Actor().setId(us.getSocialId())).
-                                setAccess(new Acl().setDomainRestricted(true).setItems(acls));
-                        new PlusDomains(new NetHttpTransport(), new JacksonFactory(), credential).activities().insert(us.getSocialId(), act).setPreview(true).execute();
                         Person inviteeGoog = new Plus(new NetHttpTransport(), new JacksonFactory(), credential).people().get(inviteeId).execute();
                         String socialEmail = null;
-                        for(Person.Emails e : inviteeGoog.getEmails()) {
+                        for (Person.Emails e : inviteeGoog.getEmails()) {
                             socialEmail = e.getValue();
-                            if(e.getType().equals("account")) break;
+                            if (e.getType().equals("account")) break;
+                        }
+
+                        if (socialEmail != null) {
+                            AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(credentials);
+                            ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(socialEmail)).withMessage(new Message().withSubject(new Content().withData("Invitiation to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hi " + inviteeGoog.getDisplayName() + ",\n\nYou are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join!\nVisit " + shortURL + " to participate in that great adventure.\n\nJournWe.com ")))).withSource(adv.getId() + "@journwe.com").withReplyToAddresses(adv.getId() + "@journwe.com"));
                         }
 
                         processSocialInvitee(adv.getId(), inviteeId, "google", socialEmail, inviteeGoog.getDisplayName());

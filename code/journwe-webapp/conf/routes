@@ -24,7 +24,7 @@ GET           /api/json/category/countCache/update.json                    contr
 
 
 #### Inspirations ####
-
+GET           /api/json/inspiration/:id/urls.json                          controllers.api.json.InspirationController.getUrls(id:String)
 GET           /api/json/inspiration/:id/tips.json                          controllers.api.json.InspirationController.getTips(id:String)
 POST          /api/json/inspiration/:id/tips.json                          controllers.api.json.InspirationController.addTip(id:String)
 GET           /api/json/inspiration/:id/images.json                        controllers.api.json.InspirationController.getImages(id:String)

@@ -3,30 +3,21 @@ package controllers.html;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredUser;
 import models.category.Category;
-import models.dao.inspiration.InspirationTipDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.inspiration.InspirationDAO;
+import models.dao.inspiration.InspirationURLDAO;
 import models.dao.manytomany.CategoryToInspirationDAO;
-import models.dao.user.UserDAO;
-import models.dao.user.UserSocialDAO;
 import models.inspiration.Inspiration;
-import models.inspiration.InspirationTip;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.inspiration.InspirationURL;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
@@ -35,12 +26,10 @@ import views.html.index.indexNew;
 import views.html.inspiration.get;
 import views.html.inspiration.manage;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.form;
@@ -129,6 +118,25 @@ public class InspirationController extends Controller {
                 } else
                     ins.setImage(new InspirationDAO().get(ins.getId()).getImage());
 
+                if (form().bindFromRequest().get("urls") != null) {
+                    String urlsRaw = form().bindFromRequest().get("urls");
+
+                    for(InspirationURL url : new InspirationURLDAO().all(ins.getId(), null, -1))
+                        new InspirationURLDAO().delete(url);
+
+                    BufferedReader bufReader = new BufferedReader(new StringReader(urlsRaw));
+                    String line = null;
+                    while ((line = bufReader.readLine()) != null) {
+                        String[] split = line.split(" ");
+                        if (split != null && split.length > 1) {
+                            InspirationURL url = new InspirationURL();
+                            url.setInspirationId(ins.getId());
+                            url.setUrl(line.split(" ")[0]);
+                            url.setUrl(line.split(" ")[1]);
+                            new InspirationURLDAO().save(url);
+                        }
+                    }
+                }
 
                 if (form().bindFromRequest().get("place") != null) {
                     String place = form().bindFromRequest().get("place");
@@ -160,7 +168,7 @@ public class InspirationController extends Controller {
                         String catId = form().bindFromRequest().data().get(key);
                         Category cat = new Category();
                         cat.setId(catId);
-                        new CategoryToInspirationDAO().createManyToManyRelationship(cat,ins);
+                        new CategoryToInspirationDAO().createManyToManyRelationship(cat, ins);
                     }
                 }
 

@@ -9,6 +9,7 @@ require([
     var placeMap;
 
     var initialize = function () {
+        loadUrls();
         loadTips();
         loadImages();
         initializePlaceMap();
@@ -16,15 +17,24 @@ require([
         index.initializePublicAdventures(null, ins.id);
     };
 
+    var loadUrls = function () {
+        routes.controllers.api.json.InspirationController.getUrls(ins.id).ajax({success: function (urls) {
+            $('.list-inspiration-urls').empty();
+            if (urls)
+                for (var i in urls)
+                    $('.list-inspiration-urls').append(tmpl('inspiration-url-template', urls[i]));
+        }});
+    };
+
     var loadTips = function () {
         routes.controllers.api.json.InspirationController.getTips(ins.id).ajax({success: function (tips) {
-            $('#inspiration-tips').empty();
+            $('.list-inspiration-tips').empty();
             if (tips) {
                 for (var i in tips) {
                     tips[i].tip.created = formatTime(tips[i].tip.created);
-                    $('#inspiration-tips').append(tmpl('inspiration-tip-template', tips[i]));
+                    $('.list-inspiration-tips').append(tmpl('inspiration-tip-template', tips[i]));
                 }
-            } else $('#inspiration-tips').html('No Tips.');
+            } else $('.list-inspiration-tips').html('No Tips.');
         }});
     };
 

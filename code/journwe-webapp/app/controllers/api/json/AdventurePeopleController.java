@@ -11,8 +11,8 @@ import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.plusDomains.PlusDomains;
-import com.google.api.services.plusDomains.model.Person;
+import com.google.api.services.plus.Plus;
+import com.google.api.services.plus.model.Person;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
 import fi.foyt.foursquare.api.FoursquareApi;
@@ -455,13 +455,11 @@ public class AdventurePeopleController extends Controller {
         UserSocial us = new UserSocialDAO().findBySocialId("foursquare", usr.getId());
 
         try {
-            Logger.debug("connecting to foursquare with " + ConfigFactory.load().getString("play-authenticate.foursquare.clientId") + " -> " + ConfigFactory.load().getString("play-authenticate.foursquare.clientSecret") + " -> " + OAuth2AuthProvider.Registry.get("foursquare").getUrl());
-            FoursquareApi four = new FoursquareApi(ConfigFactory.load().getString("play-authenticate.foursquare.clientId"), ConfigFactory.load().getString("play-authenticate.foursquare.clientSecret"), OAuth2AuthProvider.Registry.get("foursquare").getUrl(), us.getAccessToken(), new DefaultIOHandler());
+            FoursquareApi four = new FoursquareApi(ConfigFactory.load().getString("play-authenticate.foursquare.clientId"), ConfigFactory.load().getString("play-authenticate.foursquare.clientSecret"), "http://www.journwe.com" + OAuth2AuthProvider.Registry.get("foursquare").getUrl(), us.getAccessToken(), new DefaultIOHandler());
             fi.foyt.foursquare.api.Result<fi.foyt.foursquare.api.entities.UserGroup> friends = four.usersFriends(us.getSocialId());
-            Logger.debug("foursquare api request returned " + friends);
 
             for (fi.foyt.foursquare.api.entities.CompactUser friend : friends.getResult().getItems())
-                if (new String(friend.getFirstName() + friend.getLastName()).toLowerCase().contains(input.toLowerCase())) {
+                if (new String(friend.getFirstName() + " " + friend.getLastName()).toLowerCase().contains(input.toLowerCase())) {
                     ObjectNode node = Json.newObject();
                     node.put("id", friend.getId());
                     node.put("name", friend.getFirstName() + " " + friend.getLastName());
@@ -486,11 +484,11 @@ public class AdventurePeopleController extends Controller {
         try {
             GoogleCredential credential = new GoogleCredential.Builder().setClientSecrets(ConfigFactory.load().getString("play-authenticate.google.clientId"), ConfigFactory.load().getString("play-authenticate.google.clientSecret")).setTransport(new NetHttpTransport()).setJsonFactory(new JacksonFactory()).build().setFromTokenResponse(new TokenResponse().setAccessToken(us.getAccessToken()));
 
-            for (Person friend : new PlusDomains(new NetHttpTransport(), new JacksonFactory(), credential).people().list(us.getSocialId(), "circled").execute().getItems())
-                if (new String(friend.getDisplayName() + " " + friend.getName() + " " + friend.getNickname()).contains(input.toLowerCase())) {
+            for (Person friend : new Plus(new NetHttpTransport(), new JacksonFactory(), credential).people().list("me", "visible").setOrderBy("alphabetical").execute().getItems())
+                if (new String(friend.getDisplayName() + " " + friend.getName() + " " + friend.getNickname()).toLowerCase().contains(input.toLowerCase())) {
                     ObjectNode node = Json.newObject();
                     node.put("id", friend.getId());
-                    node.put("name", friend.getDisplayName() + " (" + friend.getName() + ")");
+                    node.put("name", friend.getDisplayName());
                     results.add(node);
                 }
         } catch (Exception e) {

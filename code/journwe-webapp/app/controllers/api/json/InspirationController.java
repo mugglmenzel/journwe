@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import com.typesafe.config.ConfigFactory;
@@ -15,12 +16,14 @@ import models.category.Category;
 import models.dao.category.CategoryDAO;
 import models.dao.inspiration.InspirationDAO;
 import models.dao.inspiration.InspirationTipDAO;
+import models.dao.inspiration.InspirationURLDAO;
 import models.dao.manytomany.CategoryToInspirationDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserSocialDAO;
 import models.inspiration.Inspiration;
 import models.inspiration.InspirationTip;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.inspiration.InspirationURL;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -53,10 +56,23 @@ public class InspirationController extends Controller {
             ConfigFactory.load().getString("aws.accessKey"),
             ConfigFactory.load().getString("aws.secretKey")));
 
+    public static Result getUrls(String id) {
+        DynamicForm data = form().bindFromRequest();
+        final String lastId = data.get("lastId");
+        final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 10;
+
+        List<JsonNode> result = new ArrayList<JsonNode>();
+        for (InspirationURL url : new InspirationURLDAO().all(id, lastId, count)) {
+            result.add(Json.toJson(url));
+        }
+
+        return ok(Json.toJson(result));
+    }
+
     public static Result getTips(String id) {
         DynamicForm data = form().bindFromRequest();
         final String lastId = data.get("lastId");
-        final int count = data.get("userCountByAdventure") != null ? new Integer(data.get("userCountByAdventure")).intValue() : 3;
+        final int count = data.get("count") != null ? new Integer(data.get("count")).intValue() : 5;
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
         for (InspirationTip tip : new InspirationTipDAO().activated(id, lastId, count)) {
