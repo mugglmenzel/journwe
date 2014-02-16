@@ -36,10 +36,11 @@
 			</div>
 			
 			<div class="timeline-content">
-				<a class="btn btn-default btn-file-delete" data-id="{%=o.file.fileName%}"><i class="fa fa-trash-o"></i></a> <a href="{%= o.file.url %}" target="_blank">{%= o.file.fileName %}</a>
+				<a href="{%= o.file.url %}" target="_blank">{%= o.file.fileName %}</a>
 			</div>
 			
 			<div class="timeline-info"><span class="author">{%= o.user.name %}</span></div>
+			<div class="timeline-toolbar"><a class="btn btn-link btn-file-delete" data-id="{%=o.file.fileName%}"><i class="fa fa-trash-o"></i> Remove file</a></div>
 		</div>
     </script>
 
@@ -84,12 +85,4 @@
 	    <div class="timeline">
 
 	    </div>
-    </div>
-
-    <div class="pull-right clearfix">
-        <a class="btn btn-default btn-timeline-filter-all"><i class="fa fa-square fa-fw"></i></a>
-        <a class="btn btn-default btn-timeline-filter-logs"><i class="fa fa-list fa-fw"></i></a>
-        <a class="btn btn-default btn-timeline-filter-emails"><i class="fa fa-envelope fa-fw"></i></a>
-        <a class="btn btn-default btn-timeline-filter-comments"><i class="fa fa-comments fa-fw"></i></a>
-        <a class="btn btn-default btn-timeline-filter-files"><i class="fa fa-file fa-fw"></i></a>
     </div>
