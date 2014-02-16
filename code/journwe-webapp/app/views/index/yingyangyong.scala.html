@@ -117,6 +117,10 @@
                                     <li><a data-icon="fa fa-foursquare fa-fw" data-social-type="foursquare" data-input-type="text" data-typeahead="on"><i class="fa fa-foursquare fa-fw"></i>
                                         @Messages("adventure.general.label.foursquare")</a></li>
                                 }
+                                @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("google", usr.getId) != null){
+                                    <li><a data-icon="fa fa-google-plus fa-fw" data-social-type="google" data-input-type="text" data-typeahead="on"><i class="fa fa-google-plus fa-fw"></i>
+                                        @Messages("adventure.general.label.google")</a></li>
+                                }
 
                                 <li><a data-icon="fa fa-envelope fa-fw" data-social-type="email" data-input-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
                                     @Messages("adventure.general.label.email")</a></li>

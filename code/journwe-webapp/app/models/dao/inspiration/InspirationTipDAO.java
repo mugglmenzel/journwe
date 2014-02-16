@@ -46,7 +46,7 @@ public class InspirationTipDAO extends CommonEntityDAO<InspirationTip> {
 
 
     public List<InspirationTip> activated(String inspirationId, String lastKey, int limit) {
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withLimit(limit).withRangeKeyCondition("active", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withN("1")));
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withLimit(limit).withIndexName("active-index").withRangeKeyCondition("active", new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(new AttributeValue().withN("1")));
 
         InspirationTip tip = new InspirationTip();
         tip.setInspirationId(inspirationId);

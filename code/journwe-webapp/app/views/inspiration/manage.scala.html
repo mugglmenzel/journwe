@@ -23,6 +23,7 @@
     <div class="jrn-container">
         <h2>Inspiration Form</h2>
         @form(html.routes.InspirationController.save(), 'class -> "form-horizontal", 'enctype -> "multipart/form-data") {
+            <script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.3.2/ckeditor.js"></script>
             <fieldset>
                 @if(inspForm("id").value()) {
                 <input type="hidden" name="@inspForm("id").name()" value="@inspForm("id").value()"/>
@@ -66,20 +67,7 @@
                     <ul id="inspiration-place" class="list-unstyled list-inline">
                         @if(inspForm("placeAddress").value()) {
                         <li id="inspiration-place"><input type="hidden" name="place" value="@inspForm("placeAddress").value()/@inspForm("placeLatitude").value()/@inspForm("placeLongitude").value()"><span class="label label-success"><i class="fa fa-map-marker"></i> @inspForm("placeAddress").value() &nbsp;<a href="#" onclick="$('#inspiration-place').remove(); removeMarker('inspiration-place'); return false;">&times;</a></span> <span class="divider"></span></li>
-                        <script>
-                            $(document).ready(function (){
-                                var placeLatLng = new google.maps.LatLng(@inspForm("placeLatitude").value(), @inspForm("placeLongitude").value());
 
-                                var marker = new google.maps.Marker({
-                                    map: map,
-                                    position: placeLatLng
-                                });
-                                markers['inspiration-place'] = marker;
-
-                                resetBounds();
-                            });
-
-                        </script>
                         }
                     </ul>
 
@@ -102,6 +90,17 @@
                                 mapTypeId: google.maps.MapTypeId.ROADMAP
                             };
                             map = new google.maps.Map(document.getElementById('inspiration-place-map'), mapOptions);
+
+                            // add initial marker
+                            @if(inspForm("placeAddress").value()) {
+                            var placeLatLng = new google.maps.LatLng(@inspForm("placeLatitude").value(), @inspForm("placeLongitude").value());
+
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                position: placeLatLng
+                            });
+                            markers['inspiration-place'] = marker;
+                            }
 
                             resetBounds();
 

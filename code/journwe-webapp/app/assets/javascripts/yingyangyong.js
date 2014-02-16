@@ -159,6 +159,7 @@ define([
 
         if(type === 'facebook') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL();
         if(type === 'foursquare') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFoursquare().absoluteURL();
+        if(type === 'google') route = routes.controllers.api.json.AdventurePeopleController.autocompleteGoogle().absoluteURL();
 
 
         if(route != '')

@@ -167,56 +167,6 @@ public class ApplicationController extends Controller {
     }
 
 
-    public static Result getInspirations(final String catId) {
-        DynamicForm data = form().bindFromRequest();
-        final String lastId = data.get("lastId");
-        int countParam = 8;
-        try {
-            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : 8;
-        } catch (Exception e) {
-            return badRequest("Count is not a number.");
-        }
-        final int count = countParam;
-
-        try {
-            return ok(Cache.getOrElse("category." + catId + ".inspirations." + lastId + "." + count, new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    final Date now = new Date();
-                    boolean more = true;
-
-                    List<ObjectNode> results = new ArrayList<ObjectNode>();
-                    if (count > 0) {
-                        while (more) {
-                            List<Inspiration> inspirations = new CategoryToInspirationDAO().listN(catId, lastId, count);
-                            Logger.debug("inspirations found:" + inspirations);
-
-                            for (Inspiration ins : inspirations)
-                                if (ins != null && (ins.getTimeEnd() == null || ins.getTimeEnd().after(now))) {
-                                    ObjectNode node = Json.newObject();
-                                    node.put("id", ins.getId());
-                                    node.put("link", controllers.html.routes.InspirationController.get(ins.getId()).absoluteURL(request()));
-                                    node.put("image", ins.getImage());
-                                    node.put("name", ins.getName());
-                                    node.put("lat", ins.getPlaceLatitude() != null ? ins.getPlaceLatitude().floatValue() : 0F);
-                                    node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
-
-                                    results.add(node);
-                                }
-                            more = results.size() < count && inspirations.size() >= count;
-                        }
-
-                    }
-                    return Json.toJson(results).toString();
-                }
-            }, 24 * 3600)).as("application/json");
-        } catch (Exception e) {
-            Logger.error("Couldn't generate inspirations for category " + catId, e);
-            return internalServerError();
-        }
-    }
-
-
     public static void clearUserCache(final String userId) {
         Cache.remove("user." + userId + ".myadventures");
     }

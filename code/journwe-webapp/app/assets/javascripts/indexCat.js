@@ -35,7 +35,7 @@ require([
     var loadInspirations = function (lastId, clear) {
         utils.setSpinning($('#inspirations-public-button-refresh i'));
         $('#inspirations-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
-        routes.controllers.api.json.ApplicationController.getInspirations(cat.id).ajax({data: {lastId: lastId, count: 8}, success: function (advs) {
+        routes.controllers.api.json.CategoryController.getInspirations(cat.id).ajax({data: {lastId: lastId, count: 8}, success: function (advs) {
             if (clear) $('#inspirations-public-list').empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {

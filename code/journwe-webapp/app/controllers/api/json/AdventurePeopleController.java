@@ -7,6 +7,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.oauth2.OAuth2AuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
+import com.google.api.client.auth.oauth2.TokenResponse;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.plusDomains.PlusDomains;
+import com.google.api.services.plusDomains.model.Person;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
 import fi.foyt.foursquare.api.FoursquareApi;
@@ -463,6 +469,32 @@ public class AdventurePeopleController extends Controller {
                 }
         } catch (FoursquareApiException e) {
             Logger.error("Could not fetch friends from Foursquare!");
+        }
+
+        return ok(Json.toJson(results));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result autocompleteGoogle() {
+        DynamicForm form = form().bindFromRequest();
+        String input = form.get("input");
+        List<ObjectNode> results = new ArrayList<ObjectNode>();
+
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        UserSocial us = new UserSocialDAO().findBySocialId("google", usr.getId());
+
+        try {
+            GoogleCredential credential = new GoogleCredential.Builder().setClientSecrets(ConfigFactory.load().getString("play-authenticate.google.clientId"), ConfigFactory.load().getString("play-authenticate.google.clientSecret")).setTransport(new NetHttpTransport()).setJsonFactory(new JacksonFactory()).build().setFromTokenResponse(new TokenResponse().setAccessToken(us.getAccessToken()));
+
+            for (Person friend : new PlusDomains(new NetHttpTransport(), new JacksonFactory(), credential).people().list(us.getSocialId(), "circled").execute().getItems())
+                if (new String(friend.getDisplayName() + " " + friend.getName() + " " + friend.getNickname()).contains(input.toLowerCase())) {
+                    ObjectNode node = Json.newObject();
+                    node.put("id", friend.getId());
+                    node.put("name", friend.getDisplayName() + " (" + friend.getName() + ")");
+                    results.add(node);
+                }
+        } catch (Exception e) {
+            Logger.error("Could not fetch friends from Google!", e);
         }
 
         return ok(Json.toJson(results));

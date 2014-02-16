@@ -16,7 +16,7 @@
 
 GET           /api/json/categories/optionsMap.json                         controllers.api.json.CategoryController.categoriesOptionsMap()
 GET           /api/json/category/:id/categories.json                       controllers.api.json.CategoryController.getCategories(id:String)
-GET           /api/json/category/:id/inspirations.json                     controllers.api.json.ApplicationController.getInspirations(id:String)
+GET           /api/json/category/:id/inspirations.json                     controllers.api.json.CategoryController.getInspirations(id:String)
 GET           /api/json/category/:id/adventures/public.json                controllers.api.json.ApplicationController.getPublicAdventuresOfCategory(id:String)
 POST          /api/json/category/moveInHierarchy.json                      controllers.api.json.CategoryController.setSuperCategory()
 GET           /api/json/category/countCache/update.json                    controllers.api.json.CategoryController.updateCountCache()
@@ -57,6 +57,7 @@ POST          /api/json/adventure/:id/invite.json                          contr
 POST          /api/json/adventure/:id/postFacebookWall.json                controllers.api.json.AdventurePeopleController.postOnMyFacebookWall(id:String)
 GET           /api/json/people/autocomplete/facebook.json                  controllers.api.json.AdventurePeopleController.autocompleteFacebook()
 GET           /api/json/people/autocomplete/foursquare.json                controllers.api.json.AdventurePeopleController.autocompleteFoursquare()
+GET           /api/json/people/autocomplete/google.json                    controllers.api.json.AdventurePeopleController.autocompleteGoogle()
 
 
 #### Adventure Places ####

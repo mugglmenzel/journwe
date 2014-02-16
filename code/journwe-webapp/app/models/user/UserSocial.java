@@ -20,6 +20,10 @@ public class UserSocial {
     
     private String accessToken;
 
+    private String accessSecret;
+
+    private String refreshToken;
+
     @DynamoDBHashKey
     public String getSocialId() {
         return socialId;
@@ -56,4 +60,21 @@ public class UserSocial {
 		this.accessToken = accessToken;
 	}
 
+    @DynamoDBAttribute
+    public String getAccessSecret() {
+        return accessSecret;
+    }
+
+    public void setAccessSecret(String accessSecret) {
+        this.accessSecret = accessSecret;
+    }
+
+    @DynamoDBAttribute
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

@@ -5,9 +5,12 @@ import com.ecwid.mailchimp.MailChimpClient;
 import com.ecwid.mailchimp.MailChimpException;
 import com.ecwid.mailchimp.MailChimpObject;
 import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
+import com.feth.play.module.pa.providers.oauth1.OAuth1AuthUser;
 import com.feth.play.module.pa.providers.oauth1.twitter.TwitterAuthUser;
+import com.feth.play.module.pa.providers.oauth2.OAuth2AuthUser;
 import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
 import com.feth.play.module.pa.providers.oauth2.foursquare.FoursquareAuthUser;
+import com.feth.play.module.pa.providers.oauth2.google.GoogleAuthUser;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.*;
 import models.dao.SubscriberDAO;
@@ -187,11 +190,21 @@ public class UserDAO extends CommonEntityDAO<User> {
                 }
             }
 
-            if (authUser instanceof FacebookAuthUser) {
-                Logger.debug("updating access token");
-                if (!((FacebookAuthUser) authUser).getOAuth2AuthInfo().getAccessToken().equals(social.getAccessToken())) {
-                    social.setAccessToken(((FacebookAuthUser) authUser).getOAuth2AuthInfo().getAccessToken());
+            if (authUser instanceof OAuth2AuthUser) {
+                Logger.debug("updating oauth2 access token");
+                if (!((OAuth2AuthUser) authUser).getOAuth2AuthInfo().getAccessToken().equals(social.getAccessToken())) {
+                    social.setAccessToken(((OAuth2AuthUser) authUser).getOAuth2AuthInfo().getAccessToken());
+                    social.setRefreshToken(((OAuth2AuthUser) authUser).getOAuth2AuthInfo().getRefreshToken());
                     new UserSocialDAO().save(social);
+                    updateCache = true;
+                }
+            } else if(authUser instanceof OAuth1AuthUser) {
+                Logger.debug("updating oauth1 access token");
+                if (!((OAuth1AuthUser) authUser).getOAuth1AuthInfo().getAccessToken().equals(social.getAccessToken())) {
+                    social.setAccessToken(((OAuth1AuthUser) authUser).getOAuth1AuthInfo().getAccessToken());
+                    social.setAccessSecret(((OAuth1AuthUser) authUser).getOAuth1AuthInfo().getAccessTokenSecret());
+                    new UserSocialDAO().save(social);
+                    updateCache = true;
                 }
             }
 

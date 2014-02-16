@@ -15,9 +15,11 @@ import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.user.UserDAO;
 import models.user.User;
+import org.reflections.Reflections;
 import play.Routes;
 import play.api.Play;
 import play.cache.Cache;
+import play.core.Router;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -36,6 +38,11 @@ import views.html.index.indexVet;
 import views.html.index.landing;
 import views.html.login;
 import views.html.signup;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class ApplicationController extends Controller {
@@ -208,12 +215,24 @@ public class ApplicationController extends Controller {
      */
     public static Result routes() {
         response().setContentType("text/javascript");
+
+        /*
+        Set<play.core.Router.JavascriptReverseRoute> routes = new HashSet<play.core.Router.JavascriptReverseRoute>();
+
+
+        Reflections reflections = new Reflections("controllers.api.json.javascript");
+        for(Class<? extends Object> clazz : reflections.getSubTypesOf(Object.class))
+            for(Method met : clazz.getMethods())
+                     routes.add(new Router.JavascriptReverseRoute("controllers.api.json", met.getName()));
+        */
+
         return ok("define(function(){" + // Make it AMD compatible
                 Routes.javascriptRouter("routes",
                         controllers.api.json.routes.javascript.ApplicationController.getMyAdventures(),
                         controllers.api.json.routes.javascript.ApplicationController.getPublicAdventures(),
-                        controllers.api.json.routes.javascript.ApplicationController.getInspirations(),
                         controllers.api.json.routes.javascript.CategoryController.getCategories(),
+                        controllers.api.json.routes.javascript.CategoryController.categoriesOptionsMap(),
+                        controllers.api.json.routes.javascript.CategoryController.getInspirations(),
                         controllers.api.json.routes.javascript.InspirationController.getTips(),
                         controllers.api.json.routes.javascript.InspirationController.getImages(),
                         controllers.api.json.routes.javascript.InspirationController.addTip(),
@@ -228,7 +247,6 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventureController.placeVoteOpen(),
                         controllers.api.json.routes.javascript.AdventureController.updateCategory(),
                         controllers.api.json.routes.javascript.AdventureController.updatePublic(),
-                        controllers.api.json.routes.javascript.CategoryController.categoriesOptionsMap(),
                         controllers.api.json.routes.javascript.AdventureEmailController.listEmails(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.getPlaces(),
                         controllers.api.json.routes.javascript.AdventurePlaceController.getFavoritePlace(),
@@ -247,6 +265,7 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventurePeopleController.deny(),
                         controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteFacebook(),
                         controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteFoursquare(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteGoogle(),
                         controllers.api.json.routes.javascript.AdventureTimeController.getTimes(),
                         controllers.api.json.routes.javascript.AdventureTimeController.getFavoriteTime(),
                         controllers.api.json.routes.javascript.AdventureTimeController.setFavoriteTime(),
