@@ -27,7 +27,9 @@ public class InspirationURLDAO extends CommonEntityDAO<InspirationURL> {
     }
 
     public List<InspirationURL> all(String inspirationId, String lastKey, int limit) {
-        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withLimit(limit);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression();
+
+        if(limit > 0) query.withLimit(limit);
 
         InspirationURL tip = new InspirationURL();
         tip.setInspirationId(inspirationId);

@@ -58,6 +58,7 @@ POST          /api/json/adventure/:id/postFacebookWall.json                contr
 GET           /api/json/people/autocomplete/facebook.json                  controllers.api.json.AdventurePeopleController.autocompleteFacebook()
 GET           /api/json/people/autocomplete/foursquare.json                controllers.api.json.AdventurePeopleController.autocompleteFoursquare()
 GET           /api/json/people/autocomplete/google.json                    controllers.api.json.AdventurePeopleController.autocompleteGoogle()
+GET           /api/json/people/autocomplete/twitter.json                    controllers.api.json.AdventurePeopleController.autocompleteTwitter()
 
 
 #### Adventure Places ####

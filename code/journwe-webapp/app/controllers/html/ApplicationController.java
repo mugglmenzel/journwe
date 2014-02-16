@@ -267,6 +267,7 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteFacebook(),
                         controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteFoursquare(),
                         controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteGoogle(),
+                        controllers.api.json.routes.javascript.AdventurePeopleController.autocompleteTwitter(),
                         controllers.api.json.routes.javascript.AdventureTimeController.getTimes(),
                         controllers.api.json.routes.javascript.AdventureTimeController.getFavoriteTime(),
                         controllers.api.json.routes.javascript.AdventureTimeController.setFavoriteTime(),

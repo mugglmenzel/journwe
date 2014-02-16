@@ -1,8 +1,5 @@
 package controllers.api.json;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
-import com.amazonaws.services.simpleemail.model.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.oauth2.OAuth2AuthProvider;
@@ -35,11 +32,10 @@ import models.dao.inspiration.InspirationDAO;
 import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserSocialDAO;
-import models.helpers.JournweFacebookChatClient;
 import models.helpers.JournweFacebookClient;
+import models.helpers.SocialInviter;
 import models.inspiration.Inspiration;
 import models.notifications.helper.AdventurerNotifier;
-import models.user.EUserRole;
 import models.user.User;
 import models.user.UserSocial;
 import play.Logger;
@@ -50,6 +46,10 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import twitter4j.PagableResponseList;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -356,66 +356,11 @@ public class AdventurePeopleController extends Controller {
             return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        String shortURL = adv.getShortURL() != null ? adv.getShortURL() : controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request());
-
         DynamicForm f = form().bindFromRequest();
         try {
-            if ("email".equals(f.get("type"))) {
-                AmazonSimpleEmailServiceClient ses = new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(
-                        ConfigFactory.load().getString("aws.accessKey"),
-                        ConfigFactory.load().getString("aws.secretKey")));
-                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(f.get("value"))).withMessage(new Message().withSubject(new Content().withData("You are invited to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData("Hey, Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ")))).withSource("adventure@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
-
-                return ok();
-            } else if ("facebook".equals(f.get("type"))) {
-                String inviteeId = f.get("value");
-                Logger.debug("inviting " + inviteeId);
-                UserSocial us = new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId());
-                new JournweFacebookChatClient().sendMessage(us.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + usr.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", inviteeId);
-
-
-                UserSocial inviteeSoc = new UserSocialDAO().findBySocialId("facebook", inviteeId);
-
-                User invitee = inviteeSoc != null && inviteeSoc.getUserId() != null ? new UserDAO().get(inviteeSoc.getUserId()) : null;
-                Logger.debug("got invitee " + invitee);
-                if (invitee == null) {
-                    invitee = new User();
-                    invitee.setName(JournweFacebookClient.create(us.getAccessToken()).getFacebookUser(inviteeId).getName());
-                    invitee.setRole(EUserRole.INVITEE);
-                    new UserDAO().save(invitee);
-                    Logger.debug("created invitee as user");
-                }
-
-                if (inviteeSoc == null) {
-                    inviteeSoc = new UserSocial();
-                    inviteeSoc.setProvider("facebook");
-                    inviteeSoc.setSocialId(inviteeId);
-                }
-                inviteeSoc.setUserId(invitee.getId());
-                new UserSocialDAO().save(inviteeSoc);
-
-
-                //FIXME: This doesn't work!
-                Adventurer advr = new AdventurerDAO().get(adv.getId(), invitee.getId());
-                if (advr == null) {
-                    advr = new Adventurer();
-                    advr.setUserId(invitee.getId());
-                    advr.setAdventureId(adv.getId());
-                    advr.setParticipationStatus(EAdventurerParticipation.INVITEE);
-                    new AdventurerDAO().save(advr);
-                }
-
-                AdventureAuthorization authorization = new AdventureAuthorization();
-                authorization.setAdventureId(adv.getId());
-                authorization.setUserId(invitee.getId());
-                authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_PARTICIPANT);
-                new AdventureAuthorizationDAO().save(authorization);
-
-                clearCache(advId);
-                ApplicationController.clearUserCache(invitee.getId());
-
-                return ok();
-            }
+            Logger.debug("inviting " + f.get("value"));
+            new SocialInviter(usr, f.get("type"), f.get("value")).invite(adv.getId());
+            return ok();
         } catch (Exception e) {
             Logger.error("Couldn't invite adventurer.", e);
         }
@@ -498,8 +443,55 @@ public class AdventurePeopleController extends Controller {
         return ok(Json.toJson(results));
     }
 
+    @Security.Authenticated(SecuredUser.class)
+    public static Result autocompleteTwitter() {
+        DynamicForm form = form().bindFromRequest();
+        String input = form.get("input");
+        List<ObjectNode> results = new ArrayList<ObjectNode>();
 
-    private static void clearCache(final String advId) {
+        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
+        UserSocial us = new UserSocialDAO().findBySocialId("twitter", usr.getId());
+
+        try {
+            ConfigurationBuilder cb = new ConfigurationBuilder();
+            cb.setDebugEnabled(true)
+                    .setOAuthConsumerKey(ConfigFactory.load().getString("play-authenticate.twitter.clientId"))
+                    .setOAuthConsumerSecret(ConfigFactory.load().getString("play-authenticate.twitter.clientSecret"))
+                    .setOAuthAccessToken(us.getAccessToken())
+                    .setOAuthAccessTokenSecret(us.getAccessSecret());
+            Twitter tw = new TwitterFactory(cb.build()).getInstance();
+
+            List<twitter4j.User> friends = new ArrayList<twitter4j.User>();
+
+            long cursor = -1L;
+            while (cursor != 0) {
+                PagableResponseList<twitter4j.User> result = tw.friendsFollowers().getFollowersList(us.getSocialId(), cursor);
+                cursor = result.getNextCursor();
+                friends.addAll(result);
+            }
+            cursor = -1L;
+            while (cursor != 0) {
+                PagableResponseList<twitter4j.User> result = tw.friendsFollowers().getFriendsList(us.getSocialId(), cursor);
+                cursor = result.getNextCursor();
+                friends.addAll(result);
+            }
+
+            for (twitter4j.User friend : friends)
+                if (new String(friend.getScreenName() + " " + friend.getName()).toLowerCase().contains(input.toLowerCase())) {
+                    ObjectNode node = Json.newObject();
+                    node.put("id", friend.getId());
+                    node.put("name", friend.getName() + " (@" + friend.getScreenName() + ")");
+                    results.add(node);
+                }
+        } catch (Exception e) {
+            Logger.error("Could not fetch followers from Twitter!", e);
+        }
+
+        return ok(Json.toJson(results));
+    }
+
+
+    public static void clearCache(final String advId) {
         Cache.remove("adventure." + advId + ".adventurers.all");
         Cache.remove("adventure." + advId + ".adventurers.participants.others");
         Cache.remove("adventure." + advId + ".adventurers.participants");

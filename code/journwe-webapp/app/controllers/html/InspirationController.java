@@ -67,6 +67,10 @@ public class InspirationController extends Controller {
     @Security.Authenticated(SecuredAdminUser.class)
     public static Result edit(String id) {
         Form<Inspiration> editInsForm = insForm.fill(new InspirationDAO().get(id));
+        String urls = "";
+        for(InspirationURL url : new InspirationURLDAO().all(id, null, -1))
+            urls += url.getUrl() + " " + url.getDescription() + "\n";
+        editInsForm.data().put("urls", urls);
         return ok(manage.render(editInsForm,
                 new CategoryDAO().allOptionsMap(),
                 new InspirationDAO().all()));
@@ -132,7 +136,7 @@ public class InspirationController extends Controller {
                             InspirationURL url = new InspirationURL();
                             url.setInspirationId(ins.getId());
                             url.setUrl(line.split(" ")[0]);
-                            url.setUrl(line.split(" ")[1]);
+                            url.setUrl(line.substring(line.indexOf(" ")));
                             new InspirationURLDAO().save(url);
                         }
                     }

@@ -16,7 +16,7 @@ public class InspirationTip {
 
     private String inspirationId;
 
-    private Date created;
+    private Long created;
 
     private String userId;
 
@@ -36,11 +36,11 @@ public class InspirationTip {
     }
 
     @DynamoDBRangeKey
-    public Date getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(Long created) {
         this.created = created;
     }
 
@@ -62,7 +62,7 @@ public class InspirationTip {
         this.tip = tip;
     }
 
-    @DynamoDBIndexRangeKey(localSecondaryIndexName = "active-index")
+    @DynamoDBIndexRangeKey(localSecondaryIndexName = "active-index", attributeName = "active")
     public boolean isActive() {
         return active;
     }

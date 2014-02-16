@@ -90,7 +90,7 @@ public class InspirationController extends Controller {
         final String tipTxt = data.get("tip");
         InspirationTip tip = new InspirationTip();
         tip.setInspirationId(id);
-        tip.setCreated(new Date());
+        tip.setCreated(new Date().getTime());
         tip.setTip(tipTxt);
         tip.setLang(lang().code());
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
