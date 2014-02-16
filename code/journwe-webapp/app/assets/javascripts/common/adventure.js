@@ -577,6 +577,7 @@ define([
 
     //TIMELINE
     var initializeTimeline = function () {
+        $('.btn-group-timeline-filter .btn').tooltip();
         loadTimelineAll();
     };
 
