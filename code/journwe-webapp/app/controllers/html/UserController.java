@@ -6,6 +6,7 @@ import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
 import models.user.User;
 import models.user.UserEmail;
+import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -53,12 +54,20 @@ public class UserController extends Controller {
         DynamicForm emailForm = form().bindFromRequest();
         String emailId = emailForm.get("pk");
         if (emailId != null && !"".equals(emailId)) {
-            UserEmail email = new UserEmailDAO().get(emailId.substring(0, emailId.indexOf(":")), emailId.substring(emailId.indexOf(":")));
+            UserEmail email = new UserEmailDAO().get(emailId.substring(0, emailId.indexOf(":")), emailId.substring(emailId.indexOf(":")+1));
+            UserEmail newEmail = new UserEmail();
+            newEmail.setUserId(email.getUserId());
+            newEmail.setEmail(email.getEmail());
+            newEmail.setPrimary(email.isPrimary());
+            newEmail.setValidated(email.isValidated());
+
             String name = emailForm.get("name");
-            if (name.contains("userEmail")) {
-                email.setEmail(emailForm.get("value"));
+            if (email != null && name.contains("userEmail")) {
+                newEmail.setEmail(emailForm.get("value"));
+                new UserEmailDAO().save(newEmail);
+                new UserEmailDAO().delete(email.getUserId(), email.getEmail());
             }
-            new UserEmailDAO().save(email);
+
         }
 
         return ok();

@@ -33,9 +33,9 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Emails</label>
                         <div class="col-lg-10">
-                            <ul class="list-user-emails"></ul>
+                            <div class="list-user-emails"></div>
                             <script type="text/x-tmpl" id="user-email-template">
-                                <li><a href="#" id="userEmail-{%=o.email.replace('@@', '_')%}" class="userEmail" data-type="email" data-pk="@user.getId:{%=o.email%}" data-url="@html.routes.UserController.saveEmailEditable()">{%=o.email%}</a> {% if(o.primary){ %}(primary){% } %}<li>
+                                <div><i class="fa fa-envelope"></i> <a href="#" id="userEmail-{%=o.email.replace('@@', '_')%}" class="userEmail" data-type="email" data-pk="@user.getId:{%=o.email%}" data-url="@html.routes.UserController.saveEmailEditable()">{%=o.email%}</a> {% if(o.primary){ %}(primary){% } %}</div>
                             </script>
                         </div>
                     </div>

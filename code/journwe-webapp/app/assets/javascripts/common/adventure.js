@@ -899,7 +899,7 @@ define([
         'click .btn-edit-description': function () {
             //event.stopPropagation();
 
-            $('#adventureDescription').editable('toggle');
+            $('#adventureDescription').editable('show');
             //$(this).hide();
         },
         'hidden #adventureDescription': function () {
