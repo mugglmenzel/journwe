@@ -27,8 +27,8 @@ define([
     //Temp Vars
     var map,
         markers = [];
-    var facebookUsers = {};
-    var facebookUserNames = [],
+    var socialUsers = {};
+    var socialUserNames = [],
         _timer;
 
 
@@ -328,33 +328,7 @@ define([
         loadInvitees();
         loadApplicants();
 
-        $('#people-add-input').typeahead({
-            name: 'people-typeahead',
-            template: '<p><strong>{%=o.name%}</strong></p>',
-            engine: {_templ: '', compile: function (template) {
-                _templ = template;
-                return this;
-            }, render: function (data) {
-                return tmpl(_templ, data);
-            }},
-            remote: {
-                url: routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL() + '?input=%QUERY',
-                filter: function (data) {
-                    facebookUsers = {};
-                    facebookUserNames = [];
-                    $.each(data, function (ix, item) {
-                        if ($.inArray(item.name, facebookUserNames) > -1) {
-                            item.nameId = item.name + ' #' + item.id;
-                        } else item.nameId = item.name
-
-                        facebookUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
-                        facebookUsers[item.nameId] = item.id;
-                    });
-
-                    return facebookUserNames;
-                }
-            }
-        });
+        friendTypeahead();
     };
 
     var loadAllAdventurers = function () {
@@ -389,13 +363,63 @@ define([
     }
 
     var addFriend = function () {
-        $('#people-add-button i').removeClass("fa-plus").addClass("icon-journwe fa-spin");
-        routes.controllers.api.json.AdventurePeopleController.invite(adv.id).ajax({data: (($('#people-add-input').attr('type') == 'text') ? {type: 'facebook', value: facebookUsers[$('#people-add-input').val()]} : {type: 'email', value: $('#people-add-input').val()}), success: function () {
+        utils.setSpinning($('.btn-people-add i'));
+        var data = {
+            socialId: getSocialIdByType($('#people-add-provider-icon').data('social-provider')),
+            provider: $('#people-add-type-icon').data('social-provider')
+        };
+        routes.controllers.api.json.AdventurePeopleController.invite(adv.id).ajax({data: data, success: function () {
             $('#people-add-input').val('');
             loadInvitees();
-            $('#people-add-button i').removeClass("icon-journwe fa-spin").addClass("fa-plus");
+            utils.resetSpinning($('.btn-people-add i'));
         }});
-    }
+    };
+
+    var getSocialIdByType = function (type) {
+        if (type === 'email') return $('#people-add-input').val();
+        else return socialUsers[$('#people-add-input').val()]
+    };
+
+    var friendTypeahead = function () {
+        if ($('#people-add-provider-icon').data('typeahead') == "off") $('.input-people-add').typeahead('destroy');
+        else {
+            var provider = $('#people-add-provider-icon').data('social-provider');
+
+            if (provider != null && provider != 'email'){
+                $('.input-people-add').attr('type', 'text');
+                $('.input-people-add').typeahead({
+                    name: 'people-typeahead',
+                    template: '<p><strong>{%=o.name%}</strong></p>',
+                    engine: {_templ: '', compile: function (template) {
+                        _templ = template;
+                        return this;
+                    }, render: function (data) {
+                        return tmpl(_templ, data);
+                    }},
+                    remote: {
+                        url: routes.controllers.api.json.AdventurePeopleController.autocomplete().absoluteURL() + '?provider=' + provider + '&input=%QUERY',
+                        filter: function (data) {
+                            socialUsers = {};
+                            socialUserNames = [];
+                            $.each(data, function (ix, item) {
+                                if ($.inArray(item.name, socialUserNames) > -1) {
+                                    item.nameId = item.name + ' #' + item.id;
+                                } else item.nameId = item.name
+
+                                socialUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
+                                socialUsers[item.nameId] = item.id;
+                            });
+
+                            return socialUserNames;
+                        }
+                    }
+                });
+            } else {
+                $('.input-people-add').attr('type', 'email');
+                $('.input-people-add').typeahead('destroy');
+            }
+        }
+    };
 
     var changeAdventurerStatus = function (el) {
         utils.setReplaceSpinning(el);
@@ -1012,11 +1036,12 @@ define([
         },
 
 
-        'click #people-add-type .dropdown-menu a': function () {
-            $('#people-add-type-icon').attr('class', $(this).data('icon'));
-            $('#people-add-input').attr('type', $(this).data('type'));
-            if ($(this).data('typeahead') == "on") FacebookFriendTypeahead();
-            else $('#people-add-input').typeahead('destroy');
+        'click #people-add-provider .dropdown-menu a': function () {
+            $('#people-add-provider-icon').attr('class', $(this).data('icon'));
+            $('#people-add-provider-icon').data('social-provider', $(this).data('social-provider'));
+            $('#people-add-provider-icon').data('typeahead', $(this).data('typeahead'));
+            $('#people-add-input').attr('type', $(this).data('input-type'));
+            friendTypeahead();
             $('#people-add-input').focus();
         },
         'click .btn-select-adventurer button': function () {
@@ -1028,7 +1053,7 @@ define([
         'click .btn-deny': function () {
             return denyAdventurer($(this));
         },
-        'click .btn-friend-add': function () {
+        'click .btn-people-add': function () {
             addFriend();
         },
         'keypress #people-add-input': function () {

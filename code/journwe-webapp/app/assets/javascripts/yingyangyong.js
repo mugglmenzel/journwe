@@ -131,10 +131,10 @@ define([
 
     var addFriend = function () {
         var ins = {
-            socialId: getSocialIdByType($('#people-add-type-icon').data('social-provider')),
+            socialId: getSocialIdByType($('#people-add-provider-icon').data('social-provider')),
             name: $('#people-add-input').val(),
-            provider: $('#people-add-type-icon').data('social-provider'),
-            iconCss: $('#people-add-type-icon').attr('class')
+            provider: $('#people-add-provider-icon').data('social-provider'),
+            iconCss: $('#people-add-provider-icon').attr('class')
         };
 
         renderFriend(ins);
@@ -153,9 +153,9 @@ define([
     };
 
     var friendTypeahead = function () {
-        if ($('#people-add-type-icon').data('typeahead') == "off") $('.input-people-add').typeahead('destroy');
+        if ($('#people-add-provider-icon').data('typeahead') == "off") $('.input-people-add').typeahead('destroy');
         else {
-            var provider = $('#people-add-type-icon').data('social-provider');
+            var provider = $('#people-add-provider-icon').data('social-provider');
 
             if (provider != null && provider != 'email'){
                 $('.input-people-add').attr('type', 'text');
@@ -262,10 +262,10 @@ define([
                 return false;
             } else return true;
         },
-        'click #people-add-type .dropdown-menu a': function () {
-            $('#people-add-type-icon').attr('class', $(this).data('icon'));
-            $('#people-add-type-icon').data('social-provider', $(this).data('social-provider'));
-            $('#people-add-type-icon').data('typeahead', $(this).data('typeahead'));
+        'click #people-add-provider .dropdown-menu a': function () {
+            $('#people-add-provider-icon').attr('class', $(this).data('icon'));
+            $('#people-add-provider-icon').data('social-provider', $(this).data('social-provider'));
+            $('#people-add-provider-icon').data('typeahead', $(this).data('typeahead'));
             $('#people-add-input').attr('type', $(this).data('input-type'));
             friendTypeahead();
             $('#people-add-input').focus();
