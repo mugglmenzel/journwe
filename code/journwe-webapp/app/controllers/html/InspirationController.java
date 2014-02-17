@@ -131,11 +131,10 @@ public class InspirationController extends Controller {
                     BufferedReader bufReader = new BufferedReader(new StringReader(urlsRaw));
                     String line = null;
                     while ((line = bufReader.readLine()) != null) {
-                        String[] split = line.split(" ");
-                        if (split != null && split.length > 1) {
+                        if (line.contains(" ")) {
                             InspirationURL url = new InspirationURL();
                             url.setInspirationId(ins.getId());
-                            url.setUrl(split[0]);
+                            url.setUrl(line.substring(0, line.indexOf(" ")));
                             url.setDescription(line.substring(line.indexOf(" ")));
                             new InspirationURLDAO().save(url);
                         }

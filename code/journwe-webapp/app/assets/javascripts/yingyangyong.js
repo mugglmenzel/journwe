@@ -157,7 +157,7 @@ define([
         else {
             var provider = $('#people-add-type-icon').data('social-provider');
 
-            if (provider.length && provider != 'email'){
+            if (provider != null && provider != 'email'){
                 $('.input-people-add').attr('type', 'text');
                 $('.input-people-add').typeahead({
                     name: 'people-typeahead',
@@ -265,6 +265,7 @@ define([
         'click #people-add-type .dropdown-menu a': function () {
             $('#people-add-type-icon').attr('class', $(this).data('icon'));
             $('#people-add-type-icon').data('social-provider', $(this).data('social-provider'));
+            $('#people-add-type-icon').data('typeahead', $(this).data('typeahead'));
             $('#people-add-input').attr('type', $(this).data('input-type'));
             friendTypeahead();
             $('#people-add-input').focus();

@@ -450,8 +450,10 @@ public class AdventurePeopleController extends Controller {
                             do {
                                 PagableResponseList<twitter4j.User> result = tw.friendsFollowers().getFriendsList(new Long(us.getSocialId()), cursor);
                                 cursor = result.getNextCursor();
-                                for (twitter4j.User u : result)
-                                    friends.add(new SocialAutocompleteFriend(String.valueOf(u.getId()), u.getName() + " (@" + u.getScreenName() + ")", u.getScreenName() + " " + u.getName()));
+                                for (twitter4j.User u : result) {
+                                    Logger.debug("twitter user id: " + String.valueOf(u.getId()) + ", screenname: " + u.getScreenName());
+                                    friends.add(new SocialAutocompleteFriend(String.valueOf(u.getId()), u.getName(), u.getScreenName() + " " + u.getName()));
+                                }
                             } while (cursor > 0L);
                         } catch (Exception e) {
                             Logger.error("Could not fetch friends from " + provider, e);

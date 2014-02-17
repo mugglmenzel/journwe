@@ -26,26 +26,38 @@
                 <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@html.routes.InspirationController.createAdventure(ins.getId)"> @Messages("adventure.getScala.start", ins.getName()) </a></div>
             </div>
         </div>
+    @if(ins.getDescription != null){
         <div class="row">
             <div class="col-lg-2">
                 <h4><i class="fa fa-list-alt"></i> Description</h4>
             </div>
             <div class="col-lg-10">
-                @if(ins.getDescription != null){
-                    <p>@Html(ins.getDescription())</p>
-                }
-
-                @if(ins.getWeatherId != null){
-                    <div class="weather-container">
-                    @for(period <- ins.getWeather()){
-                        <div class="weather">
-                            <img src="/assets/img/weather/@{period.getIcon()}.svg" title="@period.getDate() - @period.getCondition()"/>
-                            <span class="high-temperature">@period.getTemperature()°C</span><span class="low-temperature">@period.getLowTemperature()°C</span>
-                        </div>
-                    }
+               @Html(ins.getDescription())
+            </div>
+        </div>
+    }
+    @if(ins.getWeatherId != null){
+        <div class="row">
+            <div class="col-lg-2">
+                <h4><i class="fa fa-sun-o"></i> Weather</h4>
+            </div>
+            <div class="col-lg-10">
+                <div class="weather-container">
+                @for(period <- ins.getWeather()){
+                    <div class="weather">
+                        <img src="/assets/img/weather/@{period.getIcon()}.svg" title="@period.getDate() - @period.getCondition()"/>
+                        <span class="high-temperature">@period.getTemperature()°C</span><span class="low-temperature">@period.getLowTemperature()°C</span>
                     </div>
                 }
-
+                </div>
+            </div>
+        </div>
+    }
+        <div class="row">
+            <div class="col-lg-2">
+                <h4><i class="fa fa-link"></i> Links</h4>
+            </div>
+            <div class="col-lg-10">
                 <ul class="list-inspiration-urls"></ul>
                 <script type="text/x-tmpl" id="inspiration-url-template">
                     <li>
@@ -95,7 +107,7 @@
                     <div class="g-plusone" data-size="tall" data-annotation="vertical-bubble"></div>
                 </div>
                 <div class="pull-left" style="bottom: 0px;">
-                    <div><a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(html.routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + (if(ins.getImage != null){"&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8")}else{""}) + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" /></a></div>
+                    <a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(html.routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + (if(ins.getImage != null){"&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8")}else{""}) + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above" data-pin-color="white" data-pin-height="28"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_white_28.png" /></a>
                 </div>
             </div>
         </div>
@@ -126,11 +138,30 @@
         <h2 id="photos"><i class="fa fa-picture-o"></i> @Messages("adventure.general.label.photos") </h2>
         <div class="row">
             <div class="col-lg-12">
-                <div id="inspiration-photos"></div>
+                <div class="inspiration-photos"></div>
                 <script type="text/x-tmpl" id="inspiration-photo-template">
                     <div class="polaroid" style="position: relative; float: left; width: 20%;">
-                       <img style="margin: 0px; width: 100%;" src="{% if(o == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + o)%}{% } %}">
+                        <a class="btn-inspiration-photo" data-index='{%=o.index%}'>
+                            <img style="margin: 0px; width: 100%;" src="{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + o.url)%}{% } %}">
+                        </a>
                     </div>
+                </script>
+                <div id="carousel-inspiration-photos" class="carousel carousel-fullscreen slide">
+                    <ol class="carousel-indicators carousel-indicators-inspiration-photos"></ol>
+                    <div class="carousel-inner carousel-inner-inspiration-photos"></div>
+
+                    <a class="left carousel-control" href="#carousel-inspiration-photos" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-inspiration-photos" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+                <script type="text/x-tmpl" id="inspiration-photo-carousel-indicator-template">
+                    <li class="{%=o.active%}" data-target="#carousel-inspiration-photos" data-slide-to="{%=o.index%}"></li>
+                </script>
+                <script type="text/x-tmpl" id="inspiration-photo-carousel-item-template">
+                    <div class="item {%=o.active%}" style="background-image: url('{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/1600x1200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=1600&height=1200&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + o.url)%}{% } %}')"></div>
                 </script>
             </div>
         </div>

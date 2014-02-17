@@ -103,12 +103,19 @@ public class InspirationController extends Controller {
     }
 
     public static Result getImages(String id) {
-        List<String> images = new ArrayList<String>();
+        List<ObjectNode> images = new ArrayList<ObjectNode>();
+        int i = 0;
         for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_INSPIRATION_IMAGES).withPrefix(id + "/")).getObjectSummaries()) {
             try {
                 s3.setObjectAcl(os.getBucketName(), os.getKey(), CannedAccessControlList.PublicRead);
-                images.add(URLEncoder.encode(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
+
+                ObjectNode node = Json.newObject();
+                node.put("index", i);
+                node.put("url", URLEncoder.encode(s3.getResourceUrl(S3_BUCKET_INSPIRATION_IMAGES,
                         os.getKey()), "UTF-8"));
+                images.add(node);
+
+                i++;
             } catch (UnsupportedEncodingException e) {
                 Logger.error("Error while producing public URL of inspiration image from S3.", e);
             }

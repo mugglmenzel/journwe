@@ -71,7 +71,7 @@ public class SocialInviter {
         if (inviter != null && inviterSocial != null && inviteeSocialId != null) {
 
             Adventure adv = new AdventureDAO().get(advId);
-            String inviteeEmail = "";
+            String inviteeEmail = null;
             String inviteeName = "";
 
             if ("email".equals(provider)) {
@@ -123,8 +123,8 @@ public class SocialInviter {
                 try {
                     ConfigurationBuilder cb = new ConfigurationBuilder();
                     cb.setDebugEnabled(true)
-                            .setOAuthConsumerKey(ConfigFactory.load().getString("play-authenticate.twitter.clientId"))
-                            .setOAuthConsumerSecret(ConfigFactory.load().getString("play-authenticate.twitter.clientSecret"))
+                            .setOAuthConsumerKey(ConfigFactory.load().getString("play-authenticate.twitter.consumerKey"))
+                            .setOAuthConsumerSecret(ConfigFactory.load().getString("play-authenticate.twitter.consumerSecret"))
                             .setOAuthAccessToken(inviterSocial.getAccessToken())
                             .setOAuthAccessTokenSecret(inviterSocial.getAccessSecret());
                     Twitter tw = new TwitterFactory(cb.build()).getInstance();
@@ -160,7 +160,7 @@ public class SocialInviter {
             Logger.debug("created invitee as user");
         }
 
-        if (new UserEmailDAO().get(invitee.getId(), socialEmail) == null) {
+        if (socialEmail != null && !"".equals(socialEmail) && new UserEmailDAO().get(invitee.getId(), socialEmail) == null) {
             UserEmail inviteeEmail = new UserEmail();
             inviteeEmail.setEmail(socialEmail);
             new UserEmailDAO().save(inviteeEmail);
