@@ -103,41 +103,41 @@
                          <div id="people-add-type" class="input-group-btn">
                             <a class="btn dropdown-toggle btn-primary" data-toggle="dropdown" href="#">
                                 @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId) != null){
-                                    <i id="people-add-type-icon" class="fa fa-facebook fa-fw" data-social-type="facebook"></i>
+                                    <i id="people-add-type-icon" class="fa fa-facebook fa-fw" data-social-provider="facebook"></i>
                                 } else { @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("foursquare", usr.getId) != null){
-                                    <i id="people-add-type-icon" class="fa fa-foursquare fa-fw" data-social-type="foursquare"></i>
+                                    <i id="people-add-type-icon" class="fa fa-foursquare fa-fw" data-social-provider="foursquare"></i>
                                 } else { @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("google", usr.getId) != null){
-                                    <i id="people-add-type-icon" class="fa fa-google-plus fa-fw" data-social-type="google"></i>
+                                    <i id="people-add-type-icon" class="fa fa-google-plus fa-fw" data-social-provider="google"></i>
                                 } else { @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("twitter", usr.getId) != null){
-                                    <i id="people-add-type-icon" class="fa fa-twitter fa-fw" data-social-type="twitter"></i>
+                                    <i id="people-add-type-icon" class="fa fa-twitter fa-fw" data-social-provider="twitter"></i>
                                 } else {
-                                    <i id="people-add-type-icon" class="fa fa-envelope fa-fw" data-social-type="email"></i>
+                                    <i id="people-add-type-icon" class="fa fa-envelope fa-fw" data-social-provider="email"></i>
                                 }}}}
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId) != null){
-                                <li><a data-icon="fa fa-facebook fa-fw" data-social-type="facebook" data-input-type="text" data-typeahead="on"><i class="fa fa-facebook fa-fw"></i>
+                                <li><a data-icon="fa fa-facebook fa-fw" data-social-provider="facebook" data-input-type="text" data-typeahead="on"><i class="fa fa-facebook fa-fw"></i>
                                     @Messages("adventure.general.label.facebook")</a></li>
                                 }
                                 @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("foursquare", usr.getId) != null){
-                                    <li><a data-icon="fa fa-foursquare fa-fw" data-social-type="foursquare" data-input-type="text" data-typeahead="on"><i class="fa fa-foursquare fa-fw"></i>
+                                    <li><a data-icon="fa fa-foursquare fa-fw" data-social-provider="foursquare" data-input-type="text" data-typeahead="on"><i class="fa fa-foursquare fa-fw"></i>
                                         @Messages("adventure.general.label.foursquare")</a></li>
                                 }
                                 @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("google", usr.getId) != null){
-                                    <li><a data-icon="fa fa-google-plus fa-fw" data-social-type="google" data-input-type="text" data-typeahead="on"><i class="fa fa-google-plus fa-fw"></i>
+                                    <li><a data-icon="fa fa-google-plus fa-fw" data-social-provider="google" data-input-type="text" data-typeahead="on"><i class="fa fa-google-plus fa-fw"></i>
                                         @Messages("adventure.general.label.google")</a></li>
                                 }
                                 @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("twitter", usr.getId) != null){
-                                    <li><a data-icon="fa fa-twitter fa-fw" data-social-type="twitter" data-input-type="text" data-typeahead="on"><i class="fa fa-twitter fa-fw"></i>
+                                    <li><a data-icon="fa fa-twitter fa-fw" data-social-provider="twitter" data-input-type="text" data-typeahead="on"><i class="fa fa-twitter fa-fw"></i>
                                         @Messages("adventure.general.label.twitter")</a></li>
                                 }
 
-                                <li><a data-icon="fa fa-envelope fa-fw" data-social-type="email" data-input-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
+                                <li><a data-icon="fa fa-envelope fa-fw" data-social-provider="email" data-input-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
                                     @Messages("adventure.general.label.email")</a></li>
                             </ul>
                         </div>
-                        <input id="people-add-input" type="text" placeholder="@Messages("adventure.adventurers.add.placeholder")" autocomplete="off" class="input-people-add form-control">
+                        <input id="people-add-input" type="email" placeholder="@Messages("adventure.adventurers.add.placeholder")" autocomplete="off" class="input-people-add form-control">
                         <div class="input-group-btn">
                             <a class="btn btn-people-add btn-primary"><i class="fa fa-plus"></i></a>
                         </div>

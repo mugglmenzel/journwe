@@ -13,7 +13,8 @@ import com.google.api.services.plus.model.Person;
 import com.restfb.json.JsonObject;
 import com.typesafe.config.ConfigFactory;
 import fi.foyt.foursquare.api.FoursquareApi;
-import fi.foyt.foursquare.api.FoursquareApiException;
+import fi.foyt.foursquare.api.entities.CompactUser;
+import fi.foyt.foursquare.api.entities.UserGroup;
 import fi.foyt.foursquare.api.io.DefaultIOHandler;
 import models.adventure.Adventure;
 import models.adventure.AdventureAuthorization;
@@ -33,6 +34,7 @@ import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserSocialDAO;
 import models.helpers.JournweFacebookClient;
+import models.helpers.SocialAutocompleteFriend;
 import models.helpers.SocialInviter;
 import models.inspiration.Inspiration;
 import models.notifications.helper.AdventurerNotifier;
@@ -369,122 +371,104 @@ public class AdventurePeopleController extends Controller {
     }
 
     @Security.Authenticated(SecuredUser.class)
-    public static Result autocompleteFacebook() {
+    public static Result autocomplete() {
         DynamicForm form = form().bindFromRequest();
-        String input = form.get("input");
+        final String input = form.get("input");
+        final String provider = form.get("provider");
+        if (input == null || provider == null) return badRequest();
+
         List<ObjectNode> results = new ArrayList<ObjectNode>();
 
-        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
-        JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
-        List<JsonObject> friends = fb.getMyFriendsAsJson();
-
-        for (JsonObject friend : friends)
-            if (friend.getString("name").toLowerCase().contains(input.toLowerCase())) {
-                ObjectNode node = Json.newObject();
-                node.put("id", friend.getString("id"));
-                node.put("name", friend.getString("name"));
-                results.add(node);
-            }
-
-        return ok(Json.toJson(results));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result autocompleteFoursquare() {
-        DynamicForm form = form().bindFromRequest();
-        String input = form.get("input");
-        List<ObjectNode> results = new ArrayList<ObjectNode>();
 
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        UserSocial us = new UserSocialDAO().findBySocialId("foursquare", usr.getId());
+        final UserSocial us = new UserSocialDAO().findBySocialId(provider, usr.getId());
 
         try {
-            FoursquareApi four = new FoursquareApi(ConfigFactory.load().getString("play-authenticate.foursquare.clientId"), ConfigFactory.load().getString("play-authenticate.foursquare.clientSecret"), "http://www.journwe.com" + OAuth2AuthProvider.Registry.get("foursquare").getUrl(), us.getAccessToken(), new DefaultIOHandler());
-            fi.foyt.foursquare.api.Result<fi.foyt.foursquare.api.entities.UserGroup> friends = four.usersFriends(us.getSocialId());
+            String cacheEntry = "social.autocomplete." + provider + "." + us.getSocialId();
+            List<SocialAutocompleteFriend> friends = null;
+            if ("facebook".equals(provider))
+                friends = Cache.getOrElse(cacheEntry, new Callable<List<SocialAutocompleteFriend>>() {
+                    @Override
+                    public List<SocialAutocompleteFriend> call() throws Exception {
+                        List<SocialAutocompleteFriend> friends = new ArrayList<SocialAutocompleteFriend>();
+                        try {
+                            JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
+                            for (JsonObject o : fb.getMyFriendsAsJson())
+                                friends.add(new SocialAutocompleteFriend(o.getString("id"), o.getString("name"), o.getString("name")));
+                        } catch (Exception e) {
+                            Logger.error("Could not fetch friends from " + provider, e);
+                        }
+                        return friends;
+                    }
+                }, 60 * 60);
+            else if ("foursquare".equals(provider))
+                friends = Cache.getOrElse(cacheEntry, new Callable<List<SocialAutocompleteFriend>>() {
+                    @Override
+                    public List<SocialAutocompleteFriend> call() throws Exception {
+                        List<SocialAutocompleteFriend> friends = new ArrayList<SocialAutocompleteFriend>();
+                        try {
+                            FoursquareApi four = new FoursquareApi(ConfigFactory.load().getString("play-authenticate.foursquare.clientId"), ConfigFactory.load().getString("play-authenticate.foursquare.clientSecret"), "http://www.journwe.com" + OAuth2AuthProvider.Registry.get("foursquare").getUrl(), us.getAccessToken(), new DefaultIOHandler());
+                            fi.foyt.foursquare.api.Result<UserGroup> userGroup = four.usersFriends(us.getSocialId());
+                            for (CompactUser cu : userGroup.getResult().getItems())
+                                friends.add(new SocialAutocompleteFriend(cu.getId(), cu.getFirstName() + " " + cu.getLastName(), cu.getFirstName() + " " + cu.getLastName()));
+                        } catch (Exception e) {
+                            Logger.error("Could not fetch friends from " + provider, e);
+                        }
+                        return friends;
+                    }
+                }, 60 * 60);
+            else if ("google".equals(provider))
+                friends = Cache.getOrElse(cacheEntry, new Callable<List<SocialAutocompleteFriend>>() {
+                    @Override
+                    public List<SocialAutocompleteFriend> call() throws Exception {
+                        List<SocialAutocompleteFriend> friends = new ArrayList<SocialAutocompleteFriend>();
+                        try {
+                            GoogleCredential credential = new GoogleCredential.Builder().setClientSecrets(ConfigFactory.load().getString("play-authenticate.google.clientId"), ConfigFactory.load().getString("play-authenticate.google.clientSecret")).setTransport(new NetHttpTransport()).setJsonFactory(new JacksonFactory()).build().setFromTokenResponse(new TokenResponse().setAccessToken(us.getAccessToken()));
+                            for (Person p : new Plus(new NetHttpTransport(), new JacksonFactory(), credential).people().list("me", "visible").setOrderBy("alphabetical").execute().getItems())
+                                friends.add(new SocialAutocompleteFriend(p.getId(), p.getDisplayName(), p.getDisplayName() + p.getName() + p.getNickname()));
+                        } catch (Exception e) {
+                            Logger.error("Could not fetch friends from " + provider, e);
+                        }
+                        return friends;
+                    }
+                }, 60 * 60);
+            else if ("twitter".equals(provider))
+                friends = Cache.getOrElse(cacheEntry, new Callable<List<SocialAutocompleteFriend>>() {
+                    @Override
+                    public List<SocialAutocompleteFriend> call() throws Exception {
+                        List<SocialAutocompleteFriend> friends = new ArrayList<SocialAutocompleteFriend>();
+                        try {
+                            ConfigurationBuilder cb = new ConfigurationBuilder();
+                            cb.setDebugEnabled(true)
+                                    .setOAuthConsumerKey(ConfigFactory.load().getString("play-authenticate.twitter.consumerKey"))
+                                    .setOAuthConsumerSecret(ConfigFactory.load().getString("play-authenticate.twitter.consumerSecret"))
+                                    .setOAuthAccessToken(us.getAccessToken())
+                                    .setOAuthAccessTokenSecret(us.getAccessSecret());
+                            Twitter tw = new TwitterFactory(cb.build()).getInstance();
 
-            for (fi.foyt.foursquare.api.entities.CompactUser friend : friends.getResult().getItems())
-                if (new String(friend.getFirstName() + " " + friend.getLastName()).toLowerCase().contains(input.toLowerCase())) {
-                    ObjectNode node = Json.newObject();
-                    node.put("id", friend.getId());
-                    node.put("name", friend.getFirstName() + " " + friend.getLastName());
-                    results.add(node);
-                }
-        } catch (FoursquareApiException e) {
-            Logger.error("Could not fetch friends from Foursquare!");
-        }
+                            long cursor = -1L;
+                            do {
+                                PagableResponseList<twitter4j.User> result = tw.friendsFollowers().getFriendsList(new Long(us.getSocialId()), cursor);
+                                cursor = result.getNextCursor();
+                                for (twitter4j.User u : result)
+                                    friends.add(new SocialAutocompleteFriend(String.valueOf(u.getId()), u.getName() + " (@" + u.getScreenName() + ")", u.getScreenName() + " " + u.getName()));
+                            } while (cursor > 0L);
+                        } catch (Exception e) {
+                            Logger.error("Could not fetch friends from " + provider, e);
+                        }
+                        return friends;
+                    }
+                }, 60 * 60);
 
-        return ok(Json.toJson(results));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result autocompleteGoogle() {
-        DynamicForm form = form().bindFromRequest();
-        String input = form.get("input");
-        List<ObjectNode> results = new ArrayList<ObjectNode>();
-
-        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        UserSocial us = new UserSocialDAO().findBySocialId("google", usr.getId());
-
-        try {
-            GoogleCredential credential = new GoogleCredential.Builder().setClientSecrets(ConfigFactory.load().getString("play-authenticate.google.clientId"), ConfigFactory.load().getString("play-authenticate.google.clientSecret")).setTransport(new NetHttpTransport()).setJsonFactory(new JacksonFactory()).build().setFromTokenResponse(new TokenResponse().setAccessToken(us.getAccessToken()));
-
-            for (Person friend : new Plus(new NetHttpTransport(), new JacksonFactory(), credential).people().list("me", "visible").setOrderBy("alphabetical").execute().getItems())
-                if (new String(friend.getDisplayName() + " " + friend.getName() + " " + friend.getNickname()).toLowerCase().contains(input.toLowerCase())) {
+            for (SocialAutocompleteFriend friend : friends)
+                if (friend != null && new String(friend.getConcatinatedNameIdentifiers()).toLowerCase().contains(input.toLowerCase())) {
                     ObjectNode node = Json.newObject();
                     node.put("id", friend.getId());
                     node.put("name", friend.getDisplayName());
                     results.add(node);
                 }
         } catch (Exception e) {
-            Logger.error("Could not fetch friends from Google!", e);
-        }
-
-        return ok(Json.toJson(results));
-    }
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result autocompleteTwitter() {
-        DynamicForm form = form().bindFromRequest();
-        String input = form.get("input");
-        List<ObjectNode> results = new ArrayList<ObjectNode>();
-
-        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        UserSocial us = new UserSocialDAO().findBySocialId("twitter", usr.getId());
-
-        try {
-            ConfigurationBuilder cb = new ConfigurationBuilder();
-            cb.setDebugEnabled(true)
-                    .setOAuthConsumerKey(ConfigFactory.load().getString("play-authenticate.twitter.consumerKey"))
-                    .setOAuthConsumerSecret(ConfigFactory.load().getString("play-authenticate.twitter.consumerSecret"))
-                    .setOAuthAccessToken(us.getAccessToken())
-                    .setOAuthAccessTokenSecret(us.getAccessSecret());
-            Twitter tw = new TwitterFactory(cb.build()).getInstance();
-
-            List<twitter4j.User> friends = new ArrayList<twitter4j.User>();
-
-            long cursor = -1L;
-            while (cursor != 0) {
-                PagableResponseList<twitter4j.User> result = tw.friendsFollowers().getFollowersList(us.getSocialId(), cursor);
-                cursor = result.getNextCursor();
-                friends.addAll(result);
-            }
-            cursor = -1L;
-            while (cursor != 0) {
-                PagableResponseList<twitter4j.User> result = tw.friendsFollowers().getFriendsList(us.getSocialId(), cursor);
-                cursor = result.getNextCursor();
-                friends.addAll(result);
-            }
-
-            for (twitter4j.User friend : friends)
-                if (new String(friend.getScreenName() + " " + friend.getName()).toLowerCase().contains(input.toLowerCase())) {
-                    ObjectNode node = Json.newObject();
-                    node.put("id", friend.getId());
-                    node.put("name", friend.getName() + " (@" + friend.getScreenName() + ")");
-                    results.add(node);
-                }
-        } catch (Exception e) {
-            Logger.error("Could not fetch followers from Twitter!", e);
+            Logger.error("Could not fetch friends from " + provider + "!", e);
         }
 
         return ok(Json.toJson(results));

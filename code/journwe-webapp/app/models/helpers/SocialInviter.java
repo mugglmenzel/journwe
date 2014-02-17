@@ -128,8 +128,9 @@ public class SocialInviter {
                             .setOAuthAccessToken(inviterSocial.getAccessToken())
                             .setOAuthAccessTokenSecret(inviterSocial.getAccessSecret());
                     Twitter tw = new TwitterFactory(cb.build()).getInstance();
+                    tw.directMessages().sendDirectMessage(new Long(inviteeSocialId), "Your friend " + inviter.getName() + " wants you to join the JournWe " + adv.getName() + "! Visit " + adv.getShortURL());
+
                     twitter4j.User inviteeTw = tw.users().showUser(inviteeSocialId);
-                    tw.directMessages().sendDirectMessage(inviteeSocialId, "Your friend " + inviter.getName() + " wants you to join the JournWe " + adv.getName() + "! Visit " + adv.getShortURL());
 
                     inviteeName = inviteeTw.getName();
 

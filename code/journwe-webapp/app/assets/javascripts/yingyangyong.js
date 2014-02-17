@@ -131,9 +131,9 @@ define([
 
     var addFriend = function () {
         var ins = {
-            socialId: getSocialIdByType($('#people-add-type-icon').data('social-type')),
+            socialId: getSocialIdByType($('#people-add-type-icon').data('social-provider')),
             name: $('#people-add-input').val(),
-            type: $('#people-add-type-icon').data('social-type'),
+            provider: $('#people-add-type-icon').data('social-provider'),
             iconCss: $('#people-add-type-icon').attr('class')
         };
 
@@ -148,52 +148,49 @@ define([
 
 
     var getSocialIdByType = function (type) {
-        if (type === 'facebook') return socialUsers[$('#people-add-input').val()];
-        if (type === 'foursquare') return socialUsers[$('#people-add-input').val()];
-        if (type === 'google') return socialUsers[$('#people-add-input').val()];
-        if (type === 'twitter') return socialUsers[$('#people-add-input').val()];
         if (type === 'email') return $('#people-add-input').val();
-        return '';
+        else return socialUsers[$('#people-add-input').val()]
     };
 
     var friendTypeahead = function () {
-        var type = $('#people-add-type-icon').data('social-type'),
-            route = '';
+        if ($('#people-add-type-icon').data('typeahead') == "off") $('.input-people-add').typeahead('destroy');
+        else {
+            var provider = $('#people-add-type-icon').data('social-provider');
 
-        if (type === 'facebook') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL();
-        if (type === 'foursquare') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFoursquare().absoluteURL();
-        if (type === 'google') route = routes.controllers.api.json.AdventurePeopleController.autocompleteGoogle().absoluteURL();
-        if (type === 'twitter') route = routes.controllers.api.json.AdventurePeopleController.autocompleteTwitter().absoluteURL();
+            if (provider.length && provider != 'email'){
+                $('.input-people-add').attr('type', 'text');
+                $('.input-people-add').typeahead({
+                    name: 'people-typeahead',
+                    template: '<p><strong>{%=o.name%}</strong></p>',
+                    engine: {_templ: '', compile: function (template) {
+                        _templ = template;
+                        return this;
+                    }, render: function (data) {
+                        return tmpl(_templ, data);
+                    }},
+                    remote: {
+                        url: routes.controllers.api.json.AdventurePeopleController.autocomplete().absoluteURL() + '?provider=' + provider + '&input=%QUERY',
+                        filter: function (data) {
+                            socialUsers = {};
+                            socialUserNames = [];
+                            $.each(data, function (ix, item) {
+                                if ($.inArray(item.name, socialUserNames) > -1) {
+                                    item.nameId = item.name + ' #' + item.id;
+                                } else item.nameId = item.name
 
+                                socialUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
+                                socialUsers[item.nameId] = item.id;
+                            });
 
-        if (route != '')
-            $('.input-people-add').typeahead({
-                name: 'people-typeahead',
-                template: '<p><strong>{%=o.name%}</strong></p>',
-                engine: {_templ: '', compile: function (template) {
-                    _templ = template;
-                    return this;
-                }, render: function (data) {
-                    return tmpl(_templ, data);
-                }},
-                remote: {
-                    url: route + '?input=%QUERY',
-                    filter: function (data) {
-                        socialUsers = {};
-                        socialUserNames = [];
-                        $.each(data, function (ix, item) {
-                            if ($.inArray(item.name, socialUserNames) > -1) {
-                                item.nameId = item.name + ' #' + item.id;
-                            } else item.nameId = item.name
-
-                            socialUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
-                            socialUsers[item.nameId] = item.id;
-                        });
-
-                        return socialUserNames;
+                            return socialUserNames;
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                $('.input-people-add').attr('type', 'email');
+                $('.input-people-add').typeahead('destroy');
+            }
+        }
     };
 
     var addTime = function () {
@@ -267,10 +264,9 @@ define([
         },
         'click #people-add-type .dropdown-menu a': function () {
             $('#people-add-type-icon').attr('class', $(this).data('icon'));
-            $('#people-add-type-icon').data('social-type', $(this).data('social-type'));
+            $('#people-add-type-icon').data('social-provider', $(this).data('social-provider'));
             $('#people-add-input').attr('type', $(this).data('input-type'));
-            if ($(this).data('typeahead') == "on") friendTypeahead();
-            else $('#people-add-input').typeahead('destroy');
+            friendTypeahead();
             $('#people-add-input').focus();
         },
         'change #facebookWall': function () {
