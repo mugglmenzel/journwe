@@ -455,8 +455,8 @@ public class AdventurePeopleController extends Controller {
         try {
             ConfigurationBuilder cb = new ConfigurationBuilder();
             cb.setDebugEnabled(true)
-                    .setOAuthConsumerKey(ConfigFactory.load().getString("play-authenticate.twitter.clientId"))
-                    .setOAuthConsumerSecret(ConfigFactory.load().getString("play-authenticate.twitter.clientSecret"))
+                    .setOAuthConsumerKey(ConfigFactory.load().getString("play-authenticate.twitter.consumerKey"))
+                    .setOAuthConsumerSecret(ConfigFactory.load().getString("play-authenticate.twitter.consumerSecret"))
                     .setOAuthAccessToken(us.getAccessToken())
                     .setOAuthAccessTokenSecret(us.getAccessSecret());
             Twitter tw = new TwitterFactory(cb.build()).getInstance();
