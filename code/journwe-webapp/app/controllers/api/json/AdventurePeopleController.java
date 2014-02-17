@@ -360,7 +360,6 @@ public class AdventurePeopleController extends Controller {
         User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         DynamicForm f = form().bindFromRequest();
         try {
-            Logger.debug("inviting " + f.get("socialId"));
             new SocialInviter(usr, f.get("provider"), f.get("socialId")).invite(adv.getId());
             return ok();
         } catch (Exception e) {

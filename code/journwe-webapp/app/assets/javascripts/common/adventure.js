@@ -366,7 +366,7 @@ define([
         utils.setSpinning($('.btn-people-add i'));
         var data = {
             socialId: getSocialIdByType($('#people-add-provider-icon').data('social-provider')),
-            provider: $('#people-add-type-icon').data('social-provider')
+            provider: $('#people-add-provider-icon').data('social-provider')
         };
         routes.controllers.api.json.AdventurePeopleController.invite(adv.id).ajax({data: data, success: function () {
             $('#people-add-input').val('');
