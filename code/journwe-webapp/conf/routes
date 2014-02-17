@@ -122,6 +122,7 @@ POST          /api/json/comments.json                                      contr
 
 
 #### User ####
+GET           /user/:id/emails                                             controllers.api.json.UserController.getEmails(id:String)
 GET           /api/json/user/notifications.json                            controllers.api.json.UserController.getNotifications()
 GET           /api/json/user/:id/adventures.json                           controllers.api.json.UserController.getAdventures(id:String)
 POST          /api/json/user/:id/notifications/frequency.json/:freq        controllers.api.json.UserController.setMailDigestFrequency(id:String, freq:String)
@@ -189,6 +190,9 @@ GET           /threads/:advid                                              contr
 
 #### User ####
 GET           /user/:id                                                    controllers.html.UserController.getProfile(id:String)
+POST          /user/save/editable                                          controllers.html.UserController.saveEditable()
+POST          /user/email/save/editable                                    controllers.html.UserController.saveEmailEditable()
+
 
 #### Facebook ####
 GET           /test/fb/test                                                controllers.html.FacebookController.testFacebookFeatures()

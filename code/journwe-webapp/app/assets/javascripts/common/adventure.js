@@ -91,8 +91,8 @@ define([
     var initializeIndex = function () {
         $.fn.editable.defaults.mode = 'inline';
         $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-journwe fa fa-spin"></i></div>';
-        $('.adventureName').editable();
-
+        $('#adventureName').editable();
+        $('#adventureDescription').editable();
 
         // After saving via x-editable, replace those links as well
         $.extend($.fn.editabletypes.textarea.prototype, {
@@ -363,7 +363,7 @@ define([
     }
 
     var addFriend = function () {
-        utils.setSpinning($('.btn-people-add i'));
+        utils.setReplaceSpinning($('.btn-people-add'));
         var data = {
             socialId: getSocialIdByType($('#people-add-provider-icon').data('social-provider')),
             provider: $('#people-add-provider-icon').data('social-provider')
@@ -371,7 +371,7 @@ define([
         routes.controllers.api.json.AdventurePeopleController.invite(adv.id).ajax({data: data, success: function () {
             $('#people-add-input').val('');
             loadInvitees();
-            utils.resetSpinning($('.btn-people-add i'));
+            utils.resetReplaceSpinning($('.btn-people-add'));
         }});
     };
 

@@ -18,7 +18,6 @@ public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
         DynamoDBQueryExpression query = new DynamoDBQueryExpression();
         UserEmail ue = new UserEmail();
         ue.setUserId(userId);
-        ue.setPrimary(true);
         query.setHashKeyValues(ue);
 
         return pm.query(clazz, query);

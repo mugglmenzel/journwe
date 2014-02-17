@@ -285,7 +285,8 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventureTimelineController.getComments(),
                         controllers.api.json.routes.javascript.AdventureTimelineController.getFiles(),
                         controllers.api.json.routes.javascript.CommentController.saveComment(),
-                        controllers.api.json.routes.javascript.CommentController.listComments()
+                        controllers.api.json.routes.javascript.CommentController.listComments(),
+                        controllers.api.json.routes.javascript.UserController.getEmails()
                 ) + ";; return routes;});");
     }
 }

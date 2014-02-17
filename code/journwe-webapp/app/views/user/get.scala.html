@@ -23,11 +23,20 @@
                 <h4><i class="fa fa-list-ol"></i> Details</h4>
             </div>
             <div class="col-lg-10">
-                <form class="form-horizontal">
+                <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Name</label>
                         <div class="col-lg-10">
-                            <input type="text" class="form-control">
+                            <a href="#" id="userName" data-type="text" data-pk="@user.getId" data-url="@html.routes.UserController.saveEditable()">@user.getName</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Emails</label>
+                        <div class="col-lg-10">
+                            <ul class="list-user-emails"></ul>
+                            <script type="text/x-tmpl" id="user-email-template">
+                                <li><a href="#" id="userEmail-{%=o.email.replace('@@', '_')%}" class="userEmail" data-type="email" data-pk="@user.getId:{%=o.email%}" data-url="@html.routes.UserController.saveEmailEditable()">{%=o.email%}</a> {% if(o.primary){ %}(primary){% } %}<li>
+                            </script>
                         </div>
                     </div>
                 </form>
@@ -55,7 +64,7 @@
     </div>
 
     <div class="jrn-container">
-        <h2 id="jorunwes"><i class="fa fa-compass"></i> @Messages("index.myJournWes") <small>- <span id="adventures-user-count">0</span></small></h2>
+        <h2 id="jorunwes"><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <small>(<span id="adventures-user-count">0</span>)</small></h2>
         <div id="adventures-user-list" class="row" style="overflow: hidden">
              <i class="fa fa-spin icon-journwe stash"></i>
         </div>

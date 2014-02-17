@@ -10,9 +10,11 @@ import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.TimeOptionDAO;
 import models.dao.user.UserDAO;
+import models.dao.user.UserEmailDAO;
 import models.notifications.ENotificationFrequency;
 import models.notifications.Notification;
 import models.user.User;
+import models.user.UserEmail;
 import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
@@ -36,6 +38,21 @@ import static play.data.Form.form;
  * To change this template use File | Settings | File Templates.
  */
 public class UserController extends Controller {
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result getEmails(String userId) {
+        List<ObjectNode> results = new ArrayList<ObjectNode>();
+        for (UserEmail ue : new UserEmailDAO().getEmailsOfUser(userId)) {
+            ObjectNode node = Json.newObject();
+            node.put("id", ue.getUserId());
+            node.put("email", ue.getEmail());
+            node.put("primary", ue.isPrimary());
+            node.put("validated", ue.isValidated());
+            results.add(node);
+        }
+        return ok(Json.toJson(results));
+    }
+
 
     @Security.Authenticated(SecuredUser.class)
     public static Result setMailDigestFrequency(String userId, String frequency) {

@@ -1,11 +1,22 @@
 package controllers.html;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.auth.SecuredUser;
 import models.dao.user.UserDAO;
+import models.dao.user.UserEmailDAO;
+import models.user.User;
+import models.user.UserEmail;
+import play.data.DynamicForm;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.user.get;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static play.data.Form.form;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +30,38 @@ public class UserController extends Controller {
     @Security.Authenticated(SecuredUser.class)
     public static Result getProfile(String userId) {
         return ok(get.render(new UserDAO().get(userId)));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result saveEditable() {
+        DynamicForm usrForm = form().bindFromRequest();
+        String usrId = usrForm.get("pk");
+        if (usrId != null && !"".equals(usrId)) {
+            User usr = new UserDAO().get(usrId);
+            String name = usrForm.get("name");
+            if ("userName".equals(name)) {
+                usr.setName(usrForm.get("value"));
+            }
+            new UserDAO().save(usr);
+        }
+
+        return ok();
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result saveEmailEditable() {
+        DynamicForm emailForm = form().bindFromRequest();
+        String emailId = emailForm.get("pk");
+        if (emailId != null && !"".equals(emailId)) {
+            UserEmail email = new UserEmailDAO().get(emailId.substring(0, emailId.indexOf(":")), emailId.substring(emailId.indexOf(":")));
+            String name = emailForm.get("name");
+            if (name.contains("userEmail")) {
+                email.setEmail(emailForm.get("value"));
+            }
+            new UserEmailDAO().save(email);
+        }
+
+        return ok();
     }
 
 }

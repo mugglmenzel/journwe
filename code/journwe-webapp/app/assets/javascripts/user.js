@@ -4,6 +4,27 @@ require([
     "userData"
 ], function (utils, routes, user) {
 
+    var initialize = function () {
+        $.fn.editable.defaults.mode = 'inline';
+        $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-journwe fa fa-spin"></i></div>';
+        $('#userName').editable();
+
+        loadUserEmails(true);
+
+        loadUserAdventures(true);
+
+    }
+
+    var loadUserEmails = function (clear) {
+        routes.controllers.api.json.UserController.getEmails(user.id).ajax({success: function (emails) {
+            if (clear) $('.list-user-emails').empty();
+            for (var i in emails) {
+                $('.list-user-emails').append(tmpl('user-email-template', emails[i]));
+            }
+            $('.userEmail').editable();
+        }});
+    };
+
 
     var loadUserAdventures = function (clear) {
         utils.resetStash($('#adventures-user-list i'));
@@ -49,6 +70,7 @@ require([
         }
     });
 
-    loadUserAdventures();
+
+    initialize();
 
 });
