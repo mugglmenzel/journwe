@@ -8,8 +8,8 @@ define([
 
 
     var map, markers = {};
-    var facebookUsers = {},
-        facebookUserNames = [];
+    var socialUsers = {},
+        socialUserNames = [];
 
 
     var initialize = function () {
@@ -60,11 +60,11 @@ define([
 
     var validateYingYangYong = function () {
         /*
-        if ($('input[name="name"]').val() == null || $('input[name="name"]').val() == '') {
-            $('input[name="name"]').focus();
-            return false;
-        }
-        */
+         if ($('input[name="name"]').val() == null || $('input[name="name"]').val() == '') {
+         $('input[name="name"]').focus();
+         return false;
+         }
+         */
         /*
          if($('input[name="shortname"]').val() == null ||  $('input[name="shortname"]').val() == '') {
          $('input[name="shortname"]').focus();
@@ -148,8 +148,11 @@ define([
 
 
     var getSocialIdByType = function (type) {
-        if (type === 'facebook') return facebookUsers[$('#people-add-input').val()];
-        if (type === 'email') return   $('#people-add-input').val();
+        if (type === 'facebook') return socialUsers[$('#people-add-input').val()];
+        if (type === 'foursquare') return socialUsers[$('#people-add-input').val()];
+        if (type === 'google') return socialUsers[$('#people-add-input').val()];
+        if (type === 'twitter') return socialUsers[$('#people-add-input').val()];
+        if (type === 'email') return $('#people-add-input').val();
         return '';
     };
 
@@ -157,12 +160,13 @@ define([
         var type = $('#people-add-type-icon').data('social-type'),
             route = '';
 
-        if(type === 'facebook') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL();
-        if(type === 'foursquare') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFoursquare().absoluteURL();
-        if(type === 'google') route = routes.controllers.api.json.AdventurePeopleController.autocompleteGoogle().absoluteURL();
+        if (type === 'facebook') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFacebook().absoluteURL();
+        if (type === 'foursquare') route = routes.controllers.api.json.AdventurePeopleController.autocompleteFoursquare().absoluteURL();
+        if (type === 'google') route = routes.controllers.api.json.AdventurePeopleController.autocompleteGoogle().absoluteURL();
+        if (type === 'twitter') route = routes.controllers.api.json.AdventurePeopleController.autocompleteTwitter().absoluteURL();
 
 
-        if(route != '')
+        if (route != '')
             $('.input-people-add').typeahead({
                 name: 'people-typeahead',
                 template: '<p><strong>{%=o.name%}</strong></p>',
@@ -175,18 +179,18 @@ define([
                 remote: {
                     url: route + '?input=%QUERY',
                     filter: function (data) {
-                        facebookUsers = {};
-                        facebookUserNames = [];
+                        socialUsers = {};
+                        socialUserNames = [];
                         $.each(data, function (ix, item) {
-                            if ($.inArray(item.name, facebookUserNames) > -1) {
+                            if ($.inArray(item.name, socialUserNames) > -1) {
                                 item.nameId = item.name + ' #' + item.id;
                             } else item.nameId = item.name
 
-                            facebookUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
-                            facebookUsers[item.nameId] = item.id;
+                            socialUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
+                            socialUsers[item.nameId] = item.id;
                         });
 
-                        return facebookUserNames;
+                        return socialUserNames;
                     }
                 }
             });
