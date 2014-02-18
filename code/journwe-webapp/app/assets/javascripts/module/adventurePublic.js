@@ -1,7 +1,8 @@
 require([
     'common/utils',
+    'main',
     'common/adventure'
-], function (utils, adventure) {
+], function (utils, main, adventure) {
 
 
     adventure.initBackground();

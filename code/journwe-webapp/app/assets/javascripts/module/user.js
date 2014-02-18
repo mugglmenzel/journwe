@@ -1,8 +1,9 @@
 require([
     "common/utils",
     "routes",
+    "main",
     "userData"
-], function (utils, routes, user) {
+], function (utils, routes, main, user) {
 
     var initialize = function () {
         $.fn.editable.defaults.mode = 'inline';

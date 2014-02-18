@@ -4,8 +4,9 @@ require([
     "messages",
     "common/gmaps",
     "common/index",
+    "main",
     "yingyangyong"
-], function (utils, routes, messages, gmaps, index, yingyangyong) {
+], function (utils, routes, messages, gmaps, index, main, yingyangyong) {
 
 
     index.initializeMyAdventures();

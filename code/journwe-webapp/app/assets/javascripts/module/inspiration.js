@@ -3,8 +3,9 @@ require([
     "common/utils",
     "common/gmaps",
     "common/index",
+    "main",
     "inspirationData"
-], function (routes, utils, gmaps, index, ins) {
+], function (routes, utils, gmaps, index, main, ins) {
 
     var placeMap;
 

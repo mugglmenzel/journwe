@@ -3,9 +3,10 @@ require([
     "routes",
     "common/gmaps",
     "common/index",
+    "main",
     "categoryData"
 
-], function (utils, routes, gmaps, index, cat) {
+], function (utils, routes, gmaps, index, main, cat) {
     var inspirationsMap,
         inspirationsMarkers = [];
     var inspirationsInfos = [];
