@@ -14,17 +14,17 @@
             @if(ins != null){<input type="hidden" name="inspirationId" value="@ins.getId">}
         </div>
         <div class="col-lg-4">
-            <button type="submit" class="btn btn-yingyangyong-submit btn-lg btn-success pull-right">
+            <button type="submit" class="btn btn-yingyangyong-submit btn-lg btn-default pull-right">
                 @Messages("adventure.general.button.startJournWe") <i class="fa fa-chevron-right fa-fw"></i></button>
         </div>
     </div>
     <div class="spacer20"></div>
 
-    <div style="margin-left: 15px;">
+    <div style="">
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a style="background-color: #78a942;" href="#where-tab" data-toggle="tab"><h4><i class="fa fa-globe"></i> Where?</h4></a></li>
-            <li><a style="background-color: #eb3d00;" href="#who-tab" data-toggle="tab"><h4><i class="fa fa-group"></i> Who?</h4></a></li>
-            <li><a style="background-color: #00d1fb;" href="#when-tab" data-toggle="tab"><h4><i class="fa fa-calendar"></i> When?</h4></a></li>
+            <li class="active"><a class="where-tab" href="#where-tab" data-toggle="tab"><h4><i class="fa fa-globe"></i> Where?</h4></a></li>
+            <li><a class="who-tab" href="#who-tab" data-toggle="tab"><h4><i class="fa fa-group"></i> Who?</h4></a></li>
+            <li><a class="when-tab" href="#when-tab" data-toggle="tab"><h4><i class="fa fa-calendar"></i> When?</h4></a></li>
         </ul>
     </div>
 
@@ -32,7 +32,7 @@
     <div class="tab-content">
 
         <div class="tab-pane fade in active" id="where-tab">
-            <div style="border: solid 0px #78a942; border-radius: 5px; background-color: #78a942; margin-bottom: 20px">
+            <div style="">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px;">
                     <h1><i class="fa fa-globe"></i> @Messages("yingyangyong.place")</h1>
                     <p class="lead">Add all destinations you want to consider in your JournWe&#8482;.</p>
@@ -75,7 +75,7 @@
         @defining(new UserDAO().findByAuthUserIdentity(playusr)){ usr =>
 
         <div class="tab-pane fade" id="who-tab">
-            <div style="border: solid 0px #eb3d00; border-radius: 5px; background-color: #eb3d00; margin-bottom: 20px;">
+            <div style="">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
                     <h1><i class="fa fa-group"></i> @Messages("yingyangyong.adventurers")</h1>
                     <p class="lead">Add all friends that should know of this JournWe&#8482;.</p>
@@ -168,7 +168,7 @@
         }}
 
         <div class="tab-pane fade" id="when-tab">
-            <div style="border: solid 0px #00d1fb; border-radius: 5px; background-color: #00d1fb; margin-bottom: 20px;">
+            <div style="">
                 <div style="background-color: rgba(255, 255, 255, 1); margin-left: 15px; padding: 15px; ">
                     <h1><i class="fa fa-calendar"></i> @Messages("yingyangyong.time") </h1>
                     <p class="lead">Add all time slots available for this JournWe&#8482;.</p>

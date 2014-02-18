@@ -270,6 +270,14 @@ h1 .editableform {
   }
 }
 
+#yingyangyong-container {
+  padding-bottom: 5px;
+}
+
+.btn-yingyangyong-close {
+  margin-bottom: 15px;
+}
+
 .jrn-footer {
   background: fade(@color_white, 30%);
   padding: 20px 20px;
@@ -1343,5 +1351,73 @@ img.landing {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+  }
+}
+
+
+#yingyangyong-form {
+
+  .nav {
+
+    & li + li a {
+      margin-left: 10px; 
+    }
+
+    li a {
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #666;
+      color: rgba(0,0,0,0.4);
+
+      &:hover * {
+        color: #333;
+        color: rgba(0,0,0,0.6);
+      }
+
+      h4 {
+        margin-bottom: 10px;
+      }
+    }
+
+    li.active a {
+      box-shadow: 0 3px 7px -3px #555 inset;
+      color: #000;
+    }
+
+    .where-tab {
+      background-color: @color_place !important;
+    }
+    .who-tab {
+      background-color: @color_adventurer !important; 
+    }
+    .when-tab {
+      background-color: @color_time !important;
+    }
+  }
+
+  .tab-pane {
+    > div {
+      border: solid 0px @color_place; 
+      border-radius: 5px; 
+      background-color: @color_place; 
+      margin-bottom: 20px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+
+      > div {
+        border-radius: 5px 0 0 5px;
+      }
+    }
+  }
+
+  #who-tab > div {
+    border-color: @color_adventurer;
+    background-color: @color_adventurer;
+  }
+
+  #when-tab > div {
+    border-color: @color_time;
+    background-color: @color_time;
   }
 }
