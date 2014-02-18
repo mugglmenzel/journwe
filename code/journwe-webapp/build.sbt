@@ -15,7 +15,6 @@ libraryDependencies ++= Seq(
   "com.google.http-client" % "google-http-client" % "1.17.0-rc",
   "com.google.http-client" % "google-http-client-jackson2" % "1.17.0-rc",
   "com.google.apis" % "google-api-services-plus" % "v1-rev118-1.17.0-rc",
-  "com.google.apis" % "google-api-services-plusDomains" % "v1-rev21-1.17.0-rc",
   "fi.foyt" % "foursquare-api" % "1.0.2",
   "org.twitter4j" % "twitter4j-core" % "3.0.5",
   "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5",

@@ -29,7 +29,7 @@ require([
             center: new gmaps.LatLng(49.483472, 8.476992),
             mapTypeId: gmaps.MapTypeId.ROADMAP
         };
-        inspirationsMap = new gmaps.Map(document.getElementById('inspirations-places-map'), mapOptions);
+        if($('#inspirations-places-map').length) inspirationsMap = new gmaps.Map(document.getElementById('inspirations-places-map'), mapOptions);
     }
 
 

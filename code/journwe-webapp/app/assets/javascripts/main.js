@@ -60,6 +60,9 @@ require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switc
         return false;
     });
 
+    // Init footer tooltip
+    $('.social-icons li a').tooltip();
+
     // Init bootstrap switch
     $('input[type="checkbox"],[type="radio"]').not('.star').bootstrapSwitch();
 

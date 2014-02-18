@@ -137,7 +137,7 @@ define([
             center: new gmaps.LatLng(49.483472, 8.476992),
             mapTypeId: gmaps.MapTypeId.ROADMAP
         };
-        publicAdventuresMap = new gmaps.Map(document.getElementById('adventures-places-map'), mapOptions);
+        if($('#adventures-places-map').length) publicAdventuresMap = new gmaps.Map(document.getElementById('adventures-places-map'), mapOptions);
     };
 
     var resetPublicAdventuresMapBounds = function () {

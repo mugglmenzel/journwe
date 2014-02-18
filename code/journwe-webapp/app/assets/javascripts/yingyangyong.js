@@ -25,7 +25,7 @@ define([
             center: new gmaps.LatLng(49.483472, 8.476992),
             mapTypeId: gmaps.MapTypeId.ROADMAP
         };
-        map = new gmaps.Map(document.getElementById('where-map'),
+        if($('#where-map').length) map = new gmaps.Map(document.getElementById('where-map'),
             mapOptions);
 
         new gmaps.places.Autocomplete(document.getElementById('place-add-input'));

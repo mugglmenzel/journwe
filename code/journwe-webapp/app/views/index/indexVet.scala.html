@@ -6,7 +6,7 @@
 } {
 
 
-    <div id="yingyangyong-container" class="stash jrn-no-top-round" style="margin-top: -20px; margin-bottom: 70px;">
+    <div id="yingyangyong-container" class="stash jrn-no-top-round" style="margin-top: -20px ; margin-bottom: 70px;">
         @yingyangyong(null)
         <div>
             <button class="btn btn-default btn-block btn-yingyangyong-close"><i class="fa fa-chevron-up"></i></button>
@@ -18,11 +18,11 @@
     <div class="jrn-container jrn-no-top-round" style="margin-top: -20px;">
 
         <p class="lead">
-            @Messages("index.welcome1", user.getName())
+        @Messages("index.welcome1", user.getName())
         </p>
 
         <h3><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button class="btn btn-adventure-my-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
-        <div style="margin-bottom: 20px; margin-left: -5px; margin-right: -5px;">
+        <div style="margin-bottom : 20px; margin-left: -5px; margin-right: -5px;">
 
             <div id="adventures-my-list" class="adventures-list-full clearfix"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
             <div class="text-center"><button class="btn btn-adventures-my-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
@@ -46,39 +46,50 @@
                 </div>
             </script>
         </div>
-        <div class="jumbotron row">
-            <div class="col-lg-9"><p class="lead">Starte dein nächstes JournWe!!!</p></div>
-            <div class="col-lg-3 text-center">
-                <button class="btn btn-link btn-yingyangyong-start">
-                    <img src='@routes.Assets.at("img/journwe_logo.png").absoluteURL()' height="75"><br>
-                    <p class="lead"><i class="fa fa-asterisk"></i> Los geht's! </p>
-                </button>
+        <div class="spacer30"></div>
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-1"><img src="@routes.Assets.at("img/journwe_logo.png")" style="max-width: 100%;"></div>
+                            <div class="col-lg-8"><p class="lead">
+                                Ready for a new lifetime experience? Start your next JournWe!</p></div>
+                            <div class="col-lg-3">
+                                <button class="btn btn-danger btn-lg btn-yingyangyong-start">
+                                    <span class="lead">Start now <i class="fa fa-angle-right"></i></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-     </div>
+    </div>
 
 
     <div class="jrn-container">
         <h1>
-           @Messages("inspiration.getInspired")
+        @Messages("inspiration.getInspired")
         </h1>
 
         <h3><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
 
         <div style="">
-            <div id="categories-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="categories-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size : 50px; margin-bottom : 20px;"></i></div>
         </div>
         <div class="clearfix"></div>
 
-
+       @*
         <h3><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button class="btn btn-adventures-public-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
-        <div style="background-color: rgba(245,245,245,0.6);">
-            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+        <div style="background-color : rgba ( 245, 245, 245, 0.6 ) ;">
+            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size : 50 px ; margin-bottom : 20 px ;"></i></div>
             <div class="text-center"><button class="btn btn-adventures-public-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
-        <div style="height: 400px; margin-top: 10px;">
-            <div id="adventures-places-map" style="width: 100%; height: 100%"></div>
+        <div style="height : 400 px ; margin-top : 10 px ;">
+            <div id="adventures-places-map" style="width : 100 % ; height : 100 %"></div>
         </div>
+       *@
     </div>
     <script type="text/x-tmpl" id="category-template">
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
@@ -93,6 +104,7 @@
             </div>
         </div>
     </script>
+    @*
     <script type="text/x-tmpl" id="adventure-public-template">
         <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
             <a href="{%=o.link%}"><img class="img-rounded" style="margin: 0px; width: 204px; height: 204px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
@@ -106,6 +118,7 @@
             </div>
         </div>
     </script>
+    *@
 
     <script src="@routes.Assets.at("javascripts/module/indexVet.js").url" type="text/javascript"></script>
 }

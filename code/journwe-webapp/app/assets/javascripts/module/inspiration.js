@@ -62,7 +62,7 @@ require([
             center: new gmaps.LatLng(49.483472, 8.476992),
             mapTypeId: gmaps.MapTypeId.ROADMAP
         };
-        placeMap = new gmaps.Map(document.getElementById('inspiration-place-map'), mapOptions);
+        if($('#inspirations-place-map').length) placeMap = new gmaps.Map(document.getElementById('inspiration-place-map'), mapOptions);
 
         var placeLatLng = new gmaps.LatLng(ins.placeLatitude, ins.placeLongitude);
 

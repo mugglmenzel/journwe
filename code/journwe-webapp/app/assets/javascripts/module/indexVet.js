@@ -11,7 +11,7 @@ require([
 
     index.initializeMyAdventures();
     index.initializeCategories();
-    index.initializePublicAdventures();
+    //index.initializePublicAdventures();
 
 
     utils.on({
