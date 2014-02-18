@@ -49,10 +49,14 @@ doc in Compile <<= target.map(_ / "none")
 
 requireJs ++= Seq(
   "main.js",
-  "adventure.js",
-  "inspiration.js",
-  "user.js",
-  "build.js"
+  "module/index.js",
+  "module/indexCat.js",
+  "module/indexNew.js",
+  "module/indexVet.js",
+  "module/adventure.js",
+  "module/adventurePublic.js",
+  "module/inspiration.js",
+  "module/user.js"
 )
 
 requireJsShim += "build.js"
