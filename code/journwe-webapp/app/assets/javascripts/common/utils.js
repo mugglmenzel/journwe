@@ -170,7 +170,7 @@ define(function () {
             var id = new Date().getUTCMilliseconds() + '-' + Math.round(Math.random() * 1000);
             spinnerTempStore[id] = el.html();
             el.data('spinner-id', id);
-            el.css({width: el.width() + 'px'})
+            el.css({width: el.outerWidth() + 'px'})
                 .html('<i class="fa fa-spin icon-journwe"></i>');
         },
         resetReplaceSpinning: function (el) {

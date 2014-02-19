@@ -95,7 +95,7 @@
                             } else { @if(advr != null && new UserSocialDAO().findByUserIdAndProvider("twitter", advr.getUserId) != null){
                                 <i id="people-add-provider-icon" class="fa fa-twitter fa-fw" data-social-provider="twitter"></i>
                             } else {
-                                <i id="people-add-provider-icon" class="fa fa-envelope fa-fw" data-social-provider="email"></i>
+                                <i id="people-add-provider-icon" class="fa fa-envelope-o fa-fw" data-social-provider="email"></i>
                             }}}}
                             <span class="caret"></span>
                         </a>
@@ -116,7 +116,7 @@
                                 <li><a data-icon="fa fa-twitter fa-fw" data-social-provider="twitter" data-input-type="text" data-typeahead="on"><i class="fa fa-twitter fa-fw"></i>
                                     @Messages("adventure.general.label.twitter")</a></li>
                             }
-                            <li><a data-icon="fa fa-envelope fa-fw" data-social-provider="email" data-input-type="email" data-typeahead="off"><i class="fa fa-envelope fa-fw"></i>
+                            <li><a data-icon="fa fa-envelope-o fa-fw" data-social-provider="email" data-input-type="email" data-typeahead="off"><i class="fa fa-envelope-o fa-fw"></i>
                                 @Messages("adventure.general.label.email")</a></li>
                         </ul>
 
