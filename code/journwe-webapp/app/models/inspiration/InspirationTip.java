@@ -36,6 +36,7 @@ public class InspirationTip {
     }
 
     @DynamoDBRangeKey
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "lang-created-index")
     public Long getCreated() {
         return created;
     }
@@ -71,7 +72,7 @@ public class InspirationTip {
         this.active = active;
     }
 
-    @DynamoDBAttribute
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = "lang-created-index")
     public String getLang() {
         return lang;
     }

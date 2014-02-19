@@ -24,6 +24,7 @@ import models.inspiration.Inspiration;
 import models.inspiration.InspirationTip;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.inspiration.InspirationURL;
+import models.user.User;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -93,8 +94,8 @@ public class InspirationController extends Controller {
         tip.setCreated(new Date().getTime());
         tip.setTip(tipTxt);
         tip.setLang(lang().code());
-        AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
-        tip.setUserId(new UserSocialDAO().findBySocialId(usr.getProvider(), usr.getId()).getUserId());
+        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        if(usr != null) tip.setUserId(usr.getId());
         tip.setActive(false);
 
         new InspirationTipDAO().save(tip);
