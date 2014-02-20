@@ -115,6 +115,7 @@ public class AdventureController extends Controller {
 
         Adventure adv = new Adventure();
         adv.setName(filledForm.get("name") != null && !"".equals(filledForm.get("name")) ? filledForm.get("name") : "Your JournWe");
+        adv.setPublish(filledForm.get("publish") != null && !"".equals(filledForm.get("publish")) ? new Boolean(filledForm.get("publish")) : false);
         new AdventureDAO().save(adv);
 
         if (filledForm.get("inspirationId") != null) {

@@ -145,7 +145,7 @@
                     <div class="spacer20"></div>
                     <div>
                         <span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.public") </span>
-                        <div><input type="checkbox" id="publish" name="publish"></div>
+                        <div><input type="checkbox" id="publish" name="publish" value="true"></div>
                     </div>
                     <div class="spacer20"></div>
                     @if(usr != null && new UserSocialDAO().findByUserIdAndProvider("facebook", usr.getId) != null){
