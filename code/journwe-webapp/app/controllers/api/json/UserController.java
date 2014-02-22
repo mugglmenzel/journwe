@@ -2,6 +2,7 @@ package controllers.api.json;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
+import models.UserManager;
 import models.adventure.Adventure;
 import models.auth.SecuredUser;
 import models.dao.NotificationDAO;
@@ -74,7 +75,7 @@ public class UserController extends Controller {
 
         Logger.debug("getting notifications for " + lastId + "," + count);
 
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         List<ObjectNode> results = new ArrayList<ObjectNode>();
         List<Notification> all = new NotificationDAO().all(usr.getId(), lastId, count);
         for (Notification c : all) {
@@ -88,7 +89,7 @@ public class UserController extends Controller {
                 case GENERAL:
                 case USER:
                 default:
-                    image = controllers.html.routes.UserController.getProfile(usr.getId()).absoluteURL(request());
+                    image = controllers.core.html.routes.UserController.getProfile(usr.getId()).absoluteURL(request());
                     break;
             }
             node.put("image", image);
@@ -101,7 +102,7 @@ public class UserController extends Controller {
                 case GENERAL:
                 case USER:
                 default:
-                    link = controllers.html.routes.UserController.getProfile(usr.getId()).absoluteURL(request());
+                    link = controllers.core.html.routes.UserController.getProfile(usr.getId()).absoluteURL(request());
                     break;
             }
             node.put("link", link);

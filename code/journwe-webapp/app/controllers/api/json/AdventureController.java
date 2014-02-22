@@ -5,8 +5,11 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.typesafe.config.ConfigFactory;
-import models.adventure.*;
+import models.adventure.Adventure;
+import models.adventure.AdventureReminder;
+import models.adventure.EAdventureReminderType;
 import models.adventure.log.AdventureLogger;
 import models.adventure.log.EAdventureLogSection;
 import models.adventure.log.EAdventureLogTopic;
@@ -21,7 +24,6 @@ import models.dao.adventure.AdventureDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.manytomany.AdventureToCategoryDAO;
 import models.notifications.helper.AdventurerNotifier;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
@@ -42,7 +44,6 @@ public class AdventureController extends Controller {
     private static final AWSCredentials credentials = new BasicAWSCredentials(
             ConfigFactory.load().getString("aws.accessKey"),
             ConfigFactory.load().getString("aws.secretKey"));
-
 
 
     @Security.Authenticated(SecuredUser.class)
@@ -89,7 +90,7 @@ public class AdventureController extends Controller {
             result = new CategoryDAO().get(catId);
             Adventure adv = new AdventureDAO().get(advId);
             // Save Adventure-to-Category relationship
-            new AdventureToCategoryDAO().createManyToManyRelationship(adv,result);
+            new AdventureToCategoryDAO().createManyToManyRelationship(adv, result);
             new CategoryDAO().save(result);
             AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.CATEGORY_CHANGED, EAdventureLogSection.ALL, result.getName());
         }
@@ -137,7 +138,7 @@ public class AdventureController extends Controller {
         AdventureReminder rem = new AdventureReminder();
         rem.setAdventureId(advId);
         rem.setType(EAdventureReminderType.PLACE);
-        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
+        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3 * 24 * 60 * 60));
         new AdventureReminderDAO().save(rem);
 
         AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.PLACE_DEADLINE, EAdventureLogSection.PLACES, deadline.toString());
@@ -184,7 +185,7 @@ public class AdventureController extends Controller {
         AdventureReminder rem = new AdventureReminder();
         rem.setAdventureId(advId);
         rem.setType(EAdventureReminderType.TIME);
-        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3*24*60*60));
+        rem.setReminderDate(adv.getPlaceVoteDeadline() - (3 * 24 * 60 * 60));
         new AdventureReminderDAO().save(rem);
 
         AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.TIME_DEADLINE, EAdventureLogSection.TIMES, deadline.toString());
@@ -200,7 +201,6 @@ public class AdventureController extends Controller {
         else
             return ok(Json.toJson(adv.getTimeVoteDeadline() != null ? adv.getTimeVoteDeadline() > new Date().getTime() && adv.getTimeVoteOpen() : adv.getTimeVoteOpen()));
     }
-
 
 
     public static Result checkShortname() {

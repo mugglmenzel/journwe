@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.typesafe.config.ConfigFactory;
+import models.UserManager;
 import models.adventure.file.JournweFile;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
@@ -28,7 +29,6 @@ import play.mvc.Security;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +56,7 @@ public class AdventureFileController extends Controller {
         try {
             if (!new JournweAuthorization(advId).canUploadFiles())
                 return AuthorizationMessage.notAuthorizedResponse();
-            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             if (usr == null)
                 throw new Exception("File upload failed because user is null.");
             Form<JournweFile> filledFileForm = fileForm.bindFromRequest();

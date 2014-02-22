@@ -8,11 +8,11 @@
 <div>
 
 @currentAuth() { auth =>
-    @defining(new UserDAO().findByAuthUserIdentity(auth)) { user =>
+    @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
     <div class="row">
         <div class="col-lg-2 col-sm-2 col-xs-2">
             <div class="navbar-text">
-                    <a href="@html.routes.ApplicationController.index" class="brand" style="vertical-align: bottom;">
+                    <a href="/" class="brand" style="vertical-align: bottom;">
                         <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 30px; vertical-align: text-bottom;">
                             Journ<strong>We</strong>
                         </span>
@@ -22,9 +22,9 @@
 
         <div class="col-lg-6 col-sm-6 col-xs-6">
             <ul class="nav nav-pills nav-justified">
-                <li><a href="@html.routes.ApplicationController.indexNew()"><i class="fa fa-asterisk"></i> New <img height="14px" src="@routes.Assets.at("img/journwe_logo.png")"></a></li>
-                <li><a href="@html.routes.ApplicationController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                <li><a href="@html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
+                <li><a href="@html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New <img height="14px" src="@routes.Assets.at("img/journwe_logo.png")"></a></li>
+                <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                <li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
             </ul>
         </div>
 
@@ -56,11 +56,11 @@
                 </script>
                 <script src="@routes.Assets.at("javascripts/header.js").url" type="text/javascript"></script>
 
-                <a class="btn btn-link" href="@html.routes.UserController.getProfile(user.getId())">
+                <a class="btn btn-link" href="@core.html.routes.UserController.getProfile(user.getId())">
                     <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
                     @user.getName()
                 </a>
-                <a class="btn btn-link" href="@html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
+                <a class="btn btn-link" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
             </div>
 
 
@@ -71,7 +71,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="@html.routes.ApplicationController.login()"><i class="fa fa-user fa-fw"></i> JournWe</a></li>
+                    <li><a href="@core.html.routes.ApplicationController.login()"><i class="fa fa-user fa-fw"></i> JournWe</a></li>
                 @forProviders() { p =>
                     <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
                 }

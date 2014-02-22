@@ -1,11 +1,10 @@
 package controllers.api.json;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import models.UserManager;
 import models.adventure.comment.Comment;
-import models.adventure.comment.CommentThread;
 import models.auth.SecuredUser;
 import models.dao.adventure.CommentDAO;
-import models.dao.adventure.CommentThreadDAO;
 import models.dao.user.UserDAO;
 import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
@@ -18,8 +17,6 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.comment.createComment;
-import views.html.comment.listThreads;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +28,7 @@ public class CommentController extends Controller {
 	@Security.Authenticated(SecuredUser.class)
 	public static Result saveComment() {
 		try {
-            User user = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            User user = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             if(user==null)
                 throw new Exception("Posting a comment failed because user is null.");
             Form<Comment> filledCommentForm = form(Comment.class).bindFromRequest();

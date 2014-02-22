@@ -2,13 +2,11 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
 import com.typesafe.config.ConfigFactory;
-import controllers.html.AdventureController;
 import controllers.api.json.AdventureFileController;
-import controllers.routes;
+import controllers.html.AdventureController;
 import models.adventure.Adventure;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
@@ -27,24 +25,25 @@ import java.util.concurrent.TimeUnit;
 public class Global extends GlobalSettings {
 
     public void onStart(final Application app) {
-        PlayAuthenticate.setResolver(new Resolver() {
+
+        PlayAuthenticate.setResolver(new PlayAuthenticate.Resolver() {
 
             @Override
             public Call login() {
                 // Your login page
-                return controllers.html.routes.ApplicationController.index();
+                return controllers.html.routes.IndexController.index();
             }
 
             @Override
             public Call afterAuth() {
                 // The user will be redirected to this page after authentication
                 // if no original URL was saved
-                return controllers.html.routes.ApplicationController.index();
+                return controllers.html.routes.IndexController.index();
             }
 
             @Override
             public Call afterLogout() {
-                return controllers.html.routes.ApplicationController.index();
+                return controllers.html.routes.IndexController.index();
             }
 
             @Override
@@ -58,7 +57,7 @@ public class Global extends GlobalSettings {
             @Override
             public Call onException(final AuthException e) {
                 if (e instanceof AccessDeniedException) {
-                    return controllers.html.routes.ApplicationController
+                    return controllers.core.html.routes.ApplicationController
                             .oAuthDenied(((AccessDeniedException) e)
                                     .getProviderKey());
                 }
@@ -70,15 +69,14 @@ public class Global extends GlobalSettings {
 
             @Override
             public Call askLink() {
-                return controllers.html.routes.AccountController.askLink();
+                return controllers.core.html.routes.AccountController.askLink();
             }
 
             @Override
             public Call askMerge() {
-                return controllers.html.routes.AccountController.askMerge();
+                return controllers.core.html.routes.AccountController.askMerge();
             }
         });
-
 
         Akka.system().scheduler().schedule(Duration.create(20, TimeUnit.SECONDS), Duration.create(1, TimeUnit.DAYS), new Runnable() {
             @Override

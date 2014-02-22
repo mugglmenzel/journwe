@@ -13,7 +13,7 @@
 
         <div class="title-name">
             @ins.getName()
-            @if(category != null) {<small>- <a href="@html.routes.ApplicationController.categoryIndex(category.getId)">@category.getName()</a></small>}
+            @if(category != null) {<small>- <a href="@html.routes.IndexController.categoryIndex(category.getId)">@category.getName()</a></small>}
         </div>
         <div class="toolbar">
             <a class="btn btn-primary pull-right" href="@html.routes.InspirationController.createAdventure(ins.getId)"><i class="fa fa-arrow-right"></i> @Messages("adventure.general.label.start") </a>

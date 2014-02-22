@@ -1,11 +1,9 @@
 package controllers.api.json;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import models.UserManager;
 import models.adventure.Adventure;
 import models.adventure.EPreferenceVote;
-import models.adventure.place.PlaceOption;
-import models.adventure.place.PlaceOptionRating;
-import models.adventure.place.PlacePreference;
 import models.adventure.time.TimeOptionRating;
 import models.adventure.time.TimePreference;
 import models.adventure.time.TimeOption;
@@ -119,7 +117,7 @@ public class AdventureTimeController extends Controller {
             new TimeOptionDAO().save(time);
             new AdventurerNotifier().notifyAdventurers(advId, "The new time option " + df.format(time.getStartDate()) + (time.getStartDate().equals(time.getEndDate()) ?  "-" + df.format(time.getEndDate()) : "") + " has been added.", "New Time Option");
 
-            User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             if(usr != null) {
                 TimePreference pref = new TimePreference();
                 pref.setTimeOptionId(time.getOptionId());
@@ -153,7 +151,7 @@ public class AdventureTimeController extends Controller {
         if (!new JournweAuthorization(advId).canVoteForDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
 
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         TimeOption time = new TimeOptionDAO().get(advId, timeId);
         String vote = form().bindFromRequest().get("vote").toUpperCase();
@@ -195,7 +193,7 @@ public class AdventureTimeController extends Controller {
 
 
     private static ObjectNode timeToJSON(TimeOption time) {
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         TimePreference pref = new TimePreferenceDAO().get(time.getOptionId(), usr.getId());
 
         ObjectNode node = Json.newObject();

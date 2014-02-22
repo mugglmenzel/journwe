@@ -1,7 +1,7 @@
 package controllers.api.json;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import models.auth.SecuredAdminUser;
+import models.GlobalParameters;
 import models.category.Category;
 import models.category.CategoryCount;
 import models.category.CategoryHierarchy;
@@ -16,7 +16,6 @@ import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,9 +26,6 @@ import java.util.concurrent.Callable;
 import static play.data.Form.form;
 
 public class CategoryController extends Controller {
-
-    private final static int DEFAULT_INSPIRATION_COUNT = 8;
-
 
     public static Result getCategories(final String superCatId) {
 
@@ -46,7 +42,7 @@ public class CategoryController extends Controller {
                                 ObjectNode node = Json.newObject();
                                 node.put("id", c.getId());
                                 node.put("name", c.getName());
-                                node.put("link", controllers.html.routes.ApplicationController.categoryIndex(c.getId()).absoluteURL(request()));
+                                node.put("link", controllers.html.routes.IndexController.categoryIndex(c.getId()).absoluteURL(request()));
                                 node.put("image", c.getImage());
                                 node.put("count", cc.getCount());
                                 results.add(node);
@@ -95,7 +91,7 @@ public class CategoryController extends Controller {
         final String lastId = data.get("lastId");
         int countParam = 8;
         try {
-            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : DEFAULT_INSPIRATION_COUNT;
+            countParam = data.get("count") != null ? new Integer(data.get("count")).intValue() : GlobalParameters.DEFAULT_INSPIRATION_COUNT;
         } catch (Exception e) {
             return badRequest("Count is not a number.");
         }
@@ -140,49 +136,7 @@ public class CategoryController extends Controller {
     }
 
 
-    public static Result setSuperCategory() {
-        DynamicForm df = form().bindFromRequest();
-        String catId = df.get("category");
-        String superCatId = df.get("superCategory");
-        Logger.debug("adding " + catId + " to " + superCatId);
 
-        for (CategoryHierarchy catHier : new CategoryHierarchyDAO().categoryAsSub(catId))
-            new CategoryHierarchyDAO().delete(catHier);
-        CategoryHierarchy hier = new CategoryHierarchy();
-        hier.setSuperCategoryId(superCatId);
-        hier.setSubCategoryId(catId);
-        new CategoryHierarchyDAO().save(hier);
-
-        clearCacheOfCat(superCatId);
-
-        return ok(Json.toJson(hier));
-    }
-
-
-    @Security.Authenticated(SecuredAdminUser.class)
-    public static Result updateCountCache() {
-        new CategoryDAO().updateCategoryCountCache();
-        clearCache();
-        return ok();
-    }
-
-
-    private static void clearCache() {
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
-                Cache.remove("categories.optionsMap");
-                clearCacheOfCat(Category.SUPER_CATEGORY);
-                for (Category cat : new CategoryDAO().all())
-                    clearCacheOfCat(cat.getId());
-            }
-        }).start();
-    }
-
-    private static void clearCacheOfCat(String superCatId) {
-        Cache.remove("subCategoriesOf." + superCatId);
-        Cache.remove("category." + superCatId + ".inspirations." + "" + "." + DEFAULT_INSPIRATION_COUNT);
-    }
 
 
 

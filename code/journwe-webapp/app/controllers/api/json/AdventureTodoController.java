@@ -6,21 +6,17 @@ import com.journwe.productadvertising.webservice.client.ItemSearchRequest;
 import com.journwe.productadvertising.webservice.client.Items;
 import com.journwe.productadvertising.webservice.client.OperationRequest;
 import com.typesafe.config.ConfigFactory;
-import models.adventure.adventurer.Adventurer;
-import models.adventure.adventurer.EAdventurerParticipation;
+import models.UserManager;
 import models.adventure.todo.EStatus;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.TodoDAO;
-import models.dao.user.UserDAO;
-import models.helpers.AWSProductAdvertisingAPIHelper;
+import helpers.AWSProductAdvertisingAPIHelper;
 import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
-import play.cache.Cache;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -33,7 +29,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
 
@@ -105,7 +100,7 @@ public class AdventureTodoController extends Controller {
 
         DynamicForm requestData = form().bindFromRequest();
 
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         models.adventure.todo.Todo todo = new models.adventure.todo.Todo();
         todo.setAdventureId(advId);

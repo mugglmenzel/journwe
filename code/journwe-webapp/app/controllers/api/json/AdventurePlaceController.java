@@ -1,6 +1,7 @@
 package controllers.api.json;
 
 import com.feth.play.module.pa.PlayAuthenticate;
+import models.UserManager;
 import models.adventure.Adventure;
 import models.adventure.EPreferenceVote;
 import models.adventure.comment.Comment;
@@ -10,7 +11,6 @@ import models.adventure.place.PlacePreference;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.dao.*;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.CommentDAO;
 import models.dao.adventure.PlaceOptionDAO;
@@ -116,7 +116,7 @@ public class AdventurePlaceController extends Controller {
         new AdventurerNotifier().notifyAdventurers(advId, "The new place option " + place.getAddress() + " has been added.", "New Place Option");
 
 
-        User user = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User user = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Comment comment = new Comment();
         PlacePreference pref = new PlacePreference();
 
@@ -148,7 +148,7 @@ public class AdventurePlaceController extends Controller {
     public static Result vote(String advId, String placeId) {
         if (!new JournweAuthorization(advId).canVoteForPlaces())
             return AuthorizationMessage.notAuthorizedResponse();
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         PlaceOption place = new PlaceOptionDAO().get(advId, placeId);
         String vote = form().bindFromRequest().get("vote").toUpperCase();
@@ -192,7 +192,7 @@ public class AdventurePlaceController extends Controller {
 
 
     private static ObjectNode placeToJSON(PlaceOption place) {
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
 
         ObjectNode node = Json.newObject();

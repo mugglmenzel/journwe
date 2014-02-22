@@ -33,17 +33,16 @@ define([
 
     var loadMyAdventures = function (lastId, clear) {
         utils.setSpinning($('.btn-adventures-my-refresh i'));
-        $('.btn-adventures-my-load-more').html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning($('.btn-adventures-my-load-more'));
         routes.controllers.api.json.ApplicationController.getMyAdventures().ajax({data: {lastId: lastId, count: 10}, success: function (advs) {
-            if (clear) $('#adventures-my-list').empty();
+            if (clear) $('.list-adventures-my').empty();
             for (var i in advs)
-                $('#adventures-my-list').append(renderAdventure('adventure-my-template', advs[i]));
+                $('.list-adventures-my').append(renderAdventure('adventure-my-template', advs[i]));
 
-            if (advs.length < 10) {
+            utils.resetReplaceSpinning($('.btn-adventures-my-load-more'));
+            if (advs.length < 10)
                 $('.btn-adventures-my-load-more').fadeOut();
-            } else {
-                $('.btn-adventures-my-load-more').show().html('Show More');
-            }
+
             utils.resetSpinning($('.btn-adventures-my-refresh i'));
         }});
     };

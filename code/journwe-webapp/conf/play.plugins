@@ -1,7 +1,0 @@
-10005:services.OAuthUserServicePlugin
-10010:com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthProvider
-10011:com.feth.play.module.pa.providers.oauth2.foursquare.FoursquareAuthProvider
-10012:com.feth.play.module.pa.providers.oauth1.twitter.TwitterAuthProvider
-10013:com.feth.play.module.pa.providers.oauth2.google.GoogleAuthProvider
-10040:providers.MyUsernamePasswordAuthProvider
-5000:com.github.mumoshu.play2.memcached.MemcachedPlugin

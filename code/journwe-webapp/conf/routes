@@ -1,5 +1,5 @@
 # Routes
-# This files defines all application routes (Higher priority routes first)
+# This files defines all application routes (Higher priority admin.core.routes first)
 # ~~~~
 
 # Testing comet
@@ -18,8 +18,6 @@ GET           /api/json/categories/optionsMap.json                         contr
 GET           /api/json/category/:id/categories.json                       controllers.api.json.CategoryController.getCategories(id:String)
 GET           /api/json/category/:id/inspirations.json                     controllers.api.json.CategoryController.getInspirations(id:String)
 GET           /api/json/category/:id/adventures/public.json                controllers.api.json.ApplicationController.getPublicAdventuresOfCategory(id:String)
-POST          /api/json/category/moveInHierarchy.json                      controllers.api.json.CategoryController.setSuperCategory()
-GET           /api/json/category/countCache/update.json                    controllers.api.json.CategoryController.updateCountCache()
 
 
 
@@ -128,6 +126,11 @@ GET           /api/json/user/:id/adventures.json                           contr
 POST          /api/json/user/:id/notifications/frequency.json/:freq        controllers.api.json.UserController.setMailDigestFrequency(id:String, freq:String)
 
 
+#### Static resources from /public folder to /assets ####
+GET           /assets/javascripts-min/routes.js                            controllers.api.json.ApplicationController.routes
+GET           /assets/javascripts-min/messages.js                          controllers.api.json.ApplicationController.messages
+GET           /assets/javascripts/routes.js                                controllers.api.json.ApplicationController.routes
+GET           /assets/javascripts/messages.js                              controllers.api.json.ApplicationController.messages
 
 
 
@@ -137,19 +140,17 @@ POST          /api/json/user/:id/notifications/frequency.json/:freq        contr
 
 ## Web Frontend ##
 
-#### Categories ####
-GET           /category/new                                                controllers.html.CategoryController.create()
-GET           /category/:id/edit                                           controllers.html.CategoryController.edit(id:String)
-POST          /category/save                                               controllers.html.CategoryController.save()
-GET           /category/:id/delete                                         controllers.html.CategoryController.delete(id:String)
+#### Home Page ####
+GET           /cat/overview                                                controllers.html.IndexController.categoryOverview()
+GET           /cat/:catId                                                  controllers.html.IndexController.categoryIndex(catId:String)
+GET           /new                                                         controllers.html.IndexController.indexNew
+GET           /                                                            controllers.html.IndexController.index()
 
-#### Inspirations ####
-GET           /inspiration/new                                             controllers.html.InspirationController.create()
+
+
+#### Inspiration ####
 GET           /inspiration/:id                                             controllers.html.InspirationController.get(id:String)
 GET           /inspiration/:id/adventure/new                               controllers.html.InspirationController.createAdventure(id:String)
-GET           /inspiration/:id/edit                                        controllers.html.InspirationController.edit(id:String)
-POST          /inspiration/save                                            controllers.html.InspirationController.save()
-GET           /inspiration/:id/delete                                      controllers.html.InspirationController.delete(id:String)
 
 
 #### Adventure ####
@@ -174,12 +175,6 @@ GET           /adventure/:id/leave                                         contr
 
 
 
-#### BETA Signup ####
-# GET           /beta/join-77777777-9999-111-3322              controllers.html.ApplicationController.joinBeta()
-
-
-#### BETA Feedback ####
-POST          /feedback                                                    controllers.html.FeedbackController.createFeedback()
 
 
 #### Comments ####
@@ -188,75 +183,17 @@ GET           /comment/new/:threadId                                       contr
 GET           /threads/:advid                                              controllers.html.CommentController.listCommentThreads(advid:String)
 
 
-#### User ####
-GET           /user/:id                                                    controllers.html.UserController.getProfile(id:String)
-POST          /user/save/editable                                          controllers.html.UserController.saveEditable()
-POST          /user/email/save/editable                                    controllers.html.UserController.saveEmailEditable()
 
 
-#### Facebook ####
-GET           /test/fb/test                                                controllers.html.FacebookController.testFacebookFeatures()
-GET           /test/fb/message/create                                      controllers.html.FacebookController.createMessage()
-POST          /test/fb/message/send                                        controllers.html.FacebookController.sendMessage()
 
-#### Load Balancing & Maintenance ####
-GET           /ping                                                        controllers.html.ApplicationController.ping
 
-#### Static resources from /public folder to /assets ####
-GET           /assets/javascripts-min/routes.js                            controllers.html.ApplicationController.routes
-GET           /assets/javascripts-min/messages.js                          controllers.html.ApplicationController.messages
-GET           /assets/javascripts/routes.js                                controllers.html.ApplicationController.routes
-GET           /assets/javascripts/messages.js                              controllers.html.ApplicationController.messages
+#->            /admin                                                       admin.Routes
+
+->            /                                                            core.Routes
+
 
 GET           /assets/*file                                                controllers.Assets.at(path="/public", file)
 
-#### Signup ####
-GET           /signup                                                      controllers.html.ApplicationController.signup
-POST          /signup                                                      controllers.html.ApplicationController.doSignup
-
-#### Login ####
-GET           /login                                                       controllers.html.ApplicationController.login
-POST          /login                                                       controllers.html.ApplicationController.doLogin
-GET           /login/password/forgot/:email                                controllers.html.SignupController.forgotPassword(email: String)
-GET           /login/password/forgot                                       controllers.html.SignupController.forgotPassword(email = "")
-POST          /login/password/forgot                                       controllers.html.SignupController.doForgotPassword
-GET           /logout                                                      controllers.html.ApplicationController.doLogout
-
-#GET           /authenticate/:provider/denied                 controllers.SignupControllerController.oAuthDenied(provider: String)
-
-#### Accounts ####
-
-GET           /accounts/exists                                             controllers.html.SignupController.exists
-GET           /accounts/password/reset/:token                              controllers.html.SignupController.resetPassword(token: String)
-POST          /accounts/password/reset                                     controllers.html.SignupController.doResetPassword
-GET           /accounts/password/change                                    controllers.html.AccountController.changePassword
-POST          /accounts/password/change                                    controllers.html.AccountController.doChangePassword
-GET           /accounts/add                                                controllers.html.AccountController.link
-GET           /accounts/link                                               controllers.html.AccountController.askLink
-POST          /accounts/link                                               controllers.html.AccountController.doLink
-GET           /accounts/merge                                              controllers.html.AccountController.askMerge
-POST          /accounts/merge                                              controllers.html.AccountController.doMerge
-GET           /accounts/unverified                                         controllers.html.SignupController.unverified
-GET           /accounts/verify                                             controllers.html.AccountController.verifyEmail
-GET           /accounts/verify/:token                                      controllers.html.SignupController.verify(token: String)
-
-#### Authentication ####
-GET           /authenticate/:provider                                      com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)
-GET           /authenticate/:provider/denied                               controllers.html.ApplicationController.oAuthDenied(provider: String)
-
-#### Static Pages ####
-# GET           /subscribe                                     controllers.html.ApplicationController.subscribe()
-GET           /imprint                                                     controllers.html.ApplicationController.imprint
-GET           /about                                                       controllers.html.ApplicationController.about
-POST          /contact/send                                                controllers.html.ApplicationController.contactForm()
-GET           /contact                                                     controllers.html.ApplicationController.contact()
-GET           /admin                                                       controllers.html.ApplicationController.admin()
-GET           /lang/:id                                                    controllers.html.ApplicationController.changeLanguage(id:String)
 
 
-#### Home Page ####
-GET           /cat/overview                                                controllers.html.ApplicationController.categoryOverview()
-GET           /cat/:catId                                                  controllers.html.ApplicationController.categoryIndex(catId:String)
-GET           /new                                                         controllers.html.ApplicationController.indexNew
-GET           /                                                            controllers.html.ApplicationController.index()
 

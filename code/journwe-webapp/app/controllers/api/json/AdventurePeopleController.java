@@ -16,6 +16,7 @@ import fi.foyt.foursquare.api.FoursquareApi;
 import fi.foyt.foursquare.api.entities.CompactUser;
 import fi.foyt.foursquare.api.entities.UserGroup;
 import fi.foyt.foursquare.api.io.DefaultIOHandler;
+import models.UserManager;
 import models.adventure.Adventure;
 import models.adventure.AdventureAuthorization;
 import models.adventure.AdventureShortname;
@@ -33,9 +34,9 @@ import models.dao.inspiration.InspirationDAO;
 import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserSocialDAO;
-import models.helpers.JournweFacebookClient;
-import models.helpers.SocialAutocompleteFriend;
-import models.helpers.SocialInviter;
+import helpers.JournweFacebookClient;
+import helpers.SocialAutocompleteFriend;
+import helpers.SocialInviter;
 import models.inspiration.Inspiration;
 import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
@@ -79,7 +80,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName().replaceAll(" [^ ]*$", "") : "");
@@ -111,7 +112,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null && !EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) && !EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName() : "");
@@ -134,7 +135,7 @@ public class AdventurePeopleController extends Controller {
         if (!new JournweAuthorization(advId).canViewAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
 
-        final User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        final User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         try {
             return ok(Cache.getOrElse("adventure." + advId + ".adventurers.participants.others", new Callable<String>() {
@@ -145,7 +146,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null && !usr.getId().equals(advr.getUserId()) && !EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) && !EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName() : "");
@@ -177,7 +178,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null && EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus())) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName() : "");
@@ -209,7 +210,7 @@ public class AdventurePeopleController extends Controller {
                         if (advr != null && EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
                             ObjectNode node = Json.newObject();
                             node.put("id", advr.getUserId());
-                            node.put("link", controllers.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+                            node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
                             node.put("name", usr != null ? usr.getName() : "Unknown");
@@ -234,7 +235,7 @@ public class AdventurePeopleController extends Controller {
             return AuthorizationMessage.notAuthorizedResponse();
 
         EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
         if (advr != null) {
@@ -306,7 +307,7 @@ public class AdventurePeopleController extends Controller {
         DynamicForm f = form().bindFromRequest();
 
         ObjectNode node = Json.newObject();
-        node.put("url", routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()));
+        node.put("url", admin.core.routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()));
 
         return ok(Json.toJson(node));
     }
@@ -357,7 +358,7 @@ public class AdventurePeopleController extends Controller {
         if (!new JournweAuthorization(advId).canInviteAdventurerParticipants())
             return AuthorizationMessage.notAuthorizedResponse();
         Adventure adv = new AdventureDAO().get(advId);
-        User usr = new UserDAO().findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         DynamicForm f = form().bindFromRequest();
         try {
             new SocialInviter(usr, f.get("provider"), f.get("socialId")).invite(adv.getId());

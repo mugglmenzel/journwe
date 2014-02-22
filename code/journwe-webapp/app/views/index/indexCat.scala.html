@@ -18,7 +18,7 @@
     @defining(new CategoryHierarchyDAO){ catHierDAO =>
         <div class="nav-category visible-lg hidden" style="">
             <ul id="nav-category-list" class="nav nav-pills nav-stacked">
-                @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){@html.routes.ApplicationController.categoryOverview()}else{@html.routes.ApplicationController.categoryIndex(catSuper.getId)}"><i class="fa fa-arrow-circle-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Overview}else{@catSuper.getName}"></i> </a></li>}
+                @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){@html.routes.IndexController.categoryOverview()}else{@html.routes.IndexController.categoryIndex(catSuper.getId)}"><i class="fa fa-arrow-circle-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Overview}else{@catSuper.getName}"></i> </a></li>}
                 <li><a href="#subcategories"><i class="fa fa-arrow-circle-down" title="Sub-Categories"></i></a></li>
                 <li><a href="#inspirations"><i class="fa fa-lightbulb-o" title="Inspirations"></i></a></li>
                 <li><a href="#publicadventures"><i class="fa fa-bullhorn" title="Public JournWes"></i></a></li>
@@ -38,7 +38,7 @@
     @if(catDAO.countSubcategory(cat.getId) > 0) {
     <div class="jrn-container jrn-subcategory">
 
-        <h2 id="subcategories"><i class="fa fa-arrow-down"></i> @Messages("admin.category.subcategories") (@catDAO.countSubcategory(cat.getId))</h2>
+        <h2 id="subcategories"><i class="fa fa-arrow-down"></i> @Messages("contact.category.subcategories") (@catDAO.countSubcategory(cat.getId))</h2>
         <div style="">
             <div id="categories-list" style="font-size: 20pt;">
                 <i class="fa fa-spin icon-journwe"></i>
