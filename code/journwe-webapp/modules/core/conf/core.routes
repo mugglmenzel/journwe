@@ -1,0 +1,62 @@
+
+#### BETA Signup ####
+# GET           /beta/join-77777777-9999-111-3322              controllers.core.html.ApplicationController.joinBeta()
+
+
+#### BETA Feedback ####
+POST        /feedback                              controllers.core.html.FeedbackController.createFeedback()
+
+
+#### Signup ####
+GET         /signup                                controllers.core.html.ApplicationController.signup
+POST        /signup                                controllers.core.html.ApplicationController.doSignup
+
+#### Login ####
+GET         /login                                 controllers.core.html.ApplicationController.login
+POST        /login                                 controllers.core.html.ApplicationController.doLogin
+GET         /login/password/forgot/:email          controllers.core.html.SignupController.forgotPassword(email: String)
+GET         /login/password/forgot                 controllers.core.html.SignupController.forgotPassword(email = "")
+POST        /login/password/forgot                 controllers.core.html.SignupController.doForgotPassword
+GET         /logout                                controllers.core.html.ApplicationController.doLogout
+
+#GET           /authenticate/:provider/denied                 controllers.SignupControllerController.oAuthDenied(provider: String)
+
+#### User ####
+GET         /user/:id                              controllers.core.html.UserController.getProfile(id:String)
+POST        /user/save/editable                    controllers.core.html.UserController.saveEditable()
+POST        /user/email/save/editable              controllers.core.html.UserController.saveEmailEditable()
+
+#### Accounts ####
+
+GET         /accounts/exists                       controllers.core.html.SignupController.exists
+GET         /accounts/password/reset/:token        controllers.core.html.SignupController.resetPassword(token: String)
+POST        /accounts/password/reset               controllers.core.html.SignupController.doResetPassword
+GET         /accounts/password/change              controllers.core.html.AccountController.changePassword
+POST        /accounts/password/change              controllers.core.html.AccountController.doChangePassword
+GET         /accounts/add                          controllers.core.html.AccountController.link
+GET         /accounts/link                         controllers.core.html.AccountController.askLink
+POST        /accounts/link                         controllers.core.html.AccountController.doLink
+GET         /accounts/merge                        controllers.core.html.AccountController.askMerge
+POST        /accounts/merge                        controllers.core.html.AccountController.doMerge
+GET         /accounts/unverified                   controllers.core.html.SignupController.unverified
+GET         /accounts/verify                       controllers.core.html.AccountController.verifyEmail
+GET         /accounts/verify/:token                controllers.core.html.SignupController.verify(token: String)
+
+#### Authentication ####
+GET         /authenticate/:provider                com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)
+GET         /authenticate/:provider/denied         controllers.core.html.ApplicationController.oAuthDenied(provider: String)
+
+#### Static Pages ####
+# GET           /subscribe                                     controllers.core.html.ApplicationController.subscribe()
+GET         /index                                 controllers.core.html.ApplicationController.index()
+GET         /imprint                               controllers.core.html.ApplicationController.imprint
+GET         /about                                 controllers.core.html.ApplicationController.about
+POST        /contact/send                          controllers.core.html.ApplicationController.contactForm()
+GET         /contact                               controllers.core.html.ApplicationController.contact()
+GET         /lang/:id                              controllers.core.html.ApplicationController.changeLanguage(id:String)
+
+#### Load Balancing & Maintenance ####
+GET         /ping                                  controllers.core.html.ApplicationController.ping
+
+
+GET         /assets/*file                          controllers.Assets.at(path="/public", file)

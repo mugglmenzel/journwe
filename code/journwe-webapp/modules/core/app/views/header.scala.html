@@ -1,0 +1,88 @@
+@import models.dao.user.UserDAO
+@import models.dao.NotificationDAO
+@import com.feth.play.module.pa.views.html._
+@import com.feth.play.module.pa.providers.AuthProvider.Registry
+
+
+
+<div>
+
+@currentAuth() { auth =>
+    @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
+    <div class="row">
+        <div class="col-lg-2 col-sm-2 col-xs-2">
+            <div class="navbar-text">
+                    <a href="/" class="brand" style="vertical-align: bottom;">
+                        <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 30px; vertical-align: text-bottom;">
+                            Journ<strong>We</strong>
+                        </span>
+                    </a>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <ul class="nav nav-pills nav-justified">
+
+                <li><a href="@core.html.routes.ApplicationController.index()"><i class="fa fa-asterisk"></i> New <img height="14px" src="@routes.Assets.at("../../../../public/img/journwe_logo.png")"></a></li>
+                <li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
+
+            </ul>
+        </div>
+
+
+        <div class="col-lg-4 col-sm-4 col-xs-4 clearfix text-right">
+        @if(auth != null && user != null) {
+            <div class="">
+
+                <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
+                <div class="stash">
+                    <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
+                        <div class="text-center" style="display: block;"><i class="loading-top icon-journwe fa fa-spin"></i></div>
+                        <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
+                        <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe fa fa-spin stash"></i></div>
+                    </div>
+                </div>
+                <script type="text/x-tmpl" id="header-notification-template">
+                    <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}" data-id="{%=o.created%}">
+                        <div class="media">
+                            <span class="pull-left">
+                                <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
+                            </span>
+                            <div class="media-body">
+                                <h4 class="media-heading {% if(o.read){ %}text-muted{% } %}">{%=o.subject%}</h4>
+                                <span class="{% if(o.read){ %}text-muted{% } %}">{%=o.message%}</span>
+                            </div>
+                        </div>
+                    </a>
+                </script>
+                <script src="@routes.Assets.at("javascripts/header.js").url" type="text/javascript"></script>
+
+                <a class="btn btn-link" href="@core.html.routes.UserController.getProfile(user.getId())">
+                    <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
+                    @user.getName()
+                </a>
+                <a class="btn btn-link" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
+            </div>
+
+
+        } else {
+            <div class="btn-group user-login">
+                <a class="btn btn-default" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Login</a>
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="@core.html.routes.ApplicationController.login()"><i class="fa fa-user fa-fw"></i> JournWe</a></li>
+                @forProviders() { p =>
+                    <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                }
+                </ul>
+            </div>
+        }
+        </div>
+    </div>
+
+    }
+}
+
+</div>

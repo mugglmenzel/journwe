@@ -1,0 +1,76 @@
+@import models.dao.adventure._
+@import models.dao.inspiration._
+@import com.feth.play.module.pa.providers.AuthProvider.Registry
+@import com.feth.play.module.pa.views.html._
+
+    @main(Messages("journwe.subtitle")) { }{
+        <section class="jrn-container text-center headline">
+            <div class="text-success">
+                <div>
+                    <img src="@routes.Assets.at("img/journwe_group_logo.png")" alt="JournWe Logo, Travel together.">
+                    Journ<strong>We</strong>
+                </div>
+                <div>Travel together.</div>
+            </div>
+            <div class="btn-group user-login">
+                <a class="btn btn-lg btn-success" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Start Now</a>
+                <button class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                @forProviders() { p =>
+                    <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                }
+                </ul>
+            </div>
+        </section>
+
+        <div class="jrn-container">
+            <h2>@Messages("index.feature")</h2>
+            
+            <div class="row index-statement">
+                <div class="col-lg-6 col-lg-offset-1 index">
+                    <img src="/assets/img/index/landing_adventurer2.png" class=""/>
+                </div>
+                <div class="col-lg-4" style="">
+                    <h4>@Messages("index.featureH1")</h4>
+                    @Messages("index.featureT1")
+                </div>
+            </div>
+
+            <div class="row index-statement">
+                <div class="col-lg-4 col-lg-offset-1" style="">
+                    <h4>@Messages("index.featureH2")</h4>
+                    @Messages("index.featureT2")
+                </div>
+                <div class="col-lg-6 index">
+                      <img src="/assets/img/index/landing_todo.png"/>
+                </div>
+            </div>
+
+            <div class="row index-statement">
+                <div class="col-lg-6 col-lg-offset-1 index" style="">
+                    <img src="/assets/img/index/landing_files2.png"/>
+                </div>
+                <div class="col-lg-4">
+                    <h4>@Messages("index.featureH3")</h4>
+                    @Messages("index.featureT3")
+                </div>
+            </div>
+
+
+
+            <div class="row index-statement">
+                <div class="col-lg-4 col-lg-offset-2">
+                  <h4><i class="fa fa-wrench"></i> @Messages("index.beta.title")</h4>
+                    @Messages("index.beta.text")
+                </div>
+                <div class="col-lg-4">
+                  <h4><i class="fa fa-money"></i> @Messages("index.b2b.title")</h4>
+                    @Html(Messages("index.b2b.text"))
+                </div>
+            </div>
+            <div class="row index-statement"></div>
+        </div>
+
+    }

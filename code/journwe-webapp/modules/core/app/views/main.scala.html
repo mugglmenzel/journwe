@@ -1,0 +1,173 @@
+@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit active: String = "home")
+
+@import play.api.Play.current
+@import play.mvc.Http
+@import models.dao._
+@import models.user._
+@import play.mvc.Controller._
+@import com.feth.play.module.pa.views.html._
+@import com.feth.play.module.pa.providers.AuthProvider.Registry
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<title>JournWe - @Html(title)</title>
+    <meta property="og:title" content="JournWe - Travel together. Coming Soon." />
+    <meta property="og:type" content="company" />
+    <meta property="og:site_name" content="JournWe - Travel together. Coming Soon." />
+    <meta property="og:description" content="JournWe changes how you travel in groups and how people join for a trip. Traveling becomes adventures at the most inspiring destinations and challenges, together with your friends. JournWe helps the right people to join for an adventure and make your trip a lifetime experience." />
+    <meta property="og:url" content="www.journwe.com" />
+    <meta property="og:image" content="@routes.Assets.at("img/favicon.png")" />
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.0.1-p7/extend/css/jasny-bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.1.3/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/2.0.0/css/bootstrap-switch.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Lato:300,400'>
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400'>
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,400'>
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
+    <link rel="stylesheet" href="@routes.Assets.at("css/typeahead.js-bootstrap.css")">
+    <link rel="stylesheet" href="@routes.Assets.at("css/journwe.min.css")">
+	<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/favicon.png")">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.0.1-p7/extend/js/jasny-bootstrap.min.js"></script>
+    <script src="@routes.Assets.at("js/tmpl.min.js")"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.1.3/js/bootstrap-datepicker.min.js" charset="UTF-8"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"></script>
+    @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = routes.Assets.at("javascripts/main").url)
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-39156308-1']);
+	  _gaq.push(['_setDomainName', 'journwe.com']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+</head>
+<body>
+	<div class="background-container">
+		<img src="@routes.Assets.at("img/s.gif")" id="background"/>
+		<div class="overlay"></div>
+	</div>
+	<div class="">
+		<header class="header row">
+            <div class="col-sm-offset-2 col-sm-8">
+			@header()
+            </div>
+		</header>
+
+		<div class="main row">
+            <div class="col-sm-2 file-dropzone"></div>
+			<div class="col-sm-8">
+				@if(!headerText.toString().equals(" ")){
+					<div class="page-header">
+						<h1>@headerText</h1>
+					</div>
+				}
+
+				@content
+			</div>
+            <div class="col-sm-2 file-dropzone"></div>
+		</div>
+
+		<!-- TOP NAVIGATION -->
+		<div class="row">
+	        <div class="col-sm-offset-2 col-sm-8">
+	        	<div class="jrn-container clearfix">
+                    <div class="row">
+                        <div class="col-xs-4">
+                                &copy; 2014 JournWe.
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="pull-right"><a onclick="$('html, body').animate({ scrollTop: 0 }, 600); return false;"><i class="fa fa-angle-up"></i> Top</a></div>
+                        </div>
+                    </div>
+
+		        </div>
+	        </div>
+	    </div>
+
+        <!-- FLASH MODALS -->
+        @if(flash(GlobalParameters.FLASH_ERROR_KEY)) {
+            <div class="modal fade in modal-auto-load" data-show="true" tabindex="-1" role="dialog" aria-labelledby="modal-error" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h2 class="modal-title"><i class="fa fa-exclamation-triangle"></i> Error!</h2>
+                        </div>
+                        <div class="modal-body">
+                            <p class="lead text-danger">@flash("error")</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if(flash("success")) {
+            <div class="modal fade in modal-auto-load" data-show="true" tabindex="-1" role="dialog" aria-labelledby="modal-success" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h2 class="modal-title"><i class="fa fa-check-circle"></i> Success!</h2>
+                        </div>
+                        <div class="modal-body">
+                            <p class="lead text-success">@flash("success")</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if(flash("info")) {
+            <div class="modal fade in modal-auto-load" data-show="true" tabindex="-1" role="dialog" aria-labelledby="modal-info" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h2 class="modal-title"><i class="fa fa-info-circle"></i> Info</h2>
+                        </div>
+                        <div class="modal-body">
+                            <p class="lead text-info">@flash("info")</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+	    
+	    <!-- FOOTER -->
+		@footer()
+
+	    <div id="fb-root"></div>
+	    <script>(function(d, s, id) {
+	        var js, fjs = d.getElementsByTagName(s)[0];
+	        if (d.getElementById(id)) return;
+	        js = d.createElement(s); js.id = id;
+	        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=515340035175937";
+	        fjs.parentNode.insertBefore(js, fjs);
+	        }(document, 'script', 'facebook-jssdk'));
+	    </script>
+	</div>
+
+</body>
+</html>

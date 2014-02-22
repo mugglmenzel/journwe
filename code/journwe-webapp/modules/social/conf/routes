@@ -1,0 +1,4 @@
+#### Facebook ####
+GET           /test/fb/test                                                controllers.FacebookController.testFacebookFeatures()
+GET           /test/fb/message/create                                      controllers.FacebookController.createMessage()
+POST          /test/fb/message/send                                        controllers.FacebookController.sendMessage()

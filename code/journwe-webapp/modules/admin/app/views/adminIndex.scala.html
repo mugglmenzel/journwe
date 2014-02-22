@@ -1,0 +1,25 @@
+
+@main(Messages("journwe.subtitle")){Manage JournWe <small>@Messages("journwe.subtitle")</small>} {
+
+
+<div class="jrn-container">
+    <h2>@Messages("admin.title")</h2>
+    <div class="">
+        <a href="@controllers.admin.html.routes.CategoryController.create()" class="btn btn-primary">@Messages("admin.category")</a>
+        <a href="@controllers.admin.html.routes.InspirationController.create()" class="btn btn-primary">@Messages("admin.inspiration")</a>
+        <a id="category-count-cache-update-button" class="btn btn-primary"><i class="fa fa-spin icon-journwe hide"></i> Update Category Count Cache</a>
+    </div>
+
+    <script>
+        $('#category-count-cache-update-button').click(function(){
+            var that = $(this);
+            that.find('i').first().removeClass('hide');
+            $.get('@api.json.routes.CategoryController.updateCountCache()', function(){
+                that.find('i').first().addClass('hide');
+            });
+        });
+    </script>
+</div>
+
+
+}("admin")
