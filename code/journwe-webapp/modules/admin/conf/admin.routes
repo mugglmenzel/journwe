@@ -1,4 +1,4 @@
-GET         /admin                                           controllers.admin.html.AdminController.admin()
+GET         /                                                controllers.admin.html.AdminController.admin()
 
 #### Categories ####
 GET         /category/new                                    controllers.admin.html.CategoryController.create()
@@ -6,8 +6,8 @@ GET         /category/:id/edit                               controllers.admin.h
 POST        /category/save                                   controllers.admin.html.CategoryController.save()
 GET         /category/:id/delete                             controllers.admin.html.CategoryController.delete(id:String)
 
-POST        /api/json/category/moveInHierarchy.json          controllers.api.json.CategoryController.setSuperCategory()
-GET         /api/json/category/countCache/update.json        controllers.api.json.CategoryController.updateCountCache()
+POST        /api/json/category/moveInHierarchy.json          controllers.admin.api.json.CategoryController.setSuperCategory()
+GET         /api/json/category/countCache/update.json        controllers.admin.api.json.CategoryController.updateCountCache()
 
 
 #### Inspirations ####
@@ -15,5 +15,3 @@ GET         /inspiration/new                                 controllers.admin.h
 GET         /inspiration/:id/edit                            controllers.admin.html.InspirationController.edit(id:String)
 POST        /inspiration/save                                controllers.admin.html.InspirationController.save()
 GET         /inspiration/:id/delete                          controllers.admin.html.InspirationController.delete(id:String)
-
-GET         /index                                           controllers.core.html.ApplicationController.index()

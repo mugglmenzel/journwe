@@ -1,10 +1,5 @@
-package controllers.api.json;
+package controllers.admin.api.json;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.typesafe.config.ConfigFactory;
 import models.GlobalParameters;
 import models.auth.SecuredAdminUser;
 import models.category.Category;
@@ -14,15 +9,10 @@ import models.dao.category.CategoryHierarchyDAO;
 import play.Logger;
 import play.cache.Cache;
 import play.data.DynamicForm;
-import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.category.manage;
-
-import java.io.File;
 
 import static play.data.Form.form;
 
@@ -57,7 +47,7 @@ public class CategoryController extends Controller {
 
 
     public static void clearCache() {
-        new Thread(new Runnable(){
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 Cache.remove("categories.optionsMap");

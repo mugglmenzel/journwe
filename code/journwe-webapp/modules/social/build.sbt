@@ -33,3 +33,5 @@ resolvers ++= Seq(
 )
 
 playJavaSettings
+
+doc in Compile <<= target.map(_ / "none")

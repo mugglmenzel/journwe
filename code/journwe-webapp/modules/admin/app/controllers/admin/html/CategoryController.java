@@ -82,7 +82,7 @@ public class CategoryController extends Controller {
                         hier.setSuperCategoryId(Category.SUPER_CATEGORY);
                         hier.setSubCategoryId(cat.getId());
                         new CategoryHierarchyDAO().save(hier);
-                        controllers.api.json.CategoryController.clearCache();
+                        controllers.admin.api.json.CategoryController.clearCache();
                     }
 
                     flash("success", "Saved Category.");
@@ -113,7 +113,7 @@ public class CategoryController extends Controller {
             if (catHier != null) {
                 catHier.setSuperCategoryId(Category.SUPER_CATEGORY);
                 new CategoryHierarchyDAO().save(catHier);
-                controllers.api.json.CategoryController.clearCache();
+                controllers.admin.api.json.CategoryController.clearCache();
             }
 
         if (new CategoryDAO().delete(id)) {

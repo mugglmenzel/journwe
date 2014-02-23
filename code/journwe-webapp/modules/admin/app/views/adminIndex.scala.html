@@ -14,7 +14,7 @@
         $('#category-count-cache-update-button').click(function(){
             var that = $(this);
             that.find('i').first().removeClass('hide');
-            $.get('@api.json.routes.CategoryController.updateCountCache()', function(){
+            $.get('@controllers.admin.api.json.routes.CategoryController.updateCountCache()', function(){
                 that.find('i').first().addClass('hide');
             });
         });
