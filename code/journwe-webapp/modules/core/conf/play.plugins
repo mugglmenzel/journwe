@@ -1,3 +1,4 @@
+5000:com.github.mumoshu.play2.memcached.MemcachedPlugin
 10005:services.OAuthUserServicePlugin
 10010:com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthProvider
 10011:com.feth.play.module.pa.providers.oauth2.foursquare.FoursquareAuthProvider

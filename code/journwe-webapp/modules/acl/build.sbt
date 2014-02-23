@@ -8,7 +8,6 @@ version := "1.0"
 libraryDependencies ++= Seq(
   javaCore,
   javaEbean,
-  cache,
   "com.feth" %% "play-authenticate" % "0.5.2-SNAPSHOT"
 )
 

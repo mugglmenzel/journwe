@@ -4,6 +4,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import models.UserManager;
 import models.adventure.AdventureAuthorization;
 import models.adventure.EAuthorizationRole;
+import models.cache.CachedAdventureAuthorizationDAO;
 import models.dao.AdventureAuthorizationDAO;
 import models.dao.user.UserDAO;
 import models.user.User;
@@ -248,13 +249,7 @@ public class JournweAuthorization {
             // Load JournweAuthorization classname from database
             AdventureAuthorization model = null;
             try {
-                model = Cache.getOrElse("adventureAuthorization." + advId + "." + usr.getId(), new Callable<AdventureAuthorization>() {
-                    @Override
-                    public AdventureAuthorization call() throws Exception {
-                        Logger.debug("fetched authorization from dynamodb");
-                        return new AdventureAuthorizationDAO().get(advId, usr.getId());
-                    }
-                }, 24 * 3600);
+                model = new CachedAdventureAuthorizationDAO().get(advId, usr.getId());
             } catch (Exception e) {
                 Logger.error("Couldn't get Authorization for adv " + advId + ", usr " + usr.getId() + " from db", e);
                 model = new AdventureAuthorizationDAO().get(advId, usr.getId());

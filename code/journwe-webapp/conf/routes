@@ -187,7 +187,7 @@ GET           /threads/:advid                                              contr
 
 
 
-#->            /admin                                                       admin.Routes
+->            /admin                                                       admin.Routes
 
 ->            /                                                            core.Routes
 
