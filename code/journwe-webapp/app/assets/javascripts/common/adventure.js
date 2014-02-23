@@ -643,11 +643,11 @@ define([
 
             utils.resetSpinning($(".btn-timeline-refresh i"));
         }});
-    }
+    };
 
     var renderTimeline = function (time) {
         return $('<div></div>').html(tmpl('timeline-template-' + time.type, $.extend({
-
+            time: utils.formatTime(time.timestamp)
         }, time)));
     };
 

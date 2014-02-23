@@ -10,7 +10,6 @@
 body, body *, .btn, .btn-link {
   font-family: @font;
   font-weight: @font-normal;
-  //font-size: 16px;
 
   & b,
   body strong {
@@ -18,10 +17,22 @@ body, body *, .btn, .btn-link {
   }
 }
 
+body * {
+  font-size: 16px;
+}
+
+.btn {
+  &, & * {
+    font-size: 14px;
+  }
+}
+
 h1 {
-  font-family: @font-title;
-  font-weight: @font-title-normal;
   font-size: 32px;
+  &, & * {
+    font-family: @font-title;
+    font-weight: @font-title-normal;
+  }
 
   &, & small {
     font-weight: @font-title-thin;
@@ -29,9 +40,14 @@ h1 {
   }
 }
 
+h1, h2, h3, h4 {
+  &, & * {
+    font-family: @font-title;
+    font-weight: @font-title-normal;
+  }
+}
+
 h2, h3, h4 {
-  font-family: @font-title;
-  font-weight: @font-title-normal;
   font-size: 24px;
 
   &, & small {
@@ -1337,6 +1353,10 @@ img.landing {
 
 .label {
   padding: 0.2em 0.6em 0.2em;
+
+  i {
+    font-size: 12px;
+  }
 }
 
 .carousel-fullscreen {

@@ -42,7 +42,7 @@
                             <a href="#times" data-toggle="tooltip" title="Times"><i class="fa fa-calendar" title="Date &amp; Time"></i></a>
                         </li>
                         <li class="discussion emails">
-                            <a href="#discussion" data-toggle="tooltip" title="Discussion"><i class="fa fa-comments" title="Discussion"></i></a>
+                            <a href="#timeline" data-toggle="tooltip" title="Timeline"><i class="fa fa-clock-o" title="Timeline"></i></a>
                             <!--a href="#emails" data-toggle="tooltip" title="Emails"><i class="fa fa-envelope" title="Emails"></i></a-->
                         </li>
                         <li class="todos files pull-left">
@@ -51,33 +51,6 @@
                         </li>
                         @*<li class="offers"><a href="#offers"><i class="fa fa-suitcase" title="Offers"></i></a></li>*@
                     </ul>
-                </div>
-
-
-
-
-                <div class="jrn-adventure-section">
-                    <div class="jrn-container">
-                        <h2 id="timeline"><i class="fa fa-bolt icon-for-adventure-title"></i>
-                            Timeline
-
-                            <div class="pull-right clearfix">
-                                <div class="btn-group btn-group-timeline-filter">
-                                    <button class="btn btn-default btn-timeline-filter-all active" data-toggle="tooltip" title="All"><i class="fa fa-square fa-fw"></i></button>
-                                    <button class="btn btn-default btn-timeline-filter-logs" data-toggle="tooltip" title="Filter: Log Entries"><i class="fa fa-list fa-fw"></i></button>
-                                    <button class="btn btn-default btn-timeline-filter-emails" data-toggle="tooltip" title="Filter: Emails"><i class="fa fa-envelope fa-fw"></i></button>
-                                    <button class="btn btn-default btn-timeline-filter-comments" data-toggle="tooltip" title="Filter: Comments"><i class="fa fa-comments fa-fw"></i></button>
-                                    <button class="btn btn-default btn-timeline-filter-files" data-toggle="tooltip" title="Filter: Files"><i class="fa fa-file fa-fw"></i></button>
-                                </div>
-                                <button id="" class="btn btn-success btn-timeline-refresh"><i class="fa fa-refresh"></i></button>
-                            </div>
-                        </h2>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                @timeline(adv, user)
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
 
@@ -99,11 +72,9 @@
                     }
                     <hr/>
                 }
-
                 </div>
 
                 <div class="jrn-adventure-section">
-
                 @if(auth.canViewAdventurePlacesWidget()) {
                     <div class="jrn-container jrn-no-bottom-round">
                         <h2 id="places"><i class="fa fa-globe icon-for-adventure-title"></i> @Messages("adventure.getScala.place.title")</h2>
@@ -121,7 +92,6 @@
                     }
                     <hr/>
                 }
-
                 </div>
 
                 <div class="jrn-adventure-section">
@@ -146,7 +116,6 @@
                 </div>
 
                 <div class="jrn-adventure-section stash">
-
                 @if(auth.canViewAdventureDiscussionWidget()) {
                     <div class="jrn-container">
 
@@ -160,6 +129,30 @@
 
                     <hr/>
                 }
+                </div>
+
+                <div class="jrn-adventure-section stash">
+                    <div class="jrn-container">
+                        <h2 id="timeline"><i class="fa fa-clock-o icon-for-adventure-title"></i>
+                            Timeline
+
+                            <div class="pull-right clearfix">
+                                <div class="btn-group btn-group-timeline-filter">
+                                    <button class="btn btn-default btn-timeline-filter-all active" data-toggle="tooltip" title="All"><i class="fa fa-square fa-fw"></i></button>
+                                    <button class="btn btn-default btn-timeline-filter-logs" data-toggle="tooltip" title="Filter: Log Entries"><i class="fa fa-list fa-fw"></i></button>
+                                    <button class="btn btn-default btn-timeline-filter-emails" data-toggle="tooltip" title="Filter: Emails"><i class="fa fa-envelope fa-fw"></i></button>
+                                    <button class="btn btn-default btn-timeline-filter-comments" data-toggle="tooltip" title="Filter: Comments"><i class="fa fa-comments fa-fw"></i></button>
+                                    <button class="btn btn-default btn-timeline-filter-files" data-toggle="tooltip" title="Filter: Files"><i class="fa fa-file fa-fw"></i></button>
+                                </div>
+                                <button id="" class="btn btn-success btn-timeline-refresh"><i class="fa fa-refresh"></i></button>
+                            </div>
+                        </h2>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @timeline(adv, user)
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="jrn-adventure-section stash">
@@ -199,7 +192,7 @@
                     <hr/>
                 }
 
-                @if(auth.canViewAdventureFilesWidget()) {
+                @if(auth.canViewAdventureFilesWidget() && false) {
                     <div class="jrn-container jrn-no-bottom-round">
                         <h2 id="files"><i class="fa fa-file fa fa-for-adventure-title"></i> @Messages("adventure.getScala.files.title")<div class="pull-right"><button id="files-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
                         <div class="row">

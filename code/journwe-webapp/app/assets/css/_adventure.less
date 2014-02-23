@@ -273,6 +273,16 @@
             opacity: 1;
         }
 
+        .stash {
+            .transition(opacity 0.5s ease);
+            opacity: 0;
+            display: inline-block;
+        }
+
+        &:hover .stash {
+            opacity: 1;
+        }
+
         .timeline-icon {
             width: 42px;
             height: 42px;
