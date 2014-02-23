@@ -8,6 +8,7 @@ libraryDependencies ++= Seq(
   javaCore,
   javaEbean,
   cache,
+  "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2",
   "com.amazonaws" % "aws-java-sdk" % "1.7.1",
   "com.feth" %% "play-authenticate" % "0.5.2-SNAPSHOT",
   "com.rosaloves" % "bitlyj" % "2.0.0",
