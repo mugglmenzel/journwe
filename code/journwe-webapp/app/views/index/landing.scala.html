@@ -18,6 +18,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
+                    <li><a href="@core.html.routes.ApplicationController.login()"><i class="fa fa-user fa-fw"></i> JournWe</a></li>
                 @forProviders() { p =>
                     <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
                 }
