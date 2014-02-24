@@ -20,17 +20,8 @@
             </div>
         </div>
 
-        <div class="col-lg-6 col-sm-6 col-xs-6">
-            <ul class="nav nav-pills nav-justified">
-                <li><a href="@html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New</a></li>
-                <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                <li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
-            </ul>
-        </div>
-
-
-        <div class="col-lg-4 col-sm-4 col-xs-4 clearfix text-right">
         @if(auth != null && user != null) {
+        <div class="col-lg-4 col-sm-4 col-xs-4 clearfix text-right">
             <div class="">
 
                 <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
@@ -62,9 +53,26 @@
                 </a>
                 <a class="btn btn-link" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
             </div>
-
+        </div>
 
         } else {
+            <div class="col-lg-8 col-sm-4 col-xs-4 pull-right">
+                    <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="form-inline">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="email" type="text" class="form-control" name="email" value="" placeholder="your email">
+                            </div>
+
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="password" type="password" class="form-control" name="password" placeholder="password">
+                            </div>
+
+                            <input type="submit" value="Login" class="btn btn-default" >
+                        </div>
+                    </form>
+
             <div class="btn-group user-login">
                 <a class="btn btn-default" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Login</a>
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -73,12 +81,14 @@
                 <ul class="dropdown-menu">
                     <li><a href="@core.html.routes.ApplicationController.login()"><i class="fa fa-user fa-fw"></i> JournWe</a></li>
                 @forProviders() { p =>
-                    <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                    <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a> Login</li>
                 }
                 </ul>
             </div>
-        }
+
         </div>
+        }
+
     </div>
 
     }
