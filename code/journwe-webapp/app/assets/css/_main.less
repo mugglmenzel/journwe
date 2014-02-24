@@ -346,10 +346,6 @@ body > .row-fluid > div.span8 h2 {
     padding: 10px 0;
   }
 
-  & .user-login {
-    padding: 10px 0;
-  }
-
   & .nav > .active > a,
   & .nav > .active > a:hover,
   & .nav > .active > a:focus {
@@ -370,18 +366,7 @@ body > .row-fluid > div.span8 h2 {
   }
 }
 
-.header .brand span {
-  font-family: @font-logo-journ;
-  font-weight: @font-title-thin;
-  font-size: 20px;
-  white-space: nowrap;
 
-  & strong {
-    font-family: @font-logo-we;
-    font-weight: @font-title-bold;
-    font-size: 20px;
-  }
-}
 
 .navbar-inner p {
   padding: 10px 0;
@@ -508,7 +493,7 @@ table.inspiration {
     border-radius: 2px;
     margin-top: -3px;
 
-    .comments-wall& {
+    .comments-wall & {
       box-shadow: 0 0 1px gray;
     }
 
@@ -961,11 +946,11 @@ h3 {
     white-space: nowrap;
     display: inline;
 
-    & .btn-group>.btn:first-child {
+    & .btn-group > .btn:first-child {
       margin-left: 0;
     }
 
-    & .btn-group .btn+.btn, .btn-group .btn+.btn-group, .btn-group .btn-group+.btn, .btn-group .btn-group+.btn-group {
+    & .btn-group .btn + .btn, .btn-group .btn + .btn-group, .btn-group .btn-group + .btn, .btn-group .btn-group + .btn-group {
       margin-left: -1px;
     }
 
@@ -976,6 +961,31 @@ h3 {
 }
 
 .header {
+
+  & .brand span {
+    font-family: @font-logo-journ;
+    font-weight: @font-title-thin;
+    font-size: 20px;
+    white-space: nowrap;
+
+    & strong {
+      font-family: @font-logo-we;
+      font-weight: @font-title-bold;
+      font-size: 20px;
+    }
+  }
+
+  & .user-login {
+    //padding: 10px 0;
+    position: relative;
+    display: table;
+    border-collapse: separate;
+    white-space: nowrap;
+    & .btn {
+      display: table-cell;
+      float: none;
+    }
+  }
 
   & > * > * {
     background-color: @color_white;
@@ -1010,7 +1020,7 @@ h3 {
   color: #333;
 }
 
-.nav-pills>.active>a, .nav-pills>.active>a:hover, .nav-pills>.active>a:focus {
+.nav-pills > .active > a, .nav-pills > .active > a:hover, .nav-pills > .active > a:focus {
   color: gray;
   background-color: white;
 }
@@ -1063,6 +1073,7 @@ h3 {
 .has-switch label, .has-switch span {
   line-height: 26px;
 }
+
 /*
 .controls.switch {
     height: 28px;
@@ -1123,14 +1134,14 @@ h3 {
   overflow: hidden;
 }
 
-.table-striped>tbody>tr:nth-child(odd) {
+.table-striped > tbody > tr:nth-child(odd) {
 
   & > td, & > th {
 
   }
 }
 
-.table-striped>tbody>tr:hover {
+.table-striped > tbody > tr:hover {
 
   & > td, & > th {
 
@@ -1193,20 +1204,20 @@ h3 {
     color: white;
   }
 
-  & .nav-pills>li.active>a,
-  & .nav-pills>li.active>a:hover,
-  & .nav-pills>li.active>a:focus {
+  & .nav-pills > li.active > a,
+  & .nav-pills > li.active > a:hover,
+  & .nav-pills > li.active > a:focus {
     background: fade(@color_white, 40%) !important;
   }
 
-  & .nav-pills>li>a:hover,
-  & .nav-pills>li>a:focus {
+  & .nav-pills > li > a:hover,
+  & .nav-pills > li > a:focus {
     color: white;
     background: fade(@color_white, 20%);
   }
 
-  & .nav-pills>li>a:hover i,
-  & .nav-pills>li>a:focus i {
+  & .nav-pills > li > a:hover i,
+  & .nav-pills > li > a:focus i {
     color: white;
   }
 
@@ -1245,7 +1256,7 @@ h3 {
   }
 }
 
-.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
   color: #428bca;
   background-color: transparent;
 }
@@ -1258,7 +1269,7 @@ h3 {
 
 .input-lg {
   font-size: 16px;
-  height: 44px; 
+  height: 44px;
 }
 
 .input-group-btn .btn {
@@ -1382,13 +1393,12 @@ img.landing {
   }
 }
 
-
 #yingyangyong-form {
 
   .nav {
 
     & li + li a {
-      margin-left: 10px; 
+      margin-left: 10px;
     }
 
     li a {
@@ -1396,11 +1406,11 @@ img.landing {
       border-radius: 10px;
       margin-bottom: 10px;
       color: #666;
-      color: rgba(0,0,0,0.4);
+      color: rgba(0, 0, 0, 0.4);
 
       &:hover * {
         color: #333;
-        color: rgba(0,0,0,0.6);
+        color: rgba(0, 0, 0, 0.6);
       }
 
       h4 {
@@ -1417,7 +1427,7 @@ img.landing {
       background-color: @color_place !important;
     }
     .who-tab {
-      background-color: @color_adventurer !important; 
+      background-color: @color_adventurer !important;
     }
     .when-tab {
       background-color: @color_time !important;
@@ -1426,9 +1436,9 @@ img.landing {
 
   .tab-pane {
     > div {
-      border: solid 0px @color_place; 
-      border-radius: 5px; 
-      background-color: @color_place; 
+      border: solid 0px @color_place;
+      border-radius: 5px;
+      background-color: @color_place;
       margin-bottom: 20px;
       padding-top: 1px;
       padding-bottom: 1px;
