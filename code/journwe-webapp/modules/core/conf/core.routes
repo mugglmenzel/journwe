@@ -48,7 +48,7 @@ GET         /authenticate/:provider/denied         controllers.core.html.Applica
 
 #### Static Pages ####
 # GET           /subscribe                                     controllers.core.html.ApplicationController.subscribe()
-GET         /index                                 controllers.core.html.ApplicationController.index()
+GET         /landing                               controllers.core.html.ApplicationController.index
 GET         /imprint                               controllers.core.html.ApplicationController.imprint
 GET         /about                                 controllers.core.html.ApplicationController.about
 POST        /contact/send                          controllers.core.html.ApplicationController.contactForm()

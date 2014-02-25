@@ -185,6 +185,7 @@ admin.category.subcategories=Subcategories
 admin.inspiration=Manage Inspiration
 
 #Inspiration
+index.category.subcategories=Subcategories
 inspiration.text=Inspirations
 inspiration.title=Inspiration Category Form
 inspiration.getInspired=Get inspired from...

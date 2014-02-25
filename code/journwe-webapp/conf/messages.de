@@ -185,6 +185,7 @@ admin.category.subcategories=Unterkategorien
 admin.inspiration=Verwalte Inspirationen
 
 #Inspiration
+index.category.subcategories=Unterkategorien
 inspiration.text=Inspirationen
 inspiration.title=Inspirations Kategorien Formular
 inspiration.getInspired=Werde inspirirert von...

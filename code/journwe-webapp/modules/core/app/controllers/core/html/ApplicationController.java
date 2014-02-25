@@ -23,8 +23,10 @@ import views.html.*;
 
 public class ApplicationController extends Controller {
 
+
+
     public static Result index() {
-        return ok(views.html.index.index.render());
+        return ok(views.html.index.landing.render());
     }
 
 

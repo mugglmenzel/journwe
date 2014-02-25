@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-2 col-sm-2 col-xs-2">
             <div class="navbar-text">
-                    <a href="/" class="brand" style="vertical-align: bottom;">
+                    <a href="@core.html.routes.ApplicationController.index()" class="brand" style="vertical-align: bottom;">
                         <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 30px; vertical-align: text-bottom;">
                             Journ<strong>We</strong>
                         </span>
@@ -22,10 +22,7 @@
 
         <div class="col-lg-6 col-sm-6 col-xs-6">
             <ul class="nav nav-pills nav-justified">
-
-                <li><a href="@core.html.routes.ApplicationController.index()"><i class="fa fa-asterisk"></i> New <img height="14px" src="@routes.Assets.at("../../../../public/img/journwe_logo.png")"></a></li>
                 <li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
-
             </ul>
         </div>
 
