@@ -1,0 +1,7 @@
+@(name: String)
+Hey @name,
+
+wie geht's wie steht's?
+
+Grüße,
+Das JournWe-Team
