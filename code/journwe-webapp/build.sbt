@@ -48,7 +48,7 @@ requireJs ++= Seq(
 
 requireJsShim += "build.js"
 
-lazy val root = project.in(file(".")).aggregate(acl, admin, core, social).dependsOn(acl, admin, core, data, dataCache, social)
+lazy val root = project.in(file(".")).aggregate(acl, admin, core, social).dependsOn(acl, admin, core, data, dataCache, social, email)
 
 lazy val data = project.in(file("modules/data"))
 lazy val dataCache = project.in(file("modules/dataCache")).aggregate(data).dependsOn(data)
@@ -60,3 +60,4 @@ lazy val acl = project.in(file("modules/acl")).aggregate(core).dependsOn(core, d
 
 lazy val admin = project.in(file("modules/admin")).aggregate(core).dependsOn(core, data, dataCache)
 
+lazy val email = project.in(file("modules/email")).dependsOn(core, acl)
