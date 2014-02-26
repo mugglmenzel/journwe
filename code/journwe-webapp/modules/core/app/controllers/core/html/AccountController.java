@@ -15,8 +15,8 @@ import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.i18n.Messages;
 import play.mvc.*;
-import providers.MyUsernamePasswordAuthProvider;
-import providers.MyUsernamePasswordAuthUser;
+import models.providers.MyUsernamePasswordAuthProvider;
+import models.providers.MyUsernamePasswordAuthUser;
 import views.html.account.link;
 
 import static play.data.Form.form;

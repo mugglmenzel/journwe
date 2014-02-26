@@ -10,6 +10,8 @@
                 </div>
                 <div>Travel together.</div>
             </div>
+            <a class="btn btn-lg btn-success btn-start-tour" href="#tour">Start Now <i class="fa fa-angle-right"></i></a>
+            @*
             <div class="btn-group user-login">
                 <a class="btn btn-lg btn-success" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Start Now</a>
                 <button class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
@@ -22,9 +24,12 @@
                 }
                 </ul>
             </div>
+            *@
         </section>
 
-         @quickintro()
+        @tour(false)
+
+        <script src="@routes.Assets.at("javascripts/module/landing.js").url" type="text/javascript"></script>
 
         <div class="jrn-container">
             <h2>@Messages("landing.feature")</h2>
@@ -69,6 +74,8 @@
                 <div class="col-lg-4">
                   <h4><i class="fa fa-money"></i> @Messages("landing.b2b.title")</h4>
                     @Html(Messages("landing.b2b.text"))
+                    <br/>
+                    <div class="pull-right"><a class="btn btn-default" href="/contact"><i class="fa fa-envelope-o"></i> Contact</a></div>
                 </div>
             </div>
             <div class="row landing-statement"></div>

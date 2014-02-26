@@ -1,4 +1,4 @@
-package providers;
+package models.providers;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
@@ -42,7 +42,7 @@ import static play.data.Form.form;
 
 public class MyUsernamePasswordAuthProvider
         extends
-        UsernamePasswordAuthProvider<String, providers.MyLoginUsernamePasswordAuthUser, providers.MyUsernamePasswordAuthUser, MyUsernamePasswordAuthProvider.MyLogin, MyUsernamePasswordAuthProvider.MySignup> {
+        UsernamePasswordAuthProvider<String, MyLoginUsernamePasswordAuthUser, MyUsernamePasswordAuthUser, MyUsernamePasswordAuthProvider.MyLogin, MyUsernamePasswordAuthProvider.MySignup> {
 
     public static final String PROVIDER_KEY = "password";
 
@@ -146,7 +146,7 @@ public class MyUsernamePasswordAuthProvider
     }
 
     @Override
-    protected com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.SignupResult signupUser(final providers.MyUsernamePasswordAuthUser user) {
+    protected com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.SignupResult signupUser(final MyUsernamePasswordAuthUser user) {
         // Finds a user if emailuser with this email exists.
         final User u = UserManager.findByUsernamePasswordIdentity(user);
         // A user with this email has been found.
@@ -212,7 +212,7 @@ public class MyUsernamePasswordAuthProvider
 
     @Override
     protected com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.LoginResult loginUser(
-            final providers.MyLoginUsernamePasswordAuthUser authUser) {
+            final MyLoginUsernamePasswordAuthUser authUser) {
         final User u = UserManager.findByUsernamePasswordIdentity(authUser);
         if (u == null) {
             return LoginResult.NOT_FOUND;
@@ -250,10 +250,10 @@ public class MyUsernamePasswordAuthProvider
     }
 
     @Override
-    protected providers.MyUsernamePasswordAuthUser buildSignupAuthUser(
+    protected MyUsernamePasswordAuthUser buildSignupAuthUser(
             final MySignup signup, final Context ctx) {
         // TODO
-        providers.MyUsernamePasswordAuthUser toReturn = new providers.MyUsernamePasswordAuthUser(signup);
+        MyUsernamePasswordAuthUser toReturn = new MyUsernamePasswordAuthUser(signup);
         Logger.debug("MyUsernamePasswordAuthUser buildSignupAuthUser() -> MyUsernamePasswordAuthUser.id = " + toReturn.getId());
         return toReturn;
     }
@@ -276,7 +276,7 @@ public class MyUsernamePasswordAuthProvider
 
     @Override
     protected String getVerifyEmailMailingSubject(
-            final providers.MyUsernamePasswordAuthUser user, final Context ctx) {
+            final MyUsernamePasswordAuthUser user, final Context ctx) {
         return Messages.get("playauthenticate.password.verify_signup.subject");
     }
 
@@ -290,7 +290,7 @@ public class MyUsernamePasswordAuthProvider
 
     @Override
     protected Body getVerifyEmailMailingBody(final String token,
-                                             final providers.MyUsernamePasswordAuthUser user, final Context ctx) {
+                                             final MyUsernamePasswordAuthUser user, final Context ctx) {
 
         final boolean isSecure = getConfiguration().getBoolean(
                 SETTING_KEY_VERIFICATION_LINK_SECURE);

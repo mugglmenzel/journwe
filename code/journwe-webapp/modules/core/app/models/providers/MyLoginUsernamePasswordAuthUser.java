@@ -1,4 +1,4 @@
-package providers;
+package models.providers;
 
 import com.feth.play.module.pa.providers.password.DefaultUsernamePasswordAuthUser;
 

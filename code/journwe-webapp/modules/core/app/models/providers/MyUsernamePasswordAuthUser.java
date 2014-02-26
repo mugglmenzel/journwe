@@ -1,7 +1,7 @@
-package providers;
+package models.providers;
 
 import models.user.User;
-import providers.MyUsernamePasswordAuthProvider.MySignup;
+import models.providers.MyUsernamePasswordAuthProvider.MySignup;
 
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.NameIdentity;

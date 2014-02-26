@@ -9,14 +9,13 @@ import models.adventure.adventurer.EAdventurerParticipation;
 import models.auth.SecuredUser;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
-import models.dao.user.UserDAO;
 import models.user.User;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
-import providers.MyUsernamePasswordAuthProvider;
+import models.providers.MyUsernamePasswordAuthProvider;
 
 /**
  * Created with IntelliJ IDEA.

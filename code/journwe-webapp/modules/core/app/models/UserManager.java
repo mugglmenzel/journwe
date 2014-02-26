@@ -16,6 +16,7 @@ import models.dao.SubscriberDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
 import models.dao.user.UserSocialDAO;
+import models.providers.MyUsernamePasswordAuthProvider;
 import models.user.*;
 import play.Logger;
 
@@ -117,7 +118,7 @@ public class UserManager {
 
         final UserSocial social = new UserSocial();
         social.setProvider(authUser.getProvider());
-        if (authUser.getProvider().equalsIgnoreCase(providers.MyUsernamePasswordAuthProvider.PROVIDER_KEY))
+        if (authUser.getProvider().equalsIgnoreCase(MyUsernamePasswordAuthProvider.PROVIDER_KEY))
             social.setSocialId(user.getId());
         else
             social.setSocialId(authUser.getId());

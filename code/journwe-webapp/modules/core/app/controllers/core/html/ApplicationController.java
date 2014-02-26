@@ -17,7 +17,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import providers.MyUsernamePasswordAuthProvider;
+import models.providers.MyUsernamePasswordAuthProvider;
 import views.html.*;
 
 

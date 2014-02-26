@@ -7,6 +7,9 @@ import models.UserManager;
 import models.dao.user.TokenActionDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
+import models.providers.MyLoginUsernamePasswordAuthUser;
+import models.providers.MyUsernamePasswordAuthProvider;
+import models.providers.MyUsernamePasswordAuthUser;
 import models.signup.PasswordReset;
 import models.user.ETokenType;
 import models.user.TokenAction;
@@ -31,20 +34,20 @@ public class SignupController extends Controller {
         return ok(views.html.account.signup.unverified.render());
     }
 
-    private static final Form<providers.MyUsernamePasswordAuthProvider.MyIdentity> FORGOT_PASSWORD_FORM = form(providers.MyUsernamePasswordAuthProvider.MyIdentity.class);
+    private static final Form<MyUsernamePasswordAuthProvider.MyIdentity> FORGOT_PASSWORD_FORM = form(MyUsernamePasswordAuthProvider.MyIdentity.class);
 
     public static Result forgotPassword(final String email) {
         com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-        Form<providers.MyUsernamePasswordAuthProvider.MyIdentity> form = FORGOT_PASSWORD_FORM;
+        Form<MyUsernamePasswordAuthProvider.MyIdentity> form = FORGOT_PASSWORD_FORM;
         if (email != null && !email.trim().isEmpty()) {
-            form = FORGOT_PASSWORD_FORM.fill(new providers.MyUsernamePasswordAuthProvider.MyIdentity(email));
+            form = FORGOT_PASSWORD_FORM.fill(new MyUsernamePasswordAuthProvider.MyIdentity(email));
         }
         return ok(views.html.account.signup.password_forgot.render(form));
     }
 
     public static Result doForgotPassword() {
         com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-        final Form<providers.MyUsernamePasswordAuthProvider.MyIdentity> filledForm = FORGOT_PASSWORD_FORM
+        final Form<MyUsernamePasswordAuthProvider.MyIdentity> filledForm = FORGOT_PASSWORD_FORM
                 .bindFromRequest();
         if (filledForm.hasErrors()) {
             // User did not fill in his/her email
@@ -69,7 +72,7 @@ public class SignupController extends Controller {
                 // yep, we have a user with this email that is active - we do
                 // not know if the user owning that account has requested this
                 // reset, though.
-                final providers.MyUsernamePasswordAuthProvider provider = providers.MyUsernamePasswordAuthProvider
+                final MyUsernamePasswordAuthProvider provider = MyUsernamePasswordAuthProvider
                         .getProvider();
                 final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(user.getId());
                 // User exists
@@ -145,13 +148,13 @@ public class SignupController extends Controller {
                 // Pass true for the second parameter if you want to
                 // automatically create a password and the exception never to
                 // happen
-                UserManager.resetPassword(new providers.MyUsernamePasswordAuthUser(u, newPassword, null),
+                UserManager.resetPassword(new MyUsernamePasswordAuthUser(u, newPassword, null),
                         newPassword, false);
             } catch (final RuntimeException re) {
                 flash(GlobalParameters.FLASH_MESSAGE_KEY,
                         Messages.get("playauthenticate.reset_password.message.no_password_account"));
             }
-            final boolean login = providers.MyUsernamePasswordAuthProvider.getProvider()
+            final boolean login = MyUsernamePasswordAuthProvider.getProvider()
                     .isLoginAfterPasswordReset();
             if (login) {
                 // automatically log in
@@ -159,7 +162,7 @@ public class SignupController extends Controller {
                         Messages.get("playauthenticate.reset_password.message.success.auto_login"));
                 final UserEmail ue = new UserEmailDAO().getPrimaryEmailOfUser(u.getId());
                 return PlayAuthenticate.loginAndRedirect(ctx(),
-                        new providers.MyLoginUsernamePasswordAuthUser(ue.getEmail(), ue.getUserId()));
+                        new MyLoginUsernamePasswordAuthUser(ue.getEmail(), ue.getUserId()));
             } else {
                 // send the user to the login page
                 flash(GlobalParameters.FLASH_MESSAGE_KEY,

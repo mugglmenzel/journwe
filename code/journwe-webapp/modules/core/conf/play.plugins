@@ -4,4 +4,4 @@
 10011:com.feth.play.module.pa.providers.oauth2.foursquare.FoursquareAuthProvider
 10012:com.feth.play.module.pa.providers.oauth1.twitter.TwitterAuthProvider
 10013:com.feth.play.module.pa.providers.oauth2.google.GoogleAuthProvider
-10040:providers.MyUsernamePasswordAuthProvider
+10040:models.providers.MyUsernamePasswordAuthProvider
