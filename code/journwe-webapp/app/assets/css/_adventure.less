@@ -53,6 +53,18 @@
 
         &.active {
             background: #e1e1e1;
+
+            &.places {
+                border-bottom: 1px solid @color_place;
+            }
+
+            &.adventurers {
+                border-bottom: 1px solid @color_adventurer;
+            }
+
+            &.times {
+                border-bottom: 1px solid @color_time;
+            }
         }
 
     }
@@ -363,5 +375,17 @@
 .timeline-add {
     .input-group {
         top: 2px;
+    }
+}
+
+.icon-description {
+    font-size: 32px;
+    opacity: 0.1;
+}
+
+.description-container .editable-container {
+
+    &, & div, & textarea {
+        width: 100% !important;
     }
 }

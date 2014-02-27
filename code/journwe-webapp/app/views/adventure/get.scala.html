@@ -26,7 +26,6 @@
                         </span>
                     </h2>
                         @index(adv, ins)
-                        @options(adv, advr)
                 </div>
 
                 <div class="nav-adventure visible-lg visible-md navbar" style=""> <!---->
@@ -212,8 +211,13 @@
                     }
                     <hr/>
                 }
-
             </div>
+
+            <div class="jrn-container jrn-opacity">
+                <h2><i class="fa fa-wrench"></i> Actions</h2>
+                @options(adv, advr)
+            </div>
+
             @*
             @if(auth.canViewAdventureOffersWidget()) {
             <div class="jrn-container jrn-no-bottom-round">

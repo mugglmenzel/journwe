@@ -5,9 +5,9 @@
 
     @defining(new JournweAuthorization(adv.getId)){ auth =>
 
-    <div class="row" style="border-bottom: 1px solid #333333;">
-        <div class="col-lg-2"><h4><i class="fa fa-list-alt"></i> Description</h4></div>
-        <div class="col-lg-10">
+    <div class="row description-container" style="">
+        <div class="col-lg-1"><i class="fa fa-quote-left icon-description"></i></div>
+        <div class="col-lg-11">
             <p class="lead">You are in this JournWe&#8482; to <span class="places-favorite-place-name"></span> on <span class="times-favorite-time-name"></span>. Have some fun, guys!</p>
             @if(auth.canViewAdventureDescription()) {
                 <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"

@@ -225,21 +225,25 @@ h1 .editableform {
     border-bottom: 1px solid #333;
     margin: -20px -20px 20px -20px;
     border-radius: 5px 5px 0 0;
+    font-weight: bold;
 
     &#index {
 
     }
 
     &#places {
-      background: fade(@color_place, 20%);
+      color: @color_place;
+      border-bottom-color: @color_place;
     }
 
     &#adventurers {
-      background: fade(@color_adventurer, 20%);
+      color: @color_adventurer;
+      border-bottom-color: @color_adventurer;
     }
 
     &#times {
-      background: fade(@color_time, 20%);
+      color: @color_time;
+      border-bottom-color: @color_time;
     }
   }
 
@@ -299,6 +303,15 @@ h1 .editableform {
   padding: 20px 20px;
   border-top: 1px solid white;
   margin: 20px -20px -20px -20px;
+}
+
+.jrn-opacity {
+  background: fade(@color_white, 85%);
+  opacity: 0.85;
+
+  &:hover, &:focus {
+    opacity: 1;
+  }
 }
 
 .main > .row > * {
