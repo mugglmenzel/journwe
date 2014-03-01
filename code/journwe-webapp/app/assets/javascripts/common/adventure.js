@@ -648,14 +648,15 @@ define([
     var renderTimeline = function (time) {
         var type = time.type,
             data = $.extend({
-                        time: utils.formatTime(time.timestamp)
+                        time: utils.formatTime(time.timestamp),
+                        fulltime: utils.formatDateLong(time.timestamp)
                     }, time);
 
         if ("log" == type){
             if("PLACE_VOTE_OPEN" == time.log.topic){
-                data.message = time.log.data == "false" ? "Place vote closed." : "Place vote reopened.";
+                data.message = time.log.data == "false" ? "Closed place vote." : "Reopened place vote.";
             } else if("TIME_VOTE_OPEN" == time.log.topic){
-                data.message = time.log.data == "false"  ? "Time vote closed." : "Time vote reopened.";
+                data.message = time.log.data == "false"  ? "Closed time vote." : "Reopened time vote.";
             } else if("DESCRIPTION_CHANGE" == time.log.topic){
                 data.message = time.log.data ? time.log.data : "Description removed.";
                 data.info = "Changed description";

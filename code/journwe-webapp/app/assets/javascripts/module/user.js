@@ -14,8 +14,14 @@ require([
 
         loadUserAdventures(true);
 
-    }
+    };
 
+    var renderAdventure = function (tmplId, adv) {
+        if(adv.favoriteTime != null && adv.favoriteTime.startDate != null) adv.favoriteTime.startDate = utils.formatDateShort(adv.favoriteTime.startDate);
+        if(adv.status != null) adv.cssLabel = utils.adventurerCSSLabel[adv.status];
+        return $(tmpl(tmplId, adv));
+    };
+    
     var loadUserEmails = function (clear) {
         routes.controllers.api.json.UserController.getEmails(user.id).ajax({success: function (emails) {
             if (clear) $('.list-user-emails').empty();
@@ -34,19 +40,9 @@ require([
 
             if (clear) $('#adventures-user-list').empty();
             for (var i in advs.adventures) {
-                if(advs.adventures[i].favoriteTime != null && advs.adventures[i].favoriteTime.startDate != null) advs.adventures[i].favoriteTime.startDate = utils.formatDateShort(advs.adventures[i].favoriteTime.startDate);
-                $('#adventures-user-list').append(tmpl('adventure-user-template', advs.adventures[i]));
+                $('#adventures-user-list').append(renderAdventure('adventure-user-template', advs.adventures[i]));
             }
-
-            $('#adventures-user-list .polaroid').hide().fadeIn().hover(
-                function () {
-                    $(this).find("div.overlay").slideDown("fast");
-                },
-                function () {
-                    $(this).find("div.overlay").slideUp("fast");
-                }
-            );
-            utils.setStash($('#adventures-user-list i'));
+            utils.setStash($('#adventures-user-list > i'));
         }});
     };
 

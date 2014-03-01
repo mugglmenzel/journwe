@@ -25,7 +25,7 @@
                 {%= o.message %}
             </div>
 
-            <div class="timeline-info">{% if(o.info){ %}<span class="subject">{%= o.info %}</span> <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span> {% } %}<span class="author">{%= o.user.name %}</span></div>
+            <div class="timeline-info"><span class="time stash" title="{%= o.fulltime %}">{%= o.time %}</span>  <span class="stash">&nbsp;&nbsp;-&nbsp;&nbsp;</span> {% if(o.info){ %}<span class="subject">{%= o.info %}</span> <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span> {% } %}<span class="author">{%= o.user.name %}</span></div>
         </div>
     </script>
 
@@ -39,7 +39,7 @@
 				{%= o.comment.text %}
 			</div>
 			
-			<div class="timeline-info"><span class="author">{%= o.user.name %}</span> <span class="stash">&nbsp;&nbsp;-&nbsp;&nbsp;</span> <span class="time stash">{%= o.time %}</span></div>
+			<div class="timeline-info"><span class="author">{%= o.user.name %}</span> <span class="stash">&nbsp;&nbsp;-&nbsp;&nbsp;</span> <span class="time stash" title="{%= o.fulltime %}">{%= o.time %}</span></div>
 		</div>
     </script>
 

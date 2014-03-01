@@ -51,29 +51,17 @@
                 </script>
                 <script src="@routes.Assets.at("javascripts/header.js").url" type="text/javascript"></script>
 
-                <a class="btn btn-link" href="@core.html.routes.UserController.getProfile(user.getId())">
+                <a class="btn" href="@core.html.routes.UserController.getProfile(user.getId())">
                     <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
                     @user.getName()
                 </a>
-                <a class="btn btn-link" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
+                <a class="btn" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
             </div>
         </div>
 
         } else {
             <div class="col-xs-10 pull-right">
                 <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="form-inline row">
-                    <div class="form-group col-xs-5">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input id="email" type="text" class="form-control" name="email" value="" placeholder="your email">
-                        </div>
-                    </div>
-                    <div class="form-group col-xs-4">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input id="password" type="password" class="form-control" name="password" placeholder="password">
-                        </div>
-                    </div>
                     <div class="btn-group col-xs-3 user-login pull-right">
                         <button type="submit" class="btn btn-default"><i class="fa fa-user"></i> Login</button>
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -84,6 +72,18 @@
                                 <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) Login</a></li>
                             }
                         </ul>
+                    </div>
+                    <div class="form-group col-xs-4 pull-right">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input id="password" type="password" class="form-control" name="password" placeholder="password">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-5 pull-right">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input id="email" type="text" class="form-control" name="email" value="" placeholder="your email">
+                        </div>
                     </div>
                 </form>
         </div>

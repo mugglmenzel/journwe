@@ -19,10 +19,10 @@
     <div class="jrn-container">
         <h2 id="options"><i class="fa fa-cogs"></i> @Messages("user.options") </h2>
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-12">
                 <h4><i class="fa fa-list-ol"></i> Details</h4>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-12">
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Name</label>
@@ -42,11 +42,12 @@
                 </form>
             </div>
         </div>
+        <br/>
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-12">
                 <h4><i class="fa fa-bell"></i> Notifications</h4>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-12">
                 @Messages("user.notify")
                  <div class="btn-group btn-select-notification-frequency">
                     <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.IMMEDIATELY) {active}"
@@ -65,19 +66,25 @@
 
     <div class="jrn-container">
         <h2 id="jorunwes"><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <small>(<span id="adventures-user-count">0</span>)</small></h2>
-        <div id="adventures-user-list" class="row" style="overflow: hidden">
+        <div id="adventures-user-list" class="row adventures-list-full" style="overflow: hidden">
              <i class="fa fa-spin icon-journwe stash"></i>
         </div>
         <script type="text/x-tmpl" id="adventure-user-template">
-            <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
-                <img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}">
-                <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                    <div style="line-height: 20px;"><h4>{%=o.name%}</h4></div>
-                    <div class="overlay text-center" style="display: none;">
-                        <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                        <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
-                        <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=o.favoriteTime.startDate%} {% } else { %} ? {% } %}</span>
+            <div class="adventure-entry pull-left" data-id="{%=o.id%}" style="width: 20%; padding: 5px;">
+                <div><a href="{%=o.link%}"><h4 title="{%=o.name%}">{%=o.name%}</h4></a></div>
+                <div style="margin-bottom: 5px">
+                    <div class="label place" style="width: 100%;" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}&nbsp;</div> 
+                    <div class="label adventurer" style="width: 100%;" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}&nbsp;</div> 
+                    <div class="label time" style="width: 100%;" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=o.favoriteTime.startDate%} {% } else { %} ? {% } %} </div>
+                </div>
+                <div class="text-center" style="position: relative;">
+                    <a href="{%=o.link%}">
+                        <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=200&height=200&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp='+o.imageTimestamp)%}{% } %}">
+                    </a>
+                    <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                        <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>
                     </div>
+
                 </div>
             </div>
         </script>

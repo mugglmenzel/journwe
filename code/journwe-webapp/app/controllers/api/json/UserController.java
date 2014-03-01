@@ -138,7 +138,7 @@ public class UserController extends Controller {
             node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
             node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
             node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-
+            node.put("status", new AdventurerDAO().get(adv.getId(), userId).getParticipationStatus().name());
             results.add(node);
         }
         ObjectNode result = Json.newObject();
