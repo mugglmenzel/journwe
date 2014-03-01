@@ -646,9 +646,27 @@ define([
     };
 
     var renderTimeline = function (time) {
-        return $('<div></div>').html(tmpl('timeline-template-' + time.type, $.extend({
-            time: utils.formatTime(time.timestamp)
-        }, time)));
+        var type = time.type,
+            data = $.extend({
+                        time: utils.formatTime(time.timestamp)
+                    }, time);
+
+        if ("log" == type){
+            if("PLACE_VOTE_OPEN" == time.log.topic){
+                data.message = time.log.data == "false" ? "Place vote closed." : "Place vote reopened.";
+            } else if("TIME_VOTE_OPEN" == time.log.topic){
+                data.message = time.log.data == "false"  ? "Time vote closed." : "Time vote reopened.";
+            } else if("DESCRIPTION_CHANGE" == time.log.topic){
+                data.message = time.log.data ? time.log.data : "Description removed.";
+                data.info = "Changed description";
+            }
+
+            if (data.message){
+                type = "info";
+            }
+        }
+
+        return $('<div></div>').html(tmpl('timeline-template-' + type, data));
     };
 
 

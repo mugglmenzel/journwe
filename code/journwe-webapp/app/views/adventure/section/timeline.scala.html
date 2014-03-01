@@ -15,6 +15,20 @@
         </div>
     </script>
 
+    <script type="text/x-tmpl" id="timeline-template-info">
+        <div class="timeline-entry timeline-left">
+            <div class="timeline-icon timeline-i timeline-small">
+                <img src="/assets/img/s.gif" style="background-image: url('{%= o.user.image %}')">
+            </div>
+
+            <div class="timeline-content">
+                {%= o.message %}
+            </div>
+
+            <div class="timeline-info">{% if(o.info){ %}<span class="subject">{%= o.info %}</span> <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span> {% } %}<span class="author">{%= o.user.name %}</span></div>
+        </div>
+    </script>
+
     <script type="text/x-tmpl" id="timeline-template-comment">
 		<div class="timeline-entry timeline-right">
 			<div class="timeline-icon">
