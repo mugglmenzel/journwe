@@ -56,8 +56,8 @@
         <div class="spacer50"></div>
 
         <section @if(!active){class="text-muted"}>
-            <div><h2><span class="label label-danger">2</span> Invite Friends.</h2></div>
-            <div>Invite your friends to join the JournWe and actively participate in the discussion and planning.</div>
+            <div><h2><span class="label label-danger">2</span> Encourage Friends.</h2></div>
+            <div>Invite your friends to join your JournWe and actively participate in the discussion and planning.</div>
             <div class="spacer20"></div>
             @defining(PlayAuthenticate.getUser(Http.Context.current())){playusr =>
                 @defining(UserManager.findByAuthUserIdentity(playusr)){ usr =>
