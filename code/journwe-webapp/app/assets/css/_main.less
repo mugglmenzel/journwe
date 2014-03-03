@@ -132,6 +132,10 @@ a {
   &:hover, &:focus {
     color: #666;
   }
+
+  & .label {
+     text-overflow: ellipsis;
+  }
 }
 
 hr {
@@ -216,6 +220,14 @@ h1 .editableform {
 
   &.jrn-no-top-round {
     border-radius: 0 0 5px 5px;
+  }
+
+  &.jrn-no-round {
+    border-radius: 0px;
+  }
+
+  &.jrn-no-top-gap {
+    margin-top: 0;
   }
 
   & h2 {
@@ -383,31 +395,6 @@ body > .row-fluid > div.span8 h2 {
 
 .navbar-inner p {
   padding: 10px 0;
-}
-
-.spacer100 {
-  height: 100px;
-  width: 100%;
-}
-
-.spacer50 {
-  height: 50px;
-  width: 100%;
-}
-
-.spacer30 {
-  height: 30px;
-  width: 100%;
-}
-
-.spacer20 {
-  height: 20px;
-  width: 100%;
-}
-
-.spacer10 {
-  height: 20px;
-  width: 100%;
 }
 
 table.inspiration {
@@ -934,27 +921,32 @@ h3 {
   border: none !important;
   position: relative;
   margin-bottom: 0;
-  margin-top: 50px;
+  margin-top: 0; //50px;
   border-radius: 5px;
   /*overflow: hidden;*/
 
   & .title-name {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
-    color: white;
+    bottom: 0px;
+    left: 0px;
+    padding: 10px;
+    width: 100%;
+
+    //like page-header
+    background: rgba(255,255,255,0.1);
+    border-bottom: 1px solid #eee;
+
     font-size: 32px;
     text-shadow: 0 0px 1px black, 0 1px 1px #444;
 
     & a {
+      font-size: 32px;
+      font-family: @font-title;
+      font-weight: @font-title-normal;
       border: none;
       color: white;
     }
 
-    & i {
-      font-size: 24px;
-      color: white;
-    }
   }
 
   & .toolbar {

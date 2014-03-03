@@ -13,19 +13,20 @@
             <div id="adventure-container">
                 @comment.commentsCommon()
 
-                <div class="jrn-container">
-                    <h2 id="index"><i class="fa fa-info fa fa-for-adventure-title"></i>
-                        <span class="title-name">
-                            <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-                                data-url="@html.routes.AdventureController.saveEditable()"
-                                data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a> <i class="fa fa-pencil muted"></i> <span></span>
-                            @if(ins != null) {
-                                <small>
-                                    - <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>
-                            }
-                        </span>
-                    </h2>
-                        @index(adv, ins)
+                <div class="prime-image">
+                    <div id="adventure-prime-image" style="width: 100%; height: 200px;">
+                    </div>
+
+                    <span class="title-name">
+                        <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+                            data-url="@html.routes.AdventureController.saveEditable()"
+                            data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a> <i class="fa fa-pencil white muted"></i> <span></span>
+                        @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                    </span>
+                </div>
+
+                <div class="jrn-container jrn-no-round jrn-no-top-gap">
+                    @index(adv, ins)
                 </div>
 
                 <div class="nav-adventure visible-lg visible-md navbar" style=""> <!---->
