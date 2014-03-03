@@ -20,9 +20,16 @@
                 <div class="col-lg-5">
                     <p class="lead">Login with your JournWe Account:</p>
 
-                    @helper.form(core.html.routes.ApplicationController.doLogin) {
+                    @helper.form(core.html.routes.ApplicationController.doLogin, 'class -> "form-horizontal") {
 
-                        @_emailPartial(MyUsernamePasswordAuthProvider.LOGIN_FORM)
+                        @inputText(
+                            MyUsernamePasswordAuthProvider.LOGIN_FORM("email"),
+                            '_showConstraints -> false,
+                            '_label -> Messages("playauthenticate.login.email.placeholder"),
+                            'class -> "form-control",
+                            'required -> true,
+                            'type -> "email"
+                        )
 
                         @inputPassword(
                             MyUsernamePasswordAuthProvider.LOGIN_FORM("password"),
@@ -151,7 +158,7 @@
             <div>Discussion and planning are important to later relax while on the trip. It is always good to have put something up your sleeve.</div>
             <div class="spacer20"></div>
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-xs-12">
 
                 @if(!active){
                     <table id="places-list" class="table table-striped table-responsive">
@@ -213,7 +220,9 @@
                         </div>
                     }
                 </div>
-                <div class="col-xs-6">
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
 
                     @if(!active){
                     <table id="times-list" class="table table-striped table-responsive">

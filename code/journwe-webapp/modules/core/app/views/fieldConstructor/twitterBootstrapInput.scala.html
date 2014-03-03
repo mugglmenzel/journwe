@@ -3,9 +3,9 @@
 @**************************************************
 * Generate input according twitter bootsrap rules *
 **************************************************@
-<div class="control-group @if(elements.hasErrors) {error}">
-    <label class="control-label" for="@elements.id">@elements.label</label>
-    <div class="controls @elements.args.get('_wrapperclass)">
+<div class="form-group @if(elements.hasErrors) {error}">
+    <label class="col-sm-2 control-label" for="@elements.id">@elements.label</label>
+    <div class="col-sm-10 @elements.args.get('_wrapperclass)">
         @elements.input
         <span class="help-inline">@elements.infos.mkString(", ")</span> 
     </div>
