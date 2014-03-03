@@ -152,6 +152,38 @@
             <div class="spacer20"></div>
             <div class="row">
                 <div class="col-xs-6">
+
+                @if(!active){
+                    <table id="places-list" class="table table-striped table-responsive">
+                        <thead>
+                            <tr>
+                                <th>@Messages("adventure.general.favourite")</th>
+                                <th>@Messages("adventure.places.location")</th>
+                                <th style="width: 120px;">@Messages("adventure.general.yourvote")</th>
+                                <th class="text-center" style="width: 100px;">Group Rating</th>
+                                <th>@Messages("adventure.general.advvotes")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                               <td><button class="btn btn-success"><i class="fa fa-star"></i></button></td>
+                               <td><em>Berlin</em></td>
+                               <td>
+                                   <div class="rating rating-place">
+                                       <input id="place-star6" type="radio" class="star"/><label for="place-star6" title="Want now!"><i class="fa fa-star"></i></label>
+                                       <input id="place-star5" type="radio" class="star"/><label for="place-star5" title="Rocks!"><i class="fa fa-star"></i></label>
+                                       <input id="place-star4" type="radio" class="star"/><label for="place-star4" title="Pretty good"><i class="fa fa-star"></i></label>
+                                       <input id="place-star3" type="radio" class="star"/><label for="place-star3" title="Meh"><i class="fa fa-star"></i></label>
+                                       <input id="place-star2" type="radio" class="star"/><label for="place-star2" title="Kinda bad"><i class="fa fa-star"></i></label>
+                                       <input id="place-star1" type="radio" class="star"/><label for="place-star1" title="Sucks big time"><i class="fa fa-star"></i></label>
+                                   </div>
+                               </td>
+                               <td class="text-center">4.3</td>
+                               <td><span class="label label-success" title="Michael Menzel">Michael</span><span class="label label-warning" title="Sebastian Roth">Sebastian</span></td>
+                           </tr>
+                        </tbody>
+                    </table>
+                } else {
                     <div class="row">
                         <div class="col-lg-3">
                             <span class="text-muted">Destinations:</span>
@@ -168,6 +200,7 @@
                             <span class="divider"></span>
                         </li>
                     </script>
+                }
 
                     <div class="input-group">
                         <input id="place-add-input" type="text" placeholder="@Messages("yingyangyong.place.placeholder")" class="input-place-add form-control" @if(!active){disabled}>
@@ -181,6 +214,38 @@
                     }
                 </div>
                 <div class="col-xs-6">
+
+                    @if(!active){
+                    <table id="times-list" class="table table-striped table-responsive">
+                        <thead>
+                            <tr>
+                                <th>@Messages("adventure.general.favourite")</th>
+                                <th>@Messages("adventure.time.option")</th>
+                                <th style="min-width: 120px;">@Messages("adventure.general.yourvote")</th>
+                                <th class="text-center" style="width: 100px;">Group Rating</th>
+                                <th>@Messages("adventure.general.advvotes")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><button class="btn btn-success"><i class="fa fa-star"></i></button></td>
+                                <td>30.08.2015</td>
+                                <td>
+                                    <div class="rating rating-time">
+                                        <input id="time-star6" type="radio" class="star"/><label for="time-star6" title="Want now!"><i class="fa fa-star"></i></label>
+                                        <input id="time-star5" type="radio" class="star"/><label for="time-star5" title="Rocks!"><i class="fa fa-star"></i></label>
+                                        <input id="time-star4" type="radio" class="star"/><label for="time-star4" title="Pretty good"><i class="fa fa-star"></i></label>
+                                        <input id="time-star3" type="radio" class="star"/><label for="time-star3" title="Meh"><i class="fa fa-star"></i></label>
+                                        <input id="time-star2" type="radio" class="star"/><label for="time-star2" title="Kinda bad"><i class="fa fa-star"></i></label>
+                                        <input id="time-star1" type="radio" class="star"/><label for="time-star1" title="Sucks big time"><i class="fa fa-star"></i></label>
+                                    </div>
+                                </td>
+                                <td class="text-center">3.2</td>
+                                <td><span class="label label-danger" title="Michael Menzel">Michael</span><span class="label label-success" title="Sebastian Roth">Sebastian</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    } else {
                     <div class="row">
                         <div class="col-lg-3">
                             <span class="text-muted">Time slots:</span>
@@ -198,6 +263,7 @@
                             <span class="divider"></span>
                         </li>
                     </script>
+                    }
 
                     <div class="row">
                         <div class="col-lg-5">
