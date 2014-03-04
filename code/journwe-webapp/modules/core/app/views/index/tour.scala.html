@@ -66,6 +66,9 @@
             <div><h2><span class="label label-danger">2</span> Encourage Friends.</h2></div>
             <div>Invite your friends to join your JournWe and actively participate in the discussion and planning.</div>
             <div class="spacer20"></div>
+            <div class="row">
+                <div class="col-xs-6 col-xs-offset-3"><img style="width: 100%;" src="@routes.Assets.at("img/landing/encourage_friends.png")"></div>
+            </div>
             @defining(PlayAuthenticate.getUser(Http.Context.current())){playusr =>
                 @defining(UserManager.findByAuthUserIdentity(playusr)){ usr =>
                     <div class="row">
