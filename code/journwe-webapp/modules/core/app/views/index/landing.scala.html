@@ -3,14 +3,16 @@
 
     @main(Messages("journwe.subtitle")) { }{
         <section class="jrn-container text-center headline">
-            <div class="text-success">
-                <div>
+            <div class="row text-success">
+                <div class="col-xs-3 col-xs-offset-1">
                     <img src="@routes.Assets.at("img/journwe_group_logo.png")" alt="JournWe Logo, Travel together.">
-                    Journ<strong>We</strong>
                 </div>
-                <div>Travel together.</div>
+                <div class="col-xs-4">
+                    <div class="title">Journ<strong>We</strong></div>
+                    <div class="subtitle">Travel together.</div>
+                    <a class="btn btn-lg btn-success btn-start-tour" href="#tour">Start Now <i class="fa fa-angle-right"></i></a>
+                </div>
             </div>
-            <a class="btn btn-lg btn-success btn-start-tour" href="#tour">Start Now <i class="fa fa-angle-right"></i></a>
             @*
             <div class="btn-group user-login">
                 <a class="btn btn-lg btn-success" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Start Now</a>
@@ -35,30 +37,30 @@
             <h2>@Messages("landing.feature")</h2>
             
             <div class="row landing-statement">
-                <div class="col-lg-6 col-lg-offset-1 landing">
+                <div class="col-md-6 col-md-offset-1 landing">
                     <img src="@routes.Assets.at("img/landing/landing_adventurer2.png")">
                 </div>
-                <div class="col-lg-4" style="">
+                <div class="col-md-4" style="">
                     <h4>@Messages("landing.featureH1")</h4>
                     @Messages("landing.featureT1")
                 </div>
             </div>
 
             <div class="row landing-statement">
-                <div class="col-lg-4 col-lg-offset-1" style="">
+                <div class="col-md-4 col-md-offset-1" style="">
                     <h4>@Messages("landing.featureH2")</h4>
                     @Messages("landing.featureT2")
                 </div>
-                <div class="col-lg-6 landing">
-                      <img src="@routes.Assets.at("img/landing/landing_todo.png")">
+                <div class="col-md-6 landing">
+                      <img src="@routes.Assets.at("img/landing/landing_todos.png")">
                 </div>
             </div>
 
             <div class="row landing-statement">
-                <div class="col-lg-6 col-lg-offset-1 landing" style="">
+                <div class="col-md-6 col-md-offset-1 landing" style="">
                     <img src="@routes.Assets.at("img/landing/landing_files2.png")">
                 </div>
-                <div class="col-lg-4">
+                <div class="col-md-4">
                     <h4>@Messages("landing.featureH3")</h4>
                     @Messages("landing.featureT3")
                 </div>
@@ -67,14 +69,14 @@
 
 
             <div class="row landing-statement">
-                <div class="col-lg-4 col-lg-offset-2">
+                <div class="col-md-5 col-md-offset-1 col-xs-12">
                   <h4><i class="fa fa-wrench"></i> @Messages("landing.beta.title")</h4>
                     @Messages("landing.beta.text")
                 </div>
-                <div class="col-lg-4">
+                <div class="col-md-5 col-xs-12">
                   <h4><i class="fa fa-money"></i> @Messages("landing.b2b.title")</h4>
                     @Html(Messages("landing.b2b.text"))
-                    <br/>
+                    <div class="spacer10"></div>
                     <div class="pull-right"><a class="btn btn-default" href="/contact"><i class="fa fa-envelope-o"></i> Contact</a></div>
                 </div>
             </div>

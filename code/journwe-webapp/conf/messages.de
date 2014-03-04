@@ -458,7 +458,9 @@ playauthenticate.login.password.placeholder=Passwort
 playauthenticate.login.now=Jetzt anmelden
 playauthenticate.login.forgot.password=Passwort vergessen?
 playauthenticate.login.oauth=oder melde dich mit einem der folgenden Dienste an:
+playauthenticate.login.register=Registrieren
 playauthenticate.login.or=oder
+
 
 playauthenticate.signup.title=Registrierung
 playauthenticate.signup.name=Dein Name

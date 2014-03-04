@@ -1,3 +1,6 @@
+@import '_tour';
+
+
 .quickintro {
 	
 
@@ -84,4 +87,44 @@
 			width: 100%;
 		}
 	}
+}
+
+&.headline {
+  vertical-align: middle;
+  height: 400;
+  background: rgba(0, 0, 0, 0.4);
+  padding-bottom: 30px;
+
+  & .text-success {
+    text-shadow: -1px 1px 10px black;
+    margin-bottom: 20px;
+
+    & img {
+      width: 100%;
+      vertical-align: text-bottom;
+    }
+
+    & div.title {
+      font-size: 68px;
+      color: white;
+      font-family: @font-title;
+      font-weight: @font-title-thin;
+
+
+      & strong {
+        font-weight: @font-title-bold;
+        font-size: 68px;
+      }
+    }
+
+    & div.subtitle {
+      font-size: 40px;
+      font-weight: @font-bold;
+      color: white;
+    }
+  }
+
+  & .dropdown-menu {
+    text-align: left;
+  }
 }
