@@ -1,5 +1,3 @@
-@import '_tour';
-
 
 .quickintro {
 	
@@ -105,7 +103,7 @@
     }
 
     & div.title {
-      font-size: 68px;
+      font-size: 6vw; //68px;
       color: white;
       font-family: @font-title;
       font-weight: @font-title-thin;
@@ -113,14 +111,20 @@
 
       & strong {
         font-weight: @font-title-bold;
-        font-size: 68px;
+        font-size: 6vw;
       }
     }
 
     & div.subtitle {
-      font-size: 40px;
+      font-size: 3vw; //40px;
       font-weight: @font-bold;
       color: white;
+      white-space: nowrap;
+    }
+
+    & .btn-start-tour {
+      font-size: 2vw;
+      font-weight: @font-bold;
     }
   }
 
@@ -128,3 +132,40 @@
     text-align: left;
   }
 }
+
+
+
+
+#success-stories {
+  padding-bottom: 20px;
+
+  & .carousel-indicators {
+    bottom: -10px;
+  }
+
+  & .item {
+    padding: 0 70px;
+  }
+
+  & .carousel-control {
+    background: white;
+    width: 50px;
+    margin: -20px;
+  }
+
+  & .polaroid {
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
+  }
+
+  & .polaroid img {
+    width: 100%;
+  }
+}
+
+
+
+
+
+@import '_tour';

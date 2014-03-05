@@ -2,102 +2,104 @@
 @import com.feth.play.module.pa.views.html._
 
 
-<div>
+<nav class="navbar" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button class="btn-default navbar-toggle" data-toggle="collapse" data-target="#navbar-header">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-@currentAuth() { auth =>
-    @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
-    <div class="row">
-        <div class="col-xs-2">
-            <div class="navbar-text">
-                    <a href="/" class="brand" style="vertical-align: bottom;">
-                        <span><img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo" style="height: 30px; vertical-align: text-bottom;">
-                            Journ<strong>We</strong>
-                        </span>
-                    </a>
+            <div class="brand">
+                <a href="/">
+                    <img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo">
+                    <span>
+                        Journ<strong>We</strong>
+                    </span>
+                </a>
             </div>
         </div>
 
-        @if(auth != null && user != null) {
-        <div class="col-xs-6">
-            <ul class="nav nav-pills nav-justified">
-                <li><a href="@html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New</a></li>
-                <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                <li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
-            </ul>
-        </div>
-        <div class="col-xs-4 clearfix text-right">
-            <div class="">
+        <div class="collapse navbar-collapse" id="navbar-header">
 
-                <a id="notifications-link" data-html="true" data-placement="bottom" data-title="Notifications" style="position:relative; top: 2px;"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
-                <div class="stash">
-                    <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
-                        <div class="text-center" style="display: block;"><i class="loading-top icon-journwe fa fa-spin"></i></div>
-                        <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
-                        <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe fa fa-spin stash"></i></div>
+        @currentAuth() { auth =>
+            @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
+                @if(auth != null && user != null) {
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="@html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New</a></li>
+                    <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                    <li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
+                </ul>
+                <div class="navbar-right">
+                    <a id="notifications-link" class="btn navbar-btn" data-html="true" data-placement="bottom" data-title="Notifications"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
+                    <div class="stash">
+                        <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
+                            <div class="text-center" style="display: block;"><i class="loading-top icon-journwe fa fa-spin"></i></div>
+                            <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
+                            <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe fa fa-spin stash"></i></div>
+                        </div>
                     </div>
+                    <script type="text/x-tmpl" id="header-notification-template">
+                        <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}" data-id="{%=o.created%}">
+                            <div class="media">
+                                <span class="pull-left">
+                                    <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
+                                </span>
+                                <div class="media-body">
+                                    <h4 class="media-heading {% if(o.read){ %}text-muted{% } %}">{%=o.subject%}</h4>
+                                    <span class="{% if(o.read){ %}text-muted{% } %}">{%=o.message%}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </script>
+                    <script src="@routes.Assets.at("javascripts/header.js").url" type="text/javascript"></script>
+
+                    <a class="btn navbar-btn" href="@core.html.routes.UserController.getProfile(user.getId())">
+                        <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"}>
+                        @user.getName()
+                    </a>
+                    <a class="btn navbar-btn" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
                 </div>
-                <script type="text/x-tmpl" id="header-notification-template">
-                    <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}" data-id="{%=o.created%}">
-                        <div class="media">
-                            <span class="pull-left">
-                                <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
-                            </span>
-                            <div class="media-body">
-                                <h4 class="media-heading {% if(o.read){ %}text-muted{% } %}">{%=o.subject%}</h4>
-                                <span class="{% if(o.read){ %}text-muted{% } %}">{%=o.message%}</span>
+
+                } else {
+
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                        <!--<li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>-->
+                    </ul>
+                    <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="email" type="text" class="form-control" name="email" value="" placeholder="your email">
                             </div>
                         </div>
-                    </a>
-                </script>
-                <script src="@routes.Assets.at("javascripts/header.js").url" type="text/javascript"></script>
 
-                <a class="btn" href="@core.html.routes.UserController.getProfile(user.getId())">
-                    <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"} style="max-height: 40px; display: none;">
-                    @user.getName()
-                </a>
-                <a class="btn" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
-            </div>
-        </div>
-
-        } else {
-            <div class="col-xs-3">
-                <ul class="nav nav-pills nav-justified">
-                    <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                    <!--<li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>-->
-                </ul>
-            </div>
-            <div class="col-xs-7 pull-right">
-                <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="form-inline row">
-                    <div class="btn-group col-xs-3 user-login pull-right">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> Login</button>
-                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="password" type="password" class="form-control" name="password" placeholder="password">
+                            </div>
+                        </div>
+                        <div class="form-group spacer-horizontal"></div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> Login</button>
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
                             @forProviders() { p =>
                                 <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) Login</a></li>
                             }
-                        </ul>
-                    </div>
-                    <div class="form-group col-xs-4 pull-right">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input id="password" type="password" class="form-control" name="password" placeholder="password">
+                            </ul>
                         </div>
-                    </div>
-                    <div class="form-group col-xs-5 pull-right">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input id="email" type="text" class="form-control" name="email" value="" placeholder="your email">
-                        </div>
-                    </div>
-                </form>
-        </div>
+                    </form>
+
+                }
+            }
         }
-
+        </div>
     </div>
-
-    }
-}
-
-</div>
+</nav>

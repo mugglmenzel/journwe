@@ -1,0 +1,55 @@
+
+.header {
+
+  color: #333;
+  font-size: 14px;
+
+  & .navbar {
+
+    background-color: @color_white;
+    padding: 10px;
+    border: none;
+    border-radius: 0;
+
+    & .brand {
+
+      padding: 13px;
+      line-height: 20px;
+      white-space: nowrap;
+
+      & span {
+        font-family: @font-logo-journ;
+        font-weight: @font-title-thin;
+        font-size: 20px;
+        white-space: nowrap;
+
+        & strong {
+          font-family: @font-logo-we;
+          font-weight: @font-title-bold;
+          font-size: 20px;
+        }
+      }
+
+      & img {
+        height: 20px;
+        vertical-align: text-bottom;
+      }
+    }
+
+    & .form-group {
+      width: 150px;
+      &.spacer-horizontal {
+        width: 20px;
+      }
+    }
+
+    & img {
+      max-height: 20px;
+    }
+
+    & .icon-bar {
+      background-color: #333;
+    }
+
+  }
+}
