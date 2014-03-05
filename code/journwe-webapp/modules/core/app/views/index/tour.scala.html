@@ -12,69 +12,21 @@
     <div class="page-header"><h1>What is JournWe?</h1></div>
 
     <div class="jrn-container jrn-no-top-round jrn-no-top-gap-page-header">
-        <section>
-            <div class="lead">JournWe is ...</div>
-        </section>
 
         <section>
-            <div><h2><span class="label label-success">1</span> Sign in. Now.</h2></div>
-            <div class="lead">Login to your JournWe account, either by entering your email address and password, or by signing in via a social network account.
-                If you haven't joined JournWe.com yet, we will help you.
-                Try to login with your preferred credentials and JournWe.com takes care of the rest.</div>
-            <div class="spacer20"></div>
-
-            <div class="row">
-                <div class="col-lg-5">
-                    <p class="lead">Login with your JournWe Account:</p>
-
-                    @helper.form(core.html.routes.ApplicationController.doLogin, 'class -> "login") {
-
-                        @inputText(
-                            MyUsernamePasswordAuthProvider.LOGIN_FORM("email"),
-                            '_showConstraints -> false,
-                            '_label -> null,
-                            '_class -> "form-group",
-                            'placeholder -> Messages("playauthenticate.login.email.placeholder"),
-                            'class -> "form-control col-xs-12",
-                            'required -> true,
-                            'type -> "email"
-                        )
-
-                        @inputPassword(
-                            MyUsernamePasswordAuthProvider.LOGIN_FORM("password"),
-                            '_showConstraints -> false,
-                            '_label -> null,
-                            '_class -> "form-group",
-                            'placeholder -> Messages("playauthenticate.login.password.placeholder"),
-                            'class -> "form-control col-xs-12",
-                            'required -> true
-                        )
-
-                        <input type="submit" value="@Messages("playauthenticate.login.now")" class="btn btn-primary" style="width: 100%"><br/>
-                        <br/>
-
-                        <a href="@core.html.routes.ApplicationController.signup">@Messages("playauthenticate.login.register")</a> @Messages("playauthenticate.login.or")
-
-                        <a href="javascript:void(0);" onclick="window.location.href = '@core.html.routes.SignupController.forgotPassword("")'+($('#email').val()?'/'+$('#email').val():'');">@Messages("playauthenticate.login.forgot.password")</a>
-
-                    }
-                </div>
-                <div class="col-lg-5 col-lg-offset-2">
-                    <p class="lead">Login with your Social Network Account:</p>
-                    <ul class="nav nav-pills nav-stacked ">
-                    @forProviders() { p =>
-                        <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
-                    }
-                    </ul>
-                </div>
+            <div><h2><span class="label label-success">1</span> Go on a JournWe with your friends.</h2></div>
+            <div class="lead">You got an idea for a trip with your friends? Start a JournWe to invite friends, discuss details, share documents, correspond with travel agencies, ... .
+            Everything is in one place with your JournWe. Easy to find and always accessible from everywhere.
             </div>
+
+
 
         </section>
 
         <div class="spacer50"></div>
 
         <section @if(!active){class="text-muted"}>
-            <div><h2><span class="label label-default">2</span> Invite Friends to your JournWe.</h2></div>
+            <div><h2><span class="label label-success">2</span> Invite Friends to your JournWe.</h2></div>
             <div>Encourage your friends to join your JournWe and actively participate in the discussion and planning.</div>
             <div class="spacer20"></div>
             <div class="row">
@@ -173,7 +125,7 @@
         <div class="spacer50"></div>
 
         <section @if(!active){class="text-muted"}>
-            <div><h2><span class="label label-default">3</span> Plan & Discuss. Together.</h2></div>
+            <div><h2><span class="label label-success">3</span> Plan & Discuss. Together.</h2></div>
             <div>Discussion and planning are important to later relax while on the trip. It is always good to have put something up your sleeve.</div>
 
             <div class="row">
@@ -320,16 +272,74 @@
 
         <div class="spacer50"></div>
 
-        <section @if(!active){class="text-muted"}>
-            <div><h2><span class="label label-default">4</span> Start. Now.</h2></div>
+        <section>
+            <div><h2><span class="label label-success">4</span> Start. Now.</h2></div>
+            @if(active) {
             <div>Now, click "Start" and a new JournWe is generated.
                 Your friends receive an invition via email and social networks to join the JournWe.
                 Let the discussions and planning begin...
             </div>
-            <div class="spacer20"></div>
-            <div class="text-center">
-                <button class="btn btn-success btn-lg" @if(!active){disabled}>Start <i class="fa fa-angle-double-right"></i></button>
+            } else {
+            <div class="lead">Login to your JournWe account, either by entering your email address and password, or by signing in via a social network account.
+                If you haven't joined JournWe.com yet, we will help you.
+                Try to login with your preferred credentials and JournWe.com takes care of the rest.
             </div>
+            }
+
+            <div class="spacer20"></div>
+            @if(active) {
+            <div class="text-center">
+                <button class="btn btn-success btn-lg">Start <i class="fa fa-angle-double-right"></i></button>
+            </div>
+            }  else {
+
+            <div class="row">
+                <div class="col-lg-5">
+                    <p class="lead">Login with your JournWe Account:</p>
+
+                    @helper.form(core.html.routes.ApplicationController.doLogin, 'class -> "login") {
+
+                        @inputText(
+                            MyUsernamePasswordAuthProvider.LOGIN_FORM("email"),
+                            '_showConstraints -> false,
+                            '_label -> null,
+                            '_class -> "form-group",
+                            'placeholder -> Messages("playauthenticate.login.email.placeholder"),
+                            'class -> "form-control col-xs-12",
+                            'required -> true,
+                            'type -> "email"
+                        )
+
+                        @inputPassword(
+                            MyUsernamePasswordAuthProvider.LOGIN_FORM("password"),
+                            '_showConstraints -> false,
+                            '_label -> null,
+                            '_class -> "form-group",
+                            'placeholder -> Messages("playauthenticate.login.password.placeholder"),
+                            'class -> "form-control col-xs-12",
+                            'required -> true
+                        )
+
+                        <input type="submit" value="@Messages("playauthenticate.login.now")" class="btn btn-primary" style="width: 100%"><br/>
+                        <br/>
+
+                        <a href="@core.html.routes.ApplicationController.signup">@Messages("playauthenticate.login.register")</a> @Messages("playauthenticate.login.or")
+
+                        <a href="javascript:void(0);" onclick="window.location.href = '@core.html.routes.SignupController.forgotPassword("")'+($('#email').val()?'/'+$('#email').val():'');">@Messages("playauthenticate.login.forgot.password")</a>
+
+                    }
+                </div>
+                <div class="col-lg-5 col-lg-offset-2">
+                    <p class="lead">Login with your Social Network Account:</p>
+                    <ul class="nav nav-pills nav-stacked ">
+                    @forProviders() { p =>
+                        <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                    }
+                    </ul>
+                </div>
+            </div>
+            }
+
         </section>
 
     </div>
