@@ -301,15 +301,15 @@ landing.story6.header=What to do NEXT WEEKEND
 landing.story6.content=Andy got time. Who's up for some crazy party? Or let's do some barbecue next to the river. He fixed the date now let's see who's in and what they can do.
 landing.story6.cite=Andy
 
-landing.feature=Funktionen
-landing.featureH1=Stimme dich mit Freunden ab.
-landing.featureT1=Starte ein JournWe und plane wann du und deine Freunde Zeit für den Trip haben oder wo es hingehen sollen. Jedes JournWe bietet die Möglichkeit zwischen verschiedenen Ort- und Zeitoptionen abzustimmen.
-landing.featureH2=Nutze die JournWe-Emailadresse.
-landing.featureT2=Für jedes JournWe bekommst du eine eigene @journwe.com-Emailadresse spendiert. Die Emails sind online einsehbar und werdem jedem in der Gruppe an die private Emailadresse weitergeleitet. Nutzt eure @journwe.com-Adresse zum Korrespondieren mit Reisebüros und -veranstaltern, damit jeder auf dem Laufenden bleibt.
-landing.featureH3=Führe und vergleiche Todo-Listen.
-landing.featureT3=Lege Todo-Listen an und erinnere dich, was du mitnehmen musst. Vergleiche mit den Todo-Listen deiner Freunde, um zu sehen was dir fehlt oder was andere schon mitnehmen.
-landing.featureH4=Halte Dokumente zur Reise an einem Ort.
-landing.featureT4=Bei jeder Reise fallen viele Info-, Buchungs- und Reservierungsdokumente an. Speichere eine Kopie mit deinem JournWe, um sie leicht wiederzufinden und mit den Mitreisenden zu teilen.
+landing.feature=Features
+landing.featureH1=Coordinate with your friends.
+landing.featureT1=Start a JournWe and find the most interesting travel destination and best suiting dates for all of you. A JournWe offers possibilities to collaborate and to bring the discussion to an successful end.
+landing.featureH2=Use your JournWe Email Address.
+landing.featureT2=Every JournWe comes with its own @journwe.com email address. Those mails are accessible in your JournWe and can be forwarded to your private addresses. Use your JournWe address to get in touch with travel agents in order to keep it all in one place and accessible for everyone.
+landing.featureH3=Create and share to-do lists.
+landing.featureT3=Create your personal to-do list to remind you of what you still need to arrange, buy, pack,... Compare your list with the ones of your fellow travellers to see what you've missed so far.
+landing.featureH4=All your travel documents and data in one place.
+landing.featureT4=Every trip requires some documents, booking confirmations, reservations, general information. Store a copy in your JournWe to find them all easily. In the end you can also upload some of your pictures here to share them with other travellers.
 
 #Languages
 languages.en=English
