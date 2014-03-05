@@ -301,13 +301,15 @@ landing.story6.header=What to do NEXT WEEKEND
 landing.story6.content=Andy got time. Who's up for some crazy party? Or let's do some barbecue next to the river. He fixed the date now let's see who's in and what they can do.
 landing.story6.cite=Andy
 
-landing.feature=Features
+landing.feature=Funktionen
 landing.featureH1=Stimme dich mit Freunden ab.
 landing.featureT1=Starte ein JournWe und plane wann du und deine Freunde Zeit für den Trip haben oder wo es hingehen sollen. Jedes JournWe bietet die Möglichkeit zwischen verschiedenen Ort- und Zeitoptionen abzustimmen.
-landing.featureH2=Führe und vergleiche Todo-Listen.
-landing.featureT2=Lege Todo-Listen an und erinnere dich, was du mitnehmen musst. Vergleiche mit den Todo-Listen deiner Freunde, um zu sehen was dir fehlt oder was andere schon mitnehmen.
-landing.featureH3=Halte Dokumente zur Reise an einem Ort.
-landing.featureT3=Bei jeder Reise fallen viele Info-, Buchungs- und Reservierungsdokumente an. Speichere eine Kopie mit deinem JournWe, um sie leicht wiederzufinden und mit den Mitreisenden zu teilen.
+landing.featureH2=Nutze die JournWe-Emailadresse.
+landing.featureT2=Für jedes JournWe bekommst du eine eigene @journwe.com-Emailadresse spendiert. Die Emails sind online einsehbar und werdem jedem in der Gruppe an die private Adresse weitergeleitet. Nutzt eure @journwe.com zum Korrespondiere mit Reisebüros und -veranstaltern, damit jeder auf dem Laufenden bleibt.
+landing.featureH3=Führe und vergleiche Todo-Listen.
+landing.featureT3=Lege Todo-Listen an und erinnere dich, was du mitnehmen musst. Vergleiche mit den Todo-Listen deiner Freunde, um zu sehen was dir fehlt oder was andere schon mitnehmen.
+landing.featureH4=Halte Dokumente zur Reise an einem Ort.
+landing.featureT4=Bei jeder Reise fallen viele Info-, Buchungs- und Reservierungsdokumente an. Speichere eine Kopie mit deinem JournWe, um sie leicht wiederzufinden und mit den Mitreisenden zu teilen.
 
 #Languages
 languages.en=English

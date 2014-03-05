@@ -38,43 +38,53 @@
             <h2>@Messages("landing.feature")</h2>
             
             <div class="row landing-statement">
-                <div class="col-md-6 col-md-offset-1 landing">
-                    <img src="@routes.Assets.at("img/landing/landing_adventurer2.png")">
+                <div class="col-md-7 landing">
+                    <div><img src="@routes.Assets.at("img/landing/landing_adventurer2.png")"></div>
                 </div>
-                <div class="col-md-4" style="">
+                <div class="col-md-5">
                     <h4>@Messages("landing.featureH1")</h4>
                     @Messages("landing.featureT1")
                 </div>
             </div>
 
             <div class="row landing-statement">
-                <div class="col-md-4 col-md-offset-1" style="">
+                <div class="col-md-5">
                     <h4>@Messages("landing.featureH2")</h4>
                     @Messages("landing.featureT2")
                 </div>
-                <div class="col-md-6 landing">
-                      <img src="@routes.Assets.at("img/landing/landing_todos.png")">
+                <div class="col-md-7 landing">
+                    <div><img src="@routes.Assets.at("img/landing/landing_emails.png")"></div>
                 </div>
             </div>
 
             <div class="row landing-statement">
-                <div class="col-md-6 col-md-offset-1 landing" style="">
-                    <img src="@routes.Assets.at("img/landing/landing_files2.png")">
+                <div class="col-md-7 landing">
+                    <div><img src="@routes.Assets.at("img/landing/landing_todos.png")"></div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <h4>@Messages("landing.featureH3")</h4>
                     @Messages("landing.featureT3")
                 </div>
             </div>
 
+            <div class="row landing-statement">
+                <div class="col-md-5">
+                    <h4>@Messages("landing.featureH4")</h4>
+                    @Messages("landing.featureT4")
+                </div>
+                <div class="col-md-7 landing">
+                    <div><img src="@routes.Assets.at("img/landing/landing_files2.png")"></div>
+                </div>
+            </div>
+
 
 
             <div class="row landing-statement">
-                <div class="col-md-5 col-md-offset-1 col-xs-12">
+                <div class="col-md-6 col-xs-12">
                   <h4><i class="fa fa-wrench"></i> @Messages("landing.beta.title")</h4>
                     @Messages("landing.beta.text")
                 </div>
-                <div class="col-md-5 col-xs-12">
+                <div class="col-md-6 col-xs-12">
                   <h4><i class="fa fa-money"></i> @Messages("landing.b2b.title")</h4>
                     @Html(Messages("landing.b2b.text"))
                     <div class="spacer10"></div>

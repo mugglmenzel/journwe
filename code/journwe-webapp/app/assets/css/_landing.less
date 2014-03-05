@@ -1,90 +1,92 @@
 
 .quickintro {
-	
 
-	& .nav li {
+  & .nav li {
 
-		&.friends {
-			background-color : rgba( 50, 100, 200, 0.4);
+    &.friends {
+      background-color: rgba(50, 100, 200, 0.4);
 
-			&.active {
-				background-color : rgba( 50, 100, 200, 0.9);			
-			}
-		}
-		
-		&.place {
-			background-color : rgba( 100, 200, 100, 0.4);
+      &.active {
+        background-color: rgba(50, 100, 200, 0.9);
+      }
+    }
 
-			&.active {
-				background-color : rgba( 100, 200, 100, 0.9);			
-			}
-		}
-		
-		&.organize {
-			background-color : rgba( 200, 100, 100, 0.4);
+    &.place {
+      background-color: rgba(100, 200, 100, 0.4);
 
-			&.active {
-				background-color : rgba( 200, 100, 100, 0.9);			
-			}
-		}
-		
-		&.fun {
-			background-color : rgba( 200, 200, 100, 0.4);
+      &.active {
+        background-color: rgba(100, 200, 100, 0.9);
+      }
+    }
 
-			&.active {
-				background-color : rgba( 200, 200, 100, 0.9);				
-			}
-		}
-		
-		& a {
-			border-radius: 0;
-			border: 1px solid transparent;
+    &.organize {
+      background-color: rgba(200, 100, 100, 0.4);
 
+      &.active {
+        background-color: rgba(200, 100, 100, 0.9);
+      }
+    }
 
-			&, & i {
-				color: #666;
-			}
-		}
+    &.fun {
+      background-color: rgba(200, 200, 100, 0.4);
 
-		&.active {
+      &.active {
+        background-color: rgba(200, 200, 100, 0.9);
+      }
+    }
 
-		}
+    & a {
+      border-radius: 0;
+      border: 1px solid transparent;
 
-		&.active a,
-		& a:hover,
-		&.active a:hover {
-			background: none;
-			border: 1px solid transparent;
-			border-top: 1px solid white;
+      &, & i {
+        color: #666;
+      }
+    }
 
-			&, & i {
-				color: #222;
-			}
-		}
+    &.active {
 
-	}
+    }
+
+    &.active a,
+    & a:hover,
+    &.active a:hover {
+      background: none;
+      border: 1px solid transparent;
+      border-top: 1px solid white;
+
+      &, & i {
+        color: #222;
+      }
+    }
+
+  }
 }
 
 .landing-statement {
-	margin-top: 70px;
-	text-align: justify;
+  margin-top: 70px;
+  text-align: justify;
 
-	.col-lg-4.col-lg-offset-2  {
-		margin-left: 12%;
+  & .col-lg-4.col-lg-offset-2 {
+    margin-left: 12%;
 
-		& + .col-lg-4 {
-			margin-left: 6 + (10/3%);
-		}
-	}
+    & + .col-lg-4 {
+      margin-left: 6 + (10/3%);
+    }
+  }
 
-	.landing {
-		box-shadow: 0 0 6px -2px gray inset;
-		padding: 10px;
+  & .landing {
 
-		img {
-			width: 100%;
-		}
-	}
+    & div {
+      padding: 10px;
+      box-shadow: 0 0 7px -2px gray inset;
+      & img {
+        width: 100%;
+
+      }
+    }
+
+  }
 }
 
 &.headline {
@@ -94,8 +96,6 @@
   padding-bottom: 30px;
 
   & .text-success {
-    text-shadow: -1px 1px 10px black;
-    margin-bottom: 20px;
 
     & img {
       width: 100%;
@@ -107,7 +107,7 @@
       color: white;
       font-family: @font-title;
       font-weight: @font-title-thin;
-
+      text-shadow: -1px 1px 10px black;
 
       & strong {
         font-weight: @font-title-bold;
@@ -118,7 +118,8 @@
     & div.subtitle {
       font-size: 3vw; //40px;
       font-weight: @font-bold;
-      color: white;
+      color: @color_white;
+      text-shadow: -1px 1px 10px black;
       white-space: nowrap;
     }
 
@@ -132,9 +133,6 @@
     text-align: left;
   }
 }
-
-
-
 
 #success-stories {
   padding-bottom: 20px;
@@ -163,9 +161,5 @@
     width: 100%;
   }
 }
-
-
-
-
 
 @import '_tour';
