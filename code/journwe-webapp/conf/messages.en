@@ -125,7 +125,7 @@ adventure.time.end=End
 adventure.time.start.placeholder=Start Date
 adventure.time.end.placeholder=End Date
 adventure.time.favourite=Favourite Time:
-adventure.time.option=Time Option 
+adventure.time.option=Time
 
 #Adventure.adventurers
 adventure.adventurers.name=Name
@@ -310,6 +310,23 @@ landing.featureH3=Create and share to-do lists.
 landing.featureT3=Create your personal to-do list to remind you of what you still need to arrange, buy, pack,... Compare your list with the ones of your fellow travellers to see what you've missed so far.
 landing.featureH4=All your travel documents and data in one place.
 landing.featureT4=Every trip requires some documents, booking confirmations, reservations, general information. Store a copy in your JournWe to find them all easily. In the end you can also upload some of your pictures here to share them with other travellers.
+
+tour.title=What is JournWe?
+tour.step0.title=Go on a JournWe with your friends.
+tour.step0.intro=You got an idea for a trip with your friends? Start a JournWe to invite friends, discuss details, share documents, correspond with travel agencies, ... . Everything is in one place with your JournWe. Easy to find and always accessible from everywhere.
+tour.step1.title=Invite Friends to your JournWe.
+tour.step1.intro=Encourage your friends to join your JournWe and actively participate in the discussion and planning.
+tour.step2.title=Plan & Discuss. Together.
+tour.step2.intro=Discussion and planning are important to later relax while on the trip. It pays off to have put something up your sleeve. Our offline-features including a print version of your JournWe and an App make it easy.
+tour.step3.title=Start. Now.
+tour.step3.intro.active=Now, click "Start" and a new JournWe is generated. Your friends receive an invition via email and social networks to join the JournWe. Let the discussions and planning begin...
+tour.step3.intro.inactive=Login to your JournWe account, either by entering your email address and password, or by signing in via a social network account. If you haven't joined JournWe.com yet, we will help you. Try to login with your preferred credentials and JournWe.com takes care of the rest.
+
+tour.placediscussion.title=Place Discussion
+tour.timediscussion.title=Time Discussion
+
+tour.login.title=Login with your JournWe Account:
+tour.signin.title=Signin with your Social Network Account:
 
 #Languages
 languages.en=English

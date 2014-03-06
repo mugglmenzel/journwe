@@ -9,31 +9,29 @@
 
 
 <div id="tour" class="tour">
-    <div class="page-header"><h1>What is JournWe?</h1></div>
+    <div class="page-header"><h1>@Messages("tour.title")</h1></div>
 
     <div class="jrn-container jrn-no-top-round jrn-no-top-gap-page-header">
 
         <section>
-            <div><h2><span class="label label-success">1</span> Go on a JournWe with your friends.</h2></div>
-            <div class="lead">You got an idea for a trip with your friends? Start a JournWe to invite friends, discuss details, share documents, correspond with travel agencies, ... .
-            Everything is in one place with your JournWe. Easy to find and always accessible from everywhere.
-            </div>
-
-
-
+            <div><h2><span class="label label-success"><i class="fa fa-lightbulb-o" style="font-size: 75%; margin-right: 0;"></i></span> @Messages("tour.step0.title")</h2></div>
+            <div class="lead">@Messages("tour.step0.intro")</div>
         </section>
 
         <div class="spacer50"></div>
 
         <section @if(!active){class="text-muted"}>
-            <div><h2><span class="label label-success">2</span> Invite Friends to your JournWe.</h2></div>
-            <div>Encourage your friends to join your JournWe and actively participate in the discussion and planning.</div>
+            <div><h2><span class="label label-success">1</span> @Messages("tour.step1.title")</h2></div>
+            <div>@Messages("tour.step1.intro")</div>
             <div class="spacer20"></div>
+            @if(!active) {
             <div class="row">
-                <div class="col-xs-6 col-xs-offset-3"><img style="width: 100%;" src="@routes.Assets.at("img/landing/encourage_friends.png")"></div>
+                <div class="col-xs-6 col-xs-offset-3 text-center"><img style="max-width: 100%;" src="@routes.Assets.at("img/landing/encourage_friends.png")"></div>
             </div>
+            }
             @defining(PlayAuthenticate.getUser(Http.Context.current())){playusr =>
                 @defining(UserManager.findByAuthUserIdentity(playusr)){ usr =>
+                    @if(active) {
                     <div class="row">
                         <div class="col-lg-3">
                             <span class="text-muted">Your friends:</span>
@@ -52,6 +50,7 @@
                             <span class="divider"></span>
                         </li>
                     </script>
+                    }
 
                     <div class="input-group">
                         <div id="people-add-provider" class="input-group-btn">
@@ -125,14 +124,14 @@
         <div class="spacer50"></div>
 
         <section @if(!active){class="text-muted"}>
-            <div><h2><span class="label label-success">3</span> Plan & Discuss. Together.</h2></div>
-            <div>Discussion and planning are important to later relax while on the trip. It is always good to have put something up your sleeve.</div>
+            <div><h2><span class="label label-success">2</span> @Messages("tour.step2.title")</h2></div>
+            <div>@Messages("tour.step2.intro")</div>
 
             <div class="row">
                 <div class="col-xs-12">
 
                 @if(!active){
-                    <h3><strong>Place Discussion</strong></h3>
+                    <h3><strong>@Messages("tour.placediscussion.title")</strong></h3>
                     <table id="places-list" class="table table-striped table-responsive">
                         <thead>
                             <tr>
@@ -198,7 +197,7 @@
                 <div class="col-xs-12">
 
                 @if(!active){
-                    <h3><strong>Time Discussion</strong></h3>
+                    <h3><strong>@Messages("tour.timediscussion.title")</strong></h3>
                     <table id="times-list" class="table table-striped table-responsive">
                         <thead>
                             <tr>
@@ -273,18 +272,14 @@
         <div class="spacer50"></div>
 
         <section>
-            <div><h2><span class="label label-success">4</span> Start. Now.</h2></div>
+            <div><h2><span class="label label-success">3</span> @Messages("tour.step3.title")</h2></div>
+            <div class="lead">
             @if(active) {
-            <div>Now, click "Start" and a new JournWe is generated.
-                Your friends receive an invition via email and social networks to join the JournWe.
-                Let the discussions and planning begin...
-            </div>
+                @Messages("tour.step3.intro.active")
             } else {
-            <div class="lead">Login to your JournWe account, either by entering your email address and password, or by signing in via a social network account.
-                If you haven't joined JournWe.com yet, we will help you.
-                Try to login with your preferred credentials and JournWe.com takes care of the rest.
-            </div>
+                @Messages("tour.step3.intro.inactive")
             }
+            </div>
 
             <div class="spacer20"></div>
             @if(active) {
@@ -295,7 +290,7 @@
 
             <div class="row">
                 <div class="col-lg-5">
-                    <p class="lead">Login with your JournWe Account:</p>
+                    <p class="lead">@Messages("tour.login.title")</p>
 
                     @helper.form(core.html.routes.ApplicationController.doLogin, 'class -> "login") {
 
@@ -330,7 +325,7 @@
                     }
                 </div>
                 <div class="col-lg-5 col-lg-offset-2">
-                    <p class="lead">Login with your Social Network Account:</p>
+                    <p class="lead">@Messages("tour.signin.title")</p>
                     <ul class="nav nav-pills nav-stacked ">
                     @forProviders() { p =>
                         <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>

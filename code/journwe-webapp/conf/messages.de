@@ -125,7 +125,7 @@ adventure.time.end=Endtermin
 adventure.time.start.placeholder=Start Datum
 adventure.time.end.placeholder=End Datum
 adventure.time.favourite=Bevorzugter Termin:
-adventure.time.option=Datums Option 
+adventure.time.option=Datum
 
 #Adventure.adventurers
 adventure.adventurers.name=Name
@@ -399,6 +399,22 @@ landing.featureT3=Lege Todo-Listen an und erinnere dich, was du mitnehmen musst.
 landing.featureH4=Halte Dokumente zur Reise an einem Ort.
 landing.featureT4=Bei jeder Reise fallen viele Info-, Buchungs- und Reservierungsdokumente an. Speichere eine Kopie mit deinem JournWe, um sie leicht wiederzufinden und mit den Mitreisenden zu teilen.
 
+tour.title=Was ist JournWe?
+tour.step0.title=Starte in ein JournWe mit deinen Freunden.
+tour.step0.intro=Hast du eine Idee für einen Ausflug oder eine Reise mit deinen Freunden? Starte ein JournWe und lade deine Freunde ein, um gemeinsam Details zu diskutieren, Dokumente auszutauschen, mit Reisebüros zu korrespondieren, ... . Alles gesammelt in deinem JournWe. Einfach auffindbar und von überall verfügbar.
+tour.step1.title=Lade Freund zu deinem JournWe ein.
+tour.step1.intro=Ermutige deine Freunde in deinem JournWe mitzumachen und gemeinsam zu diskutieren und planen.
+tour.step2.title=Plant & Diskutiert. Gemeinsam.
+tour.step2.intro=Diskussion und Planung vor eurem Trip wird sich für euch unterwegs auszahlen. Keiner wurde übergangen und ihr wisst bescheid was auf dem Trip los ist. Unsere offline-Unterstützung mit Druckfunktion und App machens ganz einfach.
+tour.step3.title=Starte. Jetzt.
+tour.step3.intro.active=Klicke jetzt auf "Start" und a neues JournWe wird für euch angelegt. Deine Freunde erhalten eine Einladung am JournWe teilzunehmen via Email und Sozialen Netzwerken. Und schon kann die Diskussion and Planung los gehen...
+tour.step3.intro.inactive=Logge dich in dein JournWe-Konto ein, entweder mit Email und Passwort, oder mit einem Signin über dein Konto bei einem Sozialen Netzwerk. Solltest du noch kein JournWe-Konto haben, gib deine Wunsch-Logindaten an oder klicke dein Soziales Netzwerk an und wir übernehmen alles Andere für dich.
+
+tour.placediscussion.title=Diskussion über den Zielort
+tour.timediscussion.title=Diskussion über die Reisezeit
+
+tour.login.title=Login mit deinem JournWe-Konto:
+tour.signin.title=Signin mit einem Sozialen Netzwerk:
 
 #Travel Phrases
 #„Der kürzeste Weg zu dir selbst führt einmal um die Welt.“ - Richard Hoffmann
