@@ -315,6 +315,8 @@ yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow a
 
 
 #Landingpage
+landing.calltoaction=Starte Jetzt
+
 landing.story=Good friends will listen to your adventures, best friends join them.
 landing.story2=People love JournWe
 #Story1
@@ -400,9 +402,9 @@ landing.featureH4=Halte Dokumente zur Reise an einem Ort.
 landing.featureT4=Bei jeder Reise fallen viele Info-, Buchungs- und Reservierungsdokumente an. Speichere eine Kopie mit deinem JournWe, um sie leicht wiederzufinden und mit den Mitreisenden zu teilen.
 
 tour.title=Was ist JournWe?
-tour.step0.title=Hast du eine Idee für einen Trip mit deinen Freunden?
+tour.step0.title=Hast du eine Idee für einen Trip mit Freunden?
 tour.step0.intro=Starte in ein JournWe mit deinen Freunden. Lade deine Freunde in ein JournWe ein, um gemeinsam Details zu diskutieren, Dokumente auszutauschen, mit Reisebüros zu korrespondieren, ... . Alles gesammelt in deinem JournWe. Einfach auffindbar und von überall verfügbar.
-tour.step1.title=Lade Freund zu deinem JournWe ein.
+tour.step1.title=Lade Freunde zu deinem JournWe ein.
 tour.step1.intro=Ermutige deine Freunde in deinem JournWe mitzumachen und gemeinsam zu diskutieren und planen.
 tour.step2.title=Plant & Diskutiert. Gemeinsam.
 tour.step2.intro=Diskussion und Planung vor eurem Trip wird sich für euch unterwegs auszahlen. Keiner wurde übergangen und ihr wisst bescheid was auf dem Trip los ist. Unsere offline-Unterstützung mit Druckfunktion und App machens ganz einfach.
