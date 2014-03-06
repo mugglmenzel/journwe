@@ -8,14 +8,14 @@
 @import models.dao.user.UserSocialDAO
 
 
-<div id="tour" class="tour">
+<div class="tour">
     <div class="page-header"><h1>@Messages("tour.title")</h1></div>
 
     <div class="jrn-container jrn-no-top-round jrn-no-top-gap-page-header">
 
         <section>
             <div><h2><span class="label label-success"><i class="fa fa-lightbulb-o" style="font-size: 75%; margin-right: 0;"></i></span> @Messages("tour.step0.title")</h2></div>
-            <div class="lead">@Messages("tour.step0.intro")</div>
+            <div class="lead" style="font-size: 20px;">@Messages("tour.step0.intro")</div>
         </section>
 
         <div class="spacer50"></div>
@@ -100,6 +100,7 @@
                             <button class="btn btn-people-add btn-primary" @if(!active){disabled}><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
+                    @if(active){
                     <div class="spacer20"></div>
                     <div>
                         <span style="min-width: 300px; display: inline-block;"> @Messages("yingyangyong.adventurers.public") </span>
@@ -115,6 +116,7 @@
                                 <textarea name="facebookWallPost" style="width: 100%; height: 100px;" class="form-control">@Messages("yingyangyong.adventurers.facebookMessage.example")</textarea>
                             </div>
                         </div>
+                    }
                     }
 
                 }
@@ -271,7 +273,7 @@
 
         <div class="spacer50"></div>
 
-        <section>
+        <section id="start">
             <div><h2><span class="label label-success">3</span> @Messages("tour.step3.title")</h2></div>
             <div class="lead">
             @if(active) {
