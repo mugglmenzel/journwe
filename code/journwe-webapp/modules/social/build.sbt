@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "com.google.http-client" % "google-http-client" % "1.17.0-rc",
   "com.google.http-client" % "google-http-client-jackson2" % "1.17.0-rc",
   "com.google.apis" % "google-api-services-plus" % "v1-rev118-1.17.0-rc",
-  "fi.foyt" % "foursquare-api" % "1.0.2",
+  "fi.foyt" % "foursquare-api" % "1.0.2" exclude("com.google.appengine", "appengine-api-1.0-sdk"), //exclude needed; appengine detroys sending emails with apache commons
   "org.twitter4j" % "twitter4j-core" % "3.0.5",
   "org.igniterealtime.smack" % "smack" % "3.2.1",
   "org.igniterealtime.smack" % "smackx" % "3.2.1"

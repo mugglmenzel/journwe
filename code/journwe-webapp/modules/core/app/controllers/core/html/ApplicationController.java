@@ -139,7 +139,7 @@ public class ApplicationController extends Controller {
 // Everything was filled
 // do something with your part of the form before handling the user
 // signup
-            return UsernamePasswordAuthProvider.handleSignup(ctx());
+            return MyUsernamePasswordAuthProvider.handleSignup(ctx());
         }
     }
 
