@@ -47,6 +47,7 @@ public class JournWeSMTPServer {
     private static AmazonS3Client s3;
     private static AmazonSimpleEmailServiceClient ses;
     private static String s3bucketName = "journwe-email-attachments";
+    private static String catchallEmail = "info@journwe-company.com";
 
     private static Logger logger = LoggerFactory.getLogger(JournWeSMTPServer.class);
 
@@ -72,68 +73,83 @@ public class JournWeSMTPServer {
             @Override
             public boolean accept(String from, String recipient) {
                 logger.info("Got from: " + from + ", to: " + recipient);
-                return dynamo.load(Adventure.class, recipient.substring(0, recipient.indexOf("@"))) != null;
+                return true; // dynamo.load(Adventure.class, recipient.substring(0, recipient.indexOf("@"))) != null;
             }
 
             @Override
             public void deliver(String from, String recipient, InputStream data) throws TooMuchDataException, IOException {
-
                 try {
                     MimeMessage mimemsg = new MimeMessage(Session.getDefaultInstance(System.getProperties()), data);
 
-                    //Save Message
-                    Message msg = new Message();
-                    msg.setAdventureId(recipient.substring(0, recipient.indexOf("@")));
-                    msg.setSender(from);
-                    msg.setBody("");
+                    if (dynamo.load(Adventure.class, recipient.substring(0, recipient.indexOf("@"))) != null) {
 
-                    msg.setSubject(mimemsg.getSubject());
+                        //Save Message
+                        Message msg = new Message();
+                        msg.setAdventureId(recipient.substring(0, recipient.indexOf("@")));
+                        msg.setSender(from);
+                        msg.setBody("");
 
-                    if (mimemsg.getReceivedDate() != null)
-                        msg.setTimestamp(mimemsg.getReceivedDate().getTime());
-                    else msg.setTimestamp(new Date().getTime());
+                        msg.setSubject(mimemsg.getSubject());
 
-                    processPart(msg, mimemsg);
+                        if (mimemsg.getReceivedDate() != null)
+                            msg.setTimestamp(mimemsg.getReceivedDate().getTime());
+                        else msg.setTimestamp(new Date().getTime());
 
-                    dynamo.save(msg);
-                    logger.info("Saved Message " + msg.getMessageId());
+                        processPart(msg, mimemsg);
+
+                        dynamo.save(msg);
+                        logger.info("Saved Message " + msg.getMessageId());
 
 
-                    //Forward message
+                        //Forward message
 
-                    Adventurer hashKey = new Adventurer();
-                    hashKey.setAdventureId(msg.getAdventureId());
-                    DynamoDBQueryExpression<Adventurer> queryAdvr = new DynamoDBQueryExpression<Adventurer>().withHashKeyValues(hashKey);
+                        Adventurer hashKey = new Adventurer();
+                        hashKey.setAdventureId(msg.getAdventureId());
+                        DynamoDBQueryExpression<Adventurer> queryAdvr = new DynamoDBQueryExpression<Adventurer>().withHashKeyValues(hashKey);
 
-                    for (Adventurer advr : dynamo.query(Adventurer.class, queryAdvr)) {
+                        for (Adventurer advr : dynamo.query(Adventurer.class, queryAdvr)) {
 
-                        UserEmail ue = new UserEmail();
-                        ue.setUserId(advr.getUserId());
-                        DynamoDBQueryExpression queryEmail = new DynamoDBQueryExpression().withHashKeyValues(ue);
+                            UserEmail ue = new UserEmail();
+                            ue.setUserId(advr.getUserId());
+                            DynamoDBQueryExpression queryEmail = new DynamoDBQueryExpression().withHashKeyValues(ue);
 
-                        Iterator<UserEmail> results = dynamo.query(UserEmail.class, queryEmail).iterator();
-                        UserEmail result = null;
-                        while (results.hasNext()) {
-                            result = results.next();
-                            if (result.isPrimary()) break;
+                            Iterator<UserEmail> results = dynamo.query(UserEmail.class, queryEmail).iterator();
+                            UserEmail result = null;
+                            while (results.hasNext()) {
+                                result = results.next();
+                                if (result.isPrimary()) break;
+                            }
+
+                            if (result != null) {
+                                mimemsg.setFrom(new InternetAddress(recipient));
+                                mimemsg.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(result.getEmail()));
+                                mimemsg.setReplyTo(new Address[]{new InternetAddress(from), new InternetAddress(recipient)});
+                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                mimemsg.writeTo(outputStream);
+                                RawMessage rawMessage = new RawMessage(ByteBuffer.wrap(outputStream.toByteArray()));
+
+                                ses.sendRawEmail(new SendRawEmailRequest().withRawMessage(rawMessage).withDestinations(result.getEmail()).withSource(msg.getAdventureId() + "@journwe.com"));
+                            }
                         }
 
-                        if (result != null) {
-                            mimemsg.setFrom(new InternetAddress(recipient));
-                            mimemsg.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(result.getEmail()));
-                            mimemsg.setReplyTo(new Address[]{new InternetAddress(from), new InternetAddress(recipient)});
-                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                            mimemsg.writeTo(outputStream);
-                            RawMessage rawMessage = new RawMessage(ByteBuffer.wrap(outputStream.toByteArray()));
+                        logger.info("Forwarded Message " + msg.getMessageId() + " to adventurers");
 
-                            ses.sendRawEmail(new SendRawEmailRequest().withRawMessage(rawMessage).withDestinations(result.getEmail()).withSource(msg.getAdventureId() + "@journwe.com"));
-                        }
+                        //ses.sendEmail(new SendEmailRequest().withDestination(dest).withMessage(new com.amazonaws.services.simpleemail.model.Message().withSubject(new Content().withData(msg.getSubject())).withBody(new Body().withHtml(new Content().withData(msg.getBody())).withText(new Content().withData(msg.getBody())))));
+
+                    } else {
+                        mimemsg.setFrom(new InternetAddress("no-reply@journwe.com"));
+                        mimemsg.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(catchallEmail));
+                        mimemsg.setReplyTo(new Address[]{new InternetAddress(from), new InternetAddress(recipient)});
+                        mimemsg.addHeader("XOriginalSource", from);
+                        mimemsg.addHeader("XOriginalDestination", recipient);
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        mimemsg.writeTo(outputStream);
+                        RawMessage rawMessage = new RawMessage(ByteBuffer.wrap(outputStream.toByteArray()));
+
+                        ses.sendRawEmail(new SendRawEmailRequest().withRawMessage(rawMessage).withDestinations(catchallEmail).withSource("no-reply@journwe.com"));
+
+                        logger.info("Forwarded Message from " + from + " to catch all");
                     }
-
-                    logger.info("Forwarded Message " + msg.getMessageId());
-
-                    //ses.sendEmail(new SendEmailRequest().withDestination(dest).withMessage(new com.amazonaws.services.simpleemail.model.Message().withSubject(new Content().withData(msg.getSubject())).withBody(new Body().withHtml(new Content().withData(msg.getBody())).withText(new Content().withData(msg.getBody())))));
-
                 } catch (MessagingException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
