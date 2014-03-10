@@ -13,24 +13,8 @@
             <div id="adventure-container">
                 @comment.commentsCommon()
 
-                <div class="prime-image">
-                    <div id="adventure-prime-image" style="width: 100%; height: 200px;">
-                    </div>
-
-                    <span class="title-name">
-                        <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-                            data-url="@html.routes.AdventureController.saveEditable()"
-                            data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a> <i class="fa fa-pencil white muted"></i> <span></span>
-                        @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
-                    </span>
-                </div>
-
-                <div class="jrn-container jrn-no-round jrn-no-top-gap">
-                    @index(adv, ins)
-                </div>
-
-                <div class="nav-adventure visible-lg visible-md navbar" style=""> <!---->
-                    <h4 style="font-size: 14px; line-height: 1; color: #aaaaaa;">Navigation</h4>
+                <div class="nav-adventure visible-md visible-lg navbar">
+                    <!--<h4 class="text-right" style="font-size: 14px; line-height: 1; color: #aaaaaa;">GOTO</h4> -->
                     <ul id="nav-adventure-list" class="nav nav-pills navbar-nav navbar-right nav-adventure-list">
                         <li class="adventurers active">
                             <a href="#adventurers" data-toggle="tooltip" title="Adventurers"><i class="fa fa-group" title="Adventurers"></i></a>
@@ -43,15 +27,36 @@
                         </li>
                         <li class="discussion emails">
                             <a href="#timeline" data-toggle="tooltip" title="Timeline"><i class="fa fa-clock-o" title="Timeline"></i></a>
-                            <!--a href="#emails" data-toggle="tooltip" title="Emails"><i class="fa fa-envelope" title="Emails"></i></a-->
+                                <!--a href="#emails" data-toggle="tooltip" title="Emails"><i class="fa fa-envelope" title="Emails"></i></a-->
                         </li>
                         <li class="todos files pull-left">
                             <a href="#todos" data-toggle="tooltip" title="Todos"><i class="fa fa-list-ol" title="Todos"></i></a>
-                            <!--a href="#files" data-toggle="tooltip" title="Files"><i class="fa fa-file" title="Files"></i></a-->
+                                <!--a href="#files" data-toggle="tooltip" title="Files"><i class="fa fa-file" title="Files"></i></a-->
                         </li>
                         @*<li class="offers"><a href="#offers"><i class="fa fa-suitcase" title="Offers"></i></a></li>*@
                     </ul>
                 </div>
+
+                <div class="prime-image">
+                    <div id="adventure-prime-image" style="width: 100%; height: 200px;">
+                    </div>
+
+                    <span class="title-name">
+                        <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+                            data-url="@html.routes.AdventureController.saveEditable()"
+                            data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a> <i class="fa fa-pencil white muted"></i> <span></span>
+                        @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                    </span>
+
+                </div>
+
+
+
+                <div class="jrn-container jrn-no-round jrn-no-top-gap">
+                    @index(adv, ins)
+                </div>
+
+
                 
 
                 <div class="jrn-adventure-section">

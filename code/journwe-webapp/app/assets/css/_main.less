@@ -212,18 +212,20 @@ h1 .editableform {
 #yingyangyong-container {
   // background: none repeat scroll 0 0 fade(@color_white, 90%);
   background-color: white;
-  margin-top: 50px;
+  margin-top: 25px;
   padding: 20px;
   position: relative;
   border-radius: 5px;
   //overflow: hidden;
 
   &.jrn-no-bottom-round {
-    border-radius: 5px 5px 0 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   &.jrn-no-top-round {
-    border-radius: 0 0 5px 5px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
   }
 
   &.jrn-no-round {

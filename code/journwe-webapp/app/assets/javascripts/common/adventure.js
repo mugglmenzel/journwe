@@ -49,6 +49,11 @@ define([
     };
 
     var initNavigation = function () {
+        $('.nav-adventure').affix({
+            offset: {
+                top: $('.nav-adventure').first().offset().top
+            }
+        });
         $('.nav-adventure-list a').tooltip();
     }
 
