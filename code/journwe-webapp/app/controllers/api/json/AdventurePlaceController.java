@@ -118,7 +118,6 @@ public class AdventurePlaceController extends Controller {
 
         User user = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Comment comment = new Comment();
-        PlacePreference pref = new PlacePreference();
 
         if (user != null) {
             if (requestData.get("comment") != null && !"".equals(requestData.get("comment"))) {
@@ -128,10 +127,6 @@ public class AdventurePlaceController extends Controller {
                 comment.setUserId(user.getId());
                 new CommentDAO().save(comment);
             }
-
-            pref.setPlaceOptionId(place.getOptionId());
-            pref.setUserId(user.getId());
-            new PlacePreferenceDAO().save(pref);
         }
 
         ObjectNode node = placeToJSON(place);
@@ -162,8 +157,8 @@ public class AdventurePlaceController extends Controller {
         }
 
         try {
-            pref.setVoteGravity(voteGravity != null ? voteGravity : 0.5D);
-            pref.setVote(vote != null && !"".equals(vote) ? EPreferenceVote.valueOf(vote) : EPreferenceVote.MAYBE);
+            if(voteGravity != null) pref.setVoteGravity(voteGravity);
+            if(vote != null && !"".equals(vote)) pref.setVote(EPreferenceVote.valueOf(vote));
         } catch (IllegalArgumentException e) {
             Logger.error("Got unknown value for vote! value: " + vote);
         }
@@ -219,7 +214,7 @@ public class AdventurePlaceController extends Controller {
             return new PlaceOptionRating(place.getPlaceId(), 0D);
 
         for (PlacePreference pref : prefs)
-            if (0D >= pref.getVoteGravity() || EPreferenceVote.NO.equals(pref.getVote()))
+            if (0D >= pref.getVoteGravity())
                 return new PlaceOptionRating(place.getPlaceId(), 0D);
             else
                 sum += pref.getVoteGravity();

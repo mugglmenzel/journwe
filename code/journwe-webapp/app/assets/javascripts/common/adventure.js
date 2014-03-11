@@ -231,7 +231,7 @@ define([
     };
 
     var renderPlaceOption = function (data, replace) {
-        data.voteGroup = Math.round(data.voteGroup * 6 * 100) / 100;
+        data.voteGroup = Math.round(data.voteGroup * 5 * 100) / 100;
         var place = $(tmpl('place-template', $.extend({
             votePlaceLabelCSSClassMap: votePlaceLabelCSSClassMap
         }, data)));
@@ -303,7 +303,7 @@ define([
     };
 
     var votePlace = function (vote, voteGrav, optId) {
-
+        alert('voting ' + $(e.target).val());
         routes.controllers.api.json.AdventurePlaceController.vote(adv.id, optId).ajax({
             data: {
                 vote: vote, voteGravity: voteGrav
@@ -504,7 +504,7 @@ define([
 
 
     var renderTimeOption = function (data, replace) {
-        data.voteGroup = Math.round(data.voteGroup * 6 * 100) / 100;
+        data.voteGroup = Math.round(data.voteGroup * 5 * 100) / 100;
         var time = $(tmpl('time-template', $.extend({
             voteTimeLabelCSSClassMap: voteTimeLabelCSSClassMap,
             formatDate: utils.formatDate
@@ -919,6 +919,9 @@ define([
                 inputFile.val('');
             }
         },
+        'click .btn-upload': function(){
+            $('#adventure-prime-image-file-input').click ();
+        },
 
         'click .btn-edit-description': function () {
             //event.stopPropagation();
@@ -1015,12 +1018,11 @@ define([
                 case '2':
                     vote = 'NO';
                     break;
+                case '4':
                 case '5':
-                case '6':
                     vote = 'YES';
-            }
-            ;
-            if ($(e.target).is(':checked')) votePlace(vote, $(e.target).val() / 6, $(e.target).data('id'));
+            };
+            if ($(e.target).is(':checked')) votePlace(vote, $(e.target).val() / 5, $(e.target).data('id'));
         },
         'change #places-voting-active-switch': function () {
             routes.controllers.api.json.AdventureController.updatePlaceVoteOpen(adv.id).ajax({data: {voteOpen: $('#places-voting-active-switch').prop('checked')}, success: updatePlaceVoteOpen});
@@ -1133,7 +1135,7 @@ define([
             }
             ;
 
-            if ($(e.target).is(':checked')) voteTime(vote, $(e.target).val() / 6, $(e.target).data('id'));
+            if ($(e.target).is(':checked')) voteTime(vote, $(e.target).val() / 5, $(e.target).data('id'));
         },
         'change #times-voting-active-switch': function () {
             routes.controllers.api.json.AdventureController.updateTimeVoteOpen(adv.id).ajax({data: {voteOpen: $('#times-voting-active-switch').prop('checked')}, success: updateTimeVoteOpen});

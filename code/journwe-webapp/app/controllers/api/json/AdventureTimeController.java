@@ -117,14 +117,6 @@ public class AdventureTimeController extends Controller {
             new TimeOptionDAO().save(time);
             new AdventurerNotifier().notifyAdventurers(advId, "The new time option " + df.format(time.getStartDate()) + (time.getStartDate().equals(time.getEndDate()) ?  "-" + df.format(time.getEndDate()) : "") + " has been added.", "New Time Option");
 
-            User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-            if(usr != null) {
-                TimePreference pref = new TimePreference();
-                pref.setTimeOptionId(time.getOptionId());
-                pref.setAdventurerId(usr.getId());
-                new TimePreferenceDAO().save(pref);
-            }
-
             Logger.info("returning start date " + time.getStartDate().toString() + ", " + df.format(time.getStartDate()));
             ObjectNode node = timeToJSON(time);
 
@@ -165,8 +157,8 @@ public class AdventureTimeController extends Controller {
         }
 
         try {
-            pref.setVoteGravity(voteGravity != null ? voteGravity : 0.6D);
-            pref.setVote(vote !=  null && !"".equals(vote) ? EPreferenceVote.valueOf(vote) : EPreferenceVote.MAYBE);
+            if(voteGravity != null) pref.setVoteGravity(voteGravity);
+            if(vote !=  null && !"".equals(vote)) pref.setVote(EPreferenceVote.valueOf(vote));
         } catch (IllegalArgumentException e) {
             Logger.error("Got unknown value for vote! value: " + vote);
         }
@@ -220,7 +212,7 @@ public class AdventureTimeController extends Controller {
             return new TimeOptionRating(time.getTimeId(), 0D);
 
         for (TimePreference pref : prefs)
-            if (0D >= pref.getVoteGravity() || EPreferenceVote.NO.equals(pref.getVote()))
+            if (0D >= pref.getVoteGravity())
                 return new TimeOptionRating(time.getTimeId(), 0D);
             else
                 sum += pref.getVoteGravity();

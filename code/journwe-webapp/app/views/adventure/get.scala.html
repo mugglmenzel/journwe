@@ -13,8 +13,15 @@
             <div id="adventure-container">
                 @comment.commentsCommon()
 
-                <div class="nav-adventure visible-md visible-lg navbar">
-                    <!--<h4 class="text-right" style="font-size: 14px; line-height: 1; color: #aaaaaa;">GOTO</h4> -->
+                <div class="nav-adventure visible-sm visible-md visible-lg navbar">
+                    <span class="title-name">
+                        <i class="fa fa-info"></i>
+                        <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+                            data-url="@html.routes.AdventureController.saveEditable()"
+                            data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil muted"></i> <span></span>
+                        @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                    </span>
+                        <!--<h4 class="text-right" style="font-size: 14px; line-height: 1; color: #aaaaaa;">GOTO</h4> -->
                     <ul id="nav-adventure-list" class="nav nav-pills navbar-nav navbar-right nav-adventure-list">
                         <li class="adventurers active">
                             <a href="#adventurers" data-toggle="tooltip" title="Adventurers"><i class="fa fa-group" title="Adventurers"></i></a>
@@ -41,12 +48,19 @@
                     <div id="adventure-prime-image" style="width: 100%; height: 200px;">
                     </div>
 
-                    <span class="title-name">
-                        <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-                            data-url="@html.routes.AdventureController.saveEditable()"
-                            data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a> <i class="fa fa-pencil white muted"></i> <span></span>
-                        @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
-                    </span>
+                    <div class="infobar">
+                        <span class="title-name visible-xs">
+                            <i class="fa fa-info white"></i>
+                            <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+                                data-url="@html.routes.AdventureController.saveEditable()"
+                                data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil white muted"></i> <span></span>
+                            @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                        </span>
+
+                        <div class="toolbar text-right">
+                            <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload"><i class="fa fa-picture-o"></i></a>
+                        </div>
+                    </div>
 
                 </div>
 

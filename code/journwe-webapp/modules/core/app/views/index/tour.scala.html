@@ -291,7 +291,7 @@
             }  else {
 
             <div class="row">
-                <div class="col-lg-5">
+                <div class="col-sm-6 col-md-5">
                     <p class="lead">@Messages("tour.login.title")</p>
 
                     @helper.form(core.html.routes.ApplicationController.doLogin, 'class -> "login") {
@@ -326,7 +326,7 @@
 
                     }
                 </div>
-                <div class="col-lg-5 col-lg-offset-2">
+                <div class="col-sm-6 col-md-5 col-md-offset-2">
                     <p class="lead">@Messages("tour.signin.title")</p>
                     <ul class="nav nav-pills nav-stacked ">
                     @forProviders() { p =>
