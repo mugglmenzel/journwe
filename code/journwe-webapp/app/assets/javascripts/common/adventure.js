@@ -54,6 +54,7 @@ define([
                 top: $('.nav-adventure').first().offset().top
             }
         });
+
         $('.nav-adventure-list a').tooltip();
     }
 

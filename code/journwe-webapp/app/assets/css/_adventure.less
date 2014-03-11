@@ -1,10 +1,9 @@
 
 .nav-adventure {
   font-size: 20px;
-  width: 100%;
+  //width: 100%;
   background-color: @color_white;
-  margin-top: 10px; // 50px;
-  margin-bottom: 0;
+  margin: 10px 0 0 0;
   border-radius: 0;
   padding: 5px;
   .transition(background 0.5s ease);
@@ -12,16 +11,26 @@
   &.affix {
     box-shadow: 0 0 5px gray;
     position: fixed;
-    left: 17.03%;
-    right: 17.03%;
+
     z-index: 1000;
     top: -10px;
-    width: auto;
 
     & + div {
       margin-top: 85px;
     }
   }
+
+  @media (min-width: 1200px) {
+    &.affix {
+      width: 66%;
+    }
+  }
+  @media (max-width: 1200px) {
+    &.affix {
+      width: 100%;
+    }
+  }
+
 
   & .navbar-left li {
     padding: 4px 5px;
