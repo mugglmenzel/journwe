@@ -50,6 +50,14 @@
 
             <div class="row">
                 <div class="col-xs-12">
+                    <h3>Adventurers</h3>
+                    <div class="adventurers-list" style="overflow : hidden ;"></div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            @*
+            <div class="row">
+                <div class="col-xs-12">
                     <h3>Participants</h3>
                     <div class="adventurers-participants-list" style="overflow : hidden ;"></div>
                     <div class="clearfix"></div>
@@ -65,6 +73,7 @@
                     <div class="clearfix"></div>
                 </div>
             </div>
+            *@
 
 
             <script type="text/x-tmpl" id="adventurer-template">
@@ -80,12 +89,11 @@
                         {% } %}
                         {% if(o.status == 'APPLICANT' || o.status == 'INVITEE'){ %}
                         <button class="btn btn-danger btn-sm btn-deny" data-id="{%=o.id%}">Deny</button>
-                        {% } else { %}
+                        {% } %}
                         <div class="overlay text-center">
                             <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">
                                 {%=o.status%}</span>
                         </div>
-                        {% } %}
                     </div>
                 </div>
             </script>

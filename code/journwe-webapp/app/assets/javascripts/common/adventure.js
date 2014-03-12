@@ -304,7 +304,6 @@ define([
     };
 
     var votePlace = function (vote, voteGrav, optId) {
-        alert('voting ' + $(e.target).val());
         routes.controllers.api.json.AdventurePlaceController.vote(adv.id, optId).ajax({
             data: {
                 vote: vote, voteGravity: voteGrav
