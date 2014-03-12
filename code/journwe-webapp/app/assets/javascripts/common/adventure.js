@@ -356,10 +356,10 @@ define([
         loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '.adventurers-applicants-list');
     }
 
-    var loadAdventurers = function (endpoint, target, template) {
+    var loadAdventurers = function (endpoint, target, clear, template, hideOnEmpty) {
         template = template ? template : 'adventurer-template';
         endpoint.ajax({success: function (advs) {
-            $(target).empty();
+            if(clear) $(target).empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
                     advs[i].cssLabel = utils.adventurerCSSLabel[advs[i].status];
@@ -367,7 +367,7 @@ define([
                     $(target).append(tmpl(template, advs[i]));
                 }
                 $(target).parent().show();
-            } else $(target).parent().hide();
+            } else if(hideOnEmpty) $(target).parent().hide();
         }});
     }
 

@@ -19,7 +19,7 @@ require([
     adventure.initializePeople();
     adventure.initializeTime();
     adventure.initializeTodos();
-    adventure.initializeFiles();
+    //adventure.initializeFiles();
     adventure.initializeTimeline();
 
 });
