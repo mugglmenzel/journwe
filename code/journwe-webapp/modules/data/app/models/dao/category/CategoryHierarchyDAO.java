@@ -9,6 +9,8 @@ import models.category.Category;
 import models.category.CategoryHierarchy;
 import models.dao.common.CommonRangeEntityDAO;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,6 +61,18 @@ public class CategoryHierarchyDAO extends CommonRangeEntityDAO<CategoryHierarchy
         List<CategoryHierarchy> superCats = categoryAsSub(catId);
 
         return superCats.size() > 0 ? superCats.get(0).getSuperCategoryId() : null;
+    }
+
+    public List<String> getSuperHierarchy(String catId) {
+        String currentCatId = catId;
+        List<String> hier = new ArrayList<String>();
+        while(!Category.SUPER_CATEGORY.equals(currentCatId)) {
+            hier.add(currentCatId);
+            currentCatId =  getSuperCategoryId(currentCatId);
+        }
+        Collections.reverse(hier);
+
+        return hier;
     }
 
     public boolean isCategoryInHierarchy(String catId) {

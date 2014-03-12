@@ -330,15 +330,18 @@ define([
 
     var initializePeople = function () {
         loadAllAdventurers();
-		loadParticipants();
-        loadInvitees();
-        loadApplicants();
+		//loadParticipants();
+        //loadInvitees();
+        //loadApplicants();
 
         friendTypeahead();
     };
 
     var loadAllAdventurers = function () {
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getAdventurers(adv.id), '.adventurers-list');
+        //loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getAdventurers(adv.id), '.adventurers-list');
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getParticipants(adv.id), '.adventurers-list');
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getInvitees(adv.id), '.adventurers-list');
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '.adventurers-list');
     }
 
     var loadParticipants = function () {

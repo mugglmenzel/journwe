@@ -55,22 +55,25 @@ require([
 
 
     var initializePlaceMap = function () {
-        gmaps.visualRefresh = true;
+        if($('#inspiration-place-map').length){
+            gmaps.visualRefresh = true;
 
-        var mapOptions = {
-            zoom: 5,
-            center: new gmaps.LatLng(49.483472, 8.476992),
-            mapTypeId: gmaps.MapTypeId.ROADMAP
-        };
-        if($('#inspiration-place-map').length) placeMap = new gmaps.Map(document.getElementById('inspiration-place-map'), mapOptions);
+            var mapOptions = {
+                zoom: 5,
+                center: new gmaps.LatLng(49.483472, 8.476992),
+                mapTypeId: gmaps.MapTypeId.ROADMAP
+            };
 
-        var placeLatLng = new gmaps.LatLng(ins.placeLatitude, ins.placeLongitude);
+            placeMap = new gmaps.Map(document.getElementById('inspiration-place-map'), mapOptions);
 
-        new gmaps.Marker({
-            map: placeMap,
-            position: placeLatLng
-        });
-        placeMap.setCenter(placeLatLng);
+            var placeLatLng = new gmaps.LatLng(ins.placeLatitude, ins.placeLongitude);
+
+            new gmaps.Marker({
+                map: placeMap,
+                position: placeLatLng
+            });
+            placeMap.setCenter(placeLatLng);
+        }
     }
 
 
