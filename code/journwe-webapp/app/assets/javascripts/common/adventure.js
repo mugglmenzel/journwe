@@ -329,7 +329,8 @@ define([
     //PEOPLE
 
     var initializePeople = function () {
-        loadParticipants();
+        loadAllAdventurers();
+		loadParticipants();
         loadInvitees();
         loadApplicants();
 
