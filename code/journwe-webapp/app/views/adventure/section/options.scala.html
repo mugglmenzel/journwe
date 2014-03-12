@@ -3,22 +3,6 @@
     @import models.adventure.adventurer.EAdventurerParticipation
 
 <div class="row">
-    <div class="col-lg-12"><h4><i class="fa fa-share"></i> Share</h4></div>
-    <div class="col-lg-12">
-        @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){
-           <a href="@adv.getShortURL" class="btn btn-default"><i class="fa fa-globe"></i> @adv.getShortURL</a>
-        }
-        <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436'); return false;" class="btn btn-primary"><i class="fa fa-facebook"></i> @Messages("adventure.options.facebookpublish")</button>
-        <div class="options-twitter-share stash">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-via="JournWe" @if(adv.getShortURL()!=null && !adv.getShortURL().equals("../../../../public")){data-url="@adv.getShortURL"} data-size="large" data-related="JournWe" data-hashtags="journwe">@Messages("adventure.options.twitter")</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        </div>
-    </div>
-</div>
-
-    <br/>
-    <br/>
-<div class="row">
     <div class="col-lg-6">
         <div class="row">
             <div class="col-lg-12">
@@ -51,7 +35,7 @@
                 <a class="btn btn-default" data-toggle="modal" data-target="#pdfAdventure"><i class="fa fa-file-text"></i> @Messages("adventure.general.button.pdf")</a>
 
                 <input id="adventure-prime-image-file-input" type="file" class="hide"/>
-                <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload"><i class="fa fa-upload"></i> @Messages("adventure.files.imageUpload")</a>
+                <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload"><i class="fa fa-picture-o"></i> @Messages("adventure.files.imageUpload")</a>
                 
                 <a class="btn btn-default" data-toggle="modal" data-target="#cloneAdventure"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
                 
