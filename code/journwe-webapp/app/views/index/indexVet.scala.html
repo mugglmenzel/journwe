@@ -21,7 +21,6 @@
         <p class="lead">
         @Messages("index.welcome1", user.getName())
         </p>
-
         <h2><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button class="btn btn-adventure-my-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="margin-bottom : 20px; margin-left: -5px; margin-right: -5px;">
 
@@ -43,7 +42,7 @@
 
                     </div>
                 </div>
-                <span class="list-adventures-my"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></span>
+                <span class="list-adventures-my"><div class="loader"></div></span>
             </div>
             <div class="text-center"><button class="btn btn-adventures-my-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
             <script type="text/x-tmpl" id="adventure-my-template">
@@ -96,7 +95,7 @@
         <h2><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
 
         <div style="">
-            <div id="categories-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size : 50px; margin-bottom : 20px;"></i></div>
+            <div id="categories-list" class="text-center"><div class="loader"></div></div>
         </div>
         <div class="clearfix"></div>
 

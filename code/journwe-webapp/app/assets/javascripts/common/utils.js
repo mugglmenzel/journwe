@@ -170,12 +170,12 @@ define(function () {
             var id = new Date().getUTCMilliseconds() + '-' + Math.round(Math.random() * 1000);
             spinnerTempStore[id] = el.html();
             el.data('spinner-id', id);
-            el.css({width: el.outerWidth() + 'px'})
-                .html('<i class="fa fa-spin icon-journwe"></i>');
+            el.css({width: el.outerWidth() + 'px', height: el.outerHeight() + 'px'})
+                .html('<div class="loader text-center"></div>');
         },
         resetReplaceSpinning: function (el) {
             var id = el.data('spinner-id');
-            el.css({width: ''})
+            el.css({width: '', height: ''})
                 .html(spinnerTempStore[id]);
             delete spinnerTempStore[id];
             el.data('spinner-id', '');

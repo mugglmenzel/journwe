@@ -64,8 +64,8 @@
 
             <h2 id="subcategories"><i class="fa fa-arrow-down"></i> @Messages("index.category.subcategories") (@catDAO.countSubcategory(cat.getId))</h2>
             <div style="">
-                <div id="categories-list" style="font-size: 20pt;">
-                    <i class="fa fa-spin icon-journwe"></i>
+                <div id="categories-list">
+                    <div class="loader"></div>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -90,7 +90,7 @@
     <div class="jrn-container">
         <h2 id="inspirations"><i class="fa fa-lightbulb-o"></i> @Messages("inspiration.text") (@catDAO.countInspirationsByCategory(cat.getId))<div class="pull-right"><button id="inspirations-public-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="">
-            <div id="inspirations-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="inspirations-public-list" class="text-center"><div class="loader"></div></div>
             <div class="clearfix"></div>
             <div class="text-center"><button id="inspirations-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
@@ -114,7 +114,7 @@
         <h2 id="publicadventures"><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button id="adventures-public-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button></div></h2>
 
         <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><div class="loader"></div></div>
             <div class="clearfix"></div>
             <div class="text-center"><button id="adventures-public-load-more-button" class="btn btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>

@@ -50,7 +50,7 @@ define([
 
     var loadPublicAdventures = function (lastId, clear, insId) {
         utils.setSpinning($('.btn-adventures-public-refresh i'));
-        $('.btn-adventures-public-load-more').html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning($('.btn-adventures-public-load-more'));
         routes.controllers.api.json.ApplicationController.getPublicAdventures().ajax({data: {lastId: lastId, count: 10, inspirationId: insId}, success: function (advs) {
             if (clear) $('#adventures-public-list').empty();
             if (advs != null && advs.length > 0) {
@@ -96,6 +96,7 @@ define([
                     $(this).remove();
                 });
             }
+            utils.resetReplaceSpinning($('.btn-adventures-public-load-more'));
             if (advs.length < 10) {
                 $('.btn-adventures-public-load-more, #adventures-public-load-more-button').fadeOut();
             } else {
@@ -110,13 +111,14 @@ define([
         superCatId = superCatId ? superCatId : 'SUPER';
 
         utils.setSpinning($('.btn-categories-refresh i'));
-        $('.btn-categories-load-more').html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning($('.btn-categories-load-more'));
         routes.controllers.api.json.CategoryController.getCategories(superCatId).ajax({data: {lastId: lastId, count: 10}, success: function (cats) {
             if (clear) $('#categories-list').empty();
             for (var i in cats) {
                 $('#categories-list').append(tmpl('category-template', cats[i]));
             }
 
+            utils.resetReplaceSpinning($('.btn-categories-load-more'));
             if (cats.length < 10) {
                 $('.btn-categories-load-more').fadeOut();
             } else {

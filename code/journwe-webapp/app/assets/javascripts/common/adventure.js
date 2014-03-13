@@ -1185,7 +1185,7 @@ define([
                 i = tr.find('.btn-check i'),
                 complete = i.is('.fa-square-o');
 
-            i.removeClass('fa-square-o fa-check-square-o').addClass('fa-spin icon-journwe');
+            utils.setReplaceSpinning(i);
 
             routes.controllers.api.json.AdventureTodoController.setTodo(adv.id, id).ajax({
                 data: {
@@ -1193,7 +1193,8 @@ define([
                 },
                 success: function (res) {
                     tr.get(0).className = 'status-' + res.status + ' todo-entry';
-                    i.removeClass('fa-spin icon-journwe').addClass(res.status == 'COMPLETE' ? 'fa-check-square-o' : 'fa-square-o');
+                    utils.resetReplaceSpinning(i);
+                    i.removeClass().addClass('fa ' + (res.status == 'COMPLETE' ? 'fa-check-square-o' : 'fa-square-o'));
                 }
             });
 
@@ -1207,11 +1208,11 @@ define([
                 td = tr.find('td'),
                 title = $(td[1]).text();
 
-            btn.html('<i class="fa fa-spin icon-journwe"></i>');
+            utils.setReplaceSpinning(btn);
 
             routes.controllers.api.json.AdventureTodoController.addTodo(adv.id).ajax({data: {title: title}, success: function (res) {
                 loadUserTodos();
-                btn.html('<i class="fa fa-plus"></i>');
+                utils.resetReplaceSpinning(btn);
             }});
         },
         'keydown #todo-title': function (e) {
@@ -1221,7 +1222,7 @@ define([
         },
 
         'click #btn-add-todo': function () {
-            $(this).html('<i class="fa fa-spin icon-journwe"></i>');
+            utils.setReplaceSpinning($(this));
             var btn = $(this),
                 fld = $('#todo-title');
 
@@ -1230,19 +1231,21 @@ define([
                 //activateUserButtonListener();
                 loadUserTodos();
                 fld.val("");
-                $('#btn-add-todo').html('<i class="fa fa-plus"></i>')
+                utils.resetReplaceSpinning($('#btn-add-todo'));
             }});
         },
         'click #todos-list tbody .btn-delete': function (e) {
-            $(this).html('<i class="fa fa-spin icon-journwe"></i>');
+
             e.preventDefault();
 
             var a = $(this),
                 tr = a.parents('.todo-entry'),
                 id = tr.data('id');
+            utils.setReplaceSpinning(a);
 
             routes.controllers.api.json.AdventureTodoController.deleteTodo(adv.id, id).ajax({
                 success: function (res) {
+                    utils.resetReplaceSpinning(a);
                     tr.fadeOut(function () {
                         tr.remove();
                     });
