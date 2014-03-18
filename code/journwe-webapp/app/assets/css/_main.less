@@ -856,7 +856,7 @@ h3 {
   border-radius: 5px;
   /*overflow: hidden;*/
 
-  & .title-name {
+  & .title-overlay {
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -867,50 +867,44 @@ h3 {
     background: rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid #eee;
 
-    font-size: 32px;
-    text-shadow: 0 0px 1px black, 0 1px 1px #444;
+    & .title-name {
 
-    & a {
-      font-size: 32px;
-      font-family: @font-title;
-      font-weight: @font-title-normal;
-      border: none;
+      display: inline;
       color: white;
+
+      font-size: 32px;
+      text-shadow: 0 0px 1px black, 0 1px 1px #444;
+
+      & a {
+        font-size: 32px;
+        font-family: @font-title;
+        font-weight: @font-title-normal;
+        border: none;
+        color: white;
+      }
+
+    }
+
+    & .toolbar {
+
+      white-space: nowrap;
+      display: inline;
+
+      & .btn-group > .btn:first-child {
+        margin-left: 0;
+      }
+
+      & .btn-group .btn + .btn, .btn-group .btn + .btn-group, .btn-group .btn-group + .btn, .btn-group .btn-group + .btn-group {
+        margin-left: -1px;
+      }
+
+      & .btn {
+        margin-left: 5px;
+      }
     }
 
   }
 
-  & .infobar .title-name {
-      background: none !important;
-  }
-
-  & .toolbar {
-
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    padding: 10px;
-    width: 100%;
-
-    //like page-header
-    background: rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid #eee;
-
-    white-space: nowrap;
-    display: inline;
-
-    & .btn-group > .btn:first-child {
-      margin-left: 0;
-    }
-
-    & .btn-group .btn + .btn, .btn-group .btn + .btn-group, .btn-group .btn-group + .btn, .btn-group .btn-group + .btn-group {
-      margin-left: -1px;
-    }
-
-    & .btn {
-      margin-left: 5px;
-    }
-  }
 }
 
 

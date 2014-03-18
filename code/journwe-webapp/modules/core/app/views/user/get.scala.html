@@ -10,13 +10,17 @@
             <img id="user-prime-image" style="width: 100%; height: 200;" @if(user.getImage == null){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=No+image"}else{src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@user.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
         </div>
 
-        <div class="title-name">
-            @user.getName <small>- @user.getRole</small>
-        </div>
-        <div class="toolbar">
+        <div class="title-overlay">
+            <div class="title-name">
+                @user.getName <small>(@user.getRole)</small>
+            </div>
+            @*
+            <div class="toolbar">
+            </div>
+            *@
         </div>
     </div>
-    <div class="jrn-container">
+    <div class="jrn-container jrn-no-top-round jrn-no-top-gap">
         <h2 id="options"><i class="fa fa-cogs"></i> @Messages("user.options") </h2>
         <div class="row">
             <div class="col-lg-12">
