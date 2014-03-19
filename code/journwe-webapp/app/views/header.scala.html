@@ -4,112 +4,110 @@
 
 
 <nav class="navbar" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button class="btn-default navbar-toggle" data-toggle="collapse" data-target="#navbar-header">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+    <div class="navbar-header">
+        <button class="btn-default navbar-toggle" data-toggle="collapse" data-target="#navbar-header">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
 
-            <div class="brand">
-                <a href="/">
-                    <img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo">
-                    <span>
-                        Journ<strong>We</strong>
-                    </span>
-                </a>
-            </div>
+        <div class="brand">
+            <a href="/">
+                <img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo">
+                <span>
+                    Journ<strong>We</strong>
+                </span>
+            </a>
         </div>
+    </div>
 
-        <div class="collapse navbar-collapse" id="navbar-header">
+    <div class="collapse navbar-collapse" id="navbar-header">
 
-        @currentAuth() { auth =>
-            @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
-                @if(auth != null && user != null) {
-                <ul class="nav navbar-nav navbar-left">
-                    <li><a href="@html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New</a></li>
-                    <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                    <li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
-                </ul>
-                <div class="navbar-right">
-                    <a id="notifications-link" class="btn navbar-btn" data-html="true" data-placement="bottom" data-title="Notifications"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
-                    <div class="stash">
-                        <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
-                            <div class="text-center" style="display: block;"><i class="loading-top icon-journwe fa fa-spin"></i></div>
-                            <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
-                            <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe fa fa-spin stash"></i></div>
-                        </div>
+    @currentAuth() { auth =>
+        @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
+            @if(auth != null && user != null) {
+            <ul class="nav navbar-nav navbar-left">
+                <li><a href="@html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New</a></li>
+                <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                <li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>
+            </ul>
+            <div class="navbar-right">
+                <a id="notifications-link" class="btn navbar-btn" data-html="true" data-placement="bottom" data-title="Notifications"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
+                <div class="stash">
+                    <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
+                        <div class="text-center" style="display: block;"><i class="loading-top icon-journwe fa fa-spin"></i></div>
+                        <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
+                        <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe fa fa-spin stash"></i></div>
                     </div>
-                    <script type="text/x-tmpl" id="header-notification-template">
-                        <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}" data-id="{%=o.created%}">
-                            <div class="media">
-                                <span class="pull-left">
-                                    <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
-                                </span>
-                                <div class="media-body">
-                                    <h4 class="media-heading {% if(o.read){ %}text-muted{% } %}">{%=o.subject%}</h4>
-                                    <span class="{% if(o.read){ %}text-muted{% } %}">{%=o.message%}</span>
-                                </div>
+                </div>
+                <script type="text/x-tmpl" id="header-notification-template">
+                    <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}" data-id="{%=o.created%}">
+                        <div class="media">
+                            <span class="pull-left">
+                                <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
+                            </span>
+                            <div class="media-body">
+                                <h4 class="media-heading {% if(o.read){ %}text-muted{% } %}">{%=o.subject%}</h4>
+                                <span class="{% if(o.read){ %}text-muted{% } %}">{%=o.message%}</span>
                             </div>
-                        </a>
-                    </script>
-                    <script src="@routes.Assets.at("javascripts/header.js").url" type="text/javascript"></script>
-
-                    <a class="btn navbar-btn" href="@core.html.routes.UserController.getProfile(user.getId())">
-                        <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"}>
-                        @user.getName()
+                        </div>
                     </a>
-                    <a class="btn navbar-btn" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
+                </script>
+                <script src="@routes.Assets.at("javascripts/header.js").url" type="text/javascript"></script>
+
+                <a class="btn navbar-btn" href="@core.html.routes.UserController.getProfile(user.getId())">
+                    <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"}>
+                    @user.getName()
+                </a>
+                <a class="btn navbar-btn" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
+            </div>
+
+            } else {
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                    <!--<li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>-->
+                </ul>
+
+                <div class="navbar-right">
+                    @*<p class="navbar-text">@Messages("header.login.alternative")</p>*@
+                    <div class="btn-group navbar-btn">
+                        <a class="btn btn-primary" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Facebook Login</a>
+                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                        @forProviders() { p =>
+                            <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) Login</a></li>
+                        }
+                        </ul>
+                    </div>
                 </div>
 
-                } else {
-
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
-                        <!--<li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>-->
-                    </ul>
-
-                    <div class="navbar-right">
-                        @*<p class="navbar-text">@Messages("header.login.alternative")</p>*@
-                        <div class="btn-group navbar-btn">
-                            <a class="btn btn-primary" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Facebook Login</a>
-                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                            @forProviders() { p =>
-                                <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) Login</a></li>
-                            }
-                            </ul>
+                <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="navbar-form navbar-center">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input id="email" type="text" class="form-control" name="email" value="" placeholder="your email">
                         </div>
                     </div>
 
-                    <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="navbar-form navbar-center">
-                        <div class="form-group">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                <input id="email" type="text" class="form-control" name="email" value="" placeholder="your email">
-                            </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input id="password" type="password" class="form-control" name="password" placeholder="password">
                         </div>
-
-                        <div class="form-group">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                <input id="password" type="password" class="form-control" name="password" placeholder="password">
-                            </div>
-                        </div>
-                        <div class="form-group spacer-horizontal"></div>
-                        <div class="btn-group">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> Login</button>
-                        </div>
-                    </form>
+                    </div>
+                    <div class="form-group spacer-horizontal"></div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> Login</button>
+                    </div>
+                </form>
 
 
-                }
             }
         }
-        </div>
+    }
     </div>
 </nav>

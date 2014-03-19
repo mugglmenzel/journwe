@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import models.adventure.comment.Comment;
 import models.adventure.email.Message;
 import models.dao.common.AdventureComponentDAO;
+import models.dao.common.AdventureNumberedComponentDAO;
 import models.dao.common.CommonRangeEntityDAO;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * Time: 22:34
  * To change this template use File | Settings | File Templates.
  */
-public class AdventureEmailMessageDAO extends AdventureComponentDAO<Message> {
+public class AdventureEmailMessageDAO extends AdventureNumberedComponentDAO<Message> {
 
     public AdventureEmailMessageDAO() {
         super(Message.class);

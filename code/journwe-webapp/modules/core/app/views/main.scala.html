@@ -93,9 +93,8 @@
                             <div class="pull-right"><a onclick="$('html, body').animate({ scrollTop: 0 }, 600); return false;"><i class="fa fa-angle-up"></i> Top</a></div>
                         </div>
                     </div>
-
-		        </div>
-	        </div>
+                </div>
+ 	        </div>
 	    </div>
 
         <!-- FLASH MODALS -->
@@ -156,7 +155,11 @@
 
 	    
 	    <!-- FOOTER -->
-		@footer()
+        <footer class="footer row">
+            <div class="col-xs-12 col-lg-8 col-lg-offset-2">
+            @footer()
+            </div>
+        </footer>
 
 	    <div id="fb-root"></div>
 	    <script>(function(d, s, id) {

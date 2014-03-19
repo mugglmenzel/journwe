@@ -103,6 +103,8 @@ DELETE        /api/json/adventure/:id/files.json/:fileName                 contr
 #### Adventure Emails ####
 
 GET           /api/json/adventure/:id/emails.json                          controllers.api.json.AdventureEmailController.listEmails(id:String)
+GET           /api/json/adventure/:id/emails.json/:timestamp               controllers.api.json.AdventureEmailController.getEmail(id:String, timestamp:Long)
+
 
 #### Adventure Timeline ####
 

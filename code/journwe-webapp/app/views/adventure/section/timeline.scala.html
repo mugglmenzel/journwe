@@ -66,10 +66,11 @@
 			</div>
 			
 			<div class="timeline-content">
-				{%= o.email.body %}
+				<a class="btn-email-preview" data-timestamp="{%=o.email.timestamp%}">{%= o.email.subject %}</a>
 			</div>
 			
-			<div class="timeline-info"><span class="subject">{%= o.email.subject %}</span> <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span> <span class="author">{%= o.email.sender %}</span></div>
+			<div class="timeline-info"><span class="author">{%= o.email.sender %}</span></div>
+			<div class="timeline-toolbar"><a class="btn btn-link btn-email-preview" data-timestamp="{%=o.email.timestamp%}"><i class="fa fa-eye"></i> Preview</a></div>
 		</div>
     </script>
 

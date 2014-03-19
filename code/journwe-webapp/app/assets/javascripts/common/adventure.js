@@ -1303,6 +1303,14 @@ define([
         'click .btn-file-upload': function () {
             $('#files-file-input').click();
         },
+        'click .btn-email-preview': function () {
+            routes.controllers.api.json.AdventureEmailController.getEmail(adv.id, $(this).data('timestamp')).ajax({success: function (res){
+                $('#email-modal .email-title').html(res.subject);
+                $('#email-modal .email-body').html(res.body);
+                $('#email-modal').modal('show');
+            }});
+
+        },
 
 
         'click .btn-comment-add': function () {
