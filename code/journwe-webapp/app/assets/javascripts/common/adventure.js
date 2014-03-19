@@ -719,7 +719,7 @@ define([
     };
 
     var loadOtherAdventurers = function () {
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getOtherParticipants(adv.id), '#todos-adventurers-selection', 'todos-adventurer-template');
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getOtherParticipants(adv.id), '#todos-adventurers-selection', true, 'todos-adventurer-template');
     }
 
     var loadAdventurerTodos = function (advrId) {
