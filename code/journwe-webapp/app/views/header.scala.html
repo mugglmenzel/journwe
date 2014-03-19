@@ -71,22 +71,20 @@
                         <!--<li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>-->
                     </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a>@Messages("header.login.alternative")</a></li>
-                        <li>
-                            <div class="btn-group">
-                                <a class="btn btn-primary" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Facebook Login</a>
-                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                @forProviders() { p =>
-                                    <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) Login</a></li>
-                                }
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
+                    <div class="navbar-right">
+                        @*<p class="navbar-text">@Messages("header.login.alternative")</p>*@
+                        <div class="btn-group navbar-btn">
+                            <a class="btn btn-primary" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Facebook Login</a>
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                            @forProviders() { p =>
+                                <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) Login</a></li>
+                            }
+                            </ul>
+                        </div>
+                    </div>
 
                     <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="navbar-form navbar-center">
                         <div class="form-group">
@@ -107,6 +105,8 @@
                             <button type="submit" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> Login</button>
                         </div>
                     </form>
+
+
                 }
             }
         }
