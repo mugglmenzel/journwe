@@ -76,7 +76,7 @@
 
 <div class="tab-content">
     <div class="tab-pane fade in active" id="discussion-timeline">
-        <div class="clearfix">
+        <div class="pull-right clearfix">
             <div class="pull-right">
                 <div class="btn-group btn-group-timeline-filter">
                     <button class="btn btn-default btn-timeline-filter-all active" data-toggle="tooltip" title="All"><i class="fa fa-comments-o fa-fw"></i></button>
@@ -114,8 +114,11 @@
            <div class="timeline"></div>
        </div>
     </div>
-   <div class="tab-pane fade" id="discussion-emails">
+    <div class="tab-pane fade" id="discussion-emails">
        @emails(adv)
-   </div>
+    </div>
+    <div class="tab-pane fade" id="discussion-files">
+        @files(adv)
+    </div>
 </div>
 
