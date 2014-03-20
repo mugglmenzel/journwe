@@ -13,12 +13,15 @@ import com.journwe.linkshare.Client;
  */
 public class BookingComClient extends Client {
 	
-	private static String DOMAIN = "http://www.booking.com/";
+	private final static String DOMAIN = "http://www.booking.com/";
+	//private String currency = "&selected_currency=EUR";
+	
 	private String offeringType = "";
 	private String country = "";
 	private String offeringName = "";
 	private String checkin = "";
 	private String checkout = "";
+	
 	
 	public BookingComClient() {
 		// Our booking.com affiliate id.
@@ -75,6 +78,11 @@ public class BookingComClient extends Client {
 		link.append("checkout=");
 		link.append(checkout);
 		link.append(";");
+		
+		// append affiliate id
+		link.append("&aid=");
+		link.append(this.getAffiliateId());
+		// return constructed link
 		return link.toString();
 	}
 	
