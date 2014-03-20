@@ -639,12 +639,13 @@ define([
     };
 
     var loadTimeline = function (route, el) {
-        if (el){
-            el.parent().find(".active").removeClass("active");
-            el.addClass("active");
-        }
+        // if (el){
+        //     el.parent().find(".active").removeClass("active");
+        //     el.addClass("active");
+        // }
 
         utils.setSpinning($(".btn-timeline-refresh i"));
+        $('.timeline').parent().fadeTo(300, 0.5);
 
         route.ajax({success: function (result) {
 
@@ -654,6 +655,7 @@ define([
                 t.append(renderTimeline(res));
             });
 
+            t.parent().fadeTo(300, 1);
             utils.resetSpinning($(".btn-timeline-refresh i"));
         }});
     };
@@ -1356,6 +1358,14 @@ define([
             _timer = window.setTimeout(function () {
                 $(this).removeClass("hover");
             }.bind(this), 100);
+        },
+
+        'show.bs.tab .nav.nav-discussion a': function(evt){
+            if ($(evt.target).attr("href") === $(evt.relatedTarget).attr("href")) {
+                $(evt.target).parent().addClass("active");
+                $(evt.relatedTarget).parent().removeClass("active");
+                return false;
+            }
         }
 
 
