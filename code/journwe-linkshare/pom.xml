@@ -1,6 +1,22 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.journwe</groupId>
-  <artifactId>journwe-linkshare</artifactId>
-  <version>0.1-SNAPSHOT</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.journwe</groupId>
+	<artifactId>journwe-linkshare</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.zanox</groupId>
+			<artifactId>api</artifactId>
+			<version>2011-03-01_1.03</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/zanox.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+	</dependencies>
 </project>
