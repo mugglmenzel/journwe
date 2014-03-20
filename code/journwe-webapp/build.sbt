@@ -48,6 +48,8 @@ requireJs ++= Seq(
 
 requireJsShim += "build.js"
 
+//requireNativePath := Some("java -cp lib/requireJs/js.jar:lib/requireJs/compiler.jar org.mozilla.javascript.tools.shell.Main lib/requireJs/r.js")
+
 lazy val root = project.in(file(".")).aggregate(acl, admin, core, social).dependsOn(acl, admin, core, data, dataCache, social, email)
 
 lazy val data = project.in(file("modules/data"))
