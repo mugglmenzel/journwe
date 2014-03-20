@@ -74,30 +74,48 @@
 		</div>
     </script>
 
-   <div class="files-upload-dropzone file-upload-timeline">
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="discussion-timeline">
+        <div class="clearfix">
+            <div class="pull-right">
+                <div class="btn-group btn-group-timeline-filter">
+                    <button class="btn btn-default btn-timeline-filter-all active" data-toggle="tooltip" title="All"><i class="fa fa-comments-o fa-fw"></i></button>
+                    <button class="btn btn-default btn-timeline-filter-logs" data-toggle="tooltip" title="Filter: Log Entries"><i class="fa fa-list fa-fw"></i></button>
+                    <button class="btn btn-default btn-timeline-filter-emails" data-toggle="tooltip" title="Filter: Emails"><i class="fa fa-envelope-o fa-fw"></i></button>
+                    <button class="btn btn-default btn-timeline-filter-comments" data-toggle="tooltip" title="Filter: Comments"><i class="fa fa-comment fa-fw"></i></button>
+                    <button class="btn btn-default btn-timeline-filter-files" data-toggle="tooltip" title="Filter: Files"><i class="fa fa-file-o fa-fw"></i></button>
+                </div>
+            </div>
+        </div>
 
-        <div class="timeline-line"></div>
+        <div class="files-upload-dropzone file-upload-timeline">
 
-	    <div class="timeline-add">
-	    	<div class="timeline-entry">
-				<div class="timeline-icon">
-	                <img src="/assets/img/s.gif" style="background-image: url('@user.getImage')">
-				</div>
-				<div class="timeline-content">
-					<div class="input-group">
-	                    <input type="text" placeholder="@Messages("adventure.widgetComments.placeholder")" class="form-control input-sm"/>
-	                    <span class="input-group-btn"><button class="btn btn-default btn-comment-add btn-sm" type="button"><i class="fa fa-plus"></i></button></span>
-	                </div>
-				</div>
+            <div class="timeline-line"></div>
 
-				<div class="timeline-content-left hint">
-					<i class="fa fa-spin icon-journwe"></i> 
-					Drop a file here, send a <a href="mailto:@adv.getId()@@journwe.com">mail</a> or
-				</div>
-			</div>
-	    </div>
+            <div class="timeline-add">
+                <div class="timeline-entry">
+                    <div class="timeline-icon">
+                        <img src="/assets/img/s.gif" style="background-image: url('@user.getImage')">
+                    </div>
+                    <div class="timeline-content">
+                        <div class="input-group">
+                            <input type="text" placeholder="@Messages("adventure.widgetComments.placeholder")" class="form-control input-sm"/>
+                            <span class="input-group-btn"><button class="btn btn-default btn-comment-add btn-sm" type="button"><i class="fa fa-plus"></i></button></span>
+                        </div>
+                    </div>
 
-	    <div class="timeline">
+                    <div class="timeline-content-left hint">
+                        <i class="fa fa-spin icon-journwe"></i>
+                        Drop a file here, send a <a href="mailto:@adv.getId()@@journwe.com">mail</a> or
+                    </div>
+                </div>
+            </div>
 
-	    </div>
+           <div class="timeline"></div>
+       </div>
     </div>
+   <div class="tab-pane fade" id="discussion-emails">
+       @emails(adv)
+   </div>
+</div>
+

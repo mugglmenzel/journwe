@@ -7,5 +7,6 @@ requirejs.config({
         'adventurerData': 'empty:',
         'inspirationData': 'empty:',
         'userData': 'empty:'
-    }
+    },
+    keepBuildDir: true
 });

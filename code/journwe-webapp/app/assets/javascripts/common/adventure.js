@@ -150,7 +150,7 @@ define([
     //EMAILS
 
     var loadEmails = function () {
-        utils.setSpinning($('#emails-button-refresh i'));
+        utils.setSpinning($('.btn-emails-refresh i'));
 
         routes.controllers.api.json.AdventureEmailController.listEmails(adv.id).ajax({success: function (emails) {
             $('#emails-list tbody').empty();
@@ -164,7 +164,7 @@ define([
                 $('#emails-list').hide();
             }
 
-            utils.resetSpinning($('#emails-button-refresh i'));
+            utils.resetSpinning($('.btn-emails-refresh i'));
         }});
     };
 
@@ -952,7 +952,7 @@ define([
         },
 
 
-        'click #emails-button-refresh': function () {
+        'click .btn-emails-refresh': function () {
             loadEmails();
         },
 
