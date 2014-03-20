@@ -25,7 +25,7 @@ public class AdventureEmailController extends Controller {
     @Security.Authenticated(SecuredUser.class)
     public static Result listEmails(String adventureId) {
         List<ObjectNode> results = new ArrayList<ObjectNode>();
-        for (Message m : new AdventureEmailMessageDAO().all(adventureId))
+        for (Message m : new AdventureEmailMessageDAO().allNewest(adventureId))
             results.add(emailToSmallJSON(m));
 
         return ok(Json.toJson(results));

@@ -102,7 +102,7 @@ public class AdventureFileController extends Controller {
             return AuthorizationMessage.notAuthorizedResponse();
 
         List<ObjectNode> result = new ArrayList<ObjectNode>();
-        for (JournweFile f : new JournweFileDAO().all(adventureId))
+        for (JournweFile f : new JournweFileDAO().allNewest(adventureId))
             result.add(fileToJSON(f));
 
 //        for(JournweFile file : files) {

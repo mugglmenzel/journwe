@@ -11,15 +11,17 @@ require([
     adventure.initNavigation();
     adventure.initializeMap();
 
-    adventure.loadEmails();
 
     adventure.initializeIndex();
-    adventure.initializeOptions();
-    adventure.initializePlaces();
     adventure.initializePeople();
+
+    adventure.initializePlaces();
     adventure.initializeTime();
-    adventure.initializeTodos();
-    //adventure.initializeFiles();
     adventure.initializeTimeline();
 
+    adventure.initializeTodos();
+
+    adventure.initializeEmails();
+    adventure.initializeFiles();
+    adventure.initializeOptions();
 });

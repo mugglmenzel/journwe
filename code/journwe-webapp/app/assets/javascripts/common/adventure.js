@@ -149,6 +149,10 @@ define([
 
     //EMAILS
 
+    var initializeEmails = function () {
+        loadEmails();
+    };
+
     var loadEmails = function () {
         utils.setSpinning($('.btn-emails-refresh i'));
 
@@ -1375,7 +1379,7 @@ define([
         initScrollspy: initScrollspy,
         initNavigation: initNavigation,
         initializeMap: initializeMap,
-        loadEmails: loadEmails,
+        initializeEmails: initializeEmails,
         initializeIndex: initializeIndex,
         initializeOptions: initializeOptions,
         initializePlaces: initializePlaces,
