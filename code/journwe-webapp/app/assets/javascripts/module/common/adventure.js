@@ -116,7 +116,7 @@ define([
     //OPTIONS
 
     var initializeOptions = function () {
-        updateCategorySelection(null);
+        updateCategorySelection(adv.categoryId);
         loadCategoriesOptionsMap();
         updateTwitterShareButton();
     };

@@ -90,9 +90,13 @@ public class AdventureController extends Controller {
             result = new CategoryDAO().get(catId);
             Adventure adv = new AdventureDAO().get(advId);
             // Save Adventure-to-Category relationship
-            new AdventureToCategoryDAO().createManyToManyRelationship(adv, result);
-            new CategoryDAO().save(result);
-            AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.CATEGORY_CHANGED, EAdventureLogSection.ALL, result.getName());
+            if (adv != null && result != null) {
+                new AdventureToCategoryDAO().deleteAllMRelationships(adv);
+                new AdventureToCategoryDAO().createManyToManyRelationship(adv, result);
+                AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.CATEGORY_CHANGED, EAdventureLogSection.ALL, result.getName());
+            } else return badRequest();
+        } else {
+            result = new AdventureToCategoryDAO().listN(new AdventureDAO().get(advId).getId(), null, -1).get(0);
         }
         return ok(Json.toJson(result));
     }

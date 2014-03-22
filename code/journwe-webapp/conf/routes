@@ -14,7 +14,7 @@
 
 #### Categories ####
 
-GET           /api/json/categories/optionsMap.json                         controllers.api.json.CategoryController.categoriesOptionsMap()
+GET           /api/json/category/all/optionsMap.json                         controllers.api.json.CategoryController.categoriesOptionsMap()
 GET           /api/json/category/:id/categories.json                       controllers.api.json.CategoryController.getCategories(id:String)
 GET           /api/json/category/:id/inspirations.json                     controllers.api.json.CategoryController.getInspirations(id:String)
 GET           /api/json/category/:id/adventures/public.json                controllers.api.json.ApplicationController.getPublicAdventuresOfCategory(id:String)

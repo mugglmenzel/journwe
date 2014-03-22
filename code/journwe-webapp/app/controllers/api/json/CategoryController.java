@@ -67,12 +67,11 @@ public class CategoryController extends Controller {
                 @Override
                 public String call() throws Exception {
                     List<ObjectNode> results = new ArrayList<ObjectNode>();
-                    Map<String, String> optionsMap = new CategoryDAO().allOptionsMap();
-                    for (String catId : optionsMap.keySet()) {
-                        if (catId != null) {
+                    for (Category cat : new CategoryDAO().all()) {
+                        if (cat != null) {
                             ObjectNode node = Json.newObject();
-                            node.put("id", catId);
-                            node.put("name", optionsMap.get(catId));
+                            node.put("id", cat.getId());
+                            node.put("name", cat.getName());
                             results.add(node);
                         }
                     }
