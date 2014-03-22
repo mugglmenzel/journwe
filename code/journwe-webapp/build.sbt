@@ -37,6 +37,8 @@ doc in Compile <<= target.map(_ / "none")
 
 requireJs ++= Seq(
   "main.js",
+  "header.js",
+  "comments.js",
   "module/index.js",
   "module/indexCat.js",
   "module/indexNew.js",

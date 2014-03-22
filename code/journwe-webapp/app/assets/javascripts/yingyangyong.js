@@ -102,23 +102,7 @@ define([
     };
 
     var resetBounds = function () {
-        if (!map) {
-            return;
-        }
-        if (!$.isEmptyObject(markers)) {
-            var bounds = new gmaps.LatLngBounds();
-            for (var i in markers) {
-                bounds.extend(markers[i].getPosition());
-            }
-            map.fitBounds(bounds);
-        } else if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var pos = new gmaps.LatLng(position.coords.latitude, position.coords.longitude);
-                map.setCenter(pos);
-            }, function () {
-            });
-        }
-        gmaps.event.trigger(map, 'resize');
+        gmaps.resetBounds(map, markers);
     };
 
     var removeMarker = function (id) {

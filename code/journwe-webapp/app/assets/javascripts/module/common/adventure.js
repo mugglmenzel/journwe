@@ -26,7 +26,8 @@ define([
 
     //Temp Vars
     var map,
-        markers = [];
+        markers = [],
+        layers = {weather: [], photos: []};
     var socialUsers = {};
     var socialUserNames = [],
         _timer;
@@ -217,10 +218,22 @@ define([
         };
         map = new gmaps.Map(document.getElementById('place-add-map'), mapOptions);
         new gmaps.places.Autocomplete(document.getElementById('place-add-input'));
+
+        initializeMapLayers();
     };
 
+    var initializeMapLayers = function () {
+
+        layers.weather = [new gmaps.weather.WeatherLayer({temperatureUnits: gmaps.weather.TemperatureUnit.CELSIUS}), new gmaps.weather.CloudLayer()];
+        layers.photos = [new gmaps.panoramio.PanoramioLayer()];
+
+        //initialize weather
+        gmaps.showMapLayers(map, layers.weather);
+
+    }
 
     var resetMapBounds = function () {
+        gmaps.resetBounds(map, markers);
         var bounds = new gmaps.LatLngBounds();
         for (var i in markers) {
             bounds.extend(markers[i].getPosition());
@@ -334,7 +347,7 @@ define([
 
     var initializePeople = function () {
         loadAllAdventurers();
-		//loadParticipants();
+        //loadParticipants();
         //loadInvitees();
         //loadApplicants();
 
@@ -363,7 +376,7 @@ define([
     var loadAdventurers = function (endpoint, target, clear, template, hideOnEmpty) {
         template = template ? template : 'adventurer-template';
         endpoint.ajax({success: function (advs) {
-            if(clear) $(target).empty();
+            if (clear) $(target).empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
                     advs[i].cssLabel = utils.adventurerCSSLabel[advs[i].status];
@@ -371,7 +384,7 @@ define([
                     $(target).append(tmpl(template, advs[i]));
                 }
                 $(target).parent().show();
-            } else if(hideOnEmpty) $(target).parent().hide();
+            } else if (hideOnEmpty) $(target).parent().hide();
         }});
     }
 
@@ -398,7 +411,7 @@ define([
         else {
             var provider = $('#people-add-provider-icon').data('social-provider');
 
-            if (provider != null && provider != 'email'){
+            if (provider != null && provider != 'email') {
                 $('.input-people-add').attr('type', 'text');
                 $('.input-people-add').typeahead({
                     name: 'people-typeahead',
@@ -663,21 +676,21 @@ define([
     var renderTimeline = function (time) {
         var type = time.type,
             data = $.extend({
-                        time: utils.formatTime(time.timestamp),
-                        fulltime: utils.formatDateLong(time.timestamp)
-                    }, time);
+                time: utils.formatTime(time.timestamp),
+                fulltime: utils.formatDateLong(time.timestamp)
+            }, time);
 
-        if ("log" == type){
-            if("PLACE_VOTE_OPEN" == time.log.topic){
+        if ("log" == type) {
+            if ("PLACE_VOTE_OPEN" == time.log.topic) {
                 data.message = time.log.data == "false" ? "Closed place vote." : "Reopened place vote.";
-            } else if("TIME_VOTE_OPEN" == time.log.topic){
-                data.message = time.log.data == "false"  ? "Closed time vote." : "Reopened time vote.";
-            } else if("DESCRIPTION_CHANGE" == time.log.topic){
+            } else if ("TIME_VOTE_OPEN" == time.log.topic) {
+                data.message = time.log.data == "false" ? "Closed time vote." : "Reopened time vote.";
+            } else if ("DESCRIPTION_CHANGE" == time.log.topic) {
                 data.message = time.log.data ? time.log.data : "Description removed.";
                 data.info = "Changed description";
             }
 
-            if (data.message){
+            if (data.message) {
                 type = "info";
             }
         }
@@ -878,11 +891,6 @@ define([
             var section = $(this).attr('href');
 
             if ($(section).length) {
-                // $('.jrn-adventure-section').addClass('stash').hide();
-                // $(section).closest('.jrn-adventure-section').removeClass('stash').fadeIn(200);
-                // $('.nav-adventure-list li').removeClass('active');
-                // $(this).closest('li').addClass('active');
-
                 var sec = $(section).closest('.jrn-adventure-section'),
                     li = $(this).closest('li');
                 if (!sec.is(":visible")) {
@@ -892,6 +900,10 @@ define([
                     $('html, body').animate({
                         scrollTop: $(section).offset().top - 150
                     }, 'slow');
+
+                    //GMap bugfix
+                    resetMapBounds();
+
                 } else {
                     sec.fadeOut('100');
                     li.removeClass('active');
@@ -929,8 +941,8 @@ define([
                 inputFile.val('');
             }
         },
-        'click .btn-upload': function(){
-            $('#adventure-prime-image-file-input').click ();
+        'click .btn-upload': function () {
+            $('#adventure-prime-image-file-input').click();
         },
 
         'click .btn-edit-description': function () {
@@ -1031,7 +1043,8 @@ define([
                 case '4':
                 case '5':
                     vote = 'YES';
-            };
+            }
+            ;
             if ($(e.target).is(':checked')) votePlace(vote, $(e.target).val() / 5, $(e.target).data('id'));
         },
         'change #places-voting-active-switch': function () {
@@ -1069,6 +1082,12 @@ define([
                     updatePlaceVoteOpen(data);
                 }
             });
+        },
+        'click .btn-places-map-layers-show': function () {
+            $.each(layers, function (i, val) {
+               gmaps.hideMapLayers(map, val);
+            });
+            gmaps.showMapLayers(map, layers[$(this).data('layers')]);
         },
 
 
@@ -1308,7 +1327,7 @@ define([
             $('#files-file-input').click();
         },
         'click .btn-email-preview': function () {
-            routes.controllers.api.json.AdventureEmailController.getEmail(adv.id, $(this).data('timestamp')).ajax({success: function (res){
+            routes.controllers.api.json.AdventureEmailController.getEmail(adv.id, $(this).data('timestamp')).ajax({success: function (res) {
                 $('#email-modal .email-title').html(res.subject);
                 $('#email-modal .email-body').html(res.body);
                 $('#email-modal').modal('show');
@@ -1358,7 +1377,7 @@ define([
             }.bind(this), 100);
         },
 
-        'show.bs.tab .nav.nav-discussion a': function(evt){
+        'show.bs.tab .nav.nav-discussion a': function (evt) {
             if ($(evt.target).attr("href") === $(evt.relatedTarget).attr("href")) {
                 $(evt.target).parent().addClass("active");
                 $(evt.relatedTarget).parent().removeClass("active");
