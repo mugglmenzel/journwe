@@ -123,21 +123,21 @@ define([
 
     var loadCategoriesOptionsMap = function () {
         routes.controllers.api.json.CategoryController.categoriesOptionsMap().ajax({success: function (cats) {
-            $('#adventure-category-select ul.dropdown-menu').empty();
+            $('.dropdown-journwe-category ul.dropdown-menu').empty();
             if (cats != null && cats.length > 0)
                 for (var i in cats)
-                    $('#adventure-category-select ul.dropdown-menu').append('<li data-id="' + cats[i].id + '"><a>' + cats[i].name + '</a></li>');
+                    $('.dropdown-journwe-category ul.dropdown-menu').append('<li data-id="' + cats[i].id + '"><a>' + cats[i].name + '</a></li>');
 
         }});
     };
 
     var updateCategorySelection = function (catId) {
-        utils.resetStash($('#adventure-category-select button i'));
+        utils.setSpinning($('.dropdown-journwe-category button i'));
         routes.controllers.api.json.AdventureController.updateCategory(adv.id).ajax({
             data: {categoryId: catId},
             success: function (data) {
                 if (data.name != null && data.name.length > 0) $('#adventure-category-select button span').first().html(data.name);
-                utils.setStash($('#adventure-category-select button i'));
+                utils.resetSpinning($('.dropdown-journwe-category button i'));
             }});
     };
 
@@ -158,15 +158,15 @@ define([
         utils.setSpinning($('.btn-emails-refresh i'));
 
         routes.controllers.api.json.AdventureEmailController.listEmails(adv.id).ajax({success: function (emails) {
-            $('#emails-list tbody').empty();
+            $('.table-emails tbody').empty();
 
             for (var i in emails) {
                 renderEmail(emails[i]);
             }
-            if (emails.length) {
-                $('#emails-list').show();
+            if (emails && emails.length > 0) {
+                $('.table-emails').show();
             } else {
-                $('#emails-list').hide();
+                $('.table-emails').hide();
             }
 
             utils.resetSpinning($('.btn-emails-refresh i'));
@@ -180,7 +180,7 @@ define([
         if (replace)
             replace.replaceWith(tmpl('emails-template', data)).fadeIn();
         else
-            $('#emails-list tbody').append(tmpl('emails-template', data));
+            $('.table-emails tbody').append(tmpl('emails-template', data));
 
     };
 
@@ -286,16 +286,14 @@ define([
 
     var updateFavoritePlace = function () {
 
-        $('.icon-favorite-place').removeClass("fa-star").addClass("fa-spin icon-journwe");
-        $('.places-autofavorite-place-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        utils.setSpinning($('.icon-favorite-place'));
 
         routes.controllers.api.json.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
             favoritePlace = result.favorite;
             if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address);
             if (result.autoFavorite != null)$('.places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
-            $('.icon-favorite-place').removeClass("fa-spin icon-journwe").addClass("fa-star");
-            $('.places-autofavorite-place-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            utils.resetSpinning($('.icon-favorite-place'));
         }});
     };
 
@@ -568,16 +566,14 @@ define([
 
     var updateFavoriteTime = function () {
 
-        $('.icon-favorite-time').removeClass("fa-star").addClass("fa-spin icon-journwe");
-        $('#times-autofavorite-time-icon').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        utils.setSpinning($('.icon-favorite-time'));
 
         routes.controllers.api.json.AdventureTimeController.getFavoriteTime(adv.id).ajax({success: function (result) {
             favoriteTime = result.favorite;
             if (result.favorite != null) $('.times-favorite-time-name').html(utils.formatDate(result.favorite.startDate) + " - " + utils.formatDate(result.favorite.endDate));
             if (result.autoFavorite != null)$('#times-autofavorite-time-name').html(utils.formatDate(result.autoFavorite.startDate) + " - " + utils.formatDate(result.autoFavorite.endDate));
             $('.btn-close-time').toggle(!!result.favorite);
-            $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
-            $('#times-autofavorite-time-icon').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            utils.resetSpinning($('.icon-favorite-time'));
         }});
     };
 
@@ -830,22 +826,22 @@ define([
 
     var loadFiles = function () {
         //$('.files-loading').show();
-        utils.setSpinning($('#files-button-refresh i'));
+        utils.setSpinning($('.btn-files-refresh i'));
 
         routes.controllers.api.json.AdventureFileController.listFiles(adv.id).ajax({success: function (files) {
-            $('#files-list tbody').empty();
+            $('.table-files tbody').empty();
 
             for (var fileName in files) {
                 renderFile(files[fileName]);
             }
-            if (files.length) {
-                $('#files-list').show();
+            if (files && files.length > 0) {
+                $('.table-files').show();
             } else {
-                $('#files-list').hide();
+                $('.table-files').hide();
             }
 
             //$('.files-loading').hide();
-            utils.resetSpinning($('#files-button-refresh i'));
+            utils.resetSpinning($('.btn-files-refresh i'));
         }});
     };
 
@@ -854,7 +850,7 @@ define([
         if (replace)
             replace.replaceWith(tmpl('files-template', data)).fadeIn();
         else
-            $('#files-list tbody').append(tmpl('files-template', data));
+            $('.table-files tbody').append(tmpl('files-template', data));
 
     };
 
@@ -1087,7 +1083,9 @@ define([
             $.each(layers, function (i, val) {
                gmaps.hideMapLayers(map, val);
             });
+            $(this).closest('.btn-group').find('.btn').removeClass('active');
             gmaps.showMapLayers(map, layers[$(this).data('layers')]);
+            $(this).addClass('active');
         },
 
 
@@ -1300,7 +1298,7 @@ define([
             }});
         },
 
-        'click #files-button-refresh': function () {
+        'click .btn-files-refresh': function () {
             loadFiles();
         },
         'drop .files-upload-dropzone': function (event) {

@@ -29,7 +29,7 @@ define(['common/async!https://maps.googleapis.com/maps/api/js?libraries=places,w
             },
             hideMapLayers: function (map, layers) {
                 $.each(layers, function (i, val) {
-                    val.setMap(map);
+                    val.setMap(null);
                 });
             }
 
