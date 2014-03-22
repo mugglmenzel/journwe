@@ -123,21 +123,21 @@ define([
 
     var loadCategoriesOptionsMap = function () {
         routes.controllers.api.json.CategoryController.categoriesOptionsMap().ajax({success: function (cats) {
-            $('.dropdown-journwe-category ul.dropdown-menu').empty();
+            $('.btn-journwe-category ul.dropdown-menu').empty();
             if (cats != null && cats.length > 0)
                 for (var i in cats)
-                    $('.dropdown-journwe-category ul.dropdown-menu').append('<li data-id="' + cats[i].id + '"><a>' + cats[i].name + '</a></li>');
+                    $('.btn-journwe-category ul.dropdown-menu').append('<li data-id="' + cats[i].id + '"><a>' + cats[i].name + '</a></li>');
 
         }});
     };
 
     var updateCategorySelection = function (catId) {
-        utils.setSpinning($('.dropdown-journwe-category button i'));
+        utils.setSpinning($('.btn-journwe-category button i'));
         routes.controllers.api.json.AdventureController.updateCategory(adv.id).ajax({
             data: {categoryId: catId},
             success: function (data) {
-                if (data.name != null && data.name.length > 0) $('#adventure-category-select button span').first().html(data.name);
-                utils.resetSpinning($('.dropdown-journwe-category button i'));
+                if (data.name != null && data.name.length > 0) $('.btn-journwe-category button span').first().html(data.name);
+                utils.resetSpinning($('.btn-journwe-category button i'));
             }});
     };
 
@@ -175,7 +175,7 @@ define([
 
 
     var renderEmail = function (data, replace) {
-        if (data.timestamp != null) data.timestamp = utils.formatDateLong(data.timestamp);
+        if (data.timestamp != null) data.timestampFormatted = utils.formatDateLong(data.timestamp);
 
         if (replace)
             replace.replaceWith(tmpl('emails-template', data)).fadeIn();
@@ -961,7 +961,7 @@ define([
                     updateTwitterShareButton();
                 }});
         },
-        'click #adventure-category-select li': function () {
+        'click .btn-journwe-category li': function () {
             updateCategorySelection($(this).data('id'));
         },
 

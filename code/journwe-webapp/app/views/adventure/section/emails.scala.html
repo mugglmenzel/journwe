@@ -7,8 +7,8 @@
         <tr>
             <td><span class="label label-info" title="{%=o.sender%}">{%=o.sender%}</span></td>
             <td>{%=o.subject%}</td>
-            <td>{%=o.timestamp%}</td>
-            <td><a class="btn btn-primary" href="mailto:{%=o.sender%}?cc={%=o.adventureId%}@@journwe.com&subject={%=o.subject%}&body={%=o.body%}"><i class="fa fa-reply-all"></i></a> </td>
+            <td>{%=o.timestampFormatted%}</td>
+            <td><button class="btn btn-default btn-email-preview" data-timestamp="{%=o.timestamp%}"><i class="fa fa-eye"></i></button><a class="btn btn-default" href="mailto:{%=o.sender%}?cc={%=o.adventureId%}@@journwe.com&subject={%=o.subject%}&body={%=o.body%}"><i class="fa fa-reply-all"></i></a> </td>
         </tr>
     </script>
 
