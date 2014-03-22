@@ -16,6 +16,8 @@ import models.notifications.helper.UserNotifier;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
+import play.api.mvc.EssentialFilter;
+import play.filters.gzip.GzipFilter;
 import play.libs.Akka;
 import play.mvc.Call;
 import scala.concurrent.duration.Duration;
@@ -23,6 +25,10 @@ import scala.concurrent.duration.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class Global extends GlobalSettings {
+
+    public <T extends EssentialFilter> Class<T>[] filters() {
+        return new Class[]{GzipFilter.class};
+    }
 
     public void onStart(final Application app) {
 

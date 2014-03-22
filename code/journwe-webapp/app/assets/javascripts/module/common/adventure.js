@@ -1222,9 +1222,7 @@ define([
             }});
         },
         'keydown #todo-title': function (e) {
-            if (e.keyCode == 13) {
-                $('#btn-add-todo').click();
-            }
+            e.keyCode == 13 && $('#btn-add-todo').click();
         },
 
         'click #btn-add-todo': function () {

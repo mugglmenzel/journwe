@@ -55,7 +55,7 @@ require([
 
 
     var initializePlaceMap = function () {
-        if($('#inspiration-place-map').length){
+        if ($('#inspiration-place-map').length) {
             gmaps.visualRefresh = true;
 
             var mapOptions = {
@@ -86,12 +86,16 @@ require([
             });
         },
         'click .btn-inspiration-photo': function () {
-            $('#carousel-inspiration-photos').fadeIn();
+            //$('#carousel-inspiration-photos').fadeIn();
             $('#carousel-inspiration-photos').carousel({pause: 'false'});
             $('#carousel-inspiration-photos').carousel($(this).data('index'));
+            $('#carousel-inspiration-photos').modal('show');
         },
-        'click .carousel-fullscreen .carousel-inner': function () {
-            $('#carousel-inspiration-photos').fadeOut();
+        'click .carousel-fullscreen .carousel-inner .item.active': function () {
+            $('#carousel-inspiration-photos').modal('hide');
+        },
+        'keydown body': function (e) {
+            e.keyCode == 27 && $('#carousel-inspiration-photos').modal('hide');
         }
     });
 

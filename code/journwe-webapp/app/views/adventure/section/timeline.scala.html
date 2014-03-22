@@ -34,7 +34,7 @@
 			<div class="timeline-icon">
 				<img src="/assets/img/s.gif" style="background-image: url('{%= o.user.image %}')">
 			</div>
-			
+
 			<div class="timeline-content">
 				{%= o.comment.text %}
 			</div>
@@ -67,6 +67,9 @@
 			
 			<div class="timeline-content">
 				<a class="btn-email-preview" data-timestamp="{%=o.email.timestamp%}">{%= o.email.subject %}</a>
+			</div>
+			<div class="timeline-content-right">
+				<a class="btn-email-preview" data-timestamp="{%=o.email.timestamp%}">{%= o.email.body %}</a>
 			</div>
 			
 			<div class="timeline-info"><span class="author">{%= o.email.sender %}</span></div>

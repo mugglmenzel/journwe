@@ -1,7 +1,7 @@
 require([
     'common/utils',
     'main',
-    'common/adventure'
+    'module/common/adventure'
 ], function (utils, main, adventure) {
 
 

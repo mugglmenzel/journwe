@@ -15,6 +15,7 @@ define(function () {
         isMobile = new RegExp("Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini", "i").test(navigator.userAgent);
 
 
+
     return {
         adventurerCSSLabel: {
             'APPLICANT': 'default',

@@ -8,5 +8,7 @@ requirejs.config({
         'inspirationData': 'empty:',
         'userData': 'empty:'
     },
-    keepBuildDir: true
+    keepBuildDir: true,
+    optimize: "uglify2"
+
 });
