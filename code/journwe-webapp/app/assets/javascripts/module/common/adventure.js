@@ -882,7 +882,7 @@ define([
 
     utils.on({
         // Click on navigation to scroll to it
-        'click .nav-adventure-list a': function () {
+        'click .nav-adventure-list a': function (e) {
 
             var section = $(this).attr('href');
 
@@ -892,26 +892,28 @@ define([
                 if (!sec.is(":visible")) {
                     sec.removeClass('stash').fadeIn('100');
                     li.addClass('active');
-
+                }
+                if(e.which == 3) {
+                    sec.fadeOut('100');
+                    li.removeClass('active');
+                } else {
                     $('html, body').animate({
                         scrollTop: $(section).offset().top - 150
                     }, 'slow');
 
                     //GMap bugfix
-                    resetMapBounds();
-
-                } else {
-                    sec.fadeOut('100');
-                    li.removeClass('active');
+                    if('places' == sec.find('h2').attr('id')) resetMapBounds();
                 }
-
-                // $('html, body').animate({
-                //     scrollTop: $(section).closest('.jrn-adventure-section').offset().top - 150
-                // }, 'slow');
-
             }
 
             return false;
+        },
+        'click .btn-section-close': function () {
+            var sec = $(this).closest('.jrn-adventure-section');
+            var secName = sec.find('h2').attr('id');
+
+            sec.fadeOut('100');
+            $('.nav-adventure-list li a[href="#' + secName + '"]').closest('li').removeClass('active');
         },
 
         'click .btn-participate': function () {
