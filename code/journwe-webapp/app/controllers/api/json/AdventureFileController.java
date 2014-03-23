@@ -148,7 +148,7 @@ public class AdventureFileController extends Controller {
     }
 
 
-    private static ObjectNode fileToJSON(JournweFile file) {
+    public static ObjectNode fileToJSON(JournweFile file) {
         ObjectNode node = Json.newObject();
         node.put("file", Json.toJson(file));
         node.put("user", Json.toJson(new UserDAO().get(file.getUserId())));

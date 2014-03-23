@@ -1,8 +1,10 @@
 package models.adventure.adventurer;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.fasterxml.jackson.databind.JsonNode;
 import models.adventure.IAdventureComponentWithUser;
 import models.dao.helpers.EnumMarshaller;
+import play.libs.Json;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +23,14 @@ public class Adventurer implements IAdventureComponentWithUser {
     private String userId;
 
     private EAdventurerParticipation participationStatus = EAdventurerParticipation.APPLICANT;
+
+    private EAdventurerRole role;
+
+    private String visibleSectionsJSON;
+
+    private String emergencyContact;
+
+    private String homeAirport;
 
     @DynamoDBHashKey
     public String getAdventureId() {
@@ -63,7 +73,44 @@ public class Adventurer implements IAdventureComponentWithUser {
         this.participationStatus = participationStatus;
     }
 
+    @DynamoDBMarshalling(marshallerClass = RoleMarshaller.class)
+    public EAdventurerRole getRole() {
+        return role;
+    }
+
+    public void setRole(EAdventurerRole role) {
+        this.role = role;
+    }
+
+    @DynamoDBAttribute
+    public String getVisibleSectionsJSON() {
+        return visibleSectionsJSON;
+    }
+
+    public void setVisibleSectionsJSON(String visibleSectionsJSON) {
+        this.visibleSectionsJSON = visibleSectionsJSON;
+    }
+
+    @DynamoDBAttribute
+    public String getEmergencyContact() {
+        return emergencyContact;
+    }
+
+    public void setEmergencyContact(String emergencyContact) {
+        this.emergencyContact = emergencyContact;
+    }
+
+    @DynamoDBAttribute
+    public String getHomeAirport() {
+        return homeAirport;
+    }
+
+    public void setHomeAirport(String homeAirport) {
+        this.homeAirport = homeAirport;
+    }
 
     public static class ParticipationMarshaller extends EnumMarshaller<EAdventurerParticipation> {
+    }
+    public static class RoleMarshaller extends EnumMarshaller<EAdventurerRole> {
     }
 }

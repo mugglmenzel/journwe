@@ -42,7 +42,7 @@ public class AdventureEmailController extends Controller {
     }
 
 
-    private static ObjectNode emailToSmallJSON(Message msg) {
+    public static ObjectNode emailToSmallJSON(Message msg) {
         ObjectNode node = Json.newObject();
         node.put("adventureId", msg.getAdventureId());
         node.put("sender", msg.getSender());
@@ -53,7 +53,7 @@ public class AdventureEmailController extends Controller {
         return node;
     }
 
-    private static ObjectNode emailToJSON(Message msg) {
+    public static ObjectNode emailToJSON(Message msg) {
         ObjectNode node = emailToSmallJSON(msg);
         node.put("body", msg.getBody());
 

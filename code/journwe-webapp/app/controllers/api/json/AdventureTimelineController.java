@@ -81,7 +81,7 @@ public class AdventureTimelineController extends Controller {
         for (Message m : new AdventureEmailMessageDAO().allNewest(advId)) {
             ObjectNode result = Json.newObject();
             result.put("type", "email");
-            result.put("email", Json.toJson(m));
+            result.put("email", AdventureEmailController.emailToSmallJSON(m));
             result.put("timestamp", m.getTimestamp());
             results.add(result);
         }
