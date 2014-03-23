@@ -66,10 +66,10 @@ public class AdventureController extends Controller {
             if (image.getFilename() != null
                     && !"".equals(image.getFilename()) && file.length() > 0) {
                 s3.putObject(new PutObjectRequest(
-                        S3_BUCKET_ADVENTURE_IMAGES, advId + "/" + advId, file)
+                        S3_BUCKET_ADVENTURE_IMAGES, advId, file)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 adv.setImage(s3.getResourceUrl(S3_BUCKET_ADVENTURE_IMAGES,
-                        advId + "/" + advId));
+                        advId));
                 adv.setImageTimestamp(new Long(new Date().getTime()).toString());
             }
 

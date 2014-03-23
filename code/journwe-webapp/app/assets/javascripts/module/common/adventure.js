@@ -255,8 +255,7 @@ define([
     };
 
     var uploadPrimeImage = function (files) {
-        var btn = $('#adventure-prime-image-upload-button'),
-            btnOriginal = btn.html();
+        var btn = $('.btn-prime-image-upload');
         utils.setReplaceSpinning(btn);
 
         var data = new FormData();
@@ -297,17 +296,51 @@ define([
     }
 
     var loadPhotos = function () {
-        routes.controllers.api.json.InspirationController.getImages(adv.id).ajax({success: function (images) {
+        utils.resetStash('.loader-photos');
+        routes.controllers.api.json.AdventureController.getPhotos(adv.id).ajax({success: function (images) {
             if (images) {
                 for (var i in images) {
                     var image = $.extend({active: i == 0 ? 'active' : ''}, images[i]);
-                    $('.adventure-photos').append(tmpl('adventure-photo-template', image));
-                    $('.carousel-indicators-adventure-photos').append(tmpl('adventure-photo-carousel-indicator-template', image));
-                    $('.carousel-inner-adventure-photos').append(tmpl('adventure-photo-carousel-item-template', image));
-                    $('#adventure-photos .polaroid').last().hide().fadeIn();
+                    renderPhoto(image);
                 }
             } else $('.adventure-photos').html('No Photos.');
+            utils.setStash('.loader-photos');
         }});
+    };
+
+    var renderPhoto = function (image) {
+        $('.adventure-photos').append(tmpl('adventure-photo-template', image));
+        $('.carousel-indicators-adventure-photos').append(tmpl('adventure-photo-carousel-indicator-template', image));
+        $('.carousel-inner-adventure-photos').append(tmpl('adventure-photo-carousel-item-template', image));
+        $('#adventure-photos .polaroid').last().hide().fadeIn();
+    }
+
+    var processDroppedPhoto = function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        uploadPhoto(event.target.files || event.dataTransfer.files);
+
+        return false;
+    };
+
+    var uploadPhoto = function (files) {
+        utils.resetStash('.loader-photos');
+
+        var data = new FormData();
+        data.append(files[0].name, files[0])
+
+        routes.controllers.api.json.AdventureController.addPhoto(adv.id).ajax({
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (image) {
+                loadPhotos();
+                utils.setStash('.loader-photos');
+            }
+        });
+
     };
 
 
@@ -1132,7 +1165,7 @@ define([
                 inputFile.val('');
             }
         },
-        'click .btn-upload': function () {
+        'click .btn-prime-image-upload': function () {
             $('#adventure-prime-image-file-input').click();
         },
 
@@ -1144,6 +1177,29 @@ define([
         },
         'hidden #adventureDescription': function () {
             //$('.btn-edit-description').show();
+        },
+
+        'click .btn-adventure-photo': function () {
+            $('#carousel-adventure-photos').carousel({pause: 'false'});
+            $('#carousel-adventure-photos').carousel($(this).data('index'));
+            $('#carousel-adventure-photos').modal('show');
+        },
+        'click .carousel-fullscreen .carousel-inner .item.active': function () {
+            $('#carousel-adventure-photos').modal('hide');
+        },
+        'drop .adventure-prime-image': function (event) {
+            processDroppedPhoto(event);
+        },
+        'change #adventure-photo-file-input': function () {
+            var inputFile = $('#adventure-photo-file-input'),
+                files = inputFile[0].files;
+            if (files) {
+                uploadPhoto(files);
+                inputFile.val('');
+            }
+        },
+        'click .btn-photo-upload': function () {
+            $('#adventure-photo-file-input').click();
         },
 
 

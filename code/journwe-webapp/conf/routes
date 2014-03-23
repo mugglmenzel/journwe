@@ -14,7 +14,7 @@
 
 #### Categories ####
 
-GET           /api/json/category/all/optionsMap.json                         controllers.api.json.CategoryController.categoriesOptionsMap()
+GET           /api/json/category/all/optionsMap.json                       controllers.api.json.CategoryController.categoriesOptionsMap()
 GET           /api/json/category/:id/categories.json                       controllers.api.json.CategoryController.getCategories(id:String)
 GET           /api/json/category/:id/inspirations.json                     controllers.api.json.CategoryController.getInspirations(id:String)
 GET           /api/json/category/:id/adventures/public.json                controllers.api.json.ApplicationController.getPublicAdventuresOfCategory(id:String)
@@ -25,7 +25,7 @@ GET           /api/json/category/:id/adventures/public.json                contr
 GET           /api/json/inspiration/:id/urls.json                          controllers.api.json.InspirationController.getUrls(id:String)
 GET           /api/json/inspiration/:id/tips.json                          controllers.api.json.InspirationController.getTips(id:String)
 POST          /api/json/inspiration/:id/tips.json                          controllers.api.json.InspirationController.addTip(id:String)
-GET           /api/json/inspiration/:id/images.json                        controllers.api.json.InspirationController.getImages(id:String)
+GET           /api/json/inspiration/:id/photos.json                        controllers.api.json.InspirationController.getImages(id:String)
 
 
 
@@ -36,6 +36,8 @@ GET           /api/json/adventures/public.json                             contr
 
 POST          /api/json/adventure/:id/public.json                          controllers.api.json.AdventureController.updatePublic(id:String)
 POST          /api/json/adventure/:id/image.json                           controllers.api.json.AdventureController.updateImage(id:String)
+GET           /api/json/adventure/:id/photos.json                          controllers.api.json.AdventureController.getPhotos(id:String)
+POST          /api/json/adventure/:id/photos.json                          controllers.api.json.AdventureController.addPhoto(id:String)
 POST          /api/json/adventure/:id/category.json                        controllers.api.json.AdventureController.updateCategory(id:String)
 POST          /api/json/adventure/check/shortname.json                     controllers.api.json.AdventureController.checkShortname()
 
