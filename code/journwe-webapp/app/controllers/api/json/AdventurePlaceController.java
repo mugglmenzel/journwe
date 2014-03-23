@@ -72,8 +72,8 @@ public class AdventurePlaceController extends Controller {
         PlaceOption fav = (favId == null) ? autoFav : new PlaceOptionDAO().get(advId, favId);
 
         ObjectNode node = Json.newObject();
-        node.put("favorite", placeToJSON(fav));
-        node.put("autoFavorite", placeToJSON(autoFav));
+        node.put("favorite", placeToSmallJSON(fav));
+        node.put("autoFavorite", placeToSmallJSON(autoFav));
 
         return ok(node);
     }
@@ -185,11 +185,7 @@ public class AdventurePlaceController extends Controller {
         return ok();
     }
 
-
-    private static ObjectNode placeToJSON(PlaceOption place) {
-        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
-        PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
-
+    private static ObjectNode placeToSmallJSON(PlaceOption place) {
         ObjectNode node = Json.newObject();
         node.put("id", place.getOptionId());
         node.put("advId", place.getAdventureId());
@@ -197,6 +193,15 @@ public class AdventurePlaceController extends Controller {
         node.put("address", place.getAddress());
         node.put("lat", place.getLatitude().doubleValue());
         node.put("lng", place.getLongitude().doubleValue());
+
+        return node;
+    }
+
+    private static ObjectNode placeToJSON(PlaceOption place) {
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
+
+        ObjectNode node = placeToSmallJSON(place);
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0.5D);
         node.put("voteCount", Json.toJson(new PlacePreferenceDAO().counts(place.getOptionId())));

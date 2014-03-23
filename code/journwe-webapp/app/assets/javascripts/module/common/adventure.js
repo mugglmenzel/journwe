@@ -28,6 +28,7 @@ define([
     var map,
         bgmap,
         markers = [],
+        bgMarker,
         layers = {weather: [], photos: []};
     var socialUsers = {};
     var socialUserNames = [],
@@ -160,6 +161,7 @@ define([
             panControl: false
         };
 
+
         bgmap = new gmaps.Map(document.getElementById('background-map'), mapOptions);
 
         if (adv.image != null && adv.image != '') {
@@ -167,6 +169,18 @@ define([
             $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + adv.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + adv.imageTimestamp + '")');
         }
     };
+
+    var setBgMapCenterOffset = function (lat, lng) {
+        if (bgMarker) bgMarker.setMap(null);
+
+        gmaps.setCenterOffset(
+            bgmap,
+            new gmaps.LatLng(lat, lng),
+            (Math.round($('#background-map').width() / 2) - 100),
+            -1 * (Math.round($('#background-map').height() / 2) - 300)
+        );
+        bgMarker = new gmaps.Marker({animation: gmaps.Animation.DROP, map: bgmap, position: new gmaps.LatLng(lat, lng)});
+    }
 
     var initScrollspy = function () {
         // $('body').scrollspy({offset: ($('.nav-adventure').first().offset().top + $('.nav-adventure').first().height())});
@@ -459,7 +473,7 @@ define([
 
         routes.controllers.api.json.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
             favoritePlace = result.favorite;
-            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address) && bgmap.setCenter(new gmaps.LatLng(result.favorite.lat, result.favorite.lng));
+            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address) && setBgMapCenterOffset(result.favorite.lat, result.favorite.lng);
             if (result.autoFavorite != null) $('.places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
             utils.resetSpinning($('.icon-favorite-place'));
