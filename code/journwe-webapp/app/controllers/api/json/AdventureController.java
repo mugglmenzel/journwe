@@ -1,6 +1,5 @@
 package controllers.api.json;
 
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -92,12 +91,14 @@ public class AdventureController extends Controller {
         for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_ADVENTURE_IMAGES).withPrefix(advId + "/")).getObjectSummaries()) {
             try {
                 s3.setObjectAcl(os.getBucketName(), os.getKey(), CannedAccessControlList.BucketOwnerFullControl);
+                String id =os.getKey().substring(os.getKey().lastIndexOf("/")+1, os.getKey().length());
 
                 ObjectNode node = Json.newObject();
                 node.put("index", i);
+                node.put("id", id);
                 node.put("url", URLEncoder.encode(s3.generatePresignedUrl(S3_BUCKET_ADVENTURE_IMAGES,
                         os.getKey(), DateTime.now().plusHours(1).toDate()).toString(), "UTF-8"));
-                images.add(node);
+                if(id != null && !"".equals(id)) images.add(node);
 
                 i++;
             } catch (UnsupportedEncodingException e) {
@@ -111,7 +112,6 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result addPhoto(String advId) {
-        ObjectNode node = Json.newObject();
         try {
             Http.MultipartFormData body = request().body().asMultipartFormData();
             Http.MultipartFormData.FilePart image = body.getFiles().get(0);
@@ -124,14 +124,23 @@ public class AdventureController extends Controller {
                         .withCannedAcl(CannedAccessControlList.BucketOwnerFullControl));
             }
 
-
-            node.put("url", URLEncoder.encode(s3.generatePresignedUrl(S3_BUCKET_ADVENTURE_IMAGES,
-                    advId + "/" + image.getFilename(), DateTime.now().plusHours(1).toDate()).toString(), "UTF-8"));
         } catch (Exception e) {
             return badRequest();
         }
 
-        return ok(node);
+        return ok();
+    }
+
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result deletePhoto(String advId, String photoId) {
+        try {
+            s3.deleteObject(S3_BUCKET_ADVENTURE_IMAGES, advId + "/" + photoId);
+        } catch (Exception e) {
+            return badRequest();
+        }
+
+        return ok();
     }
 
     @Security.Authenticated(SecuredUser.class)

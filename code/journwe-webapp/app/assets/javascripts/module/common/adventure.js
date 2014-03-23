@@ -292,13 +292,14 @@ define([
             }
         });
 
-        loadPhotos();
+        loadPhotos(true);
     }
 
-    var loadPhotos = function () {
+    var loadPhotos = function (clear) {
         utils.resetStash('.loader-photos');
         routes.controllers.api.json.AdventureController.getPhotos(adv.id).ajax({success: function (images) {
             if (images) {
+                if (clear) $('.adventure-photos').empty();
                 for (var i in images) {
                     var image = $.extend({active: i == 0 ? 'active' : ''}, images[i]);
                     renderPhoto(image);
@@ -335,12 +336,20 @@ define([
             cache: false,
             contentType: false,
             processData: false,
-            success: function (image) {
-                loadPhotos();
+            success: function () {
+                loadPhotos(true);
                 utils.setStash('.loader-photos');
             }
         });
 
+    };
+
+    var deletePhoto = function (id) {
+        utils.resetStash('.loader-photos');
+        routes.controllers.api.json.AdventureController.deletePhoto(adv.id, id).ajax({success: function () {
+            loadPhotos(true);
+            utils.setStash('.loader-photos');
+        }});
     };
 
 
@@ -359,7 +368,7 @@ define([
                 for (var i in cats)
                     $('.btn-journwe-category ul.dropdown-menu').append('<li data-id="' + cats[i].id + '"><a>' + cats[i].name + '</a></li>');
 
-        }, complete:function(){
+        }, complete: function () {
             utils.resetSpinning($('.btn-journwe-category button i'));
         }});
     };
@@ -370,7 +379,7 @@ define([
             data: {categoryId: catId},
             success: function (data) {
                 if (data.name != null && data.name.length > 0) $('.btn-journwe-category button span').first().html(data.name);
-            }, complete:function(){
+            }, complete: function () {
                 utils.resetSpinning($('.btn-journwe-category button i'));
             }});
     };
@@ -565,7 +574,7 @@ define([
 
 
     var deletePlace = function (optId, el) {
-        el.html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning(el);
         routes.controllers.api.json.AdventurePlaceController.deletePlace(adv.id, optId).ajax({success: function () {
             removeMapMarker(optId);
             $('#placeoption-item-' + optId).fadeOut(function () {
@@ -1201,7 +1210,9 @@ define([
         'click .btn-photo-upload': function () {
             $('#adventure-photo-file-input').click();
         },
-
+        'click .btn-photo-delete': function () {
+            deletePhoto($(this).data('id'));
+        },
 
         'change #adventure-public-switch': function () {
             var el = $(this);
