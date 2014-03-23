@@ -2,44 +2,47 @@
 .nav-adventure {
   font-size: 20px;
   //width: 100%;
-  background-color: @color_white;
+  background-color: #333;
+  background-color: rgba(255,255,255,0.3);
   margin: 0;
   border-radius: 0;
   padding: 5px;
   .transition(background 0.5s ease);
+  position: absolute;
+  z-index: 1;
+  left: -23.4%;
+  right: -23.4%;
+  top: 143px;
 
   &.affix {
     border: none;
     border-radius: 0;
     box-shadow: 0 0 5px gray;
     position: fixed;
-
     z-index: 1000;
     top: 0px;
+    width: 100%;
+    left: 0;
+    background: white;
 
     & + div {
-      margin-top: 50px;
-    }
-  }
 
-  @media (min-width: 1200px) {
-    &.affix {
-      width: 66%;
     }
-  }
-  @media (max-width: 1200px) {
-    &.affix {
-      width: 100%;
+
+    & * {
+      color: #333;
     }
   }
 
   & .nav-title {
     line-height: 40px;
     margin-right: 10px;
+    margin-top: 3px;
   }
 
   & .title-name {
     line-height: 40px;
+    margin-top: 3px;
   }
 
 
@@ -64,7 +67,6 @@
     }
 
     &.active {
-      background: #e1e1e1;
 
       &.places {
         border-bottom: 1px solid @color_place;
@@ -86,14 +88,18 @@
     padding-bottom: 12px;
   }
 
-  & a {
-    color: #666 !important;
+  & * {
+    color: white;
   }
 
   & .nav-pills > li.active > a,
   & .nav-pills > li.active > a:hover,
   & .nav-pills > li.active > a:focus {
-    background: fade(@color_white, 40%) !important;
+    background: fade(@color_white, 60%) !important;
+
+    & i {
+      color: #333;
+    }
   }
 
   & .nav-pills > li > a:hover,
@@ -167,10 +173,6 @@
 
 .icon-for-adventure-title.icon-cogs {
   font-size: 24px;
-}
-
-.fixed .prime-image {
-  margin-top: calc(50px + 50px + 75px);
 }
 
 #places-list {

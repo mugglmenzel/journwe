@@ -10,14 +10,15 @@
         <div class="col-lg-11">
             <p class="lead">You are in this JournWe&#8482; to <span class="places-favorite-place-name"></span> on <span class="times-favorite-time-name"></span>. Have some fun, guys!</p>
             @if(auth.canViewAdventureDescription()) {
-                <div id="adventureDescription" class="replace-links" data-type="textarea" data-pk="@adv.getId()"
+                <div id="adventureDescription" class="replace-links pull-left" data-type="textarea" data-pk="@adv.getId()"
                     data-url="@html.routes.AdventureController.saveEditable()" data-toggle="manual" data-rows="15" data-inputclass="form-control" data-showbuttons="bottom"
                     data-original-title="Enter adventure description" data-emptytext="Description of your adventure...">@if(adv.getHTMLDescription != null){@Html(adv.getHTMLDescription())}</div>
 
             }
             @if(auth.canEditAdventureDescription()) {
-                <div class="text-right">
-                    <a class="btn btn-edit-description btn-default"><i class="fa fa-pencil"></i></a>
+                <div class="text-right pull-right">
+                    <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload"><i class="fa fa-fw fa-picture-o"></i></a>
+                    <a class="btn btn-edit-description btn-default"><i class="fa fa-fw fa-pencil"></i></a>
                 </div>
             }
         </div>

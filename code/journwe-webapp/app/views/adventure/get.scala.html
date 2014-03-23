@@ -10,11 +10,11 @@
     @main(adv.getName()) { } {
 
         @defining(new JournweAuthorization(adv.getId)) { auth =>
-            <div id="adventure-container">
-                @comment.commentsCommon()
 
-                <div class="nav-adventure row">
-                        <!--<h4 class="text-right" style="font-size: 14px; line-height: 1; color: #aaaaaa;">GOTO</h4> -->
+            <div class="nav-adventure row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="row">
+                    <!--<h4 class="text-right" style="font-size: 14px; line-height: 1; color: #aaaaaa;">GOTO</h4> -->
                         <div class="col-xs-6 title-name">
                             <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
                             data-url="@html.routes.AdventureController.saveEditable()"
@@ -54,31 +54,32 @@
                             </ul>
                             <div class="nav-title pull-right"><strong>Go to</strong></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prime-image">
+                <div id="adventure-prime-image" style="width: 100%; height: 200px;">
                 </div>
 
-                <div class="prime-image">
-                    <div id="adventure-prime-image" style="width: 100%; height: 200px;">
-                    </div>
-
-                    <div class="title-overlay">
-                        @*
-                        <span class="title-name visible-xs">
-                            <i class="fa fa-info white"></i>
-                            <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-                                data-url="@html.routes.AdventureController.saveEditable()"
-                                data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil white muted"></i> <span></span>
-                            @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
-                        </span>
-                        *@
-
-                        <div class="toolbar pull-right">
-                            <a id="adventure-prime-image-upload-button" class="btn btn-default btn-upload"><i class="fa fa-picture-o"></i></a>
-                        </div>
-                    </div>
-
+                @*
+                <div class="title-overlay">
+                    <span class="title-name visible-xs">
+                        <i class="fa fa-info white"></i>
+                        <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
+                            data-url="@html.routes.AdventureController.saveEditable()"
+                            data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil white muted"></i> <span></span>
+                        @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                    </span>
                 </div>
+                *@
 
-                <div class="jrn-container jrn-no-top-round jrn-no-top-gap">
+            </div>
+
+            <div id="adventure-container">
+                @comment.commentsCommon()
+
+                <div class="jrn-container">
                     @index(adv, ins)
                 </div>
 
