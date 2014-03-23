@@ -17,7 +17,7 @@
   &.affix {
     border: none;
     border-radius: 0;
-    box-shadow: 0 0 5px gray;
+    box-shadow: 0 0 3px gray;
     position: fixed;
     z-index: 1000;
     top: 0px;
@@ -31,6 +31,12 @@
 
     & * {
       color: #333;
+    }
+
+    & .nav-pills > li.active > a,
+    & .nav-pills > li.active > a:hover,
+    & .nav-pills > li.active > a:focus {
+      background: #f1f1f1 !important;
     }
   }
 
