@@ -14,7 +14,7 @@
 
 #### Categories ####
 
-GET           /api/json/category/all/optionsMap.json                         controllers.api.json.CategoryController.categoriesOptionsMap()
+GET           /api/json/category/all/optionsMap.json                       controllers.api.json.CategoryController.categoriesOptionsMap()
 GET           /api/json/category/:id/categories.json                       controllers.api.json.CategoryController.getCategories(id:String)
 GET           /api/json/category/:id/inspirations.json                     controllers.api.json.CategoryController.getInspirations(id:String)
 GET           /api/json/category/:id/adventures/public.json                controllers.api.json.ApplicationController.getPublicAdventuresOfCategory(id:String)
@@ -25,7 +25,7 @@ GET           /api/json/category/:id/adventures/public.json                contr
 GET           /api/json/inspiration/:id/urls.json                          controllers.api.json.InspirationController.getUrls(id:String)
 GET           /api/json/inspiration/:id/tips.json                          controllers.api.json.InspirationController.getTips(id:String)
 POST          /api/json/inspiration/:id/tips.json                          controllers.api.json.InspirationController.addTip(id:String)
-GET           /api/json/inspiration/:id/images.json                        controllers.api.json.InspirationController.getImages(id:String)
+GET           /api/json/inspiration/:id/photos.json                        controllers.api.json.InspirationController.getImages(id:String)
 
 
 
@@ -36,6 +36,11 @@ GET           /api/json/adventures/public.json                             contr
 
 POST          /api/json/adventure/:id/public.json                          controllers.api.json.AdventureController.updatePublic(id:String)
 POST          /api/json/adventure/:id/image.json                           controllers.api.json.AdventureController.updateImage(id:String)
+
+GET           /api/json/adventure/:id/photos.json                          controllers.api.json.AdventureController.getPhotos(id:String)
+POST          /api/json/adventure/:id/photos.json                          controllers.api.json.AdventureController.addPhoto(id:String)
+DELETE        /api/json/adventure/:id/photos/:photo/photo.json             controllers.api.json.AdventureController.deletePhoto(id:String, photo:String)
+
 POST          /api/json/adventure/:id/category.json                        controllers.api.json.AdventureController.updateCategory(id:String)
 POST          /api/json/adventure/check/shortname.json                     controllers.api.json.AdventureController.checkShortname()
 
@@ -59,7 +64,7 @@ GET           /api/json/people/autocomplete.json                           contr
 #### Adventure Places ####
 GET           /api/json/adventure/:id/places.json                          controllers.api.json.AdventurePlaceController.getPlaces(id:String)
 POST          /api/json/adventure/:id/places.json                          controllers.api.json.AdventurePlaceController.addPlace(id:String)
-DELETE        /api/json/adventure/:id/places/:placeId                      controllers.api.json.AdventurePlaceController.deletePlace(id:String, placeId:String)
+DELETE        /api/json/adventure/:id/places/:placeId/place.json           controllers.api.json.AdventurePlaceController.deletePlace(id:String, placeId:String)
 POST          /api/json/adventure/:id/places/vote.json                     controllers.api.json.AdventurePlaceController.voteParam(id:String)
 POST          /api/json/adventure/:id/places/:placeId/vote.json            controllers.api.json.AdventurePlaceController.vote(id:String, placeId:String)
 GET           /api/json/adventure/:id/places/favorite.json                 controllers.api.json.AdventurePlaceController.getFavoritePlace(id:String)
@@ -73,7 +78,7 @@ POST          /api/json/adventure/:id/places/vote/deadline.json            contr
 
 GET           /api/json/adventure/:id/times.json                           controllers.api.json.AdventureTimeController.getTimes(id:String)
 POST          /api/json/adventure/:id/times.json                           controllers.api.json.AdventureTimeController.addTime(id:String)
-DELETE        /api/json/adventure/:id/times.json/:timeId                   controllers.api.json.AdventureTimeController.deleteTime(id:String,timeId:String)
+DELETE        /api/json/adventure/:id/times/:timeId/time.json              controllers.api.json.AdventureTimeController.deleteTime(id:String,timeId:String)
 POST          /api/json/adventure/:id/times/vote.json                      controllers.api.json.AdventureTimeController.voteParam(id:String)
 POST          /api/json/adventure/:id/times/:timeId/vote.json              controllers.api.json.AdventureTimeController.vote(id:String,timeId:String)
 GET           /api/json/adventure/:id/times/favorite.json                  controllers.api.json.AdventureTimeController.getFavoriteTime(id:String)
@@ -86,24 +91,24 @@ POST          /api/json/adventure/:id/times/vote/deadline.json             contr
 
 #### Adventure Todos ####
 
-GET           /api/json/adventure/:id/todos.json/:userId                   controllers.api.json.AdventureTodoController.getTodos(id:String, userId:String)
+GET           /api/json/adventure/:id/user/:userId/todos.json              controllers.api.json.AdventureTodoController.getTodos(id:String, userId:String)
 GET           /api/json/adventure/:id/affiliate.json                       controllers.api.json.AdventureTodoController.getTodoAffiliateItems(id:String)
 POST          /api/json/adventure/:id/todos.json                           controllers.api.json.AdventureTodoController.addTodo(id:String)
-PUT           /api/json/adventure/:id/todos.json/:tid                      controllers.api.json.AdventureTodoController.setTodo(id:String, tid: String)
-DELETE        /api/json/adventure/:id/todos.json/:tid                      controllers.api.json.AdventureTodoController.deleteTodo(id:String, tid: String)
+PUT           /api/json/adventure/:id/todos/:tid/todo.json                 controllers.api.json.AdventureTodoController.setTodo(id:String, tid: String)
+DELETE        /api/json/adventure/:id/todos/:tid/todo.json                 controllers.api.json.AdventureTodoController.deleteTodo(id:String, tid: String)
 
 
 #### Adventure Files ####
 
 GET           /api/json/adventure/:id/files.json                           controllers.api.json.AdventureFileController.listFiles(id:String)
 POST          /api/json/adventure/:id/files.json                           controllers.api.json.AdventureFileController.uploadFile(id:String)
-DELETE        /api/json/adventure/:id/files.json/:fileName                 controllers.api.json.AdventureFileController.deleteFile(id:String, fileName: String)
+DELETE        /api/json/adventure/:id/files/:fileName/file.json            controllers.api.json.AdventureFileController.deleteFile(id:String, fileName: String)
 
 
 #### Adventure Emails ####
 
 GET           /api/json/adventure/:id/emails.json                          controllers.api.json.AdventureEmailController.listEmails(id:String)
-GET           /api/json/adventure/:id/emails.json/:timestamp               controllers.api.json.AdventureEmailController.getEmail(id:String, timestamp:Long)
+GET           /api/json/adventure/:id/emails/:timestamp/email.json         controllers.api.json.AdventureEmailController.getEmail(id:String, timestamp:Long)
 
 
 #### Adventure Timeline ####
