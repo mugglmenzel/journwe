@@ -6,6 +6,8 @@ require([
 ], function (utils, routes, main, user) {
 
     var initialize = function () {
+        utils.loadGenericBgImage();
+
         $.fn.editable.defaults.mode = 'inline';
         $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-journwe fa fa-spin"></i></div>';
         $('#userName').editable();

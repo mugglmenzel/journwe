@@ -5,6 +5,7 @@ require([
     "yingyangyong"
 ], function (utils, index, main, yingyangyong) {
 
+    utils.loadGenericBgImage();
     index.initializeCategories();
     index.initializePublicAdventures();
 

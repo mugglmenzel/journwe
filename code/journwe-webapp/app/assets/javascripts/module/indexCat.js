@@ -107,7 +107,7 @@ require([
 
     if (cat.image != null && cat.image != "") {
         $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + cat.image + '")').addClass('blur');
-    }
+    } else utils.loadGenericBgImage();
 
     initialize();
 

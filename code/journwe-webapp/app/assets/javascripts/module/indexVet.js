@@ -8,7 +8,7 @@ require([
     "yingyangyong"
 ], function (utils, routes, messages, gmaps, index, main, yingyangyong) {
 
-
+    utils.loadGenericBgImage();
     index.initializeMyAdventures();
     index.initializeCategories();
     //index.initializePublicAdventures();

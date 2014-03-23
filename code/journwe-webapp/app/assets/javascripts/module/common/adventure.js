@@ -37,11 +37,18 @@ define([
 
     // Init bg & scrollspy
     var initBackground = function () {
+        if (adv.image != null && adv.image != '') {
+            $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '&timestamp=' + adv.imageTimestamp + '")').addClass('blur');
+            $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + adv.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + adv.imageTimestamp + '")');
+        } else utils.loadGenericBgImage();
+    };
 
+
+    var loadBgMap = function (lat, lng) {
         var mapOptions = {
             zoom: 13,
             mapTypeId: gmaps.MapTypeId.ROADMAP,
-            center: new gmaps.LatLng(52.5075419, 13.4261419), //Berlin
+            center: new gmaps.LatLng(lat, lng),
             styles: [
                 {
                     "featureType": "all",
@@ -164,10 +171,6 @@ define([
 
         bgmap = new gmaps.Map(document.getElementById('background-map'), mapOptions);
 
-        if (adv.image != null && adv.image != '') {
-            //$('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '&timestamp=' + adv.imageTimestamp + '")').addClass('blur');
-            $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + adv.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + adv.imageTimestamp + '")');
-        }
     };
 
     var setBgMapCenterOffset = function (lat, lng) {
@@ -533,7 +536,8 @@ define([
 
         routes.controllers.api.json.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
             favoritePlace = result.favorite;
-            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address) && setBgMapCenterOffset(result.favorite.lat, result.favorite.lng);
+            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address) && loadBgMap(result.favorite.lat, result.favorite.lng);
+            else initBackground();
             if (result.autoFavorite != null) $('.places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
             utils.resetSpinning($('.icon-favorite-place'));

@@ -180,7 +180,18 @@ define(function () {
                 .html(spinnerTempStore[id]);
             delete spinnerTempStore[id];
             el.data('spinner-id', '');
+        },
+
+        loadGenericBgImage: function () {
+            var bgr = $('#background');
+
+            // Set background image
+            var images = ['cinque_terre.jpg', 'tokyo_tower.jpg', 'camper_beach.jpg', 'lake_sailing.jpg']; //  'tokyo_drums.jpg', 'arirang.jpg','kilimanjaro.jpg',
+            if (!bgr.css('background-image') || bgr.css('background-image') == "none") {
+                bgr.css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=http%3A%2F%2Fwww.journwe.com%2Fassets%2Fimg%2Fbg%2F' + images[Math.floor(Math.random() * images.length)] + '")');
+            }
         }
 
-    };
+
+};
 });

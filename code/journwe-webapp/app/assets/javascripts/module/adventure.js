@@ -6,7 +6,6 @@ require([
 
 
     //INITIALIZE
-    adventure.initBackground();
     adventure.initScrollspy();
     adventure.initNavigation();
     adventure.initializeMap();

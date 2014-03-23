@@ -3,6 +3,8 @@ require([
     "tour"
 ], function (utils, tour) {
 
+    utils.loadGenericBgImage();
+
     utils.on({
         "click .btn-start-tour": function(e) {
             e.preventDefault();
