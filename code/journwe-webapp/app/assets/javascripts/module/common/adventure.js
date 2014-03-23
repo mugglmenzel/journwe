@@ -49,6 +49,9 @@ define([
         // });
     };
 
+
+
+    //NAVIGATION
     var initNavigation = function () {
         $('.nav-adventure').affix({
             offset: {
@@ -58,6 +61,46 @@ define([
 
         $('.nav-adventure-list a').tooltip();
     }
+
+    var showNavSection = function (sec) {
+        var icon = sec.find('.btn-nav-section-collapse-toggle i'),
+            secName = sec.attr('id'),
+            container = sec.find('.jrn-container'),
+            collapsables = sec.find('.collapsable'),
+            li = $('.nav-adventure-list li a[href="#' + secName + '"]').closest('li');
+
+        collapsables.slideDown('100', function () {
+            icon.removeClass().addClass('fa fa-chevron-up');
+            //GMap bugfix
+            if ('places' == secName) resetMapBounds();
+        });
+        container.removeClass('jrn-collapsed');
+        li.addClass('active');
+    };
+
+    var hideNavSection = function (sec) {
+        var icon = sec.find('.btn-nav-section-collapse-toggle i'),
+            secName = sec.attr('id'),
+            container = sec.find('.jrn-container'),
+            collapsables = sec.find('.collapsable'),
+            li = $('.nav-adventure-list li a[href="#' + secName + '"]').closest('li');
+
+        collapsables.slideUp('100', function () {
+            container.addClass('jrn-collapsed');
+            icon.removeClass().addClass('fa fa-chevron-down');
+        });
+        li.removeClass('active');
+    };
+
+    var toggleNavSection = function (sec) {
+        var collapsables = sec.find('.collapsable');
+
+        if (collapsables.first().is(':visible')) {
+            hideNavSection(sec);
+        } else {
+            showNavSection(sec);
+        }
+    };
 
 
     //TOOLBAR
@@ -888,32 +931,24 @@ define([
 
             if ($(section).length) {
                 var sec = $(section).closest('.jrn-adventure-section'),
-                    li = $(this).closest('li');
-                if (!sec.is(":visible")) {
-                    sec.removeClass('stash').fadeIn('100');
-                    li.addClass('active');
-                }
-                if(e.which == 3) {
-                    sec.fadeOut('100');
-                    li.removeClass('active');
-                } else {
+                    collapsables = sec.find('.collapsable');
+
+                if (e.altKey)
+                    hideNavSection(sec);
+                else {
+                    if (!collapsables.first().is(':visible'))
+                        showNavSection(sec);
                     $('html, body').animate({
                         scrollTop: $(section).offset().top - 150
                     }, 'slow');
-
-                    //GMap bugfix
-                    if('places' == sec.find('h2').attr('id')) resetMapBounds();
                 }
+
             }
 
             return false;
         },
-        'click .btn-section-close': function () {
-            var sec = $(this).closest('.jrn-adventure-section');
-            var secName = sec.find('h2').attr('id');
-
-            sec.fadeOut('100');
-            $('.nav-adventure-list li a[href="#' + secName + '"]').closest('li').removeClass('active');
+        'click .btn-nav-section-collapse-toggle': function () {
+            toggleNavSection($(this).closest('.jrn-adventure-section'));
         },
 
         'click .btn-participate': function () {
@@ -1083,7 +1118,7 @@ define([
         },
         'click .btn-places-map-layers-show': function () {
             $.each(layers, function (i, val) {
-               gmaps.hideMapLayers(map, val);
+                gmaps.hideMapLayers(map, val);
             });
             $(this).closest('.btn-group').find('.btn').removeClass('active');
             gmaps.showMapLayers(map, layers[$(this).data('layers')]);

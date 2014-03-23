@@ -243,6 +243,15 @@ h1 .editableform {
     margin-top: -20px;
   }
 
+  &.jrn-collapsed {
+    border-radius: 5px;
+
+    & h2 {
+      margin-bottom: -20px;
+      border-bottom: none;
+    }
+  }
+
   & h2 {
     // background: fade(@color_white, 30%);
     padding: 20px 20px;
@@ -272,7 +281,6 @@ h1 .editableform {
     }
   }
 }
-
 
 #yingyangyong-container {
   padding-bottom: 5px;
@@ -328,8 +336,6 @@ body > .row-fluid > div.span8 h2 {
   padding: 5px 20px;
   border-bottom: 1px solid white;
 }
-
-
 
 table.inspiration {
 
@@ -910,8 +916,6 @@ h3 {
 
 }
 
-
-
 .popover * {
   color: #333;
 }
@@ -920,8 +924,6 @@ h3 {
   color: gray;
   background-color: white;
 }
-
-
 
 .search-query {
   padding: 8px 12px;
@@ -1258,7 +1260,7 @@ img.landing {
   width: 80%;
   height: 80%;
   overflow: auto;
-//  overflow-y: scroll;
+  //  overflow-y: scroll;
 
   & .item {
     position: fixed;
@@ -1338,11 +1340,9 @@ img.landing {
   }
 }
 
-
 .navbar-fixed-top .navbar-inner {
   background: white;
   border: none;
 }
-
 
 @import "_header";
