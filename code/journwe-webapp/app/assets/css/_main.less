@@ -220,7 +220,8 @@ h1 .editableform {
   padding: 20px;
   position: relative;
   border-radius: 5px;
-  border:  1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 1px #888;
+
   //overflow: hidden;
 
   &.jrn-no-bottom-round {
@@ -256,12 +257,16 @@ h1 .editableform {
 
   & h2 {
     // background: fade(@color_white, 30%);
-    padding: 20px 20px;
     // border-bottom: 1px solid white;
-    border-bottom: 1px solid #333;
-    margin: -20px -20px 20px -20px;
-    border-radius: 5px 5px 0 0;
-    font-weight: bold;
+    border-bottom: 1px solid #bbb;
+    font-weight: bold; 
+    margin: 0;
+    padding: 0px 0 10px;
+    margin-bottom: 10px;
+
+    &, & > i {
+      font-size: 24px;
+    }
 
     &#index {
 
@@ -297,6 +302,30 @@ h1 .editableform {
   padding: 20px 20px;
   border-top: 1px solid white;
   margin: 20px -20px -20px -20px;
+}
+
+.footer {
+  background: #555;
+  padding: 20px 0;
+
+  & * {
+    color: white;
+  }
+  .nav-pills > li.active > a {
+    &, &:hover, &:focus {
+      font-weight: bold;
+
+      &, & i {
+        color: white;
+      }
+    }
+  }
+}
+
+.footer-navigation {
+  background: white;
+  padding: 20px;
+  margin-top: 25px;
 }
 
 .jrn-opacity {
@@ -402,13 +431,19 @@ table.inspiration {
   }
 }
 
+#place-add-map {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
 .comments {
   padding-left: 10px;
   display: block;
   float: none;
-  background: rgba(255, 255, 255, 0.8);
+  background: #f6f6f6;
   padding: 15px 20px 20px;
   border-radius: 0 0 5px 5px;
+  box-shadow: 0 0 1px #888;
 
   & .empty {
     color: fadeout(#000, 60%);

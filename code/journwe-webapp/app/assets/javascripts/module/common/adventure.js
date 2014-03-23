@@ -311,6 +311,8 @@ define([
                 for (var i in cats)
                     $('.btn-journwe-category ul.dropdown-menu').append('<li data-id="' + cats[i].id + '"><a>' + cats[i].name + '</a></li>');
 
+        }, complete:function(){
+            utils.resetSpinning($('.btn-journwe-category button i'));
         }});
     };
 
@@ -320,6 +322,7 @@ define([
             data: {categoryId: catId},
             success: function (data) {
                 if (data.name != null && data.name.length > 0) $('.btn-journwe-category button span').first().html(data.name);
+            }, complete:function(){
                 utils.resetSpinning($('.btn-journwe-category button i'));
             }});
     };
