@@ -4,7 +4,9 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.typesafe.config.ConfigFactory;
 import models.adventure.Adventure;
@@ -24,6 +26,7 @@ import models.dao.adventure.AdventureDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.manytomany.AdventureToCategoryDAO;
 import models.notifications.helper.AdventurerNotifier;
+import org.joda.time.DateTime;
 import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
@@ -33,7 +36,11 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -41,9 +48,9 @@ public class AdventureController extends Controller {
 
     public static final String S3_BUCKET_ADVENTURE_IMAGES = "journwe-adventure-images";
 
-    private static final AWSCredentials credentials = new BasicAWSCredentials(
+    private static AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
             ConfigFactory.load().getString("aws.accessKey"),
-            ConfigFactory.load().getString("aws.secretKey"));
+            ConfigFactory.load().getString("aws.secretKey")));
 
 
     @Security.Authenticated(SecuredUser.class)
@@ -58,14 +65,11 @@ public class AdventureController extends Controller {
 
             if (image.getFilename() != null
                     && !"".equals(image.getFilename()) && file.length() > 0) {
-                AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
-                        ConfigFactory.load().getString("aws.accessKey"),
-                        ConfigFactory.load().getString("aws.secretKey")));
                 s3.putObject(new PutObjectRequest(
-                        S3_BUCKET_ADVENTURE_IMAGES, adv.getId(), file)
+                        S3_BUCKET_ADVENTURE_IMAGES, advId + "/" + advId, file)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 adv.setImage(s3.getResourceUrl(S3_BUCKET_ADVENTURE_IMAGES,
-                        adv.getId()));
+                        advId + "/" + advId));
                 adv.setImageTimestamp(new Long(new Date().getTime()).toString());
             }
 
@@ -79,6 +83,55 @@ public class AdventureController extends Controller {
         node.put("image", adv.getImage());
         node.put("imageTimestamp", adv.getImageTimestamp());
         return ok(Json.toJson(node));
+    }
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result getPhotos(String advId) {
+        List<ObjectNode> images = new ArrayList<ObjectNode>();
+        int i = 0;
+        for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_ADVENTURE_IMAGES).withPrefix(advId + "/")).getObjectSummaries()) {
+            try {
+                s3.setObjectAcl(os.getBucketName(), os.getKey(), CannedAccessControlList.BucketOwnerFullControl);
+
+                ObjectNode node = Json.newObject();
+                node.put("index", i);
+                node.put("url", URLEncoder.encode(s3.generatePresignedUrl(S3_BUCKET_ADVENTURE_IMAGES,
+                        os.getKey(), DateTime.now().plusHours(1).toDate()).toString(), "UTF-8"));
+                images.add(node);
+
+                i++;
+            } catch (UnsupportedEncodingException e) {
+                Logger.error("Error while producing public URL of adventure photo from S3.", e);
+            }
+        }
+
+        return ok(Json.toJson(images));
+    }
+
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result addPhoto(String advId) {
+        ObjectNode node = Json.newObject();
+        try {
+            Http.MultipartFormData body = request().body().asMultipartFormData();
+            Http.MultipartFormData.FilePart image = body.getFiles().get(0);
+            File file = image.getFile();
+
+            if (image.getFilename() != null
+                    && !"".equals(image.getFilename()) && file.length() > 0) {
+                s3.putObject(new PutObjectRequest(
+                        S3_BUCKET_ADVENTURE_IMAGES, advId + "/" + image.getFilename(), file)
+                        .withCannedAcl(CannedAccessControlList.BucketOwnerFullControl));
+            }
+
+
+            node.put("url", URLEncoder.encode(s3.generatePresignedUrl(S3_BUCKET_ADVENTURE_IMAGES,
+                    advId + "/" + image.getFilename(), DateTime.now().plusHours(1).toDate()).toString(), "UTF-8"));
+        } catch (Exception e) {
+            return badRequest();
+        }
+
+        return ok(node);
     }
 
     @Security.Authenticated(SecuredUser.class)

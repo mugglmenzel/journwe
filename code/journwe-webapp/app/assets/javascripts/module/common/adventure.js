@@ -176,7 +176,7 @@ define([
         gmaps.setCenterOffset(
             bgmap,
             new gmaps.LatLng(lat, lng),
-            (Math.round($('#background-map').width() / 2) - 100),
+            -1 * (Math.round($('#background-map').width() / 2) - 100),
             -1 * (Math.round($('#background-map').height() / 2) - 300)
         );
         bgMarker = new gmaps.Marker({animation: gmaps.Animation.DROP, map: bgmap, position: new gmaps.LatLng(lat, lng)});
@@ -293,7 +293,22 @@ define([
             }
         });
 
+        loadPhotos();
     }
+
+    var loadPhotos = function () {
+        routes.controllers.api.json.InspirationController.getImages(adv.id).ajax({success: function (images) {
+            if (images) {
+                for (var i in images) {
+                    var image = $.extend({active: i == 0 ? 'active' : ''}, images[i]);
+                    $('.adventure-photos').append(tmpl('adventure-photo-template', image));
+                    $('.carousel-indicators-adventure-photos').append(tmpl('adventure-photo-carousel-indicator-template', image));
+                    $('.carousel-inner-adventure-photos').append(tmpl('adventure-photo-carousel-item-template', image));
+                    $('#adventure-photos .polaroid').last().hide().fadeIn();
+                }
+            } else $('.adventure-photos').html('No Photos.');
+        }});
+    };
 
 
     //OPTIONS
