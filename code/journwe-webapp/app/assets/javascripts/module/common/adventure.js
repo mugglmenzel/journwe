@@ -489,7 +489,7 @@ define([
             data: {favoritePlaceId: placeID},
             success: function (data) {
                 favoritePlace = data;
-                $('.places-favorite-place-name').html(data.address) && bgmap.setCenter(new gmaps.LatLng(data.lat, data.lng));
+                $('.places-favorite-place-name').html(data.address) && setBgMapCenterOffset(data.lat, data.lng);
                 $('.icon-favorite-place').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
                 $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
