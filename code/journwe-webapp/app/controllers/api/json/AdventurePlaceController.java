@@ -72,8 +72,8 @@ public class AdventurePlaceController extends Controller {
         PlaceOption fav = (favId == null) ? autoFav : new PlaceOptionDAO().get(advId, favId);
 
         ObjectNode node = Json.newObject();
-        node.put("favorite", Json.toJson(fav));
-        node.put("autoFavorite", Json.toJson(autoFav));
+        node.put("favorite", placeToJSON(fav));
+        node.put("autoFavorite", placeToJSON(autoFav));
 
         return ok(node);
     }

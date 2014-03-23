@@ -26,6 +26,7 @@ define([
 
     //Temp Vars
     var map,
+        bgmap,
         markers = [],
         layers = {weather: [], photos: []};
     var socialUsers = {};
@@ -35,8 +36,134 @@ define([
 
     // Init bg & scrollspy
     var initBackground = function () {
+
+        var mapOptions = {
+            zoom: 13,
+            mapTypeId: gmaps.MapTypeId.ROADMAP,
+            center: new gmaps.LatLng(52.5075419, 13.4261419), //Berlin
+            styles: [
+                {
+                    "featureType": "all",
+                    "elementType": "labels",
+                    "stylers": [
+                        { "visibility": "off" }
+
+                    ]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "geometry",
+                    "stylers": [
+                        { "hue": "#94ccf9" },
+                        { "visibility": "on" },
+                        { "saturation": 0 },
+                        { "gamma": 5 }
+                    ]
+                },
+                {
+                    "stylers": [
+                        { "visibility": "simplified" }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "geometry",
+                    "stylers": [
+                        { "visibility": "simplified" },
+                        { "hue": "#94ccf9" },
+                        { "weight": 0.1 },
+                        { "gamma": 6 }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": [
+                        { "visibility": "simplified" },
+                        { "hue": "#94ccf9" },
+                        { "saturation": 50 },
+                        { "gamma": 2 }
+
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        { "color": "#cccccc" },
+                        { "visibility": "simplified" },
+                        { "lightness": 50 },
+                        { "gamma": 5 },
+                        { "weight": 1.5 }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        { "color": "#cccccc" },
+                        { "visibility": "simplified" },
+                        { "lightness": 50 },
+                        { "gamma": 2 },
+                        { "weight": 1.5 }
+                    ]
+                },
+                {
+                    "featureType": "road.local",
+                    "stylers": [
+                        { "visibility": "off" }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "labels",
+                    "stylers": [
+                        { "visibility": "off" }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels",
+                    "stylers": [
+                        { "visibility": "off" }
+                    ]
+                },
+                {
+                    "featureType": "poi.attraction",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        { "visibility": "on" }
+                    ]
+                },
+                {
+                    "featureType": "transit.station",
+                    "elementType": "labels",
+                    "stylers": [
+                        { "visibility": "on" }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry",
+                    "stylers": [
+                        { "color": "#ffffff" },
+                        { "visibility": "simplified" },
+                        { "lightness": 50},
+                        { "weight": 2 },
+                        { "gamma": 2 }
+                    ]
+                }
+            ],
+            disableDefaultUI: true,
+            draggable: false,
+            scrollwheel: false,
+            panControl: false
+        };
+
+        bgmap = new gmaps.Map(document.getElementById('background-map'), mapOptions);
+
         if (adv.image != null && adv.image != '') {
-            $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '&timestamp=' + adv.imageTimestamp + '")').addClass('blur');
+            //$('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '&timestamp=' + adv.imageTimestamp + '")').addClass('blur');
             $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + adv.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + adv.imageTimestamp + '")');
         }
     };
@@ -48,7 +175,6 @@ define([
         //     $($(evt.target).find('a').attr('href')).parent('.row').addClass('active');
         // });
     };
-
 
 
     //NAVIGATION
@@ -333,8 +459,8 @@ define([
 
         routes.controllers.api.json.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
             favoritePlace = result.favorite;
-            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address);
-            if (result.autoFavorite != null)$('.places-autofavorite-place-name').html(result.autoFavorite.address);
+            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address) && bgmap.setCenter(new gmaps.LatLng(result.favorite.lat, result.favorite.lng));
+            if (result.autoFavorite != null) $('.places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
             utils.resetSpinning($('.icon-favorite-place'));
         }});
@@ -349,7 +475,7 @@ define([
             data: {favoritePlaceId: placeID},
             success: function (data) {
                 favoritePlace = data;
-                $('.places-favorite-place-name').html(data.address);
+                $('.places-favorite-place-name').html(data.address) && bgmap.setCenter(new gmaps.LatLng(data.lat, data.lng));
                 $('.icon-favorite-place').removeClass("fa-spin icon-journwe").addClass("fa-star");
 
                 $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
