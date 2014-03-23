@@ -44,7 +44,7 @@ define(['common/async!https://maps.googleapis.com/maps/api/js?libraries=places,w
                     point1.x - point2.x,
                     point1.y - point2.y
                 )));
-
+                window.google.maps.event.trigger(map, 'resize');
             }
 
         });

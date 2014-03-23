@@ -91,9 +91,9 @@ public class AdventurePlaceController extends Controller {
 
         if (favId != null && !"".equals(favId)) {
             new AdventurerNotifier().notifyAdventurers(advId, "Favorite Place is now " + new PlaceOptionDAO().get(advId, adv.getFavoritePlaceId()).getAddress() + ".", "Favorite Place");
-            return ok(Json.toJson(new PlaceOptionDAO().get(advId, favId)));
+            return ok(placeToSmallJSON(new PlaceOptionDAO().get(advId, favId)));
         } else {
-            return ok(Json.toJson(autoFavorite(advId)));
+            return ok(placeToSmallJSON(autoFavorite(advId)));
         }
     }
 
@@ -129,9 +129,7 @@ public class AdventurePlaceController extends Controller {
             }
         }
 
-        ObjectNode node = placeToJSON(place);
-
-        return created(Json.toJson(node));
+        return created(placeToJSON(place));
     }
 
     @Security.Authenticated(SecuredUser.class)
