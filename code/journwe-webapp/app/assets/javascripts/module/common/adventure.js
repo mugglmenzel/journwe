@@ -39,7 +39,6 @@ define([
     var initBackground = function () {
         if (adv.image != null && adv.image != '') {
             $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '&timestamp=' + adv.imageTimestamp + '")').addClass('blur');
-            $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + adv.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + adv.imageTimestamp + '")');
         } else utils.loadGenericBgImage();
     };
 
@@ -170,7 +169,7 @@ define([
 
 
         bgmap = new gmaps.Map(document.getElementById('background-map'), mapOptions);
-
+        setBgMapCenterOffset(lat, lng);
     };
 
     var setBgMapCenterOffset = function (lat, lng) {
@@ -247,6 +246,11 @@ define([
 
 
     //TOOLBAR
+    var initPrimeImage = function () {
+        if (adv.image != null && adv.image != '') {
+            $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + adv.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + adv.imageTimestamp + '")');
+        }
+    }
 
     var processDroppedPrimeImage = function (event) {
         event.stopPropagation();
@@ -271,7 +275,6 @@ define([
             processData: false,
             success: function (result) {
                 $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + result.imageTimestamp + '")');
-                $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + result.image + '&timestamp=' + result.imageTimestamp + '")');
                 utils.resetReplaceSpinning(btn);
             }
         });
@@ -434,6 +437,8 @@ define([
     //PLACES
 
     var initializePlaces = function () {
+        initializeMap();
+
         routes.controllers.api.json.AdventurePlaceController.getPlaces(adv.id).ajax({success: function (result) {
             $('#places-list tbody').empty();
             for (var id in result)
@@ -536,8 +541,10 @@ define([
 
         routes.controllers.api.json.AdventurePlaceController.getFavoritePlace(adv.id).ajax({success: function (result) {
             favoritePlace = result.favorite;
-            if (result.favorite != null) $('.places-favorite-place-name').html(result.favorite.address) && loadBgMap(result.favorite.lat, result.favorite.lng);
-            else initBackground();
+            if (result.favorite != null) {
+                $('.places-favorite-place-name').html(result.favorite.address);
+                loadBgMap(result.favorite.lat, result.favorite.lng);
+            } else initBackground();
             if (result.autoFavorite != null) $('.places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
             utils.resetSpinning($('.icon-favorite-place'));
@@ -546,17 +553,17 @@ define([
 
     var setFavoritePlace = function (placeID, el) {
 
-        el.find('i').attr("class", "fa fa-spin icon-journwe");
-        $('.icon-favorite-place').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        utils.setSpinning(el.find('i'));
+        utils.setSpinning($('.icon-favorite-place'));
 
         routes.controllers.api.json.AdventurePlaceController.setFavoritePlace(adv.id).ajax({
             data: {favoritePlaceId: placeID},
             success: function (data) {
                 favoritePlace = data;
                 $('.places-favorite-place-name').html(data.address) && setBgMapCenterOffset(data.lat, data.lng);
-                $('.icon-favorite-place').removeClass("fa-spin icon-journwe").addClass("fa-star");
+                utils.resetSpinning($('.icon-favorite-place'));
 
-                $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
+                utils.resetSpinning($(el).find('i'));
                 el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
                 $(el).addClass('btn-success');
 
@@ -826,16 +833,16 @@ define([
 
 
     var setFavoriteTime = function (timeID, el) {
-        $('.icon-favorite-time').removeClass("fa-star").addClass("fa-spin icon-journwe");
-        $(el).find('i').removeClass("fa-star").addClass("fa-spin icon-journwe");
+        utils.setSpinning($('.icon-favorite-time'));
+        utils.setSpinning($(el).find('i'));
         routes.controllers.api.json.AdventureTimeController.setFavoriteTime(adv.id).ajax({data: {favoriteTimeId: timeID}, success: function (data) {
             favoriteTime = data;
             $('.times-favorite-time-name').html(utils.formatDate(data.startDate) + " - " + utils.formatDate(data.endDate));
-            $('.icon-favorite-time').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            utils.resetSpinning($('.icon-favorite-time'));
 
             el.closest('table').find('td:first-child .btn-success').removeClass('btn-success');
             $(el).addClass('btn-success');
-            $(el).find('i').removeClass("fa-spin icon-journwe").addClass("fa-star");
+            utils.resetSpinning($(el).find('i'));
 
             $('.btn-close-time').show();
         }});
@@ -1667,9 +1674,9 @@ define([
 
     return {
         initBackground: initBackground,
+        initPrimeImage: initPrimeImage,
         initScrollspy: initScrollspy,
         initNavigation: initNavigation,
-        initializeMap: initializeMap,
         initializeEmails: initializeEmails,
         initializeIndex: initializeIndex,
         initializeOptions: initializeOptions,

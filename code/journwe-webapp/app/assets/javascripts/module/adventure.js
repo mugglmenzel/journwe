@@ -7,8 +7,8 @@ require([
 
     //INITIALIZE
     adventure.initScrollspy();
+    adventure.initPrimeImage();
     adventure.initNavigation();
-    adventure.initializeMap();
 
 
     adventure.initializeIndex();
@@ -16,11 +16,11 @@ require([
 
     adventure.initializePlaces();
     adventure.initializeTime();
-    adventure.initializeTimeline();
-
     adventure.initializeTodos();
 
+    adventure.initializeTimeline();
     adventure.initializeEmails();
     adventure.initializeFiles();
+
     adventure.initializeOptions();
 });

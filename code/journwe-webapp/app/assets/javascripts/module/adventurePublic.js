@@ -6,6 +6,7 @@ require([
 
 
     adventure.initBackground();
+    adventure.initPrimeImage();
     adventure.loadAllAdventurers();
 
 
