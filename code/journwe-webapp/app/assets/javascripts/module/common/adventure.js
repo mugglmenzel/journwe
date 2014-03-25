@@ -21,6 +21,8 @@ define([
         voteTimeLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
 
     //State Vars
+    var visibleSections = (typeof advr.visibleSections === 'undefined' || advr.visibleSections == null ? 'adventurers,places,times' : advr.visibleSections).split(',');
+    var availableSections = $('.jrn-adventure-section').map(function () {return $(this).attr('id');}).get();
     var favoritePlace, favoriteTime;
 
 
@@ -202,6 +204,12 @@ define([
         });
 
         $('.nav-adventure-list a').tooltip();
+
+        $.each(availableSections, function (i, val) {
+            var sec = $('.jrn-adventure-section[id=' + val +']');
+            if($.inArray(val, visibleSections) > -1) showNavSection(sec);
+            else hideNavSection(sec);
+        });
     }
 
     var showNavSection = function (sec) {
@@ -303,7 +311,7 @@ define([
 
     var loadPhotos = function (clear) {
         utils.resetStash('.loader-photos');
-        routes.controllers.api.json.AdventureController.getPhotos(adv.id).ajax({success: function (images) {
+        routes.controllers.api.json.AdventurePhotoController.getPhotos(adv.id).ajax({success: function (images) {
             if (images) {
                 if (clear) $('.adventure-photos').empty();
                 for (var i in images) {
@@ -337,7 +345,7 @@ define([
         var data = new FormData();
         data.append(files[0].name, files[0])
 
-        routes.controllers.api.json.AdventureController.addPhoto(adv.id).ajax({
+        routes.controllers.api.json.AdventurePhotoController.addPhoto(adv.id).ajax({
             data: data,
             cache: false,
             contentType: false,
@@ -352,7 +360,7 @@ define([
 
     var deletePhoto = function (id) {
         utils.resetStash('.loader-photos');
-        routes.controllers.api.json.AdventureController.deletePhoto(adv.id, id).ajax({success: function () {
+        routes.controllers.api.json.AdventurePhotoController.deletePhoto(adv.id, id).ajax({success: function () {
             loadPhotos(true);
             utils.setStash('.loader-photos');
         }});
@@ -484,13 +492,8 @@ define([
     }
 
     var resetMapBounds = function () {
+        if(typeof map === 'undefined') initializeMap();
         gmaps.resetBounds(map, markers);
-        var bounds = new gmaps.LatLngBounds();
-        for (var i in markers) {
-            bounds.extend(markers[i].getPosition());
-        }
-        map.fitBounds(bounds);
-        gmaps.event.trigger(map, 'resize');
     };
 
     var removeMapMarker = function (id) {

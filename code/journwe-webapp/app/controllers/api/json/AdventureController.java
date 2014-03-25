@@ -27,6 +27,7 @@ import models.dao.manytomany.AdventureToCategoryDAO;
 import models.notifications.helper.AdventurerNotifier;
 import org.joda.time.DateTime;
 import play.Logger;
+import play.cache.Cache;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -40,6 +41,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
 
@@ -84,64 +86,6 @@ public class AdventureController extends Controller {
         return ok(Json.toJson(node));
     }
 
-    @Security.Authenticated(SecuredUser.class)
-    public static Result getPhotos(String advId) {
-        List<ObjectNode> images = new ArrayList<ObjectNode>();
-        int i = 0;
-        for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_ADVENTURE_IMAGES).withPrefix(advId + "/")).getObjectSummaries()) {
-            try {
-                s3.setObjectAcl(os.getBucketName(), os.getKey(), CannedAccessControlList.BucketOwnerFullControl);
-                String id =os.getKey().substring(os.getKey().lastIndexOf("/")+1, os.getKey().length());
-
-                ObjectNode node = Json.newObject();
-                node.put("index", i);
-                node.put("id", id);
-                node.put("url", URLEncoder.encode(s3.generatePresignedUrl(S3_BUCKET_ADVENTURE_IMAGES,
-                        os.getKey(), DateTime.now().plusHours(1).toDate()).toString(), "UTF-8"));
-                if(id != null && !"".equals(id)) images.add(node);
-
-                i++;
-            } catch (UnsupportedEncodingException e) {
-                Logger.error("Error while producing public URL of adventure photo from S3.", e);
-            }
-        }
-
-        return ok(Json.toJson(images));
-    }
-
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result addPhoto(String advId) {
-        try {
-            Http.MultipartFormData body = request().body().asMultipartFormData();
-            Http.MultipartFormData.FilePart image = body.getFiles().get(0);
-            File file = image.getFile();
-
-            if (image.getFilename() != null
-                    && !"".equals(image.getFilename()) && file.length() > 0) {
-                s3.putObject(new PutObjectRequest(
-                        S3_BUCKET_ADVENTURE_IMAGES, advId + "/" + image.getFilename(), file)
-                        .withCannedAcl(CannedAccessControlList.BucketOwnerFullControl));
-            }
-
-        } catch (Exception e) {
-            return badRequest();
-        }
-
-        return ok();
-    }
-
-
-    @Security.Authenticated(SecuredUser.class)
-    public static Result deletePhoto(String advId, String photoId) {
-        try {
-            s3.deleteObject(S3_BUCKET_ADVENTURE_IMAGES, advId + "/" + photoId);
-        } catch (Exception e) {
-            return badRequest();
-        }
-
-        return ok();
-    }
 
     @Security.Authenticated(SecuredUser.class)
     public static Result updateCategory(String advId) {
@@ -279,6 +223,5 @@ public class AdventureController extends Controller {
         Logger.info(node.toString());
         return ok(Json.toJson(node));
     }
-
 
 }

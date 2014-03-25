@@ -9,7 +9,6 @@ import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.TimeOptionDAO;
-import models.dao.user.UserDAO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.Routes;
@@ -199,9 +198,9 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.UserController.setMailDigestFrequency(),
                         controllers.api.json.routes.javascript.UserController.getAdventures(),
                         controllers.api.json.routes.javascript.AdventureController.updateImage(),
-                        controllers.api.json.routes.javascript.AdventureController.getPhotos(),
-                        controllers.api.json.routes.javascript.AdventureController.addPhoto(),
-                        controllers.api.json.routes.javascript.AdventureController.deletePhoto(),
+                        controllers.api.json.routes.javascript.AdventurePhotoController.getPhotos(),
+                        controllers.api.json.routes.javascript.AdventurePhotoController.addPhoto(),
+                        controllers.api.json.routes.javascript.AdventurePhotoController.deletePhoto(),
                         controllers.api.json.routes.javascript.AdventureController.updatePlaceVoteDeadline(),
                         controllers.api.json.routes.javascript.AdventureController.updateTimeVoteDeadline(),
                         controllers.api.json.routes.javascript.AdventureController.updatePlaceVoteOpen(),

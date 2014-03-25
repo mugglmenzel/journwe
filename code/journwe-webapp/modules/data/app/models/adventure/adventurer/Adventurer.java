@@ -26,7 +26,7 @@ public class Adventurer implements IAdventureComponentWithUser {
 
     private EAdventurerRole role;
 
-    private String visibleSectionsJSON;
+    private String visibleSections;
 
     private String emergencyContact;
 
@@ -83,12 +83,12 @@ public class Adventurer implements IAdventureComponentWithUser {
     }
 
     @DynamoDBAttribute
-    public String getVisibleSectionsJSON() {
-        return visibleSectionsJSON;
+    public String getVisibleSections() {
+        return visibleSections;
     }
 
-    public void setVisibleSectionsJSON(String visibleSectionsJSON) {
-        this.visibleSectionsJSON = visibleSectionsJSON;
+    public void setVisibleSections(String visibleSections) {
+        this.visibleSections = visibleSections;
     }
 
     @DynamoDBAttribute
