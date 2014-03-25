@@ -197,6 +197,7 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.UserController.getNotifications(),
                         controllers.api.json.routes.javascript.UserController.setMailDigestFrequency(),
                         controllers.api.json.routes.javascript.UserController.getAdventures(),
+                        controllers.api.json.routes.javascript.AdventureController.updateVisibleSections(),
                         controllers.api.json.routes.javascript.AdventureController.updateImage(),
                         controllers.api.json.routes.javascript.AdventurePhotoController.getPhotos(),
                         controllers.api.json.routes.javascript.AdventurePhotoController.addPhoto(),

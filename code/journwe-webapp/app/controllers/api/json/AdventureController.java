@@ -3,14 +3,15 @@ package controllers.api.json;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.feth.play.module.pa.PlayAuthenticate;
 import com.typesafe.config.ConfigFactory;
+import models.UserManager;
 import models.adventure.Adventure;
 import models.adventure.AdventureReminder;
 import models.adventure.EAdventureReminderType;
+import models.adventure.adventurer.Adventurer;
 import models.adventure.log.AdventureLogger;
 import models.adventure.log.EAdventureLogSection;
 import models.adventure.log.EAdventureLogTopic;
@@ -22,12 +23,12 @@ import models.category.Category;
 import models.dao.AdventureReminderDAO;
 import models.dao.AdventureShortnameDAO;
 import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.manytomany.AdventureToCategoryDAO;
 import models.notifications.helper.AdventurerNotifier;
-import org.joda.time.DateTime;
+import models.user.User;
 import play.Logger;
-import play.cache.Cache;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -36,12 +37,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
 
@@ -53,6 +49,28 @@ public class AdventureController extends Controller {
             ConfigFactory.load().getString("aws.accessKey"),
             ConfigFactory.load().getString("aws.secretKey")));
 
+
+    public static Result updateVisibleSections(String advId) {
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        if (usr == null)
+            return badRequest();
+
+        DynamicForm data = form().bindFromRequest();
+        String visibleSections = data.get("visibleSections");
+
+        try {
+            Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+            if (visibleSections != null && !"".equals(visibleSections)) {
+                advr.setVisibleSections(visibleSections);
+                new AdventurerDAO().save(advr);
+            }
+            visibleSections = advr.getVisibleSections();
+        } catch (Exception e) {
+            return badRequest();
+        }
+
+        return ok(visibleSections);
+    }
 
     @Security.Authenticated(SecuredUser.class)
     public static Result updateImage(String advId) {

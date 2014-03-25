@@ -22,7 +22,9 @@ define([
 
     //State Vars
     var visibleSections = (typeof advr.visibleSections === 'undefined' || advr.visibleSections == null ? 'adventurers,places,times' : advr.visibleSections).split(',');
-    var availableSections = $('.jrn-adventure-section').map(function () {return $(this).attr('id');}).get();
+    var availableSections = $('.jrn-adventure-section').map(function () {
+        return $(this).attr('id');
+    }).get();
     var favoritePlace, favoriteTime;
 
 
@@ -180,8 +182,8 @@ define([
         gmaps.setCenterOffset(
             bgmap,
             new gmaps.LatLng(lat, lng),
-            -1 * (Math.round($('#background-map').width() / 2) - 100),
-            -1 * (Math.round($('#background-map').height() / 2) - 300)
+                -1 * (Math.round($('#background-map').width() / 2) - 100),
+                -1 * (Math.round($('#background-map').height() / 2) - 300)
         );
         bgMarker = new gmaps.Marker({animation: gmaps.Animation.DROP, map: bgmap, position: new gmaps.LatLng(lat, lng)});
     }
@@ -206,8 +208,8 @@ define([
         $('.nav-adventure-list a').tooltip();
 
         $.each(availableSections, function (i, val) {
-            var sec = $('.jrn-adventure-section[id=' + val +']');
-            if($.inArray(val, visibleSections) > -1) showNavSection(sec);
+            var sec = $('.jrn-adventure-section[id=' + val + ']');
+            if ($.inArray(val, visibleSections) > -1) showNavSection(sec);
             else hideNavSection(sec);
         });
     }
@@ -220,12 +222,15 @@ define([
             li = $('.nav-adventure-list li a[href="#' + secName + '"]').closest('li');
 
         collapsables.slideDown('100', function () {
-            icon.removeClass().addClass('fa fa-chevron-up');
+            icon.removeClass().addClass('fa fa-caret-up');
             //GMap bugfix
             if ('places' == secName) resetMapBounds();
         });
         container.removeClass('jrn-collapsed');
         li.addClass('active');
+
+        if (visibleSections.indexOf(secName) < 0) visibleSections.push(secName);
+        updateVisibleSections();
     };
 
     var hideNavSection = function (sec) {
@@ -237,9 +242,13 @@ define([
 
         collapsables.slideUp('100', function () {
             container.addClass('jrn-collapsed');
-            icon.removeClass().addClass('fa fa-chevron-down');
+            icon.removeClass().addClass('fa fa-caret-down');
         });
         li.removeClass('active');
+
+        var i = visibleSections.indexOf(secName);
+        if (i > -1) delete visibleSections[i];
+        updateVisibleSections();
     };
 
     var toggleNavSection = function (sec) {
@@ -250,6 +259,13 @@ define([
         } else {
             showNavSection(sec);
         }
+    };
+
+
+    var updateVisibleSections = function () {
+        routes.controllers.api.json.AdventureController.updateVisibleSections(adv.id).ajax({data: {visibleSections: visibleSections.join(",")}, success: function (result) {
+            visibleSections = result.split(',');
+        }});
     };
 
 
@@ -492,7 +508,7 @@ define([
     }
 
     var resetMapBounds = function () {
-        if(typeof map === 'undefined') initializeMap();
+        if (typeof map === 'undefined') initializeMap();
         gmaps.resetBounds(map, markers);
     };
 

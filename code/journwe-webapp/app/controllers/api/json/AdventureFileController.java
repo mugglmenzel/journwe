@@ -58,7 +58,8 @@ public class AdventureFileController extends Controller {
                 return AuthorizationMessage.notAuthorizedResponse();
             User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             if (usr == null)
-                throw new Exception("File upload failed because user is null.");
+                return badRequest();
+
             Form<JournweFile> filledFileForm = fileForm.bindFromRequest();
             if (fileForm.hasErrors()) {
                 flash("error", "Sorry. Could not complete request because the form contains errors.");
