@@ -53,7 +53,7 @@ public class AdventurePhotoController extends Controller {
                             node.put("index", i);
                             node.put("id", id);
                             node.put("url", URLEncoder.encode(s3.generatePresignedUrl(S3_BUCKET_ADVENTURE_IMAGES,
-                                    os.getKey(), DateTime.now().plusHours(1).toDate()).toString(), "UTF-8"));
+                                    os.getKey(), DateTime.now().plusHours(24).toDate()).toString(), "UTF-8"));
                             if (id != null && !"".equals(id)) images.add(node);
 
                             i++;

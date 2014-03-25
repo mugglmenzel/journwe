@@ -21,10 +21,7 @@ define([
         voteTimeLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
 
     //State Vars
-    var visibleSections = (typeof advr.visibleSections === 'undefined' || advr.visibleSections == null ? 'adventurers,places,times' : advr.visibleSections).split(',');
-    var availableSections = $('.jrn-adventure-section').map(function () {
-        return $(this).attr('id');
-    }).get();
+    var visibleSections = typeof advr.visibleSections === 'undefined' || advr.visibleSections == null ? ['adventurers','places','times'] : JSON.parse(advr.visibleSections);
     var favoritePlace, favoriteTime;
 
 
@@ -207,10 +204,9 @@ define([
 
         $('.nav-adventure-list a').tooltip();
 
-        $.each(availableSections, function (i, val) {
+        $.each(visibleSections, function (i, val) {
             var sec = $('.jrn-adventure-section[id=' + val + ']');
-            if ($.inArray(val, visibleSections) > -1) showNavSection(sec);
-            else hideNavSection(sec);
+            if (sec.length) showNavSection(sec);
         });
     }
 
@@ -229,8 +225,10 @@ define([
         container.removeClass('jrn-collapsed');
         li.addClass('active');
 
-        if (visibleSections.indexOf(secName) < 0) visibleSections.push(secName);
-        updateVisibleSections();
+        if (visibleSections.indexOf(secName) < 0) {
+            visibleSections.push(secName);
+            updateVisibleSections();
+        }
     };
 
     var hideNavSection = function (sec) {
@@ -247,8 +245,10 @@ define([
         li.removeClass('active');
 
         var i = visibleSections.indexOf(secName);
-        if (i > -1) delete visibleSections[i];
-        updateVisibleSections();
+        if (i > -1) {
+            visibleSections.splice(i, 1);
+            updateVisibleSections();
+        }
     };
 
     var toggleNavSection = function (sec) {
@@ -263,8 +263,8 @@ define([
 
 
     var updateVisibleSections = function () {
-        routes.controllers.api.json.AdventureController.updateVisibleSections(adv.id).ajax({data: {visibleSections: visibleSections.join(",")}, success: function (result) {
-            visibleSections = result.split(',');
+        routes.controllers.api.json.AdventureController.updateVisibleSections(adv.id).ajax({data: {visibleSections: JSON.stringify(visibleSections)}, success: function (result) {
+            visibleSections = JSON.parse(result);
         }});
     };
 
@@ -308,20 +308,6 @@ define([
 
     //INDEX
     var initializeIndex = function () {
-        $.fn.editable.defaults.mode = 'inline';
-        $.fn.editableform.loading = '<div class="x-edit-loading"><i class="icon-journwe fa fa-spin"></i></div>';
-        $('#adventureName').editable();
-        $('#adventureDescription').editable();
-
-        // After saving via x-editable, replace those links as well
-        $.extend($.fn.editabletypes.textarea.prototype, {
-            v2h: $.fn.editabletypes.textarea.prototype.value2html,
-            value2html: function (foo, element) {
-                this.v2h.apply(this, arguments);
-                $(element).html(utils.replaceURLWithHTMLLinks($(element).html()));
-            }
-        });
-
         loadPhotos(true);
     }
 

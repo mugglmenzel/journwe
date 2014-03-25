@@ -1,13 +1,5 @@
 @(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit active: String = "home")
 
-@import play.api.Play.current
-@import play.mvc.Http
-@import models.dao._
-@import models.user._
-@import play.mvc.Controller._
-@import com.feth.play.module.pa.views.html._
-@import com.feth.play.module.pa.providers.AuthProvider.Registry
-
 <!DOCTYPE html>
 
 <html lang="en">
@@ -24,12 +16,9 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.1.3/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/2.0.0/css/bootstrap-switch.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Lato:300,400'>
     <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400'>
-    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,400'>
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300'>
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Lato:300,400'>
     <link rel="stylesheet" href="@routes.Assets.at("css/typeahead.js-bootstrap.css")">
     <link rel="stylesheet" href="@routes.Assets.at("css/journwe.min.css")">
 	<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/favicon.png")">
@@ -97,7 +86,7 @@
 	    </div>
 
         <!-- FLASH MODALS -->
-        @if(flash(GlobalParameters.FLASH_ERROR_KEY)) {
+        @if(flash.get(GlobalParameters.FLASH_ERROR_KEY)) {
             <div class="modal fade in modal-auto-load" data-show="true" tabindex="-1" role="dialog" aria-labelledby="modal-error" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -106,7 +95,7 @@
                             <h2 class="modal-title"><i class="fa fa-exclamation-triangle"></i> Error!</h2>
                         </div>
                         <div class="modal-body">
-                            <p class="lead text-danger">@flash("error")</p>
+                            <p class="lead text-danger">@flash.get(GlobalParameters.FLASH_ERROR_KEY)</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -115,7 +104,7 @@
                 </div>
             </div>
         }
-        @if(flash("success")) {
+        @if(flash.get("success")) {
             <div class="modal fade in modal-auto-load" data-show="true" tabindex="-1" role="dialog" aria-labelledby="modal-success" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -124,7 +113,7 @@
                             <h2 class="modal-title"><i class="fa fa-check-circle"></i> Success!</h2>
                         </div>
                         <div class="modal-body">
-                            <p class="lead text-success">@flash("success")</p>
+                            <p class="lead text-success">@flash.get("success")</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -133,7 +122,7 @@
                 </div>
             </div>
         }
-        @if(flash("info")) {
+        @if(flash.get("info")) {
             <div class="modal fade in modal-auto-load" data-show="true" tabindex="-1" role="dialog" aria-labelledby="modal-info" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -142,7 +131,7 @@
                             <h2 class="modal-title"><i class="fa fa-info-circle"></i> Info</h2>
                         </div>
                         <div class="modal-body">
-                            <p class="lead text-info">@flash("info")</p>
+                            <p class="lead text-info">@flash.get("info")</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

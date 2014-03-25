@@ -56,11 +56,12 @@ public class AdventureController extends Controller {
             return badRequest();
 
         DynamicForm data = form().bindFromRequest();
+        Logger.debug("visibleSections: " + (data.get("visibleSections") == null));
         String visibleSections = data.get("visibleSections");
 
         try {
             Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
-            if (visibleSections != null && !"".equals(visibleSections)) {
+            if (visibleSections != null) {
                 advr.setVisibleSections(visibleSections);
                 new AdventurerDAO().save(advr);
             }
@@ -69,7 +70,7 @@ public class AdventureController extends Controller {
             return badRequest();
         }
 
-        return ok(visibleSections);
+        return ok(Json.toJson(visibleSections));
     }
 
     @Security.Authenticated(SecuredUser.class)

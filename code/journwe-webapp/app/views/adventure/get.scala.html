@@ -16,36 +16,36 @@
                     <div class="row">
                     <!--<h4 class="text-right" style="font-size: 14px; line-height: 1; color: #aaaaaa;">GOTO</h4> -->
                         <div class="col-xs-6 title-name">
-                            <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-                            data-url="@html.routes.AdventureController.saveEditable()"
-                            data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil muted"></i> <span></span>
+                            <a href="#" class="editable" data-type="text" data-name="adventureName" data-pk="@adv.getId()"
+                                data-url="@html.routes.AdventureController.saveEditable()"
+                                data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil muted"></i> <span></span>
                             @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
                         </div>
                         <div class="col-xs-6">
                             <ul id="nav-adventure-list" class="nav nav-pills pull-right nav-adventure-list">
                                 @if(auth.canViewAdventureAdventurersWidget()) {
-                                    <li class="adventurers active">
+                                    <li class="adventurers">
                                         <a href="#adventurers" data-toggle="tooltip" data-placement="bottom" title="Adventurers"><i class="fa fa-group" title="Adventurers"></i></a>
                                     </li>
                                 }
                                 @if(auth.canViewAdventurePlacesWidget()) {
-                                    <li class="places active">
+                                    <li class="places">
                                         <a href="#places" data-toggle="tooltip" data-placement="bottom" title="Places"><i class="fa fa-globe" title="Place"></i></a>
                                     </li>
                                 }
                                 @if(auth.canViewAdventureTimeWidget()) {
-                                    <li class="times active">
+                                    <li class="times">
                                         <a href="#times" data-toggle="tooltip" data-placement="bottom" title="Times"><i class="fa fa-calendar" title="Date &amp; Time"></i></a>
                                     </li>
                                 }
                                 @if(auth.canViewAdventureDiscussionWidget()) {
-                                    <li class="discussion emails active">
+                                    <li class="discussion emails">
                                         <a href="#discussion" data-toggle="tooltip" data-placement="bottom" title="Discussion"><i class="fa fa-comments-o" title="Discussion"></i></a>
                                             <!--a href="#emails" data-toggle="tooltip" title="Emails"><i class="fa fa-envelope" title="Emails"></i></a-->
                                     </li>
                                 }
                                 @if(auth.canViewAdventureTodoWidget()) {
-                                    <li class="todos files active">
+                                    <li class="todos files">
                                         <a href="#todos" data-toggle="tooltip" data-placement="bottom" title="Todos"><i class="fa fa-list-ol" title="Todos"></i></a>
                                             <!--a href="#files" data-toggle="tooltip" title="Files"><i class="fa fa-file" title="Files"></i></a-->
                                     </li>
@@ -86,10 +86,14 @@
 
                 @if(auth.canViewAdventureAdventurersWidget()) {
                 <div class="jrn-adventure-section" id="adventurers">
-                     <div class="jrn-container jrn-no-bottom-round">
+                     <div class="jrn-container jrn-no-bottom-round jrn-collapsed">
 
-                        <h2><i class="fa fa-group icon-for-adventure-title"></i> @Messages("adventure.getScala.adventurers.title")<div class="pull-right clearfix"><button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-up"></i></button></div></h2>
-                        <div class="row collapsable">
+                        <h2><i class="fa fa-group icon-for-adventure-title"></i> @Messages("adventure.getScala.adventurers.title")
+                            <div class="pull-right clearfix">
+                                <button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-down"></i></button>
+                            </div>
+                        </h2>
+                        <div class="row collapsable stash">
                             <div class="col-lg-12">
                                 <p class="lead">@Messages("adventure.getScala.adventurers.subtitle")</p>
                                 @adventurers(adv, advr)
@@ -97,7 +101,9 @@
                         </div>
                     </div>
                     @if(auth.canViewAdventurerComments()) {
+                        <div class="collapsable stash">
                         @comment.widget_comment(adv.getId + "_adventurers", user)
+                        </div>
                     }
                     <hr/>
                 </div>
@@ -105,9 +111,13 @@
 
                 @if(auth.canViewAdventurePlacesWidget()) {
                 <div class="jrn-adventure-section" id="places">
-                    <div class="jrn-container jrn-no-bottom-round">
-                        <h2><i class="fa fa-globe icon-for-adventure-title"></i> @Messages("adventure.getScala.place.title")<div class="pull-right clearfix"><button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-up"></i></button></div></h2>
-                        <div class="row collapsable">
+                    <div class="jrn-container jrn-no-bottom-round jrn-collapsed">
+                        <h2><i class="fa fa-globe icon-for-adventure-title"></i> @Messages("adventure.getScala.place.title")
+                            <div class="pull-right clearfix">
+                                <button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-down"></i></button>
+                            </div>
+                        </h2>
+                        <div class="row collapsable stash">
                             <div class="col-lg-12">
                                 <p class="lead">@Messages("adventure.getScala.place.subtitle")</p>
 
@@ -117,7 +127,9 @@
                         </div>
                     </div>
                     @if(auth.canViewPlaceComments()) {
+                        <div class="collapsable stash">
                         @comment.widget_comment(adv.getId + "_places", user)
+                        </div>
                     }
                     <hr/>
                 </div>
@@ -125,9 +137,13 @@
 
                 @if(auth.canViewAdventureTimeWidget()) {
                 <div class="jrn-adventure-section" id="times">
-                    <div class="jrn-container jrn-no-bottom-round">
-                        <h2><i class="fa fa-calendar icon-for-adventure-title"></i> @Messages("adventure.getScala.time.title")<div class="pull-right clearfix"><button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-up"></i></button></div></h2>
-                        <div class="row collapsable">
+                    <div class="jrn-container jrn-no-bottom-round jrn-collapsed">
+                        <h2><i class="fa fa-calendar icon-for-adventure-title"></i> @Messages("adventure.getScala.time.title")
+                            <div class="pull-right clearfix">
+                                <button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-down"></i></button>
+                            </div>
+                        </h2>
+                        <div class="row collapsable stash">
                             <div class="col-lg-12">
                                 <p class="lead">@Messages("adventure.getScala.time.subtitle")</p>
 
@@ -137,7 +153,9 @@
                         </div>
                     </div>
                     @if(auth.canViewDateAndTimeComments()) {
+                        <div class="collapsable stash">
                         @comment.widget_comment(adv.getId + "_times", user)
+                        </div>
                     }
                </div>
                 }
@@ -176,16 +194,16 @@
                 *@
 
                 <div class="jrn-adventure-section" id="discussion">
-                    <div class="jrn-container">
+                    <div class="jrn-container jrn-collapsed">
                         <h2><i class="fa fa-comments-o icon-for-adventure-title"></i>
                             Discussion
 
                             <div class="pull-right clearfix">
                                 <div class="btn-toolbar pull-right">
                                     <button class="btn btn-success btn-timeline-refresh btn-emails-refresh btn-files-refresh"><i class="fa fa-refresh"></i></button>
-                                    <button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-down"></i></button>
                                 </div>
-                                <ul class="nav nav-pills nav-discussion collapsable pull-right">
+                                <ul class="nav nav-pills nav-discussion collapsable stash pull-right">
                                     <li class="active"><a class="btn btn-default btn-timeline-filter-all" href="#discussion-timeline" data-toggle="tab"><i class="fa fa-comments-o fa-fw"></i></a></li>
                                     <li><a class="btn btn-default" href="#discussion-emails" data-toggle="tab"><i class="fa fa-envelope-o fa-fw"></i></a></li>
                                     <li><a class="btn btn-default" href="#discussion-files" data-toggle="tab"><i class="fa fa-file-o"></i></a></li>
@@ -194,7 +212,7 @@
                                 </ul>
                             </div>
                         </h2>
-                        <div class="row collapsable">
+                        <div class="row collapsable stash">
                             <div class="col-lg-12">
                                 @timeline(adv, user)
                             </div>
@@ -205,9 +223,14 @@
 
                 @if(auth.canViewAdventureTodoWidget()) {
                 <div class="jrn-adventure-section" id="todos">
-                    <div class="jrn-container jrn-no-bottom-round">
-                        <h2><i class="fa fa-list-ol fa fa-for-adventure-title"></i> @Messages("adventure.getScala.todo.title")<div class="btn-toolbar pull-right"><button id="todos-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button><button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-up"></i></button></div></h2>
-                        <div class="row collapsable">
+                    <div class="jrn-container jrn-no-bottom-round jrn-collapsed">
+                        <h2><i class="fa fa-list-ol fa fa-for-adventure-title"></i> @Messages("adventure.getScala.todo.title")
+                            <div class="btn-toolbar pull-right">
+                                <button id="todos-button-refresh" class="btn btn-success"><i class="fa fa-refresh"></i></button>
+                                <button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-down"></i></button>
+                            </div>
+                        </h2>
+                        <div class="row collapsable stash">
                             <div class="col-lg-12">
                                 <p class="lead">@Messages("adventure.getScala.todo.subtitle")</p>
 
@@ -217,9 +240,10 @@
                         </div>
                     </div>
                     @if(auth.canViewTodoComments()) {
+                        <div class="collapsable stash">
                         @comment.widget_comment(adv.getId + "_todos", user)
+                        </div>
                     }
-                    <hr/>
                 </div>
                 }
 
@@ -360,5 +384,7 @@
         </script>
         <script src="@routes.Assets.at("javascripts/module/adventure.js").url" type="text/javascript"></script>
 
-
+        <!--
+        @{Html(Json.toJson(advr).toString())});
+        -->
     }
