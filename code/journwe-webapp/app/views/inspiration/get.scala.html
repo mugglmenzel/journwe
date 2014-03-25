@@ -227,4 +227,4 @@ define("inspirationData", [], @{Html(Json.toJson(ins).toString())});
 </script>
 <script src="@routes.Assets.at("javascripts/module/inspiration.js").url" type="text/javascript"></script>
 
-}
+} {@openGraphMeta(ins.getName, controllers.html.routes.InspirationController.get(ins.getId).absoluteURL(), ins.getDescription, ins.getImage, "article")}

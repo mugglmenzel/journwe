@@ -31,7 +31,7 @@ import java.util.List;
  * Created by markus on 26/01/14.
  */
 public class PdfboxService {
-    private static PDType1Font textFontBold = PDType1Font.TIMES_BOLD;
+    private static PDType1Font textFontBold = PDType1Font.HELVETICA_BOLD;
     private static int titleFontSize = 16;
     private static int afterTitleSpace = titleFontSize;
     private static PDType1Font textFont = PDType1Font.TIMES_ROMAN;

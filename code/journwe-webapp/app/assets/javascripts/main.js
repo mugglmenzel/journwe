@@ -9,9 +9,9 @@ require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switc
 
 
     // Set parallex scrolling
+    /*
     if ($(".nav-adventure").length) {
         var top;
-        /*
          $(window).scroll($.throttle(0, function (event) {
          if ("undefined" == typeof top) {
          top = $(".nav-adventure").offset().top + 1;
@@ -37,8 +37,8 @@ require(['common/utils', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switc
          lastScrollTop = st;
          }.bind(this))
          );
-         */
     }
+    */
 
 
     // Init drop behaviour

@@ -1,16 +1,15 @@
-@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit active: String = "home")
+@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit ogMeta: Html = Html.empty, active: String = "home")
 
 <!DOCTYPE html>
 
 <html lang="en">
 <head>
 	<title>JournWe - @Html(title)</title>
-    <meta property="og:title" content="JournWe - Travel together. Coming Soon." />
-    <meta property="og:type" content="company" />
-    <meta property="og:site_name" content="JournWe - Travel together. Coming Soon." />
-    <meta property="og:description" content="JournWe changes how you travel in groups and how people join for a trip. Traveling becomes adventures at the most inspiring destinations and challenges, together with your friends. JournWe helps the right people to join for an adventure and make your trip a lifetime experience." />
-    <meta property="og:url" content="www.journwe.com" />
-    <meta property="og:image" content="@routes.Assets.at("img/favicon.png")" />
+    @if(!Html.empty.equals(ogMeta)) {
+        @ogMeta
+    } else {
+       @openGraphMeta(title)
+    }
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.1.3/css/bootstrap-datepicker.min.css">

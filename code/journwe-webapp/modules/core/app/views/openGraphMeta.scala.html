@@ -1,0 +1,16 @@
+@(implicit title: String = "JournWe - Travel together. Coming Soon.", url: String = "http://www.journwe.com", description: String = "JournWe changes how you travel in groups and how people join for a trip. Traveling becomes adventures at the most inspiring destinations and challenges, together with your friends. JournWe helps the right people to join for an adventure and make your trip a lifetime experience.", image: String = null, typus: String = "website", sitename: String = "JournWe - Travel together.", extra: Html = Html.empty)
+
+@import play.api.Play.current
+
+<meta property="og:title" content="@title" />
+<meta property="og:type" content="@typus" />
+<meta property="og:determiner" content="the" />
+<meta property="og:site_name" content="@sitename" />
+<meta property="og:description" content="@description" />
+<meta property="og:url" content="@url" />
+<meta property="og:image" content="@if(image != null){@image}else{@routes.Assets.at("img/favicon.png")}" />
+<meta property="og:locale" content="@Http.Context.current().lang().toLocale" />
+@for(lang <- Lang.availables) {
+<meta property="og:locale:alternate" content="@lang.toLocale" />
+}
+@extra
