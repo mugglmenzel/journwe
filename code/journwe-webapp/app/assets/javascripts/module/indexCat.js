@@ -35,7 +35,7 @@ require([
 
     var loadInspirations = function (lastId, clear) {
         utils.setSpinning($('#inspirations-public-button-refresh i'));
-        $('#inspirations-public-load-more-button').html('<i class="icon-spin icon-journwe"></i>');
+        utils.setReplaceSpinning($('#inspirations-public-load-more-button'));
         routes.controllers.api.json.CategoryController.getInspirations(cat.id).ajax({data: {lastId: lastId, count: 8}, success: function (advs) {
             if (clear) $('#inspirations-public-list').empty();
             if (advs != null && advs.length > 0) {
@@ -81,9 +81,8 @@ require([
                 });
             }
 
-            if (advs.length == 8){
-                $('#inspirations-public-load-more-button').html('Show More');
-            } else {
+            utils.resetReplaceSpinning($('#inspirations-public-load-more-button'));
+            if (!advs.length == 8){
                 $('#inspirations-public-load-more-button').hide();
             }
             utils.resetSpinning($('#inspirations-public-button-refresh i'));
@@ -106,7 +105,7 @@ require([
 
 
     if (cat.image != null && cat.image != "") {
-        $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + cat.image + '")').addClass('blur');
+        $('#background').css('background-image', 'url("http://www.journwe.com/thumbnail?w=1600&u=' + cat.image + '")').addClass('blur');
     } else utils.loadGenericBgImage();
 
     initialize();

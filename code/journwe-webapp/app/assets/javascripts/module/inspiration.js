@@ -100,7 +100,7 @@ require([
     });
 
     if (ins.image != null && ins.image != "") {
-        $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + ins.image + '")').addClass('blur');
+        $('#background').css('background-image', 'url("http://www.journwe.com/thumbnail?w=1600&u=' + ins.image + '")').addClass('blur');
     } else utils.loadGenericBgImage();
 
     initialize();

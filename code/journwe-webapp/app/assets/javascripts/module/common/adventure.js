@@ -39,7 +39,7 @@ define([
     // Init bg & scrollspy
     var initBackground = function () {
         if (adv.image != null && adv.image != '') {
-            $('#background').css('background-image', 'url("http://i.embed.ly/1/image/resize?width=1600&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + adv.image + '&timestamp=' + adv.imageTimestamp + '")').addClass('blur');
+            $('#background').css('background-image', 'url("http://www.journwe.com/thumbnail?w=1600&u=' + adv.image + '&t=' + adv.imageTimestamp + '")').addClass('blur');
         } else utils.loadGenericBgImage();
     };
 
@@ -272,7 +272,7 @@ define([
     //TOOLBAR
     var initPrimeImage = function () {
         if (adv.image != null && adv.image != '') {
-            $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + adv.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + adv.imageTimestamp + '")');
+            $('#adventure-prime-image').css('background', 'url("http://www.journwe.com/thumbnail?h=200&w=1200&u=' + adv.image + '&t=' + adv.imageTimestamp + '")');
         }
     }
 
@@ -298,7 +298,7 @@ define([
             contentType: false,
             processData: false,
             success: function (result) {
-                $('#adventure-prime-image').css('background', 'url("http://i.embed.ly/1/image/crop?height=200&width=1200&url=' + result.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp=' + result.imageTimestamp + '")');
+                $('#adventure-prime-image').css('background', 'url("http://www.journwe.com/thumbnail?h=200&w=1200&u=' + result.image + '&t=' + result.imageTimestamp + '")');
                 utils.resetReplaceSpinning(btn);
             }
         });

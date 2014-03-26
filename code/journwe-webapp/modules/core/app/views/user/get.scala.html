@@ -7,7 +7,7 @@
 
     <div class="prime-image">
         <div style="width: 100%;">
-            <img id="user-prime-image" style="width: 100%; height: 200;" @if(user.getImage == null){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=No+image"}else{src="http://i.embed.ly/1/image/crop?height=200&width=1200&url=@user.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"}/>
+            <img id="user-prime-image" style="width: 100%; height: 200;" @if(user.getImage == null){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=No+image"}else{src="http://www.journwe.com/thumbnail?h=200&w=1200&u=@user.getImage"}/>
         </div>
 
         <div class="title-overlay">
@@ -83,7 +83,7 @@
                 </div>
                 <div class="text-center" style="position: relative;">
                     <a href="{%=o.link%}">
-                        <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=200&height=200&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp='+o.imageTimestamp)%}{% } %}">
+                        <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=200&h=200&u=' + o.image + '&t='+o.imageTimestamp)%}{% } %}">
                     </a>
                     <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                         <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>

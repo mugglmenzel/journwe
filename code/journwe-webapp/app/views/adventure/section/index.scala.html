@@ -39,7 +39,7 @@
             <script type="text/x-tmpl" id="adventure-photo-template">
                 <div class="polaroid" style="position: relative; float: left; width: 20%;">
                     <a class="btn-adventure-photo" data-index='{%=o.index%}'>
-                        <img style="margin: 0px; width: 100%;" src="{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + o.url)%}{% } %}">
+                        <img style="margin: 0px; width: 100%;" src="{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=204&h=204&u=' + o.url)%}{% } %}">
                     </a>
                     <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                         <button class="btn btn-default btn-photo-delete pull-right" data-id="{%=o.id%}"><i class="fa fa-trash-o"></i></button>
@@ -62,7 +62,7 @@
                 <li class="{%=o.active%}" data-target="#carousel-adventure-photos" data-slide-to="{%=o.index%}"></li>
             </script>
             <script type="text/x-tmpl" id="adventure-photo-carousel-item-template">
-                <div class="item {%=o.active%}" style="background-image: url('{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/1600x1200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=1600&height=1200&key=2c8ef5b200c6468f9f863bc75c46009f&url=' + o.url)%}{% } %}')"></div>
+                <div class="item {%=o.active%}" style="background-image: url('{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/1600x1200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=1600&h=1200&u=' + o.url)%}{% } %}')"></div>
             </script>
         </div>
     </div>

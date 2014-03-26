@@ -15,8 +15,7 @@ require([
             var el = $(this),
                 html = el.html();
 
-            el.css({width: el.width() + "px"})
-                .html('<i class="fa fa-spin icon-journwe"></i>');
+            utils.setReplaceSpinning(el);
 
             return true;
         }

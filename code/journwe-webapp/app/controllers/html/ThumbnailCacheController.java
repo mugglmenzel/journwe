@@ -45,6 +45,8 @@ public class ThumbnailCacheController extends Controller {
         final String timestamp = data.get("t");
         final String url = data.get("u");
 
+        if(width == null && height == null) return badRequest();
+
         if (width != null)
             try {
                 new Integer(width);
@@ -99,7 +101,6 @@ public class ThumbnailCacheController extends Controller {
                                 ObjectMetadata meta = new ObjectMetadata();
                                 meta.setContentLength(response.getEntity().getContentLength());
                                 meta.setContentType(response.getEntity().getContentType().getValue());
-                                meta.setExpirationTime(DateTime.now().plusDays(7).toDate());
 
                                 s3.putObject(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), response.getEntity().getContent(), meta);
 
@@ -122,7 +123,16 @@ public class ThumbnailCacheController extends Controller {
 
     private static String toEmbedly(String width, String height, String timestamp, String url) {
         try {
-            return "http://i.embed.ly/1/image/crop?" + (width != null ? "width=" + width + "&" : "") + (height != null ? "height=" + height + "&" : "") + (timestamp != null ? "timestamp=" + timestamp + "&" : "") + "key=2c8ef5b200c6468f9f863bc75c46009f&url=" + URLEncoder.encode(url, "UTF-8");
+            StringBuilder sb = new StringBuilder("http://i.embed.ly/1/image/");
+
+            if (height == null || width == null)
+                sb.append("resize?" + (width != null ? "width=" + width + "&" : "") + (height != null ? "height=" + height + "&" : ""));
+            else
+                sb.append("crop?" + (width != null ? "width=" + width + "&" : "") + (height != null ? "height=" + height + "&" : ""));
+
+            sb.append((timestamp != null ? "timestamp=" + timestamp + "&" : "") + "key=2c8ef5b200c6468f9f863bc75c46009f&url=" + URLEncoder.encode(url, "UTF-8"));
+
+            return sb.toString();
         } catch (UnsupportedEncodingException e) {
             return null;
         }
