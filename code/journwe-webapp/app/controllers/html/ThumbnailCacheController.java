@@ -1,6 +1,5 @@
 package controllers.html;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -12,7 +11,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.joda.time.DateTime;
-import play.Logger;
+import play.cache.Cache;
 import play.data.DynamicForm;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
 
@@ -75,13 +75,15 @@ public class ThumbnailCacheController extends Controller {
         }
 
 
-
-
         try {
             s3.getObjectMetadata(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url));
-            URL forward = s3.generatePresignedUrl(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), DateTime.now().plusHours(24).toDate());
-            return redirect(forward.toString());
-        } catch (AmazonServiceException e) {
+            return redirect(Cache.getOrElse(toS3Key(width, height, timestamp, url), new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    return s3.generatePresignedUrl(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), DateTime.now().plusHours(24).toDate()).toString();
+                }
+            }, 24 * 3600));
+        } catch (Exception e) {
             final String embedlyUrl = toEmbedly(width, height, timestamp, url);
             if (embedlyUrl == null) return badRequest();
 
