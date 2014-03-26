@@ -12,7 +12,7 @@ public class CDNAssetsController extends Controller {
 
 
     public static Result at(String file) {
-        return redirect("http://" + CLOUDFRONT_SERVER_BASE_URL + "/public/" + file);
+        return redirect("http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + file);
     }
 
 }
