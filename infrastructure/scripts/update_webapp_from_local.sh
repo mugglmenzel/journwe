@@ -54,4 +54,10 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
 	echo "---- finished updating $ipaddress"
 done;
 
+echo "-----------------------------------------------------"
+echo "------ JournWe Asset Distribution to CloudFront -----"
+echo "-----------------------------------------------------"
+echo ""
+sh push_assets_to_s3.sh
+
 echo "-- update complete."
