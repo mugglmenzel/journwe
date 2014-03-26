@@ -11,6 +11,8 @@ import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.api.json.AdventureFileController;
 import controllers.core.html.ApplicationController;
+import helpers.JournweFacebookClient;
+import helpers.SocialInviter;
 import models.UserManager;
 import models.adventure.Adventure;
 import models.adventure.AdventureAuthorization;
@@ -37,8 +39,6 @@ import models.dao.inspiration.InspirationDAO;
 import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserEmailDAO;
 import models.dao.user.UserSocialDAO;
-import helpers.JournweFacebookClient;
-import helpers.SocialInviter;
 import models.inspiration.Inspiration;
 import models.user.User;
 import models.user.UserEmail;
@@ -67,6 +67,8 @@ public class AdventureController extends Controller {
     private static final AWSCredentials credentials = new BasicAWSCredentials(
             ConfigFactory.load().getString("aws.accessKey"),
             ConfigFactory.load().getString("aws.secretKey"));
+
+    private static final AmazonS3Client s3 = new AmazonS3Client(credentials);
 
     private static DynamicForm advForm = form();
 
@@ -270,21 +272,31 @@ public class AdventureController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result saveEditable() {
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        if (usr == null) return badRequest();
+
         DynamicForm advForm = form().bindFromRequest();
         String advId = advForm.get("pk");
         if (advId != null && !"".equals(advId)) {
             if (!new JournweAuthorization(advId).canEditAdventureTitle())
                 return badRequest("You are not authorized to do this.");
             Adventure adv = new AdventureDAO().get(advId);
+            Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
             String name = advForm.get("name");
+
             if ("adventureName".equals(name)) {
                 adv.setName(advForm.get("value"));
                 AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.NAME_CHANGE, EAdventureLogSection.ALL, adv.getName());
             } else if ("adventureDescription".equals(name)) {
                 adv.setDescription(advForm.get("value"));
                 AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.DESCRIPTION_CHANGE, EAdventureLogSection.ALL, adv.getDescription());
+            } else if ("adventurerHomeAirport".equals(name)) {
+                advr.setHomeAirport(advForm.get("value"));
+            } else if ("adventurerEmergencyContact".equals(name)) {
+                advr.setEmergencyContact(advForm.get("value"));
             }
             new AdventureDAO().save(adv);
+            new AdventurerDAO().save(advr);
         }
 
         return ok();
@@ -296,9 +308,7 @@ public class AdventureController extends Controller {
         String name = new AdventureDAO().get(advId).getName();
         new AdventureDAO().deleteFull(advId);
         //delete s3 objects
-        AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
-                ConfigFactory.load().getString("aws.accessKey"),
-                ConfigFactory.load().getString("aws.secretKey")));
+
         for (S3ObjectSummary obj : s3.listObjects(S3_BUCKET_ADVENTURE_IMAGES, advId).getObjectSummaries())
             s3.deleteObject(
                     S3_BUCKET_ADVENTURE_IMAGES, obj.getKey());

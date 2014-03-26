@@ -55,7 +55,7 @@
                     </div>
                     <div class="text-center" style="position: relative;">
                         <a href="{%=o.link%}">
-                            <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=200&height=200&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f&timestamp='+o.imageTimestamp)%}{% } %}">
+                            <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('@controllers.html.routes.ThumbnailCacheController.getThumbnail()?w=200&h=200&u=' + o.image + '&t='+o.imageTimestamp)%}{% } %}">
                         </a>
                         <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                             <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>

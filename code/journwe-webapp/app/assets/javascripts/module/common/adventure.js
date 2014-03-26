@@ -1194,14 +1194,10 @@ define([
             $('#adventure-prime-image-file-input').click();
         },
 
-        'click .btn-edit-description': function () {
-            //event.stopPropagation();
+        'click .btn-edit-description': function (e) {
+            e.stopPropagation();
 
-            $('#adventureDescription').editable('show');
-            //$(this).hide();
-        },
-        'hidden #adventureDescription': function () {
-            //$('.btn-edit-description').show();
+            $('.editable[data-name=adventureDescription]').editable('show');
         },
 
         'click .btn-adventure-photo': function () {

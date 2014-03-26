@@ -99,6 +99,29 @@
             </script>
         }
 
+        <div class="row">
+            <div class="col-xs-12">
+                <h4><i class="fa fa-lock"></i> Your Details</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <i class="fa fa-road"></i>
+                <a href="#" class="editable" data-type="text" data-name="adventurerHomeAirport" data-pk="@adv.getId()"
+                data-url="@html.routes.AdventureController.saveEditable()"
+                data-original-title="Enter your home airport" data-emptytext="Your Home Airport" data-inputclass="form-control">@advr.getHomeAirport()</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <i class="fa fa-ambulance"></i>
+                <a href="#" class="editable" data-type="textarea" data-name="adventurerEmergencyContact" data-pk="@adv.getId()"
+                data-url="@html.routes.AdventureController.saveEditable()"
+                data-original-title="Enter your emergency contact" data-emptytext="Your Emergency Contact" data-inputclass="form-control">@advr.getEmergencyContact()</a>
+            </div>
+        </div>
+
+
         @if(auth.canInviteAdventurerParticipants()) {
 
             <div class="row">
