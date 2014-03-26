@@ -98,7 +98,7 @@ public class ThumbnailCacheController extends Controller {
                 @Override
                 public String call() throws Exception {
                     long expiration = DateTime.now().plusHours(24).toDate().getTime()/1000;
-                    String cfPolicy = ("{\"Statement\":[{\"Resource\":\"" + "http*://" + CLOUDFRONT_SERVER_BASE_URL + "/" + toS3Key(width, height, timestamp, url) + "\",\"Condition\":{\"DateLessThan\":{\"AWS:EpochTime\":" + expiration + "}}}]}").trim();
+                    String cfPolicy = ("{\"Statement\":[{\"Resource\":\"" + "http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + toS3Key(width, height, timestamp, url) + "\",\"Condition\":{\"DateLessThan\":{\"AWS:EpochTime\":" + expiration + "}}}]}").trim();
                     Logger.debug("policy: " + cfPolicy);
 
                     KeyFactory fac = KeyFactory.getInstance("RSA");
