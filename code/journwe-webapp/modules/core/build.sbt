@@ -7,7 +7,7 @@ version := "1.0"
 libraryDependencies ++= Seq(
   javaCore,
   javaEbean,
-  "com.amazonaws" % "aws-java-sdk" % "1.7.1",
+  "com.amazonaws" % "aws-java-sdk" % "1.7.5",
   "com.feth" %% "play-authenticate" % "0.5.2-SNAPSHOT",
   "com.ecwid" % "ecwid-mailchimp" % "1.3.0.5"
 )

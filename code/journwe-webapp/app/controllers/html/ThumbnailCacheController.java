@@ -5,12 +5,16 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.typesafe.config.ConfigFactory;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.joda.time.DateTime;
+import play.Logger;
+import play.api.Play;
 import play.cache.Cache;
 import play.data.DynamicForm;
 import play.mvc.Controller;
@@ -18,8 +22,14 @@ import play.mvc.Result;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
@@ -29,7 +39,11 @@ import static play.data.Form.form;
  */
 public class ThumbnailCacheController extends Controller {
 
+    private static final String privateKeyPath = "conf/pk-APKAIIQOD6MCIRX3BIZA.der";
+    private static final String cloudFrontKeyPairId = "APKAIIQOD6MCIRX3BIZA";
+
     public static final String S3_BUCKET_THUMBNAILS_CACHE = "journwe-thumbnails-cache";
+    public static final String CLOUDFRONT_SERVER_BASE_URL = "thumbnails-cdn.journwe.com";
 
     private static final AWSCredentials credentials = new BasicAWSCredentials(
             ConfigFactory.load().getString("aws.accessKey"),
@@ -45,7 +59,7 @@ public class ThumbnailCacheController extends Controller {
         final String timestamp = data.get("t");
         final String url = data.get("u");
 
-        if(width == null && height == null) return badRequest();
+        if (width == null && height == null) return badRequest();
 
         if (width != null)
             try {
@@ -79,10 +93,24 @@ public class ThumbnailCacheController extends Controller {
 
         try {
             s3.getObjectMetadata(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url));
+
             return redirect(Cache.getOrElse(toS3Key(width, height, timestamp, url), new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    return s3.generatePresignedUrl(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), DateTime.now().plusHours(24).toDate()).toString();
+                    long expiration = DateTime.now().plusHours(24).toDate().getTime()/1000;
+                    String cfPolicy = ("{\"Statement\":[{\"Resource\":\"" + "http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + toS3Key(width, height, timestamp, url) + "\",\"Condition\":{\"DateLessThan\":{\"AWS:EpochTime\":" + expiration + "}}}]}").trim();
+                    Logger.debug("policy: " + cfPolicy);
+
+                    KeyFactory fac = KeyFactory.getInstance("RSA");
+                    EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(FileUtils.readFileToByteArray(Play.getFile(privateKeyPath, Play.current())));
+                    PrivateKey privateKey = fac.generatePrivate(privKeySpec);
+
+                    Signature signer = Signature.getInstance("SHA1withRSA");
+                    signer.initSign(privateKey);
+                    signer.update(cfPolicy.getBytes("UTF-8"));
+                    String signature = Base64.encodeBase64String(signer.sign()).replace("+", "-").replace("=", "_").replace("/", "~");
+                    return "http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + toS3Key(width, height, timestamp, url) + "?Expires=" + expiration + "&Signature=" + signature + "&Key-Pair-Id=" + cloudFrontKeyPairId;
+                    //s3.generatePresignedUrl(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), DateTime.now().plusHours(24).toDate()).toString();
                 }
             }, 24 * 3600));
         } catch (Exception e) {
@@ -118,7 +146,12 @@ public class ThumbnailCacheController extends Controller {
     }
 
     private static String toS3Key(String width, String height, String timestamp, String url) {
-        return url + "_" + width + "x" + height + "_" + timestamp;
+        try {
+            URL urlObj = new URL(url);
+            return urlObj.getAuthority() + urlObj.getFile() + "_" + width + "x" + height + "_" + timestamp;
+        } catch (MalformedURLException e) {
+            return url + "_" + width + "x" + height + "_" + timestamp;
+        }
     }
 
     private static String toEmbedly(String width, String height, String timestamp, String url) {

@@ -10,10 +10,11 @@ libraryDependencies ++= Seq(
   cache,
   filters,
   "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2",
-  "com.amazonaws" % "aws-java-sdk" % "1.7.1",
+  "com.amazonaws" % "aws-java-sdk" % "1.7.5",
   "com.feth" %% "play-authenticate" % "0.5.2-SNAPSHOT",
   "com.rosaloves" % "bitlyj" % "2.0.0",
-  "org.apache.pdfbox" % "pdfbox" % "1.8.2"
+  "org.apache.pdfbox" % "pdfbox" % "1.8.2",
+  "commons-io" % "commons-io" % "2.4"
 )
 
 
