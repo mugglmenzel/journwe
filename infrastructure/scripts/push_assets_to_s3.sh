@@ -1,7 +1,7 @@
 #!/bin/sh
 
 S3CMD="../s3cmd/s3cmd"
-CONF="--config=../s3cmd/s3cfg"
+CONF="--config=../s3cmd/s3cfg --add-header=Cache-Control:max-age='31536000,public'"
 ASSETDIR1="../../code/journwe-webapp/target/scala-2.10/classes/public/"
 ASSETDIR2="../../code/journwe-webapp/modules/acl/target/scala-2.10/classes/public/"
 ASSETDIR3="../../code/journwe-webapp/modules/admin/target/scala-2.10/classes/public/"

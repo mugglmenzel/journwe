@@ -54,6 +54,8 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
 	echo "---- finished updating $ipaddress"
 done;
 
+cd $current_path
+
 echo "-----------------------------------------------------"
 echo "------ JournWe Asset Distribution to CloudFront -----"
 echo "-----------------------------------------------------"
