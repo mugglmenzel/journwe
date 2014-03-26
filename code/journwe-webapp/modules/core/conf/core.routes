@@ -58,5 +58,5 @@ GET         /lang/:id                              controllers.core.html.Applica
 #### Load Balancing & Maintenance ####
 GET         /ping                                  controllers.core.html.ApplicationController.ping
 
-
+GET         /cdn-assets/*file                      controllers.core.html.CDNAssetsController.at(file:String)
 GET         /assets/*file                          controllers.Assets.at(path="/public", file)

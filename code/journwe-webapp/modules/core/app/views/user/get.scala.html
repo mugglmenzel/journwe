@@ -83,7 +83,7 @@
                 </div>
                 <div class="text-center" style="position: relative;">
                     <a href="{%=o.link%}">
-                        <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=200&h=200&u=' + o.image + '&t='+o.imageTimestamp)%}{% } %}">
+                        <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=200&h=200&u=' + o.image + (o.imageTimestamp ? '&t='+o.imageTimestamp : ''))%}{% } %}">
                     </a>
                     <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                         <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>

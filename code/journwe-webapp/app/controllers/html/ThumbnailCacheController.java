@@ -99,7 +99,6 @@ public class ThumbnailCacheController extends Controller {
                 public String call() throws Exception {
                     long expiration = DateTime.now().plusHours(24).toDate().getTime()/1000;
                     String cfPolicy = ("{\"Statement\":[{\"Resource\":\"" + "http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + toS3Key(width, height, timestamp, url) + "\",\"Condition\":{\"DateLessThan\":{\"AWS:EpochTime\":" + expiration + "}}}]}").trim();
-                    Logger.debug("policy: " + cfPolicy);
 
                     KeyFactory fac = KeyFactory.getInstance("RSA");
                     EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(FileUtils.readFileToByteArray(Play.getFile(privateKeyPath, Play.current())));
@@ -148,9 +147,9 @@ public class ThumbnailCacheController extends Controller {
     private static String toS3Key(String width, String height, String timestamp, String url) {
         try {
             URL urlObj = new URL(url);
-            return urlObj.getAuthority() + urlObj.getFile() + "_" + width + "x" + height + "_" + timestamp;
+            return urlObj.getAuthority() + urlObj.getFile().replace("?", "~") + "_" + width + "x" + height + "_" + timestamp;
         } catch (MalformedURLException e) {
-            return url + "_" + width + "x" + height + "_" + timestamp;
+            return url.replace("?", "~") + "_" + width + "x" + height + "_" + timestamp;
         }
     }
 

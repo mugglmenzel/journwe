@@ -147,10 +147,10 @@ POST          /api/json/user/:id/notifications/:freq/frequency.json        contr
 GET           /thumbnail                                                   controllers.html.ThumbnailCacheController.getThumbnail
 
 #### Static resources from /public folder to /assets ####
-GET           /assets/javascripts-min/routes.js                            controllers.api.json.ApplicationController.routes
-GET           /assets/javascripts-min/messages.js                          controllers.api.json.ApplicationController.messages
-GET           /assets/javascripts/routes.js                                controllers.api.json.ApplicationController.routes
-GET           /assets/javascripts/messages.js                              controllers.api.json.ApplicationController.messages
+GET           /cdn-assets/javascripts-min/routes.js                            controllers.api.json.ApplicationController.routes
+GET           /cdn-assets/javascripts-min/messages.js                          controllers.api.json.ApplicationController.messages
+GET           /cdn-assets/javascripts/routes.js                                controllers.api.json.ApplicationController.routes
+GET           /cdn-assets/javascripts/messages.js                              controllers.api.json.ApplicationController.messages
 
 
 #### Home Page ####
@@ -204,8 +204,6 @@ GET           /threads/:advid                                              contr
 
 ->            /                                                            core.Routes
 
-
-GET           /assets/*file                                                controllers.Assets.at(path="/public", file)
 
 
 
