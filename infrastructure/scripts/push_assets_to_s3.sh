@@ -13,6 +13,21 @@ ASSETDIR7="../../code/journwe-webapp/modules/email/target/scala-2.10/classes/pub
 ASSETDIR8="../../code/journwe-webapp/modules/social/target/scala-2.10/classes/public/"
 S3BUCKET="s3://journwe-assets/"
 
+echo "gzip all files"
+gzip_func () {
+  gzip -c "$1" > "$1.gz"
+}
+
+export -f gzip_func
+
+find $ASSETDIR1 -type f ! -name '*.gz' -exec sh -c 'gzip_func {}' \;
+find $ASSETDIR2 -type f ! -name '*.gz' -exec sh -c 'gzip_func {}' \;
+find $ASSETDIR3 -type f ! -name '*.gz' -exec sh -c 'gzip_func {}' \;
+find $ASSETDIR4 -type f ! -name '*.gz' -exec sh -c 'gzip_func {}' \;
+find $ASSETDIR5 -type f ! -name '*.gz' -exec sh -c 'gzip_func {}' \;
+find $ASSETDIR6 -type f ! -name '*.gz' -exec sh -c 'gzip_func {}' \;
+find $ASSETDIR7 -type f ! -name '*.gz' -exec sh -c 'gzip_func {}' \;
+
 echo "check md5 hash and uploade changed local assets to s3 bucket now... sorry, this can take a while ..."
 echo "checking and uploading $ASSETDIR1"
 $S3CMD $CONF sync --recursive $HEADER $ASSETDIR1 $S3BUCKET
