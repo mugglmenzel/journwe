@@ -2,14 +2,18 @@ package controllers.html;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.event.ProgressEvent;
+import com.amazonaws.event.ProgressListener;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.typesafe.config.ConfigFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.GzipCompressingEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.joda.time.DateTime;
@@ -17,6 +21,7 @@ import play.Logger;
 import play.api.Play;
 import play.cache.Cache;
 import play.data.DynamicForm;
+import play.filters.gzip.Gzip;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -134,6 +139,17 @@ public class ThumbnailCacheController extends Controller {
                                 meta.setHttpExpiresDate(DateTime.now().plusDays(7).toDate());
 
                                 s3.putObject(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), response.getEntity().getContent(), meta);
+                                Logger.debug("Uploaded Thumbnail to S3 " + S3_BUCKET_THUMBNAILS_CACHE + "/" + toS3Key(width, height, timestamp, url));
+
+                                meta.setContentEncoding("gzip");
+
+                                s3.putObject(new PutObjectRequest(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url) + ".gz", new GzipCompressingEntity(response.getEntity()).getContent(), meta).withGeneralProgressListener(new ProgressListener() {
+                                    @Override
+                                    public void progressChanged(ProgressEvent progressEvent) {
+                                        Logger.debug("Status " + progressEvent.getEventCode() + ": " + progressEvent.getBytesTransferred() + " bytes transferred.");
+                                    }
+                                }));
+                                Logger.debug("Uploaded Thumbnail GZip to S3 " + S3_BUCKET_THUMBNAILS_CACHE + "/" + toS3Key(width, height, timestamp, url) + ".gz");
 
                                 return null;
                             }

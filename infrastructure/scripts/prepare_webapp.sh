@@ -35,7 +35,7 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
 	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq update"
 	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq install unzip"
 	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq install rsync"
-	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq install nginx"
+#	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq install nginx"
 #	ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq purge openjdk-6-jre"
     ssh $ssh_opts_terminal $ssh_host "sudo aptitude -yq upgrade"
     scp $scp_opts $current_path/prepare_webapp_remote.sh $ssh_host:/home/ubuntu/
