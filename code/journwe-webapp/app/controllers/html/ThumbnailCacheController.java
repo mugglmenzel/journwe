@@ -10,10 +10,11 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.typesafe.config.ConfigFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.CloseShieldInputStream;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.GzipCompressingEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.joda.time.DateTime;
@@ -21,12 +22,10 @@ import play.Logger;
 import play.api.Play;
 import play.cache.Cache;
 import play.data.DynamicForm;
-import play.filters.gzip.Gzip;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -35,7 +34,9 @@ import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.zip.GZIPOutputStream;
 
 import static play.data.Form.form;
 
@@ -102,7 +103,7 @@ public class ThumbnailCacheController extends Controller {
             return redirect(Cache.getOrElse(toS3Key(width, height, timestamp, url), new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    long expiration = DateTime.now().plusHours(24).toDate().getTime()/1000;
+                    long expiration = DateTime.now().plusHours(24).toDate().getTime() / 1000;
                     String cfPolicy = ("{\"Statement\":[{\"Resource\":\"" + "http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + toS3Key(width, height, timestamp, url) + "\",\"Condition\":{\"DateLessThan\":{\"AWS:EpochTime\":" + expiration + "}}}]}").trim();
                     Logger.debug("policy: " + cfPolicy);
 
@@ -131,31 +132,65 @@ public class ThumbnailCacheController extends Controller {
                         httpclient.execute(new HttpGet(embedlyUrl), new ResponseHandler<Void>() {
                             @Override
                             public Void handleResponse(HttpResponse response) throws IOException {
+                                try {
 
-                                ObjectMetadata meta = new ObjectMetadata();
-                                meta.setContentLength(response.getEntity().getContentLength());
-                                meta.setContentType(response.getEntity().getContentType().getValue());
-                                meta.setCacheControl("max-age=604800");
-                                meta.setHttpExpiresDate(DateTime.now().plusDays(7).toDate());
+                                    Logger.debug("Got a response type: " + response.getEntity().getClass().getName());
 
-                                s3.putObject(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), response.getEntity().getContent(), meta);
-                                Logger.debug("Uploaded Thumbnail to S3 " + S3_BUCKET_THUMBNAILS_CACHE + "/" + toS3Key(width, height, timestamp, url));
+                                    String contentType = response.getEntity().getContentType().getValue();
 
-                                meta.setContentEncoding("gzip");
+                                    File origFile = File.createTempFile(UUID.randomUUID().toString(), ".http");
+                                    OutputStream origOs = new FileOutputStream(origFile);
+                                    IOUtils.copy(response.getEntity().getContent(), origOs);
+                                    origOs.close();
 
-                                s3.putObject(new PutObjectRequest(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url) + ".gz", new GzipCompressingEntity(response.getEntity()).getContent(), meta).withGeneralProgressListener(new ProgressListener() {
-                                    @Override
-                                    public void progressChanged(ProgressEvent progressEvent) {
-                                        Logger.debug("Status " + progressEvent.getEventCode() + ": " + progressEvent.getBytesTransferred() + " bytes transferred.");
-                                    }
-                                }));
-                                Logger.debug("Uploaded Thumbnail GZip to S3 " + S3_BUCKET_THUMBNAILS_CACHE + "/" + toS3Key(width, height, timestamp, url) + ".gz");
+                                    InputStream origIs = new FileInputStream(origFile);
+
+                                    ObjectMetadata meta = new ObjectMetadata();
+                                    meta.setContentLength(origFile.length());
+                                    meta.setContentType(contentType);
+                                    meta.setCacheControl("max-age=604800");
+                                    meta.setHttpExpiresDate(DateTime.now().plusDays(7).toDate());
+
+                                    s3.putObject(new PutObjectRequest(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), origIs, meta).withGeneralProgressListener(new ProgressListener() {
+                                        @Override
+                                        public void progressChanged(ProgressEvent progressEvent) {
+                                            if (progressEvent.getEventCode() < 4)
+                                                Logger.debug(progressEvent.getBytesTransferred() + " bytes thumbnail transferred.");
+                                        }
+                                    }));
+                                    Logger.debug("Uploaded Thumbnail to S3 " + S3_BUCKET_THUMBNAILS_CACHE + "/" + toS3Key(width, height, timestamp, url));
+
+                                    InputStream gzIs = new FileInputStream(origFile);
+
+                                    File gzFile = File.createTempFile(UUID.randomUUID().toString(), ".gz");
+                                    GZIPOutputStream gzOs = new GZIPOutputStream(new FileOutputStream(gzFile));
+                                    IOUtils.copy(gzIs, gzOs);
+                                    gzOs.close();
+
+                                    meta.setContentLength(gzFile.length());
+                                    meta.setContentEncoding("gzip");
+
+                                    s3.putObject(new PutObjectRequest(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url) + ".gz", new FileInputStream(gzFile), meta).withGeneralProgressListener(new ProgressListener() {
+                                        @Override
+                                        public void progressChanged(ProgressEvent progressEvent) {
+                                            if (progressEvent.getEventCode() < 4)
+                                                Logger.debug(progressEvent.getBytesTransferred() + " bytes gz transferred.");
+                                        }
+                                    }));
+                                    Logger.debug("Uploaded Thumbnail GZip to S3 " + S3_BUCKET_THUMBNAILS_CACHE + "/" + toS3Key(width, height, timestamp, url) + ".gz");
+
+                                    origFile.delete();
+                                    gzFile.delete();
+
+                                } catch (IOException e) {
+                                    Logger.error("Error during thumbnail upload and gzipping", e);
+                                }
 
                                 return null;
                             }
                         });
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Logger.error("Error during thumbnail upload and gzipping", e);
                     }
                 }
             }).start();
