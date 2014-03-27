@@ -38,6 +38,7 @@ import play.mvc.Security;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -110,7 +111,7 @@ public class AdventureController extends Controller {
     public static Result updateCategory(String advId) {
         DynamicForm data = form().bindFromRequest();
         String catId = data.get("categoryId");
-        Category result = new Category();
+        Category result;
         if (catId != null && !"".equals(catId)) {
             result = new CategoryDAO().get(catId);
             Adventure adv = new AdventureDAO().get(advId);
@@ -121,7 +122,8 @@ public class AdventureController extends Controller {
                 AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.CATEGORY_CHANGED, EAdventureLogSection.ALL, result.getName());
             } else return badRequest();
         } else {
-            result = new AdventureToCategoryDAO().listN(new AdventureDAO().get(advId).getId(), null, -1).get(0);
+            List<Category> cats = new AdventureToCategoryDAO().listN(new AdventureDAO().get(advId).getId(), null, -1);
+            result = cats.size() > 0 ? cats.get(0) : null;
         }
         return ok(Json.toJson(result));
     }

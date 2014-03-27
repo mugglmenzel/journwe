@@ -99,6 +99,7 @@ public class ThumbnailCacheController extends Controller {
                 public String call() throws Exception {
                     long expiration = DateTime.now().plusHours(24).toDate().getTime()/1000;
                     String cfPolicy = ("{\"Statement\":[{\"Resource\":\"" + "http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + toS3Key(width, height, timestamp, url) + "\",\"Condition\":{\"DateLessThan\":{\"AWS:EpochTime\":" + expiration + "}}}]}").trim();
+                    Logger.debug("policy: " + cfPolicy);
 
                     KeyFactory fac = KeyFactory.getInstance("RSA");
                     EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(FileUtils.readFileToByteArray(Play.getFile(privateKeyPath, Play.current())));
@@ -107,7 +108,8 @@ public class ThumbnailCacheController extends Controller {
                     Signature signer = Signature.getInstance("SHA1withRSA");
                     signer.initSign(privateKey);
                     signer.update(cfPolicy.getBytes("UTF-8"));
-                    String signature = Base64.encodeBase64String(signer.sign()).replace("+", "-").replace("=", "_").replace("/", "~");
+                    String signature = Base64.encodeBase64String(signer.sign()).replace("+", "-").replace("=", "_").replace("/", "~").trim();
+                    Logger.debug("signature: " + signature);
                     return "http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + toS3Key(width, height, timestamp, url) + "?Expires=" + expiration + "&Signature=" + signature + "&Key-Pair-Id=" + cloudFrontKeyPairId;
                     //s3.generatePresignedUrl(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), DateTime.now().plusHours(24).toDate()).toString();
                 }
@@ -128,6 +130,8 @@ public class ThumbnailCacheController extends Controller {
                                 ObjectMetadata meta = new ObjectMetadata();
                                 meta.setContentLength(response.getEntity().getContentLength());
                                 meta.setContentType(response.getEntity().getContentType().getValue());
+                                meta.setCacheControl("max-age=604800");
+                                meta.setHttpExpiresDate(DateTime.now().plusDays(7).toDate());
 
                                 s3.putObject(S3_BUCKET_THUMBNAILS_CACHE, toS3Key(width, height, timestamp, url), response.getEntity().getContent(), meta);
 
@@ -147,9 +151,9 @@ public class ThumbnailCacheController extends Controller {
     private static String toS3Key(String width, String height, String timestamp, String url) {
         try {
             URL urlObj = new URL(url);
-            return urlObj.getAuthority() + urlObj.getFile().replace("?", "~") + "_" + width + "x" + height + "_" + timestamp;
+            return urlObj.getAuthority() + urlObj.getFile().replace("?", "~").replace("&", "_").replace("=", "-").replace("%", "-") + "_" + width + "x" + height + "_" + timestamp;
         } catch (MalformedURLException e) {
-            return url.replace("?", "~") + "_" + width + "x" + height + "_" + timestamp;
+            return url.replace("?", "~").replace("&", "_").replace("=", "-").replace("%", "-") + "_" + width + "x" + height + "_" + timestamp;
         }
     }
 
