@@ -6,6 +6,7 @@
 # IntelliJ 
 .idea
 *.iml
+*.pyc
 
 code/journwe-utility/target/*
 code/journwe-james/target/*
