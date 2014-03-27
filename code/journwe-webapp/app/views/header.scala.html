@@ -45,7 +45,7 @@
                     <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}" data-id="{%=o.created%}">
                         <div class="media">
                             <span class="pull-left">
-                                <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=50&height=50&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
+                                <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail??w=50&h=50&u=' + o.image)%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
                             </span>
                             <div class="media-body">
                                 <h4 class="media-heading {% if(o.read){ %}text-muted{% } %}">{%=o.subject%}</h4>

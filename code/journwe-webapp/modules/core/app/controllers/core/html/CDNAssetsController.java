@@ -1,5 +1,7 @@
 package controllers.core.html;
 
+import controllers.routes;
+import play.Play;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -12,7 +14,7 @@ public class CDNAssetsController extends Controller {
 
 
     public static Result at(String file) {
-        return redirect("http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + file);
+        return Play.isDev() ? redirect(routes.Assets.at(file)) : redirect("http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + file);
     }
 
 }
