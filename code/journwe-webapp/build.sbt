@@ -14,7 +14,8 @@ libraryDependencies ++= Seq(
   "com.feth" %% "play-authenticate" % "0.5.2-SNAPSHOT",
   "com.rosaloves" % "bitlyj" % "2.0.0",
   "org.apache.pdfbox" % "pdfbox" % "1.8.2",
-  "commons-io" % "commons-io" % "2.4"
+  "commons-io" % "commons-io" % "2.4",
+  "com.mohiva" %% "play-html-compressor" % "0.2-SNAPSHOT"
 )
 
 
@@ -29,7 +30,8 @@ resolvers ++= Seq(
   Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns),
   // Repository for com.github.mumoshu play2-memcached
   // required to resolve `spymemcached`, the plugin's dependency.
-  "Spy Repository" at "http://files.couchbase.com/maven2"
+  "Spy Repository" at "http://files.couchbase.com/maven2",
+  "Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 )
 
 playJavaSettings

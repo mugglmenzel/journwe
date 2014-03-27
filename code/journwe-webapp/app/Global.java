@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.exceptions.AccessDeniedException;
 import com.feth.play.module.pa.exceptions.AuthException;
+import com.mohiva.play.htmlcompressor.HTMLCompressorFilter;
 import com.typesafe.config.ConfigFactory;
 import controllers.api.json.AdventureFileController;
 import controllers.html.AdventureController;
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class Global extends GlobalSettings {
 
     public <T extends EssentialFilter> Class<T>[] filters() {
-        return new Class[]{GzipFilter.class};
+        return new Class[]{HTMLCompressorFilter.class, GzipFilter.class};
     }
 
     public void onStart(final Application app) {
