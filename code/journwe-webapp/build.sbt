@@ -48,8 +48,7 @@ lessEntryPoints <<= baseDirectory(_ / "app" / "assets" / "css" ** "journwe.less"
 
 requireJs ++= Seq(
   "journwe.js",
-  "header.js",
-  "comments.js",
+  "modules/header.js",
   "modules/index.js",
   "modules/indexCat.js",
   "modules/indexNew.js",

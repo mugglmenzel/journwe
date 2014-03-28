@@ -2,7 +2,7 @@ define([
     "common/utils",
     "routes",
     "messages",
-    "modules/comments",
+    "modules/common/comments",
     "common/gmaps",
     "adventureData",
     "adventurerData"

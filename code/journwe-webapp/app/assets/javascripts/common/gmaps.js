@@ -1,7 +1,7 @@
 define(['common/async!https://maps.googleapis.com/maps/api/js?libraries=places,weather,panoramio&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false'],
     function () {
 
-        console.log("loaded google maps.");
+        console.log("google maps api injected and loaded.");
         return $.extend(window.google.maps, {
             resetBounds: function (map, markers) {
                 if (!map) {

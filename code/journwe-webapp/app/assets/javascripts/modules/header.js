@@ -4,7 +4,6 @@ require([
     "journwe"
 ], function (utils, routes, journwe) {
     journwe(function () {
-        console.log("header js is loaded.");
 
         var pop_content = $('#notifications-popover-content');
         var pop_content_loaded = false;
