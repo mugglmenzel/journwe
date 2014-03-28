@@ -100,11 +100,11 @@
                     </ul>
                 </div>
                 <div class="rating rating-time">
-                    <input type="radio" class="star" id="{%=o.timeId%}-star5" name="{%=o.timeId%}-rating" value="5" data-id="{%=o.timeId%}" {% if(o.voteGravity === 5/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star5" title="Rocks!"><i class="fa fa-star"></i></label>
-                    <input type="radio" class="star" id="{%=o.timeId%}-star4" name="{%=o.timeId%}-rating" value="4" data-id="{%=o.timeId%}" {% if(o.voteGravity < 5/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star4" title="Pretty good"><i class="fa fa-star"></i></label>
-                    <input type="radio" class="star" id="{%=o.timeId%}-star3" name="{%=o.timeId%}-rating" value="3" data-id="{%=o.timeId%}" {% if(o.voteGravity < 4/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star3" title="Meh"><i class="fa fa-star"></i></label>
-                    <input type="radio" class="star" id="{%=o.timeId%}-star2" name="{%=o.timeId%}-rating" value="2" data-id="{%=o.timeId%}" {% if(o.voteGravity < 3/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star2" title="Kinda bad"><i class="fa fa-star"></i></label>
-                    <input type="radio" class="star" id="{%=o.timeId%}-star1" name="{%=o.timeId%}-rating" value="1" data-id="{%=o.timeId%}" {% if(o.voteGravity < 2/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star1" title="Sucks big time"><i class="fa fa-star"></i></label>
+                    <input type="radio" class="star" id="{%=o.timeId%}-star5" name="{%=o.timeId%}-rating" value="5" data-id="{%=o.timeId%}" {% if(o.Gravity && o.voteGravity === 5/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star5" title="Rocks!"><i class="fa fa-star"></i></label>
+                    <input type="radio" class="star" id="{%=o.timeId%}-star4" name="{%=o.timeId%}-rating" value="4" data-id="{%=o.timeId%}" {% if(o.Gravity && o.voteGravity < 5/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star4" title="Pretty good"><i class="fa fa-star"></i></label>
+                    <input type="radio" class="star" id="{%=o.timeId%}-star3" name="{%=o.timeId%}-rating" value="3" data-id="{%=o.timeId%}" {% if(o.Gravity && o.voteGravity < 4/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star3" title="Meh"><i class="fa fa-star"></i></label>
+                    <input type="radio" class="star" id="{%=o.timeId%}-star2" name="{%=o.timeId%}-rating" value="2" data-id="{%=o.timeId%}" {% if(o.Gravity && o.voteGravity < 3/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star2" title="Kinda bad"><i class="fa fa-star"></i></label>
+                    <input type="radio" class="star" id="{%=o.timeId%}-star1" name="{%=o.timeId%}-rating" value="1" data-id="{%=o.timeId%}" {% if(o.Gravity && o.voteGravity < 2/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star1" title="Sucks big time"><i class="fa fa-star"></i></label>
                 </div>
             </td>
             }

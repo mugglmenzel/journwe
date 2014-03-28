@@ -11,71 +11,64 @@
 
         @defining(new JournweAuthorization(adv.getId)) { auth =>
 
-            <div class="nav-adventure row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <div class="row">
-                    <!--<h4 class="text-right" style="font-size: 14px; line-height: 1; color: #aaaaaa;">GOTO</h4> -->
-                        <div class="col-xs-6 title-name">
-                            <a href="#" class="editable" data-type="text" data-name="adventureName" data-pk="@adv.getId()"
-                                data-url="@html.routes.AdventureController.saveEditable()"
-                                data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil muted"></i> <span></span>
-                            @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
-                        </div>
-                        <div class="col-xs-6">
-                            <ul id="nav-adventure-list" class="nav nav-pills pull-right nav-adventure-list">
-                                @if(auth.canViewAdventureAdventurersWidget()) {
-                                    <li class="adventurers">
-                                        <a href="#adventurers" data-toggle="tooltip" data-placement="bottom" title="Adventurers"><i class="fa fa-group" title="Adventurers"></i></a>
-                                    </li>
-                                }
-                                @if(auth.canViewAdventurePlacesWidget()) {
-                                    <li class="places">
-                                        <a href="#places" data-toggle="tooltip" data-placement="bottom" title="Places"><i class="fa fa-globe" title="Place"></i></a>
-                                    </li>
-                                }
-                                @if(auth.canViewAdventureTimeWidget()) {
-                                    <li class="times">
-                                        <a href="#times" data-toggle="tooltip" data-placement="bottom" title="Times"><i class="fa fa-calendar" title="Date &amp; Time"></i></a>
-                                    </li>
-                                }
-                                @if(auth.canViewAdventureDiscussionWidget()) {
-                                    <li class="discussion emails">
-                                        <a href="#discussion" data-toggle="tooltip" data-placement="bottom" title="Discussion"><i class="fa fa-comments-o" title="Discussion"></i></a>
-                                            <!--a href="#emails" data-toggle="tooltip" title="Emails"><i class="fa fa-envelope" title="Emails"></i></a-->
-                                    </li>
-                                }
-                                @if(auth.canViewAdventureTodoWidget()) {
-                                    <li class="todos files">
-                                        <a href="#todos" data-toggle="tooltip" data-placement="bottom" title="Todos"><i class="fa fa-list-ol" title="Todos"></i></a>
-                                            <!--a href="#files" data-toggle="tooltip" title="Files"><i class="fa fa-file" title="Files"></i></a-->
-                                    </li>
-                                }
-                                @*<li class="offers"><a href="#offers"><i class="fa fa-suitcase" title="Offers"></i></a></li>*@
-                            </ul>
-                            <div class="nav-title pull-right"><strong>Go to</strong></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             <div class="prime-image">
                 <div id="adventure-prime-image" style="width: 100%; height: 200px;">
                 </div>
 
-                @*
+
                 <div class="title-overlay">
-                    <span class="title-name visible-xs">
-                        <i class="fa fa-info white"></i>
-                        <a href="#" id="adventureName" data-type="text" data-pk="@adv.getId()"
-                            data-url="@html.routes.AdventureController.saveEditable()"
-                            data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil white muted"></i> <span></span>
-                        @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
-                    </span>
+                    <div class="nav-adventure">
+                        <div class="container">
+                            <div class="row">
+                                    <!--<h4 class="text-right" style="font-size: 14px; line-height: 1; color: #aaaaaa;">GOTO</h4> -->
+                                <div class="col-xs-6 title-name">
+                                    <a href="#" class="editable" data-type="text" data-name="adventureName" data-pk="@adv.getId()"
+                                    data-url="@html.routes.AdventureController.saveEditable()"
+                                    data-original-title="Enter adventure name" data-inputclass="form-control input-lg">@adv.getName()</a><i class="fa fa-pencil muted"></i> <span></span>
+                                    @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                                </div>
+                                <div class="col-xs-6">
+                                    <ul id="nav-adventure-list" class="nav nav-pills pull-right nav-adventure-list">
+                                        @if(auth.canViewAdventureAdventurersWidget()) {
+                                            <li class="adventurers">
+                                                <a href="#adventurers" data-toggle="tooltip" data-placement="bottom" title="Adventurers"><i class="fa fa-group" title="Adventurers"></i></a>
+                                            </li>
+                                        }
+                                        @if(auth.canViewAdventurePlacesWidget()) {
+                                            <li class="places">
+                                                <a href="#places" data-toggle="tooltip" data-placement="bottom" title="Places"><i class="fa fa-globe" title="Place"></i></a>
+                                            </li>
+                                        }
+                                        @if(auth.canViewAdventureTimeWidget()) {
+                                            <li class="times">
+                                                <a href="#times" data-toggle="tooltip" data-placement="bottom" title="Times"><i class="fa fa-calendar" title="Date &amp; Time"></i></a>
+                                            </li>
+                                        }
+                                        @if(auth.canViewAdventureDiscussionWidget()) {
+                                            <li class="discussion emails">
+                                                <a href="#discussion" data-toggle="tooltip" data-placement="bottom" title="Discussion"><i class="fa fa-comments-o" title="Discussion"></i></a>
+                                                    <!--a href="#emails" data-toggle="tooltip" title="Emails"><i class="fa fa-envelope" title="Emails"></i></a-->
+                                            </li>
+                                        }
+                                        @if(auth.canViewAdventureTodoWidget()) {
+                                            <li class="todos files">
+                                                <a href="#todos" data-toggle="tooltip" data-placement="bottom" title="Todos"><i class="fa fa-list-ol" title="Todos"></i></a>
+                                                    <!--a href="#files" data-toggle="tooltip" title="Files"><i class="fa fa-file" title="Files"></i></a-->
+                                            </li>
+                                        }
+                                        @*<li class="offers"><a href="#offers"><i class="fa fa-suitcase" title="Offers"></i></a></li>*@
+                                    </ul>
+                                    <div class="nav-title pull-right"><strong>Go to</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                *@
             </div>
 
-            <div id="adventure-container">
+            <div class="adventure-container">
                 @comment.commentsCommon()
 
                 <div class="jrn-container">
@@ -382,9 +375,6 @@
             Html(Json.toJson(advr).toString())
         });
         </script>
-        <script src="@routes.Assets.at("javascripts/module/adventure.js").url" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/modules/adventure.js").url" type="text/javascript"></script>
 
-        <!--
-        @{Html(Json.toJson(advr).toString())});
-        -->
     }{@openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage)}

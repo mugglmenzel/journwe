@@ -2,7 +2,6 @@
 @import com.feth.play.module.pa.views.html._
 @import com.feth.play.module.pa.providers.AuthProvider.Registry
 
-
 <nav class="navbar" role="navigation">
     <div class="navbar-header">
         <button class="btn-default navbar-toggle" data-toggle="collapse" data-target="#navbar-header">
@@ -54,7 +53,6 @@
                         </div>
                     </a>
                 </script>
-                <script src="@routes.Assets.at("javascripts/header.js").url" type="text/javascript"></script>
 
                 <a class="btn navbar-btn" href="@core.html.routes.UserController.getProfile(user.getId())">
                     <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"}>
@@ -111,3 +109,4 @@
     }
     </div>
 </nav>
+<script src="@routes.Assets.at("javascripts/modules/header.js").url" type="text/javascript"></script>

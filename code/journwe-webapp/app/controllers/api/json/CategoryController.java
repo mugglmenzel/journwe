@@ -101,12 +101,13 @@ public class CategoryController extends Controller {
                 @Override
                 public String call() throws Exception {
                     final Date now = new Date();
+                    String lastInsId = lastId;
                     boolean more = true;
 
                     List<ObjectNode> results = new ArrayList<ObjectNode>();
                     if (count > 0) {
                         while (more) {
-                            List<Inspiration> inspirations = new CategoryToInspirationDAO().listN(catId, lastId, count);
+                            List<Inspiration> inspirations = new CategoryToInspirationDAO().listN(catId, lastInsId, count);
                             Logger.debug("inspirations found:" + inspirations);
 
                             for (Inspiration ins : inspirations)
@@ -120,6 +121,7 @@ public class CategoryController extends Controller {
                                     node.put("lng", ins.getPlaceLongitude() != null ? ins.getPlaceLongitude().floatValue() : 0F);
 
                                     results.add(node);
+                                    lastInsId = ins.getId();
                                 }
                             more = results.size() < count && inspirations.size() >= count;
                         }

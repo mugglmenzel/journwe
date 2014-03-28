@@ -4,7 +4,6 @@
 @import java.text.SimpleDateFormat
 
 @main(ins.getName()){ } {
-<div id="inspiration-container">
 
     <div class="prime-image">
         <div style="width: 100%;">
@@ -21,6 +20,10 @@
             </div>
         </div>
     </div>
+
+    <div id="inspiration-container" class="container">
+
+
 
     <div class="jrn-container jrn-no-top-gap jrn-no-top-round">
         <div class="row">
@@ -225,6 +228,6 @@
 <script type="text/javascript">
 define("inspirationData", [], @{Html(Json.toJson(ins).toString())});
 </script>
-<script src="@routes.Assets.at("javascripts/module/inspiration.js").url" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/modules/inspiration.js").url" type="text/javascript"></script>
 
 } {@openGraphMeta(ins.getName, controllers.html.routes.InspirationController.get(ins.getId).absoluteURL(), ins.getDescription, ins.getImage, "article")}

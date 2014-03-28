@@ -1,0 +1,282 @@
+
+
+#yingyangyong-container {
+  padding-bottom: 5px;
+}
+
+.btn-yingyangyong-close {
+  margin-bottom: 15px;
+}
+
+#place-add-map {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+#where-map img {
+  max-width: none;
+}
+
+
+#where-dialog,
+#who-dialog,
+#when-dialog {
+  border-left: 20px solid silver !important;
+  border-radius: 0 !important;
+  background: white !important;
+  position: absolute;
+  width: 100%;
+
+  #where-dialog {
+    border-left-color: fade(@color_place, 50%) !important;
+  }
+
+  #who-dialog {
+    border-left-color: fade(@color_adventurer, 50%) !important;
+  }
+
+  #when-dialog {
+    border-left-color: fade(@color_time, 50%) !important;
+  }
+}
+
+
+
+#yingyangyong-form {
+
+  .nav {
+
+    & li + li a {
+      margin-left: 10px;
+    }
+
+    li a {
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: #666;
+      color: rgba(0, 0, 0, 0.4);
+
+      &:hover * {
+        color: #333;
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      h4 {
+        margin-bottom: 10px;
+      }
+    }
+
+    li.active a {
+      box-shadow: 0 3px 7px -3px #555 inset;
+      color: #000;
+    }
+
+    .where-tab {
+      background-color: @color_place !important;
+    }
+    .who-tab {
+      background-color: @color_adventurer !important;
+    }
+    .when-tab {
+      background-color: @color_time !important;
+    }
+  }
+
+  .tab-pane {
+    > div {
+      border: solid 0px @color_place;
+      border-radius: 5px;
+      background-color: @color_place;
+      margin-bottom: 20px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+
+      > div {
+        border-radius: 5px 0 0 5px;
+      }
+    }
+  }
+
+  #who-tab > div {
+    border-color: @color_adventurer;
+    background-color: @color_adventurer;
+  }
+
+  #when-tab > div {
+    border-color: @color_time;
+    background-color: @color_time;
+  }
+}
+
+
+#yingyangyong {
+  /*	-webkit-transition: all 1s ease;
+      -moz-transition: all 1s ease;
+      -ms-transition: all 1s ease;
+      -o-transition: all 1s ease;
+      transition: all 1s ease; */
+
+  background-color: fade(@color_white, 10%);
+  border-radius: 50%;
+  padding: 5px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  &.where {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+
+    -webkit-animation: spinWhere 1s 1 ease;
+    -moz-animation: spinWhere 1s 1 ease;
+    -o-animation: spinWhere 1s 1 ease;
+    -ms-animation: spinWhere 1s 1 ease;
+    animation: spinWhere 1s ease 1;
+
+  }
+
+  &.who {
+    -webkit-transform: rotate(120deg);
+    -moz-transform: rotate(120deg);
+    -ms-transform: rotate(120deg);
+    -o-transform: rotate(120deg);
+    transform: rotate(120deg);
+
+    -webkit-animation: spinWho 1s 1 ease;
+    -moz-animation: spinWho 1s 1 ease;
+    -o-animation: spinWho 1s 1 ease;
+    -ms-animation: spinWho 1s 1 ease;
+    animation: spinWho 1s ease 1;
+
+  }
+
+  &.when {
+    -webkit-transform: rotate(240deg);
+    -moz-transform: rotate(240deg);
+    -ms-transform: rotate(240deg);
+    -o-transform: rotate(240deg);
+    transform: rotate(240deg);
+
+    -webkit-animation: spinWhen 1s ease 1;
+    -moz-animation: spinWhen 1s ease 1;
+    -o-animation: spinWhen 1s ease 1;
+    -ms-animation: spinWhen 1s ease 1;
+    animation: spinWhen 1s ease 1;
+  }
+}
+
+
+
+
+@-webkit-keyframes spinWhere {
+  0% {
+    -webkit-transform: rotate(240deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes spinWhere {
+  0% {
+    -moz-transform: rotate(240deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes spinWhere {
+  0% {
+    -o-transform: rotate(240deg);
+  }
+  100% {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@-ms-keyframes spinWhere {
+  0% {
+    -ms-transform: rotate(240deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spinWho {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(120deg);
+  }
+}
+
+@-moz-keyframes spinWho {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(120deg);
+  }
+}
+
+@-o-keyframes spinWho {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(120deg);
+  }
+}
+
+@-ms-keyframes spinWho {
+  0% {
+    -ms-transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(120deg);
+  }
+}
+
+@-webkit-keyframes spinWhen {
+  0% {
+    -webkit-transform: rotate(120deg);
+  }
+  100% {
+    -webkit-transform: rotate(240deg);
+  }
+}
+
+@-moz-keyframes spinWhen {
+  0% {
+    -moz-transform: rotate(120deg);
+  }
+  100% {
+    -moz-transform: rotate(240deg);
+  }
+}
+
+@-o-keyframes spinWhen {
+  0% {
+    -o-transform: rotate(120deg);
+  }
+  100% {
+    -o-transform: rotate(240deg);
+  }
+}
+
+@-ms-keyframes spinWhen {
+  0% {
+    -ms-transform: rotate(120deg);
+  }
+  100% {
+    -ms-transform: rotate(240deg);
+  }
+}

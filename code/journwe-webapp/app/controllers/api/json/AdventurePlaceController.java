@@ -185,6 +185,8 @@ public class AdventurePlaceController extends Controller {
 
     private static ObjectNode placeToSmallJSON(PlaceOption place) {
         ObjectNode node = Json.newObject();
+        if(place == null) return node;
+
         node.put("id", place.getOptionId());
         node.put("advId", place.getAdventureId());
         node.put("placeId", place.getPlaceId());
@@ -196,10 +198,12 @@ public class AdventurePlaceController extends Controller {
     }
 
     private static ObjectNode placeToJSON(PlaceOption place) {
+        ObjectNode node = placeToSmallJSON(place);
+        if(place == null) return node;
+
         User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
 
-        ObjectNode node = placeToSmallJSON(place);
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0.5D);
         node.put("voteCount", Json.toJson(new PlacePreferenceDAO().counts(place.getOptionId())));
@@ -230,7 +234,7 @@ public class AdventurePlaceController extends Controller {
         List<PlaceOptionRating> ratings = new ArrayList<PlaceOptionRating>();
         List<PlaceOption> placeOptions = new PlaceOptionDAO().all(advId);
 
-        if(placeOptions == null || !(placeOptions.size() > 0)) return null;
+        if(placeOptions == null || placeOptions.size() < 1) return null;
 
         for (PlaceOption po : placeOptions) {
             PlaceOptionRating rating = getPlaceGroupRating(po);

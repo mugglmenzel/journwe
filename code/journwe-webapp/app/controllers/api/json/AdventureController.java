@@ -57,7 +57,6 @@ public class AdventureController extends Controller {
             return badRequest();
 
         DynamicForm data = form().bindFromRequest();
-        Logger.debug("visibleSections: " + (data.get("visibleSections") == null));
         String visibleSections = data.get("visibleSections");
 
         try {
@@ -125,7 +124,7 @@ public class AdventureController extends Controller {
             List<Category> cats = new AdventureToCategoryDAO().listN(new AdventureDAO().get(advId).getId(), null, -1);
             result = cats.size() > 0 ? cats.get(0) : null;
         }
-        return ok(Json.toJson(result));
+        return result == null ? noContent() : ok(Json.toJson(result));
     }
 
     @Security.Authenticated(SecuredUser.class)

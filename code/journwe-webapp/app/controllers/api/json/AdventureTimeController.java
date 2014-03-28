@@ -185,10 +185,12 @@ public class AdventureTimeController extends Controller {
 
 
     private static ObjectNode timeToJSON(TimeOption time) {
+        ObjectNode node = Json.newObject();
+        if(time == null) return node;
+
         User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         TimePreference pref = new TimePreferenceDAO().get(time.getOptionId(), usr.getId());
 
-        ObjectNode node = Json.newObject();
         node.put("id", time.getOptionId());
         node.put("advId", time.getAdventureId());
         node.put("timeId", time.getTimeId());
@@ -224,7 +226,7 @@ public class AdventureTimeController extends Controller {
         List<TimeOptionRating> ratings = new ArrayList<TimeOptionRating>();
         List<TimeOption> timeOptions = new TimeOptionDAO().all(advId);
 
-        if(timeOptions == null || !(timeOptions.size() > 0)) return null;
+        if(timeOptions == null || timeOptions.size() < 1) return null;
 
         for (TimeOption po : timeOptions) {
             TimeOptionRating rating = getTimeGroupRating(po);

@@ -6,9 +6,7 @@
 @main("User Profile") { } {
 
     <div class="prime-image">
-        <div style="width: 100%;">
-            <img id="user-prime-image" style="width: 100%; height: 200;" @if(user.getImage == null){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=No+image"}else{src="http://www.journwe.com/thumbnail?h=200&w=1200&u=@user.getImage"}/>
-        </div>
+        <img id="user-prime-image" style="width: 100%; height: 200;" @if(user.getImage == null){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=No+image"}else{src="http://www.journwe.com/thumbnail?h=200&w=1200&u=@user.getImage"}/>
 
         <div class="title-overlay">
             <div class="title-name">
@@ -20,6 +18,8 @@
             *@
         </div>
     </div>
+
+    <div class="container">
     <div class="jrn-container jrn-no-top-round jrn-no-top-gap">
         <h2 id="options"><i class="fa fa-cogs"></i> @Messages("user.options") </h2>
         <div class="row">
@@ -103,10 +103,11 @@
             </div>
         </div>
     </div>
+    </div>
 
     <script type="text/javascript">
     define("userData", [], @{Html(Json.toJson(user).toString())});
     </script>
-    <script src="@routes.Assets.at("javascripts/module/user.js").url" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/modules/user.js").url" type="text/javascript"></script>
 
 } {@openGraphMeta(user.getName, core.html.routes.UserController.getProfile(user.getId).absoluteURL(), "Profile of " + user.getName + " on JournWe.com", user.getImage, "profile")}

@@ -5,28 +5,12 @@
 @import models.dao.category.CategoryDAO
 @import play.libs.Json
 
-@main(Messages("journwe.subtitle")) { } {
-
-    @*
-    @defining(new CategoryHierarchyDAO){ catHierDAO =>
-        <div class="nav-category visible-lg hidden" style="">
-            <ul id="nav-category-list" class="nav nav-pills nav-stacked">
-                @defining(new CategoryDAO().get(catHierDAO.getSuperCategoryId(cat.getId))){ catSuper => <li><a href="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){@html.routes.IndexController.categoryOverview()}else{@html.routes.IndexController.categoryIndex(catSuper.getId)}"><i class="fa fa-arrow-circle-up" title="@if(Category.SUPER_CATEGORY.equals(catSuper.getId)){Overview}else{@catSuper.getName}"></i> </a></li>}
-                <li><a href="#subcategories"><i class="fa fa-arrow-circle-down" title="Sub-Categories"></i></a></li>
-                <li><a href="#inspirations"><i class="fa fa-lightbulb-o" title="Inspirations"></i></a></li>
-                <li><a href="#publicadventures"><i class="fa fa-bullhorn" title="Public JournWes"></i></a></li>
-            </ul>
-        </div>
-    }
-    *@
+@main(Messages("journwe.subtitle")) { Category <em>@if(Category.SUPER_CATEGORY.equals(cat.getId)){Overview}else{@cat.getName}</em> } {
 
 
+<div class="container">
 
-    <div class="page-header">
-        <h1>
-            Category <em>@if(Category.SUPER_CATEGORY.equals(cat.getId)){Overview}else{@cat.getName}</em>
-        </h1>
-    </div>
+
     <div class="jrn-container jrn-no-round jrn-no-top-gap-page-header" style="padding: 0;">
         <ol  class="breadcrumb">
             @if(Category.SUPER_CATEGORY.equals(cat.getId)){
@@ -140,5 +124,6 @@
         define("categoryData", [], @{Html(Json.toJson(cat).toString())});
     </script>
 
-    <script src="@routes.Assets.at("javascripts/module/indexCat.js").url" type="text/javascript"></script>
+</div>
+<script src="@routes.Assets.at("javascripts/modules/indexCat.js").url" type="text/javascript"></script>
 }

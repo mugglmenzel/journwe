@@ -2,6 +2,7 @@
 
 @main(Messages("journwe.subtitle")){Welcome to JournWe
 <small>@Messages("journwe.subtitle")</small>} {
+    <div class="container">
 
     <div id="yingyangyong-container" class="jrn-no-top-round" style="margin-top: -20px; margin-bottom: 70px;">
     @yingyangyong(null)
@@ -56,5 +57,6 @@
         </div>
     </script>
 
-    <script src="@routes.Assets.at("javascripts/module/index.js").url" type="text/javascript"></script>
+</div>
+<script src="@routes.Assets.at("javascripts/modules/index.js").url" type="text/javascript"></script>
 }

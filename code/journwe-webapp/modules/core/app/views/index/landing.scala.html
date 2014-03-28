@@ -2,6 +2,7 @@
 @import com.feth.play.module.pa.views.html._
 
     @main(Messages("journwe.subtitle")) { }{
+    <div class="container">
         <section class="jrn-container text-center headline" style="background-size: cover; background-image:url('@routes.Assets.at("img/japan_logo.jpg")');">
             <div class="row text-success">
                 <div class="col-xs-3 col-xs-offset-1">
@@ -14,25 +15,11 @@
                     <a class="btn btn-lg btn-success btn-start-tour" href="#start">@Messages("landing.calltoaction") <i class="fa fa-angle-right"></i></a>
                 </div>
             </div>
-            @*
-            <div class="btn-group user-login">
-                <a class="btn btn-lg btn-success" href="@Registry.get("facebook").getUrl()"><i class="fa fa-facebook fa-fw"></i> Start Now</a>
-                <button class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="@core.html.routes.ApplicationController.login()"><i class="fa fa-user fa-fw"></i> JournWe</a></li>
-                @forProviders() { p =>
-                    <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
-                }
-                </ul>
-            </div>
-            *@
         </section>
 
         @tour(false)
 
-        <script src="@routes.Assets.at("javascripts/module/landing.js").url" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/modules/landing.js").url" type="text/javascript"></script>
 
         <div class="jrn-container">
             <h2>@Messages("landing.feature")</h2>
@@ -93,211 +80,5 @@
             </div>
             <div class="row landing-statement"></div>
         </div>
-
-        @*
-        <div class="jrn-container">
-            <h2>@Messages("index.story")</h2>
-            
-            <div id="success-stories" class="carousel slide">
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    <li data-target="#success-stories" data-slide-to="0" class="active"></li>
-                    <li data-target="#success-stories" data-slide-to="1"></li>
-                    <li data-target="#success-stories" data-slide-to="2"></li>
-                    <li data-target="#success-stories" data-slide-to="3"></li>
-                    <li data-target="#success-stories" data-slide-to="4"></li>
-                </ol>
-
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <div class="row">
-                            <div class="col-lg-7">
-                                <h3>@Messages("index.story1.header")</h3>
-                                <blockquote><p class="lead">@Messages("index.story1.content")</p>
-                                    <small><cite>@Messages("index.story1.cite")</cite></small></blockquote>
-                            </div>
-                            <div class="col-lg-5 text-center">
-                                @defining(new AdventureDAO().get("965ddda2-140c-4331-9883-72c9217216ca")){ adv =>   @if(adv != null) {
-                                <div class="polaroid" style="">
-                                    <a href="@html.admin.core.routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@html.admin.core.routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                                        <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> ETO</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 3</span>
-                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> 10-2013</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                } }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="row">
-                            <div class="col-lg-5 text-center">
-                            @defining(new AdventureDAO().get("5af6f85a-4145-4e3d-bcf0-ea8cf9e4962a")){ adv => @if(adv != null) {
-                                <div class="polaroid" style="position: relative; float: left;">
-                                    <a href="@html.admin.core.routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@html.admin.core.routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                                        <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> STO</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 5</span>
-                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> 11-2013</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }    }
-                            </div>
-                            <div class="col-lg-7">
-                                <h3>@Messages("index.story2.header")</h3>
-                                <blockquote><p class="lead">@Messages("index.story2.content")</p>
-                                    <small><cite>@Messages("index.story2.cite")</cite></small>  </blockquote>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="row">
-                            <div class="col-lg-7">
-                                <h3>@Messages("index.story3.header")</h3>
-                                <blockquote><p class="lead">@Messages("index.story3.content")</p>
-                                    <small><cite>@Messages("index.story3.cite")</cite></small></blockquote>
-                            </div>
-                            <div class="col-lg-5 text-center">
-                            @defining(new AdventureDAO().get("3146479b-8f99-4023-8e88-947fc4742002")){ adv =>  @if(adv != null) {
-                                <div class="polaroid" style="position: relative; float: left;">
-                                    <a href="@html.admin.core.routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@html.admin.core.routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                                        <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> ZUR</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 15</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            } }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="row">
-                            <div class="col-lg-5 text-center">
-                            @defining(new InspirationDAO().get("ebe510c4-25e9-4f18-9ffc-71ff10fc9901")){ ins => @if(ins != null) {
-                                <div class="polaroid" style="position: relative; float: left;">
-                                    <a href="@html.admin.core.routes.InspirationController.get(ins.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@ins.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@html.admin.core.routes.InspirationController.get(ins.getId)">@ins.getName</a></h4></div>
-                                        <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> BLA</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 56784</span>
-                                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> 8-2014</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }   }
-                            </div>
-                            <div class="col-lg-7">
-                                <h3>@Messages("index.story4.header")</h3>
-                                <blockquote><p class="lead">@Messages("index.story4.content")</p>
-                                    <small><cite>@Messages("index.story4.cite")</cite></small>  </blockquote>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="row">
-                            <div class="col-lg-7">
-                                <h3>@Messages("index.story5.header")</h3>
-                                <blockquote><p class="lead">@Messages("index.story5.content")</p>
-                                    <small><cite>@Messages("index.story5.cite")</cite></small></blockquote>
-                            </div>
-                            <div class="col-lg-5 text-center">
-                            @defining(new AdventureDAO().get("a05e49c5-8008-4e16-bde5-1af28d0c46d5")){ adv =>  @if(adv != null) {
-                                <div class="polaroid" style="position: relative; float: left;">
-                                    <a href="@html.admin.core.routes.AdventureController.getIndex(adv.getId)"><img style="margin: 0px;" src="http://i.embed.ly/1/image/crop?width=400&height=300&url=@adv.getImage&key=2c8ef5b200c6468f9f863bc75c46009f"></a>
-                                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                                        <div style="line-height: 20px;"><h4><a href="@html.admin.core.routes.AdventureController.getIndex(adv.getId)">@adv.getName</a></h4></div>
-                                        <div class="overlay text-center" style="display: none;">
-                                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> EARTH</span>
-                                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> 1</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }  }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Controls -->
-                <a class="left carousel-control" href="#success-stories" data-slide="prev">
-                    <span class="fa fa-prev"></span>
-                </a>
-                <a class="right carousel-control" href="#success-stories" data-slide="next">
-                   <span class="fa fa-next"></span>
-                </a>
-            </div>
-        </div>
-
-        <div class="jrn-container">
-            <h2>Some Inspirations</h2>
-
-            <div class="clearfix">
-                <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
-            </div>
-
-            <script type="text/x-tmpl" id="adventure-public-template">
-                <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left;">
-                    <a href="{%=o.link%}"><img style="margin: 0px; width: 204px; height: 204px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://i.embed.ly/1/image/crop?width=204&height=204&url=' + o.image + '&key=2c8ef5b200c6468f9f863bc75c46009f')%}{% } %}"></a>
-                    <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                        <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%}</a></h4></div>
-                        <div class="overlay text-center" style="display: none;">
-                            <span class="label" style="background-color: rgba(184, 246, 145, 0.5);" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}</span>
-                            <span class="label" style="background-color: rgba(235, 114, 104, 0.5);" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}</span>
-                            <span class="label" style="background-color: rgba(152, 229, 251, 0.5);" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=formatDateShort(o.favoriteTime.startDate)%} {% } else { %} ? {% } %}</span>
-                        </div>
-                    </div>
-                </div>
-            </script>
-            <script type="text/javascript">
-                $(document).ready(function(){
-
-                loadPublicAdventures(null, true);
-
-                $('#success-stories div.polaroid').hover(
-                    function(){
-                        $(this).find("div.overlay").slideDown("fast");
-                    },
-                    function(){
-                        $(this).find("div.overlay").slideUp("fast");
-                    }
-                );
-
-                });
-
-                function loadPublicAdventures(lastId, clear) {
-                $.get('@api.json.admin.core.routes.ApplicationController.getPublicAdventures()', {lastId: lastId, count: 10} , function (advs) {
-                if (clear) $('#adventures-public-list').empty();
-                for(var i in advs) {
-                var polaroid = tmpl('adventure-public-template', advs[i]);
-                $('#adventures-public-list').append(polaroid);
-
-                $('#adventures-public-list .polaroid').last().hide().fadeIn().hover(
-                function(){
-                $(this).find("div.overlay").slideDown("fast");
-                },
-                function(){
-                $(this).find("div.overlay").slideUp("fast");
-                }
-                );
-
-                }
-                });
-                }
-            </script>
-        </div>
-
-
-        *@
+    </div>
     }

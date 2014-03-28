@@ -1,6 +1,7 @@
 define(['common/async!https://maps.googleapis.com/maps/api/js?libraries=places,weather,panoramio&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false'],
     function () {
-        // return the gmaps namespace for brevity
+
+        console.log("loaded google maps.");
         return $.extend(window.google.maps, {
             resetBounds: function (map, markers) {
                 if (!map) {
@@ -37,12 +38,12 @@ define(['common/async!https://maps.googleapis.com/maps/api/js?libraries=places,w
                     (latlng instanceof window.google.maps.LatLng) ? latlng : map.getCenter()
                 );
                 var point2 = new window.google.maps.Point(
-                    ( (typeof(offsetX) == 'number' ? offsetX : 0) / Math.pow(2, map.getZoom()) ) || 0,
-                    ( (typeof(offsetY) == 'number' ? offsetY : 0) / Math.pow(2, map.getZoom()) ) || 0
+                        ( (typeof(offsetX) == 'number' ? offsetX : 0) / Math.pow(2, map.getZoom()) ) || 0,
+                        ( (typeof(offsetY) == 'number' ? offsetY : 0) / Math.pow(2, map.getZoom()) ) || 0
                 );
                 map.setCenter(map.getProjection().fromPointToLatLng(new google.maps.Point(
-                    point1.x - point2.x,
-                    point1.y - point2.y
+                        point1.x - point2.x,
+                        point1.y - point2.y
                 )));
                 window.google.maps.event.trigger(map, 'resize');
             }

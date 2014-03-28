@@ -38,18 +38,26 @@ playJavaSettings
 
 doc in Compile <<= target.map(_ / "none")
 
+// LESS
+
+lessEntryPoints <<= baseDirectory(_ / "app" / "assets" / "css" ** "journwe.less")
+
+
+
+// RequireJS
+
 requireJs ++= Seq(
-  "main.js",
+  "journwe.js",
   "header.js",
   "comments.js",
-  "module/index.js",
-  "module/indexCat.js",
-  "module/indexNew.js",
-  "module/indexVet.js",
-  "module/adventure.js",
-  "module/adventurePublic.js",
-  "module/inspiration.js",
-  "module/user.js"
+  "modules/index.js",
+  "modules/indexCat.js",
+  "modules/indexNew.js",
+  "modules/indexVet.js",
+  "modules/adventure.js",
+  "modules/adventurePublic.js",
+  "modules/inspiration.js",
+  "modules/user.js"
 )
 
 requireJsShim += "build.js"
