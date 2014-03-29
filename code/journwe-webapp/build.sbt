@@ -59,7 +59,7 @@ requireJs ++= Seq(
   "modules/user.js"
 )
 
-requireJsShim += "build.js"
+requireJsShim += "journwe.js"
 
 //requireNativePath := Some("java -cp lib/requireJs/js.jar:lib/requireJs/compiler.jar org.mozilla.javascript.tools.shell.Main lib/requireJs/r.js")
 
