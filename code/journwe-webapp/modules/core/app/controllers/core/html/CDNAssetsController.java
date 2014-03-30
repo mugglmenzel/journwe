@@ -1,6 +1,7 @@
 package controllers.core.html;
 
 import controllers.routes;
+import org.jboss.netty.handler.codec.http.HttpHeaders;
 import play.Play;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -14,7 +15,7 @@ public class CDNAssetsController extends Controller {
 
 
     public static Result at(String file) {
-        return Play.isDev() ? redirect(routes.Assets.at(file)) : redirect("http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + file);
+        return Play.isDev() ? redirect(routes.Assets.at(file)) : redirect("http://" + CLOUDFRONT_SERVER_BASE_URL + "/" + file + (request().headers().get(HttpHeaders.Names.ACCEPT_ENCODING).toString().contains("gzip") ? ".gz" : ""));
     }
 
 }

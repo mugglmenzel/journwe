@@ -24,7 +24,6 @@ define(function () {
             url = name.replace(paramRegex, ''),
             param = (paramRegex.test(name)) ? name.replace(/.+!/, '') : DEFAULT_PARAM_NAME;
         url += (url.indexOf('?') < 0) ? '?' : '&';
-        console.log('async url is ' + url + param + '=' + id);
         return url + param + '=' + id;
     };
 
@@ -35,7 +34,6 @@ define(function () {
 
     return {
         load: function (name, req, onLoad, config) {
-            console.log('loading async...');
             if (config.isBuild) {
                 onLoad(null); //avoid errors on the optimizer
             } else {

@@ -49,5 +49,4 @@ define(['config', 'common/async!https://maps.googleapis.com/maps/api/js?librarie
             }
 
         });
-});  //'common/google!maps,3,other_params:[libraries="places,weather,panoramio",key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY,sensor=false]'
-//'common/async!https://maps.googleapis.com/maps/api/js?libraries=places,weather,panoramio&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false'
+});
