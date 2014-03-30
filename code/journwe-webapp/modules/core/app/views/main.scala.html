@@ -24,7 +24,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
- 	<script type="text/javascript">
+    @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = controllers.core.html.routes.CDNAssetsController.at("javascripts/" + (if(javascriptModule == null){"static"}else{javascriptModule})).absoluteURL())
+    <script src="@controllers.core.html.routes.CDNAssetsController.at("javascripts/requireConfig.js")"></script>
+    <script type="text/javascript">
 	  var _gaq = _gaq || [];
 	  _gaq.push(['_setAccount', 'UA-39156308-1']);
 	  _gaq.push(['_setDomainName', 'journwe.com']);
@@ -36,7 +38,6 @@
 	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
 	</script>
-    @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = controllers.core.html.routes.CDNAssetsController.at("javascripts/" + (if(javascriptModule == null){"static"}else{javascriptModule})).absoluteURL())
 </head>
 <body>
     <div class="background-container">
@@ -150,6 +151,7 @@
 	        fjs.parentNode.insertBefore(js, fjs);
 	        }(document, 'script', 'facebook-jssdk'));
 	    </script>
+
 	</div>
 </body>
 </html>

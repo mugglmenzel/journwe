@@ -1,5 +1,8 @@
 require([
+    "common/utils",
     "modules/main"
-], function () {
+], function (utils) {
+
+    utils.loadGenericBgImage();
 
 });

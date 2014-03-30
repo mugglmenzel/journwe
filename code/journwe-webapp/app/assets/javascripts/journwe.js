@@ -1,7 +1,7 @@
 
 define([
-    "common/utils"
-], function (utils) {
+    "config"
+], function () {
     // Init drop behaviour
     $(window).bind('drop', function (event) {
         event.stopPropagation();

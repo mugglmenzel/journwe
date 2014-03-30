@@ -47,18 +47,18 @@ lessEntryPoints <<= baseDirectory(_ / "app" / "assets" / "css" ** "journwe.less"
 // RequireJS
 
 requireJs ++= Seq(
-  "modules/adventure.js",
-  "modules/adventurePublic.js",
-  "modules/index.js",
-  "modules/indexCat.js",
-  "modules/indexNew.js",
-  "modules/indexVet.js",
-  "modules/inspiration.js",
-  "modules/landing.js",
-  "modules/user.js"
+  "adventure.js",
+  "adventurePublic.js",
+  "index.js",
+  "indexCat.js",
+  "indexNew.js",
+  "indexVet.js",
+  "inspiration.js",
+  "landing.js",
+  "user.js"
 )
 
-requireJsShim += "journwe.js"
+requireJsShim += "shim.js"
 
 //requireNativePath := Some("java -cp lib/requireJs/js.jar:lib/requireJs/compiler.jar org.mozilla.javascript.tools.shell.Main lib/requireJs/r.js")
 

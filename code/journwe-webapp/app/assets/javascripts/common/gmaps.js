@@ -1,4 +1,4 @@
-define(['common/async!https://maps.googleapis.com/maps/api/js?libraries=places,weather,panoramio&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false'],
+define(['config', 'common/async!https://maps.googleapis.com/maps/api/js?libraries=places,weather,panoramio&key=AIzaSyAbYnwpdOgqWhspiETgFdlXyX3H2Fjb8fY&sensor=false'],
     function () {
 
         console.log("google maps api injected and loaded.");
