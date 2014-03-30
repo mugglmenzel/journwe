@@ -56,7 +56,8 @@ requireJs ++= Seq(
   "indexVet.js",
   "inspiration.js",
   "landing.js",
-  "user.js"
+  "user.js",
+  "static.js"
 )
 
 requireJsShim += "shim.js"
