@@ -4,7 +4,7 @@
  *
  */
 
-define(['routes'], function (routes) {
+define(['routes', 'config'], function (routes) {
 
     var spinnerTempStore = [];
 
@@ -14,7 +14,7 @@ define(['routes'], function (routes) {
         },
         isMobile = new RegExp("Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini", "i").test(navigator.userAgent);
 
-
+    console.log("utils loaded.");
 
     return {
         adventurerCSSLabel: {

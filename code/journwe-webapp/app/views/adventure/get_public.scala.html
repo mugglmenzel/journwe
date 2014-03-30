@@ -4,7 +4,7 @@
 @import play.libs.Json
 @import views.html.index.quickintro
 
-@main(adv.getName()){ }{
+@main(adv.getName()){ } {
 
 <div id="adventure-container">
     <div class="prime-image">
@@ -78,7 +78,6 @@
     define("adventureData", [], @{Html(Json.toJson(adv).toString())});
     define("adventurerData", [], @{Html(Json.newObject().toString())});
 </script>
-<script src="@routes.Assets.at("javascripts/adventurePublic.js").url" type="text/javascript"></script>
 
 
-}{@openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage)}
+} {@openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage)} ("modules/adventurePublic")

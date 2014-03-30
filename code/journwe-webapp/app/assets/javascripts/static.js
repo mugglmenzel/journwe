@@ -1,0 +1,5 @@
+require([
+    "modules/main"
+], function () {
+
+});

@@ -47,15 +47,14 @@ lessEntryPoints <<= baseDirectory(_ / "app" / "assets" / "css" ** "journwe.less"
 // RequireJS
 
 requireJs ++= Seq(
-  "journwe.js",
-  "modules/header.js",
+  "modules/adventure.js",
+  "modules/adventurePublic.js",
   "modules/index.js",
   "modules/indexCat.js",
   "modules/indexNew.js",
   "modules/indexVet.js",
-  "modules/adventure.js",
-  "modules/adventurePublic.js",
   "modules/inspiration.js",
+  "modules/landing.js",
   "modules/user.js"
 )
 

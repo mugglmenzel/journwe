@@ -375,6 +375,5 @@
             Html(Json.toJson(advr).toString())
         });
         </script>
-        <script src="@routes.Assets.at("javascripts/modules/adventure.js").url" type="text/javascript"></script>
 
-    }{@openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage)}
+    }(openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage), "adventure")

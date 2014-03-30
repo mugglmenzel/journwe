@@ -3,7 +3,8 @@ define([
     "routes",
     "messages",
     "common/gmaps",
-    "inspirationData"
+    "inspirationData",
+    "journwe"
 ], function (utils, routes, messages, gmaps, ins) {
 
 
@@ -13,6 +14,15 @@ define([
 
 
     var initialize = function () {
+
+        $("#time-add-input-start").datepicker({startDate: new Date()}).on('changeDate', function (e) {
+            $("#time-add-input-end").datepicker('setStartDate', e.date);
+            $("#time-add-input-start").datepicker('hide');
+        });
+        $("#time-add-input-end").datepicker({startDate: new Date()}).on('changeDate', function (e) {
+            $("#time-add-input-end").datepicker('hide');
+        });
+
         gmaps.visualRefresh = true;
 
         if (map) {
@@ -25,7 +35,7 @@ define([
             center: new gmaps.LatLng(49.483472, 8.476992),
             mapTypeId: gmaps.MapTypeId.ROADMAP
         };
-        if($('#where-map').length) map = new gmaps.Map(document.getElementById('where-map'),
+        if ($('#where-map').length) map = new gmaps.Map(document.getElementById('where-map'),
             mapOptions);
 
         new gmaps.places.Autocomplete(document.getElementById('place-add-input'));
@@ -141,7 +151,7 @@ define([
         else {
             var provider = $('#people-add-provider-icon').data('social-provider');
 
-            if (provider != null && provider != 'email'){
+            if (provider != null && provider != 'email') {
                 $('.input-people-add').attr('type', 'text');
                 $('.input-people-add').typeahead({
                     name: 'people-typeahead',
@@ -176,6 +186,7 @@ define([
             }
         }
     };
+
 
     var addTime = function () {
 
@@ -269,22 +280,9 @@ define([
     });
 
 
-    $("#time-add-input-start").datepicker({startDate: new Date()}).on('changeDate', function (e) {
-        $("#time-add-input-end").datepicker('setStartDate', e.date);
-        $("#time-add-input-start").datepicker('hide');
-    });
-    $("#time-add-input-end").datepicker({startDate: new Date()}).on('changeDate', function (e) {
-        $("#time-add-input-end").datepicker('hide');
-    });
-
-
-    initialize();
-
-
     return {
-        resetBounds: function () {
-            resetBounds();
-        }
+        initialize: initialize,
+        resetBounds: resetBounds
     }
 
 });

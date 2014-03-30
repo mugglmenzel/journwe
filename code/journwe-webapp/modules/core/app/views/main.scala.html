@@ -1,4 +1,4 @@
-@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit ogMeta: Html = Html.empty, active: String = "home")
+@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit ogMeta: Html = Html.empty, javascriptModule: String = null, active: String = "home")
 
 <!DOCTYPE html>
 
@@ -36,10 +36,9 @@
 	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
 	</script>
-    @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = controllers.core.html.routes.CDNAssetsController.at("javascripts/journwe").absoluteURL())
+    @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = controllers.core.html.routes.CDNAssetsController.at("javascripts/" + (if(javascriptModule == null){"static"}else{javascriptModule})).absoluteURL())
 </head>
 <body>
-
     <div class="background-container">
 		<img src="@routes.Assets.at("img/s.gif")" id="background"/>
 		<div class="overlay"></div>
@@ -72,7 +71,7 @@
                             &copy; 2014 JournWe.
                     </div>
                     <div class="col-xs-8">
-                        <div class="pull-right"><a onclick="$('html, body').animate({ scrollTop: 0 }, 600); return false;"><i class="fa fa-angle-up"></i> Top</a></div>
+                        <div class="pull-right"><a class="btn-scroll-top"><i class="fa fa-angle-up"></i> Top</a></div>
                     </div>
                 </div>
  	        </div>
@@ -152,6 +151,5 @@
 	        }(document, 'script', 'facebook-jssdk'));
 	    </script>
 	</div>
-
 </body>
 </html>
