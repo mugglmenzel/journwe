@@ -1,9 +1,47 @@
 @import com.feth.play.module.pa.providers.AuthProvider.Registry
 @import com.feth.play.module.pa.views.html._
 
-    @main(Messages("journwe.subtitle")){ } {
+@main(Messages("journwe.subtitle")) { } {
+
+    <section style="background-size: cover; background-image: url('@controllers.core.html.routes.CDNAssetsController.at("img/landing/map_mannheim.png")');">
+        <div class="container text-center headline">
+            <div class="text-success">
+                <div class="title">Journ<strong>We</strong></div>
+                <div class="subtitle">Organize and Travel Together.</div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background-color : #fff;">
+        <div class="container text-center">
+            <div class="text-success">
+                <h1>Do you still use Emails, Facebook, and Whatsapp to organize a trip with your friends?</h1>
+                <h2>We got everything to organize a trip with your friends.</h2>
+                <div class="spacer20"></div>
+                <a class="btn btn-lg btn-success btn-start-tour" href="#start">Login and Try JournWe now! <i class="fa fa-angle-right"></i></a>
+                <div class="spacer20"></div>
+            </div>
+        </div>
+    </section>
+    <section style="background-color : #999;">
+        <div class="container">
+            <div class="row" style="color: #fff;">
+                <div class="col-xs-4"><h2>"JournWe helped me to have a great surf trip with friends." - Seppel</h2></div>
+                <div class="col-xs-4"><p class="lead">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p></div>
+                <div class="col-xs-4"><img style="width: 100%;" src="http://i.imgur.com/x1EDvD9.jpg"></div>
+            </div>
+            <div class="row" style="color: #fff;">
+                <div class="col-xs-4"><img style="width: 100%;" src="http://i.imgur.com/p44hTBZ.jpg"></div>
+                <div class="col-xs-4"><p class="lead">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p></div>
+                <div class="col-xs-4"><h2>"JournWe helped me to have a great surf trip with friends." - Seppel</h2></div>
+            </div>
+
+        </div>
+    </section>
+
+    @*
     <div class="container">
-        <section class="jrn-container text-center headline" style="background-size: cover; background-image:url('@routes.Assets.at("img/japan_logo.jpg")');">
+        <section class="jrn-container text-center headline" style="background-size : cover ; background-image : url ( ' @routes.Assets.at("img/japan_logo.jpg") ');">
             <div class="row text-success">
                 <div class="col-xs-3 col-xs-offset-1">
                     <img src="@routes.Assets.at("img/journwe_group_logo.png")" alt="JournWe Logo, Travel together.">
@@ -21,7 +59,7 @@
 
         <div class="jrn-container">
             <h2>@Messages("landing.feature")</h2>
-            
+
             <div class="row landing-statement">
                 <div class="col-md-7 landing">
                     <div><img src="@routes.Assets.at("img/landing/landing_adventurer2.png")"></div>
@@ -63,20 +101,21 @@
             </div>
 
 
-
             <div class="row landing-statement">
                 <div class="col-md-6 col-xs-12">
-                  <h4><i class="fa fa-wrench"></i> @Messages("landing.beta.title")</h4>
+                    <h4><i class="fa fa-wrench"></i> @Messages("landing.beta.title")</h4>
                     @Messages("landing.beta.text")
                 </div>
                 <div class="col-md-6 col-xs-12">
-                  <h4><i class="fa fa-money"></i> @Messages("landing.b2b.title")</h4>
+                    <h4><i class="fa fa-money"></i> @Messages("landing.b2b.title")</h4>
                     @Html(Messages("landing.b2b.text"))
                     <div class="spacer10"></div>
-                    <div class="pull-right"><a class="btn btn-default" href="/contact"><i class="fa fa-envelope-o"></i> Contact</a></div>
+                    <div class="pull-right"><a class="btn btn-default" href="/contact"><i class="fa fa-envelope-o"></i>
+                        Contact</a></div>
                 </div>
             </div>
             <div class="row landing-statement"></div>
         </div>
     </div>
-    }(Html.empty, "landing")
+    *@
+}(Html.empty, "landing")

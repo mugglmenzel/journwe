@@ -73,7 +73,7 @@ public class JournWeSMTPServer {
             @Override
             public boolean accept(String from, String recipient) {
                 logger.info("Got from: " + from + ", to: " + recipient);
-                return true; // dynamo.load(Adventure.class, recipient.substring(0, recipient.indexOf("@"))) != null;
+                return recipient.endsWith("@journwe.com");
             }
 
             @Override
