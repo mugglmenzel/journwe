@@ -67,5 +67,6 @@ require([
         }
     });
 
+    initialize();
 
 });
