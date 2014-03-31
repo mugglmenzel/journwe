@@ -15,7 +15,7 @@
 
         <div class="brand">
             <a href="/">
-                <img src="@routes.Assets.at("img/journwe_logo.png")" alt="JournWe logo">
+                <img src="@controllers.core.html.routes.CDNAssetsController.at("img/journwe_logo.png")" alt="JournWe logo">
                 <span>
                     Journ<strong>We</strong>
                 </span>
@@ -29,9 +29,9 @@
         @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
             @if(auth != null && user != null) {
             <ul class="nav navbar-nav navbar-left">
-                <li @if(active == "home"){class="active"}><a href="@html.routes.IndexController.index()"><i class="fa fa-home"></i> My JournWe</a></li>
-                <li @if(active == "new"){class="active"}><a href="@html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New JournWe</a></li>
-                <li @if(active == "inspiration"){class="active"}><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Travel Inspirations</a></li>
+                <li @if(active == "home"){class="active"}><a href="@controllers.html.routes.IndexController.index()"><i class="fa fa-home"></i> My JournWe</a></li>
+                <li @if(active == "new"){class="active"}><a href="@controllers.html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New JournWe</a></li>
+                <li @if(active == "inspiration"){class="active"}><a href="@controllers.html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Travel Inspirations</a></li>
             </ul>
             <div class="navbar-right">
                 <a id="notifications-link" class="btn navbar-btn" data-html="true" data-placement="bottom" data-title="Notifications"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
@@ -66,7 +66,7 @@
             } else {
 
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
+                    <li><a href="@controllers.html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Travel Inspirations</a></li>
                     <!--<li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>-->
                 </ul>
 
