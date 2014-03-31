@@ -1,7 +1,12 @@
 @(user: models.user.User)
 
-@main(Messages("journwe.subtitle")){Welcome to JournWe
-<small>@Messages("journwe.subtitle")</small>} {
+@scripts = {
+    <script type="text/javascript">
+    define("inspirationData", [], @{Json.newObject()});
+    </script>
+}
+
+@main(Messages("journwe.subtitle")){New JournWe} {
     <div class="container">
 
     <div id="yingyangyong-container" class="jrn-no-top-round" style="margin-top: -20px; margin-bottom: 70px;">
