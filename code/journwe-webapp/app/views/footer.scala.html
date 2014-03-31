@@ -7,17 +7,18 @@
     <div class="col-xs-4">
         <ul class="nav nav-pills nav-stacked">
 
-            <li @if(active == "home"){class="active"}><a href="@html.routes.IndexController.index">Home</a></li>
-            <li @if(active == "inspiration"){class="active"}><a href="@html.routes.IndexController.categoryOverview">Travel Inspirations</a></li>
+            <li @if(active == "home"){class="active"}><a href="@html.routes.IndexController.index"><i class="fa fa-home"></i> My JournWe</a></li>
+            <li @if(active == "new"){class="active"}><a href="@html.routes.IndexController.indexNew"><i class="fa fa-asterisk"></i> My JournWe</a></li>
+            <li @if(active == "inspiration"){class="active"}><a href="@html.routes.IndexController.categoryOverview"><i class="fa fa-lightbulb-o"></i> Travel Inspirations</a></li>
             <li @if(active == "about"){class="active"}><a href="@core.html.routes.ApplicationController.about">
-            About JournWe</a></li>
+            <i class="fa fa-info"></i> About JournWe</a></li>
             @*<li @if(active == "team"){class="active"}><a href="@core.html.routes.ApplicationController.contact">Team</a></li>*@
             <li @if(active == "contact"){class="active"}><a href="@core.html.routes.ApplicationController.contact">
-            Contact Us</a></li>
+            <i class="fa fa-envelope-o"></i> Contact Us</a></li>
             <li @if(active == "imprint"){class="active"}><a href="@core.html.routes.ApplicationController.imprint">
-            Imprint</a> </li>
+            <i class="fa fa-legal"></i> Imprint</a> </li>
             <li class="stash @if(active == "admin"){active}">
-                <a href="@controllers.admin.html.routes.AdminController.admin">Admin</a>
+                <a href="@controllers.admin.html.routes.AdminController.admin"><i class="fa fa-cogs"></i> Admin</a>
             </li>
         </ul>
     </div>
@@ -43,7 +44,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-xs-4 text-right">
+    <div class="col-xs-2 col-xs-offset-2 text-right">
         <ul class="nav nav-pills nav-stacked">
         @for(lang <- Lang.availables) {
             <li @if(lang.language == Http.Context.current().lang().language()) {class="active"}><a href="@core.html.routes.ApplicationController.changeLanguage(lang.language.toString)">@if(lang.language == Http.Context.current().lang().language()) {

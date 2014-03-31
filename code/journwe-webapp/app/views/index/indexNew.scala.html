@@ -8,11 +8,12 @@
     </script>
 }
 
-@main(Messages("journwe.subtitle")){New @if(ins != null){@ins.getName()} JournWe} {
-
-    <div id="yingyangyong-container jrn-no-top-round" style="margin-top: -20px; margin-bottom: 50px;">
-
-    @yingyangyong(ins)
+@main(Messages("journwe.subtitle")){ } {
+    <div class="container">
+        <div id="yingyangyong-container" class="jrn-container">
+            <h2><i class="fa fa-asterisk"></i> New @if(ins != null){@ins.getName()} JournWe</h2>
+            @yingyangyong(ins)
+        </div>
     </div>
 
 }(Html.empty, "indexNew", scripts)
