@@ -1,10 +1,14 @@
 @(user: models.user.User)
 
+@import play.libs.Json
 
+@scripts = {
+    <script type="text/javascript">
+    define("inspirationData", [], @{Json.newObject()});
+    </script>
+}
 
-@main(Messages("journwe.subtitle")) {JournWe
-    <small>@Messages("journwe.subtitle")</small>
-} {
+@main(Messages("journwe.subtitle")) {My JournWes} {
 
 <div class="container">
     <div id="yingyangyong-container" class="jrn-container stash jrn-no-top-round" style="margin-top: -20px ; margin-bottom: 70px;">
@@ -18,10 +22,10 @@
 
     <div class="jrn-container jrn-no-top-round jrn-no-top-gap-page-header">
 
+        <h2><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button class="btn btn-adventure-my-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <p class="lead">
         @Messages("index.welcome1", user.getName())
         </p>
-        <h2><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button class="btn btn-adventure-my-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="margin-bottom : 20px; margin-left: -5px; margin-right: -5px;">
 
             <div class="adventures-list-full clearfix">
@@ -88,11 +92,10 @@
 
 
     <div class="jrn-container">
-        <h1>
-        @Messages("inspiration.getInspired")
-        </h1>
-
         <h2><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
+        <p class="lead">
+        @Messages("inspiration.getInspired")
+        </p>
 
         <div style="">
             <div id="categories-list" class="text-center"><div class="loader"></div></div>
@@ -139,4 +142,4 @@
     </script>
     *@
 </div>
-}(Html.empty, "indexVet")
+}(Html.empty, "indexVet", scripts)

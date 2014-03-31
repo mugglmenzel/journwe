@@ -3,6 +3,12 @@
 @import play.libs.Json
 @import java.text.SimpleDateFormat
 
+@scripts = {
+    <script type="text/javascript">
+    define("inspirationData", [], @{Html(Json.toJson(ins).toString())});
+    </script>
+}
+
 @main(ins.getName()){ } {
 
     <div class="prime-image">
@@ -225,8 +231,4 @@
     </script>
 </div>
 
-<script type="text/javascript">
-define("inspirationData", [], @{Html(Json.toJson(ins).toString())});
-</script>
-
-}(openGraphMeta(ins.getName, controllers.html.routes.InspirationController.get(ins.getId).absoluteURL(), ins.getDescription, ins.getImage, "article"), "inspiration")
+}(openGraphMeta(ins.getName, controllers.html.routes.InspirationController.get(ins.getId).absoluteURL(), ins.getDescription, ins.getImage, "article"), "inspiration", scripts)

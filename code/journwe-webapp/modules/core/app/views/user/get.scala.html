@@ -3,6 +3,12 @@
 @import models.notifications.ENotificationFrequency
 @import play.libs.Json
 
+@scripts = {
+    <script type="text/javascript">
+    define("userData", [], @{Html(Json.toJson(user).toString())});
+    </script>
+}
+
 @main("User Profile"){ } {
 
     <div class="prime-image">
@@ -105,9 +111,4 @@
     </div>
     </div>
 
-    <script type="text/javascript">
-    define("userData", [], @{Html(Json.toJson(user).toString())});
-    </script>
-    <script src="@routes.Assets.at("javascripts/modules/user.js").url" type="text/javascript"></script>
-
-} {@openGraphMeta(user.getName, core.html.routes.UserController.getProfile(user.getId).absoluteURL(), "Profile of " + user.getName + " on JournWe.com", user.getImage, "profile")} ("modules/user")
+}(openGraphMeta(user.getName, core.html.routes.UserController.getProfile(user.getId).absoluteURL(), "Profile of " + user.getName + " on JournWe.com", user.getImage, "profile"), "user")

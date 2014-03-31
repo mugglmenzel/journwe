@@ -6,7 +6,8 @@
 @main(Messages("journwe.subtitle")){Contact}{
 <div class="container">
     <div class="jrn-container" style="margin-top:-20px;">
-    @helper.form(core.html.routes.ApplicationController.contactForm) {
+        <p class="lead">Please use the form to contact us.</p>
+        @helper.form(core.html.routes.ApplicationController.contactForm) {
         @helper.inputText(contactForm("name"),
             '_label -> "Name",
             'class -> "form-control")
@@ -34,4 +35,4 @@
     </div>
  </div>
 
-} { } (null, "contact")
+}(Html.empty, null, Html.empty, "contact")

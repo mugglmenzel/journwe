@@ -6,8 +6,18 @@
 
 @import views.html.adventure.section._
 
+@scripts = {
+    <script type="text/javascript">
+    define("adventureData", [ ], @{
+        Html(Json.toJson(adv).toString())
+    });
+    define("adventurerData", [ ], @{
+        Html(Json.toJson(advr).toString())
+    });
+    </script>
+}
 
-    @main(adv.getName()) { } {
+@main(adv.getName()) { } {
 
         @defining(new JournweAuthorization(adv.getId)) { auth =>
 
@@ -367,13 +377,4 @@
 
     </div>
 
-        <script type="text/javascript">
-        define("adventureData", [ ], @{
-            Html(Json.toJson(adv).toString())
-        });
-        define("adventurerData", [ ], @{
-            Html(Json.toJson(advr).toString())
-        });
-        </script>
-
-    }(openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage), "adventure")
+}(openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage), "adventure", scripts)

@@ -1,10 +1,10 @@
-@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit ogMeta: Html = Html.empty, javascriptModule: String = null, active: String = "home")
+@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit ogMeta: Html = Html.empty, javascriptModule: String = null, scripts: Html = Html.empty, active: String = "home")
 
 @import play.Play
 
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="@Http.Context.current().lang().language()">
 <head>
 	<title>JournWe - @Html(title)</title>
     @if(!Html.empty.equals(ogMeta)) {
@@ -13,7 +13,7 @@
        @openGraphMeta(title)
     }
     <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400'>
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300' type='text/css'>
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300'>
     <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Lato:300,400'>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="@controllers.core.html.routes.CDNAssetsController.at("css/journwe.min.css")">
@@ -26,8 +26,6 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = controllers.core.html.routes.CDNAssetsController.at("javascripts/" + (if(javascriptModule == null){"static"}else{javascriptModule})).absoluteURL())
-    <script src="@controllers.core.html.routes.CDNAssetsController.at((if(Play.isProd()){"javascripts-min"}else{"javascripts"}) + "/requireConfig.js")"></script>
     <script type="text/javascript">
 	  var _gaq = _gaq || [];
 	  _gaq.push(['_setAccount', 'UA-39156308-1']);
@@ -144,7 +142,11 @@
             </div>
         </footer>
 
-	    <div id="fb-root"></div>
+        @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = controllers.core.html.routes.CDNAssetsController.at("javascripts/" + (if(javascriptModule == null){"static"}else{javascriptModule})).absoluteURL())
+        <script src="@controllers.core.html.routes.CDNAssetsController.at((if(Play.isProd()){"javascripts-min"}else{"javascripts"}) + "/requireConfig.js")"></script>
+        @scripts
+
+        <div id="fb-root"></div>
 	    <script>(function(d, s, id) {
 	        var js, fjs = d.getElementsByTagName(s)[0];
 	        if (d.getElementById(id)) return;

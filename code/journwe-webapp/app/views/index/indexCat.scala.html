@@ -5,6 +5,12 @@
 @import models.dao.category.CategoryDAO
 @import play.libs.Json
 
+@scripts = {
+    <script type="text/javascript">
+    define("categoryData", [], @{Html(Json.toJson(cat).toString())});
+    </script>
+}
+
 @main(Messages("journwe.subtitle")) { Category <em>@if(Category.SUPER_CATEGORY.equals(cat.getId)){Overview}else{@cat.getName}</em> } {
 
 
@@ -120,9 +126,5 @@
         </div>
     </script>
 
-    <script type="text/javascript">
-        define("categoryData", [], @{Html(Json.toJson(cat).toString())});
-    </script>
-
 </div>
-}(Html.empty, "indexCat")
+}(Html.empty, "indexCat", scripts)

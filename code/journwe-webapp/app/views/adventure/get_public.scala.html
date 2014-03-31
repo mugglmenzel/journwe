@@ -4,6 +4,13 @@
 @import play.libs.Json
 @import views.html.index.quickintro
 
+@scripts = {
+    <script type="text/javascript">
+    define("adventureData", [], @{Html(Json.toJson(adv).toString())});
+    define("adventurerData", [], @{Html(Json.newObject().toString())});
+    </script>
+}
+
 @main(adv.getName()){ } {
 
 <div id="adventure-container">
@@ -74,10 +81,4 @@
 
 @quickintro()
 
-<script type="text/javascript">
-    define("adventureData", [], @{Html(Json.toJson(adv).toString())});
-    define("adventurerData", [], @{Html(Json.newObject().toString())});
-</script>
-
-
-} {@openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage)} ("modules/adventurePublic")
+}(openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage), "adventurePublic", scripts)

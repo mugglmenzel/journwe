@@ -27,7 +27,7 @@
         @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
             @if(auth != null && user != null) {
             <ul class="nav navbar-nav navbar-left">
-                <li><a href="@html.routes.IndexController.index()"><i class="fa fa-info"></i> My JournWe</a></li>
+                <li><a href="@html.routes.IndexController.index()"><i class="fa fa-home"></i> My JournWe</a></li>
                 <li><a href="@html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New</a></li>
                 <li><a href="@html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Inspirations</a></li>
             </ul>

@@ -1,11 +1,8 @@
 @(ins: models.inspiration.Inspiration)
 
 @import models.dao.user.UserSocialDAO
-@import models.dao.user.UserDAO
-
-@import java.text.SimpleDateFormat
 @import com.feth.play.module.pa.PlayAuthenticate
-@import play.libs.Json
+
 
 <form id="yingyangyong-form" action="@html.routes.AdventureController.save()" method="POST">
 
@@ -219,9 +216,5 @@
         </div>
     </div>
 </form>
-
-<script type="text/javascript">
-    define("inspirationData", [], @{Html(if(ins != null){Json.toJson(ins).toString}else{Json.newObject().toString})});
-</script>
 
 

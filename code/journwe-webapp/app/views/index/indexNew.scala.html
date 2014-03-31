@@ -1,5 +1,13 @@
 @(ins: models.inspiration.Inspiration)
 
+@import play.libs.Json
+
+@scripts = {
+    <script type="text/javascript">
+    define("inspirationData", [], @{Json.toJson(ins)});
+    </script>
+}
+
 @main(Messages("journwe.subtitle")){New @if(ins != null){@ins.getName()} Adventure} {
 
     <div id="yingyangyong-container jrn-no-top-round" style="margin-top: -20px; margin-bottom: 50px;">
@@ -7,4 +15,4 @@
     @yingyangyong(ins)
     </div>
 
-}(Html.empty, "indexNew")
+}(Html.empty, "indexNew", scripts)
