@@ -1,5 +1,7 @@
 @(user: models.user.User)
 
+@import play.libs.Json
+
 @scripts = {
     <script type="text/javascript">
     define("inspirationData", [], @{Json.newObject()});
@@ -21,14 +23,14 @@
         <h3><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
 
         <div style="">
-            <div id="categories-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="categories-list" class="text-center"><div class="loader"></div></div>
         </div>
         <div class="clearfix"></div>
 
 
         <h3><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button class="btn btn-adventures-public-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h3>
         <div style="background-color: rgba(245,245,245,0.6);">
-            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><div class="loader"></div></div>
             <div class="text-center"><button class="btn btn-adventures-public-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>
         <div style="height: 400px; margin-top: 10px;">
@@ -63,4 +65,4 @@
     </script>
 
 </div>
-}(Html.empty, "index")
+}(Html.empty, "index", scripts)

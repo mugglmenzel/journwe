@@ -4,11 +4,11 @@
 
 @scripts = {
     <script type="text/javascript">
-    define("inspirationData", [], @{Json.toJson(ins)});
+    define("inspirationData", [], @{if(ins != null){Json.toJson(ins)}else{Json.newObject()}});
     </script>
 }
 
-@main(Messages("journwe.subtitle")){New @if(ins != null){@ins.getName()} Adventure} {
+@main(Messages("journwe.subtitle")){New @if(ins != null){@ins.getName()} JournWe} {
 
     <div id="yingyangyong-container jrn-no-top-round" style="margin-top: -20px; margin-bottom: 50px;">
 
