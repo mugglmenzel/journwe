@@ -1,10 +1,10 @@
 define([
-    "tmpl",
-    "bootstrap",
-    "bootstrap-switch",
-    "bootstrap-editable",
-    "bootstrap-datepicker",
-    "typeahead"
+    "common/tmpl",
+    "common/bootstrap",
+    "common/bootstrap-switch",
+    "common/bootstrap-editable",
+    "common/bootstrap-datepicker",
+    "common/typeahead"
 ], function (tmpl) {
     window.tmpl = tmpl;
     jQuery.event.props.push('dataTransfer');

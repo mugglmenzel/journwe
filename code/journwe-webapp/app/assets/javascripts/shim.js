@@ -1,12 +1,5 @@
 requirejs.config({
     paths: {
-        'jquery': 'common/jquery',
-        'bootstrap': 'common/bootstrap',
-        'bootstrap-switch': 'common/bootstrap-switch',
-        'bootstrap-editable': 'common/bootstrap-editable',
-        'bootstrap-datepicker': 'common/bootstrap-datepicker',
-        'typeahead': 'common/typeahead',
-        'tmpl': 'common/tmpl',
         'routes': 'empty:',
         'messages': 'empty:',
         'categoryData': 'empty:',
@@ -16,16 +9,16 @@ requirejs.config({
         'userData': 'empty:'
     },
     shim: {
-        'bootstrap': ['jquery'],
-        'bootstrap-switch': ['bootstrap'],
-        'bootstrap-editable': ['bootstrap'],
-        'bootstrap-datepicker': ['bootstrap'],
-        'typeahead': ['jquery'],
-        'tmpl': {
+        'common/bootstrap': ['common/jquery'],
+        'common/bootstrap-switch': ['common/bootstrap'],
+        'common/bootstrap-editable': ['common/bootstrap'],
+        'common/bootstrap-datepicker': ['common/bootstrap'],
+        'common/typeahead': ['common/jquery'],
+        'common/tmpl': {
             exports: 'tmpl'
         }
     },
-    waitSeconds: 15,
+    waitSeconds: 0,
     keepBuildDir: true,
     optimize: "uglify2",
     uglify2: {

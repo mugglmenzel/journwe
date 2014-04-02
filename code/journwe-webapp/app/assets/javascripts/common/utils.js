@@ -34,7 +34,7 @@ define(['routes', 'config'], function (routes) {
         },
 
         /**
-         * Returns TRUE if the client is a models.mobile browser
+         * Returns TRUE if the client is a mobile browser
          * @return Boolean
          */
         isMobile: function () {
