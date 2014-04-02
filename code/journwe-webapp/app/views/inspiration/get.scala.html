@@ -1,5 +1,8 @@
-@(ins: models.inspiration.Inspiration)(category:  models.category.Category)
+@(ins: models.inspiration.Inspiration)(cat:  models.category.Category)
 
+@import models.category.Category
+@import models.dao.category.CategoryHierarchyDAO
+@import models.dao.category.CategoryDAO
 @import play.libs.Json
 @import java.text.SimpleDateFormat
 
@@ -20,41 +23,57 @@
             <div class="container">
                 <div class="title-name">
                     @ins.getName()
-                    @if(category != null) {<small>(<a href="@html.routes.IndexController.categoryIndex(category.getId)">@category.getName()</a>)</small>}
+                    @* @if(cat != null) {<small>(<a href="@html.routes.IndexController.categoryIndex(cat.getId)">@cat.getName()</a>)</small>}  *@
                 </div>
+                @*
                 <div class="toolbar">
                     <a class="btn btn-primary pull-right" href="@html.routes.InspirationController.createAdventure(ins.getId)"><i class="fa fa-arrow-right"></i> @Messages("adventure.general.label.start") </a>
                 </div>
+                *@
             </div>
         </div>
     </div>
 
-    <div id="inspiration-container" class="container">
+    <div class="inspiration-container">
 
 
 
-    <div class="jrn-container jrn-no-top-gap jrn-no-top-round">
+    <div class="jrn-container">
+        <ol  class="breadcrumb row">
+            <li class="active"><i class="fa fa-folder"></i></li>
+            @if(Category.SUPER_CATEGORY.equals(cat.getId)){
+                <li><a href="@html.routes.IndexController.categoryOverview()">Overview</a></li>
+            } else {
+                @defining(new CategoryHierarchyDAO) { catHierDAO =>
+                    @for(catId <- catHierDAO.getSuperHierarchy(cat.getId)) {
+                        @defining(new CategoryDAO().get(catId)) { catHier =>
+                            <li><a href="@html.routes.IndexController.categoryIndex(catId)">@catHier.getName</a></li>
+                        }
+                    }
+                }
+            }
+        </ol>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-xs-12">
                 <div class="text-center"><a class="btn btn-primary btn-lg text-center" href="@html.routes.InspirationController.createAdventure(ins.getId)"> @Messages("adventure.getScala.start", ins.getName()) </a></div>
             </div>
         </div>
     @if(ins.getDescription != null){
         <div class="row">
-            <div class="col-lg-2">
-                <h4><i class="fa fa-list-alt"></i> Description</h4>
+            <div class="col-xs-1">
+                <h4><i class="fa fa-quote-left icon-description"></i></h4>
             </div>
-            <div class="col-lg-10">
+            <div class="col-xs-11">
                @Html(ins.getDescription())
             </div>
         </div>
     }
     @if(ins.getWeatherId != null){
         <div class="row">
-            <div class="col-lg-2">
-                <h4><i class="fa fa-sun-o"></i> Weather</h4>
+            <div class="col-xs-1">
+                <h4><i class="fa fa-sun-o icon-description"></i></h4>
             </div>
-            <div class="col-lg-10">
+            <div class="col-xs-11">
                 <div class="weather-container">
                 @for(period <- ins.getWeather()){
                     <div class="weather">
@@ -67,10 +86,10 @@
         </div>
     }
         <div class="row">
-            <div class="col-lg-2">
-                <h4><i class="fa fa-link"></i> Links</h4>
+            <div class="col-xs-1">
+                <h4><i class="fa fa-link icon-description"></i></h4>
             </div>
-            <div class="col-lg-10">
+            <div class="col-xs-11">
                 <ul class="list-inspiration-urls"></ul>
                 <script type="text/x-tmpl" id="inspiration-url-template">
                     <li>
@@ -80,10 +99,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-2">
-                <h4><i class="fa fa-heart-o"></i> Share</h4>
+            <div class="col-xs-1">
+                <h4><i class="fa fa-heart-o icon-description"></i></h4>
             </div>
-            <div class="col-lg-10">
+            <div class="col-xs-11">
                 <div id="fb-root"></div>
                 <script>(function(d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
@@ -119,9 +138,11 @@
                 <div class="pull-left" style="bottom: 0px;">
                     <div class="g-plusone" data-size="tall" data-annotation="vertical-bubble"></div>
                 </div>
+                @*
                 <div class="pull-left" style="bottom: 0px;">
                     <a href=@{"//www.pinterest.com/pin/create/button/?url=" + java.net.URLEncoder.encode(html.routes.InspirationController.get(ins.getId).absoluteURL(), "UTF-8") + (if(ins.getImage != null){"&media=" + java.net.URLEncoder.encode(ins.getImage, "UTF-8")}else{""}) + "&description=" + java.net.URLEncoder.encode("JournWe Inspiration " + ins.getName, "UTF-8")} data-pin-do="buttonPin" data-pin-config="above" data-pin-color="white" data-pin-height="28"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_white_28.png" /></a>
                 </div>
+                *@
             </div>
         </div>
     </div>
@@ -129,7 +150,7 @@
     <div class="jrn-container">
         <h2 id="tips"><i class="fa fa-thumbs-up"></i> Tips</h2>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-xs-12">
                 <div class="list-inspiration-tips"></div>
                 <script type="text/x-tmpl" id="inspiration-tip-template">
                     <div>
@@ -139,9 +160,13 @@
                     </div>
                 </script>
             </div>
-            <div class="col-lg-12">
-                <input type="text" id="tip-add-text">
-                <button id="tip-add-button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
+            <div class="col-xs-12">
+                <div>
+                    <textarea placeholder="Share your tips and give recommendations..." rows="1" id="tip-add-text" style="width: 100%"></textarea>
+                </div>
+                <div>
+                    <button class="btn btn-primary btn-tip-add pull-right"><i class="fa fa-plus"></i></button>
+                </div>
             </div>
         </div>
 
@@ -190,6 +215,10 @@
                 <div style="height: 400px; margin-top: 10px;">
                     <div id="inspiration-place-map" style="width: 100%; height: 100%"></div>
                 </div>
+                <div class="btn-group pull-right">
+                    <button class="btn btn-default btn-place-map-layers-show active" data-layers="weather"><i class="fa fa-sun-o"></i></button>
+                    <button class="btn btn-default btn-place-map-layers-show" data-layers="photos"><i class="fa fa-picture-o"></i></button>
+                </div>
             </div>
         </div>
     </div>
@@ -210,7 +239,7 @@
     <div class="jrn-container">
         <h2 id="public-journwes"><i class="fa fa-bullhorn"></i> @Messages("public.adventures") <div class="pull-right"><button class="btn btn-adventures-public-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="">
-            <div id="adventures-public-list" class="text-center"><i class="fa fa-spin icon-journwe" style="font-size: 50px; margin-bottom: 20px;"></i></div>
+            <div id="adventures-public-list" class="text-center"><div class="loader"></div></div>
             <div class="clearfix"></div>
             <div class="text-center"><button class="btn btn-adventures-public-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
         </div>

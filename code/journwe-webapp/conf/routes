@@ -12,6 +12,11 @@
 
 ## JSON API ##
 
+
+#### Mobile ####
+GET           /api/json/mobile/login                                       controllers.api.json.MobileAppController.getLoginToken
+
+
 #### Categories ####
 
 GET           /api/json/category/all/optionsMap.json                       controllers.api.json.CategoryController.categoriesOptionsMap()

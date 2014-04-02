@@ -21,13 +21,13 @@
                         <strong style="vertical-align : middle ;">@Messages("adventure.adventurers.myStat")</strong>
 
                         <div class="btn-group btn-select-adventurer">
-                            <button class="btn btn-danger @if(status == EAdventurerParticipation.NOTGOING) {active}"
+                            <button class="btn  @if(status == EAdventurerParticipation.NOTGOING) {active btn-danger} else {btn-default}"
                             data-status="@EAdventurerParticipation.NOTGOING.name"><i class="fa fa-frown-o"></i> @Messages("adventure.adventurers.status.notIn")</button>
-                            <button class="btn btn-warning @if(status == EAdventurerParticipation.UNDECIDED) {active}"
+                            <button class="btn  @if(status == EAdventurerParticipation.UNDECIDED) {active btn-warning} else {btn-default}"
                             data-status="@EAdventurerParticipation.UNDECIDED.name"><i class="fa fa-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
-                            <button class="btn btn-info @if(status == EAdventurerParticipation.GOING) {active}"
+                            <button class="btn  @if(status == EAdventurerParticipation.GOING) {active btn-info} else {btn-default}"
                             data-status="@EAdventurerParticipation.GOING.name"><i class="fa fa-smile-o"></i> @Messages("adventure.adventurers.status.soIn")</button>
-                            <button class="btn btn-success @if(status == EAdventurerParticipation.BOOKED) {active}"
+                            <button class="btn  @if(status == EAdventurerParticipation.BOOKED) {active btn-success} else {btn-default}"
                             data-status="@EAdventurerParticipation.BOOKED.name"><i class="fa fa-check"></i> @Messages("adventure.adventurers.status.booked")</button>
                         </div>
                     </div>

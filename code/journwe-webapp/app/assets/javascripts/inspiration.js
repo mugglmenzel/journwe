@@ -7,7 +7,8 @@ require([
     "modules/main"
 ], function (routes, utils, gmaps, index, ins) {
 
-    var placeMap;
+    var placeMap,
+        layers = {weather: [], photos: []};
 
     var initialize = function () {
         loadUrls();
@@ -74,11 +75,23 @@ require([
             });
             placeMap.setCenter(placeLatLng);
         }
-    }
+
+        initializeMapLayers();
+    };
+
+    var initializeMapLayers = function () {
+
+        layers.weather = [new gmaps.weather.WeatherLayer({temperatureUnits: gmaps.weather.TemperatureUnit.CELSIUS}), new gmaps.weather.CloudLayer()];
+        layers.photos = [new gmaps.panoramio.PanoramioLayer()];
+
+        //initialize weather
+        gmaps.showMapLayers(placeMap, layers.weather);
+
+    };
 
 
     utils.on({
-        'click #tip-add-button': function () {
+        'click .btn-tip-add': function () {
             routes.controllers.api.json.InspirationController.addTip(ins.id).ajax({data: {tip: $('#tip-add-text').val()}, success: function () {
                 $('#tip-add-text').val('');
                 loadTips();
@@ -96,6 +109,20 @@ require([
         },
         'keydown body': function (e) {
             e.keyCode == 27 && $('#carousel-inspiration-photos').modal('hide');
+        },
+        'click .btn-place-map-layers-show': function () {
+            $.each(layers, function (i, val) {
+                gmaps.hideMapLayers(placeMap, val);
+            });
+            $(this).closest('.btn-group').find('.btn').removeClass('active');
+            gmaps.showMapLayers(placeMap, layers[$(this).data('layers')]);
+            $(this).addClass('active');
+        },
+        'focus #tip-add-text' : function () {
+            $('#tip-add-text').prop('rows', 3);
+        },
+        'blur #tip-add-text' : function () {
+            $('#tip-add-text').prop('rows', 1);
         }
     });
 

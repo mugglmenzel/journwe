@@ -246,6 +246,8 @@ public class AdventurePeopleController extends Controller {
             clearCache(advId);
         }
 
+        Cache.remove("user." + usr.getId() + ".myadventures");
+
         return ok(Json.toJson(advr));
     }
 

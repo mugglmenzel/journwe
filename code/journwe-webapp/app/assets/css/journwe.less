@@ -1,44 +1,20 @@
 
-@font: 'Source Sans Pro', 'Lato', sans-serif;        //'Open Sans Condensed',
-@font-normal: 300;
-@font-thin: 100;
-@font-bold: 400;
-
-// @font-title: 'Roboto Condensed', sans-serif;
-@font-title: 'Yanone Kaffeesatz', sans-serif;
-@font-title-normal: 400;
-@font-title-thin: 300;
-@font-title-bold: 700;
-
-@font-logo-journ: @font-title;
-@font-logo-we: 'Lato', san-serif;
-
-
-@color_green: #32a38a;
-@color_red: #f05355;
-@color_blue: #3386bd;
-
-@color_place: @color_green; //rgb(184, 246, 145);
-@color_adventurer: @color_blue; //rgb(235, 114, 104);
-@color_time: @color_red; //rgb(152, 229, 251);
-@color_white: rgb(255,255,255);
-
-.transition(@value: all 0.5s ease){
-    -webkit-transition: @value;
-    -moz-transition: @value;
-    -ms-transition: @value;
-    -o-transition: @value;
-    transition: @value;
-}
-
 //libraries
 @import "bootstrap/bootstrap";
 @import "bootstrapswitch/bootstrap-switch";
 @import "bootstrapeditable/bootstrap-editable";
 @import "bootstrapdatepicker/datepicker3";
 
+
+
+
+
+
 //modules
 @import 'modules/helper';
 @import 'modules/main';
+@import 'modules/comments';
 @import 'modules/landing';
+@import 'modules/category';
 @import 'modules/adventure';
+@import 'modules/inspiration';

@@ -1,10 +1,38 @@
 
+.landing-section {
+  padding: 30px 0 30px 0;
 
-&.headline {
+  & h1 {
+    font-size: 3.7vw;
+    font-weight: @font-title-normal;
+  }
+
+  & h2 {
+    font-size: 2.3vw;
+    font-weight: @font-title-thin;
+  }
+
+  & .btn-start {
+    font-size: 2vw;
+    font-weight: @font-bold;
+  }
+
+  & .landing-story {
+    & h2 {
+      text-shadow: -1px 1px 4px black;
+    }
+  }
+
+  &:last-of-type {
+    margin-bottom: -25px;
+  }
+}
+
+.headline-section {
   vertical-align: middle;
-  height: 400;
-//  background: rgba(0, 0, 0, 0.4);
-  padding-bottom: 30px;
+  padding: 50px 0 50px 0;
+  background-size: cover;
+  background: #00bfff url('//www.journwe.com/cdn-assets/img/landing/map_mannheim.png') fixed;
 
   & .text-success {
 
@@ -18,7 +46,13 @@
       color: #333;
       font-family: @font-title;
       font-weight: @font-title-thin;
-      //text-shadow: -1px 1px 10px black;
+      text-shadow: 0 0 3px white, 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0 20px white;
+      margin-bottom: -15px;
+
+      & img {
+        height: 6vw;
+        width: initial;
+      }
 
       & strong {
         font-weight: @font-title-bold;
@@ -29,37 +63,18 @@
 
     & div.subtitle {
       font-size: 3vw; //40px;
-      font-weight: @font-bold;
+      font-weight: @font-title-thin;
       color: #333;
-      //text-shadow: -1px 1px 10px black;
+      text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0 20px white;
       white-space: nowrap;
     }
 
-    & .btn-start-tour {
-      font-size: 2vw;
-      font-weight: @font-bold;
-    }
   }
 
-  & .dropdown-menu {
-    text-align: left;
-  }
+  &:extend(.landing-section);
 }
 
-.landing-section {
-  padding: 30px 0 30px 0;
-  & h1 {
-    font-size: 4vw;
-  }
-  & h2 {
-    font-size: 2.3vw;
-  }
-  & .landing-story {
-    & h2 {
-      text-shadow: -1px 1px 4px black;
-    }
-  }
-}
+
 
 
 .landing-statement {

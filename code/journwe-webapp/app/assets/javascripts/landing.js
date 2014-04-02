@@ -1,17 +1,20 @@
 require([
     "common/utils",
-    "modules/tour",
+//    "modules/tour",
     "modules/main"
-], function (utils, tour) {
+], function (utils) {
 
 
     utils.loadGenericBgImage();
 
-    tour.initialize();
+    //tour.initialize();
 
     utils.on({
-        "click .btn-start-tour": function (e) {
+        "click .btn-start": function (e) {
             e.preventDefault();
+
+            $('.landing-section-start').slideDown();
+
 
             var hash = this.hash;
 

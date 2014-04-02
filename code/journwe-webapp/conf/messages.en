@@ -229,7 +229,10 @@ yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow a
 
 
 #Landingpage
-landing.calltoaction=Start Now
+landing.calltoaction=Try JournWe Now
+
+landing.register.title=Create your JournWe Account:
+landing.signin.title=Signin with your Social Network Account:
 
 landing.story=Good friends will listen to your adventures, best friends join them.
 landing.story2=People love JournWe

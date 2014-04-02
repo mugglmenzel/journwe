@@ -1,8 +1,8 @@
 
-@main(Messages("journwe.subtitle")){Manage JournWe <small>@Messages("journwe.subtitle")</small>} {
+@main(Messages("journwe.subtitle")){Manage JournWe} {
 
-
-<div class="jrn-container">
+<div class="container">
+<div class="jrn-container jrn-no-top-round jrn-no-top-gap-page-header">
     <h2>@Messages("admin.title")</h2>
     <div class="">
         <a href="@controllers.admin.html.routes.CategoryController.create()" class="btn btn-primary">@Messages("admin.category")</a>
@@ -20,6 +20,6 @@
         });
     </script>
 </div>
-
+</div>
 
 } { } ("admin")

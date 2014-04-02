@@ -496,7 +496,7 @@ define([
         //initialize weather
         gmaps.showMapLayers(map, layers.weather);
 
-    }
+    };
 
     var resetMapBounds = function () {
         if (typeof map === 'undefined') initializeMap();

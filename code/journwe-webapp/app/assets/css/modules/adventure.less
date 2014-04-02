@@ -1,4 +1,7 @@
 
+
+
+
 .adventure-container {
 
   & .editable-container, & .editable-input, & textarea {
@@ -442,5 +445,63 @@
       margin-right: 0;
       width: 20px;
     }
+  }
+}
+
+#files-upload-dropzone {
+  border: dashed 3px fade(@color_white, 40%);
+  padding: 40px 0 20px 0;
+  margin-top: 15px;
+
+  &.hover {
+    border: solid 3px #79a848;
+  }
+}
+
+.btn-file {
+  border-radius: 4px;
+}
+
+.jrn-actions {
+  background: fade(@color_white, 20%);
+  border-top: 1px solid white;
+  padding: 20px;
+  margin: 20px -20px -20px -20px !important;
+}
+
+
+/* star rating      */
+.rating {
+  float: left;
+
+  &:not(:checked) {
+    & > input {
+      display: none;
+    }
+
+    & > label {
+      float: right;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+      color: #ddd;
+    }
+
+    & > label:hover,
+    & > label:hover ~ label {
+      color: gold;
+    }
+  }
+
+  & > input:checked ~ label {
+    color: #f70;
+  }
+
+  & > input:checked + label:hover,
+  & > input:checked + label:hover ~ label,
+  & > input:checked ~ label:hover,
+  & > input:checked ~ label:hover ~ label,
+  & > label:hover ~ input:checked ~ label {
+    color: #ea0;
   }
 }

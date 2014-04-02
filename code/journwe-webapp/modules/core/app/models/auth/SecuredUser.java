@@ -3,6 +3,7 @@ package models.auth;
 import models.GlobalParameters;
 import models.UserManager;
 import models.user.EUserRole;
+import org.joda.time.DateTime;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -19,7 +20,12 @@ public class SecuredUser extends Security.Authenticator {
 	 */
 	@Override
 	public String getUsername(Context ctx) {
-		final AuthUser u = PlayAuthenticate.getUser(ctx.session());
+		AuthUser u = PlayAuthenticate.getUser(ctx.session());
+        if(u == null && ctx.request().cookie("mobileLogin") != null) {
+            String provider = ctx.request().cookie("mobileProvider").value();
+            String userId =  ctx.request().cookie("mobileUserId").value();
+            u = PlayAuthenticate.getProvider(provider).getSessionAuthUser(userId, DateTime.now().plusDays(7).toDate().getTime());
+        }
 
 		if (u != null && isAuthorized(u)) {
 			return u.getId();

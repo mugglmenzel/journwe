@@ -1,14 +1,17 @@
-@import com.feth.play.module.pa.providers.AuthProvider.Registry
+@import com.feth.play.module.pa.PlayAuthenticate
 @import com.feth.play.module.pa.views.html._
+@import helper._
+@import helper.twitterBootstrap._
+@import models.providers.MyUsernamePasswordAuthProvider
 
 @main(Messages("journwe.subtitle")) { } {
 
-    <section style="background-size: cover; background-image: url('@controllers.core.html.routes.CDNAssetsController.at("img/landing/map_mannheim.png")');">
-        <div class="container text-center headline">
+    <section class="headline-section">
+        <div class="container text-center">
             <div class="text-success">
-                <div class="title">Journ<strong>We</strong></div>
-                <div class="subtitle">Organize and Travel Together.</div>
-                <div class="spacer20"></div>
+                <div class="title"><img src="@controllers.core.html.routes.CDNAssetsController.at("img/journwe_logo.png")">Journ<strong>We</strong></div>
+                <div class="subtitle">Travel Together.</div>
+                <div class="spacer50"></div>
                 <div><img src="@controllers.core.html.routes.CDNAssetsController.at("img/landing/landing-journwe-explain.png")"></div>
             </div>
         </div>
@@ -17,14 +20,63 @@
     <section class="landing-section" style="background-color : #fff;">
         <div class="container text-center">
             <div class="text-success">
-                <h1>Do you still use Emails, Facebook, and Whatsapp<br> to organize a trip with your friends?</h1>
-                <h2>JournWe offers everything to organize a trip with your friends.</h2>
-                <div class="spacer20"></div>
-                <div class="btn-toolbar"><a class="btn btn-lg btn-success" href="@core.html.routes.ApplicationController.login()">Login and Try JournWe now! <i class="fa fa-angle-right"></i></a><a class="btn btn-default" href="@core.html.routes.ApplicationController.about()">Learn more</a> </div>
+                <h1 id="start">Do you still use Emails, Facebook, and Whatsapp<br> to organize a trip with your friends?</h1>
+                <h2><em>Discuss, Plan, Organize</em> in one place with Journ<strong>We</strong>.</h2>
+                <div class="spacer50"></div>
+                <div class="btn-toolbar"><a class="btn btn-lg btn-success btn-start" href="#start">@Messages("landing.calltoaction") <i class="fa fa-angle-right"></i></a><a class="btn btn-default" href="@core.html.routes.ApplicationController.about()">Learn more</a> </div>
                 <div class="spacer20"></div>
             </div>
         </div>
     </section>
+
+    <section class="landing-section landing-section-start stash" style="background-color: #fff;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-5">
+                    <h3>@Messages("landing.register.title")</h3>
+
+                    @helper.form(core.html.routes.ApplicationController.doSignup(), 'class -> "login") {
+
+                        <div class="row">
+                            @inputText(
+                                MyUsernamePasswordAuthProvider.LOGIN_FORM("email"),
+                                '_showConstraints -> false,
+                                '_label -> null,
+                                '_class -> "form-group col-xs-6",
+                                'placeholder -> Messages("playauthenticate.login.email.placeholder"),
+                                'class -> "form-control",
+                                'required -> true,
+                                'type -> "email"
+                            )
+
+                            @inputPassword(
+                                MyUsernamePasswordAuthProvider.LOGIN_FORM("password"),
+                                '_showConstraints -> false,
+                                '_label -> null,
+                                '_class -> "form-group col-xs-6",
+                                'placeholder -> Messages("playauthenticate.login.password.placeholder"),
+                                'class -> "form-control",
+                                'required -> true
+                            )
+                        </div>
+                        <div class="row">
+                            <button type="submit" class="col-xs-12 btn btn-primary" href="@core.html.routes.ApplicationController.signup">@Messages("playauthenticate.login.register")</button>
+                        </div>
+
+                    }
+                </div>
+                <div class="col-sm-6 col-md-5 col-md-offset-2">
+                    <h3>@Messages("landing.signin.title")</h3>
+                    <ul class="nav nav-pills nav-stacked ">
+                    @forProviders() { p =>
+                        <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                    }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="landing-section" style="background-color : #bbb;">
         <div class="container">
             <div class="row landing-story" style="color: #fff;">

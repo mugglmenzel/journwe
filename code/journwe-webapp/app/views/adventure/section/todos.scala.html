@@ -57,7 +57,7 @@
         <tr class="status-{%=o.status%} todo-entry" data-id="{%=o.todoId%}">
             <td><button class="btn btn-primary btn-check"><i class="fa fa{% if(o.status == '@EStatus.COMPLETE'){ %}{%=String('-check')%}{% } %}-square-o"></i></button></td>
             <td style="width:100%;">{%=o.title%}</td>
-            <td class="text-center"><a class="btn btn-success btn-affiliate" data-toggle="modal" data-target="#amazon-affiliate"><i class="fa fa-shopping-cart"></i></a></td>
+            <td class="text-center"><button class="btn btn-success btn-affiliate" data-toggle="modal" data-target="#amazon-affiliate"><i class="fa fa-shopping-cart"></i></button></td>
             @if(auth.canEditTodoItem()) {
             <td class="text-center"><button class="btn btn-danger btn-delete"><i class="fa fa-trash-o"></i></button></td>
             }

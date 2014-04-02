@@ -17,27 +17,27 @@
 <div class="container">
 
 
-    <div class="jrn-container jrn-no-round jrn-no-top-gap-page-header" style="padding: 0;">
-        <ol  class="breadcrumb">
+    <div class="jrn-container jrn-no-round jrn-no-top-gap-page-header">
+        <ol  class="breadcrumb row">
+            <li class="active"><i class="fa fa-folder"></i></li>
             @if(Category.SUPER_CATEGORY.equals(cat.getId)){
                 <li class="active">Overview</li>
             } else {
                 <li><a href="@html.routes.IndexController.categoryOverview()">Overview</a></li>
-            }
-            @defining(new CategoryHierarchyDAO){ catHierDAO =>
-                @for(catId <- catHierDAO.getSuperHierarchy(cat.getId)){
-                    @defining(new CategoryDAO().get(catId)){catHier =>
-                        @if(catId.equals(cat.getId)){
-                            <li class="active">@catHier.getName</li>
-                        } else {
-                            <li><a href="@html.routes.IndexController.categoryIndex(catId)">@catHier.getName</a></li>
+
+                @defining(new CategoryHierarchyDAO) { catHierDAO =>
+                    @for(catId <- catHierDAO.getSuperHierarchy(cat.getId)) {
+                        @defining(new CategoryDAO().get(catId)) { catHier =>
+                            @if(catId.equals(cat.getId)) {
+                                <li class="active">@catHier.getName</li>
+                            } else {
+                                <li><a href="@html.routes.IndexController.categoryIndex(catId)">@catHier.getName</a></li>
+                            }
                         }
                     }
                 }
             }
         </ol>
-    </div>
-    <div class="jrn-container jrn-no-top-round jrn-no-top-gap-page-header">
 
 
     @if(!"".equals(cat.getHTMLDescription())){
@@ -52,7 +52,7 @@
     @if(catDAO.countSubcategory(cat.getId) > 0) {
         <div class="jrn-subcategory">
 
-            <h2 id="subcategories"><i class="fa fa-arrow-down"></i> @Messages("index.category.subcategories") (@catDAO.countSubcategory(cat.getId))</h2>
+            <h2 id="subcategories"><i class="fa fa-folder-open"></i> @Messages("index.category.subcategories") (@catDAO.countSubcategory(cat.getId))</h2>
             <div style="">
                 <div id="categories-list">
                     <div class="loader"></div>

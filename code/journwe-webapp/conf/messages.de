@@ -316,7 +316,10 @@ yingyangyong.adventurers.facebookMessage.example=Hey friends! Become my fellow a
 
 
 #Landingpage
-landing.calltoaction=Starte Jetzt
+landing.calltoaction=Teste JournWe Jetzt
+
+landing.register.title=Schnapp dir einen JournWe Account:
+landing.signin.title=Logge dich mit einem Sozialen Netzwerk ein:
 
 landing.story=Good friends will listen to your adventures, best friends join them.
 landing.story2=People love JournWe
@@ -471,7 +474,6 @@ playauthenticate.login.email.placeholder=Deine E-Mail-Adresse
 playauthenticate.login.password.placeholder=Wähle ein Passwort
 playauthenticate.login.password.repeat=Wiederhole das gewählte Passwort
 playauthenticate.login.title=Anmeldung
-playauthenticate.login.password.placeholder=Passwort
 playauthenticate.login.now=Jetzt anmelden
 playauthenticate.login.forgot.password=Passwort vergessen?
 playauthenticate.login.oauth=oder melde dich mit einem der folgenden Dienste an:

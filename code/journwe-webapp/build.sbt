@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   "com.rosaloves" % "bitlyj" % "2.0.0",
   "org.apache.pdfbox" % "pdfbox" % "1.8.2",
   "commons-io" % "commons-io" % "2.4",
-  "com.mohiva" %% "play-html-compressor" % "0.2-SNAPSHOT"
+  "com.mohiva" %% "play-html-compressor" % "0.2.1-SNAPSHOT"
 )
 
 
@@ -31,7 +31,7 @@ resolvers ++= Seq(
   // Repository for com.github.mumoshu play2-memcached
   // required to resolve `spymemcached`, the plugin's dependency.
   "Spy Repository" at "http://files.couchbase.com/maven2",
-  "Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+  Resolver.sonatypeRepo("snapshots")
 )
 
 playJavaSettings

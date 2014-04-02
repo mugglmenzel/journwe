@@ -8,10 +8,14 @@ import models.category.Category;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.user.User;
+import play.api.templates.Html;
+import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+
+import java.util.concurrent.Callable;
 
 /**
  * Created by mugglmenzel on 22/02/14.
@@ -26,7 +30,16 @@ public class IndexController extends Controller {
             if (new AdventurerDAO().isAdventurer(user.getId())) return Results.ok(views.html.index.indexVet.render(user));
             else return Results.ok(views.html.index.index.render(user));
 
-        } else return Results.ok(views.html.index.landing.render());
+        } else try {
+            return ok(Cache.getOrElse("landing", new Callable<Html>() {
+                @Override
+                public Html call() throws Exception {
+                    return views.html.index.landing.render();
+                }
+            }, 3600));
+        } catch(Exception e){
+            return ok(views.html.index.landing.render());
+        }
 
     }
 
