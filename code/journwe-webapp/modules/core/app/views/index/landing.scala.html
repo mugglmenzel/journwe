@@ -11,20 +11,17 @@
             <div class="text-success">
                 <div class="title"><img src="@controllers.core.html.routes.CDNAssetsController.at("img/journwe_logo.png")">Journ<strong>We</strong></div>
                 <div class="subtitle">Travel Together.</div>
-                <div class="spacer50"></div>
-                <div><img src="@controllers.core.html.routes.CDNAssetsController.at("img/landing/landing-journwe-explain.png")"></div>
             </div>
         </div>
     </section>
 
-    <section class="landing-section" style="background-color : #fff;">
+    <section class="landing-section" style="background-color : #eeeef6;">
         <div class="container text-center">
             <div class="text-success">
                 <h1 id="start">Do you still use Emails, Facebook, and Whatsapp<br> to organize a trip with your friends?</h1>
-                <h2><em>Discuss, Plan, Organize</em> in one place with Journ<strong>We</strong>.</h2>
-                <div class="spacer50"></div>
-                <div class="btn-toolbar"><a class="btn btn-lg btn-success btn-start" href="#start">@Messages("landing.calltoaction") <i class="fa fa-angle-right"></i></a><a class="btn btn-default" href="@core.html.routes.ApplicationController.about()">Learn more</a> </div>
+                <h2>JournWe takes over the hassle, you travel with your friends.</h2>
                 <div class="spacer20"></div>
+                <div class="btn-toolbar"><a class="btn btn-lg btn-success btn-start" href="#start">@Messages("landing.calltoaction") <i class="fa fa-angle-right"></i></a><a class="btn btn-default" href="@core.html.routes.ApplicationController.about()">Learn more</a> </div>
             </div>
         </div>
     </section>
@@ -77,6 +74,17 @@
         </div>
     </section>
 
+    <section class="landing-section" style="background-color: #fff;">
+        <div class="container text-center">
+            <h2><em>Discuss, Plan, Organize</em> in one place with Journ<strong>We</strong>.</h2>
+            <div class="spacer20"></div>
+            <div><img src="@controllers.core.html.routes.CDNAssetsController.at("img/landing/landing-journwe-explain.png")" style="50%"></div>
+            <div class="spacer20"></div>
+            <div>Also: share <em>Todos and Documents</em>, use a dedicated <em>Group Email Address</em>, and correspond with Travel Guides &amp; Agencies.</div>
+            <div class="spacer20"></div>
+        </div>
+    </section>
+
     <section class="landing-section" style="background-color : #bbb;">
         <div class="container">
             <div class="row landing-story" style="color: #fff;">
@@ -96,6 +104,34 @@
             </div>
 
         </div>
+    </section>
+
+    <section class="landing-section" style="background-color: #fff">
+        <div class="container text-center">
+            <h2>Get Inspired.</h2>
+            <div>Browse our catalog of inspiring adventures and invite your friends.</div>
+            <div class="spacer20"></div>
+            <div style="">
+                <div id="categories-list">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <script type="text/x-tmpl" id="category-template">
+            <div data-id="{%=o.id%}" class="polaroid" style="position: relative; float: left; width: 20%;">
+                <a href="{%=o.link%}">
+                    <img style="margin: 0px; width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=204&h=204&u=' + o.image)%}{% } %}">
+                    <div style="position: absolute; bottom: 0px; right: 0px; left: 0px; top: 0px; padding: 0px;">
+                        <img class="img-rounded" src="@routes.Assets.at("img/overlay/category_overlay.png")" style="width: 100%; height: 100%; margin: 0px;">
+                    </div>
+                </a>
+                <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                    <div style="line-height: 20px;"><h4><a href="{%=o.link%}">{%=o.name%} <span class="badge badge-info">{%=o.count%}</span></a></h4></div>
+                </div>
+            </div>
+        </script>
+        <div class="spacer20"></div>
     </section>
 
     @*

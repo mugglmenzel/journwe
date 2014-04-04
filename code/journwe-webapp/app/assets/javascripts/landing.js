@@ -1,10 +1,12 @@
 require([
     "common/utils",
+    "modules/index",
 //    "modules/tour",
     "modules/main"
-], function (utils) {
+], function (utils, index) {
 
 
+    index.initializeCategories();
     utils.loadGenericBgImage();
 
     //tour.initialize();

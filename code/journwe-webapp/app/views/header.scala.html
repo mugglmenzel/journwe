@@ -65,11 +65,26 @@
 
             } else {
 
+                @*
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="@controllers.html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Travel Inspirations</a></li>
                     <!--<li><a href="@core.html.routes.ApplicationController.about()"><i class="fa fa-info"></i> About</a></li>-->
                 </ul>
+                *@
 
+                <div class="col-xs-7">
+                <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="navbar-form">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input id="email" type="text" class="form-control" name="email" value="" placeholder="email">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input id="password" type="password" class="form-control" name="password" placeholder="password">
+                        <div class="btn-group input-group-btn">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> Login</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
                 <div class="navbar-right">
                     @*<p class="navbar-text">@Messages("header.login.alternative")</p>*@
                     <div class="btn-group navbar-btn">
@@ -83,27 +98,12 @@
                         }
                         </ul>
                     </div>
+
                 </div>
 
-                <form action="@core.html.routes.ApplicationController.doLogin()" method="POST" class="navbar-form navbar-center">
-                    <div class="form-group">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input id="email" type="text" class="form-control" name="email" value="" placeholder="your email">
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input id="password" type="password" class="form-control" name="password" placeholder="password">
-                        </div>
-                    </div>
-                    <div class="form-group spacer-horizontal"></div>
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> Login</button>
-                    </div>
-                </form>
+
+
 
 
             }
