@@ -30,6 +30,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-md-5">
+                    <h3>@Messages("landing.signin.title")</h3>
+                    <p class="lead">This will allow you to invite friends from your social network.</p>
+                    <ul class="nav nav-pills nav-stacked ">
+                    @forProviders() { p =>
+                        <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
+                    }
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-5 col-md-offset-2">
                     <h3>@Messages("landing.register.title")</h3>
 
                     @helper.form(core.html.routes.ApplicationController.doSignup(), 'class -> "login") {
@@ -62,14 +71,6 @@
 
                     }
                 </div>
-                <div class="col-sm-6 col-md-5 col-md-offset-2">
-                    <h3>@Messages("landing.signin.title")</h3>
-                    <ul class="nav nav-pills nav-stacked ">
-                    @forProviders() { p =>
-                        <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase)</a></li>
-                    }
-                    </ul>
-                </div>
             </div>
         </div>
     </section>
@@ -99,7 +100,7 @@
                 <div class="col-xs-12 col-md-4"><img style="width: 100%;" src="http://i.imgur.com/p44hTBZ.jpg"></div>
                 <div class="col-xs-12 col-md-8">
                     <h2>"Thanks to JournWe, I had no hassle to organize a stag party with my dudes." - Michael</h2>
-                    <p class="lead">For my brother in law, we had to organize an awesome stag party. With all his friends of course. We started out with a Whatsapp chat and facebook group, but things got messy. Then one guy told us about JournWe and things took off. Everyone uploaded documents, and we could write emails with travel agencies with everyone in the loop. Nobody got lost along the way and with the print option, everyone was prepared for the trip. Ultimately, the trip to Mallorca was legendary.</p>
+                    <p class="lead">For my best friend, we had to organize an awesome stag party. With all his friends of course. We started out with a Whatsapp chat and facebook group, but things got messy. Then one guy told us about JournWe and things took off. Everyone uploaded documents, and we could write emails with travel agencies with everyone in the loop. Nobody got lost along the way and with the print option, everyone was prepared for the trip. Ultimately, the trip to Ibiza was legendary.</p>
                 </div>
             </div>
 
