@@ -9,5 +9,6 @@
 *.pyc
 
 infrastructure/play/repository/cache/
+infrastructure/play/framework/sbt/
 code/journwe-utility/target/*
 code/journwe-james/target/*
