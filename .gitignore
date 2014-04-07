@@ -8,5 +8,6 @@
 *.iml
 *.pyc
 
+infrastructure/play/repository/cache/
 code/journwe-utility/target/*
 code/journwe-james/target/*
