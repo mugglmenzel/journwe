@@ -79,7 +79,7 @@
             <div data-id="{%=o.id%}" id="adventurers-adventurer-{%=o.id%}" class="polaroid" style="position: relative; float: left; border-bottom: 2px solid {%=o.color%};">
                 <img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=100&h=100&u=' + o.image)%}{% } %}">
                 <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 5px 10px !important;">
-                    <div style="line-height: 10px;"><a href="{%=o.link%}">{%=String(o.name).replace(new RegExp(' [^ ]*$', 'g'), '')%}</a></div>
+                    <div style="line-height: 10px;">{%=String(o.name).replace(new RegExp(' [^ ]*$', 'g'), '')%}</div>
                     <div class="overlay text-center">
                         <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>
                     </div>
