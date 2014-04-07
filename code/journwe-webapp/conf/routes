@@ -175,6 +175,7 @@ GET           /inspiration/:id/adventure/new                               contr
 #GET           /adventure/new                                        controllers.html.AdventureController.create()
 #POST	/adventure/saveOld											controllers.html.AdventureController.saveOld()
 POST          /adventure/save/editable                                     controllers.html.AdventureController.saveEditable()
+GET           /adventure/new                                               controllers.html.AdventureController.save()
 POST          /adventure/save                                              controllers.html.AdventureController.save()
 GET           /adventure/:id                                               controllers.html.AdventureController.getIndex(id:String)
 #GET           /adventure/:id/index                                         controllers.html.AdventureController.getIndex(id:String)

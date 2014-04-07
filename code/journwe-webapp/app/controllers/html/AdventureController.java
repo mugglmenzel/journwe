@@ -117,7 +117,7 @@ public class AdventureController extends Controller {
         DynamicForm filledForm = advForm.bindFromRequest();
 
         Adventure adv = new Adventure();
-        adv.setName(filledForm.get("name") != null && !"".equals(filledForm.get("name")) ? filledForm.get("name") : "Your JournWe");
+        adv.setName(filledForm.get("name") != null && !"".equals(filledForm.get("name")) ? filledForm.get("name") : "Your New JournWe");
         adv.setPublish(filledForm.get("publish") != null && !"".equals(filledForm.get("publish")) ? new Boolean(filledForm.get("publish")) : false);
         new AdventureDAO().save(adv);
 
@@ -263,7 +263,7 @@ public class AdventureController extends Controller {
 
         ApplicationController.clearUserCache(usr.getId());
 
-        flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa! The shortURL is " + shortURL);
+        //flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa! The shortURL is " + shortURL);
 
         return redirect(controllers.html.routes.AdventureController.getIndex(adv.getId()));
 

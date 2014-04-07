@@ -11,14 +11,6 @@
 @main(Messages("journwe.subtitle")) { } {
 
 <div class="container">
-    <div id="yingyangyong-container" class="jrn-container stash" style="margin-bottom: 70px;">
-        @yingyangyong(null)
-        <div>
-            <button class="btn btn-default btn-block btn-yingyangyong-close"><i class="fa fa-chevron-up"></i></button>
-        </div>
-    </div>
-
-    <hr>
 
     <div class="jrn-container">
 
@@ -26,10 +18,16 @@
         <p class="lead">
         @Messages("index.welcome1", user.getName())
         </p>
-        <div style="margin-bottom : 20px; margin-left: -5px; margin-right: -5px;">
+        <div class="clearfix">
+            <ul class="nav nav-pills">
+                <li><a href="@controllers.html.routes.AdventureController.save()"><i class="fa fa-asterisk"></i> New JournWe</a></li>
+            </ul>
+        </div>
+        <div style="margin-bottom : 20px;">
 
             <div class="adventures-list-full clearfix">
-                <div class="adventure-entry pull-left" style="width: 20%; padding: 5px;">
+                <span class="list-adventures-my"><div class="loader"></div></span>
+                <div class="adventure-entry" style="display: inline-block; vertical-align: top; width: 20%; padding: 5px;">
                     <div><a class="btn-yingyangyong-start"><h4 title="New JournWe">New JournWe</h4></a></div>
                     <div style="margin-bottom: 5px">
                         <div class="label place" style="width: 100%;" title="Place"><i class="fa fa-globe"></i> ?</div>
@@ -37,20 +35,15 @@
                         <div class="label time" style="width: 100%;" title="Time"><i class="fa fa-calendar"></i> ?</div>
                     </div>
                     <div class="text-center" style="position: relative;">
-                        <a class="btn-yingyangyong-start">
-                            <img class="img-rounded" style="width:100%;" src="http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=++add++">
+                        <a href="@controllers.html.routes.AdventureController.save()">
+                            <img class="img-rounded" style="width: 100%;" src="http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=++add++">
                         </a>
-                        <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                            <span class="label label-default" title="Status" style="display: inline-block; width: 100%;">Waiting</span>
-                        </div>
-
                     </div>
                 </div>
-                <span class="list-adventures-my"><div class="loader"></div></span>
             </div>
             <div class="text-center"><button class="btn btn-adventures-my-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
             <script type="text/x-tmpl" id="adventure-my-template">
-                <div class="adventure-entry pull-left" data-id="{%=o.id%}" style="width: 20%; padding: 5px;">
+                <div class="adventure-entry" data-id="{%=o.id%}" style="display: inline-block; vertical-align: top; width: 20%; padding: 5px;">
                     <div><a href="{%=o.link%}"><h4 title="{%=o.name%}">{%=o.name%}</h4></a></div>
                     <div style="margin-bottom: 5px">
                         <div class="label place" style="width: 100%;" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}&nbsp;</div> 
@@ -59,7 +52,7 @@
                     </div>
                     <div class="text-center" style="position: relative;">
                         <a href="{%=o.link%}">
-                            <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=200&h=200&u=' + o.image + (o.imageTimestamp != null ? '&t='+o.imageTimestamp : ''))%}{% } %}">
+                            <img class="img-rounded" style="width: 100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=200&h=200&u=' + o.image + (o.imageTimestamp != null ? '&t='+o.imageTimestamp : ''))%}{% } %}">
                         </a>
                         <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                             <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>
@@ -68,25 +61,6 @@
                     </div>
                 </div>
             </script>
-        </div>
-        <div class="spacer30"></div>
-        <div class="row">
-            <div class="col-lg-10 col-lg-offset-1 col-xs-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-1"><img src="@routes.Assets.at("img/journwe_logo.png")" style="max-width: 100%;"></div>
-                            <div class="col-xs-8"><p class="lead">
-                                Ready for a new lifetime experience? Start your next JournWe!</p></div>
-                            <div class="col-xs-3">
-                                <button class="btn btn-danger btn-lg btn-yingyangyong-start">
-                                    <span class="lead">Start now <i class="fa fa-angle-right"></i></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
