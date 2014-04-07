@@ -8,6 +8,8 @@ require([
     adventure.initBackground();
     adventure.initPrimeImage();
     adventure.loadPublicAdventurers();
+    adventure.updateFavoritePlace();
+    adventure.updateFavoriteTime();
 
 
     utils.on({

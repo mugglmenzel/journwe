@@ -1689,7 +1689,9 @@ define([
         initializeTimeline: initializeTimeline,
         initializeTodos: initializeTodos,
         initializeFiles: initializeFiles,
-        loadPublicAdventurers: loadPublicAdventurers
+        loadPublicAdventurers: loadPublicAdventurers,
+        updateFavoriteTime: updateFavoriteTime,
+        updateFavoritePlace: updateFavoritePlace
     };
 
 });
