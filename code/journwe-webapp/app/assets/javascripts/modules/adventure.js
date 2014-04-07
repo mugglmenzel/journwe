@@ -643,7 +643,6 @@ define([
     var loadAdventurers = function (endpoint, target, clear, template, hideOnEmpty) {
         template = template ? template : 'adventurer-template';
         endpoint.ajax({success: function (advs) {
-            console.log('got advrs list: ' + advs);
             if (clear) $(target).empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
@@ -681,18 +680,13 @@ define([
 
             if (provider != null && provider != 'email') {
                 $('.input-people-add').attr('type', 'text');
-                $('.input-people-add').typeahead({
+                $('.input-people-add').typeahead({highlight: true, minLength: 3},
+                    {
                     name: 'people-typeahead',
-                    template: '<p><strong>{%=o.name%}</strong></p>',
-                    engine: {_templ: '', compile: function (template) {
-                        _templ = template;
-                        return this;
-                    }, render: function (data) {
-                        return tmpl(_templ, data);
-                    }},
-                    remote: {
-                        url: routes.controllers.api.json.AdventurePeopleController.autocomplete().absoluteURL() + '?provider=' + provider + '&input=%QUERY',
-                        filter: function (data) {
+                    displayKey: 'name',
+                    source: function(query, callback){
+                        routes.controllers.api.json.AdventurePeopleController.autocomplete().ajax({data: {provider: provider, input: query},
+                        success: function (data) {
                             socialUsers = {};
                             socialUserNames = [];
                             $.each(data, function (ix, item) {
@@ -704,8 +698,8 @@ define([
                                 socialUsers[item.nameId] = item.id;
                             });
 
-                            return socialUserNames;
-                        }
+                            callback(socialUserNames);
+                        }})
                     }
                 });
             } else {

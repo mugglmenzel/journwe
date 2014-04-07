@@ -50,7 +50,7 @@
 
             <div class="row">
                 <div class="col-xs-12">
-                    <h3><i class="fa fa -male"></i> Adventurers</h3>
+                    <h3><i class="fa fa-male"></i> Adventurers</h3>
                     <div class="adventurers-list" style="overflow : hidden ;"></div>
                     <div class="clearfix"></div>
                 </div>
@@ -105,16 +105,20 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12">
-                <i class="fa fa-road"></i>
+            <div class="col-xs-2">
+                <i class="fa fa-road"></i> Home Aiport
+            </div>
+            <div class="col-xs-10">
                 <a href="#" class="editable" data-type="text" data-name="adventurerHomeAirport" data-pk="@adv.getId()"
                 data-url="@html.routes.AdventureController.saveEditable()"
                 data-original-title="Enter your home airport" data-emptytext="Your Home Airport" data-inputclass="form-control">@advr.getHomeAirport()</a>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12">
-                <i class="fa fa-ambulance"></i>
+            <div class="col-xs-2">
+                <i class="fa fa-ambulance"></i> Emergency Contact
+            </div>
+            <div class="col-xs-10">
                 <a href="#" class="editable" data-type="textarea" data-name="adventurerEmergencyContact" data-pk="@adv.getId()"
                 data-url="@html.routes.AdventureController.saveEditable()"
                 data-original-title="Enter your emergency contact" data-emptytext="Your Emergency Contact" data-inputclass="form-control">@advr.getEmergencyContact()</a>
