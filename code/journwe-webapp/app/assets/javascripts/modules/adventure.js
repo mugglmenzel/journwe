@@ -570,7 +570,8 @@ define([
             data: {favoritePlaceId: placeID},
             success: function (data) {
                 favoritePlace = data;
-                $('.places-favorite-place-name').html(data.address) && setBgMapCenterOffset(data.lat, data.lng);
+                $('.places-favorite-place-name').html(data.address);
+                if(data.lat && data.lng) setBgMapCenterOffset(data.lat, data.lng);
                 utils.resetSpinning($('.icon-favorite-place'));
 
                 utils.resetSpinning($(el).find('i'));
@@ -617,28 +618,32 @@ define([
         friendTypeahead();
     };
 
-    var loadAllAdventurers = function () {
-        //loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getAdventurers(adv.id), '.adventurers-list');
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getParticipants(adv.id), '.adventurers-list');
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getInvitees(adv.id), '.adventurers-list');
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '.adventurers-list');
+    var loadPublicAdventurers = function () {
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getAdventurers(adv.id), '.adventurers-list');
     }
+
+    var loadAllAdventurers = function () {
+        loadParticipants();
+        loadInvitees();
+        loadApplicants();
+    };
 
     var loadParticipants = function () {
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getParticipants(adv.id), '.adventurers-participants-list');
-    }
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getParticipants(adv.id), '.adventurers-list');
+    };
 
     var loadInvitees = function () {
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getInvitees(adv.id), '.adventurers-invitees-list');
-    }
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getInvitees(adv.id), '.adventurers-list');
+    };
 
     var loadApplicants = function () {
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '.adventurers-applicants-list');
-    }
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '.adventurers-list');
+    };
 
     var loadAdventurers = function (endpoint, target, clear, template, hideOnEmpty) {
         template = template ? template : 'adventurer-template';
         endpoint.ajax({success: function (advs) {
+            console.log('got advrs list: ' + advs);
             if (clear) $(target).empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
@@ -649,7 +654,7 @@ define([
                 $(target).parent().show();
             } else if (hideOnEmpty) $(target).parent().hide();
         }});
-    }
+    };
 
     var addFriend = function () {
         utils.setReplaceSpinning($('.btn-people-add'));
@@ -1300,13 +1305,14 @@ define([
         },
         'click #place-add-button': function () {
             if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
-                $(this).html('<i class="fa fa-spin icon-journwe"></i>');
+                var el = $(this);
+                utils.setReplaceSpinning(el);
                 new gmaps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
                     routes.controllers.api.json.AdventurePlaceController.addPlace(adv.id).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
                         renderPlaceOption(res);
                         $('#place-add-input').val("");
                         $('#place-add-comment-input').val("");
-                        $('#place-add-button').html('<i class="fa fa-plus"></i>');
+                        utils.resetReplaceSpinning(el);
                         $('#places-list').show();
                     }});
                 });
@@ -1423,8 +1429,9 @@ define([
             if (!end.val()) {
                 end = start;
             }
+            var el = $(this);
 
-            $(this).html('<i class="fa fa-spin icon-journwe"></i>');
+            utils.setReplaceSpinning(el);
             routes.controllers.api.json.AdventureTimeController.addTime(adv.id).ajax({
                 data: { startDate: start.val(), endDate: end.val()},
                 success: function (res) {
@@ -1432,7 +1439,7 @@ define([
                     $('#time-add-form input[name=name]').val("");
                     $('#time-add-form input[name=startDate]').val("");
                     $('#time-add-form input[name=endDate]').val("");
-                    $('#time-add-button').html('<i class="fa fa-plus"></i>');
+                    utils.resetReplaceSpinning(el);
                     $('#times-list').show();
                 }});
         },
@@ -1688,7 +1695,7 @@ define([
         initializeTimeline: initializeTimeline,
         initializeTodos: initializeTodos,
         initializeFiles: initializeFiles,
-        loadAllAdventurers: loadAllAdventurers
+        loadPublicAdventurers: loadPublicAdventurers
     };
 
 });

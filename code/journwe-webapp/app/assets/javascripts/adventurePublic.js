@@ -3,11 +3,11 @@ require([
     'modules/adventure',
     'modules/main'
 ], function (utils, adventure) {
-
+    console.log("initializing adventure public page...");
 
     adventure.initBackground();
     adventure.initPrimeImage();
-    adventure.loadAllAdventurers();
+    adventure.loadPublicAdventurers();
 
 
     utils.on({

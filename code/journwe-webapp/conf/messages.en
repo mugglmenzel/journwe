@@ -85,15 +85,15 @@ adventure.general.nofavourite.placeholder=No favorite yet
 adventure.general.listactions=Actions
 adventure.general.loading=Loading
 adventure.general.cloneby=You can create a new Adventure based on
-adventure.general.invitation=You have been invited to join this Adventure!
+adventure.general.invitation=You have been invited to join this JournWe!
 adventure.general.leaveconfirm=Are you sure, you want to leave
 
 #Adventure.header
 adventure.header.find.placeholder=Find Places, People and Inspirations
 
 #Adventure.getScala
-adventure.getScala.start=Start a {0} Adventure
-adventure.getScala.adventure.title=Adventure
+adventure.getScala.start=Start a {0} JournWe
+adventure.getScala.adventure.title=JournWe
 adventure.getScala.discussion.title=Discussion
 adventure.getScala.place.title=Place
 adventure.getScala.place.subtitle=Find a special place where your adventure takes place. Make it a beautiful spot worth exploring.

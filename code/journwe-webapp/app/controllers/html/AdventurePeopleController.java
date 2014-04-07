@@ -52,6 +52,7 @@ public class AdventurePeopleController extends Controller {
             ApplicationController.clearUserCache(usr.getId());
             return AdventureController.getIndex(advId);
         } else if (provider != null && !"".equals(provider)) {
+            PlayAuthenticate.storeOriginalUrl(ctx());
             AuthProvider prov = AuthProvider.Registry.get(provider);
             if (prov != null) return redirect(prov.getUrl());
             else if("journwe".equals(provider))

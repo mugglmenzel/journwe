@@ -319,14 +319,14 @@ public class AdventurePeopleController extends Controller {
     public static Result postOnMyFacebookWall(String advId) {
         Adventure adv = new AdventureDAO().get(advId);
         Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
-        AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
+        //AdventureShortname shortname = new AdventureShortnameDAO().getShortname(advId);
 
         DynamicForm f = form().bindFromRequest();
 
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         UserSocial us = new UserSocialDAO().findBySocialId("facebook", usr.getId());
         JournweFacebookClient fb = JournweFacebookClient.create(us.getAccessToken());
-        fb.publishLinkOnMyFeed(f.get("posttext"), controllers.html.routes.AdventureController.getIndexShortname(shortname.getShortname()).absoluteURL(request()), "JournWe  Adventure: " + adv.getName(), "" + (adv.getDescription() == null ? ins.getDescription() : adv.getDescription()), "" + adv.getImage());
+        fb.publishLinkOnMyFeed(f.get("posttext"), adv.getShortURL(), "JournWe  Adventure: " + adv.getName(), "" + (adv.getDescription() == null ? ins.getDescription() : adv.getDescription()), "" + adv.getImage());
 
         return ok();
     }

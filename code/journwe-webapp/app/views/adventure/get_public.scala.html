@@ -2,7 +2,6 @@
 
 @import com.feth.play.module.pa.views.html._
 @import play.libs.Json
-@import views.html.index.quickintro
 
 @scripts = {
     <script type="text/javascript">
@@ -13,55 +12,71 @@
 
 @main(adv.getName()){ } {
 
-<div id="adventure-container">
-    <div class="prime-image">
+<div class="prime-image">
 
-        <div id="adventure-prime-image" style="width: 100%; height: 200px; background: url('http://www.placehold.it/1250x200/AAAAAA/EFEFEF&text=Drop+image') no-repeat center center transparent; background-size: auto 100%;">
-        </div>
+    <div id="adventure-prime-image" style="width: 100%; height: 200px; background: url('http://www.placehold.it/1250x200/AAAAAA/EFEFEF&text=Drop+image') no-repeat center center transparent; background-size: auto 100%;">
+    </div>
 
-        <div class="title-name">
-            @adv.getName() @if(ins != null) {<small>@ins.getName()</small>}
-        </div>
-
-        <div class="toolbar">
-
-            <div class="btn-group pull-right">
-                <a class="btn btn-participate btn-success" href="@html.routes.AdventurePeopleController.participateFacebook(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join") (via Facebook)</a>
-                <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="@html.routes.AdventurePeopleController.participate(adv.getId(), "journwe")"><i class="fa fa-user fa-fw"></i> @Messages("adventure.general.button.join") (via JournWe)</a></li>
-                    @forProviders() { p =>
-                        <li><a class="btn-participate" href="@html.routes.AdventurePeopleController.participate(adv.getId(), p.getKey)"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @Messages("adventure.general.button.join") (via @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase))</a></li>
-                    }
-                </ul>
+    <div class="title-overlay">
+        <div class="container">
+            <div class="title-name">
+                <strong>@adv.getName()</strong> @if(ins != null) {<small>@ins.getName()</small>}
             </div>
-
-            @*
-            @currentAuth() { auth =>
-                @if(auth != null) {
-                    <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
-                }
-            }
-            *@
-
         </div>
     </div>
 
+
+
+
+    @*
+    @currentAuth() { auth =>
+    @if(auth != null) {
+    <div class="toolbar">
+    <a class="btn btn-primary pull-right" onclick="$('#cloneAdventure').modal();"><i class="fa fa-copy"></i> @Messages("adventure.general.button.clone")</a>
+    </div>
+    }
+    }
+    *@
+
+</div>
+
+<div class="adventure-container">
+
+
     <div class="jrn-container">
         <h2>@Messages("adventure.general.invitation")</h2>
-        <p class="pull-left">
-            <div>@Html(adv.getHTMLDescription())</div>
-        </p>
+        <div class="spacer20"></div>
+        <div class="text-center">
+            <div class="btn-group">
+                <a class="btn btn-participate btn-success btn-lg" href="@html.routes.AdventurePeopleController.participateFacebook(adv.getId())"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join") (via Facebook)</a>
+                <button class="btn btn-success btn-lg dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu text-left">
+                    <li><a href="@controllers.html.routes.AdventurePeopleController.participate(adv.getId(), "journwe")"><i class="fa fa-user fa-fw"></i> @Messages("adventure.general.button.join") (via JournWe)</a></li>
+                    @forProviders() { p =>
+                        <li><a class="btn-participate" href="@controllers.html.routes.AdventurePeopleController.participate(adv.getId(), p.getKey)"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @Messages("adventure.general.button.join") (via @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase))</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="spacer20"></div>
         <div>
-            <h3 class="lead">Involved Adventurers</h3>
+            <p class="lead">You are invited to this JournWe&#8482; to <span class="places-favorite-place-name">?</span> on <span class="times-favorite-time-name">?</span>. Have some fun, guys!</p>
+        </div>
+        <div>
+            <p>
+                @Html(adv.getHTMLDescription())
+            </p>
+        </div>
+        <div>
+            <h3><i class="fa fa-group"></i> Involved Adventurers</h3>
             <div class="adventurers-list" style="overflow: hidden;"></div>
             <div class="clearfix"></div>
         </div>
 
         <script type="text/x-tmpl" id="adventurer-template">
-            <div data-id="{%=o.id%}" id="adventurers-adventurer-{%=o.id%}" class="polaroid" style="position: relative; float: left; margin-right: 20px; margin-bottom: 20px;">
+            <div data-id="{%=o.id%}" id="adventurers-adventurer-{%=o.id%}" class="polaroid" style="position: relative; float: left; border-bottom: 2px solid {%=o.color%};">
                 <a href="{%=o.link%}">
                     <img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=100&h=100&u=' + o.image)%}{% } %}">
                 </a>
@@ -75,10 +90,17 @@
         </script>
     </div>
 
-   @cloneAdventure(adv,new DynamicForm())
+    <div class="jrn-container text-center">
+        <h2><em>Discuss, Plan, Organize</em> in one place with Journ<strong>We</strong>.</h2>
+        <div class="spacer20"></div>
+        <div><img src="@controllers.core.html.routes.CDNAssetsController.at("img/landing/landing-journwe-explain.png")" style="50%"></div>
+        <div class="spacer20"></div>
+        <div>Also: share <em>Todos and Documents</em>, use a dedicated <em>Group Email Address</em>, and correspond with Travel Guides &amp; Agencies.</div>
+        <div class="spacer20"></div>
+    </div>
+
+   @* cloneAdventure(adv,new DynamicForm()) *@
 
 </div>
-
-@quickintro()
 
 }(openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage), "adventurePublic", scripts)

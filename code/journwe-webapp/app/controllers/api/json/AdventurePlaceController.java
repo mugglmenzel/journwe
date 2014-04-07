@@ -205,7 +205,7 @@ public class AdventurePlaceController extends Controller {
         PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
 
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
-        node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0.5D);
+        node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0D);
         node.put("voteCount", Json.toJson(new PlacePreferenceDAO().counts(place.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new PlacePreferenceDAO().adventurersNames(place.getOptionId())));
         node.put("voteGroup", Json.toJson(getPlaceGroupRating(place).getRating()));

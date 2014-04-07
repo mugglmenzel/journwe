@@ -84,16 +84,16 @@ adventure.general.nofavourite.placeholder=Bislang kein Favorit ausgewählt
 #Adventure.general
 adventure.general.listactions=Aktionen
 adventure.general.loading=Laden
-adventure.general.cloneby=Du kannst ein neues Abenteuer erstellen basierend auf
-adventure.general.invitation=Du wurdest eingeladen an diesem Abeuteuer teilzunehmen!
+adventure.general.cloneby=Du kannst ein neues JournWe erstellen basierend auf
+adventure.general.invitation=Du wurdest eingeladen an diesem JournWe teilzunehmen!
 adventure.general.leaveconfirm=Bist du dir sicher, dass du hier raus willst?
 
 #Adventure.header
 adventure.header.find.placeholder=Find Orte, Leute und Inspirationen
 
 #Adventure.getScala
-adventure.getScala.start=Starte ein {0} Abenteuer
-adventure.getScala.adventure.title=Abenteuer
+adventure.getScala.start=Starte ein {0} JournWe
+adventure.getScala.adventure.title=JournWe
 adventure.getScala.discussion.title=Diskussion
 adventure.getScala.place.title=Ort
 adventure.getScala.place.subtitle=Finde eine interessante Location an der euer Abenteuer stattfinden soll. Die Welt ist gross, sucht euch was nettes aus.
