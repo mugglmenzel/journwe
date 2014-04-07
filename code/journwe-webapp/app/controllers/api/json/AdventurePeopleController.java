@@ -364,6 +364,7 @@ public class AdventurePeopleController extends Controller {
         DynamicForm f = form().bindFromRequest();
         try {
             new SocialInviter(usr, f.get("provider"), f.get("socialId")).invite(adv.getId());
+            clearCache(advId);
             return ok();
         } catch (Exception e) {
             Logger.error("Couldn't invite adventurer.", e);
