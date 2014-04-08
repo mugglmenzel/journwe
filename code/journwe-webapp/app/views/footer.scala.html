@@ -10,11 +10,13 @@
             @*
             <li @if(active == "home"){class="active"}><a href="@html.routes.IndexController.index"><i class="fa fa-bookmark fa-fw"></i> My JournWes</a></li>
             <li @if(active == "new"){class="active"}><a href="@html.routes.IndexController.indexNew"><i class="fa fa-asterisk fa-fw"></i> New JournWe</a></li> *@
-            <li @if(active == "inspiration"){class="active"}><a href="@html.routes.IndexController.categoryOverview"><i class="fa fa-lightbulb-o fa-fw"></i> Travel Inspirations</a></li>
             <li @if(active == "about"){class="active"}><a href="@core.html.routes.ApplicationController.about"><i class="fa fa-info fa-fw"></i> About JournWe</a></li>
+            <li @if(active == "inspiration"){class="active"}><a href="@html.routes.IndexController.categoryOverview"><i class="fa fa-lightbulb-o fa-fw"></i> Travel Inspirations</a></li>
+            <li><a href="http://blog.journwe.com"><i class="fa fa-compass"></i> JournWe Traveler Blog</a></li>
+            <li><a href="http://labs.journwe.com"><i class="fa fa-flask"></i> JournWe Labs</a></li>
             @*<li @if(active == "team"){class="active"}><a href="@core.html.routes.ApplicationController.contact">Team</a></li>*@
             <li @if(active == "contact"){class="active"}><a href="@core.html.routes.ApplicationController.contact"><i class="fa fa-envelope-o fa-fw"></i> Contact Us</a></li>
-            <li @if(active == "imprint"){class="active"}><a href="@core.html.routes.ApplicationController.imprint"><i class="fa fa-legal fa-fw"></i> Imprint</a> </li>
+            <li @if(active == "imprint"){class="active"}><a href="@core.html.routes.ApplicationController.imprint"><i class="fa fa-legal fa-fw"></i> Imprint</a></li>
             <li class="stash @if(active == "admin"){active}">
                 <a href="@controllers.admin.html.routes.AdminController.admin"><i class="fa fa-cogs fa-fw"></i> Admin</a>
             </li>
