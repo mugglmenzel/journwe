@@ -21,6 +21,11 @@ define([
             },
             'hide.bs.popover #notifications-link': function () {
                 $('body').removeClass('unscrollable');
+            },
+
+            'click .login-mail': function(){
+                $(this).parents('.navbar-right').hide();
+                $('.login-mail-container').fadeIn();
             }
 
         });
