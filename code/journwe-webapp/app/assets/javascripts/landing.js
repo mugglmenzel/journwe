@@ -7,7 +7,7 @@ require([
 
 
     index.initializeCategories();
-    utils.loadGenericBgImage();
+    // utils.loadGenericBgImage();
 
     //tour.initialize();
 

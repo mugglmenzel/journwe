@@ -1,23 +1,29 @@
 
 .landing-section {
-  padding: 30px 0 30px 0;
+  padding: 50px 0;
 
   & h1 {
     font-weight: @font-title-normal;
+    margin-top: 0;
   }
 
   & h2 {
     font-weight: @font-title-thin;
+    margin-top: 0;
   }
 
   & .btn-start {
     font-size: 2vw;
-    font-weight: @font-bold;
+    padding: 10px 32px;
+
+    + .btn {
+      padding: 20px 20px;
+      border-radius: 6px;
+    }
   }
 
   & .landing-story {
     & h2 {
-      text-shadow: -1px 1px 4px black;
     }
   }
 
@@ -28,8 +34,8 @@
 
 .headline-section {
   vertical-align: middle;
-  padding: 50px 0 50px 0;
-  background: #fff center top / contain url('//www.journwe.com/cdn-assets/img/landing/hot-air-balloons.jpg') no-repeat fixed;
+  padding: 100px 0;
+  background: #fff center top / cover url('//www.journwe.com/cdn-assets/img/landing/hot-air-balloons.jpg') no-repeat;
 
   & .text-success {
 
@@ -38,7 +44,7 @@
       color: #333;
       font-family: @font-title;
       font-weight: @font-title-thin;
-      text-shadow: 0 0 3px white, 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0 20px white;
+      text-shadow: 0 0 3px white, 0 0 5px white, 0 0 15px white, 0 0 30px white, 0 0 50px white;
       margin-bottom: -5px;
 
       & img {
@@ -58,7 +64,7 @@
       font-size: 40px;
       font-weight: @font-title-thin;
       color: #333;
-      text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 5px white, 0 0 10px white, 0 0 15px white, 0 0 20px white;
+      text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 5px white, 0 0 10px white, 0 0 20px white, 0 0 40px white;
       white-space: nowrap;
     }
 
