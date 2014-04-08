@@ -1,7 +1,7 @@
 
 
 @font: 'Source Sans Pro', 'Lato', sans-serif;        //'Open Sans Condensed',
-@font-normal: 300;
+@font-normal: 200;
 @font-thin: 100;
 @font-bold: 400;
 
@@ -72,7 +72,9 @@
 @link-color:            @gray-dark;
 @link-hover-color:      @gray;
 
-
+body {
+  font-weight: @font-normal;
+}
 
 h1 {
 
@@ -303,8 +305,12 @@ h1 .editableform {
     }
   }
 
-  & .social-icons i {
-    font-size: 24px;
+  & .social-icons { 
+    margin-top: 10px;
+
+    i {
+      font-size: 24px;
+    }
   }
 }
 
@@ -312,6 +318,10 @@ h1 .editableform {
   background: white;
   padding: 20px;
   margin-top: 25px;
+
+  .row > div {
+    padding: 0 30px;
+  }
 }
 
 .jrn-opacity {
