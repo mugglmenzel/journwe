@@ -16,10 +16,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class AdventureTimelineController extends Controller {
 
@@ -89,15 +86,25 @@ public class AdventureTimelineController extends Controller {
     }
 
     private static List<ObjectNode> allCommentNewestJSON(String advId) {
+        List<String> threads = Arrays.asList(new String[]{"discussion", "places", "times", "adventurers", "todos"});
         List<ObjectNode> results = new ArrayList<ObjectNode>();
-        for (Comment c : new CommentDAO().getCommentsNewest(advId + "_discussion")) {
-            ObjectNode result = Json.newObject();
-            result.put("type", "comment");
-            result.put("comment", Json.toJson(c));
-            result.put("user", Json.toJson(new UserDAO().get(c.getUserId())));
-            result.put("timestamp", c.getTimestamp());
-            results.add(result);
-        }
+        for (String thread : threads)
+            for (Comment c : new CommentDAO().getCommentsNewest(advId + "_" + thread)) {
+                ObjectNode result = Json.newObject();
+                result.put("type", "comment");
+                result.put("comment", Json.toJson(c));
+                result.put("user", Json.toJson(new UserDAO().get(c.getUserId())));
+                result.put("timestamp", c.getTimestamp());
+                results.add(result);
+            }
+
+        Collections.sort(results, new Comparator<ObjectNode>() {
+            @Override
+            public int compare(ObjectNode jsonNode1, ObjectNode jsonNode2) {
+                return new Long(jsonNode2.get("timestamp").asLong()).compareTo(jsonNode1.get("timestamp").asLong());
+            }
+        });
+
         return results;
     }
 

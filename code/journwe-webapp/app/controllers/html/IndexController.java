@@ -27,8 +27,8 @@ public class IndexController extends Controller {
         if (PlayAuthenticate.isLoggedIn(Http.Context.current().session())
                 && SecuredUser.isAuthorized(usr)) {
             User user = UserManager.findByAuthUserIdentity(usr);
-            if (new AdventurerDAO().isAdventurer(user.getId())) return Results.ok(views.html.index.indexVet.render(user));
-            else return Results.ok(views.html.index.index.render(user));
+            return Results.ok(views.html.index.indexVet.render(user));
+            //if (new AdventurerDAO().isAdventurer(user.getId()))  else return Results.ok(views.html.index.index.render(user));
 
         } else try {
             return ok(Cache.getOrElse("landing", new Callable<Html>() {

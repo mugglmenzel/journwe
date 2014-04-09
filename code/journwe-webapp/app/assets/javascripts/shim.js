@@ -20,6 +20,7 @@ requirejs.config({
     },
     waitSeconds: 0,
     keepBuildDir: true,
+    skipDirOptimize: true,
     optimize: "uglify2",
     uglify2: {
         output: {

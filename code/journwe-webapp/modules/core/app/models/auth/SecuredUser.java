@@ -21,11 +21,6 @@ public class SecuredUser extends Security.Authenticator {
 	@Override
 	public String getUsername(Context ctx) {
 		AuthUser u = PlayAuthenticate.getUser(ctx.session());
-        if(u == null && ctx.request().cookie("mobileLogin") != null) {
-            String provider = ctx.request().cookie("mobileProvider").value();
-            String userId =  ctx.request().cookie("mobileUserId").value();
-            u = PlayAuthenticate.getProvider(provider).getSessionAuthUser(userId, DateTime.now().plusDays(7).toDate().getTime());
-        }
 
 		if (u != null && isAuthorized(u)) {
 			return u.getId();

@@ -21,7 +21,7 @@ define([
         voteTimeLabelCSSClassMap = {'YES': 'label-success', 'NO': 'label-danger', 'MAYBE': 'label-warning'};
 
     //State Vars
-    var visibleSections = typeof advr.visibleSections === 'undefined' || advr.visibleSections == null ? ['adventurers', 'places', 'times'] : JSON.parse(advr.visibleSections);
+    var visibleSections = typeof advr.visibleSections === 'undefined' || advr.visibleSections == null ? ['discussion', 'adventurers'] : JSON.parse(advr.visibleSections);
     var favoritePlace, favoriteTime;
 
 
@@ -196,13 +196,17 @@ define([
 
     //NAVIGATION
     var initNavigation = function () {
+        $('.nav-adventure-list a').tooltip();
+
         $('.nav-adventure').affix({
             offset: {
-                top: $('.nav-adventure').first().offset().top
+                top: function () {
+                    console.log('returning offset ' + $('.nav-container').first().offset().top + ", window scroll " + $(window).scrollTop());
+                    return $('.nav-container').first().offset().top + $('.nav-adventure').height() - $(window).height();
+                }
             }
         });
 
-        $('.nav-adventure-list a').tooltip();
 
         $.each(visibleSections, function (i, val) {
             var sec = $('.jrn-adventure-section[id=' + val + ']');
@@ -610,7 +614,7 @@ define([
     //PEOPLE
 
     var initializePeople = function () {
-        loadAllAdventurers();
+        loadAllAdventurers(true);
         //loadParticipants();
         //loadInvitees();
         //loadApplicants();
@@ -622,22 +626,22 @@ define([
         loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getAdventurers(adv.id), '.adventurers-list');
     }
 
-    var loadAllAdventurers = function () {
-        loadParticipants();
-        loadInvitees();
-        loadApplicants();
+    var loadAllAdventurers = function (clear) {
+        loadParticipants(clear);
+        loadInvitees(clear);
+        loadApplicants(clear);
     };
 
-    var loadParticipants = function () {
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getParticipants(adv.id), '.adventurers-list');
+    var loadParticipants = function (clear) {
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getParticipants(adv.id), '.adventurers-list', clear);
     };
 
-    var loadInvitees = function () {
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getInvitees(adv.id), '.adventurers-list');
+    var loadInvitees = function (clear) {
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getInvitees(adv.id), '.adventurers-list', clear);
     };
 
-    var loadApplicants = function () {
-        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '.adventurers-list');
+    var loadApplicants = function (clear) {
+        loadAdventurers(routes.controllers.api.json.AdventurePeopleController.getApplicants(adv.id), '.adventurers-list', clear);
     };
 
     var loadAdventurers = function (endpoint, target, clear, template, hideOnEmpty) {
@@ -663,7 +667,7 @@ define([
         };
         routes.controllers.api.json.AdventurePeopleController.invite(adv.id).ajax({data: data, success: function () {
             $('#people-add-input').val('');
-            loadInvitees();
+            loadAllAdventurers(true);
             utils.resetReplaceSpinning($('.btn-people-add'));
         }});
     };
@@ -841,8 +845,8 @@ define([
 
         routes.controllers.api.json.AdventureTimeController.getFavoriteTime(adv.id).ajax({success: function (result) {
             favoriteTime = result.favorite;
-            if (result.favorite != null) $('.times-favorite-time-name').html(utils.formatDate(result.favorite.startDate) + " - " + utils.formatDate(result.favorite.endDate));
-            if (result.autoFavorite != null)$('#times-autofavorite-time-name').html(utils.formatDate(result.autoFavorite.startDate) + " - " + utils.formatDate(result.autoFavorite.endDate));
+            if (result.favorite != null) $('.times-favorite-time-name').html(utils.formatDate(result.favorite.startDate) + (result.favorite.startDate != result.favorite.endDate ? " - " + utils.formatDate(result.favorite.endDate) : ""));
+            if (result.autoFavorite != null)$('#times-autofavorite-time-name').html(utils.formatDate(result.autoFavorite.startDate) + (result.favorite.startDate != result.favorite.endDate ? " - " + utils.formatDate(result.autoFavorite.endDate) : ""));
             $('.btn-close-time').toggle(!!result.favorite);
             utils.resetSpinning($('.icon-favorite-time'));
         }});
@@ -894,7 +898,7 @@ define([
 
     //TIMELINE
     var initializeTimeline = function () {
-        $('.btn-group-timeline-filter .btn').tooltip();
+        $('.nav-discussion .btn').tooltip();
         loadTimelineAll();
     };
 

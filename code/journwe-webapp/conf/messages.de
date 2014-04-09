@@ -177,7 +177,7 @@ adventure.wallComments.firstComment=Schreib eine erste Nachricht auf die Wall!
 
 #IndexVet
 index.welcome1=Willkommen zurück, {0}! Es warten neue Abenteuer auf dich.
-index.myJournWes=Meine JournWes
+index.myJournWes=Deine JournWes
 
 #Admin
 admin.title=Administration and Wartung

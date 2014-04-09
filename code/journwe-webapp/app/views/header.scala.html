@@ -29,7 +29,7 @@
         @defining(UserManager.findByAuthUserIdentity(auth)) { user =>
             @if(auth != null && user != null) {
             <ul class="nav navbar-nav navbar-left">
-                <li @if(active == "home"){class="active"}><a href="@controllers.html.routes.IndexController.index()"><i class="fa fa-bookmark"></i> My JournWes</a></li>
+                <li @if(active == "home"){class="active"}><a href="@controllers.html.routes.IndexController.index()"><i class="fa fa-bookmark"></i> Your JournWes</a></li>
                 @* <li @if(active == "new"){class="active"}><a href="@controllers.html.routes.IndexController.indexNew()"><i class="fa fa-asterisk"></i> New JournWe</a></li> *@
                 <li @if(active == "inspiration"){class="active"}><a href="@controllers.html.routes.IndexController.categoryOverview()"><i class="fa fa-lightbulb-o"></i> Travel Inspirations</a></li>
             </ul>
@@ -37,9 +37,9 @@
                 <a id="notifications-link" class="btn navbar-btn" data-html="true" data-placement="bottom" data-title="Notifications"><i class="fa fa-bell" title="Notifications"></i> @defining(new NotificationDAO()) { notiDAO => @notiDAO.countUnread(user.getId) }</a>
                 <div class="stash">
                     <div id="notifications-popover-content" style="min-width: 300px; max-width: 500px">
-                        <div class="text-center" style="display: block;"><i class="loading-top icon-journwe fa fa-spin"></i></div>
+                        <div class="text-center" style="display: block;"><i class="loading-top fa fa-spinner fa-spin"></i></div>
                         <div class="notifications-list scrollable list-group pull-left" style="display: block; overflow: auto; max-height: 250px;"></div>
-                        <div class="text-center" style="display: block;"><i class="loading-bottom icon-journwe fa fa-spin stash"></i></div>
+                        <div class="text-center" style="display: block;"><i class="loading-bottom fa fa-spinner fa-spin stash"></i></div>
                     </div>
                 </div>
                 <script type="text/x-tmpl" id="header-notification-template">
@@ -79,8 +79,16 @@
                             <input id="email" type="text" class="form-control" name="email" value="" placeholder="email">
                             <span class="input-group-addon no-border"><i class="glyphicon glyphicon-lock"></i></span>
                             <input id="password" type="password" class="form-control" name="password" placeholder="password">
-                            <div class="btn-group input-group-btn">
+                            <div class="input-group-btn btn-group" style="width: auto;">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> Login</button>
+                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @forProviders() { p =>
+                                        <li><a href="@p.getUrl()"><i class="fa fa-@(if(p.getKey().toLowerCase()=="google"){"google-plus"}else{p.getKey().toLowerCase()}) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) Login</a></li>
+                                    }
+                                </ul>
                             </div>
                         </div>
                     </form>

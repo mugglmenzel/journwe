@@ -1,7 +1,4 @@
 
-
-
-
 .adventure-container {
 
   & .editable-container, & .editable-input, & textarea {
@@ -29,135 +26,108 @@
 
 .nav-adventure {
   font-size: 20px;
-  //width: 100%;
+  width: 100%;
+
   margin: 0;
-  border-radius: 0;
+
+  border: none;
+
   padding: 5px;
+  background: @color_white;
   .transition(background 0.5s ease);
-  z-index: 1;
+
+  border-radius: 0;
+  box-shadow: 0 0 3px gray;
+  position: fixed;
+  z-index: 1000;
+
+  bottom: 0px;
+  left: 0;
 
   &.affix {
-    border: none;
-    border-radius: 0;
-    box-shadow: 0 0 3px gray;
-    position: fixed;
-    z-index: 1000;
-    top: 0px;
-    width: 100%;
-    left: 0;
-    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 1px #888;
+    position: relative;
 
-    & *, .prime-image .title-overlay .title-name {
-      color: #333;
-      text-shadow: none;
-    }
+    z-index: 1;
 
-    & .nav-pills > li.active > a,
-    & .nav-pills > li.active > a:hover,
-    & .nav-pills > li.active > a:focus {
-      background: #f1f1f1 !important;
-    }
   }
 
   & .nav-title {
+    color: #333;
     line-height: 40px;
     margin-right: 10px;
     margin-top: 3px;
   }
 
-  & .title-name {
-    line-height: 40px;
-    margin-top: 3px;
-    color: white;
-  }
-
-  & .nav-adventure-list {
-    color: white;
-  }
-
-  & li {
-    display: inline-block;
-
-    & a {
-      border-radius: 0;
-      text-align: center;
-      margin: 0;
-      padding: 9px 5px !important;
-    }
-
-    & a i {
-      width: 40px;
+  & .nav-pills {
+    & > li {
       display: inline-block;
 
-      .fixed & {
-        color: gray;
-        .transition(color 0.5s ease);
+      & > a {
+        border-radius: 0;
+        text-align: center;
+        margin: 0;
+        padding: 9px 5px;
+        color: #333;
+        background: fade(@color_white, 60%);
+
+        &:hover,
+        &:focus {
+          background: lighten(#e1e1e1, 7%);
+        }
+
+        & i {
+          width: 40px;
+          display: inline-block;
+          color: #333;
+
+          .fixed & {
+            color: #333;
+          }
+        }
       }
+
+      &.active {
+
+        & > a {
+          background: lighten(#e1e1e1, 7%);
+
+          & i {
+            color: #333;
+          }
+        }
+
+        &.places {
+          border-bottom: 1px solid @color_place;
+        }
+
+        &.adventurers {
+          border-bottom: 1px solid @color_adventurer;
+        }
+
+        &.times {
+          border-bottom: 1px solid @color_time;
+        }
+      }
+
     }
 
-    &.active {
-
-      &.places {
-        border-bottom: 1px solid @color_place;
-      }
-
-      &.adventurers {
-        border-bottom: 1px solid @color_adventurer;
-      }
-
-      &.times {
-        border-bottom: 1px solid @color_time;
-      }
-    }
-
-  }
-
-  & > li > a {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-
-  & * {
-    color: white;
-  }
-
-  & .editable-container * {
-    color: #333;
-  }
-
-  & .nav-pills > li.active > a,
-  & .nav-pills > li.active > a:hover,
-  & .nav-pills > li.active > a:focus {
-    background: fade(@color_white, 60%) !important;
-
-    & i {
-      color: #333;
-    }
-  }
-
-  & .nav-pills > li > a:hover,
-  & .nav-pills > li > a:focus {
-    color: #333;
-    background: lighten(#e1e1e1, 7%);
-  }
-
-  & .nav-pills > li > a:hover i,
-  & .nav-pills > li > a:focus i {
-    color: #333;
-
-    .fixed & {
-      color: #333;
-    }
   }
 
 }
 
 .title-name {
 
+  line-height: 40px;
+  margin-top: 3px;
+  color: @color_white;
+
   & a {
     padding: 0 10px !important;
     border-bottom: 0 !important;
     line-height: 38px;
+    color: @color_white;
   }
 
   & .editable-container + i {
@@ -177,14 +147,6 @@
   }
 }
 
-.icon-for-adventure-title {
-
-}
-
-.icon-for-adventure-title.icon-cogs {
-  font-size: 24px;
-}
-
 #places-list {
 
   & td, & th {
@@ -192,20 +154,9 @@
   }
 }
 
-.rating {
-
-  & label {
-    margin-bottom: 0;
-  }
-}
-
 .btn-set-close-place,
 .btn-set-close-time {
   margin-left: 10px;
-}
-
-#nav-adventure-list {
-  margin-right: 0;
 }
 
 #places-favorite-place,
@@ -463,17 +414,13 @@
   border-radius: 4px;
 }
 
-.jrn-actions {
-  background: fade(@color_white, 20%);
-  border-top: 1px solid white;
-  padding: 20px;
-  margin: 20px -20px -20px -20px !important;
-}
-
-
 /* star rating      */
 .rating {
   float: left;
+
+  & label {
+    margin-bottom: 0;
+  }
 
   &:not(:checked) {
     & > input {

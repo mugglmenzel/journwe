@@ -144,7 +144,7 @@ adventure.adventurers.add.placeholder=A good ol' friend
 
 #Adventure.todo
 adventure.todos.listaction=Actions
-adventure.todos.listheading=My things to do
+adventure.todos.listheading=Your things to do
 adventure.todos.placeholder=Add an important thing
 adventure.todos.otherAdventurer=Other Adventurer's Todo Lists
 adventure.todos.amazon.title=Get Prepared for your JournWe!
@@ -177,7 +177,7 @@ adventure.wallComments.firstComment=Write a first wall post!
 
 #IndexVet
 index.welcome1=Welcome back, {0}! You have some adventures before you.
-index.myJournWes=My JournWes
+index.myJournWes=Your JournWes
 
 #Admin
 admin.title=Administration and Maintenance
