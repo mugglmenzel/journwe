@@ -403,7 +403,9 @@ define([
         routes.controllers.api.json.AdventureController.updateCategory(adv.id).ajax({
             data: {categoryId: catId},
             success: function (data) {
-                if (data.name != null && data.name.length > 0) $('.btn-journwe-category button span').first().html(data.name);
+                if (data && data.name != null && data.name.length > 0){
+                    $('.btn-journwe-category button span').first().html(data.name);
+                }
             }, complete: function () {
                 utils.resetSpinning($('.btn-journwe-category button i'));
             }});

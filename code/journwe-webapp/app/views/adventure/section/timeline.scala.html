@@ -61,19 +61,18 @@
 
     <script type="text/x-tmpl" id="timeline-template-email">
 		<div class="timeline-entry timeline-left">
-			<div class="timeline-icon timeline-i timeline-small">
-				<i class="fa fa-envelope-o"></i>
-			</div>
+			<div class="timeline-icon timeline-i timeline-small"><i class="fa fa-envelope-o"></i></div>
 			
 			<div class="timeline-content">
 				<a class="btn-email-preview" data-timestamp="{%=o.email.timestamp%}">{%= o.email.subject %}</a>
 			</div>
+
+            <div class="timeline-info"><span class="author">{%= o.email.sender %}</span></div>
 			<div class="timeline-content-right">
 				<a class="btn-email-preview" data-timestamp="{%=o.email.timestamp%}">{%= o.email.body %}</a>
+                &nbsp;&nbsp; - <small><a class="btn-email-preview" data-timestamp="{%=o.email.timestamp%}"><i class="fa fa-envelope-o"></i> Show mail</a></small>
 			</div>
 			
-			<div class="timeline-info"><span class="author">{%= o.email.sender %}</span></div>
-			<div class="timeline-toolbar"><a class="btn btn-link btn-email-preview" data-timestamp="{%=o.email.timestamp%}"><i class="fa fa-eye"></i> Preview</a></div>
 		</div>
     </script>
 

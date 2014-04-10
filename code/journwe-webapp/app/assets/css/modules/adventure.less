@@ -305,13 +305,14 @@
           vertical-align: middle;
           line-height: 24px;
           font-size: 12px;
+          border-radius: 20px;
         }
       }
 
       &.timeline-i {
         border: 4px solid rgba(168, 168, 168, 0.7);
         border-radius: 20px;
-        overflow: hidden;
+        overflow: visible;
       }
     }
 
@@ -330,15 +331,21 @@
     }
 
     .timeline-content-right {
-      left: 50%;
-      padding-left: 40px;
+      left: 100%;
       position: relative;
+      text-align: left;
+      margin-left: 80px;
+      margin-top: -40px;
     }
 
     .timeline-info * {
       font-size: 12px;
       color: gray;
     }
+  }
+
+  .btn-email-preview {
+    cursor: pointer;
   }
 
 }
