@@ -8,6 +8,7 @@ require([
 
     index.initializeCategories();
     // utils.loadGenericBgImage();
+    $('.background-container').hide();
 
     //tour.initialize();
 
