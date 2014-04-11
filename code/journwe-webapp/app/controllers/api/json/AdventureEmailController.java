@@ -47,7 +47,7 @@ public class AdventureEmailController extends Controller {
         node.put("adventureId", msg.getAdventureId());
         node.put("sender", msg.getSender());
         node.put("subject", msg.getSubject());
-        node.put("body", msg.getBody().length() > 150 ? msg.getBody().substring(150) : msg.getBody());
+        node.put("body", msg.getBody().length() > 150 ? msg.getBody().substring(0, 150) : msg.getBody());
         node.put("timestamp", msg.getTimestamp());
 
         return node;

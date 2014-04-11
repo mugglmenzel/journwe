@@ -1,11 +1,12 @@
 define([
+    "common/utils",
     "common/tmpl",
     "common/bootstrap",
     "common/bootstrap-switch",
     "common/bootstrap-editable",
     "common/bootstrap-datepicker",
     "common/typeahead"
-], function (tmpl) {
+], function (utils, tmpl) {
     window.tmpl = tmpl;
     jQuery.event.props.push('dataTransfer');
     // Init x-editable

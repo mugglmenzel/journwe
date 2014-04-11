@@ -5,7 +5,7 @@ require([
 ], function (utils, adventure) {
     console.log("initializing adventure public page...");
 
-    adventure.initBackground();
+    //adventure.initBackground();
     adventure.initPrimeImage();
     adventure.loadPublicAdventurers();
     adventure.updateFavoritePlace();

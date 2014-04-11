@@ -1,10 +1,9 @@
 @(adv: models.adventure.Adventure, user: models.user.User)
 
-
     <script type="text/x-tmpl" id="timeline-template-log">
         <div class="timeline-entry timeline-left">
             <div class="timeline-icon timeline-i timeline-small">
-                <img src="/assets/img/s.gif" style="background-image: url('{%= o.user.image %}')">
+                <img src="@controllers.core.html.routes.CDNAssetsController.at("img/s.gif")" style="background-image: url('{%= o.user.image %}')">
             </div>
 
             <div class="timeline-content">
@@ -18,7 +17,7 @@
     <script type="text/x-tmpl" id="timeline-template-info">
         <div class="timeline-entry timeline-left">
             <div class="timeline-icon timeline-i timeline-small">
-                <img src="/assets/img/s.gif" style="background-image: url('{%= o.user.image %}')">
+                <img src="@controllers.core.html.routes.CDNAssetsController.at("img/s.gif")" style="background-image: url('{%= o.user.image %}')">
             </div>
 
             <div class="timeline-content">
@@ -32,7 +31,7 @@
     <script type="text/x-tmpl" id="timeline-template-comment">
 		<div class="timeline-entry timeline-right">
 			<div class="timeline-icon">
-				<img src="/assets/img/s.gif" style="background-image: url('{%= o.user.image %}')">
+				<img src="@controllers.core.html.routes.CDNAssetsController.at("img/s.gif")" style="background-image: url('{%= o.user.image %}')">
 			</div>
 
 			<div class="timeline-content">
@@ -46,7 +45,7 @@
     <script type="text/x-tmpl" id="timeline-template-file">
 		<div class="timeline-entry timeline-left">
 			<div class="timeline-icon timeline-small">
-				<img src="/assets/img/s.gif" style="background-image: url('{%= o.user.image %}')">
+				<img src="@controllers.core.html.routes.CDNAssetsController.at("img/s.gif")" style="background-image: url('{%= o.user.image %}')">
 			</div>
 			
 			<div class="timeline-content">

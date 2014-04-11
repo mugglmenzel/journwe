@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.typesafe.config.ConfigFactory;
 import models.auth.SecuredUser;
+import models.dao.adventure.AdventureDAO;
 import org.joda.time.DateTime;
 import play.Logger;
 import play.cache.Cache;
@@ -44,12 +45,20 @@ public class AdventurePhotoController extends Controller {
                 public String call() throws Exception {
                     List<ObjectNode> images = new ArrayList<ObjectNode>();
                     int i = 0;
+
+                    ObjectNode node = Json.newObject();
+                    node.put("index", i);
+                    node.put("id", "title");
+                    node.put("url", URLEncoder.encode(new AdventureDAO().get(advId).getImage(), "UTF-8"));
+                    images.add(node);
+                    i++;
+
                     for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_ADVENTURE_IMAGES).withPrefix(advId + "/")).getObjectSummaries()) {
                         try {
                             s3.setObjectAcl(os.getBucketName(), os.getKey(), CannedAccessControlList.BucketOwnerFullControl);
                             String id = os.getKey().substring(os.getKey().lastIndexOf("/") + 1, os.getKey().length());
 
-                            ObjectNode node = Json.newObject();
+                            node = Json.newObject();
                             node.put("index", i);
                             node.put("id", id);
                             node.put("url", URLEncoder.encode(s3.generatePresignedUrl(S3_BUCKET_ADVENTURE_IMAGES,

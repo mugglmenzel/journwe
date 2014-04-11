@@ -201,7 +201,6 @@ define([
         $('.nav-adventure').affix({
             offset: {
                 top: function () {
-                    console.log('returning offset ' + $('.nav-container').first().offset().top + ", window scroll " + $(window).scrollTop());
                     return $('.nav-container').first().offset().top + $('.nav-adventure').height() - $(window).height();
                 }
             }
@@ -559,7 +558,8 @@ define([
             favoritePlace = result.favorite;
             if (result.favorite != null) {
                 $('.places-favorite-place-name').html(result.favorite.address);
-                loadBgMap(result.favorite.lat, result.favorite.lng);
+                if(result.favorite.lat != null && result.favorite.lng != null) loadBgMap(result.favorite.lat, result.favorite.lng);
+                else initBackground();
             } else initBackground();
             if (result.autoFavorite != null) $('.places-autofavorite-place-name').html(result.autoFavorite.address);
             $('.btn-close-place').toggle(!!result.favorite);
@@ -1640,12 +1640,12 @@ define([
                 input.val(""); // Reset
                 var list = $('.comment-list-' + threadId);
 
-                btn.html('<i class="fa fa-spin icon-journwe"></i>');
+                utils.setReplaceSpinning(btn);
 
                 routes.controllers.api.json.CommentController.saveComment().ajax({data: {text: val, threadId: threadId}, success: function (f) {
                     f.type = "comment";
                     $('.timeline').prepend(renderTimeline(f));
-                    btn.html('<i class="fa fa-plus"></i>');
+                    utils.resetReplaceSpinning(btn);
                 }});
 
             }
