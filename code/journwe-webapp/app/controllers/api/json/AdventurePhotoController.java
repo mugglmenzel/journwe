@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.typesafe.config.ConfigFactory;
+import models.adventure.Adventure;
 import models.auth.SecuredUser;
 import models.dao.adventure.AdventureDAO;
 import org.joda.time.DateTime;
@@ -26,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import static play.data.Form.form;
-
 public class AdventurePhotoController extends Controller {
 
     public static final String S3_BUCKET_ADVENTURE_IMAGES = "journwe-adventure-images";
@@ -44,21 +43,26 @@ public class AdventurePhotoController extends Controller {
                 @Override
                 public String call() throws Exception {
                     List<ObjectNode> images = new ArrayList<ObjectNode>();
+                    Adventure adv = new AdventureDAO().get(advId);
+                    if (adv == null) return Json.newObject().toString();
+
                     int i = 0;
 
-                    ObjectNode node = Json.newObject();
-                    node.put("index", i);
-                    node.put("id", "title");
-                    node.put("url", URLEncoder.encode(new AdventureDAO().get(advId).getImage(), "UTF-8"));
-                    images.add(node);
-                    i++;
+                    if (adv.getImage() != null) {
+                        ObjectNode node = Json.newObject();
+                        node.put("index", i);
+                        node.put("id", "title");
+                        node.put("url", URLEncoder.encode(adv.getImage(), "UTF-8"));
+                        images.add(node);
+                        i++;
+                    }
 
                     for (S3ObjectSummary os : s3.listObjects(new ListObjectsRequest().withBucketName(S3_BUCKET_ADVENTURE_IMAGES).withPrefix(advId + "/")).getObjectSummaries()) {
                         try {
                             s3.setObjectAcl(os.getBucketName(), os.getKey(), CannedAccessControlList.BucketOwnerFullControl);
                             String id = os.getKey().substring(os.getKey().lastIndexOf("/") + 1, os.getKey().length());
 
-                            node = Json.newObject();
+                            ObjectNode node = Json.newObject();
                             node.put("index", i);
                             node.put("id", id);
                             node.put("url", URLEncoder.encode(s3.generatePresignedUrl(S3_BUCKET_ADVENTURE_IMAGES,
