@@ -616,7 +616,7 @@ define([
     //PEOPLE
 
     var initializePeople = function () {
-        loadAllAdventurers(true);
+        loadAllAdventurers();
         //loadParticipants();
         //loadInvitees();
         //loadApplicants();
@@ -629,9 +629,10 @@ define([
     }
 
     var loadAllAdventurers = function (clear) {
-        loadParticipants(clear);
-        loadInvitees(clear);
-        loadApplicants(clear);
+        if (clear) $('.adventurers-list').empty();
+        loadParticipants();
+        loadInvitees();
+        loadApplicants();
     };
 
     var loadParticipants = function (clear) {

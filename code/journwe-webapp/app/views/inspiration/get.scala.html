@@ -41,13 +41,13 @@
     <div class="jrn-container">
         <ol  class="breadcrumb row">
             <li class="active"><i class="fa fa-folder"></i></li>
-            @if(Category.SUPER_CATEGORY.equals(cat.getId)){
-                <li><a href="@html.routes.IndexController.categoryOverview()">Overview</a></li>
-            } else {
+            <li><a href="@controllers.html.routes.IndexController.categoryOverview()">Travel Inspirations</a></li>
+
+            @if(cat != null && !Category.SUPER_CATEGORY.equals(cat.getId)) {
                 @defining(new CategoryHierarchyDAO) { catHierDAO =>
                     @for(catId <- catHierDAO.getSuperHierarchy(cat.getId)) {
                         @defining(new CategoryDAO().get(catId)) { catHier =>
-                            <li><a href="@html.routes.IndexController.categoryIndex(catId)">@catHier.getName</a></li>
+                            <li><a href="@controllers.html.routes.IndexController.categoryIndex(catId)">@catHier.getName</a></li>
                         }
                     }
                 }

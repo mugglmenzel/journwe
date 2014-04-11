@@ -23,7 +23,7 @@ define([
     var addComment = function (threadId, val, btn) {
         var list = $('.comment-list-' + threadId);
 
-        btn.html('<i class="fa fa-spin icon-journwe"></i>');
+        utils.setReplaceSpinning(btn);
 
         routes.controllers.api.json.CommentController.saveComment().ajax({data: {text: val, threadId: threadId}, success: function (f) {
             list.find(".empty").remove();
@@ -31,7 +31,7 @@ define([
             f.time = utils.formatTime(f.comment.timestamp);
             f.color = utils.colorOfUser(f.user.name);
             list.append(tmpl('template-comment', f)).fadeIn();
-            btn.html('<i class="fa fa-plus"></i>');
+            utils.resetReplaceSpinning(btn);
         }});
     };
 

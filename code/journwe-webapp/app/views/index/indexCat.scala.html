@@ -11,7 +11,7 @@
     </script>
 }
 
-@main(Messages("journwe.subtitle")) { Category <em>@if(Category.SUPER_CATEGORY.equals(cat.getId)){Overview}else{@cat.getName}</em> } {
+@main(Messages("journwe.subtitle")) { @if(Category.SUPER_CATEGORY.equals(cat.getId)){Travel Inspirations}else{Category <em>@cat.getName</em>} } {
 
 
 <div class="container">
@@ -20,18 +20,20 @@
     <div class="jrn-container jrn-no-round jrn-no-top-gap-page-header">
         <ol  class="breadcrumb row">
             <li class="active"><i class="fa fa-folder"></i></li>
-            @if(Category.SUPER_CATEGORY.equals(cat.getId)){
-                <li class="active">Overview</li>
-            } else {
-                <li><a href="@html.routes.IndexController.categoryOverview()">Overview</a></li>
+            @if(cat != null) {
+                @if(Category.SUPER_CATEGORY.equals(cat.getId)) {
+                    <li class="active">Travel Inspirations</li>
+                } else {
+                    <li><a href="@controllers.html.routes.IndexController.categoryOverview()">Travel Inspirations</a></li>
 
-                @defining(new CategoryHierarchyDAO) { catHierDAO =>
-                    @for(catId <- catHierDAO.getSuperHierarchy(cat.getId)) {
-                        @defining(new CategoryDAO().get(catId)) { catHier =>
-                            @if(catId.equals(cat.getId)) {
-                                <li class="active">@catHier.getName</li>
-                            } else {
-                                <li><a href="@html.routes.IndexController.categoryIndex(catId)">@catHier.getName</a></li>
+                    @defining(new CategoryHierarchyDAO) { catHierDAO =>
+                        @for(catId <- catHierDAO.getSuperHierarchy(cat.getId)) {
+                            @defining(new CategoryDAO().get(catId)) { catHier =>
+                                @if(catId.equals(cat.getId)) {
+                                    <li class="active">@catHier.getName</li>
+                                } else {
+                                    <li><a href="@controllers.html.routes.IndexController.categoryIndex(catId)">@catHier.getName</a></li>
+                                }
                             }
                         }
                     }
