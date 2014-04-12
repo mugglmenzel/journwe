@@ -1,20 +1,21 @@
 package controllers.api.json;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
 import models.UserManager;
 import models.adventure.Adventure;
 import models.adventure.EPreferenceVote;
+import models.adventure.time.TimeOption;
 import models.adventure.time.TimeOptionRating;
 import models.adventure.time.TimePreference;
-import models.adventure.time.TimeOption;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
-import models.dao.adventure.*;
-import models.dao.user.UserDAO;
-import models.notifications.helper.AdventurerNotifier;
+import models.dao.adventure.AdventureDAO;
+import models.dao.adventure.TimeOptionDAO;
+import models.dao.adventure.TimePreferenceDAO;
+import services.AdventurerNotifier;
 import models.user.User;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -115,7 +116,7 @@ public class AdventureTimeController extends Controller {
             time.setStartDate(df.parse(requestData.get("startDate")));
             time.setEndDate(df.parse(requestData.get("endDate")));
             new TimeOptionDAO().save(time);
-            new AdventurerNotifier().notifyAdventurers(advId, "The new time option " + df.format(time.getStartDate()) + (time.getStartDate().equals(time.getEndDate()) ?  "-" + df.format(time.getEndDate()) : "") + " has been added.", "New Time Option");
+            new AdventurerNotifier().notifyAdventurers(advId, "The new time option " + df.format(time.getStartDate()) + (time.getStartDate().equals(time.getEndDate()) ? "-" + df.format(time.getEndDate()) : "") + " has been added.", "New Time Option");
 
             Logger.info("returning start date " + time.getStartDate().toString() + ", " + df.format(time.getStartDate()));
             ObjectNode node = timeToJSON(time);
@@ -124,7 +125,7 @@ public class AdventureTimeController extends Controller {
             List<TimeOption> timeOptions = new ArrayList<TimeOption>();
             timeOptions.addAll(new TimeOptionDAO().all(advId));
             java.util.Collections.sort(timeOptions);
-            node.put("index", timeOptions.indexOf(time)); 
+            node.put("index", timeOptions.indexOf(time));
 
             return created(Json.toJson(node));
         } catch (ParseException pe) {
@@ -157,15 +158,15 @@ public class AdventureTimeController extends Controller {
         }
 
         try {
-            if(voteGravity != null) pref.setVoteGravity(voteGravity);
-            if(vote !=  null && !"".equals(vote)) pref.setVote(EPreferenceVote.valueOf(vote));
+            if (voteGravity != null) pref.setVoteGravity(voteGravity);
+            if (vote != null && !"".equals(vote)) pref.setVote(EPreferenceVote.valueOf(vote));
         } catch (IllegalArgumentException e) {
             Logger.error("Got unknown value for vote! value: " + vote);
         }
 
         new TimePreferenceDAO().save(pref);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " voted on time option " + df.format(time.getStartDate()) + (time.getStartDate().equals(time.getEndDate()) ?  "-" + df.format(time.getEndDate()) : "") + ".", "Vote Time Option");
+        new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " voted on time option " + df.format(time.getStartDate()) + (time.getStartDate().equals(time.getEndDate()) ? "-" + df.format(time.getEndDate()) : "") + ".", "Vote Time Option");
 
 
         ObjectNode node = timeToJSON(time);
@@ -186,7 +187,7 @@ public class AdventureTimeController extends Controller {
 
     private static ObjectNode timeToJSON(TimeOption time) {
         ObjectNode node = Json.newObject();
-        if(time == null) return node;
+        if (time == null) return node;
 
         User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         TimePreference pref = new TimePreferenceDAO().get(time.getOptionId(), usr.getId());
@@ -226,7 +227,7 @@ public class AdventureTimeController extends Controller {
         List<TimeOptionRating> ratings = new ArrayList<TimeOptionRating>();
         List<TimeOption> timeOptions = new TimeOptionDAO().all(advId);
 
-        if(timeOptions == null || timeOptions.size() < 1) return null;
+        if (timeOptions == null || timeOptions.size() < 1) return null;
 
         for (TimeOption po : timeOptions) {
             TimeOptionRating rating = getTimeGroupRating(po);

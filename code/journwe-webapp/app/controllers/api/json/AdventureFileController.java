@@ -15,7 +15,7 @@ import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.adventure.JournweFileDAO;
 import models.dao.user.UserDAO;
-import models.notifications.helper.AdventurerNotifier;
+import services.AdventurerNotifier;
 import models.user.User;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;

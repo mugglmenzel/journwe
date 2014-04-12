@@ -26,7 +26,7 @@ import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.dao.manytomany.AdventureToCategoryDAO;
-import models.notifications.helper.AdventurerNotifier;
+import services.AdventurerNotifier;
 import models.user.User;
 import play.Logger;
 import play.data.DynamicForm;

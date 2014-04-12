@@ -15,21 +15,21 @@ public class JournweMailer {
     /**
     *    templatePath is the path after views.html.* or views.txt.*
      */
-    public static Body getMailBody(final String templatePath, final Http.Context ctx, final String name) {
+    public static Body getMailBody(final String templatePath, final Http.Context ctx, final Object[] params) {
 
         final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
         final String langCode = lang.code();
 
         final String html = getEmailTemplate(
-                "views.html."+templatePath, langCode, name);
+                "views.html."+templatePath, langCode, params);
         final String text = getEmailTemplate(
-                "views.txt."+templatePath, langCode, name);
+                "views.txt."+templatePath, langCode, params);
 
         return new Body(text, html);
     }
 
     public static String getEmailTemplate(final String template,
-                                      final String langCode, final String name) {
+                                      final String langCode, final Object[] params) {
         Class<?> cls = null;
         String ret = null;
         try {
@@ -39,7 +39,7 @@ public class JournweMailer {
                     + template
                     + "_"
                     + langCode
-                    + "' was not found! Trying to use English fallback template instead.");
+                    + "' was not found! Trying to use language fallback template instead.");
         }
         if (cls == null) {
             try {
@@ -55,7 +55,7 @@ public class JournweMailer {
             Method htmlRender = null;
             try {
                 htmlRender = cls.getMethod("render", String.class);
-                ret = htmlRender.invoke(null, name)
+                ret = htmlRender.invoke(null, params)
                         .toString();
 
             } catch (NoSuchMethodException e) {

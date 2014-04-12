@@ -1,11 +1,15 @@
-package models.notifications.helper;
+package services;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
+import com.feth.play.module.mail.Mailer;
 import com.typesafe.config.ConfigFactory;
+import controller.JournweMailer;
+import models.adventure.Adventure;
 import models.dao.NotificationDAO;
 import models.dao.NotificationDigestQueueDAO;
+import models.dao.adventure.AdventureDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
 import models.notifications.ENotificationFrequency;
@@ -14,9 +18,9 @@ import models.notifications.Notification;
 import models.user.User;
 import models.user.UserEmail;
 import play.Logger;
+import play.mvc.Http;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -72,7 +76,7 @@ public class UserNotifier {
             Logger.debug("user " + user.getName() + " wants a digest? " + (new Date().getTime() > user.getLastDigest().getTime() + minimumAge) + "(lastDigest: " + user.getLastDigest().getTime() + ", now: " + new Date().getTime() + ")");
             if (new Date().getTime() > user.getLastDigest().getTime() + minimumAge) {
                 Logger.debug("checking notifications for " + user.getName());
-                notifyUserViaEmailDigest(new NotificationDAO().unsent(user.getId()), frequency.getDigestName());
+                notifyUserViaEmailDigest(user.getId(), new NotificationDAO().unsent(user.getId()), frequency.getDigestName());
                 user.setLastDigest(new Date());
                 new UserDAO().save(user);
 
@@ -86,20 +90,30 @@ public class UserNotifier {
     /* Email Stuff */
 
     public void notifyUserViaEmail(Notification notification) {
-        sendNotificationEmail(notification.getUserId(), "JournWe Notification" + (notification.getSubject() != null && !"".equals(notification.getSubject()) ? ": " + notification.getSubject() : ""), notification.getMessage());
+        //sendNotificationEmail(notification.getUserId(), "JournWe Notification" + (notification.getSubject() != null && !"".equals(notification.getSubject()) ? ": " + notification.getSubject() : ""), notification.getMessage());
         markNotificationSent(notification);
     }
 
-    public void notifyUserViaEmailDigest(List<Notification> notifications, String digestName) {
+    public void notifyUserViaEmailDigest(String userId, List<Notification> notifications, String digestName) {
         if (notifications.size() > 0) {
 
-            String message = "You have following Notifications: \n";
+            Map<Adventure, List<Notification>> advNoti = new HashMap<Adventure, List<Notification>>();
+            List<Notification> generalNoti = new ArrayList<Notification>();
             for (Notification notification : notifications) {
-                message += "+ " + notification.getSubject() + ": " + notification.getMessage() + "\n";
+                if (notification.getTopicRef() != null) {
+                    Adventure adv = new AdventureDAO().get(notification.getTopicRef());
+                    if (adv != null) {
+                        List<Notification> notis = advNoti.get(adv) != null ? advNoti.get(adv) : new ArrayList<Notification>();
+                        notis.add(notification);
+                        advNoti.put(adv, notis);
+                    }
+                }
                 markNotificationSent(notification);
             }
+            //TODO: no current context available in batch, read language from user settings
+            Mailer.Mail.Body emailBody = JournweMailer.getMailBody("notification", Http.Context.current(), new Object[]{generalNoti, advNoti});
 
-            sendNotificationEmail(notifications.get(0).getUserId(), "JournWe Notification: " + digestName + " Digest", message);
+            sendNotificationEmail(userId, "JournWe Notification: " + digestName + " Digest", emailBody);
         }
 
     }
@@ -110,7 +124,7 @@ public class UserNotifier {
     }
 
 
-    private void sendNotificationEmail(String userId, String subject, String message) {
+    private void sendNotificationEmail(String userId, String subject, Mailer.Mail.Body message) {
         try {
             UserEmail primaryEmail = new UserEmailDAO().getPrimaryEmailOfUser(userId);
             if (primaryEmail != null) {
@@ -118,7 +132,7 @@ public class UserNotifier {
                         ConfigFactory.load().getString("aws.accessKey"),
                         ConfigFactory.load().getString("aws.secretKey")));
                 Logger.debug("got primary email: " + primaryEmail);
-                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData(subject)).withBody(new Body().withText(new Content().withData(message)))).withSource("no-reply@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
+                ses.sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(primaryEmail.getEmail())).withMessage(new Message().withSubject(new Content().withData(subject)).withBody(new Body().withText(new Content().withData(message.getText())).withHtml(new Content().withData(message.getHtml())))).withSource("no-reply@journwe.com").withReplyToAddresses("no-reply@journwe.com"));
             }
         } catch (Exception e) {
             e.printStackTrace();

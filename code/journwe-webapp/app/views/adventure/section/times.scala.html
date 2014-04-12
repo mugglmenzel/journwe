@@ -53,26 +53,30 @@
 }
 
 @if(auth.canEditDateAndTime()) {
-<div id="time-add-form" class="row">
+    <div id="time-add-form" class="row">
 
-        <div class="col-lg-5" style="width: 43%;">
-            <div class="input-group col-lg-12">
-                <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.start")</span>
-                <input class="journwe-date form-control" id="time-add-input-start" data-date="2014-03-14" data-date-format="yyyy-mm-dd" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")" style=""/>
+        <div class="col-xs-5" style="width: 43%;">
+            <div class="form-group">
+                <div class="input-group date col-xs-12" id="time-add-input-start" data-date-format="YYYY-MM-DD">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.start")</span>
+                    <input class="journwe-date form-control" type="text" name="startDate" placeholder="@Messages("adventure.time.start.placeholder")"/>
+                </div>
             </div>
         </div>
-        <div class="col-lg-5" style="width: 43%;">
-            <div class="input-group col-lg-12">
-                <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.end")</span>
-                <input class="journwe-date form-control" id="time-add-input-end" data-date="2014-03-16" data-date-format="yyyy-mm-dd" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")" style=""/>
+        <div class="col-xs-5" style="width: 43%;">
+            <div class="form-group">
+                <div class="input-group date col-xs-12" id="time-add-input-end" data-date-format="YYYY-MM-DD">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i> @Messages("adventure.time.end")</span>
+                    <input class="journwe-date form-control" type="text" name="endDate" placeholder="@Messages("adventure.time.end.placeholder")"/>
+                </div>
             </div>
         </div>
 
-        <div class="col-lg-2 text-right" style="width: 14%;">
+        <div class="col-xs-2 text-right" style="width: 14%;">
             <button id="time-add-button" class="btn btn-primary" style="width: 100%;"><i class="fa fa-plus"></i></button>
         </div>
 
-</div>
+    </div>
 }
 
     <script type="text/x-tmpl" id="time-template">

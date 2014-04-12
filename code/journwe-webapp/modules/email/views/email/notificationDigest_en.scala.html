@@ -1,0 +1,69 @@
+@(generalNotis: List[models.notifications.Notification], advNotis: Map[models.adventure.Adventure, List[models.notification.Notification]])
+
+<html>
+    <head>
+        <style>
+        ul { margin-top : 0em; list-style-type : circle; }
+        p { margin : 0em; }
+        blockquote { padding-left : 96px; }
+        </style>
+    </head>
+
+    <body>
+        <h2>Within the last 24hrs (week) the following updates were made in JournWes you are participating:</h2>
+
+        @advList.map { adv =>
+            <p>
+                <img width="96" height="96" align="center" src="http://www.journwe.com/thumbnail?w=96&amp;h=96&amp;u=@adv.getImage()&amp;t=@adv.getImageTimestamp()"/>
+                <a href="http://www.journwe.com/adventure/@adv.getId()" target="_blank">
+                    <span style="font-size: 5px; padding-left: 20px;">@adv.getName</span>
+                </a>
+            </p>
+            <blockquote>
+                <p>
+                    <strong>Adventurers:</strong>
+                </p>
+                <ul>
+                    <li> Markus Klems changed the participation status to BOOKED.</li>
+                </ul>
+
+                <p>
+                    <strong>Place:</strong>
+                </p>
+                <ul>
+                    <li> Markus Klems voted on place option Tullastra&szlige 12, 68161 Mannheim, Germany.</li>
+                </ul>
+
+                <p>
+                    <strong>Date:</strong>
+                </p>
+                <ul>
+                    <li> Markus Klems voted on time option 2014-03-29-2014-03-29.</li>
+                </ul>
+
+                <p>
+                    <strong>other sections:</strong>
+                </p>
+                <ul>
+                    <li> Sebastian Roth wrote a comment.</li>
+                    <li> Sebastian Roth added the todo item Eine Sache to the todo</li>
+                    <li> Willi Tscheschner uploaded the file Screen Shot 2014-03-20 at 23.29.54.png.</li>
+                </ul>
+
+            </blockquote>
+        }
+
+
+        <br>
+        <p>
+            Have lots of fun travelling guys,<img width="28" height="36" style="padding-left: 20px" align="top" src="http://www.journwe.com/cdn-assets/img/journwe_logo.png"/> <br>
+            <strong>The JournWe Team</strong>
+        </p>
+        <br> <br>
+        <p>For changes in the frequence you'd like to receive your summary of JournWe changes please check on the "Notifications" setting in your Profile on the
+            JournWe website.
+            <br> <br>
+            In case you have questions or feedback on JournWe.com we would love to receive your mail to <a href="mailto:info@@journwe.com" target="_blank">info@@journwe.com</a>
+        </p>
+
+    </body></html>

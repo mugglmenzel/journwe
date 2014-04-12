@@ -767,18 +767,20 @@ define([
 
     var initializeTime = function () {
         // Init all date fields
-        $('.date').datepicker({
-            startDate: today,
-            weekStart: 1
-        });
+        //$('.date').datetimepicker();
 
-        $("#time-add-input-start").datepicker({startDate: new Date()}).on('changeDate', function (e) {
-            $("#time-add-input-end").datepicker('setStartDate', e.date);
-            $("#time-add-input-start").datepicker('hide');
+        $('#time-add-input-start').datetimepicker({pickTime: false, minDate: new Date()}).on('dp.change',function (e) {
+            $('#time-add-input-end').data("DateTimePicker").setMinDate(e.date);
+            $("#time-add-input-start").data("DateTimePicker").hide();
+        }).find('input').click(function () {
+            $("#time-add-input-start").data("DateTimePicker").show();
         });
-        $("#time-add-input-end").datepicker({startDate: new Date()}).on('changeDate', function (e) {
-            $("#time-add-input-end").datepicker('hide');
-        });
+        $('#time-add-input-end').datetimepicker({pickTime: false, minDate: new Date()}).on('dp.change', function (e) {
+            //$("#time-add-input-start").data("DateTimePicker").setMaxDate(e.date);
+            $("#time-add-input-end").data("DateTimePicker").hide();
+        }).find('input').click(function () {
+            $("#time-add-input-end").data("DateTimePicker").show();
+        });;
 
         routes.controllers.api.json.AdventureTimeController.getTimes(adv.id).ajax({success: function (result) {
             $('#times-list tbody').empty();

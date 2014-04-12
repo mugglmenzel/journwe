@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   "com.rosaloves" % "bitlyj" % "2.0.0",
   "org.apache.pdfbox" % "pdfbox" % "1.8.2",
   "commons-io" % "commons-io" % "2.4",
-  "com.mohiva" %% "play-html-compressor" % "0.2.1-SNAPSHOT"
+  "com.mohiva" %% "play-html-compressor" % "0.2.1"
 )
 
 
@@ -63,16 +63,18 @@ requireJsShim += "shim.js"
 
 //requireNativePath := Some("java -cp lib/requireJs/js.jar:lib/requireJs/compiler.jar org.mozilla.javascript.tools.shell.Main lib/requireJs/r.js")
 
-lazy val root = project.in(file(".")).aggregate(acl, admin, core, social).dependsOn(acl, admin, core, data, dataCache, social, email)
+lazy val root = project.in(file(".")).aggregate(acl, admin, social).dependsOn(acl, admin, social)
 
 lazy val data = project.in(file("modules/data"))
 lazy val dataCache = project.in(file("modules/dataCache")).aggregate(data).dependsOn(data)
-lazy val core = project.in(file("modules/core")).aggregate(data, dataCache).dependsOn(data, dataCache)
+lazy val email = project.in(file("modules/email")).aggregate(data).dependsOn(data)
 
 
-lazy val social = project.in(file("modules/social")).aggregate(core).dependsOn(core, data, dataCache)
-lazy val acl = project.in(file("modules/acl")).aggregate(core).dependsOn(core, data, dataCache)
+lazy val core = project.in(file("modules/core")).aggregate(dataCache, email).dependsOn(dataCache, email)
 
-lazy val admin = project.in(file("modules/admin")).aggregate(core).dependsOn(core, data, dataCache)
 
-lazy val email = project.in(file("modules/email")).dependsOn(core, acl)
+lazy val social = project.in(file("modules/social")).aggregate(core).dependsOn(core)
+lazy val acl = project.in(file("modules/acl")).aggregate(core).dependsOn(core)
+
+lazy val admin = project.in(file("modules/admin")).aggregate(core).dependsOn(core)
+

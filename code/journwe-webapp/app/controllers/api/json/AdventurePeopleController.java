@@ -38,7 +38,7 @@ import helpers.JournweFacebookClient;
 import helpers.SocialAutocompleteFriend;
 import helpers.SocialInviter;
 import models.inspiration.Inspiration;
-import models.notifications.helper.AdventurerNotifier;
+import services.AdventurerNotifier;
 import models.user.User;
 import models.user.UserSocial;
 import play.Logger;

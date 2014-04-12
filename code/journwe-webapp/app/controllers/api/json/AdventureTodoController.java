@@ -1,21 +1,20 @@
 package controllers.api.json;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.journwe.productadvertising.webservice.client.Item;
 import com.journwe.productadvertising.webservice.client.ItemSearchRequest;
 import com.journwe.productadvertising.webservice.client.Items;
 import com.journwe.productadvertising.webservice.client.OperationRequest;
 import com.typesafe.config.ConfigFactory;
+import helpers.AWSProductAdvertisingAPIHelper;
 import models.UserManager;
 import models.adventure.todo.EStatus;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.dao.adventure.TodoDAO;
-import helpers.AWSProductAdvertisingAPIHelper;
-import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
 import play.data.DynamicForm;
 import play.libs.Json;
@@ -23,6 +22,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import services.AdventurerNotifier;
 
 import javax.xml.ws.Holder;
 import java.io.UnsupportedEncodingException;
@@ -49,7 +49,6 @@ public class AdventureTodoController extends Controller {
 
         //return ok(getTodos.render(adv, ins, advr, AdventureTimeController.timeForm, AdventureFileController.fileForm));
     }
-
 
 
     @Security.Authenticated(SecuredUser.class)

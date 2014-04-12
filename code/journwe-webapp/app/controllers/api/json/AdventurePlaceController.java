@@ -1,5 +1,6 @@
 package controllers.api.json;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
 import models.UserManager;
 import models.adventure.Adventure;
@@ -15,10 +16,7 @@ import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.CommentDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.PlacePreferenceDAO;
-import models.dao.user.UserDAO;
-import models.notifications.helper.AdventurerNotifier;
 import models.user.User;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.joda.time.DateTime;
 import play.Logger;
 import play.data.DynamicForm;
@@ -27,6 +25,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import services.AdventurerNotifier;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -155,8 +154,8 @@ public class AdventurePlaceController extends Controller {
         }
 
         try {
-            if(voteGravity != null) pref.setVoteGravity(voteGravity);
-            if(vote != null && !"".equals(vote)) pref.setVote(EPreferenceVote.valueOf(vote));
+            if (voteGravity != null) pref.setVoteGravity(voteGravity);
+            if (vote != null && !"".equals(vote)) pref.setVote(EPreferenceVote.valueOf(vote));
         } catch (IllegalArgumentException e) {
             Logger.error("Got unknown value for vote! value: " + vote);
         }
@@ -185,7 +184,7 @@ public class AdventurePlaceController extends Controller {
 
     private static ObjectNode placeToSmallJSON(PlaceOption place) {
         ObjectNode node = Json.newObject();
-        if(place == null) return node;
+        if (place == null) return node;
 
         node.put("id", place.getOptionId());
         node.put("advId", place.getAdventureId());
@@ -199,7 +198,7 @@ public class AdventurePlaceController extends Controller {
 
     private static ObjectNode placeToJSON(PlaceOption place) {
         ObjectNode node = placeToSmallJSON(place);
-        if(place == null) return node;
+        if (place == null) return node;
 
         User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
@@ -234,7 +233,7 @@ public class AdventurePlaceController extends Controller {
         List<PlaceOptionRating> ratings = new ArrayList<PlaceOptionRating>();
         List<PlaceOption> placeOptions = new PlaceOptionDAO().all(advId);
 
-        if(placeOptions == null || placeOptions.size() < 1) return null;
+        if (placeOptions == null || placeOptions.size() < 1) return null;
 
         for (PlaceOption po : placeOptions) {
             PlaceOptionRating rating = getPlaceGroupRating(po);

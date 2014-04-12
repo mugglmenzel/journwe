@@ -12,7 +12,7 @@ requirejs.config({
         'common/bootstrap': ['common/jquery'],
         'common/bootstrap-switch': ['common/bootstrap'],
         'common/bootstrap-editable': ['common/bootstrap'],
-        'common/bootstrap-datepicker': ['common/bootstrap'],
+        'common/bootstrap-datetimepicker': ['common/bootstrap', 'common/moment-with-langs'],
         'common/typeahead': ['common/jquery'],
         'common/tmpl': {
             exports: 'tmpl'

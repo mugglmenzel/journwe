@@ -1,4 +1,4 @@
-package models.notifications.helper;
+package services;
 
 import models.adventure.Adventure;
 import models.adventure.adventurer.Adventurer;
