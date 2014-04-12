@@ -8,6 +8,7 @@ public class RequestGenerator {
 	
 	public static final String BASE_URL = "http://api.ean.com/ean-services/rs/hotel/v3/";
 	public static final String MINOR_REV = "99";
+	public static final Integer NUMBER_OF_RESULTS = 20; // max 200
 	
 	/**
 	 * Generate a URL for REST request.
@@ -26,6 +27,10 @@ public class RequestGenerator {
 		toReturn.append("&cid=");
 		toReturn.append(cid);
 		toReturn.append(generateRequestUrlParameters(hotelRequest));
+		if(NUMBER_OF_RESULTS!=20 && NUMBER_OF_RESULTS>=1 && NUMBER_OF_RESULTS<=200) {
+				toReturn.append("&numberOfResults=");
+				toReturn.append(NUMBER_OF_RESULTS);	
+		}
 		return toReturn.toString();
 	}
 	
@@ -35,9 +40,8 @@ public class RequestGenerator {
 	 * @param hotelRequest
 	 * @return the URL parameters
 	 */
-	private static String generateRequestUrlParameters(HotelRequest hotelRequest) {
+	protected static String generateRequestUrlParameters(HotelRequest hotelRequest) {
 		StringBuffer toReturn = new StringBuffer();
-		System.out.println(hotelRequest.getClass());
 		Field[] fields = hotelRequest.getClass().getFields();
 		for (Field field : fields) {
 			// Retrieve fields that are annotated with HotelRequestParameter.

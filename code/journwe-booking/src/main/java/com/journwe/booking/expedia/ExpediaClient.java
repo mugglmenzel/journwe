@@ -4,13 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.journwe.booking.expedia.model.ArrivalDate;
-import com.journwe.booking.expedia.model.City;
-import com.journwe.booking.expedia.model.CountryCode;
-import com.journwe.booking.expedia.model.DepartureDate;
-import com.journwe.booking.expedia.model.Room;
-import com.journwe.booking.expedia.model.Rooms;
-import com.journwe.booking.expedia.model.StateProvinceCode;
+import com.journwe.booking.expedia.model.destination.City;
+import com.journwe.booking.expedia.model.destination.CountryCode;
+import com.journwe.booking.expedia.model.destination.StateProvinceCode;
+import com.journwe.booking.expedia.model.room.Room;
+import com.journwe.booking.expedia.model.room.Rooms;
+import com.journwe.booking.expedia.model.time.ArrivalDate;
+import com.journwe.booking.expedia.model.time.DepartureDate;
 
 public class ExpediaClient {
 

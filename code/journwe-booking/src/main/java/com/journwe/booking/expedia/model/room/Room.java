@@ -1,4 +1,4 @@
-package com.journwe.booking.expedia.model;
+package com.journwe.booking.expedia.model.room;
 
 import java.util.ArrayList;
 import java.util.Arrays;

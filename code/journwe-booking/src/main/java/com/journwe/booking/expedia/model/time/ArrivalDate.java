@@ -1,4 +1,4 @@
-package com.journwe.booking.expedia.model;
+package com.journwe.booking.expedia.model.time;
 
 import java.util.Date;
 
