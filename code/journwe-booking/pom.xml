@@ -1,18 +1,30 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>journwe</groupId>
-  <artifactId>journwe-booking</artifactId>
-  <version>0.1-SNAPSHOT</version>
-  <dependencies>
-  	<dependency>
-  		<groupId>commons-httpclient</groupId>
-  		<artifactId>commons-httpclient</artifactId>
-  		<version>3.1</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.apache.httpcomponents</groupId>
-  		<artifactId>httpcore</artifactId>
-  		<version>4.3.2</version>
-  	</dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>journwe</groupId>
+	<artifactId>journwe-booking</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<repositories>
+		<repository>
+			<id>com.typesafe.play</id>
+			<url>http://repo.typesafe.com/typesafe/releases/</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe.play</groupId>
+			<artifactId>play-json_2.10</artifactId>
+			<version>2.2.0-RC1</version>
+		</dependency>
+	</dependencies>
 </project>

@@ -1,6 +1,7 @@
 package com.journwe.booking.expedia;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +13,9 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
+import play.libs.Json;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.journwe.booking.expedia.model.destination.City;
 import com.journwe.booking.expedia.model.destination.CountryCode;
 import com.journwe.booking.expedia.model.destination.StateProvinceCode;
@@ -29,24 +33,30 @@ public class ExpediaClient {
 
 	// private static final String API_KEY = "uuph6fb6wv46taepq87bkwt7"; // BETA
 	// private static final String SHARED_SECRET = "wCdUR4JY"; // BETA
+	
+	// Create an instance of HttpClient.
+	private static HttpClient client = new HttpClient();
 
 	public static void main(String[] args) throws ParseException {
-		// Create an instance of HttpClient.
-		HttpClient client = new HttpClient();
-
-		// Create a method instance.
+		// Create a Hotel List request.
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date june10 = sdf.parse("10/06/2014");
 		Date june15 = sdf.parse("15/06/2014");
-		HotelListRequest req = new HotelRequestBuilder<HotelListRequest>(
+		HotelListRequest hotelListRequest = new HotelRequestBuilder<HotelListRequest>(
 				HotelListRequest.class).with(new City("Seattle"))
 				.with(new CountryCode("US")).with(new StateProvinceCode("WA"))
 				.with(new Rooms(new Room(2))).with(new ArrivalDate(june10))
 				.with(new DepartureDate(june15)).build();
+		JsonNode jsonNode = listHotels(hotelListRequest);
+		System.out.println(jsonNode);
+	}
+	
+	public static JsonNode listHotels(final HotelListRequest hotelListRequest) {
 		String url = RequestGenerator.generateUrl(API_KEY, CID, SHARED_SECRET,
-				req);
+				hotelListRequest);
 		System.out.println("HTTP GET " + url);
 		GetMethod method = new GetMethod(url);
+		//method.setRequestHeader("Accept", "application/json");
 
 		// Provide custom retry handler is necessary
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
@@ -61,12 +71,9 @@ public class ExpediaClient {
 			}
 
 			// Read the response body.
-			byte[] responseBody = method.getResponseBody();
-
-			// Deal with the response.
-			// Use caution: ensure correct character encoding and is not binary
-			// data
-			System.out.println(new String(responseBody));
+			InputStream is = method.getResponseBodyAsStream();
+			JsonNode jsonNode = Json.parse(is);
+			return jsonNode;
 
 		} catch (HttpException e) {
 			System.err.println("Fatal protocol violation: " + e.getMessage());
@@ -78,5 +85,6 @@ public class ExpediaClient {
 			// Release the connection.
 			method.releaseConnection();
 		}
+		return null;
 	}
 }
