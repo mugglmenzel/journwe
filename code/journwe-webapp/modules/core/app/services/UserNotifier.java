@@ -6,10 +6,8 @@ import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.mail.Mailer;
 import com.typesafe.config.ConfigFactory;
 import controller.JournweMailer;
-import models.adventure.Adventure;
 import models.dao.NotificationDAO;
 import models.dao.NotificationDigestQueueDAO;
-import models.dao.adventure.AdventureDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserEmailDAO;
 import models.notifications.ENotificationFrequency;
@@ -18,7 +16,7 @@ import models.notifications.Notification;
 import models.user.User;
 import models.user.UserEmail;
 import play.Logger;
-import play.mvc.Http;
+import play.i18n.Lang;
 
 import java.util.*;
 
@@ -76,7 +74,7 @@ public class UserNotifier {
             Logger.debug("user " + user.getName() + " wants a digest? " + (new Date().getTime() > user.getLastDigest().getTime() + minimumAge) + "(lastDigest: " + user.getLastDigest().getTime() + ", now: " + new Date().getTime() + ")");
             if (new Date().getTime() > user.getLastDigest().getTime() + minimumAge) {
                 Logger.debug("checking notifications for " + user.getName());
-                notifyUserViaEmailDigest(user.getId(), new NotificationDAO().unsent(user.getId()), frequency.getDigestName());
+                notifyUserViaEmailDigest(user.getId(), new NotificationDAO().unsent(user.getId()), frequency);
                 user.setLastDigest(new Date());
                 new UserDAO().save(user);
 
@@ -94,26 +92,36 @@ public class UserNotifier {
         markNotificationSent(notification);
     }
 
-    public void notifyUserViaEmailDigest(String userId, List<Notification> notifications, String digestName) {
+    public void notifyUserViaEmailDigest(String userId, List<Notification> notifications, ENotificationFrequency frequency) {
         if (notifications.size() > 0) {
+            Map<ENotificationTopics, Map<Object, List<Notification>>> notis = new HashMap<ENotificationTopics, Map<Object, List<Notification>>>();
 
-            Map<Adventure, List<Notification>> advNoti = new HashMap<Adventure, List<Notification>>();
-            List<Notification> generalNoti = new ArrayList<Notification>();
-            for (Notification notification : notifications) {
-                if (notification.getTopicRef() != null) {
-                    Adventure adv = new AdventureDAO().get(notification.getTopicRef());
-                    if (adv != null) {
-                        List<Notification> notis = advNoti.get(adv) != null ? advNoti.get(adv) : new ArrayList<Notification>();
-                        notis.add(notification);
-                        advNoti.put(adv, notis);
+
+            Map<Object, List<Notification>> objNotis;
+            for (ENotificationTopics topic : ENotificationTopics.values()) {
+                objNotis = new HashMap<Object, List<Notification>>();
+
+                for (Notification notification : notifications) {
+                    if (topic.equals(notification.getTopic())) {
+                        Object obj = NotificationObjectResolver.get(topic, notification.getTopicRef());
+                        List<Notification> nots = objNotis.get(obj) != null ? objNotis.get(obj) : new ArrayList<Notification>();
+                        nots.add(notification);
+                        objNotis.put(obj, nots);
+
+                        markNotificationSent(notification);
                     }
                 }
-                markNotificationSent(notification);
-            }
-            //TODO: no current context available in batch, read language from user settings
-            Mailer.Mail.Body emailBody = JournweMailer.getMailBody("notification", Http.Context.current(), new Object[]{generalNoti, advNoti});
 
-            sendNotificationEmail(userId, "JournWe Notification: " + digestName + " Digest", emailBody);
+                notis.put(topic, objNotis);
+            }
+            Logger.debug("digest emailer is fed with " + notis);
+
+            User usr = new UserDAO().get(userId);
+            if (usr != null) {
+                //TODO: user actual user LANG setting
+                Mailer.Mail.Body emailBody = JournweMailer.getMailBody("email.notificationDigest", new Lang(Lang.defaultLang()), new Object[]{notis, frequency});
+                sendNotificationEmail(userId, "JournWe Notification: " + frequency.getDigestName() + " Digest", emailBody);
+            }
         }
 
     }

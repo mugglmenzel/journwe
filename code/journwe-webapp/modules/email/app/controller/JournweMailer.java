@@ -7,6 +7,8 @@ import play.mvc.Http;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JournweMailer {
 
@@ -16,10 +18,16 @@ public class JournweMailer {
     *    templatePath is the path after views.html.* or views.txt.*
      */
     public static Body getMailBody(final String templatePath, final Http.Context ctx, final Object[] params) {
-
         final Lang lang = Lang.preferred(ctx.request().acceptLanguages());
-        final String langCode = lang.code();
+        return getMailBody(templatePath, lang, params);
+    }
 
+    public static Body getMailBody(final String templatePath, final Lang lang, final Object[] params) {
+        final String langCode = lang.language();
+        return getMailBody(templatePath, langCode, params);
+    }
+
+    public static Body getMailBody(final String templatePath, final String langCode, final Object[] params) {
         final String html = getEmailTemplate(
                 "views.html."+templatePath, langCode, params);
         final String text = getEmailTemplate(
@@ -52,14 +60,19 @@ public class JournweMailer {
             }
         }
         if (cls != null) {
-            Method htmlRender = null;
+            //Method htmlRender = null;
             try {
-                htmlRender = cls.getMethod("render", String.class);
-                ret = htmlRender.invoke(null, params)
-                        .toString();
+                List<Class> paramTypes = new ArrayList<Class>();
+                for(Object param : params)
+                    paramTypes.add(param.getClass());
 
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+                for (Method m : cls.getMethods())
+                    if ("render".equals(m.getName()) && m.getParameterTypes().length == params.length)
+                            ret = m.invoke(null, params).toString();
+
+                //htmlRender = cls.getMethod("render", paramTypes.toArray(new Class[]{}));
+
+
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

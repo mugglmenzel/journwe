@@ -244,6 +244,23 @@ public class Adventure {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Adventure)) return false;
+
+        Adventure adventure = (Adventure) o;
+
+        if (id != null ? !id.equals(adventure.id) : adventure.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
     public String toString() {
         return "Adventure{" +
                 "id='" + id + '\'' +

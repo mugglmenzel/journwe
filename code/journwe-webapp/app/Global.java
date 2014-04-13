@@ -13,7 +13,7 @@ import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.notifications.ENotificationFrequency;
-import models.notifications.helper.UserNotifier;
+import services.UserNotifier;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
