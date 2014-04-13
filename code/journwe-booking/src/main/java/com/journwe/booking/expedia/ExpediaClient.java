@@ -24,9 +24,10 @@ public class ExpediaClient {
 
 	private static final String CID = "55505";
 	//private static final String CID = "455210";
-	//private static final String API_KEY = "cr47t8qtx2ub9rk65usay3f6";
-	private static final String API_KEY = "uuph6fb6wv46taepq87bkwt7";
-	private static final String SHARED_SECRET = "wCdUR4JY";
+	private static final String API_KEY = "cr47t8qtx2ub9rk65usay3f6";
+	private static final String SHARED_SECRET = "hrAA3KD9";
+	//private static final String API_KEY = "uuph6fb6wv46taepq87bkwt7"; // BETA
+	//private static final String SHARED_SECRET = "wCdUR4JY"; // BETA
 	
 //	public static void main(String[] args) throws ParseException {
 //		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -56,7 +57,7 @@ public class ExpediaClient {
 		HotelListRequest req = new HotelRequestBuilder<HotelListRequest>(
 				HotelListRequest.class).with(new City("Seattle"))
 				.with(new CountryCode("US")).with(new StateProvinceCode("WA"))
-				.with(new Rooms(new Room(2, 5, 13)))
+				.with(new Rooms(new Room(2)))
 				.with(new ArrivalDate(june10)).with(new DepartureDate(june15))
 				.build();
      String url = RequestGenerator.generateUrl(API_KEY, CID, SHARED_SECRET, req);

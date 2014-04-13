@@ -31,9 +31,9 @@ public class RequestGenerator {
 		toReturn.append("&sig=");
 		String signature = SignatureGenerator.generateMD5Signature(apiKey, secret);
 		toReturn.append(signature);
-//		&customerUserAgent=xxx
-//		toReturn.append("&customerIpAddress=95.114.46.27&supplierCacheTolerance=MED&supplierCacheTolerance=MED_ENHANCED&customerSessionId=1726373627263"); 
 		toReturn.append("&customerIpAddress=95.114.46.27");
+		//toReturn.append("&customerUserAgent='Mozilla/4.0'");
+		toReturn.append("&customerSessionId=0ABAAA8E-D630-3E91-4552-ACC125095B40");
 		toReturn.append(generateRequestUrlParameters(hotelRequest));
 		if(NUMBER_OF_RESULTS!=20 && NUMBER_OF_RESULTS>=1 && NUMBER_OF_RESULTS<=200) {
 				toReturn.append("&numberOfResults=");
@@ -41,6 +41,8 @@ public class RequestGenerator {
 		}
 		return toReturn.toString();
 	}
+	//toReturn.append("http://api.ean.com/ean-services/rs/hotel/v3/list?cid=55505&minorRev=26&apiKey=cbrzfta369qwyrm9t5b8y8kf&locale=en_US&currencyCode=USD&customerIpAddress=95.114.46.27&customerUserAgent=Mozilla/5.0+(Macintosh;+Intel+Mac+OS+X+10.9;+rv:28.0)+Gecko/20100101+Firefox/28.0&customerSessionId=&xml=<HotelListRequest><arrivalDate>05/04/2014</arrivalDate><departureDate>05/06/2014</departureDate><RoomGroup><Room><numberOfAdults>0</numberOfAdults></Room></RoomGroup><city>Amsterdam</city><countryCode>NL</countryCode></HotelListRequest>");
+//	toReturn.append("&customerIpAddress=95.114.46.27&supplierCacheTolerance=MED&supplierCacheTolerance=MED_ENHANCED&customerSessionId=1726373627263"); 
 	
 	/**
 	 * The method generates URL parameters in the form <code>&name=value</code> from a HotelRequest java object.
