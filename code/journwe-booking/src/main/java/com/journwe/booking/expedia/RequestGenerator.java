@@ -7,7 +7,8 @@ import com.journwe.booking.expedia.model.common.AbstractParameterModel;
 
 public class RequestGenerator {
 	
-	public static final String BASE_URL = "http://api.ean.com/ean-services/rs/hotel/v3/";
+	//public static final String BASE_URL = "http://api.ean.com/ean-services/rs/hotel/v3/";
+	public static final String BASE_URL = "https://api.eancdn.com/ean-services/rs/hotel/v3/"; // SANDBOX
 	public static final String MINOR_REV = "26";
 	public static final Integer NUMBER_OF_RESULTS = 20; // max 200
 	
