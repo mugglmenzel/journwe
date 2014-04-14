@@ -738,26 +738,19 @@ define([
     var adoptAdventurer = function (el) {
         utils.setReplaceSpinning(el);
 
-        routes.controllers.api.json.AdventurePeopleController.adopt(adv.id, el.data('id')).ajax({success: function (json) {
-            var state = json.participationStatus;
-
-            loadApplicants();
-            loadParticipants();
-
+        routes.controllers.api.json.AdventurePeopleController.adopt(adv.id, el.data('id')).ajax({success: function () {
+            loadAllAdventurers(true);
             utils.resetReplaceSpinning(el);
         }});
         return false;
     };
 
     var denyAdventurer = function (el) {
-        var html = el.html();
+        utils.setReplaceSpinning(el);
 
-        el.css({width: el.width() + "px"})
-            .html('<i class="fa fa-spin icon-journwe"></i>');
-
-        routes.controllers.api.json.AdventurePeopleController.deny(adv.id, el.data('id')).ajax({success: function (json) {
-            loadInvitees();
-            loadApplicants();
+        routes.controllers.api.json.AdventurePeopleController.deny(adv.id, el.data('id')).ajax({success: function () {
+            loadAllAdventurers(true);
+            utils.resetReplaceSpinning(el);
         }});
         return false;
     };

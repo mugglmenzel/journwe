@@ -29,6 +29,7 @@ import models.adventure.time.TimeOption;
 import models.auth.SecuredAdminUser;
 import models.auth.SecuredUser;
 import models.authorization.JournweAuthorization;
+import models.cache.CachedUserDAO;
 import models.dao.AdventureAuthorizationDAO;
 import models.dao.AdventureShortnameDAO;
 import models.dao.adventure.AdventureDAO;
@@ -261,7 +262,7 @@ public class AdventureController extends Controller {
         authorization.setAuthorizationRole(EAuthorizationRole.ADVENTURE_OWNER);
         new AdventureAuthorizationDAO().save(authorization);
 
-        ApplicationController.clearUserCache(usr.getId());
+        new CachedUserDAO().clearCache(usr.getId());
 
         //flash("success", "Congratulations! There goes your adventure. Yeeeehaaaa! The shortURL is " + shortURL);
 
@@ -297,6 +298,8 @@ public class AdventureController extends Controller {
             }
             new AdventureDAO().save(adv);
             new AdventurerDAO().save(advr);
+
+            new CachedUserDAO().clearCache(usr.getId());
         }
 
         return ok();

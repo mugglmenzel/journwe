@@ -90,7 +90,6 @@ public class ApplicationController extends Controller {
     */
 
     public static void clearUserCache(final String userId) {
-        Cache.remove("user." + userId + ".myadventures");
         new CachedUserDAO().clearCache(userId);
     }
 

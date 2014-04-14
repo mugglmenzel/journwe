@@ -19,6 +19,7 @@ import models.adventure.log.EAdventureLogType;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
+import models.cache.CachedUserDAO;
 import models.category.Category;
 import models.dao.AdventureReminderDAO;
 import models.dao.AdventureShortnameDAO;
@@ -94,6 +95,11 @@ public class AdventureController extends Controller {
             }
 
             new AdventureDAO().save(adv);
+
+            User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            if (usr != null)
+                new CachedUserDAO().clearCache(usr.getId());
+
             AdventureLogger.log(adv.getId(), EAdventureLogType.TEXT, EAdventureLogTopic.BACKGROUND_UPLOAD, EAdventureLogSection.ALL, image.getFilename());
         } catch (Exception e) {
             return badRequest();

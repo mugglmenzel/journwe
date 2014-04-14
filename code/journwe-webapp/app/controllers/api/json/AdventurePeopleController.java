@@ -26,6 +26,7 @@ import models.adventure.adventurer.EAdventurerParticipation;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
+import models.cache.CachedUserDAO;
 import models.dao.AdventureAuthorizationDAO;
 import models.dao.AdventureShortnameDAO;
 import models.dao.adventure.AdventureDAO;
@@ -278,7 +279,7 @@ public class AdventurePeopleController extends Controller {
         new AdventureToUserDAO().createManyToManyRelationship(adv, usr);
 
         clearCache(advId);
-        ApplicationController.clearUserCache(userId);
+        new CachedUserDAO().clearCache(userId);
 
         ObjectNode result = (ObjectNode) Json.toJson(advr);
         result.put("userName", new UserDAO().get(userId).getName());
@@ -294,7 +295,7 @@ public class AdventurePeopleController extends Controller {
         new AdventurerDAO().delete(advId, userId);
 
         clearCache(advId);
-        ApplicationController.clearUserCache(userId);
+        new CachedUserDAO().clearCache(userId);
 
         return ok();
     }

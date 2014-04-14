@@ -5,6 +5,7 @@ import com.feth.play.module.pa.user.AuthUser;
 import models.UserManager;
 import models.adventure.Adventure;
 import models.auth.SecuredUser;
+import models.cache.CachedUserDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
@@ -256,11 +257,6 @@ public class ApplicationController extends Controller {
     public static Result messages() {
         response().setContentType("text/javascript");
         return ok("define(function(){ var messages = " + Json.toJson(scala.collection.JavaConversions.asJavaMap(play.api.i18n.Messages.messages(Play.current()).get(Http.Context.current().lang().code()).get())).toString() + "; return messages;});");
-    }
-
-
-    public static void clearUserCache(final String userId) {
-        Cache.remove("user." + userId + ".myadventures");
     }
 
 }

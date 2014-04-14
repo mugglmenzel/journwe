@@ -37,6 +37,7 @@ public class CachedUserDAO extends UserDAO {
             public void run() {
                 for (UserSocial identity : new UserSocialDAO().findByUserId(userId))
                     Cache.remove("user.social." + identity.getProvider() + "." + identity.getSocialId());
+                Cache.remove("user." + userId + ".myadventures");
             }
         }).start();
     }
