@@ -65,10 +65,11 @@ public class AdventureTimeController extends Controller {
         return ok(Json.toJson(times));
     }
 
-    @Security.Authenticated(SecuredUser.class)
     public static Result getFavoriteTime(String advId) {
+        /*
         if (!new JournweAuthorization(advId).canViewFavoriteDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
+            */
 
         if (new TimeOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 

@@ -60,10 +60,11 @@ public class AdventurePlaceController extends Controller {
         return ok(Json.toJson(places));
     }
 
-    @Security.Authenticated(SecuredUser.class)
     public static Result getFavoritePlace(String advId) {
+        /*
         if (!new JournweAuthorization(advId).canViewFavoritePlace())
             return AuthorizationMessage.notAuthorizedResponse();
+            */
         if (new PlaceOptionDAO().count(advId) < 1) return ok(Json.toJson(""));
 
         String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
