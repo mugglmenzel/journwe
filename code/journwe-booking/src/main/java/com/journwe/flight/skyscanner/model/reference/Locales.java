@@ -40,15 +40,15 @@ public class Locales {
 		localesMap.put("zh-TW", new Locale("zh-TW","繁體中文"));
 	}
 
-	public Set<Entry<String, Locale>> entrySet() {
+	public static Set<Entry<String, Locale>> entrySet() {
 		return localesMap.entrySet();
 	}
 
-	public Locale get(String key) {
+	public static Locale get(String key) {
 		return localesMap.get(key);
 	}
 
-	public Set<String> keySet() {
+	public static Set<String> keySet() {
 		return localesMap.keySet();
 	}
 	

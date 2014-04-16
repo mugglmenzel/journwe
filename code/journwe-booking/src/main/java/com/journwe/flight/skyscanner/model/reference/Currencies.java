@@ -84,15 +84,15 @@ public class Currencies {
 		currencyMap.put("ZAR", new Currency("ZAR","R",",",".","true","false","0","2"));
 	}
 
-	public Set<Entry<String, Currency>> entrySet() {
+	public static Set<Entry<String, Currency>> entrySet() {
 		return currencyMap.entrySet();
 	}
 
-	public Currency get(String key) {
+	public static Currency get(String key) {
 		return currencyMap.get(key);
 	}
 
-	public Set<String> keySet() {
+	public static Set<String> keySet() {
 		return currencyMap.keySet();
 	}
 

@@ -1,32 +1,52 @@
 package com.journwe.flight.skyscanner;
 
-import com.journwe.flight.skyscanner.query.BrowseCacheQuery;
+import com.journwe.flight.skyscanner.query.Query;
+import com.journwe.flight.skyscanner.query.browsecache.BrowseCacheQuery;
+import com.journwe.flight.skyscanner.query.livepricing.ListFlightsQuery;
+import com.journwe.flight.skyscanner.query.livepricing.LivePricingPollQuery;
 
 public class QueryGenerator {
 
 	public static final String BASE_URL = "http://partners.api.skyscanner.net/apiservices/";
 
-	/**
-	 * Generate a URL for REST request.
-	 * 
-	 * @param hotelRequest
-	 * @return
-	 */
-	public static String generateUrl(final String apiKey,
-			final BrowseCacheQuery browserCacheQuery) {
+	public static String generateEndpoint(final String apiKey, final Query query) {
+		if(query instanceof LivePricingPollQuery) {
+			LivePricingPollQuery lppquery = (LivePricingPollQuery)query;
+			return lppquery.getSessionUrl()+"?apiKey="+apiKey;
+		}
 		StringBuffer toReturn = new StringBuffer();
 		toReturn.append(BASE_URL);
-		toReturn.append(browserCacheQuery.getBrowserCacheQuerytType().value());
-		toReturn.append(browserCacheQuery.getCountry());
-		toReturn.append("/");
-		toReturn.append(browserCacheQuery.getCurrency());
-		toReturn.append("/");
-		toReturn.append(browserCacheQuery.getLocale());
-		toReturn.append("/");
-		toReturn.append(generateUrlPath(browserCacheQuery));
-		toReturn.append("?apiKey=");
-		toReturn.append(apiKey);
+		toReturn.append(query.getQuerytType().value());
+		if(query instanceof BrowseCacheQuery) {
+			toReturn.append("/");
+			toReturn.append(query.getCountry().getCode());
+			toReturn.append("/");
+			toReturn.append(query.getCurrency().getCode());
+			toReturn.append("/");
+			toReturn.append(query.getLocale().getCode());
+			toReturn.append("/");
+			BrowseCacheQuery bcquery = (BrowseCacheQuery)query;
+			toReturn.append(generateUrlPath(bcquery));
+			toReturn.append("?apiKey=");
+			toReturn.append(apiKey);
+		}
 		return toReturn.toString();
+	}
+	
+	public static String generateHttpPostBody(final String apiKey, final ListFlightsQuery query) {
+		String toReturn = "";
+		String country = query.getCountry().getCode();
+		String currency = query.getCurrency().getCode();
+		String locale = query.getLocale().getCode();
+		String origin = query.getOriginPlace().getValue();
+		String destination = query.getDestinationPlace().getValue();
+		String outboundDate = query.getOutboundPartialDate()
+				.getValue();
+		String inboundDate = query.getInboundPartialDate()
+				.getValue();
+		toReturn = String.format("apikey=%s&country=%s&currency=%s&locale=%s&originplace=%s&destinationplace=%s&outbounddate=%s&inbounddate=%s&locationschema=Iata", apiKey, country, currency, locale, origin, destination,
+				outboundDate, inboundDate);
+		return toReturn;
 	}
 
 	private static String generateUrlPath(

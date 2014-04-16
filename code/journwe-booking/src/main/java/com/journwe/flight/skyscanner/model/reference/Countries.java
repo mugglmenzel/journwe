@@ -241,15 +241,15 @@ public class Countries {
 		countryMap.put("Zimbabwe", new Country("Zimbabwe","ZW"));
 	}
 
-	public Set<Entry<String, Country>> entrySet() {
+	public static Set<Entry<String, Country>> entrySet() {
 		return countryMap.entrySet();
 	}
 
-	public Country get(String key) {
+	public static Country get(String key) {
 		return countryMap.get(key);
 	}
 
-	public Collection<Country> values() {
+	public static Collection<Country> values() {
 		return countryMap.values();
 	}
 	

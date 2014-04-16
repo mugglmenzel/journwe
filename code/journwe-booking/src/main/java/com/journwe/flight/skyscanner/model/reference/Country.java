@@ -2,10 +2,10 @@ package com.journwe.flight.skyscanner.model.reference;
 
 public class Country {
 
-	private String code;
 	private String name;
-		
-	public Country(String code, String name) {
+	private String code;
+	
+	public Country(String name, String code) {
 		this.code = code;
 		this.name = name;
 	}
