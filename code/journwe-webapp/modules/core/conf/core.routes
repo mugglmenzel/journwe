@@ -41,6 +41,8 @@ POST        /accounts/merge                        controllers.core.html.Account
 GET         /accounts/unverified                   controllers.core.html.SignupController.unverified
 GET         /accounts/verify                       controllers.core.html.AccountController.verifyEmail
 GET         /accounts/verify/:token                controllers.core.html.SignupController.verify(token: String)
+GET         /accounts/unlink/:provider             controllers.core.html.AccountController.unlink(provider:String)
+
 
 #### Authentication ####
 GET         /authenticate/:provider                com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)

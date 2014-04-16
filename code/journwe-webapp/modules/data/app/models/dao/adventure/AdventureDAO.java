@@ -6,10 +6,10 @@ import models.adventure.adventurer.Adventurer;
 import models.adventure.comment.Comment;
 import models.adventure.comment.CommentThread;
 import models.adventure.file.JournweFile;
-import models.adventure.place.PlacePreference;
 import models.adventure.place.PlaceOption;
-import models.adventure.time.TimePreference;
+import models.adventure.place.PlacePreference;
 import models.adventure.time.TimeOption;
+import models.adventure.time.TimePreference;
 import models.dao.common.CommonEntityDAO;
 import models.dao.manytomany.ManyToManyListQuery;
 import models.inspiration.Inspiration;
@@ -30,16 +30,18 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
         return new AdventurerDAO().adventureCountByUser(userId);
     }
 
-    // TODO this should probably be deprecated some time in the future
+    /**
+     * Only a helper for cleaning old adventures...
+     */
     public List<Adventure> all() {
         return pm.scan(clazz,
                 new DynamoDBScanExpression());
     }
 
     public List<Adventure> listPublicAdventuresByInspiration(String inspirationId, String lastKey, int limit) {
-        if(inspirationId==null)
+        if (inspirationId == null)
             return new ArrayList<Adventure>();
-        return adventureToInspirationListQuery.listM(inspirationId,lastKey,limit);
+        return adventureToInspirationListQuery.listM(inspirationId, lastKey, limit);
     }
 
     public void deleteFull(String advId) {

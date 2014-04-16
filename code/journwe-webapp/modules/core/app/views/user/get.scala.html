@@ -1,6 +1,8 @@
 @(user: models.user.User)
 
+@import models.dao.user.UserSocialDAO
 @import models.notifications.ENotificationFrequency
+@import com.feth.play.module.pa.views.html._
 @import play.libs.Json
 
 @scripts = {
@@ -15,100 +17,143 @@
         <img id="user-prime-image" style="width: 100%; height: 200;" @if(user.getImage == null){src="http://www.placehold.it/1200x200/AAAAAA/EFEFEF&text=No+image"}else{src="http://www.journwe.com/thumbnail?h=200&w=1200&u=@user.getImage"}/>
 
         <div class="title-overlay">
-            <div class="title-name">
-                @user.getName <small>(@user.getRole)</small>
+            <div class="container">
+                <div class="title-name">
+                    @user.getName <small>(@user.getRole)</small>
+                </div>
+                @*
+                <div class="toolbar">
+                </div>
+                *@
             </div>
-            @*
-            <div class="toolbar">
-            </div>
-            *@
         </div>
     </div>
 
     <div class="container">
-    <div class="jrn-container">
-        <h2 id="options"><i class="fa fa-cogs"></i> @Messages("user.options") </h2>
-        <div class="row">
-            <div class="col-lg-12">
-                <h4><i class="fa fa-list-ol"></i> Details</h4>
-            </div>
-            <div class="col-lg-12">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">Name</label>
-                        <div class="col-lg-10">
-                            <a href="#" id="userName" data-type="text" data-pk="@user.getId" data-url="@core.html.routes.UserController.saveEditable()">@user.getName</a>
+    @if(user != null && user.getActive) {
+        @currentAuth() { auth =>
+            @defining(UserManager.findByAuthUserIdentity(auth)) { usr =>
+                    @if(user.equals(usr)) {
+
+                        <div class="jrn-container">
+                            <h2 id="options"><i class="fa fa-cogs"></i> @Messages("user.options") </h2>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h4><i class="fa fa-list-ol"></i> Details</h4>
+                                </div>
+                                <div class="col-lg-12">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">Name</label>
+                                            <div class="col-lg-10">
+                                                <a href="#" id="userName" data-type="text" data-pk="@user.getId" data-url="@core.html.routes.UserController.saveEditable()">@user.getName</a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">Emails</label>
+                                            <div class="col-lg-10">
+                                                <div class="list-user-emails"></div>
+                                                <script type="text/x-tmpl" id="user-email-template">
+                                                    <div><i class="fa fa-envelope"></i> <a href="#" id="userEmail-{%=o.email.replace('@@', '_')%}" class="userEmail" data-type="email" data-pk="@user.getId:{%=o.email%}" data-url="@core.html.routes.UserController.saveEmailEditable()">{%=o.email%}</a> {% if(o.primary){ %}(primary){% } %}</div>
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h4><i class="fa fa-bell"></i> Notifications</h4>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Messages("user.notify")
+                                    <div class="btn-group btn-select-notification-frequency">
+                                        <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.IMMEDIATELY) {active}"
+                                        data-frequency="@ENotificationFrequency.IMMEDIATELY.toString"><i class="fa fa-exclamation-triangle"></i> @Messages("user.notify.immediately") </button>
+                                        <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.DAILY) {active}"
+                                        data-frequency="@ENotificationFrequency.DAILY.toString"><i class="fa fa-clock-o"></i> @Messages("user.notify.daily") </button>
+                                        <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.WEEKLY) {active}"
+                                        data-frequency="@ENotificationFrequency.WEEKLY.toString"><i class="fa fa-calendar"></i> @Messages("user.notify.weekly") </button>
+                                        <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.NONE) {active}"
+                                        data-frequency="@ENotificationFrequency.NONE.toString"><i class="fa fa-stop"></i> @Messages("user.notify.none") </button>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+
+
+                        <section class="jrn-container">
+                            <h2>Account</h2>
+                            <div>
+                                <ul class="nav nav-pills">
+                                @forProviders() { p =>
+                                    <li>@if(new UserSocialDAO().findByUserIdAndProvider(p.getKey, user.getId) != null) {
+                                        <i class="fa fa-@(if(p.getKey().toLowerCase() == "google") {
+                                            "google-plus"
+                                        } else {
+                                            p.getKey().toLowerCase()
+                                        }) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) <i class="fa fa-check"></i><a class="btn btn-default" href="@controllers.core.html.routes.AccountController.unlink(p.getKey)">Disconnect</a>
+                                    } else {
+                                        <i class="fa fa-@(if(p.getKey().toLowerCase() == "google") {
+                                            "google-plus"
+                                        } else {
+                                            p.getKey().toLowerCase()
+                                        }) fa-fw"></i> @(p.getKey().substring(0, 1).toUpperCase + p.getKey().substring(1, p.getKey().length).toLowerCase) <a class="btn btn-primary" href="@p.getUrl()">Connect</a>
+                                    }</li>
+                                }
+                                </ul>
+                            </div>
+                        </section>
+                    } else {
+
+
+                <div class="jrn-container">
+                    <h2 id="journwes"><i class="fa fa-bullhorn-o"></i> Public JournWes <small>(<span id="adventures-user-count">0</span>)</small></h2>
+                    <div id="adventures-user-list" class="row adventures-list-full" style="overflow: hidden">
+                         <i class="fa fa-spin icon-journwe stash"></i>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">Emails</label>
-                        <div class="col-lg-10">
-                            <div class="list-user-emails"></div>
-                            <script type="text/x-tmpl" id="user-email-template">
-                                <div><i class="fa fa-envelope"></i> <a href="#" id="userEmail-{%=o.email.replace('@@', '_')%}" class="userEmail" data-type="email" data-pk="@user.getId:{%=o.email%}" data-url="@core.html.routes.UserController.saveEmailEditable()">{%=o.email%}</a> {% if(o.primary){ %}(primary){% } %}</div>
-                            </script>
+                    <script type="text/x-tmpl" id="adventure-user-template">
+                        <div class="adventure-entry pull-left" data-id="{%=o.id%}" style="width: 20%; padding: 5px;">
+                            <div><a href="{%=o.link%}"><h4 title="{%=o.name%}">{%=o.name%}</h4></a></div>
+                            <div style="margin-bottom: 5px">
+                                <div class="label place" style="width: 100%;" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}&nbsp;</div>
+                                <div class="label adventurer" style="width: 100%;" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}&nbsp;</div>
+                                <div class="label time" style="width: 100%;" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=o.favoriteTime.startDate%} {% } else { %} ? {% } %} </div>
+                            </div>
+                            <div class="text-center" style="position: relative;">
+                                <a href="{%=o.link%}">
+                                    <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=200&h=200&u=' + o.image + (o.imageTimestamp ? '&t='+o.imageTimestamp : ''))%}{% } %}">
+                                </a>
+                                <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                    <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <br/>
-        <div class="row">
-            <div class="col-lg-12">
-                <h4><i class="fa fa-bell"></i> Notifications</h4>
-            </div>
-            <div class="col-lg-12">
-                @Messages("user.notify")
-                 <div class="btn-group btn-select-notification-frequency">
-                    <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.IMMEDIATELY) {active}"
-                    data-frequency="@ENotificationFrequency.IMMEDIATELY.toString"><i class="fa fa-exclamation-triangle"></i> @Messages("user.notify.immediately") </button>
-                    <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.DAILY) {active}"
-                    data-frequency="@ENotificationFrequency.DAILY.toString"><i class="fa fa-clock-o"></i> @Messages("user.notify.daily") </button>
-                    <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.WEEKLY) {active}"
-                    data-frequency="@ENotificationFrequency.WEEKLY.toString"><i class="fa fa-calendar"></i> @Messages("user.notify.weekly") </button>
-                    <button class="btn btn-default @if(user.getNotificationDigest == ENotificationFrequency.NONE) {active}"
-                    data-frequency="@ENotificationFrequency.NONE.toString"><i class="fa fa-stop"></i> @Messages("user.notify.none") </button>
-                 </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="jrn-container">
-        <h2 id="jorunwes"><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <small>(<span id="adventures-user-count">0</span>)</small></h2>
-        <div id="adventures-user-list" class="row adventures-list-full" style="overflow: hidden">
-             <i class="fa fa-spin icon-journwe stash"></i>
-        </div>
-        <script type="text/x-tmpl" id="adventure-user-template">
-            <div class="adventure-entry pull-left" data-id="{%=o.id%}" style="width: 20%; padding: 5px;">
-                <div><a href="{%=o.link%}"><h4 title="{%=o.name%}">{%=o.name%}</h4></a></div>
-                <div style="margin-bottom: 5px">
-                    <div class="label place" style="width: 100%;" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}&nbsp;</div> 
-                    <div class="label adventurer" style="width: 100%;" title="Adventurers"><i class="fa fa-group"></i> {%=o.peopleCount%}&nbsp;</div> 
-                    <div class="label time" style="width: 100%;" title="Time"><i class="fa fa-calendar"></i> {% if(o.favoriteTime != null) { %} {%=o.favoriteTime.startDate%} {% } else { %} ? {% } %} </div>
+                    </script>
                 </div>
-                <div class="text-center" style="position: relative;">
-                    <a href="{%=o.link%}">
-                        <img class="img-rounded" style="width:100%;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/200x200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=200&h=200&u=' + o.image + (o.imageTimestamp ? '&t='+o.imageTimestamp : ''))%}{% } %}">
-                    </a>
-                    <div class="text-center" style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
-                        <span class="label label-{%=o.cssLabel%}" title="Status" style="display: inline-block; width: 100%;">{%=o.status%}</span>
-                    </div>
+                    }
 
+            <div class="jrn-container">
+                <h2 id="badges"><i class="fa fa-trophy"></i> @Messages("user.badges") <small>- 1</small></h2>
+                <div class="row" style="overflow: hidden">
+                    <div style="position: relative; float: left; width: 20%;">
+                        <img style="margin: 0px; width: 100%;" src="@routes.Assets.at("img/badge/welcome_journwe.png")" title="Welcome to JournWe Badge">
+                    </div>
                 </div>
             </div>
-        </script>
-    </div>
 
 
-    <div class="jrn-container">
-        <h2 id="badges"><i class="fa fa-trophy"></i> @Messages("user.badges") <small>- 1</small></h2>
-        <div class="row" style="overflow: hidden">
-            <div style="position: relative; float: left; width: 20%;">
-                <img style="margin: 0px; width: 100%;" src="@routes.Assets.at("img/badge/welcome_journwe.png")" title="Welcome to JournWe Badge">
-            </div>
+            }
+        }
+    } else {
+        <div class="jrn-container">
+            <p class="lead text-danger">User not active or does not exist.</p>
         </div>
+    }
     </div>
-    </div>
+
 
 }(openGraphMeta(user.getName, core.html.routes.UserController.getProfile(user.getId).absoluteURL(), "Profile of " + user.getName + " on JournWe.com", user.getImage, "profile"), "user", scripts)

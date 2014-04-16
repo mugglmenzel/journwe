@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import models.dao.helpers.EnumMarshaller;
 import models.notifications.ENotificationFrequency;
 import play.data.validation.Constraints.Required;
+import play.i18n.Lang;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,6 +28,8 @@ public class User implements Serializable {
     private ENotificationFrequency notificationDigest = ENotificationFrequency.DAILY;
 
     private Date lastDigest = new Date();
+
+    private Lang language;
 
     /**
      * @return the id
@@ -125,10 +128,50 @@ public class User implements Serializable {
         this.hashedPassword = hashedPassword;
     }
 
+    @DynamoDBMarshalling(marshallerClass = LangMarshaller.class)
+    public Lang getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Lang language) {
+        this.language = language;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
     public static class UserRoleMarshaller extends EnumMarshaller<EUserRole> {
     }
 
     public static class NotificationFrequencyMarshaller extends EnumMarshaller<ENotificationFrequency> {
+    }
+
+    public static class LangMarshaller implements DynamoDBMarshaller<Lang> {
+
+        @Override
+        public String marshall(Lang getterReturnResult) {
+            return getterReturnResult.code();
+        }
+
+        @Override
+        public Lang unmarshall(Class<Lang> clazz, String code) {
+            return new Lang(play.api.i18n.Lang.apply(code));
+        }
     }
 
 }

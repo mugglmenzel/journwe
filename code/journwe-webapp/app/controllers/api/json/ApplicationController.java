@@ -5,7 +5,6 @@ import com.feth.play.module.pa.user.AuthUser;
 import models.UserManager;
 import models.adventure.Adventure;
 import models.auth.SecuredUser;
-import models.cache.CachedUserDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
@@ -197,7 +196,7 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.InspirationController.addTip(),
                         controllers.api.json.routes.javascript.UserController.getNotifications(),
                         controllers.api.json.routes.javascript.UserController.setMailDigestFrequency(),
-                        controllers.api.json.routes.javascript.UserController.getAdventures(),
+                        controllers.api.json.routes.javascript.UserController.getPublicAdventures(),
                         controllers.api.json.routes.javascript.AdventureController.updateVisibleSections(),
                         controllers.api.json.routes.javascript.AdventureController.updateImage(),
                         controllers.api.json.routes.javascript.AdventurePhotoController.getPhotos(),

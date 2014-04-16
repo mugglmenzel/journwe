@@ -83,7 +83,7 @@ public class UserDAO extends CommonEntityDAO<User> {
 
     public void merge(final String oldProvider, final String oldSocialId, final String newProvider, final String newSocialId) {
         UserSocialDAO usdao = new UserSocialDAO();
-        UserSocial us = usdao.get(oldProvider, oldSocialId);
+        UserSocial us = usdao.get(oldSocialId, oldProvider);
         final User newUser = new UserDAO().findByProviderAndSocialId(newProvider, newSocialId);
         us.setUserId(newUser.getId());
         usdao.save(us);

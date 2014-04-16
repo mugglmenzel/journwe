@@ -8,6 +8,7 @@ import models.category.Category;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.user.User;
+import play.Logger;
 import play.api.templates.Html;
 import play.cache.Cache;
 import play.mvc.Controller;

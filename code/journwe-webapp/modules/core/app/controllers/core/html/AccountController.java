@@ -5,9 +5,14 @@ import com.feth.play.module.pa.user.AuthUser;
 import models.GlobalParameters;
 import models.UserManager;
 import models.auth.SecuredUser;
+import models.cache.CachedUserDAO;
 import models.dao.user.UserEmailDAO;
+import models.dao.user.UserSocialDAO;
+import models.providers.MyUsernamePasswordAuthProvider;
+import models.providers.MyUsernamePasswordAuthUser;
 import models.user.User;
 import models.user.UserEmail;
+import models.user.UserSocial;
 import play.Logger;
 import play.data.Form;
 import play.data.format.Formats.NonEmpty;
@@ -15,9 +20,9 @@ import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 import play.i18n.Messages;
 import play.mvc.*;
-import models.providers.MyUsernamePasswordAuthProvider;
-import models.providers.MyUsernamePasswordAuthUser;
 import views.html.account.link;
+
+import java.util.List;
 
 import static play.data.Form.form;
 
@@ -75,6 +80,27 @@ public class AccountController extends Controller {
 
     private static final Form<Accept> ACCEPT_FORM = form(Accept.class);
     private static final Form<AccountController.PasswordChange> PASSWORD_CHANGE_FORM = form(AccountController.PasswordChange.class);
+
+    public static Result unlink(final String authProvider) {
+        final AuthUser au = PlayAuthenticate.getUser(Http.Context.current());
+        final User user = UserManager.findByAuthUserIdentity(au);
+        if (user != null) {
+
+            UserSocial us = new UserSocialDAO().findByUserIdAndProvider(authProvider, user.getId());
+            if (us != null)
+                if (new UserSocialDAO().findByUserId(user.getId()).size() > 1) {
+                    new CachedUserDAO().clearCache(user.getId());
+                    new UserSocialDAO().delete(us);
+
+                    if (au.getProvider().equals(authProvider)) {
+                        return com.feth.play.module.pa.controllers.Authenticate.authenticate(new UserSocialDAO().findByUserId(user.getId()).iterator().next().getProvider());
+                    }
+                } else flash(GlobalParameters.FLASH_ERROR_KEY, "Sorry! You cannot unlink your single login account.");
+        }
+
+        return redirect(request().getHeader(REFERER) != null ? request().getHeader(REFERER) : "/");
+    }
+
 
     public static Result link() {
         com.feth.play.module.pa.controllers.Authenticate.noCache(response());

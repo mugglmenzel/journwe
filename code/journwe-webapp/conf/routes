@@ -14,7 +14,7 @@
 
 
 #### Mobile ####
-GET           /api/json/mobile/login                                       controllers.api.json.MobileAppController.getLoginToken
+GET           /api/json/mobile/authenticate/:provider                      controllers.api.json.MobileAppController.authenticate(provider:String)
 
 
 #### Categories ####
@@ -135,7 +135,7 @@ POST          /api/json/comments.json                                      contr
 #### User ####
 GET           /api/json/user/:id/emails.json                               controllers.api.json.UserController.getEmails(id:String)
 GET           /api/json/user/notifications.json                            controllers.api.json.UserController.getNotifications()
-GET           /api/json/user/:id/adventures.json                           controllers.api.json.UserController.getAdventures(id:String)
+GET           /api/json/user/:id/adventures.json                           controllers.api.json.UserController.getPublicAdventures(id:String)
 POST          /api/json/user/:id/notifications/:freq/frequency.json        controllers.api.json.UserController.setMailDigestFrequency(id:String, freq:String)
 
 

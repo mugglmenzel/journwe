@@ -30,7 +30,7 @@ public class UserManager {
     public static User findByAuthUserIdentity(final AuthUserIdentity identity) {
         if (identity == null)
             return null;
-        Logger.debug("AuthUserIdentity: id = " + identity.getId() + " provider = " + identity.getProvider());
+        Logger.debug("AuthUserIdentity: id = " + identity.getId() + ", provider = " + identity.getProvider());
         return getAuthUserFind(identity);
     }
 
@@ -254,7 +254,9 @@ public class UserManager {
     }
 
     public static boolean addLinkedAccount(final AuthUser oldAuthUser, final AuthUser newAuthUser) {
-        return new UserSocialDAO().addLinkedAccount(new UserDAO().findByProviderAndSocialId(oldAuthUser.getProvider(), oldAuthUser.getId()), newAuthUser.getProvider(), newAuthUser.getId());
+        User usr = new UserDAO().findByProviderAndSocialId(oldAuthUser.getProvider(), oldAuthUser.getId());
+        new CachedUserDAO().clearCache(usr.getId());
+        return new UserSocialDAO().addLinkedAccount(usr, newAuthUser.getProvider(), newAuthUser.getId());
     }
 
 }

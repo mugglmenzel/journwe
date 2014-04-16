@@ -77,4 +77,12 @@ public class AdventurerDAO extends AdventureComponentDAO<Adventurer> {
     public int adventureCountByUser(String userId) {
         return adventureToUserCountQuery.countM(userId);
     }
+
+    public int adventurePublicCountByUser(String userId) {
+        int count = 0;
+        for(Adventure adv : adventureToUserListQuery.listM(userId, null, -1))
+            if(adv.isPublish()) count++;
+        return count;
+    }
+
 }

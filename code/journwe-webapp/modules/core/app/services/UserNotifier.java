@@ -119,7 +119,7 @@ public class UserNotifier {
             User usr = new UserDAO().get(userId);
             if (usr != null) {
                 //TODO: user actual user LANG setting
-                Mailer.Mail.Body emailBody = JournweMailer.getMailBody("email.notificationDigest", new Lang(Lang.defaultLang()), new Object[]{notis, frequency});
+                Mailer.Mail.Body emailBody = JournweMailer.getMailBody("email.notificationDigest", usr.getLanguage() != null ? usr.getLanguage() : new Lang(Lang.defaultLang()), new Object[]{notis, frequency});
                 sendNotificationEmail(userId, "JournWe Notification: " + frequency.getDigestName() + " Digest", emailBody);
             }
         }

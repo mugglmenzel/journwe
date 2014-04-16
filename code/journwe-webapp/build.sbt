@@ -1,4 +1,5 @@
 import play.Project._
+import sbt._
 
 name := "journwe-webapp"
 
@@ -65,16 +66,21 @@ requireJsShim += "shim.js"
 
 lazy val root = project.in(file(".")).aggregate(acl, admin, social).dependsOn(acl, admin, social)
 
-lazy val data = project.in(file("modules/data"))
-lazy val dataCache = project.in(file("modules/dataCache")).aggregate(data).dependsOn(data)
-lazy val email = project.in(file("modules/email")).aggregate(data).dependsOn(data)
+
+lazy val social = project.in(file("modules/social")).aggregate(core).dependsOn(core)
+
+lazy val acl = project.in(file("modules/acl")).aggregate(core).dependsOn(core)
+
+lazy val admin = project.in(file("modules/admin")).aggregate(core).dependsOn(core)
 
 
 lazy val core = project.in(file("modules/core")).aggregate(dataCache, email).dependsOn(dataCache, email)
 
 
-lazy val social = project.in(file("modules/social")).aggregate(core).dependsOn(core)
-lazy val acl = project.in(file("modules/acl")).aggregate(core).dependsOn(core)
+lazy val email = project.in(file("modules/email")).aggregate(data).dependsOn(data)
 
-lazy val admin = project.in(file("modules/admin")).aggregate(core).dependsOn(core)
+lazy val dataCache = project.in(file("modules/dataCache")).aggregate(data).dependsOn(data)
+
+lazy val data = project.in(file("modules/data"))
+
 

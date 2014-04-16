@@ -123,27 +123,29 @@ public class UserController extends Controller {
     }
 
     @Security.Authenticated(SecuredUser.class)
-    public static Result getAdventures(String userId) {
+    public static Result getPublicAdventures(String userId) {
         DynamicForm data = form().bindFromRequest();
         int count = new Integer(data.get("count")).intValue();
 
 
         List<ObjectNode> results = new ArrayList<ObjectNode>();
         for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, null, count)) {
-            ObjectNode node = Json.newObject();
-            node.put("id", adv.getId());
-            node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-            node.put("image", adv.getImage());
-            node.put("name", adv.getName());
-            node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
-            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-            node.put("status", new AdventurerDAO().get(adv.getId(), userId).getParticipationStatus().name());
-            results.add(node);
+            if(adv.isPublish()) {
+                ObjectNode node = Json.newObject();
+                node.put("id", adv.getId());
+                node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                node.put("image", adv.getImage());
+                node.put("name", adv.getName());
+                node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
+                node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+                node.put("status", new AdventurerDAO().get(adv.getId(), userId).getParticipationStatus().name());
+                results.add(node);
+            }
         }
         ObjectNode result = Json.newObject();
         result.put("adventures", Json.toJson(results));
-        result.put("count", new AdventureDAO().adventureCountByUser(userId));
+        result.put("count", new AdventurerDAO().adventurePublicCountByUser(userId));
 
         return ok(Json.toJson(result));
     }

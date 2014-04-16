@@ -35,7 +35,7 @@ require([
 
     var loadUserAdventures = function (clear) {
         utils.resetStash($('#adventures-user-list i'));
-        routes.controllers.api.json.UserController.getAdventures(user.id).ajax({data: {count: 10}, success: function (advs) {
+        routes.controllers.api.json.UserController.getPublicAdventures(user.id).ajax({data: {count: 10}, success: function (advs) {
             $('#adventures-user-count').html(advs.count);
 
             if (clear) $('#adventures-user-list').empty();

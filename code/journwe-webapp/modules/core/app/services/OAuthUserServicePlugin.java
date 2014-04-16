@@ -57,9 +57,9 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
      * @return
      */
     @Override
-    public AuthUser merge(final AuthUser oldUser,final AuthUser newUser) {
+    public AuthUser merge(final AuthUser oldUser, final AuthUser newUser) {
         Logger.debug("merging auth users");
-        UserManager.merge(oldUser,newUser);
+        UserManager.merge(oldUser, newUser);
         return newUser;
     }
 
@@ -73,7 +73,7 @@ public class OAuthUserServicePlugin extends UserServicePlugin {
     @Override
     public AuthUser link(final AuthUser oldUser, final AuthUser newUser) {
         Logger.debug("linking accounts");
-        UserManager.addLinkedAccount(oldUser,newUser);
+        UserManager.addLinkedAccount(oldUser, newUser);
         return newUser;
     }
 
