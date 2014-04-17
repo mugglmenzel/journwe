@@ -5,35 +5,35 @@ import com.journwe.flight.skyscanner.model.location.OriginPlace;
 import com.journwe.flight.skyscanner.model.time.InboundPartialDate;
 import com.journwe.flight.skyscanner.model.time.OutboundPartialDate;
 
-public class BrowseCacheQueryBuilder {
+public class QueryBuilder {
 	
-	private BrowseCacheQuery query = null;
+	private Query query = null;
 	
-	public BrowseCacheQueryBuilder(final BrowseCacheQuery query) {
+	public QueryBuilder(final Query query) {
 		this.query = query;
 	}
 	
-	public BrowseCacheQueryBuilder withOriginPlace(OriginPlace originPlace) {
+	public QueryBuilder withOriginPlace(OriginPlace originPlace) {
 		query.setOriginPlace(originPlace);
 		return this;
 	}
 	
-	public BrowseCacheQueryBuilder withDestinationPlace(DestinationPlace destinationPlace) {
+	public QueryBuilder withDestinationPlace(DestinationPlace destinationPlace) {
 		query.setDestinationPlace(destinationPlace);
 		return this;
 	}
 	
-	public BrowseCacheQueryBuilder withOutboundPartialDate(OutboundPartialDate outboundPartialDate) {
+	public QueryBuilder withOutboundPartialDate(OutboundPartialDate outboundPartialDate) {
 		query.setOutboundPartialDate(outboundPartialDate);
 		return this;
 	}
 	
-	public BrowseCacheQueryBuilder withInboundPartialDate(InboundPartialDate inboundPartialDate) {
+	public QueryBuilder withInboundPartialDate(InboundPartialDate inboundPartialDate) {
 		query.setInboundPartialDate(inboundPartialDate);
 		return this;
 	}
 	
-	public BrowseCacheQuery build() {
+	public Query build() {
 		return query;
 	}
 

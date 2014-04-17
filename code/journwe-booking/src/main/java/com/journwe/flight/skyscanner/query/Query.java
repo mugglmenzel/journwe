@@ -2,62 +2,68 @@ package com.journwe.flight.skyscanner.query;
 
 import com.journwe.flight.skyscanner.model.location.DestinationPlace;
 import com.journwe.flight.skyscanner.model.location.OriginPlace;
+import com.journwe.flight.skyscanner.model.reference.Countries;
+import com.journwe.flight.skyscanner.model.reference.Country;
+import com.journwe.flight.skyscanner.model.reference.Currencies;
+import com.journwe.flight.skyscanner.model.reference.Currency;
+import com.journwe.flight.skyscanner.model.reference.Locale;
+import com.journwe.flight.skyscanner.model.reference.Locales;
 import com.journwe.flight.skyscanner.model.time.InboundPartialDate;
 import com.journwe.flight.skyscanner.model.time.OutboundPartialDate;
 
-public abstract class BrowseCacheQuery {
+public abstract class Query {
 	
-	private BrowseCacheQueryType browserCacheQuerytType;
-	private String country;
-	private String locale;
-	private String currency;
-    public final static String DEFAULT_COUNTRY = "GB";
-    public final static String DEFAULT_LOCALE = "en-GB";
-    public final static String DEFAULT_CURRENCY = "GBP";
+	private QueryType queryType;
+	private Country country;
+	private Locale locale;
+	private Currency currency;
+    public final static Country DEFAULT_COUNTRY = Countries.get("United Kingdom");
+    public final static Locale DEFAULT_LOCALE = Locales.get("en-GB");
+    public final static Currency DEFAULT_CURRENCY = Currencies.get("GBP");
     
 	private OriginPlace originPlace;
 	private DestinationPlace destinationPlace;
 	private OutboundPartialDate outboundPartialDate;
 	private InboundPartialDate inboundPartialDate;
-	
-	public BrowseCacheQuery() {
+    
+	public Query() {
 		setCountry(DEFAULT_COUNTRY);
 		setLocale(DEFAULT_LOCALE);
 		setCurrency(DEFAULT_CURRENCY);
 	}
 
-	public BrowseCacheQueryType getBrowserCacheQuerytType() {
-		return browserCacheQuerytType;
+	public QueryType getQuerytType() {
+		return queryType;
 	}
 
-	public void setBrowserCacheQueryType(
-			BrowseCacheQueryType browserCacheQuerytType) {
-		this.browserCacheQuerytType = browserCacheQuerytType;
-	}	
-	
-	public String getCountry() {
+	public void setQueryType(
+			QueryType browserCacheQuerytType) {
+		this.queryType = browserCacheQuerytType;
+	}
+
+	public Country getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(Country country) {
 		this.country = country;
 	}
 
-	public String getLocale() {
+	public Locale getLocale() {
 		return locale;
 	}
 
-	public void setLocale(String locale) {
+	public void setLocale(Locale locale) {
 		this.locale = locale;
 	}
 
-	public String getCurrency() {
+	public Currency getCurrency() {
 		return currency;
 	}
 
-	public void setCurrency(String currency) {
+	public void setCurrency(Currency currency) {
 		this.currency = currency;
-	}	
+	}
 	
 	public OriginPlace getOriginPlace() {
 		return originPlace;
