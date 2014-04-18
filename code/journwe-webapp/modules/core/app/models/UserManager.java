@@ -68,7 +68,7 @@ public class UserManager {
         if (authUser instanceof NameIdentity && ((NameIdentity) authUser).getName() != null) {
             user.setName(((NameIdentity) authUser).getName());
         }
-        if (authUser instanceof PicturedIdentity) {
+        if (authUser instanceof PicturedIdentity && ((PicturedIdentity) authUser).getPicture() != null) {
             String picture = "";
             if (authUser instanceof FacebookAuthUser)
                 picture = ((PicturedIdentity) authUser).getPicture() + "?type=large";
@@ -81,7 +81,7 @@ public class UserManager {
         else
             Logger.error("Saving user in method UserDAO.create failed.");
 
-        if (authUser instanceof EmailIdentity) {
+        if (authUser instanceof EmailIdentity && ((EmailIdentity) authUser).getEmail() != null) {
             final UserEmail email = new UserEmail();
             email.setUserId(user.getId());
 
