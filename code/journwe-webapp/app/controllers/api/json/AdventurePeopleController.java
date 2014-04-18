@@ -245,9 +245,8 @@ public class AdventurePeopleController extends Controller {
             new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " changed the participation status to " + status.name() + ".", "Participation Status");
 
             clearCache(advId);
+            new CachedUserDAO().clearCache(usr.getId());
         }
-
-        Cache.remove("user." + usr.getId() + ".myadventures");
 
         return ok(Json.toJson(advr));
     }

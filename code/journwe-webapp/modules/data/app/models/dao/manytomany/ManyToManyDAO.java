@@ -66,12 +66,12 @@ public class ManyToManyDAO<M, N> {
                     .withItem(item);
             AmazonDynamoDB dynamoBD = DynamoDBMapperHelper.getDynamoDB();
             PutItemResult result1 = dynamoBD.putItem(putItemRequest1);
-            Logger.debug("Saved many-to-many-relationship table item in " + mToNTableName + ": " + result1.toString());
+            Logger.debug("Saved many-to-many-relationship table item in " + mToNTableName + ": " + result1);
             PutItemRequest putItemRequest2 = new PutItemRequest()
                     .withTableName(nToMTableName)
                     .withItem(item);
             PutItemResult result2 = dynamoBD.putItem(putItemRequest2);
-            Logger.debug("Saved many-to-many-relationship table item in " + nToMTableName + ": " + result2.toString());
+            Logger.debug("Saved many-to-many-relationship table item in " + nToMTableName + ": " + result2);
         } catch (AmazonServiceException ase) {
             Logger.error("Saving many-to-many-relationship item failed.");
             return false;
@@ -143,39 +143,28 @@ public class ManyToManyDAO<M, N> {
     }
 
     public boolean deleteAllMRelationships(M obj1) {
-        Map<String, AttributeValue> key1 = dynamoDbMapperHelper.getKey(obj1);
-
         try {
-            Map<String, AttributeValue> key = new HashMap<String, AttributeValue>();
+            Map<String, AttributeValue> key1 = dynamoDbMapperHelper.getKey(obj1);
             String key1Name = dynamoDbMapperHelper.getPrimaryHashKeyName(clazzM);
             AttributeValue key1Val = key1.get(key1Name);
-            key.put(mHashIdName, key1Val);
 
             Map<String, Condition> keyConditions = new HashMap<String, Condition>();
             Condition hashKeyCondition = new Condition()
                     .withComparisonOperator(ComparisonOperator.EQ.toString())
                     .withAttributeValueList(key1Val);
-            keyConditions.put(key1Name, hashKeyCondition);
+            keyConditions.put(mHashIdName, hashKeyCondition);
             QueryRequest query = new QueryRequest().withTableName(mToNTableName).withKeyConditions(keyConditions);
             QueryResult res = dynamoDB.query(query);
             for (Map<String, AttributeValue> item : res.getItems()) {
-                AttributeValue key2Val = item.get(dynamoDbMapperHelper.getPrimaryHashKeyName(clazzN));
-                key = new HashMap<String, AttributeValue>();
-                key.put(mHashIdName, key1Val);
-                key.put(nHashIdName, key2Val);
-
-                DeleteItemRequest deleteItemRequest1 = new DeleteItemRequest()
-                        .withTableName(mToNTableName).withKey(key);
-                DeleteItemResult result1 = dynamoDB.deleteItem(deleteItemRequest1);
-
-                Logger.debug("Deleted many-to-many-relationship table item in " + mToNTableName + ": " + result1.toString());
-                DeleteItemRequest deleteItemRequest2 = new DeleteItemRequest()
-                        .withTableName(nToMTableName).withKey(key);
-                DeleteItemResult result2 = dynamoDB.deleteItem(deleteItemRequest2);
-                Logger.debug("Deleted many-to-many-relationship table item in " + nToMTableName + ": " + result2.toString());
+                DeleteItemResult result1 = dynamoDB.deleteItem(new DeleteItemRequest()
+                        .withTableName(mToNTableName).withKey(item));
+                Logger.trace("Deleted many-to-many-relationship table item in " + mToNTableName + ": " + result1.toString());
+                DeleteItemResult result2 = dynamoDB.deleteItem(new DeleteItemRequest()
+                        .withTableName(nToMTableName).withKey(item));
+                Logger.trace("Deleted many-to-many-relationship table item in " + nToMTableName + ": " + result2.toString());
             }
         } catch (AmazonServiceException ase) {
-            Logger.error("Deleting many-to-many-relationship item failed.");
+            Logger.error("Deleting many-to-many-relationship item failed.", ase);
             return false;
         }
 
@@ -183,39 +172,28 @@ public class ManyToManyDAO<M, N> {
     }
 
     public boolean deleteAllNRelationships(N obj2) {
-        Map<String, AttributeValue> key2 = dynamoDbMapperHelper.getKey(obj2);
-
         try {
-            Map<String, AttributeValue> key = new HashMap<String, AttributeValue>();
+            Map<String, AttributeValue> key2 = dynamoDbMapperHelper.getKey(obj2);
             String key2Name = dynamoDbMapperHelper.getPrimaryHashKeyName(clazzN);
             AttributeValue key2Val = key2.get(key2Name);
-            key.put(nHashIdName, key2Val);
 
             Map<String, Condition> keyConditions = new HashMap<String, Condition>();
             Condition hashKeyCondition = new Condition()
                     .withComparisonOperator(ComparisonOperator.EQ.toString())
                     .withAttributeValueList(key2Val);
-            keyConditions.put(key2Name, hashKeyCondition);
+            keyConditions.put(nHashIdName, hashKeyCondition);
             QueryRequest query = new QueryRequest().withTableName(nToMTableName).withKeyConditions(keyConditions);
             QueryResult res = dynamoDB.query(query);
             for (Map<String, AttributeValue> item : res.getItems()) {
-                AttributeValue key1Val = item.get(dynamoDbMapperHelper.getPrimaryHashKeyName(clazzM));
-                key = new HashMap<String, AttributeValue>();
-                key.put(mHashIdName, key1Val);
-                key.put(nHashIdName, key2Val);
-
-                DeleteItemRequest deleteItemRequest1 = new DeleteItemRequest()
-                        .withTableName(mToNTableName).withKey(key);
-                DeleteItemResult result1 = dynamoDB.deleteItem(deleteItemRequest1);
-
-                Logger.debug("Deleted many-to-many-relationship table item in " + mToNTableName + ": " + result1.toString());
-                DeleteItemRequest deleteItemRequest2 = new DeleteItemRequest()
-                        .withTableName(nToMTableName).withKey(key);
-                DeleteItemResult result2 = dynamoDB.deleteItem(deleteItemRequest2);
-                Logger.debug("Deleted many-to-many-relationship table item in " + nToMTableName + ": " + result2.toString());
+                DeleteItemResult result1 = dynamoDB.deleteItem(new DeleteItemRequest()
+                        .withTableName(mToNTableName).withKey(item));
+                Logger.trace("Deleted many-to-many-relationship table item in " + mToNTableName + ": " + result1.toString());
+                DeleteItemResult result2 = dynamoDB.deleteItem(new DeleteItemRequest()
+                        .withTableName(nToMTableName).withKey(item));
+                Logger.trace("Deleted many-to-many-relationship table item in " + nToMTableName + ": " + result2.toString());
             }
         } catch (AmazonServiceException ase) {
-            Logger.error("Deleting many-to-many-relationship item failed.");
+            Logger.error("Deleting many-to-many-relationship item failed.", ase);
             return false;
         }
 
@@ -246,8 +224,7 @@ public class ManyToManyDAO<M, N> {
             // First Query
             QueryResult firstResult = listRelations(hashKey, lastKey, limit, returnM);
 
-
-            // Second: batchLoad.
+            // Second: Load.
 
             // Prepare the input parameters for the queries
             String targetTableName = returnM ? mTableName : nTableName;
@@ -275,8 +252,21 @@ public class ManyToManyDAO<M, N> {
                 itemsToGet.add(obj);
             }
 
-            Map<String, List<Object>> batchLoadReturn = dynamoDbMapperHelper.batchLoad(itemsToGet);
-            List<Object> toReturn = batchLoadReturn.get(targetTableName);
+            List<Object> toReturn = new ArrayList<Object>();
+            List<Object> ghosts = new ArrayList<Object>();
+            for (Object item : itemsToGet) {
+                Object loaded = dynamoDbMapperHelper.load(item);
+                if (loaded != null) toReturn.add(loaded);
+                else ghosts.add(item);
+            }
+            if (ghosts.size() > 0) {
+                for (Object item : ghosts) {
+                    if (returnM) deleteAllMRelationships((M) item);
+                    else deleteAllNRelationships((N) item);
+                }
+                return list(hashKey, lastKey, limit, returnM);
+            }
+
             return toReturn != null ? toReturn : new ArrayList<Object>();
 
         } catch (InstantiationException e) {
@@ -293,8 +283,7 @@ public class ManyToManyDAO<M, N> {
     }
 
     private QueryRequest prepareQueryRequest(String hashKey, String lastKey, int limit, boolean returnM) {
-        if (lastKey == null)
-            lastKey = "";
+
         String hashIdName = returnM ? nHashIdName : mHashIdName;
         String rangeIdName = returnM ? mHashIdName : nHashIdName;
         String relationTableName = returnM ? nToMTableName : mToNTableName;
@@ -309,17 +298,28 @@ public class ManyToManyDAO<M, N> {
         Map<String, Condition> keyConditions = new HashMap<String, Condition>();
         keyConditions.put(hashIdName, hashKeyCondition);
 
+        Map<String, AttributeValue> exclusiveStartKey = new HashMap<String, AttributeValue>();
         // An AttributeValue may not contain an empty string.
-        if (lastKey != null && !lastKey.equals("")) {
-            Condition rangeKeyCondition = new Condition()
-                    .withComparisonOperator(ComparisonOperator.GT.toString())
-                    .withAttributeValueList(new AttributeValue().withS(lastKey));
-            keyConditions.put(rangeIdName, rangeKeyCondition);
-        }
+
 
         // Prepare query request.
         QueryRequest queryRequest = new QueryRequest().withTableName(relationTableName)
                 .withKeyConditions(keyConditions);
+
+        if (lastKey != null && !lastKey.equals("")) {
+            exclusiveStartKey.put(hashIdName, new AttributeValue().withS(hashKey));
+            exclusiveStartKey.put(rangeIdName, new AttributeValue().withS(lastKey));
+
+            queryRequest.setExclusiveStartKey(exclusiveStartKey);
+            Logger.debug("query with start key: " + exclusiveStartKey);
+
+            /*
+            Condition rangeKeyCondition = new Condition()
+                    .withComparisonOperator(ComparisonOperator.GT.toString())
+                    .withAttributeValueList(new AttributeValue().withS(lastKey));
+            keyConditions.put(rangeIdName, rangeKeyCondition);
+            */
+        }
         // Set the limit.
         if (limit > 0)
             queryRequest.setLimit(limit);

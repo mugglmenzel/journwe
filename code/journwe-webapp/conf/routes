@@ -14,7 +14,7 @@
 
 
 #### Mobile ####
-GET           /api/json/mobile/authenticate/:provider                      controllers.api.json.MobileAppController.authenticate(provider:String)
+POST          /api/json/mobile/authenticate/:provider                      controllers.api.json.MobileAppController.authenticate(provider:String)
 
 
 #### Categories ####
