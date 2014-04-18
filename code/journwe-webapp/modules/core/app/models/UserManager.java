@@ -157,7 +157,7 @@ public class UserManager {
             }
 
 
-            if (authUser instanceof EmailIdentity) {
+            if (authUser instanceof EmailIdentity && ((EmailIdentity) authUser).getEmail() != null) {
                 UserEmail userEmail = new UserEmailDAO().getPrimaryEmailOfUser(social.getUserId());
                 if (userEmail == null || !userEmail.equals(((EmailIdentity) authUser).getEmail())) {
                     UserEmail email = new UserEmailDAO().get(social.getUserId(), ((EmailIdentity) authUser).getEmail());
@@ -198,7 +198,7 @@ public class UserManager {
 
             }
 
-            if (authUser instanceof PicturedIdentity) {
+            if (authUser instanceof PicturedIdentity && ((PicturedIdentity) authUser).getPicture() != null) {
                 Logger.debug("updating picture");
 
                 String picture = "";

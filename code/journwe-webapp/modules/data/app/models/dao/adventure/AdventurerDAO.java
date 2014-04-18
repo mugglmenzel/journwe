@@ -56,9 +56,7 @@ public class AdventurerDAO extends AdventureComponentDAO<Adventurer> {
     }
 
     public List<Adventure> listAdventuresByUser(String userId, String lastAdventureKey, int limit) {
-        List<Adventure> result = new AdventureToUserDAO().listM(userId, lastAdventureKey, limit);
-        Logger.debug("DAO forwards result: " + result.size() + ", list: " + result);
-        return result;
+        return new AdventureToUserDAO().listM(userId, lastAdventureKey, limit);
     }
 
     public List<Adventurer> listAdventurersByAdventure(String advId) {

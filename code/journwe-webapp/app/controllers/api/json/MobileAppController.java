@@ -8,9 +8,11 @@ import com.feth.play.module.pa.providers.oauth2.facebook.FacebookAuthUser;
 import com.feth.play.module.pa.providers.oauth2.google.GoogleAuthInfo;
 import com.feth.play.module.pa.providers.oauth2.google.GoogleAuthUser;
 import com.feth.play.module.pa.user.AuthUser;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +45,9 @@ public class MobileAppController extends Controller {
         AuthUser au = null;
 
         if ("facebook".equals(authProvider)) {
+            if(json.get(OAuth2AuthProvider.Constants.ACCESS_TOKEN) == null || json.get(OAuth2AuthProvider.Constants.EXPIRES_IN) == null || json.get("id") == null)
+                return badRequest();
+
             Map<String, String> authInfoMap = new HashMap<String, String>();
             authInfoMap.put(OAuth2AuthProvider.Constants.ACCESS_TOKEN, json.get(OAuth2AuthProvider.Constants.ACCESS_TOKEN).asText());
             authInfoMap.put("expires", json.get(OAuth2AuthProvider.Constants.EXPIRES_IN).asText());
@@ -56,6 +61,7 @@ public class MobileAppController extends Controller {
             PlayAuthenticate.getUserService().save(au);
 
         PlayAuthenticate.storeUser(ctx().session(), au);
+        Logger.debug("updated user session: " + ctx().session());
 
         return ok();
     }
