@@ -252,9 +252,6 @@ public class AdventureController extends Controller {
 
         }
 
-        // Save Adventure-to-User relationship
-        new AdventureToUserDAO().createManyToManyRelationship(adv, usr);
-
         // Save the creator as default owner of the adventure
         AdventureAuthorization authorization = new AdventureAuthorization();
         authorization.setAdventureId(adv.getId());

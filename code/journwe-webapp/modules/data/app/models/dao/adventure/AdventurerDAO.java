@@ -9,6 +9,7 @@ import models.dao.manytomany.ManyToManyCountQuery;
 import models.dao.manytomany.ManyToManyListQuery;
 import models.dao.user.UserDAO;
 import models.user.User;
+import play.Logger;
 
 import java.util.*;
 
@@ -21,22 +22,15 @@ import java.util.*;
  */
 public class AdventurerDAO extends AdventureComponentDAO<Adventurer> {
 
-    private ManyToManyListQuery<Adventure, User> adventureToUserListQuery;
-    private ManyToManyCountQuery<Adventure, User> adventureToUserCountQuery;
-
-    AdventureToUserDAO advToUserDAO = new AdventureToUserDAO();
-
     public AdventurerDAO() {
         super(Adventurer.class);
-        adventureToUserListQuery = new ManyToManyListQuery<Adventure, User>(Adventure.class,User.class);
-        adventureToUserCountQuery = new ManyToManyCountQuery<Adventure, User>(Adventure.class,User.class);
     }
 
     public boolean save(Adventurer advr) {
         // Create many-to-many Adventure-to-User relationship
         Adventure adv = new AdventureDAO().get(advr.getAdventureId());
         User usr = new UserDAO().get(advr.getUserId());
-        advToUserDAO.createManyToManyRelationship(adv, usr);
+        new AdventureToUserDAO().createManyToManyRelationship(adv, usr);
         return super.save(advr);
     }
 
@@ -62,7 +56,9 @@ public class AdventurerDAO extends AdventureComponentDAO<Adventurer> {
     }
 
     public List<Adventure> listAdventuresByUser(String userId, String lastAdventureKey, int limit) {
-        return adventureToUserListQuery.listM(userId, lastAdventureKey, limit);
+        List<Adventure> result = new AdventureToUserDAO().listM(userId, lastAdventureKey, limit);
+        Logger.debug("DAO forwards result: " + result.size() + ", list: " + result);
+        return result;
     }
 
     public List<Adventurer> listAdventurersByAdventure(String advId) {
@@ -75,12 +71,12 @@ public class AdventurerDAO extends AdventureComponentDAO<Adventurer> {
     }
 
     public int adventureCountByUser(String userId) {
-        return adventureToUserCountQuery.countM(userId);
+        return new AdventureToUserDAO().countM(userId, null);
     }
 
     public int adventurePublicCountByUser(String userId) {
         int count = 0;
-        for(Adventure adv : adventureToUserListQuery.listM(userId, null, -1))
+        for(Adventure adv : new AdventureToUserDAO().listM(userId, null, -1))
             if(adv.isPublish()) count++;
         return count;
     }

@@ -43,8 +43,6 @@ public class ApplicationController extends Controller {
 
         try {
             Callable<String> resultsCallable = new Callable<String>() {
-
-
                 @Override
                 public String call() throws Exception {
                     List<ObjectNode> results = new ArrayList<ObjectNode>();
@@ -63,10 +61,10 @@ public class ApplicationController extends Controller {
                             results.add(node);
                         }
                     }
+
                     return Json.toJson(results).toString();
                 }
             };
-
 
             return ok(count == 10 && (lastId == null || "".equals(lastId)) ?
                     Cache.getOrElse("user." + userId + ".myadventures", resultsCallable, 24 * 3600)

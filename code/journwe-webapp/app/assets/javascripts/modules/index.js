@@ -232,7 +232,7 @@ define([
             loadMyAdventures(null, true);
         },
         'click .btn-adventures-my-load-more': function () {
-            loadMyAdventures($('#adventures-my-list .adventure-entry').last().data('id'));
+            loadMyAdventures($('.list-adventures-my .adventure-entry').last().data('id'));
         },
         'click .btn-categories-refresh': function () {
             loadCategories(null, true);
