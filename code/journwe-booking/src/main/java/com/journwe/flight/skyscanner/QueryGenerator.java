@@ -12,7 +12,12 @@ public class QueryGenerator {
 	public static String generateEndpoint(final String apiKey, final Query query) {
 		if(query instanceof LivePricingPollQuery) {
 			LivePricingPollQuery lppquery = (LivePricingPollQuery)query;
-			return lppquery.getSessionUrl()+"?apiKey="+apiKey;
+			StringBuffer queryString = new StringBuffer();
+			queryString.append(lppquery.getSessionUrl());
+			queryString.append("?apiKey=");
+			queryString.append(apiKey);
+			queryString.append(lppquery.getQueryString());
+			return queryString.toString();
 		}
 		StringBuffer toReturn = new StringBuffer();
 		toReturn.append(BASE_URL);

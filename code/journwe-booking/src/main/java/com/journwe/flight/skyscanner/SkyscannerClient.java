@@ -19,18 +19,15 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import play.libs.Json;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.journwe.flight.skyscanner.model.filter.MaxNumberOfStops;
 import com.journwe.flight.skyscanner.model.location.DestinationPlace;
-import com.journwe.flight.skyscanner.model.location.LocationType;
 import com.journwe.flight.skyscanner.model.location.OriginPlace;
 import com.journwe.flight.skyscanner.model.time.InboundPartialDate;
 import com.journwe.flight.skyscanner.model.time.OutboundPartialDate;
 import com.journwe.flight.skyscanner.query.Query;
 import com.journwe.flight.skyscanner.query.QueryBuilder;
-import com.journwe.flight.skyscanner.query.browsecache.BrowseCacheQuery;
-import com.journwe.flight.skyscanner.query.browsecache.CheapestQuoteQuery;
 import com.journwe.flight.skyscanner.query.livepricing.ListFlightsQuery;
 import com.journwe.flight.skyscanner.query.livepricing.LivePricingPollQuery;
-import com.journwe.flight.skyscanner.query.livepricing.LivePricingQuery;
 
 public class SkyscannerClient {
 
@@ -42,23 +39,24 @@ public class SkyscannerClient {
 	public static void main(String[] args) throws ParseException {
 
 		// Create a LivePricingQuery
-		/**
-		 * SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); Date
-		 * june10 = sdf.parse("10/06/2014"); Date june15 =
-		 * sdf.parse("15/06/2014"); ListFlightsQuery listFlightsQuery =
-		 * (ListFlightsQuery) new QueryBuilder(new ListFlightsQuery())
-		 * .withOriginPlace(new OriginPlace("EDI")) .withDestinationPlace( new
-		 * DestinationPlace("LHR")) .withOutboundPartialDate(new
-		 * OutboundPartialDate(june10)) .withInboundPartialDate(new
-		 * InboundPartialDate(june15)).build(); String sessionUrl =
-		 * query(listFlightsQuery); System.out.println("Session: "+sessionUrl);
-		 **/
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date june10 = sdf.parse("10/06/2014");
+		Date june15 = sdf.parse("15/06/2014");
+		ListFlightsQuery listFlightsQuery = (ListFlightsQuery) new QueryBuilder(
+				new ListFlightsQuery()).withOriginPlace(new OriginPlace("EDI"))
+				.withDestinationPlace(new DestinationPlace("LHR"))
+				.withOutboundPartialDate(new OutboundPartialDate(june10))
+				.withInboundPartialDate(new InboundPartialDate(june15)).build();
+		String sessionUrl = makeHttpPostQuery(listFlightsQuery);
+		System.out.println("Session: " + sessionUrl);
 
-		String sessionUrl = "http://partners.api.skyscanner.net/apiservices/pricing/v1.0/40461c50d91c45a396631b777a012121_elhhpiln_B6D8CE1B67A7A30D5CF190D260853651";
-		LivePricingPollQuery livePricingPollQuery = new LivePricingPollQuery(sessionUrl);
+		// String sessionUrl =
+		// "http://partners.api.skyscanner.net/apiservices/pricing/v1.0/40461c50d91c45a396631b777a012121_elhhpiln_B6D8CE1B67A7A30D5CF190D260853651";
+		LivePricingPollQuery livePricingPollQuery = new LivePricingPollQuery(
+				sessionUrl).withMaxNumberOfStops(new MaxNumberOfStops(0));
 		JsonNode jsonNode = makeHttpGetQuery(livePricingPollQuery);
 		System.out.println(jsonNode);
-		
+
 		/**
 		 * // Create a CheapestQuoteQuery SimpleDateFormat sdf = new
 		 * SimpleDateFormat("dd/MM/yyyy"); Date june10 =
@@ -147,8 +145,7 @@ public class SkyscannerClient {
 	}
 
 	public static JsonNode makeHttpGetQuery(final Query query) {
-		String url = QueryGenerator
-				.generateEndpoint(API_KEY, query);
+		String url = QueryGenerator.generateEndpoint(API_KEY, query);
 		System.out.println("HTTP GET " + url);
 		GetMethod method = new GetMethod(url);
 		method.setRequestHeader("Accept", "application/json");
