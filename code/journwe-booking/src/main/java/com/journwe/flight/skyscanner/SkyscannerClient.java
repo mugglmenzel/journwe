@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.journwe.flight.skyscanner.model.filter.MaxNumberOfStops;
 import com.journwe.flight.skyscanner.model.location.DestinationPlace;
 import com.journwe.flight.skyscanner.model.location.OriginPlace;
+import com.journwe.flight.skyscanner.model.sort.SortType;
+import com.journwe.flight.skyscanner.model.sort.SortTypeOption;
 import com.journwe.flight.skyscanner.model.time.InboundPartialDate;
 import com.journwe.flight.skyscanner.model.time.OutboundPartialDate;
 import com.journwe.flight.skyscanner.query.Query;
@@ -53,7 +55,7 @@ public class SkyscannerClient {
 		// String sessionUrl =
 		// "http://partners.api.skyscanner.net/apiservices/pricing/v1.0/40461c50d91c45a396631b777a012121_elhhpiln_B6D8CE1B67A7A30D5CF190D260853651";
 		LivePricingPollQuery livePricingPollQuery = new LivePricingPollQuery(
-				sessionUrl).withMaxNumberOfStops(new MaxNumberOfStops(0));
+				sessionUrl).withMaxNumberOfStops(new MaxNumberOfStops(0)).withSortType(new SortType(SortTypeOption.OUTBOUND_ARRIVE_TIME));
 		JsonNode jsonNode = makeHttpGetQuery(livePricingPollQuery);
 		System.out.println(jsonNode);
 
