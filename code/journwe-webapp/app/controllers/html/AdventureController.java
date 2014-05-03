@@ -10,7 +10,6 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import controllers.api.json.AdventureFileController;
-import controllers.core.html.ApplicationController;
 import helpers.JournweFacebookClient;
 import helpers.SocialInviter;
 import models.UserManager;
@@ -37,7 +36,6 @@ import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.TimeOptionDAO;
 import models.dao.inspiration.InspirationDAO;
-import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserEmailDAO;
 import models.dao.user.UserSocialDAO;
 import models.inspiration.Inspiration;
@@ -53,6 +51,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.adventure.create;
 import views.html.adventure.get;
+import views.html.adventure.get_invited;
 import views.html.adventure.get_public;
 
 import java.text.SimpleDateFormat;
@@ -81,10 +80,19 @@ public class AdventureController extends Controller {
             User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
             Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
-            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) || !SecuredUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
+            if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || !SecuredUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
                 return ok(get_public.render(adv, ins));
             else
                 return ok(get.render(adv, ins, advr, usr, "", null));
+        }
+    }
+
+    public static Result getInvitedIndex(String id, String provider) {
+        Adventure adv = new AdventureDAO().get(id);
+        if (adv == null) return badRequest();
+        else {
+            Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
+            return ok(get_invited.render(adv, provider, ins));
         }
     }
 
@@ -203,19 +211,19 @@ public class AdventureController extends Controller {
                 }
             }
             if (key.startsWith("email[")) {
-                new SocialInviter(usr, "email", filledForm.data().get(key)).invite(adv.getId());
+                new SocialInviter(usr, "email", filledForm.data().get(key), shortURL).invite(adv.getId());
             }
             if (key.startsWith("facebook[")) {
-                new SocialInviter(usr, "facebook", filledForm.data().get(key)).invite(adv.getId());
+                new SocialInviter(usr, "facebook", filledForm.data().get(key), shortURL).invite(adv.getId());
             }
             if (key.startsWith("foursquare[")) {
-                new SocialInviter(usr, "foursquare", filledForm.data().get(key)).invite(adv.getId());
+                new SocialInviter(usr, "foursquare", filledForm.data().get(key), shortURL).invite(adv.getId());
             }
             if (key.startsWith("google[")) {
-                new SocialInviter(usr, "google", filledForm.data().get(key)).invite(adv.getId());
+                new SocialInviter(usr, "google", filledForm.data().get(key), shortURL).invite(adv.getId());
             }
             if (key.startsWith("twitter[")) {
-                new SocialInviter(usr, "twitter", filledForm.data().get(key)).invite(adv.getId());
+                new SocialInviter(usr, "twitter", filledForm.data().get(key), shortURL).invite(adv.getId());
             }
         }
 

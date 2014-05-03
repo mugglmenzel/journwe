@@ -39,6 +39,9 @@ GET           /api/json/inspiration/:id/photos.json                        contr
 GET           /api/json/adventures/my.json                                 controllers.api.json.ApplicationController.getMyAdventures()
 GET           /api/json/adventures/public.json                             controllers.api.json.ApplicationController.getPublicAdventures()
 
+GET           /api/json/adventure/:id/info.json                            controllers.api.json.AdventureController.info(id:String)
+
+
 POST          /api/json/adventure/:id/image.json                           controllers.api.json.AdventureController.updateImage(id:String)
 POST          /api/json/adventure/:id/public.json                          controllers.api.json.AdventureController.updatePublic(id:String)
 POST          /api/json/adventure/:id/visibleSections.json                 controllers.api.json.AdventureController.updateVisibleSections(id:String)
@@ -178,14 +181,15 @@ POST          /adventure/save/editable                                     contr
 GET           /adventure/new                                               controllers.html.AdventureController.save()
 POST          /adventure/save                                              controllers.html.AdventureController.save()
 GET           /adventure/:id                                               controllers.html.AdventureController.getIndex(id:String)
-#GET           /adventure/:id/index                                         controllers.html.AdventureController.getIndex(id:String)
-#GET           /adventure/:id/new                                           controllers.html.AdventureController.createFromInspiration(id:String)
+GET           /adventure/:id/invited/:provider                             controllers.html.AdventureController.getInvitedIndex(id:String, provider:String)
 GET           /adventure/:id/delete                                        controllers.html.AdventureController.delete(id:String)
 POST          /adventure/:id/clone                                         controllers.html.CloneController.cloneAndSaveAdventure(id:String)
 POST          /adventure/:id/pdf                                           controllers.html.PdfController.create(id:String)
 
 GET           /adv/:shortname                                              controllers.html.AdventureController.getIndexShortname(shortname:String)
 
+#### Adventure Place ####
+POST          /adventure/:id/place/save/editable                           controllers.html.AdventurePlaceController.savePlaceEditable(id:String)
 
 #### Adventure People ####
 GET           /adventure/:id/:provider/participate                         controllers.html.AdventurePeopleController.participate(id:String, provider:String)

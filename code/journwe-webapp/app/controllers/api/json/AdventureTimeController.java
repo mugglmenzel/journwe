@@ -234,7 +234,6 @@ public class AdventureTimeController extends Controller {
             TimeOptionRating rating = getTimeGroupRating(po);
             if (rating != null && 0D < rating.getRating()) ratings.add(rating);
         }
-        Logger.debug("List of Ratings: " + ratings);
 
         String favId = ratings.size() > 0 ? Collections.max(ratings, new Comparator<TimeOptionRating>() {
             @Override
@@ -242,7 +241,6 @@ public class AdventureTimeController extends Controller {
                 return timeOptionRating.getRating().compareTo(timeOptionRating2.getRating());
             }
         }).getTimeOptionId() : timeOptions.iterator().next().getOptionId();
-        Logger.debug("got time autofav with id " + favId);
 
         return new TimeOptionDAO().get(advId, favId);
     }

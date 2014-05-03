@@ -52,6 +52,37 @@ public class AdventureController extends Controller {
             ConfigFactory.load().getString("aws.secretKey")));
 
 
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result info(String advId) {
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        if (usr == null)
+            return badRequest();
+
+
+        try {
+            Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
+            Adventure adv = new AdventureDAO().get(advId);
+            if (advr != null && adv != null) {
+                ObjectNode node = Json.newObject();
+                node.put("id", adv.getId());
+                node.put("inspirationId", adv.getInspirationId());
+                node.put("name", adv.getName());
+                node.put("description", adv.getDescription());
+                node.put("descriptionHTML", adv.getHTMLDescription());
+                node.put("image", adv.getImage());
+                node.put("imageTimestamp", adv.getImageTimestamp());
+                node.put("limit", adv.getLimit());
+
+                return ok(node);
+            };
+        } catch (Exception e) {
+        }
+
+        return badRequest();
+    }
+
+
     public static Result updateVisibleSections(String advId) {
         User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         if (usr == null)

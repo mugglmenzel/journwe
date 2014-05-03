@@ -62,7 +62,15 @@ public class AdventureTimelineController extends Controller {
 
     private static List<ObjectNode> allLogNewestJSON(String advId) {
         List<ObjectNode> results = new ArrayList<ObjectNode>();
+        //compress
+        List<AdventureLogEntry> logList = new ArrayList<AdventureLogEntry>();
+        AdventureLogEntry previousLog = null;
         for (AdventureLogEntry l : new AdventureLogDAO().allNewest(advId)) {
+            if(previousLog == null || !l.getTopic().equals(previousLog.getTopic()))
+                logList.add(l);
+            previousLog = l;
+        }
+        for(AdventureLogEntry l : logList){
             ObjectNode result = Json.newObject();
             result.put("type", "log");
             result.put("log", Json.toJson(l));
@@ -70,6 +78,7 @@ public class AdventureTimelineController extends Controller {
             result.put("timestamp", l.getTimestamp());
             results.add(result);
         }
+
         return results;
     }
 

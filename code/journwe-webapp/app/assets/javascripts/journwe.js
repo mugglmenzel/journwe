@@ -16,9 +16,12 @@ define([
         return false;
     });
 
+    // Show loader animation
+    $('.loader').each(function(idx,val){utils.setReplaceSpinning($(this));});
+
     // Init x-editable
     $.fn.editable.defaults.mode = 'inline';
-    $.fn.editableform.loading = '<div class="loader"></div>';
+    $.fn.editableform.loading = '<i class="fa fa-spinner fa-spin"></div>';
     $('.editable').editable();
 
     // After saving textareas via x-editable, replace links

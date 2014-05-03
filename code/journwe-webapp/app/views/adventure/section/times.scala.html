@@ -34,12 +34,9 @@
     <thead>
     <tr>
         <th>@Messages("adventure.general.favourite")</th>
-        <th>@Messages("adventure.time.option")</th>
         <th style="min-width: 120px;">@Messages("adventure.general.yourvote")</th>
+        <th>@Messages("adventure.time.option")</th>
         <th class="text-center" style="width: 100px;">Group Rating</th>
-        <th class="text-center hidden">@Messages("adventure.general.yes")</th>
-        <th class="text-center hidden">@Messages("adventure.general.maybe")</th>
-        <th class="text-center hidden">@Messages("adventure.general.no")</th>
         <th>@Messages("adventure.general.advvotes")</th>
         <th class="text-center">@Messages("adventure.general.listactions")</th>
     </tr>
@@ -84,25 +81,8 @@
             @if(auth.canEditFavoriteDateAndTime()) {
             <td><button class="btn btn-favorite-time btn-default {%=o.favorite?'btn-success':''%}"><i class="fa fa-star"></i></button></td>
             }
-
-            {% if (o.startDate == o.endDate){ %}
-                <td>{%=o.formatDate(o.startDate)%}</td>
-            {% } else { %}
-                <td>{%=o.formatDate(o.startDate)%} - {%=o.formatDate(o.endDate)%}</td>
-            {% } %}
             @if(auth.canVoteForDateAndTime()) {
             <td>
-                <div class="btn-group hidden">
-                    <button id="timeoption-status-{%=o.timeId%}" class="btn btn-default" style="width: 90px" disabled="disabled"><i id="timeoption-status-icon-{%=o.timeId%}"></i> {%=o.vote%}</button>
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-pencil"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a onclick="voteTime('YES', '{%=o.timeId%}');"><i class="fa fa-thumbs-up"></i> @Messages("adventure.general.yes")</a></li>
-                        <li><a onclick="voteTime('MAYBE', '{%=o.timeId%}');"><i class="fa fa-question"></i> @Messages("adventure.general.maybe")</a></li>
-                        <li><a onclick="voteTime('NO', '{%=o.timeId%}');"><i class="fa fa-thumbs-down"></i> @Messages("adventure.general.no")</a></li>
-                    </ul>
-                </div>
                 <div class="rating rating-time">
                     <input type="radio" class="star" id="{%=o.timeId%}-star5" name="{%=o.timeId%}-rating" value="5" data-id="{%=o.timeId%}" {% if(o.voteGravity && o.voteGravity == 5/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star5" title="Rocks!"><i class="fa fa-star"></i></label>
                     <input type="radio" class="star" id="{%=o.timeId%}-star4" name="{%=o.timeId%}-rating" value="4" data-id="{%=o.timeId%}" {% if(o.voteGravity && o.voteGravity < 5/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star4" title="Pretty good"><i class="fa fa-star"></i></label>
@@ -112,11 +92,15 @@
                 </div>
             </td>
             }
+
+            {% if (o.startDate == o.endDate){ %}
+                <td>{%=o.formatDate(o.startDate)%}</td>
+            {% } else { %}
+                <td>{%=o.formatDate(o.startDate)%} - {%=o.formatDate(o.endDate)%}</td>
+            {% } %}
+
             @if(auth.canViewVotesForDateAndTime()) {
             <td class="text-center">{%=o.voteGroup%}</td>
-            <td class="text-center hidden">{%=o.voteCount.YES%}</td>
-            <td class="text-center hidden">{%=o.voteCount.MAYBE%}</td>
-            <td class="text-center hidden">{%=o.voteCount.NO%}</td>
             <td>{% for (var i in o.voteAdventurers) { for (var j in o.voteAdventurers[i]) { %} <span class="label {%=o.voteTimeLabelCSSClassMap[i]%}" title="{%=o.voteAdventurers[i][j]%}">{%=o.voteAdventurers[i][j].split(/\s/)[0]%}</span> {% }} %}</td>
             }
             @if(auth.canEditDateAndTime()) {

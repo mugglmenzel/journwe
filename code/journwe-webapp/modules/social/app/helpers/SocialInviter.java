@@ -34,6 +34,7 @@ import models.user.User;
 import models.user.UserEmail;
 import models.user.UserSocial;
 import play.Logger;
+import play.mvc.Controller;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -59,17 +60,21 @@ public class SocialInviter {
 
     private String inviteeSocialId;
 
-    public SocialInviter(User inviter, String provider, String inviteeSocialId) {
+    private String shortURL;
+
+    public SocialInviter(User inviter, String provider, String inviteeSocialId, String shortURL) {
         this.inviter = inviter;
         this.inviterSocial = new UserSocialDAO().findByUserIdAndProvider(provider, inviter.getId());
         this.provider = provider;
         this.inviteeSocialId = inviteeSocialId;
+        this.shortURL = shortURL;
     }
 
     public void invite(String advId) {
         if (inviter != null && inviterSocial != null && inviteeSocialId != null) {
 
             Adventure adv = new AdventureDAO().get(advId);
+
             String inviteeEmail = null;
             String inviteeName = "";
 
@@ -78,7 +83,7 @@ public class SocialInviter {
                     sendSESEmail(adv, inviteeSocialId, null);
 
             } else if ("facebook".equals(provider)) {
-                new JournweFacebookChatClient().sendMessage(inviterSocial.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + inviter.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + adv.getShortURL() + " to participate in that great adventure. ", inviteeSocialId);
+                new JournweFacebookChatClient().sendMessage(inviterSocial.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + inviter.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", inviteeSocialId);
                 com.restfb.types.User inviteeFb = JournweFacebookClient.create(inviterSocial.getAccessToken()).getFacebookUser(inviteeSocialId);
                 inviteeEmail = inviteeFb.getEmail();
                 inviteeName = inviteeFb.getName();
@@ -127,7 +132,7 @@ public class SocialInviter {
                             .setOAuthAccessToken(inviterSocial.getAccessToken())
                             .setOAuthAccessTokenSecret(inviterSocial.getAccessSecret());
                     Twitter tw = new TwitterFactory(cb.build()).getInstance();
-                    tw.directMessages().sendDirectMessage(new Long(inviteeSocialId), "Your friend " + inviter.getName() + " wants you to join the JournWe " + adv.getName() + "! Visit " + adv.getShortURL());
+                    tw.directMessages().sendDirectMessage(new Long(inviteeSocialId), "Your friend " + inviter.getName() + " wants you to join the JournWe " + adv.getName() + "! Visit " + shortURL);
 
                     twitter4j.User inviteeTw = tw.users().showUser(inviteeSocialId);
 
@@ -143,7 +148,7 @@ public class SocialInviter {
     }
 
     private void sendSESEmail(Adventure adv, String inviteeEmail, String inviteeName) {
-        new AmazonSimpleEmailServiceClient(credentials).sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(inviteeEmail)).withMessage(new Message().withSubject(new Content().withData("Invitation to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData((inviteeName != null && !"".equals(inviteeName) ? "Hi " + inviteeName : "Hey") + ",\nYour friend " + inviter.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + adv.getShortURL() + " to participate in that great adventure.\n\nJournWe.com")))).withSource(adv.getId() + "@journwe.com").withReplyToAddresses(adv.getId() + "@journwe.com"));
+        new AmazonSimpleEmailServiceClient(credentials).sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(inviteeEmail)).withMessage(new Message().withSubject(new Content().withData("Invitation to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData((inviteeName != null && !"".equals(inviteeName) ? "Hi " + inviteeName : "Hey") + ",\nYour friend " + inviter.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure.\n\nJournWe.com")))).withSource(adv.getId() + "@journwe.com").withReplyToAddresses(adv.getId() + "@journwe.com"));
     }
 
     private void processSocialInvitee(String advId, String inviteeId, String provider, String socialEmail, String socialName) {

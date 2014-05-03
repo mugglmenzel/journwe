@@ -459,23 +459,7 @@ define([
     var initializePlaces = function () {
         initializeMap();
 
-        routes.controllers.api.json.AdventurePlaceController.getPlaces(adv.id).ajax({success: function (result) {
-            $('#places-list tbody').empty();
-            for (var id in result)
-                renderPlaceOption(result[id])
-
-            if (result.length)
-                $('#places-list').show();
-            else
-                $('#places-list').hide();
-
-            $('.places-loading').hide();
-
-            updateFavoritePlace();
-
-            updatePlaceVoteOpen(adv.placeVoteOpen);
-
-        }});
+        loadPlaces();
     };
 
     var initializeMap = function () {
@@ -514,6 +498,26 @@ define([
         resetMapBounds();
     };
 
+
+    var loadPlaces = function () {
+        routes.controllers.api.json.AdventurePlaceController.getPlaces(adv.id).ajax({success: function (result) {
+            $('#places-list tbody').empty();
+            for (var id in result)
+                renderPlaceOption(result[id])
+
+            if (result.length)
+                $('#places-list').show();
+            else
+                $('#places-list').hide();
+
+            $('.places-loading').hide();
+
+            updateFavoritePlace();
+
+            updatePlaceVoteOpen(adv.placeVoteOpen);
+        }});
+    }
+
     var renderPlaceOption = function (data, replace) {
         data.voteGroup = Math.round(data.voteGroup * 5 * 100) / 100;
         var place = $(tmpl('place-template', $.extend({
@@ -532,19 +536,37 @@ define([
 
         $('#placeoption-status-icon-' + data.placeId).addClass(votePlaceIconCSSClassMap[data.vote]);
         $('#placeoption-status-' + data.placeId).addClass(votePlaceButtonCSSClassMap[data.vote]);
+        $('.editable-place').editable();
     };
 
+
+    var addPlace = function (el) {
+        if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
+            utils.setReplaceSpinning(el);
+            new gmaps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
+                routes.controllers.api.json.AdventurePlaceController.addPlace(adv.id).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
+                    $('#place-add-input').val("");
+                    $('#place-add-comment-input').val("");
+                    loadPlaces();
+                    utils.resetReplaceSpinning(el);
+                }});
+            });
+        } else {
+            $('#place-add-input').focus();
+            return false;
+        };
+    };
 
     var updatePlaceVoteOpen = function (open) {
 
         if (open) {
             var address = favoritePlace && favoritePlace.address.split(",")[0];
             $(".btn-set-close-place").removeClass('btn-default').addClass("btn-success").html('<i class="fa fa-ok"></i> Close' + (address ? ' with ' + address : ''));
-            $('#places-list button, .btn-set-reminder-place').prop('disabled', false);
+            $('#places-list button, #places-list input, .btn-set-reminder-place').prop('disabled', false);
             $('#place-add-form').fadeIn();
         } else {
             $(".btn-set-close-place").removeClass("btn-success").addClass('btn-default').html('Reopen');
-            $('#places-list button, .btn-set-reminder-place').prop('disabled', true);
+            $('#places-list button, #places-list input, .btn-set-reminder-place').prop('disabled', true);
             $('#place-add-form').fadeOut();
         }
 
@@ -828,11 +850,11 @@ define([
         if (data) {
             var time = favoriteTime && (utils.formatDateShort(favoriteTime.startDate) + '-' + utils.formatDateShort(favoriteTime.endDate));
             $(".btn-set-close-time").addClass("btn-success").removeClass('btn-default').html('<i class="fa fa-ok"></i> Close' + (time ? ' with ' + time : ''));
-            $('#times-list button').prop('disabled', false);
+            $('#times-list button, #times-list input, .btn-set-reminder-time').prop('disabled', false);
             $('#time-add-form').fadeIn();
         } else {
             $(".btn-set-close-time").removeClass("btn-success").addClass('btn-default').html('Reopen');
-            $('#times-list button').prop('disabled', true);
+            $('#times-list button, #times-list input, .btn-set-reminder-time').prop('disabled', true);
             $('#time-add-form').fadeOut();
         }
     };
@@ -1300,22 +1322,7 @@ define([
             }
         },
         'click #place-add-button': function () {
-            if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
-                var el = $(this);
-                utils.setReplaceSpinning(el);
-                new gmaps.Geocoder().geocode({'address': $('#place-add-input').val()}, function (results, status) {
-                    routes.controllers.api.json.AdventurePlaceController.addPlace(adv.id).ajax({data: { address: results[0].formatted_address, lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng(), comment: $('#place-add-comment-input').val()}, success: function (res) {
-                        renderPlaceOption(res);
-                        $('#place-add-input').val("");
-                        $('#place-add-comment-input').val("");
-                        utils.resetReplaceSpinning(el);
-                        $('#places-list').show();
-                    }});
-                });
-            } else {
-                $('#place-add-input').focus();
-                return false;
-            }
+            addPlace($(this));
         },
 
         'click .rating-place :radio': function (e) {

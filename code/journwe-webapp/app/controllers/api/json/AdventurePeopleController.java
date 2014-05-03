@@ -11,6 +11,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 import com.restfb.json.JsonObject;
+import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import fi.foyt.foursquare.api.FoursquareApi;
 import fi.foyt.foursquare.api.entities.CompactUser;
@@ -59,6 +60,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import static com.rosaloves.bitlyj.Bitly.shorten;
 import static play.data.Form.form;
 
 /**
@@ -363,7 +365,15 @@ public class AdventurePeopleController extends Controller {
         User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         DynamicForm f = form().bindFromRequest();
         try {
-            new SocialInviter(usr, f.get("provider"), f.get("socialId")).invite(adv.getId());
+            String shortURL = controllers.html.routes.AdventureController.getInvitedIndex(adv.getId(), f.get("provider")).absoluteURL(request());
+            try {
+                shortURL = request().host().contains("localhost") ?
+                        shortURL :
+                        Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(shortURL)).getShortUrl();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            new SocialInviter(usr, f.get("provider"), f.get("socialId"), shortURL).invite(adv.getId());
             clearCache(advId);
             return ok();
         } catch (Exception e) {

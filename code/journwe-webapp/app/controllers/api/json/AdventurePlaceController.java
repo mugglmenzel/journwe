@@ -106,6 +106,7 @@ public class AdventurePlaceController extends Controller {
         PlaceOption place = new PlaceOption();
         place.setAdventureId(advId);
         place.setAddress(requestData.get("address"));
+        place.setDescription(requestData.get("comment"));
         try {
             place.setLatitude(new Double(requestData.get("lat")));
             place.setLongitude(new Double(requestData.get("lng")));
@@ -115,7 +116,7 @@ public class AdventurePlaceController extends Controller {
         new PlaceOptionDAO().save(place);
         new AdventurerNotifier().notifyAdventurers(advId, "The new place option " + place.getAddress() + " has been added.", "New Place Option");
 
-
+        /*
         User user = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         Comment comment = new Comment();
 
@@ -128,6 +129,7 @@ public class AdventurePlaceController extends Controller {
                 new CommentDAO().save(comment);
             }
         }
+        */
 
         return created(placeToJSON(place));
     }
@@ -191,6 +193,7 @@ public class AdventurePlaceController extends Controller {
         node.put("advId", place.getAdventureId());
         node.put("placeId", place.getPlaceId());
         node.put("address", place.getAddress());
+        node.put("description", place.getDescription());
         node.put("lat", place.getLatitude().doubleValue());
         node.put("lng", place.getLongitude().doubleValue());
 
@@ -240,7 +243,6 @@ public class AdventurePlaceController extends Controller {
             PlaceOptionRating rating = getPlaceGroupRating(po);
             if (rating != null && 0D < rating.getRating()) ratings.add(rating);
         }
-        Logger.debug("List of Ratings: " + ratings);
 
         String favId = ratings.size() > 0 ? Collections.max(ratings, new Comparator<PlaceOptionRating>() {
             @Override
@@ -248,7 +250,6 @@ public class AdventurePlaceController extends Controller {
                 return placeOptionRating.getRating().compareTo(placeOptionRating2.getRating());
             }
         }).getPlaceOptionId() : placeOptions.iterator().next().getOptionId();
-        Logger.debug("got autofav with id " + favId);
 
         return new PlaceOptionDAO().get(advId, favId);
     }

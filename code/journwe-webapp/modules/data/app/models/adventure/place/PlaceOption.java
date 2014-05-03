@@ -28,6 +28,9 @@ public class PlaceOption implements IAdventureComponent {
     @JournweCloneable
     private Double longitude = 0D;
 
+    @JournweCloneable
+    private String description;
+
     public static PlaceOption fromId(String id) {
         PlaceOption po = new PlaceOption();
         po.setAdventureId(id.split(":")[0]);
@@ -84,5 +87,14 @@ public class PlaceOption implements IAdventureComponent {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    @DynamoDBAttribute
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

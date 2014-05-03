@@ -172,7 +172,7 @@ define(['routes', 'config'], function (routes) {
             spinnerTempStore[id] = el.html();
             el.data('spinner-id', id);
             el.css({width: el.outerWidth() + 'px', height: el.outerHeight() + 'px'})
-                .html('<div class="loader text-center"></div>');
+                .html('<i class="fa fa-spinner fa-spin"></i>');
         },
         resetReplaceSpinning: function (el) {
             var id = el.data('spinner-id');
