@@ -2,21 +2,9 @@ package helpers;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
-import com.amazonaws.services.simpleemail.model.*;
-import com.feth.play.module.pa.providers.oauth2.OAuth2AuthProvider;
-import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.plus.Plus;
-import com.google.api.services.plus.model.Person;
+import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
-import fi.foyt.foursquare.api.FoursquareApi;
-import fi.foyt.foursquare.api.FoursquareApiException;
-import fi.foyt.foursquare.api.entities.CompactUser;
-import fi.foyt.foursquare.api.entities.CompleteUser;
-import fi.foyt.foursquare.api.io.DefaultIOHandler;
+import helpers.inviters.*;
 import models.adventure.Adventure;
 import models.adventure.AdventureAuthorization;
 import models.adventure.EAuthorizationRole;
@@ -34,13 +22,9 @@ import models.user.User;
 import models.user.UserEmail;
 import models.user.UserSocial;
 import play.Logger;
-import play.mvc.Controller;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
 
-import java.io.IOException;
+import static com.rosaloves.bitlyj.Bitly.shorten;
+import static play.mvc.Controller.request;
 
 /**
  * Created by mugglmenzel on 16.02.14.
@@ -60,99 +44,43 @@ public class SocialInviter {
 
     private String inviteeSocialId;
 
-    private String shortURL;
-
-    public SocialInviter(User inviter, String provider, String inviteeSocialId, String shortURL) {
+    public SocialInviter(User inviter, String provider, String inviteeSocialId) {
         this.inviter = inviter;
         this.inviterSocial = new UserSocialDAO().findByUserIdAndProvider(provider, inviter.getId());
         this.provider = provider;
         this.inviteeSocialId = inviteeSocialId;
-        this.shortURL = shortURL;
     }
 
-    public void invite(String advId) {
+    public void invite(String advId, String shortURL) {
         if (inviter != null && inviterSocial != null && inviteeSocialId != null) {
 
             Adventure adv = new AdventureDAO().get(advId);
+            AbstractInvitation invitation = getInvitationService();
 
-            String inviteeEmail = null;
-            String inviteeName = "";
-
-            if ("email".equals(provider)) {
-                if (inviteeSocialId != null)
-                    sendSESEmail(adv, inviteeSocialId, null);
-
-            } else if ("facebook".equals(provider)) {
-                new JournweFacebookChatClient().sendMessage(inviterSocial.getAccessToken(), "You are invited to the JournWe " + adv.getName() + ". Your friend " + inviter.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure. ", inviteeSocialId);
-                com.restfb.types.User inviteeFb = JournweFacebookClient.create(inviterSocial.getAccessToken()).getFacebookUser(inviteeSocialId);
-                inviteeEmail = inviteeFb.getEmail();
-                inviteeName = inviteeFb.getName();
-            } else if ("foursquare".equals(provider)) {
-                try {
-                    FoursquareApi four = new FoursquareApi(ConfigFactory.load().getString("play-authenticate.foursquare.clientId"), ConfigFactory.load().getString("play-authenticate.foursquare.clientSecret"), "http://www.journwe.com" + OAuth2AuthProvider.Registry.get("foursquare").getUrl(), inviterSocial.getAccessToken(), new DefaultIOHandler());
-                    CompleteUser inviteeFq = new CompleteUser();
-                    for (CompactUser fu : four.usersFriends(inviterSocial.getSocialId()).getResult().getItems()) {
-                        if (inviteeSocialId.equals(fu.getId())) inviteeFq = four.user(fu.getId()).getResult();
-                    }
-
-                    if (inviteeFq.getContact() != null && inviteeFq.getContact().getEmail() != null)
-                        sendSESEmail(adv, inviteeFq.getContact().getEmail(), inviteeFq.getFirstName());
-
-                    inviteeEmail = inviteeFq.getContact() != null ? inviteeFq.getContact().getEmail() : "";
-                    inviteeName = inviteeFq.getFirstName() + " " + inviteeFq.getLastName();
-                } catch (FoursquareApiException e) {
-                    Logger.error("Could not send invitiation via Foursquare.", e);
-                }
-            } else if ("google".equals(provider)) {
-                try {
-                    GoogleCredential credential = new GoogleCredential.Builder().setClientSecrets(ConfigFactory.load().getString("play-authenticate.google.clientId"), ConfigFactory.load().getString("play-authenticate.google.clientSecret")).setTransport(new NetHttpTransport()).setJsonFactory(new JacksonFactory()).build().setFromTokenResponse(new TokenResponse().setAccessToken(inviterSocial.getAccessToken()));
-
-                    Person inviteeGoog = new Plus(new NetHttpTransport(), new JacksonFactory(), credential).people().get(inviteeSocialId).execute();
-                    String socialEmail = null;
-                    for (Person.Emails e : inviteeGoog.getEmails()) {
-                        socialEmail = e.getValue();
-                        if (e.getType().equals("account")) break;
-                    }
-
-                    if (socialEmail != null)
-                        sendSESEmail(adv, socialEmail, inviteeGoog.getDisplayName());
-
-                    inviteeEmail = socialEmail;
-                    inviteeName = inviteeGoog.getDisplayName();
-
-                } catch (IOException e) {
-                    Logger.error("Could not send invitiation via Google.", e);
-                }
-            } else if ("twitter".equals(provider)) {
-                try {
-                    ConfigurationBuilder cb = new ConfigurationBuilder();
-                    cb.setDebugEnabled(true)
-                            .setOAuthConsumerKey(ConfigFactory.load().getString("play-authenticate.twitter.consumerKey"))
-                            .setOAuthConsumerSecret(ConfigFactory.load().getString("play-authenticate.twitter.consumerSecret"))
-                            .setOAuthAccessToken(inviterSocial.getAccessToken())
-                            .setOAuthAccessTokenSecret(inviterSocial.getAccessSecret());
-                    Twitter tw = new TwitterFactory(cb.build()).getInstance();
-                    tw.directMessages().sendDirectMessage(new Long(inviteeSocialId), "Your friend " + inviter.getName() + " wants you to join the JournWe " + adv.getName() + "! Visit " + shortURL);
-
-                    twitter4j.User inviteeTw = tw.users().showUser(inviteeSocialId);
-
-                    inviteeName = inviteeTw.getName();
-
-                } catch (TwitterException e) {
-                    Logger.error("Could not send invitiation via Twitter.", e);
-                }
+            try {
+                Logger.debug("Sending message to " + inviteeSocialId + " via " + provider + " with shortURL " + shortURL);
+                invitation.send(inviteeSocialId, inviter.getName(), adv, shortURL);
+            } catch (Exception e) {
+                Logger.error("Could not send invitiation via " + provider, e);
             }
 
-            processSocialInvitee(adv.getId(), inviteeSocialId, provider, inviteeEmail, inviteeName);
         }
     }
 
-    private void sendSESEmail(Adventure adv, String inviteeEmail, String inviteeName) {
-        new AmazonSimpleEmailServiceClient(credentials).sendEmail(new SendEmailRequest().withDestination(new Destination().withToAddresses(inviteeEmail)).withMessage(new Message().withSubject(new Content().withData("Invitation to the JournWe " + adv.getName())).withBody(new Body().withText(new Content().withData((inviteeName != null && !"".equals(inviteeName) ? "Hi " + inviteeName : "Hey") + ",\nYour friend " + inviter.getName() + " created the JournWe " + adv.getName() + " and wants you to join! Visit " + shortURL + " to participate in that great adventure.\n\nJournWe.com")))).withSource(adv.getId() + "@journwe.com").withReplyToAddresses(adv.getId() + "@journwe.com"));
-    }
 
-    private void processSocialInvitee(String advId, String inviteeId, String provider, String socialEmail, String socialName) {
-        UserSocial inviteeSoc = new UserSocialDAO().findBySocialId(provider, inviteeId);
+    public String createSocialInvitee(String advId) {
+        AbstractInvitation invitation = getInvitationService();
+        String socialEmail = null;
+        String socialName = null;
+        try {
+            socialEmail = invitation.getInviteeEmail(inviteeSocialId);
+            socialName = invitation.getInviteeName(inviteeSocialId);
+        } catch (Exception e) {
+            Logger.error("Could not fetch user data for invitation via " + provider, e);
+        }
+
+
+        UserSocial inviteeSoc = new UserSocialDAO().findBySocialId(provider, inviteeSocialId);
         User invitee = inviteeSoc != null && inviteeSoc.getUserId() != null ? new UserDAO().get(inviteeSoc.getUserId()) : null;
         Logger.debug("got invitee " + invitee);
         if (invitee == null) {
@@ -173,7 +101,7 @@ public class SocialInviter {
         if (inviteeSoc == null) {
             inviteeSoc = new UserSocial();
             inviteeSoc.setProvider(provider);
-            inviteeSoc.setSocialId(inviteeId);
+            inviteeSoc.setSocialId(inviteeSocialId);
         }
         inviteeSoc.setUserId(invitee.getId());
         new UserSocialDAO().save(inviteeSoc);
@@ -196,5 +124,26 @@ public class SocialInviter {
 
         //AdventurePeopleController.clearCache(advId);
         new CachedUserDAO().clearCache(invitee.getId());
+
+        return invitee.getId();
+    }
+
+
+    private AbstractInvitation getInvitationService() {
+        AbstractInvitation invitation = null;
+
+        if ("email".equals(provider)) {
+            invitation = new EmailInvitation();
+        } else if ("facebook".equals(provider)) {
+            invitation = new FacebookInvitation(inviterSocial.getAccessToken());
+        } else if ("foursquare".equals(provider)) {
+            invitation = new FoursquareInvitation(inviterSocial.getSocialId(), inviterSocial.getAccessToken());
+        } else if ("google".equals(provider)) {
+            invitation = new GoogleInvitation(inviterSocial.getAccessToken());
+        } else if ("twitter".equals(provider)) {
+            invitation = new TwitterInvitation(inviterSocial.getAccessToken(), inviterSocial.getAccessSecret());
+        }
+
+        return invitation;
     }
 }

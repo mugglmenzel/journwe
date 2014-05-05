@@ -9,7 +9,7 @@ import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
-import controllers.api.json.AdventureFileController;
+import controllers.api.json.*;
 import helpers.JournweFacebookClient;
 import helpers.SocialInviter;
 import models.UserManager;
@@ -55,6 +55,7 @@ import views.html.adventure.get_invited;
 import views.html.adventure.get_public;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 import static com.rosaloves.bitlyj.Bitly.shorten;
@@ -87,12 +88,19 @@ public class AdventureController extends Controller {
         }
     }
 
-    public static Result getInvitedIndex(String id, String provider) {
+    public static Result getInvitedIndex(String id, String inviteeId) {
         Adventure adv = new AdventureDAO().get(id);
         if (adv == null) return badRequest();
         else {
+            User usr = new CachedUserDAO().get(inviteeId);
+            if(usr == null) return badRequest();
+
+            List<UserSocial> socials = new UserSocialDAO().findByUserId(usr.getId());
+            if(socials.size() < 1) return badRequest();
+
+            UserSocial us = socials.get(0);
             Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
-            return ok(get_invited.render(adv, provider, ins));
+            return ok(get_invited.render(adv, usr, us.getProvider(), ins));
         }
     }
 
@@ -211,19 +219,19 @@ public class AdventureController extends Controller {
                 }
             }
             if (key.startsWith("email[")) {
-                new SocialInviter(usr, "email", filledForm.data().get(key), shortURL).invite(adv.getId());
+                controllers.api.json.AdventurePeopleController.sendInvitation(adv, usr, "email", filledForm.data().get(key));
             }
             if (key.startsWith("facebook[")) {
-                new SocialInviter(usr, "facebook", filledForm.data().get(key), shortURL).invite(adv.getId());
+                controllers.api.json.AdventurePeopleController.sendInvitation(adv, usr, "facebook", filledForm.data().get(key));
             }
             if (key.startsWith("foursquare[")) {
-                new SocialInviter(usr, "foursquare", filledForm.data().get(key), shortURL).invite(adv.getId());
+                controllers.api.json.AdventurePeopleController.sendInvitation(adv, usr, "foursquare", filledForm.data().get(key));
             }
             if (key.startsWith("google[")) {
-                new SocialInviter(usr, "google", filledForm.data().get(key), shortURL).invite(adv.getId());
+                controllers.api.json.AdventurePeopleController.sendInvitation(adv, usr, "google", filledForm.data().get(key));
             }
             if (key.startsWith("twitter[")) {
-                new SocialInviter(usr, "twitter", filledForm.data().get(key), shortURL).invite(adv.getId());
+                controllers.api.json.AdventurePeopleController.sendInvitation(adv, usr, "twitter", filledForm.data().get(key));
             }
         }
 

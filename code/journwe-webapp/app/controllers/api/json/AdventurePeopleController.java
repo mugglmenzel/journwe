@@ -365,15 +365,7 @@ public class AdventurePeopleController extends Controller {
         User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
         DynamicForm f = form().bindFromRequest();
         try {
-            String shortURL = controllers.html.routes.AdventureController.getInvitedIndex(adv.getId(), f.get("provider")).absoluteURL(request());
-            try {
-                shortURL = request().host().contains("localhost") ?
-                        shortURL :
-                        Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(shortURL)).getShortUrl();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            new SocialInviter(usr, f.get("provider"), f.get("socialId"), shortURL).invite(adv.getId());
+            sendInvitation(adv, usr, f.get("provider"), f.get("socialId"));
             clearCache(advId);
             return ok();
         } catch (Exception e) {
@@ -382,6 +374,20 @@ public class AdventurePeopleController extends Controller {
 
         return badRequest();
     }
+
+    public static void sendInvitation(Adventure adv, User usr, String provider, String inviteeSocialId) {
+        SocialInviter invtr = new SocialInviter(usr, provider, inviteeSocialId);
+        String shortURL = controllers.html.routes.AdventureController.getInvitedIndex(adv.getId(), invtr.createSocialInvitee(adv.getId())).absoluteURL(request());
+        try {
+            shortURL = request().host().contains("localhost") ?
+                    shortURL :
+                    Jmp.as(ConfigFactory.load().getString("bitly.username"), ConfigFactory.load().getString("bitly.apiKey")).call(shorten(shortURL)).getShortUrl();
+        } catch (Exception e) {
+            Logger.warn("Could not generate short URL with bit.ly", e);
+        }
+        invtr.invite(adv.getId(), shortURL);
+    }
+
 
     @Security.Authenticated(SecuredUser.class)
     public static Result autocomplete() {

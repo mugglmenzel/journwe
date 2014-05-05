@@ -181,7 +181,7 @@ POST          /adventure/save/editable                                     contr
 GET           /adventure/new                                               controllers.html.AdventureController.save()
 POST          /adventure/save                                              controllers.html.AdventureController.save()
 GET           /adventure/:id                                               controllers.html.AdventureController.getIndex(id:String)
-GET           /adventure/:id/invited/:provider                             controllers.html.AdventureController.getInvitedIndex(id:String, provider:String)
+GET           /adventure/:id/invited/:inviteeId                            controllers.html.AdventureController.getInvitedIndex(id:String, inviteeId:String)
 GET           /adventure/:id/delete                                        controllers.html.AdventureController.delete(id:String)
 POST          /adventure/:id/clone                                         controllers.html.CloneController.cloneAndSaveAdventure(id:String)
 POST          /adventure/:id/pdf                                           controllers.html.PdfController.create(id:String)

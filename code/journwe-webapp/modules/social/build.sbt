@@ -9,6 +9,7 @@ libraryDependencies ++= Seq(
   javaEbean,
   "com.feth" %% "play-authenticate" % "0.5.2-SNAPSHOT",
   "com.amazonaws" % "aws-java-sdk" % "1.7.5",
+  "com.rosaloves" % "bitlyj" % "2.0.0",
   "com.restfb" % "restfb" % "1.6.12",
   "com.google.api-client" % "google-api-client" % "1.17.0-rc",
   "com.google.http-client" % "google-http-client" % "1.17.0-rc",

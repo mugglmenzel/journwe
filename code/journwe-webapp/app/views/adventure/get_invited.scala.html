@@ -1,4 +1,4 @@
-@(adv: models.adventure.Adventure, provider:String, ins: models.inspiration.Inspiration)
+@(adv: models.adventure.Adventure, usr: models.user.User, provider:String, ins: models.inspiration.Inspiration)
 
 @import com.feth.play.module.pa.views.html._
 @import play.libs.Json
@@ -45,19 +45,12 @@
 
     <div class="jrn-container">
         <h2>@Messages("adventure.general.invitation")</h2>
-        <div class="spacer20"></div>
-        <div class="text-center">
-            <a class="btn btn-participate btn-success btn-lg" href="@html.routes.AdventurePeopleController.participate(adv.getId(), provider)"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join") (via <i class="fa fa-@(if(provider.toLowerCase()=="google"){"google-plus"}else{provider.toLowerCase()})"></i> @(provider.substring(0, 1).toUpperCase + provider.substring(1, provider.length).toLowerCase))</a>
-            <br>
-            <small><a href="@core.html.routes.ApplicationController.login()">or: Register to join JournWe</a></small>
-        </div>
-        <div class="spacer20"></div>
         <div>
-            <p class="lead">You are invited to this JournWe&#8482; to <span class="places-favorite-place-name">?</span> on <span class="times-favorite-time-name">?</span>. Have some fun, guys!</p>
+            <p class="lead">Hi, @usr.getName! You are invited to this JournWe&#8482; to <span class="places-favorite-place-name">?</span> on <span class="times-favorite-time-name">?</span>. Engage actively in the planning by logging in now.</p>
         </div>
         <div>
             <p>
-                @Html(adv.getHTMLDescription())
+            @Html(adv.getHTMLDescription())
             </p>
         </div>
         <div>
@@ -65,7 +58,6 @@
             <div class="adventurers-list" style="overflow: hidden;"></div>
             <div class="clearfix"></div>
         </div>
-
         <script type="text/x-tmpl" id="adventurer-template">
             <div data-id="{%=o.id%}" id="adventurers-adventurer-{%=o.id%}" class="polaroid" style="position: relative; float: left; border-bottom: 2px solid {%=o.color%};">
                 <img style="margin: 0px;" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=100&h=100&u=' + o.image)%}{% } %}">
@@ -77,12 +69,26 @@
                 </div>
             </div>
         </script>
+
+        <div class="spacer20"></div>
+        <div class="text-center">
+            <a class="btn btn-participate btn-success btn-lg" href="@html.routes.AdventurePeopleController.participate(adv.getId(), provider)"><i class="fa fa-plus"></i> @Messages("adventure.general.button.join") (via <i class="fa fa-@(if(provider.toLowerCase()=="google"){"google-plus"}else{provider.toLowerCase()})"></i> @(provider.substring(0, 1).toUpperCase + provider.substring(1, provider.length).toLowerCase))</a>
+            <br>
+            <small><a href="@core.html.routes.ApplicationController.login()">or: Register to join JournWe</a></small>
+        </div>
+        <div class="spacer20"></div>
     </div>
 
     <div class="jrn-container">
-        <h2><em>Discuss, Plan, Organize</em> in one place with Journ<strong>We</strong>.</h2>
+        <h2>Answer without active participation</h2>
+        <p>...</p>
+    </div>
+
+    <div class="jrn-container">
+        <h2>What is JournWe&#8482;?</h2>
+        <p class="lead"><em>Discuss, Plan, Organize</em> in one place with Journ<strong>We</strong>.</p>
         <div class="spacer20"></div>
-        <div><img src="@controllers.core.html.routes.CDNAssetsController.at("img/landing/landing-journwe-explain.png")" style="50%"></div>
+        <div class="text-center"><img src="@controllers.core.html.routes.CDNAssetsController.at("img/landing/landing-journwe-explain.png")" style="50%"></div>
         <div class="spacer20"></div>
         <div>Also: share <em>Todos and Documents</em>, use a dedicated <em>Group Email Address</em>, and correspond with Travel Guides &amp; Agencies.</div>
         <div class="spacer20"></div>
