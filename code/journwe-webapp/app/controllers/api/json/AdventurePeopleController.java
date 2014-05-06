@@ -17,10 +17,12 @@ import fi.foyt.foursquare.api.FoursquareApi;
 import fi.foyt.foursquare.api.entities.CompactUser;
 import fi.foyt.foursquare.api.entities.UserGroup;
 import fi.foyt.foursquare.api.io.DefaultIOHandler;
+import helpers.JournweFacebookClient;
+import helpers.SocialAutocompleteFriend;
+import helpers.SocialInviter;
 import models.UserManager;
 import models.adventure.Adventure;
 import models.adventure.AdventureAuthorization;
-import models.adventure.AdventureShortname;
 import models.adventure.EAuthorizationRole;
 import models.adventure.adventurer.Adventurer;
 import models.adventure.adventurer.EAdventurerParticipation;
@@ -29,18 +31,14 @@ import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
 import models.cache.CachedUserDAO;
 import models.dao.AdventureAuthorizationDAO;
-import models.dao.AdventureShortnameDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.inspiration.InspirationDAO;
 import models.dao.manytomany.AdventureToUserDAO;
 import models.dao.user.UserDAO;
 import models.dao.user.UserSocialDAO;
-import helpers.JournweFacebookClient;
-import helpers.SocialAutocompleteFriend;
-import helpers.SocialInviter;
 import models.inspiration.Inspiration;
-import services.AdventurerNotifier;
+import models.user.EUserRole;
 import models.user.User;
 import models.user.UserSocial;
 import play.Logger;
@@ -51,6 +49,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import services.AdventurerNotifier;
 import twitter4j.PagableResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -234,11 +233,21 @@ public class AdventurePeopleController extends Controller {
 
     @Security.Authenticated(SecuredUser.class)
     public static Result participateStatus(final String advId, final String statusStr) {
-        if (!new JournweAuthorization(advId).canEditAdventurerParticipationStatus())
-            return AuthorizationMessage.notAuthorizedResponse();
-
+        DynamicForm data = form().bindFromRequest();
         EAdventurerParticipation status = EAdventurerParticipation.valueOf(statusStr);
-        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = null;
+
+        if (data.get("userId") != null && !"".equals(data.get("userId"))) {
+            usr = new CachedUserDAO().get(data.get("userId"));
+            usr = usr.getRole().equals(EUserRole.INVITEE) ? usr : null;
+        }
+        if (usr == null) {
+            usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            if (!new JournweAuthorization(advId).canEditAdventurerParticipationStatus())
+                return AuthorizationMessage.notAuthorizedResponse();
+        }
+
+        if (usr == null) return badRequest();
 
         Adventurer advr = new AdventurerDAO().get(advId, usr.getId());
         if (advr != null) {

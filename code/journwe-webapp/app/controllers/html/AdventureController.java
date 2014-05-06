@@ -99,8 +99,11 @@ public class AdventureController extends Controller {
             if(socials.size() < 1) return badRequest();
 
             UserSocial us = socials.get(0);
+
+            Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
+
             Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
-            return ok(get_invited.render(adv, usr, us.getProvider(), ins));
+            return ok(get_invited.render(adv, advr, usr, us.getProvider(), ins));
         }
     }
 

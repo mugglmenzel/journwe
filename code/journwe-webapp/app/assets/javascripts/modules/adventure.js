@@ -500,7 +500,7 @@ define([
 
 
     var loadPlaces = function () {
-        routes.controllers.api.json.AdventurePlaceController.getPlaces(adv.id).ajax({success: function (result) {
+        routes.controllers.api.json.AdventurePlaceController.getPlaces(adv.id).ajax({data: {userId: advr.userId}, success: function (result) {
             $('#places-list tbody').empty();
             for (var id in result)
                 renderPlaceOption(result[id])
@@ -614,7 +614,8 @@ define([
     var votePlace = function (vote, voteGrav, optId) {
         routes.controllers.api.json.AdventurePlaceController.vote(adv.id, optId).ajax({
             data: {
-                vote: vote, voteGravity: voteGrav
+                vote: vote, voteGravity: voteGrav,
+                userId: advr.userId
             },
             success: function (res) {
                 renderPlaceOption(res, $('#placeoption-item-' + res.placeId));
@@ -742,13 +743,16 @@ define([
     var changeAdventurerStatus = function (el) {
         utils.setReplaceSpinning(el);
 
-        routes.controllers.api.json.AdventurePeopleController.participateStatus(adv.id, el.data('status')).ajax({success: function (json) {
+        routes.controllers.api.json.AdventurePeopleController.participateStatus(adv.id, el.data('status')).ajax({data: {userId: advr.userId}, success: function (json) {
             var state = json.participationStatus;
 
             utils.resetReplaceSpinning(el);
 
-            el.parent().find('.active').removeClass('active');
-            el.addClass('active');
+            var original = el.parent().find('.active'),
+                originalState = original.first().data('status');
+
+            original.removeClass('active btn-' + utils.adventurerCSSLabel[originalState]).addClass('btn-default');
+            el.removeClass('btn-default').addClass('active btn-' + utils.adventurerCSSLabel[state]);
 
             $('#adventurers-adventurer-' + json.userId)
                 .find('.label').removeClass().addClass('label label-' + utils.adventurerCSSLabel[state])
@@ -797,7 +801,7 @@ define([
             $("#time-add-input-end").data("DateTimePicker").show();
         });;
 
-        routes.controllers.api.json.AdventureTimeController.getTimes(adv.id).ajax({success: function (result) {
+        routes.controllers.api.json.AdventureTimeController.getTimes(adv.id).ajax({data: {userId: advr.userId}, success: function (result) {
             $('#times-list tbody').empty();
             for (var id in result) {
                 renderTimeOption(result[id])
@@ -895,7 +899,8 @@ define([
             .html('<i class="fa fa-spin icon-journwe"></i>');
         routes.controllers.api.json.AdventureTimeController.vote(adv.id, optId).ajax({
             data: {
-                vote: vote, voteGravity: voteGrav
+                vote: vote, voteGravity: voteGrav,
+                userId: advr.userId
             },
             success: function (res) {
                 renderTimeOption(res, $('#timeoption-item-' + res.timeId));

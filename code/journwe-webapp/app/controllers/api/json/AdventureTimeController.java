@@ -11,9 +11,11 @@ import models.adventure.time.TimePreference;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
+import models.cache.CachedUserDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.TimeOptionDAO;
 import models.dao.adventure.TimePreferenceDAO;
+import models.user.EUserRole;
 import services.AdventurerNotifier;
 import models.user.User;
 import play.Logger;
@@ -43,10 +45,11 @@ public class AdventureTimeController extends Controller {
 
     public static Form<TimeOption> timeForm = form(TimeOption.class);
 
-    @Security.Authenticated(SecuredUser.class)
     public static Result getTimes(String advId) {
+        /*
         if (!new JournweAuthorization(advId).canViewDateAndTime())
             return AuthorizationMessage.notAuthorizedResponse();
+            */
 
         String favId = new AdventureDAO().get(advId).getFavoriteTimeId();
 
@@ -135,17 +138,24 @@ public class AdventureTimeController extends Controller {
         }
     }
 
-    @Security.Authenticated(SecuredUser.class)
     public static Result voteParam(String advId) {
         return vote(advId, form().bindFromRequest().get("timeId"));
     }
 
-    @Security.Authenticated(SecuredUser.class)
     public static Result vote(String advId, String timeId) {
-        if (!new JournweAuthorization(advId).canVoteForDateAndTime())
-            return AuthorizationMessage.notAuthorizedResponse();
+        User usr = null;
 
-        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        DynamicForm data = form().bindFromRequest();
+        if (data.get("userId") != null && !"".equals(data.get("userId"))) {
+            usr = new CachedUserDAO().get(data.get("userId"));
+            usr = usr.getRole().equals(EUserRole.INVITEE) ? usr : null;
+        }
+        if (usr == null) {
+            usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            if (!new JournweAuthorization(advId).canVoteForDateAndTime())
+                return AuthorizationMessage.notAuthorizedResponse();
+        }
+
 
         TimeOption time = new TimeOptionDAO().get(advId, timeId);
         String vote = form().bindFromRequest().get("vote").toUpperCase();
@@ -190,7 +200,17 @@ public class AdventureTimeController extends Controller {
         ObjectNode node = Json.newObject();
         if (time == null) return node;
 
-        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = null;
+
+        DynamicForm data = form().bindFromRequest();
+        if (data.get("userId") != null && !"".equals(data.get("userId"))) {
+            usr = new CachedUserDAO().get(data.get("userId"));
+            usr = usr.getRole().equals(EUserRole.INVITEE) ? usr : null;
+        }
+        if (usr == null) {
+            usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        }
+
         TimePreference pref = new TimePreferenceDAO().get(time.getOptionId(), usr.getId());
 
         node.put("id", time.getOptionId());
@@ -198,7 +218,7 @@ public class AdventureTimeController extends Controller {
         node.put("timeId", time.getTimeId());
         node.put("startDate", time.getStartDate() != null ? time.getStartDate().getTime() : new Date().getTime());
         node.put("endDate", time.getEndDate() != null ? time.getEndDate().getTime() : new Date().getTime());
-        node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
+        //node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
         node.put("voteGravity", (pref != null) ? pref.getVoteGravity() : 0D);
         node.put("voteCount", Json.toJson(new TimePreferenceDAO().counts(time.getOptionId())));
         node.put("voteAdventurers", Json.toJson(new TimePreferenceDAO().adventurersNames(time.getOptionId())));

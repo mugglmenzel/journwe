@@ -1,12 +1,13 @@
-@(adv: models.adventure.Adventure, usr: models.user.User, provider:String, ins: models.inspiration.Inspiration)
+@(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer, usr: models.user.User, provider:String, ins: models.inspiration.Inspiration)
 
+@import models.adventure.adventurer.EAdventurerParticipation
 @import com.feth.play.module.pa.views.html._
 @import play.libs.Json
 
 @scripts = {
     <script type="text/javascript">
     define("adventureData", [], @{Html(Json.toJson(adv).toString())});
-    define("adventurerData", [], @{Html(Json.newObject().toString())});
+    define("adventurerData", [], @{Html(Json.toJson(advr).toString())});
     </script>
 }
 
@@ -80,8 +81,137 @@
     </div>
 
     <div class="jrn-container">
-        <h2>Answer without active participation</h2>
-        <p>...</p>
+        <h2>Respond without active engagement</h2>
+        <p class="lead">Share your opinion with the fellows. Login if you want to participate in the planning and to raise your voice.</p>
+        <h3>Your Status</h3>
+        @defining((advr.getParticipationStatus())) { (status) =>
+            @if(status != null && !EAdventurerParticipation.APPLICANT.equals(status)) {
+                <div>
+                    <strong style="vertical-align : middle ;">@Messages("adventure.adventurers.myStat")</strong>
+
+                    <div class="btn-group btn-select-adventurer">
+                        <button class="btn @if(status == EAdventurerParticipation.NOTGOING) {active btn-danger} else {btn-default}"
+                        data-status="@EAdventurerParticipation.NOTGOING.name"><i class="fa fa-frown-o"></i> @Messages("adventure.adventurers.status.notIn")</button>
+                        <button class="btn @if(status == EAdventurerParticipation.UNDECIDED) {active btn-warning} else {btn-default}"
+                        data-status="@EAdventurerParticipation.UNDECIDED.name"><i class="fa fa-question"></i> @Messages("adventure.adventurers.status.undecided")</button>
+                        <button class="btn @if(status == EAdventurerParticipation.GOING) {active btn-info} else {btn-default}"
+                        data-status="@EAdventurerParticipation.GOING.name"><i class="fa fa-smile-o"></i> @Messages("adventure.adventurers.status.soIn")</button>
+                        <button class="btn @if(status == EAdventurerParticipation.BOOKED) {active btn-success} else {btn-default}"
+                        data-status="@EAdventurerParticipation.BOOKED.name"><i class="fa fa-check"></i> @Messages("adventure.adventurers.status.booked")</button>
+                    </div>
+                </div>
+            } else {
+                @if(EAdventurerParticipation.APPLICANT.equals(status)) {
+                    <div>
+                        <strong>@Messages("adventure.adventurers.applicant")</strong>
+                    </div>
+                }
+            }
+        }
+
+
+        @if(adv.getPlaceVoteOpen) {
+            <div>
+                <h3>Your Place Preference</h3>
+                <div class="clearfix">
+                    <div id="places-favorite-place" class="pull-left" style="margin-bottom: 10px; margin-top: 7px;">
+                        <i class="fa fa-star icon-favorite-place"></i> @Messages("adventure.places.favourite") <em><span class="places-favorite-place-name">@Messages("adventure.general.nofavourite.placeholder")</span></em>
+                    </div>
+                </div>
+
+                <table id="places-list" class="table table-striped table-responsive stash">
+                    <thead>
+                        <tr>
+                            <th style="width: 120px;">@Messages("adventure.general.yourvote")</th>
+                            <th>@Messages("adventure.places.location")</th>
+                            <th class="text-center" style="width: 100px;">Group Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+
+                </table>
+                <div class="places-loading loader"></div>
+
+                <div style="height: 400px;">
+                    <div id="place-add-map" style="width: 100%; height: 100%"></div>
+                </div>
+                <div class="btn-group pull-right">
+                    <button class="btn btn-default btn-places-map-layers-show active" data-layers="weather"><i class="fa fa-sun-o"></i></button>
+                    <button class="btn btn-default btn-places-map-layers-show" data-layers="photos"><i class="fa fa-picture-o"></i></button>
+                </div>
+
+                <script type="text/x-tmpl" id="place-template">
+                    <tr id="placeoption-item-{%=o.placeId%}" data-placeid="{%=o.placeId%}">
+                        <td>
+                            <div class="rating rating-place">
+                                <input type="radio" class="star" id="{%=o.placeId%}-star5" name="{%=o.placeId%}-rating" value="5" data-id="{%=o.placeId%}" {% if(o.voteGravity && o.voteGravity == 5/5){ %}checked{% } %} /><label for="{%=o.placeId%}-star5" title="Rocks!"><i class="fa fa-star"></i></label>
+                                <input type="radio" class="star" id="{%=o.placeId%}-star4" name="{%=o.placeId%}-rating" value="4" data-id="{%=o.placeId%}" {% if(o.voteGravity && o.voteGravity < 5/5){ %}checked{% } %} /><label for="{%=o.placeId%}-star4" title="Pretty good"><i class="fa fa-star"></i></label>
+                                <input type="radio" class="star" id="{%=o.placeId%}-star3" name="{%=o.placeId%}-rating" value="3" data-id="{%=o.placeId%}" {% if(o.voteGravity && o.voteGravity < 4/5){ %}checked{% } %} /><label for="{%=o.placeId%}-star3" title="Meh"><i class="fa fa-star"></i></label>
+                                <input type="radio" class="star" id="{%=o.placeId%}-star2" name="{%=o.placeId%}-rating" value="2" data-id="{%=o.placeId%}" {% if(o.voteGravity && o.voteGravity < 3/5){ %}checked{% } %} /><label for="{%=o.placeId%}-star2" title="Kinda bad"><i class="fa fa-star"></i></label>
+                                <input type="radio" class="star" id="{%=o.placeId%}-star1" name="{%=o.placeId%}-rating" value="1" data-id="{%=o.placeId%}" {% if(o.voteGravity && o.voteGravity < 2/5){ %}checked{% } %} /><label for="{%=o.placeId%}-star1" title="Sucks big time"><i class="fa fa-star"></i></label>
+                            </div>
+                        </td>
+                        <td><em>{%=o.address%}</em>
+                            <br>
+                            {%=o.description%}
+                        </td>
+                        <td class="text-center">{%=o.voteGroup%}</td>
+                    </tr>
+                </script>
+
+            </div>
+        }
+
+
+        @if(adv.getTimeVoteOpen) {
+            <div>
+                <h3>Your Time Preference</h3>
+                <div class="clearfix">
+                    <div id="times-favorite-time" style="margin-bottom: 10px; margin-top: 7px;" class="pull-left">
+                        <i class="fa fa-star icon-favorite-time"></i> @Messages("adventure.time.favourite") <em><span class="times-favorite-time-name">@Messages("adventure.general.nofavourite.placeholder")</span></em>
+                    </div>
+                </div>
+
+                <table id="times-list" class="table table-striped table-responsive stash">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 120px;">@Messages("adventure.general.yourvote")</th>
+                            <th>@Messages("adventure.time.option")</th>
+                            <th class="text-center" style="width: 100px;">Group Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <div class="times-loading loader"></div>
+
+                <script type="text/x-tmpl" id="time-template">
+                    <tr id="timeoption-item-{%=o.timeId%}" data-timeid="{%=o.timeId%}">
+                        <td>
+                            <div class="rating rating-time">
+                                <input type="radio" class="star" id="{%=o.timeId%}-star5" name="{%=o.timeId%}-rating" value="5" data-id="{%=o.timeId%}" {% if(o.voteGravity && o.voteGravity == 5/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star5" title="Rocks!"><i class="fa fa-star"></i></label>
+                                <input type="radio" class="star" id="{%=o.timeId%}-star4" name="{%=o.timeId%}-rating" value="4" data-id="{%=o.timeId%}" {% if(o.voteGravity && o.voteGravity < 5/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star4" title="Pretty good"><i class="fa fa-star"></i></label>
+                                <input type="radio" class="star" id="{%=o.timeId%}-star3" name="{%=o.timeId%}-rating" value="3" data-id="{%=o.timeId%}" {% if(o.voteGravity && o.voteGravity < 4/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star3" title="Meh"><i class="fa fa-star"></i></label>
+                                <input type="radio" class="star" id="{%=o.timeId%}-star2" name="{%=o.timeId%}-rating" value="2" data-id="{%=o.timeId%}" {% if(o.voteGravity && o.voteGravity < 3/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star2" title="Kinda bad"><i class="fa fa-star"></i></label>
+                                <input type="radio" class="star" id="{%=o.timeId%}-star1" name="{%=o.timeId%}-rating" value="1" data-id="{%=o.timeId%}" {% if(o.voteGravity && o.voteGravity < 2/5){ %}checked{% } %} /><label for="{%=o.timeId%}-star1" title="Sucks big time"><i class="fa fa-star"></i></label>
+                            </div>
+                        </td>
+
+                        {% if (o.startDate == o.endDate){ %}
+                            <td>{%=o.formatDate(o.startDate)%}</td>
+                        {% } else { %}
+                            <td>{%=o.formatDate(o.startDate)%} - {%=o.formatDate(o.endDate)%}</td>
+                        {% } %}
+
+                        <td class="text-center">{%=o.voteGroup%}</td>
+                    </tr>
+                </script>
+
+            </div>
+        }
     </div>
 
     <div class="jrn-container">
@@ -98,4 +228,4 @@
 
 </div>
 
-}(openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage), "adventurePublic", scripts)
+}(openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage), "adventureInvited", scripts)

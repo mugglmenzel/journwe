@@ -12,10 +12,12 @@ import models.adventure.place.PlacePreference;
 import models.auth.SecuredUser;
 import models.authorization.AuthorizationMessage;
 import models.authorization.JournweAuthorization;
+import models.cache.CachedUserDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.CommentDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.PlacePreferenceDAO;
+import models.user.EUserRole;
 import models.user.User;
 import org.joda.time.DateTime;
 import play.Logger;
@@ -43,10 +45,11 @@ import static play.data.Form.form;
  */
 public class AdventurePlaceController extends Controller {
 
-    @Security.Authenticated(SecuredUser.class)
     public static Result getPlaces(String advId) {
+        /*
         if (!new JournweAuthorization(advId).canViewPlaces())
             return AuthorizationMessage.notAuthorizedResponse();
+            */
 
         String favId = new AdventureDAO().get(advId).getFavoritePlaceId();
 
@@ -134,16 +137,23 @@ public class AdventurePlaceController extends Controller {
         return created(placeToJSON(place));
     }
 
-    @Security.Authenticated(SecuredUser.class)
     public static Result voteParam(String advId) {
         return vote(advId, form().bindFromRequest().get("placeId"));
     }
 
-    @Security.Authenticated(SecuredUser.class)
     public static Result vote(String advId, String placeId) {
-        if (!new JournweAuthorization(advId).canVoteForPlaces())
-            return AuthorizationMessage.notAuthorizedResponse();
-        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = null;
+
+        DynamicForm data = form().bindFromRequest();
+        if (data.get("userId") != null && !"".equals(data.get("userId"))) {
+            usr = new CachedUserDAO().get(data.get("userId"));
+            usr = usr.getRole().equals(EUserRole.INVITEE) ? usr : null;
+        }
+        if (usr == null) {
+            usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+            if (!new JournweAuthorization(advId).canVoteForPlaces())
+                return AuthorizationMessage.notAuthorizedResponse();
+        }
 
         PlaceOption place = new PlaceOptionDAO().get(advId, placeId);
         String vote = form().bindFromRequest().get("vote").toUpperCase();
@@ -204,7 +214,17 @@ public class AdventurePlaceController extends Controller {
         ObjectNode node = placeToSmallJSON(place);
         if (place == null) return node;
 
-        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        User usr = null;
+
+        DynamicForm data = form().bindFromRequest();
+        if (data.get("userId") != null && !"".equals(data.get("userId"))) {
+            usr = new CachedUserDAO().get(data.get("userId"));
+            usr = usr.getRole().equals(EUserRole.INVITEE) ? usr : null;
+        }
+        if (usr == null) {
+            usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        }
+
         PlacePreference pref = new PlacePreferenceDAO().get(place.getOptionId(), usr.getId());
 
         node.put("vote", (pref != null) ? pref.getVote().toString() : EPreferenceVote.MAYBE.toString());
