@@ -67,21 +67,21 @@ public class ThumbnailCacheController extends Controller {
 
         if (width == null && height == null) return badRequest();
 
-        if (width != null)
+        if (width != null && !"".equals(width))
             try {
                 new Integer(width);
             } catch (Exception e) {
                 e.printStackTrace();
                 return badRequest();
             }
-        if (height != null)
+        if (height != null && !"".equals(height))
             try {
                 new Integer(height);
             } catch (Exception e) {
                 e.printStackTrace();
                 return badRequest();
             }
-        if (timestamp != null)
+        if (timestamp != null && !"".equals(timestamp))
             try {
                 new Long(timestamp);
             } catch (Exception e) {

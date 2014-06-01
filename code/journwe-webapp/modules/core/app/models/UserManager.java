@@ -69,7 +69,7 @@ public class UserManager {
         if (authUser instanceof NameIdentity && ((NameIdentity) authUser).getName() != null) {
             user.setName(((NameIdentity) authUser).getName());
         }
-        if (authUser instanceof PicturedIdentity && ((PicturedIdentity) authUser).getPicture() != null && (user.getImage() == null || "".equals(user.getImage()))) {
+        if (authUser instanceof PicturedIdentity && ((PicturedIdentity) authUser).getPicture() != null) {
             String picture = "";
             if (authUser instanceof FacebookAuthUser)
                 picture = ((PicturedIdentity) authUser).getPicture() + "?type=large";
@@ -200,7 +200,7 @@ public class UserManager {
 
             }
 
-            if (authUser instanceof PicturedIdentity && ((PicturedIdentity) authUser).getPicture() != null) {
+            if (authUser instanceof PicturedIdentity && ((PicturedIdentity) authUser).getPicture() != null && (user.getImage() == null || "".equals(user.getImage()))) {
                 Logger.debug("updating picture");
 
                 String picture = "";
@@ -209,6 +209,7 @@ public class UserManager {
                 else picture = ((PicturedIdentity) authUser).getPicture();
                 if (!picture.equals(user.getImage())) {
                     user.setImage(picture);
+                    user.setImageTimestamp(new Long(new Date().getTime()).toString());
                     updateCache = true;
                 }
             }
