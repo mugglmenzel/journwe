@@ -140,6 +140,7 @@ GET           /api/json/user/:id/emails.json                               contr
 GET           /api/json/user/notifications.json                            controllers.api.json.UserController.getNotifications()
 GET           /api/json/user/:id/adventures.json                           controllers.api.json.UserController.getPublicAdventures(id:String)
 POST          /api/json/user/:id/notifications/:freq/frequency.json        controllers.api.json.UserController.setMailDigestFrequency(id:String, freq:String)
+POST          /api/json/user/image.json                                    controllers.api.json.UserController.updateImage()
 
 
 

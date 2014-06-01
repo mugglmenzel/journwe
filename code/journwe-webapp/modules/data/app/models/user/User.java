@@ -19,6 +19,8 @@ public class User implements Serializable {
 
     private String image;
 
+    private String imageTimestamp;
+
     private boolean active;
 
     private String hashedPassword;
@@ -69,6 +71,14 @@ public class User implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getImageTimestamp() {
+        return imageTimestamp;
+    }
+
+    public void setImageTimestamp(String imageTimestamp) {
+        this.imageTimestamp = imageTimestamp;
     }
 
     /**

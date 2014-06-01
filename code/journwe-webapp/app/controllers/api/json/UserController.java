@@ -1,10 +1,20 @@
 package controllers.api.json;
 
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
+import com.typesafe.config.ConfigFactory;
 import models.UserManager;
 import models.adventure.Adventure;
+import models.adventure.log.AdventureLogger;
+import models.adventure.log.EAdventureLogSection;
+import models.adventure.log.EAdventureLogTopic;
+import models.adventure.log.EAdventureLogType;
 import models.auth.SecuredUser;
+import models.cache.CachedUserDAO;
 import models.dao.NotificationDAO;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
@@ -24,8 +34,10 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -39,6 +51,14 @@ import static play.data.Form.form;
  * To change this template use File | Settings | File Templates.
  */
 public class UserController extends Controller {
+
+
+    public static final String S3_BUCKET_PROFILE_IMAGES = "journwe-profile-images";
+
+    private static AmazonS3Client s3 = new AmazonS3Client(new BasicAWSCredentials(
+            ConfigFactory.load().getString("aws.accessKey"),
+            ConfigFactory.load().getString("aws.secretKey")));
+
 
     @Security.Authenticated(SecuredUser.class)
     public static Result getEmails(String userId) {
@@ -130,7 +150,7 @@ public class UserController extends Controller {
 
         List<ObjectNode> results = new ArrayList<ObjectNode>();
         for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, null, count)) {
-            if(adv.isPublish()) {
+            if (adv.isPublish()) {
                 ObjectNode node = Json.newObject();
                 node.put("id", adv.getId());
                 node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
@@ -148,5 +168,39 @@ public class UserController extends Controller {
         result.put("count", new AdventurerDAO().adventurePublicCountByUser(userId));
 
         return ok(Json.toJson(result));
+    }
+
+
+    @Security.Authenticated(SecuredUser.class)
+    public static Result updateImage() {
+        User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
+        if (usr != null) {
+            try {
+                Http.MultipartFormData body = request().body().asMultipartFormData();
+                Http.MultipartFormData.FilePart image = body.getFiles().get(0);
+                File file = image.getFile();
+
+                if (image.getFilename() != null
+                        && !"".equals(image.getFilename()) && file.length() > 0) {
+                    s3.putObject(new PutObjectRequest(
+                            S3_BUCKET_PROFILE_IMAGES, usr.getId(), file)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+                    usr.setImage(s3.getResourceUrl(S3_BUCKET_PROFILE_IMAGES,
+                            usr.getId()));
+                    usr.setImageTimestamp(new Long(new Date().getTime()).toString());
+                }
+
+                new CachedUserDAO().save(usr);
+                new CachedUserDAO().clearCache(usr.getId());
+
+            } catch (Exception e) {
+                return badRequest();
+            }
+        }
+
+        ObjectNode node = Json.newObject();
+        node.put("image", usr.getImage());
+        node.put("imageTimestamp", usr.getImageTimestamp());
+        return ok(Json.toJson(node));
     }
 }

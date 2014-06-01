@@ -46,6 +46,26 @@ require([
         }});
     };
 
+    var uploadPrimeImage = function (files) {
+        var btn = $('.btn-prime-image-upload');
+        utils.setReplaceSpinning(btn);
+
+        var data = new FormData();
+        data.append(files[0].name, files[0])
+
+        routes.controllers.api.json.UserController.updateImage().ajax({
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                $('#user-prime-image').attr('src', 'http://www.journwe.com/thumbnail?h=200&w=1200&u=' + result.image + '&t=' + result.imageTimestamp);
+                utils.resetReplaceSpinning(btn);
+            }
+        });
+
+    };
+
     utils.on({
         'click .btn-select-notification-frequency button': function () {
             var el = $(this),
@@ -64,6 +84,17 @@ require([
                 el.addClass('active');
             }});
             return false;
+        },
+        'change #user-prime-image-file-input': function () {
+            var inputFile = $('#user-prime-image-file-input'),
+                files = inputFile[0].files;
+            if (files) {
+                uploadPrimeImage(files);
+                inputFile.val('');
+            }
+        },
+        'click .btn-prime-image-upload': function () {
+            $('#user-prime-image-file-input').click();
         }
     });
 

@@ -195,6 +195,8 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.UserController.getNotifications(),
                         controllers.api.json.routes.javascript.UserController.setMailDigestFrequency(),
                         controllers.api.json.routes.javascript.UserController.getPublicAdventures(),
+                        controllers.api.json.routes.javascript.UserController.getEmails(),
+                        controllers.api.json.routes.javascript.UserController.updateImage(),
                         controllers.api.json.routes.javascript.AdventureController.updateVisibleSections(),
                         controllers.api.json.routes.javascript.AdventureController.updateImage(),
                         controllers.api.json.routes.javascript.AdventurePhotoController.getPhotos(),
@@ -245,8 +247,7 @@ public class ApplicationController extends Controller {
                         controllers.api.json.routes.javascript.AdventureTimelineController.getComments(),
                         controllers.api.json.routes.javascript.AdventureTimelineController.getFiles(),
                         controllers.api.json.routes.javascript.CommentController.saveComment(),
-                        controllers.api.json.routes.javascript.CommentController.listComments(),
-                        controllers.api.json.routes.javascript.UserController.getEmails()
+                        controllers.api.json.routes.javascript.CommentController.listComments()
                 ) + ";; return routes;});");
     }
 
