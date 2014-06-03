@@ -9,7 +9,7 @@ public class EmailInvitation extends AbstractInvitation {
     }
 
     public String getInviteeName(String inviteeContact) throws Exception {
-        return null;
+        return "";
     }
 
     public String getInviteeEmail(String inviteeContact) throws Exception {

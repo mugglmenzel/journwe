@@ -101,7 +101,7 @@ public class ApplicationController extends Controller {
             }
         }
 
-        return ok(Json.toJson(result));
+        return ok(Json.toJson(result)).as("application/json");
     }
 
     public static Result getPublicAdventuresOfCategory(final String catId) {
@@ -122,38 +122,23 @@ public class ApplicationController extends Controller {
                 @Override
                 public String call() throws Exception {
                     List<ObjectNode> results = new ArrayList<ObjectNode>(count);
-                    String lastAdventureId = lastId;
 
-                    boolean more = true;
-                    if (count > 0)
-                        while (more) {
-                            // TODO
-//                            List<AdventureCategory> advCats = new AdventureToCategoryDAO().all(catId, lastAdventureId, userCountByAdventure);
-//                            more = advCats.size() > 0;
-//                            for (AdventureCategory advCat : advCats) {
-//                                if (more) {
-//                                    Adventure adv = new AdventureDAO().get(advCat.getAdventureId());
-//                                    if (adv != null && adv.isPublish()) {
-//                                        ObjectNode node = Json.newObject();
-//                                        node.put("id", adv.getId());
-//                                        node.put("link", admin.core.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
-//                                        node.put("image", adv.getImage());
-//                                        node.put("name", adv.getName());
-//                                        node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
-//                                        node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
-//                                        node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-//                                        node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
-//                                        node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
-//
-//                                        results.add(node);
-//
-//                                        more = results.size() < userCountByAdventure;
-//                                    }
-//                                    lastAdventureId = advCat.getAdventureId();
-//                                }
-//                            }
+                    for (Adventure adv : new AdventureDAO().listPublicAdventuresByCategory(catId, lastId, count)) {
+                        if (adv != null) {
+                            ObjectNode node = Json.newObject();
+                            node.put("id", adv.getId());
+                            node.put("link", controllers.html.routes.AdventureController.getIndex(adv.getId()).absoluteURL(request()));
+                            node.put("image", adv.getImage());
+                            node.put("name", adv.getName());
+                            node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
+                            node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
+                            node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
+                            node.put("lat", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLatitude().floatValue() : 0F);
+                            node.put("lng", adv.getFavoritePlaceId() != null ? new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId()).getLongitude().floatValue() : 0F);
 
+                            results.add(node);
                         }
+                    }
                     return Json.toJson(results).toString();
                 }
             }, 24 * 3600)).as("application/json");
@@ -185,6 +170,7 @@ public class ApplicationController extends Controller {
                 Routes.javascriptRouter("routes",
                         controllers.api.json.routes.javascript.ApplicationController.getMyAdventures(),
                         controllers.api.json.routes.javascript.ApplicationController.getPublicAdventures(),
+                        controllers.api.json.routes.javascript.ApplicationController.getPublicAdventuresOfCategory(),
                         controllers.api.json.routes.javascript.CategoryController.getCategories(),
                         controllers.api.json.routes.javascript.CategoryController.categoriesOptionsMap(),
                         controllers.api.json.routes.javascript.CategoryController.getInspirations(),

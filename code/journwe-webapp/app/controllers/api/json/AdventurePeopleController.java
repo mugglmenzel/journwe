@@ -85,7 +85,7 @@ public class AdventurePeopleController extends Controller {
                             node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                             User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
-                            node.put("name", usr != null ? usr.getName().replaceAll(" [^ ]*$", "") : "");
+                            node.put("name", usr != null && usr.getName() != null ? usr.getName().replaceAll(" [^ ]*$", "") : "");
                             node.put("image", usr != null ? usr.getImage() : null);
 
                             node.put("status", advr.getParticipationStatus().toString());
@@ -140,26 +140,22 @@ public class AdventurePeopleController extends Controller {
         final User usr = UserManager.findByAuthUserIdentity(PlayAuthenticate.getUser(Http.Context.current()));
 
         try {
-            return ok(Cache.getOrElse("adventure." + advId + ".adventurers.participants.others", new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    List<ObjectNode> results = new ArrayList<ObjectNode>();
-                    for (Adventurer advr : new AdventurerDAO().all(advId))
-                        if (advr != null && !usr.getId().equals(advr.getUserId()) && !EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) && !EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
-                            ObjectNode node = Json.newObject();
-                            node.put("id", advr.getUserId());
-                            node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
+            List<ObjectNode> results = new ArrayList<ObjectNode>();
+            for (Adventurer advr : new AdventurerDAO().all(advId))
+                if (advr != null && !usr.getId().equals(advr.getUserId()) && !EAdventurerParticipation.INVITEE.equals(advr.getParticipationStatus()) && !EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus())) {
+                    ObjectNode node = Json.newObject();
+                    node.put("id", advr.getUserId());
+                    node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
-                            User usr = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
-                            node.put("name", usr != null ? usr.getName() : "");
-                            node.put("image", usr != null ? usr.getImage() : null);
+                    User user = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
+                    node.put("name", user != null ? usr.getName() : "");
+                    node.put("image", user != null ? usr.getImage() : null);
 
-                            node.put("status", advr.getParticipationStatus().toString());
-                            results.add(node);
-                        }
-                    return Json.toJson(results).toString();
+                    node.put("status", advr.getParticipationStatus().toString());
+                    results.add(node);
                 }
-            }, 24 * 3600)).as("application/json");
+            return ok(Json.toJson(results).toString()).as("application/json");
+
         } catch (Exception e) {
             Logger.error("Couldn't generate participants for adventure " + advId, e);
             return internalServerError();
@@ -255,9 +251,10 @@ public class AdventurePeopleController extends Controller {
             new AdventurerDAO().save(advr);
             new AdventurerNotifier().notifyAdventurers(advId, usr.getName() + " changed the participation status to " + status.name() + ".", "Participation Status");
 
-            clearCache(advId);
             new CachedUserDAO().clearCache(usr.getId());
         }
+
+        clearCache(advId);
 
         return ok(Json.toJson(advr));
     }
@@ -507,7 +504,6 @@ public class AdventurePeopleController extends Controller {
 
     public static void clearCache(final String advId) {
         Cache.remove("adventure." + advId + ".adventurers.all");
-        Cache.remove("adventure." + advId + ".adventurers.participants.others");
         Cache.remove("adventure." + advId + ".adventurers.participants");
         Cache.remove("adventure." + advId + ".adventurers.invitees");
         Cache.remove("adventure." + advId + ".adventurers.applicants");

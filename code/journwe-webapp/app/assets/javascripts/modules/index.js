@@ -15,9 +15,14 @@ define([
 
 
 
-    var initializePublicAdventures = function (lastId, insId) {
+    var initializePublicAdventuresInspiration = function (lastId, insId) {
         initializePublicAdventuresMap();
-        loadPublicAdventures(lastId, true, insId);
+        loadPublicAdventuresByInspiration(lastId, true, insId);
+    };
+
+    var initializePublicAdventuresCategory = function (lastId, catId) {
+        initializePublicAdventuresMap();
+        loadPublicAdventuresByCategory(lastId, true, catId);
     };
 
     var initializeMyAdventures = function (lastId) {
@@ -56,32 +61,39 @@ define([
         }});
     };
 
+    var loadPublicAdventuresByInspiration = function (lastId, clear, insId) {
+        loadPublicAdventures(lastId, clear, insId, routes.controllers.api.json.ApplicationController.getPublicAdventures());
+    };
 
-    var loadPublicAdventures = function (lastId, clear, insId) {
+    var loadPublicAdventuresByCategory = function (lastId, clear, catId) {
+        loadPublicAdventures(lastId, clear, catId, routes.controllers.api.json.ApplicationController.getPublicAdventuresOfCategory(catId));
+    };
+
+    var loadPublicAdventures = function (lastId, clear, id, endpoint) {
         utils.setSpinning($('.btn-adventures-public-refresh i'));
         utils.setReplaceSpinning($('.btn-adventures-public-load-more'));
-        routes.controllers.api.json.ApplicationController.getPublicAdventures().ajax({data: {lastId: lastId, count: 10, inspirationId: insId}, success: function (advs) {
+        endpoint.ajax({data: {lastId: lastId, count: 10, inspirationId: id}, success: function (advs) {
             if (clear) $('#adventures-public-list').empty();
             if (advs != null && advs.length > 0) {
                 for (var i in advs) {
                     $('#adventures-public-list').append(renderAdventure('adventure-public-template', advs[i]));
 
-                    publicAdventuresMarkers[advs[i].id] = new google.maps.Marker({
+                    publicAdventuresMarkers[advs[i].id] = new gmaps.Marker({
                         animation: google.maps.Animation.DROP,
                         map: publicAdventuresMap,
                         position: new google.maps.LatLng(advs[i].lat, advs[i].lng),
                         title: advs[i].name
                     });
-                    publicAdventuresInfos[advId] = new gmaps.InfoWindow({
+                    publicAdventuresInfos[advs[i].id] = new gmaps.InfoWindow({
                         content: '<a href="' + advs[i].link + '"><h3>' + advs[i].name + '</h3></a>'
                     });
                     (function (marker, infowindow) {
                         gmaps.event.addListener(marker, 'click', function () {
-                            infowindow.open(adventuresMap, marker);
+                            infowindow.open(publicAdventuresMap, marker);
                         });
-                    })(adventuresMarkers[advId], adventuresInfos[advId]);
+                    })(publicAdventuresMarkers[advs[i].id], publicAdventuresInfos[advs[i].id]);
                     gmaps.event.addListener(publicAdventuresMarkers[advs[i].id], 'click', function () {
-                        infowindow.open(publicAdventuresMap, publicAdventuresMarkers[advs[i].id]);
+                        publicAdventuresInfos[advs[i].id].open(publicAdventuresMap, publicAdventuresMarkers[advs[i].id]);
                     });
 
                     resetPublicAdventuresMapBounds();
@@ -92,7 +104,7 @@ define([
                     function () {
                         $(this).find("div.overlay").slideDown("fast");
                         publicAdventuresMarkers[$(this).data('id')].setAnimation(google.maps.Animation.BOUNCE);
-                        adventuresInfos[$(this).data('id')].open(adventuresMap, adventuresMarkers[$(this).data('id')]);
+                        publicAdventuresInfos[$(this).data('id')].open(publicAdventuresMap, publicAdventuresMarkers[$(this).data('id')]);
                     },
                     function () {
                         $(this).find("div.overlay").slideUp("fast");
@@ -254,7 +266,8 @@ define([
 
     return {
         initializeMyAdventures: initializeMyAdventures,
-        initializePublicAdventures: initializePublicAdventures,
+        initializePublicAdventuresInspiration: initializePublicAdventuresInspiration,
+        initializePublicAdventuresCategory: initializePublicAdventuresCategory,
         initializeCategories: initializeCategories,
         initializeInspirations: initializeInspirations
     };

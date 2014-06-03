@@ -7,7 +7,6 @@ require([
 
     utils.loadGenericBgImage();
     index.initializeCategories();
-    index.initializePublicAdventures();
     yingyangyong.initialize();
 
 });

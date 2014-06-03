@@ -16,7 +16,7 @@ require([
         loadImages();
         initializePlaceMap();
 
-        index.initializePublicAdventures(null, ins.id);
+        index.initializePublicAdventuresInspiration(null, ins.id);
     };
 
     var loadUrls = function () {

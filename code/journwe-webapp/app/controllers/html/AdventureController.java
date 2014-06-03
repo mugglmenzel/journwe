@@ -96,14 +96,14 @@ public class AdventureController extends Controller {
             if(usr == null) return badRequest();
 
             List<UserSocial> socials = new UserSocialDAO().findByUserId(usr.getId());
-            if(socials.size() < 1) return badRequest();
+            if(socials.isEmpty()) return badRequest();
 
-            UserSocial us = socials.get(0);
+            UserSocial us = socials.iterator().next();
 
             Adventurer advr = usr != null ? new AdventurerDAO().get(id, usr.getId()) : null;
 
             Inspiration ins = adv.getInspirationId() != null ? new InspirationDAO().get(adv.getInspirationId()) : null;
-            return ok(get_invited.render(adv, advr, usr, us.getProvider(), ins));
+            return ok(advr != null ? get_invited.render(adv, advr, usr, us.getProvider(), ins) : get_public.render(adv, ins));
         }
     }
 

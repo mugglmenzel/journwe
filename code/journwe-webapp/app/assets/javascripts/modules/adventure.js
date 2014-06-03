@@ -1267,7 +1267,7 @@ define([
             deletePhoto($(this).data('id'));
         },
 
-        'change #adventure-public-switch': function () {
+        'change #adventure-public-switch input[type="checkbox"]': function () {
             var el = $(this);
             routes.controllers.api.json.AdventureController.updatePublic(adv.id).ajax({
                 data: {publish: el.find('input:checkbox').prop('checked')},

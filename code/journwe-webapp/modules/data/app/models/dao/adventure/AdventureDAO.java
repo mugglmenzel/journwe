@@ -10,6 +10,7 @@ import models.adventure.place.PlaceOption;
 import models.adventure.place.PlacePreference;
 import models.adventure.time.TimeOption;
 import models.adventure.time.TimePreference;
+import models.category.Category;
 import models.dao.common.CommonEntityDAO;
 import models.dao.manytomany.ManyToManyListQuery;
 import models.inspiration.Inspiration;
@@ -21,9 +22,12 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
 
     private ManyToManyListQuery<Adventure, Inspiration> adventureToInspirationListQuery;
 
+    private ManyToManyListQuery<Adventure, Category> adventureToCategoryListQuery;
+
     public AdventureDAO() {
         super(Adventure.class);
         adventureToInspirationListQuery = new ManyToManyListQuery<Adventure, Inspiration>(Adventure.class, Inspiration.class);
+        adventureToCategoryListQuery = new ManyToManyListQuery<Adventure, Category>(Adventure.class, Category.class);
     }
 
     public int adventureCountByUser(String userId) {
@@ -42,6 +46,12 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
         if (inspirationId == null)
             return new ArrayList<Adventure>();
         return adventureToInspirationListQuery.listM(inspirationId, lastKey, limit);
+    }
+
+    public List<Adventure> listPublicAdventuresByCategory(String categoryId, String lastKey, int limit) {
+        if (categoryId == null)
+            return new ArrayList<Adventure>();
+        return adventureToCategoryListQuery.listM(categoryId, lastKey, limit);
     }
 
     public void deleteFull(String advId) {

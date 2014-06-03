@@ -26,17 +26,27 @@ public class UserEmailDAO extends CommonRangeEntityDAO<UserEmail> {
     public UserEmail getPrimaryEmailOfUser(String userId) {
         Iterator<UserEmail> results = getEmailsOfUser(userId).iterator();
         UserEmail result = null;
-        while(results.hasNext()) {
+        while (results.hasNext()) {
             result = results.next();
-            if(result.isPrimary()) return result;
+            if (result.isPrimary()) return result;
         }
 
-        if(result != null) {
+        if (result != null) {
             result.setPrimary(true);
             save(result);
         }
 
         return result;
+    }
+
+    public UserEmail findByEmail(String email) {
+        UserEmail ue = new UserEmail();
+        ue.setEmail(email);
+        DynamoDBQueryExpression query = new DynamoDBQueryExpression().withIndexName("email-index").withHashKeyValues(ue).withConsistentRead(false);
+
+        List<UserEmail> results = pm.query(clazz, query);
+
+        return !results.isEmpty() ? results.iterator().next() : null;
     }
 
 

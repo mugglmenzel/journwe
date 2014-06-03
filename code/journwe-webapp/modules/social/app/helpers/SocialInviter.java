@@ -2,7 +2,6 @@ package helpers;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.rosaloves.bitlyj.Jmp;
 import com.typesafe.config.ConfigFactory;
 import helpers.inviters.*;
 import models.adventure.Adventure;
@@ -23,8 +22,7 @@ import models.user.UserEmail;
 import models.user.UserSocial;
 import play.Logger;
 
-import static com.rosaloves.bitlyj.Bitly.shorten;
-import static play.mvc.Controller.request;
+import java.util.List;
 
 /**
  * Created by mugglmenzel on 16.02.14.
@@ -46,18 +44,18 @@ public class SocialInviter {
 
     public SocialInviter(User inviter, String provider, String inviteeSocialId) {
         this.inviter = inviter;
-        this.inviterSocial = new UserSocialDAO().findByUserIdAndProvider(provider, inviter.getId());
         this.provider = provider;
         this.inviteeSocialId = inviteeSocialId;
+
+        this.inviterSocial = provider != null ? new UserSocialDAO().findByUserIdAndProvider(provider, inviter.getId()) : new UserSocialDAO().findByUserId(inviter.getId()).iterator().next();
     }
 
     public void invite(String advId, String shortURL) {
-        if (inviter != null && inviterSocial != null && inviteeSocialId != null) {
-
-            Adventure adv = new AdventureDAO().get(advId);
-            AbstractInvitation invitation = getInvitationService();
-
+        if (inviter != null && inviteeSocialId != null) {
             try {
+                Adventure adv = new AdventureDAO().get(advId);
+                AbstractInvitation invitation = getInvitationService();
+
                 Logger.debug("Sending message to " + inviteeSocialId + " via " + provider + " with shortURL " + shortURL);
                 invitation.send(inviteeSocialId, inviter.getName(), adv, shortURL);
             } catch (Exception e) {
@@ -81,6 +79,14 @@ public class SocialInviter {
 
 
         UserSocial inviteeSoc = new UserSocialDAO().findBySocialId(provider, inviteeSocialId);
+        if (inviteeSoc == null) {
+            UserEmail ue = new UserEmailDAO().findByEmail(socialEmail);
+            if (ue != null) {
+                List<UserSocial> emailSocs = new UserSocialDAO().findByUserId(ue.getUserId());
+                inviteeSoc = emailSocs.isEmpty() ? inviteeSoc : emailSocs.iterator().next();
+            }
+        }
+
         User invitee = inviteeSoc != null && inviteeSoc.getUserId() != null ? new UserDAO().get(inviteeSoc.getUserId()) : null;
         Logger.debug("got invitee " + invitee);
         if (invitee == null) {
@@ -94,8 +100,13 @@ public class SocialInviter {
 
         if (socialEmail != null && !"".equals(socialEmail) && new UserEmailDAO().get(invitee.getId(), socialEmail) == null) {
             UserEmail inviteeEmail = new UserEmail();
+            inviteeEmail.setUserId(invitee.getId());
             inviteeEmail.setEmail(socialEmail);
+            inviteeEmail.setPrimary(true);
             new UserEmailDAO().save(inviteeEmail);
+
+            if (invitee.getName() == null || "".equals(invitee.getName()))
+                invitee.setName(socialEmail);
         }
 
         if (inviteeSoc == null) {
