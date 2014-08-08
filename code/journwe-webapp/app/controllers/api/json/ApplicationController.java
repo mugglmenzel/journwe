@@ -32,7 +32,7 @@ public class ApplicationController extends Controller {
 
 
     @Security.Authenticated(SecuredUser.class)
-    public static Result getMyAdventures() {
+    public static Result getMyAdventures(String cached) {
         AuthUser usr = PlayAuthenticate.getUser(Http.Context.current());
         final String userId = usr != null ? UserManager.findByAuthUserIdentity(usr).getId() : null;
         if (userId == null) return badRequest();
@@ -66,7 +66,7 @@ public class ApplicationController extends Controller {
                 }
             };
 
-            return ok(count == 10 && (lastId == null || "".equals(lastId)) ?
+            return ok("yes".equals(cached) && count == 10 && (lastId == null || "".equals(lastId)) ?
                     Cache.getOrElse("user." + userId + ".myadventures", resultsCallable, 24 * 3600)
                     : resultsCallable.call()).as("application/json");
 

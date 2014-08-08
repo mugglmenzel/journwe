@@ -924,7 +924,7 @@ define([
     //TIMELINE
     var initializeTimeline = function () {
         $('.nav-discussion .btn').tooltip();
-        loadTimelineAll();
+        loadTimelineComments();
     };
 
     var loadTimelineAll = function (el) {

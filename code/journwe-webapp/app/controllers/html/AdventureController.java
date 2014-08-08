@@ -50,7 +50,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.adventure.create;
-import views.html.adventure.get;
+import views.html.adventure.get_full;
 import views.html.adventure.get_invited;
 import views.html.adventure.get_public;
 
@@ -84,7 +84,7 @@ public class AdventureController extends Controller {
             if (advr == null || EAdventurerParticipation.APPLICANT.equals(advr.getParticipationStatus()) || !SecuredUser.isAuthorized(PlayAuthenticate.getUser(Http.Context.current())))
                 return ok(get_public.render(adv, ins));
             else
-                return ok(get.render(adv, ins, advr, usr, "", null));
+                return ok(get_full.render(adv, ins, advr, usr, "", null));
         }
     }
 

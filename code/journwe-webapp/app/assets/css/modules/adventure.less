@@ -1,6 +1,9 @@
 
 .adventure-container {
 
+  background-color: @color_white;
+  padding: 0 20px 0 20px;
+
   & .editable-container, & .editable-input, & textarea {
     width: 100%;
   }
@@ -21,7 +24,18 @@
     color: gray !important;
   }
 
-  &:extend(.container);
+  //&:extend(.container);
+}
+
+.adventure-container-left {
+  background-color: @color_white;
+  height: 100%;
+}
+
+.adventure-container-right {
+  background-color: @color_white;
+  height: 100%;
+  //box-shadow: -2px 2px 3px #888;
 }
 
 .nav-adventure {

@@ -36,7 +36,7 @@ GET           /api/json/inspiration/:id/photos.json                        contr
 
 #### Adventures ####
 
-GET           /api/json/adventures/my.json                                 controllers.api.json.ApplicationController.getMyAdventures()
+GET           /api/json/adventures/my.json                                 controllers.api.json.ApplicationController.getMyAdventures(cached ?= null)
 GET           /api/json/adventures/public.json                             controllers.api.json.ApplicationController.getPublicAdventures()
 
 GET           /api/json/adventure/:id/info.json                            controllers.api.json.AdventureController.info(id:String)
