@@ -29,33 +29,112 @@
 
 
                 <div class="title-overlay">
-                    <div class="container">
-
-                        <div class="title-name">
-                            <strong>
-                                <a href="#" class="editable" data-type="text" data-name="adventureName" data-pk="@adv.getId()"
-                                data-url="@html.routes.AdventureController.saveEditable()"
-                                data-original-title="Enter adventure name" data-inputclass="form-control ">@adv.getName()</a></strong><i class="fa fa-pencil muted"></i> <span></span>
-                            @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                    <div class="container-fluid">
+                        <div class="pull-left">
+                            <ul class="nav nav-pills">
+                                <li><a><i class="fa fa-info"></i></a></li>
+                                <li><a><i class="fa fa-group"></i></a></li>
+                                <li><a><i class="fa fa-map-marker"></i></a></li>
+                                <li><a><i class="fa fa-calendar"></i></a></li>
+                            </ul>
                         </div>
+                         <div class="pull-right">
+                             <ul class="nav nav-pills">
+                                 <li><a><i class="fa fa-print"></i></a></li>
+                                 <li><a><i class="fa fa-sliders"></i></a></li>
+                             </ul>
+                         </div>
 
                     </div>
                 </div>
             </div>
 
-            <div class="adventure-container">
+            <div class="adventure-container container-fluid">
                 @comment.commentsCommon()
+
+
 
                 <div class="row">
                     <div class="adventure-container-left col-lg-9" style="padding: 0 10px 0 10px;">
 
 
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h2 class="panel-title">
+                                    <strong>
+                                        <a href="#" class="editable" data-type="text" data-name="adventureName" data-pk="@adv.getId()"
+                                        data-url="@html.routes.AdventureController.saveEditable()"
+                                        data-original-title="Enter adventure name" data-inputclass="form-control ">@adv.getName()</a></strong><i class="fa fa-pencil muted"></i> <span></span>
+                                    @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
+                                </h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p class="lead">You are in this JournWe&#8482; to <span class="places-favorite-place-name">?</span> on <span class="times-favorite-time-name">?</span>. Have some fun, guys!</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-4"><i class="fa fa-map-marker fa-fw icon-description"></i> <span class="places-favorite-place-name">?</span> <a href="#" class="btn btn-link">Reopen</a></div>
+                                    <div class="col-xs-4"><i class="fa fa-calendar fa-fw icon-description"></i> <span class="times-favorite-time-name">?</span> <a href="#" class="btn btn-link">Reopen</a></div>
+                                    <div class="col-xs-4"><i class="fa fa-group fa-fw icon-description"></i> ? Participants</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-1"><i class="fa fa-picture-o fa-fw icon-description"></i></div>
+                                    <div class="col-xs-11">
+                                        <div>
+                                            <div class="adventure-photos"></div>
+                                            <div class="polaroid" style="position: relative; float: left; width: 20%;">
+                                                <a class="btn-photo-upload"><img style="margin: 0px; width: 100%;" src="http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=add+photo"></a>
+                                                <input id="adventure-photo-file-input" type="file" class="hide"/>
+                                            </div>
+                                        </div>
+                                        <div class="loader loader-photos stash"></div>
 
+                                        <script type="text/x-tmpl" id="adventure-photo-template">
+                                            <div class="polaroid" style="position: relative; float: left; width: 20%;">
+                                                <a class="btn-adventure-photo" data-index='{%=o.index%}'>
+                                                    <img style="margin: 0px; width: 100%;" src="{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=204&h=204&u=' + o.url)%}{% } %}">
+                                                </a>
+                                                <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
+                                                    <button class="btn btn-default btn-photo-delete pull-right" data-id="{%=o.id%}"><i class="fa fa-trash-o"></i></button>
+                                                </div>
+                                            </div>
+                                        </script>
+                                        <div id="carousel-adventure-photos" class="carousel carousel-fullscreen slide modal fade">
+                                            <div class="text-center" style="position: absolute; top: 0; width: 100%; z-index: 9999;"><em>Click</em> to exit</div>
+                                            <ol class="carousel-indicators carousel-indicators-adventure-photos"></ol>
+                                            <div class="carousel-inner carousel-inner-adventure-photos"></div>
 
+                                            <a class="left carousel-control" href="#carousel-adventure-photos" data-slide="prev">
+                                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                            </a>
+                                            <a class="right carousel-control" href="#carousel-adventure-photos" data-slide="next">
+                                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                            </a>
+                                        </div>
+                                        <script type="text/x-tmpl" id="adventure-photo-carousel-indicator-template">
+                                            <li class="{%=o.active%}" data-target="#carousel-adventure-photos" data-slide-to="{%=o.index%}"></li>
+                                        </script>
+                                        <script type="text/x-tmpl" id="adventure-photo-carousel-item-template">
+                                            <div class="item {%=o.active%}" style="background-image: url('{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/1600x1200/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=1600&h=1200&u=' + o.url)%}{% } %}')"></div>
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-xs-6"><a href="@adv.getShortURL"><i class="fa fa-globe"></i> @adv.getShortURL</a></div>
+                                    <div class="col-xs-6"><a href="mailto:@adv.getId@@journwe.com"><i class="fa fa-envelope"></i> @adv.getId@@journwe.com</a></div>
+                                </div>
+                            </div>
+                        </div>
+
+                            @*
                         <div class="jrn-container">
                             @index(adv, ins)
                         </div>
-
+                           *@
 
 
                         @if(auth.canViewAdventureAdventurersWidget()) {
