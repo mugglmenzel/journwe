@@ -115,6 +115,8 @@ adventure.getScala.offers.title=Angebote
 adventure.getScala.offers.subtitle=Die besten Angebote zu eurer Reise. Schnell und einfach das passende raus suchen.
 adventure.getScala.adventurers.title=Abenteurer
 adventure.getScala.adventurers.subtitle=Ein Erlebnis mit grossartigen Begleitern und waren Freunden. Ladet sie ein, plant zusammen und lasst das Abenteuer beginnen.
+adventure.getScala.booking.title=Buchungsanfrage
+adventure.getScala.booking.subtitle=Sende eine Buchungsanfrage an Dein liebstes Reisebüro.
 
 #Adventure.options
 adventure.options.facebookpublish=Posten auf Facebook

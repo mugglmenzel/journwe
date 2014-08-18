@@ -115,6 +115,8 @@ adventure.getScala.offers.title=Offers
 adventure.getScala.offers.subtitle=Check offers for your dates and places. There might be just the right sweet spot for you.
 adventure.getScala.adventurers.title=Adventurers
 adventure.getScala.adventurers.subtitle=Experience your adventure with great people, real adventurers. Invite the greatest and book together.
+adventure.getScala.booking.title=Booking Request
+adventure.getScala.booking.subtitle=Send a booking request to your favorite travel agency.
 
 #Adventure.options
 adventure.options.facebookpublish=Publish on Facebook
