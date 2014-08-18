@@ -238,6 +238,31 @@
                         </div>
                         }
 
+                        @if(auth.canViewAdventureBookingWidget()) {
+                            <div class="jrn-adventure-section" id="bookings">
+                                <div class="jrn-container jrn-no-bottom-round jrn-collapsed">
+                                    <h2><i class="fa fa-file-text-o fa fa-for-adventure-title"></i> @Messages("adventure.getScala.booking.title")
+                                        <div class="btn-toolbar pull-right">
+                                            <button class="btn btn-default btn-nav-section-collapse-toggle"><i class="fa fa-caret-down"></i></button>
+                                        </div>
+                                    </h2>
+                                    <div class="row collapsable stash">
+                                        <div class="col-lg-12">
+                                            <p class="lead">@Messages("adventure.getScala.booking.subtitle")</p>
+
+                                            @bookings(adv, advr)
+
+                                        </div>
+                                    </div>
+                                </div>
+                                @if(auth.canViewBookingComments()) {
+                                    <div class="collapsable stash">
+                                    @comment.widget_comment(adv.getId + "_bookings", user)
+                                    </div>
+                                }
+                            </div>
+                        }
+
                         @*
                         @if(auth.canViewAdventureFilesWidget() && false) {
 
