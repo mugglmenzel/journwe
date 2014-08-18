@@ -64,7 +64,7 @@ requireJsShim += "shim.js"
 
 //requireNativePath := Some("java -cp lib/requireJs/js.jar:lib/requireJs/compiler.jar org.mozilla.javascript.tools.shell.Main lib/requireJs/r.js")
 
-lazy val root = project.in(file(".")).aggregate(acl, admin, social).dependsOn(acl, admin, core, data, dataCache, email, social)
+lazy val root = project.in(file(".")).aggregate(acl, admin, social).dependsOn(acl, admin, core, data, dataCache, email, social, booking)
 
 
 lazy val social = project.in(file("modules/social")).aggregate(core).dependsOn(core, data, dataCache)
@@ -73,11 +73,11 @@ lazy val acl = project.in(file("modules/acl")).aggregate(core).dependsOn(core, d
 
 lazy val admin = project.in(file("modules/admin")).aggregate(core).dependsOn(core, data, dataCache)
 
-
 lazy val core = project.in(file("modules/core")).aggregate(dataCache, email).dependsOn(data, dataCache, email)
 
-
 lazy val email = project.in(file("modules/email")).aggregate(data).dependsOn(data)
+
+lazy val booking = project.in(file("modules/booking")).aggregate(core).dependsOn(core, data, dataCache, email)
 
 lazy val dataCache = project.in(file("modules/dataCache")).aggregate(data).dependsOn(data)
 
