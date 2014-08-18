@@ -239,6 +239,10 @@ public class JournweAuthorization {
         return (auth != null) ? auth.canViewAdventureBookingWidget() : false;
     }
 
+    public boolean canViewBookingComments() {
+        return (auth != null) ? auth.canViewBookingComments() : false;
+    }
+
     /**
      * Helper
      *

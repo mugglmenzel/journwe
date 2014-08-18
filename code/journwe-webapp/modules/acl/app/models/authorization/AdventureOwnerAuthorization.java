@@ -277,4 +277,9 @@ public class AdventureOwnerAuthorization extends AbstractAuthorization {
         return true;
     }
 
+    @Override
+    boolean canViewBookingComments() {
+        return true;
+    }
+
 }
