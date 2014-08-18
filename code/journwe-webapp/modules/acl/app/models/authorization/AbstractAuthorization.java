@@ -169,4 +169,9 @@ public abstract class AbstractAuthorization {
     boolean canViewOfferComments() {
         return false;
     }
+
+    // BOOKING
+    boolean canViewAdventureBookingWidget() {
+        return false;
+    }
 }

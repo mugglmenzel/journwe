@@ -76,4 +76,8 @@ public class AdventureInviteeAuthorization extends AbstractAuthorization {
     // OFFERS
 
     // .. can see nothing
+
+    // BOOKING
+
+    // .. can see nothing
 }

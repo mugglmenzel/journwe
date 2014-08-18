@@ -271,4 +271,11 @@ public class AdventureExpertAuthorization extends AbstractAuthorization {
         return true;
     }
 
+    // BOOKING
+
+    @Override
+    boolean canViewAdventureBookingWidget() {
+        return false; // TODO false or true?
+    }
+
 }
