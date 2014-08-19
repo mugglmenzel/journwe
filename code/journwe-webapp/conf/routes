@@ -198,7 +198,8 @@ GET           /adventure/:id/participate                                   contr
 GET           /adventure/:id/leave                                         controllers.html.AdventurePeopleController.leave(id:String)
 
 
-
+#### Adventure Booking ####
+GET           /adventure/:id/booking/new                                   controllers.html.BookingRequestController.createFromAdventure(id:String)
 
 
 #### Comments ####

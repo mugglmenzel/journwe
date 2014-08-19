@@ -1,3 +1,5 @@
-@(adv: models.adventure.Adventure, advr: models.adventure.adventurer.Adventurer)
+@(adv: models.adventure.Adventure)
 
-<p>booking form, coming soon...</p>
+<form class="form-horizontal" role="form" action="@controllers.html.routes.BookingRequestController.createFromAdventure(adv.getId())">
+    <button type="submit" class="btn btn-default">Create New Booking Request</button>
+</form>

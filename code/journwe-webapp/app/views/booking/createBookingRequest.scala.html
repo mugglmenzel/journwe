@@ -1,0 +1,12 @@
+@(adv: models.adventure.Adventure, bookingForm: Form[models.booking.BookingRequest])
+
+<a>Name: @bookingForm.get().getAdventureName </a>
+
+<div id="booking-request-form" class="">
+    <div class="form-group">
+        <label for="journwe-name" class="col-sm-2 control-label">JournWe Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="journwe-name" placeholder="JournWe Name">
+        </div>
+    </div>
+</div>
