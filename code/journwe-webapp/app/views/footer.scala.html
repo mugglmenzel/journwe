@@ -48,7 +48,7 @@
         <ul class="nav nav-pills nav-stacked">
         @for(lang <- Lang.availables) {
             <li @if(lang.language == Http.Context.current().lang().language()) {class="active"}><a href="@core.html.routes.ApplicationController.changeLanguage(lang.language.toString)">@if(lang.language == Http.Context.current().lang().language()) {
-                <i class="fa fa-globe"></i>
+                <i class="fa fa-language"></i>
             } @Messages("languages." + lang.language)</a> </li>
         }
         </ul>

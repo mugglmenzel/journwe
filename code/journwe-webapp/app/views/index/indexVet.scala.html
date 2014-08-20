@@ -14,15 +14,29 @@
 
     <div class="jrn-container">
 
-        <h2><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button class="btn btn-adventure-my-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
-        <p class="lead">
-        @Messages("index.welcome1", user.getName())
-        </p>
-        <div class="clearfix">
-            <ul class="nav nav-pills">
-                <li><a class="btn btn-default" href="@controllers.html.routes.AdventureController.save()"><i class="fa fa-asterisk"></i> New JournWe</a></li>
-            </ul>
+        <div class="row">
+            <div class="col-md-2">
+                <a href="@core.html.routes.UserController.getProfile(user.getId())">
+                    <img class="img-circle img-responsive" @if(user.getImage()){src="/thumbnail?w=100&h=100&u=@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"}>
+                </a>
+            </div>
+            <div class="col-md-10">
+                <a class="btn-link" href="@core.html.routes.UserController.getProfile(user.getId())"><h1>@user.getName()</h1></a>
+                <p class="lead">
+                @Messages("index.welcome")
+                </p>
+                <div class="clearfix">
+                    <ul class="nav nav-pills">
+                        <li><a class="btn btn-default" href="@controllers.html.routes.AdventureController.save()"><i class="fa fa-asterisk"></i> Start a JournWe</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
+
+       <div class="spacer20"></div>
+
+        <h2><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button class="btn btn-adventure-my-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="margin-bottom : 20px;">
 
             <div class="adventures-list-full clearfix">

@@ -182,6 +182,7 @@ adventure.wallComments.placeholder=Speak up!
 adventure.wallComments.firstComment=Write a first wall post!
 
 #IndexVet
+index.welcome=Welcome back! You have some adventures before you.
 index.welcome1=Welcome back, {0}! You have some adventures before you.
 index.myJournWes=Your JournWes
 

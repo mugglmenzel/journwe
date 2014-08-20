@@ -1,0 +1,46 @@
+
+
+.jrn-footer {
+  background: fade(@color_white, 30%);
+  padding: 20px 20px;
+  border-top: 1px solid white;
+  margin: 20px -20px -20px -20px;
+}
+
+.footer {
+  background: #555;
+  padding: 20px 0;
+
+  & * {
+    color: white;
+  }
+
+  .nav-pills > li.active > a {
+    &, &:hover, &:focus {
+      font-weight: bold;
+
+      &, & i {
+        color: white;
+      }
+    }
+  }
+
+  & .social-icons {
+    margin-top: 10px;
+
+    i {
+      font-size: 24px;
+    }
+  }
+}
+
+.footer-navigation {
+  background: white;
+  padding: 20px;
+  margin-top: 25px;
+  //box-shadow: 0 0 10px #888;
+
+  .row > div {
+    padding: 0 30px;
+  }
+}

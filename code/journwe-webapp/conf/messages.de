@@ -182,6 +182,7 @@ adventure.wallComments.placeholder=Sag was!
 adventure.wallComments.firstComment=Schreib eine erste Nachricht auf die Wall!
 
 #IndexVet
+index.welcome=Willkommen zurück! Es warten neue Abenteuer auf dich.
 index.welcome1=Willkommen zurück, {0}! Es warten neue Abenteuer auf dich.
 index.myJournWes=Deine JournWes
 

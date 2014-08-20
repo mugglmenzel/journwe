@@ -527,7 +527,7 @@ define([
         if (replace)
             replace.replaceWith(place).fadeIn();
         else
-            $('#places-list tbody').append(place).fadeIn();
+            $('#places-list').append(place).fadeIn();
 
         var marker = new gmaps.Marker({animation: gmaps.Animation.DROP, map: map, position: new gmaps.LatLng(data.lat, data.lng), title: data.address});
         markers[data.placeId] = marker;

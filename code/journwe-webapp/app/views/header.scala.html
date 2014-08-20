@@ -4,7 +4,7 @@
 @import com.feth.play.module.pa.views.html._
 @import com.feth.play.module.pa.providers.AuthProvider.Registry
 
-<nav class="navbar" role="navigation">
+<nav class="navbar navbar-fixed-top" role="navigation">
     <div class="navbar-header">
         <button class="btn-default navbar-toggle" data-toggle="collapse" data-target="#navbar-header">
             <span class="sr-only">Toggle navigation</span>
@@ -46,7 +46,7 @@
                     <a href="{%=o.link%}" class="list-group-item" style="color: black" title="{%=o.message%}" data-id="{%=o.created%}">
                         <div class="media">
                             <span class="pull-left">
-                                <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail??w=50&h=50&u=' + o.image)%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
+                                <img class="media-object" src="{% if(o.image == null) { %}{%=String('http://www.placehold.it/50x50/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=50&h=50&u=' + o.image)%}{% } %}" alt="{%=o.subject%}" style="width: 50px; height: 50px">
                             </span>
                             <div class="media-body">
                                 <h4 class="media-heading {% if(o.read){ %}text-muted{% } %}">{%=o.subject%}</h4>
@@ -57,7 +57,7 @@
                 </script>
 
                 <a class="btn navbar-btn" href="@core.html.routes.UserController.getProfile(user.getId())">
-                    <img @if(user.getImage()){src="@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"}>
+                    <img class="img-circle" @if(user.getImage()){src="/thumbnail?w=20&h=20&u=@user.getImage()"}else{src="http://www.placehold.it/20x20/EFEFEF/AAAAAA&text=no+image"}>
                     @user.getName()
                 </a>
                 <a class="btn navbar-btn" href="@core.html.routes.ApplicationController.doLogout"><i class="fa fa-sign-out"></i></a>
