@@ -49,7 +49,7 @@ GET         /authenticate/:provider                com.feth.play.module.pa.contr
 GET         /authenticate/:provider/denied         controllers.core.html.ApplicationController.oAuthDenied(provider: String)
 
 #### Static Pages ####
-# GET           /subscribe                                     controllers.core.html.ApplicationController.subscribe()
+POST        /subscribe                             controllers.core.html.ApplicationController.subscribe()
 GET         /landing                               controllers.core.html.ApplicationController.index
 GET         /imprint                               controllers.core.html.ApplicationController.imprint
 GET         /about                                 controllers.core.html.ApplicationController.about

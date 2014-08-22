@@ -24,9 +24,9 @@
                 <p class="lead">Leave your Email Address, we notify you when JournWe<sup>Beta</sup> is ready.</p>
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-3">
-                        <form class="form-horizontal">
-                            <div class="input-group input-group-lg"><input class="form-control" type="text" placeholder="you@@example.com"><span class="input-group-btn"><button class="btn btn-success" type="submit">Keep me posted!</button></span></div>
-                        </form>
+                        @helper.form(controllers.core.html.routes.ApplicationController.subscribe(), 'class -> "form-horizontal") {
+                            <div class="input-group input-group-lg"><input class="form-control" type="text" name="email" placeholder="you@@example.com"><span class="input-group-btn"><button class="btn btn-success" type="submit">Keep me posted!</button></span></div>
+                        }
                     </div>
                 </div>
 

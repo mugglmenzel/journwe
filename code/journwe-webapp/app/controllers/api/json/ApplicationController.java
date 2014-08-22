@@ -10,10 +10,12 @@ import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.TimeOptionDAO;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.reflections.Reflections;
 import play.Logger;
 import play.Routes;
 import play.api.Play;
 import play.cache.Cache;
+import play.core.Router;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -21,8 +23,11 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
@@ -157,13 +162,18 @@ public class ApplicationController extends Controller {
         response().setContentType("text/javascript");
 
         /*
-        Set<play.core.Router.JavascriptReverseRoute> admin.core.routes = new HashSet<play.core.Router.JavascriptReverseRoute>();
+        Set<Router.JavascriptReverseRoute> routes = new HashSet<Router.JavascriptReverseRoute>();
 
 
-        Reflections reflections = new Reflections("controllers.api.json.javascript");
-        for(Class<? extends Object> clazz : reflections.getSubTypesOf(Object.class))
-            for(Method met : clazz.getMethods())
-                     admin.core.routes.add(new Router.JavascriptReverseRoute("controllers.api.json", met.getName()));
+        Reflections reflections = new Reflections("controllers.api.json");
+        for(Class<? extends Controller> clazz : reflections.getSubTypesOf(Controller.class)) {
+            Logger.debug("  reflecting class: " + clazz.getCanonicalName());
+            for (Method met : clazz.getDeclaredMethods()) {
+                Logger.debug("    reflecting method: " + met.getName());
+                routes.add(new Router.JavascriptReverseRoute("controllers.api.json.routes.javascript." + clazz.getSimpleName() + "." met.getName(), ""));
+            }
+        }
+        Logger.debug("routes: " + Routes.javascriptRouter("routes", routes.toArray(new Router.JavascriptReverseRoute[]{})));
         */
 
         return ok("define(function(){" + // Make it AMD compatible

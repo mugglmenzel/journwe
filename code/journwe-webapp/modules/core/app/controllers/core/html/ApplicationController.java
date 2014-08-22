@@ -3,6 +3,9 @@ package controllers.core.html;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
+import com.ecwid.mailchimp.MailChimpClient;
+import com.ecwid.mailchimp.MailChimpException;
+import com.ecwid.mailchimp.method.list.ListSubscribeMethod;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
@@ -10,6 +13,8 @@ import com.typesafe.config.ConfigFactory;
 import models.UserManager;
 import models.cache.CachedUserDAO;
 import models.contact.Contact;
+import models.dao.SubscriberDAO;
+import models.user.Subscriber;
 import models.user.User;
 import play.cache.Cache;
 import play.data.Form;
@@ -19,6 +24,10 @@ import play.mvc.Result;
 import play.mvc.Results;
 import models.providers.MyUsernamePasswordAuthProvider;
 import views.html.*;
+
+import java.io.IOException;
+
+import static play.data.Form.form;
 
 
 public class ApplicationController extends Controller {
@@ -142,5 +151,34 @@ public class ApplicationController extends Controller {
         }
     }
 
+
+    public static Result subscribe() {
+        Form<Subscriber> filledSubForm = form(Subscriber.class).bindFromRequest();
+        Subscriber sub = filledSubForm.get();
+        if (new SubscriberDAO().save(sub)) {
+            flash("success", "You are subscribed now! We keep you posted.");
+            try {
+                ListSubscribeMethod listSubscribeMethod = new ListSubscribeMethod();
+                listSubscribeMethod.apikey = "426c4fc75113db8416df74f92831d066-us4";
+                listSubscribeMethod.id = "c18d5a32fb";
+                listSubscribeMethod.email_address = sub.getEmail();
+                listSubscribeMethod.double_optin = false;
+                listSubscribeMethod.update_existing = true;
+                listSubscribeMethod.send_welcome = true;
+
+                new MailChimpClient().execute(listSubscribeMethod);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (MailChimpException e) {
+                e.printStackTrace();
+            }
+
+        } else
+            flash("error", "You could not be subscribed :(");
+
+
+
+        return redirect(controllers.core.html.routes.ApplicationController.index());
+    }
 
 }
