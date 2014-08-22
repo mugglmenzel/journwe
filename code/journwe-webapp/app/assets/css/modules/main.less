@@ -291,15 +291,21 @@ h1 .editableform {
   }
 }
 
-.main > .row > * {
-  background: none repeat scroll 0 0 fade(@color_white, 80%);
-  display: block;
-  padding: 20px 50px;
-}
+.main {
+  & > .content {
+    padding-top: 70px;
+  }
 
-.main > .row {
-  margin-left: -60px;
-  margin-right: 10px;
+  & > .row > * {
+    background: none repeat scroll 0 0 fade(@color_white, 80%);
+    display: block;
+    padding: 20px 50px;
+  }
+
+  & > .row {
+    margin-left: -60px;
+    margin-right: 10px;
+  }
 }
 
 
