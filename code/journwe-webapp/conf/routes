@@ -128,6 +128,10 @@ GET           /api/json/adventure/:id/timeline/emails.json                 contr
 GET           /api/json/adventure/:id/timeline/comments.json               controllers.api.json.AdventureTimelineController.getComments(id:String)
 GET           /api/json/adventure/:id/timeline/files.json                  controllers.api.json.AdventureTimelineController.getFiles(id:String)
 
+#### Adventure Booking ####
+GET           /api/json/adventure/:id/booking/booking.json                 controllers.api.json.BookingRequestController.getBookingRequest(id:String)
+POST          /api/json/adventure/:id/booking/new.json                     controllers.api.json.BookingRequestController.createBookingRequestFromAdventure(id:String)
+POST          /api/json/adventure/:id/booking/booking.json                 controllers.api.json.BookingRequestController.saveBookingRequest(id:String)
 
 #### Comments ####
 
@@ -141,8 +145,6 @@ GET           /api/json/user/notifications.json                            contr
 GET           /api/json/user/:id/adventures.json                           controllers.api.json.UserController.getPublicAdventures(id:String)
 POST          /api/json/user/:id/notifications/:freq/frequency.json        controllers.api.json.UserController.setMailDigestFrequency(id:String, freq:String)
 POST          /api/json/user/image.json                                    controllers.api.json.UserController.updateImage()
-
-
 
 
 
@@ -196,10 +198,6 @@ POST          /adventure/:id/place/save/editable                           contr
 GET           /adventure/:id/:provider/participate                         controllers.html.AdventurePeopleController.participate(id:String, provider:String)
 GET           /adventure/:id/participate                                   controllers.html.AdventurePeopleController.participateFacebook(id:String)
 GET           /adventure/:id/leave                                         controllers.html.AdventurePeopleController.leave(id:String)
-
-
-#### Adventure Booking ####
-GET           /adventure/:id/booking/new                                   controllers.html.BookingRequestController.createFromAdventure(id:String)
 
 
 #### Comments ####
