@@ -148,8 +148,8 @@ public class AdventurePeopleController extends Controller {
                     node.put("link", controllers.core.html.routes.UserController.getProfile(advr.getUserId()).absoluteURL(request()));
 
                     User user = advr.getUserId() != null ? new UserDAO().get(advr.getUserId()) : null;
-                    node.put("name", user != null ? usr.getName() : "");
-                    node.put("image", user != null ? usr.getImage() : null);
+                    node.put("name", user != null ? user.getName() : "");
+                    node.put("image", user != null ? user.getImage() : null);
 
                     node.put("status", advr.getParticipationStatus().toString());
                     results.add(node);
