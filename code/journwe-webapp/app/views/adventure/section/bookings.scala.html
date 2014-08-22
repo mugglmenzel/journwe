@@ -1,5 +1,9 @@
 @(adv: models.adventure.Adventure)
 
-<form class="form-horizontal" role="form" action="@controllers.html.routes.BookingRequestController.createFromAdventure(adv.getId())">
+<form class="form-horizontal" role="form" action="@controllers.json.routes.BookingRequestController.createFromAdventure(adv.getId())">
     <button type="submit" class="btn btn-default">Create New Booking Request</button>
 </form>
+
+@if(controllers.html.routes.BookingRequestController.existsBookingRequest(adv.getId())) {
+
+}
