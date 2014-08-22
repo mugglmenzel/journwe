@@ -2,6 +2,8 @@ package models.booking;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
+import java.util.Date;
+
 @DynamoDBTable(tableName = "journwe-bookingrequest")
 public class BookingRequest {
 
@@ -11,6 +13,14 @@ public class BookingRequest {
 
     // order booking requests by timestamp
     private Long timestamp;
+
+    private String favoritePlaceAddress;
+
+    private String favoritePlaceDescription;
+
+    private Date favoriteStartDate;
+
+    private Date favoriteEndDate;
 
     private String additionalDescription;
 
@@ -40,6 +50,42 @@ public class BookingRequest {
 
     public void setAdventureName(String adventureName) {
         this.adventureName = adventureName;
+    }
+
+    @DynamoDBAttribute
+    public String getFavoritePlaceAddress() {
+        return favoritePlaceAddress;
+    }
+
+    public void setFavoritePlaceAddress(String favoritePlaceAddress) {
+        this.favoritePlaceAddress = favoritePlaceAddress;
+    }
+
+    @DynamoDBAttribute
+    public String getFavoritePlaceDescription() {
+        return favoritePlaceDescription;
+    }
+
+    public void setFavoritePlaceDescription(String favoritePlaceDescription) {
+        this.favoritePlaceDescription = favoritePlaceDescription;
+    }
+
+    @DynamoDBAttribute
+    public Date getFavoriteStartDate() {
+        return favoriteStartDate;
+    }
+
+    public void setFavoriteStartDate(Date favoriteStartDate) {
+        this.favoriteStartDate = favoriteStartDate;
+    }
+
+    @DynamoDBAttribute
+    public Date getFavoriteEndDate() {
+        return favoriteEndDate;
+    }
+
+    public void setFavoriteEndDate(Date favoriteEndDate) {
+        this.favoriteEndDate = favoriteEndDate;
     }
 
     @DynamoDBAttribute
