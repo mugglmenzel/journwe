@@ -32,19 +32,20 @@ import static play.mvc.Results.ok;
 public class BookingRequestController {
 
     private static final String ADVENTURE_ID = "adventureId";
-    private static final String ADVENTURE_NAME = "adventureName";
-    private static final String FAVORITE_PLACE_ADDRESS = "favoritePlaceAddress";
-    private static final String FAVORITE_PLACE_DESCRIPTION = "favoritePlaceDescription";
-    private static final String FAVORITE_START_DATE = "favoriteStartDate";
-    private static final String FAVORITE_END_DATE = "favoriteEndDate";
-    private static final String ADDITIONAL_DESCRIPTION = "additionalDescription";
+    private static final String ADVENTURE_NAME = "bookingRequest-adventureName";
+    private static final String FAVORITE_PLACE_ADDRESS = "bookingRequest-favoritePlaceAddress";
+    private static final String FAVORITE_PLACE_DESCRIPTION = "bookingRequest-favoritePlaceDescription";
+    private static final String FAVORITE_START_DATE = "bookingRequest-favoriteStartDate";
+    private static final String FAVORITE_END_DATE = "bookingRequest-favoriteEndDate";
+    private static final String ADDITIONAL_DESCRIPTION = "bookingRequest-additionalDescription";
 
     private final static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
 
     @Security.Authenticated(SecuredUser.class)
     public static Result createBookingRequestFromAdventure(String advId) {
+        Logger.debug("Create booking request from adventure "+advId);
         Adventure adv;
-        if (advId != null && !"".equals(advId)) {
+        if (advId != null && !"".equals(advId) && !"undefined".equals(advId)) {
             // Read adventure attributes
             adv = new AdventureDAO().get(advId);
             String advName = adv.getName();
