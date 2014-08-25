@@ -1,9 +1,16 @@
 @(adv: models.adventure.Adventure)
 
-<form class="form-horizontal" role="form" action="@controllers.json.routes.BookingRequestController.createFromAdventure(adv.getId())">
-    <button type="submit" class="btn btn-default">Create New Booking Request</button>
+<button class="btn btn-create-new-booking-request btn-primary"><i class="fa fa-file-text-o"></i> Create Booking Request</button>
+
+<form role="form">
+    <div class="form-group">
+        <label for="bookingRequest-adventureName">JournWe Name</label>
+        <input type="text" class="form-control" id="bookingRequest-adventureName" placeholder="...">
+    </div>
+    <div class="form-group">
+        <label for="bookingRequest-favoritePlaceAddress">Address of favorite place</label>
+        <input type="text" class="form-control" id="bookingRequest-favoritePlaceAddress" placeholder="...">
+    </div>
+
+    <button type="submit" class="btn btn-default">Save (not implemented yet)</button>
 </form>
-
-@if(controllers.html.routes.BookingRequestController.existsBookingRequest(adv.getId())) {
-
-}
