@@ -1186,8 +1186,8 @@ define([
     var loadBookingRequests = function () {
         routes.controllers.api.json.BookingRequestController.getBookingRequest(adv.id).ajax({success: function (br) {
             if(br!=null) {
-                console.log($('#br-adventureName input').val());
-                $('#br-adventureName input').val(br["br-adventureName"]);
+                console.log($('#br-adventureName').val());
+                $('#br-adventureName').val(br["br-adventureName"]);
             }
             else {
                 console.log("No booking request generated, yet.");
