@@ -180,7 +180,7 @@ GET           /inspiration/:id/adventure/new                               contr
 #POST	/adventure/saveOld											controllers.html.AdventureController.saveOld()
 POST          /adventure/save/editable                                     controllers.html.AdventureController.saveEditable()
 GET           /adventure/new                                               controllers.html.AdventureController.save()
-POST          /adventure/save                                              controllers.html.AdventureController.save()
+POST          /adventure/new                                               controllers.html.AdventureController.save()
 GET           /adventure/:id                                               controllers.html.AdventureController.getIndex(id:String)
 GET           /adventure/:id/invited/:inviteeId                            controllers.html.AdventureController.getInvitedIndex(id:String, inviteeId:String)
 GET           /adventure/:id/delete                                        controllers.html.AdventureController.delete(id:String)

@@ -23,6 +23,7 @@ define([
     //State Vars
     var visibleSections = typeof advr.visibleSections === 'undefined' || advr.visibleSections == null ? ['discussion', 'adventurers'] : JSON.parse(advr.visibleSections);
     var favoritePlace, favoriteTime;
+    var places;
 
 
     //Temp Vars
@@ -402,7 +403,7 @@ define([
         routes.controllers.api.json.AdventureController.updateCategory(adv.id).ajax({
             data: {categoryId: catId},
             success: function (data) {
-                if (data && data.name != null && data.name.length > 0){
+                if (data && data.name != null && data.name.length > 0) {
                     $('.btn-journwe-category button span').first().html(data.name);
                 }
             }, complete: function () {
@@ -501,25 +502,15 @@ define([
 
     var loadPlaces = function () {
         routes.controllers.api.json.AdventurePlaceController.getPlaces(adv.id).ajax({data: {userId: advr.userId}, success: function (result) {
-            $('#places-list tbody').empty();
-            for (var id in result)
-                renderPlaceOption(result[id])
+            places = result;
 
-            if (result.length)
-                $('#places-list').show();
-            else
-                $('#places-list').hide();
-
-            $('.places-loading').hide();
-
+            showPlaces();
             updateFavoritePlace();
-
             updatePlaceVoteOpen(adv.placeVoteOpen);
         }});
-    }
+    };
 
     var renderPlaceOption = function (data, replace) {
-        data.voteGroup = Math.round(data.voteGroup * 5 * 100) / 100;
         var place = $(tmpl('place-template', $.extend({
             votePlaceLabelCSSClassMap: votePlaceLabelCSSClassMap
         }, data)));
@@ -540,6 +531,27 @@ define([
     };
 
 
+    var showPlaces = function (startIndex, sliceSize) {
+        $('.places-loading').show();
+
+        if (!sliceSize) sliceSize = 3;
+        if (!startIndex || startIndex < 0 || (startIndex+sliceSize) > places.length) startIndex = 0;
+        var actualSliceSize = startIndex+sliceSize > places.length ? places.length : sliceSize;
+
+
+        $('#places-list').empty();
+        for (var idx = startIndex; idx < startIndex+actualSliceSize; idx++)
+            if (places[idx]) renderPlaceOption($.extend(places[idx], {index: Number(idx)}));
+
+        if (places.length)
+            $('#places-list').show();
+        else
+            $('#places-list').hide();
+
+        $('.places-loading').hide();
+    };
+
+
     var addPlace = function (el) {
         if ($('#place-add-input').val() != null && $('#place-add-input').val() != '') {
             utils.setReplaceSpinning(el);
@@ -554,7 +566,8 @@ define([
         } else {
             $('#place-add-input').focus();
             return false;
-        };
+        }
+        ;
     };
 
     var updatePlaceVoteOpen = function (open) {
@@ -580,7 +593,7 @@ define([
             favoritePlace = result.favorite;
             if (result.favorite != null) {
                 $('.places-favorite-place-name').html(result.favorite.address);
-                if(result.favorite.lat != null && result.favorite.lng != null) loadBgMap(result.favorite.lat, result.favorite.lng);
+                if (result.favorite.lat != null && result.favorite.lng != null) loadBgMap(result.favorite.lat, result.favorite.lng);
                 else initBackground();
             } else initBackground();
             if (result.autoFavorite != null) $('.places-autofavorite-place-name').html(result.autoFavorite.address);
@@ -599,7 +612,7 @@ define([
             success: function (data) {
                 favoritePlace = data;
                 $('.places-favorite-place-name').html(data.address);
-                if(data.lat && data.lng) setBgMapCenterOffset(data.lat, data.lng);
+                if (data.lat && data.lng) setBgMapCenterOffset(data.lat, data.lng);
                 utils.resetSpinning($('.icon-favorite-place'));
 
                 utils.resetSpinning($(el).find('i'));
@@ -712,26 +725,26 @@ define([
                 $('.input-people-add').attr('type', 'text');
                 $('.input-people-add').typeahead({highlight: true, minLength: 3},
                     {
-                    name: 'people-typeahead',
-                    displayKey: 'name',
-                    source: function(query, callback){
-                        routes.controllers.api.json.AdventurePeopleController.autocomplete().ajax({data: {provider: provider, input: query},
-                        success: function (data) {
-                            socialUsers = {};
-                            socialUserNames = [];
-                            $.each(data, function (ix, item) {
-                                if ($.inArray(item.name, socialUserNames) > -1) {
-                                    item.nameId = item.name + ' #' + item.id;
-                                } else item.nameId = item.name
+                        name: 'people-typeahead',
+                        displayKey: 'name',
+                        source: function (query, callback) {
+                            routes.controllers.api.json.AdventurePeopleController.autocomplete().ajax({data: {provider: provider, input: query},
+                                success: function (data) {
+                                    socialUsers = {};
+                                    socialUserNames = [];
+                                    $.each(data, function (ix, item) {
+                                        if ($.inArray(item.name, socialUserNames) > -1) {
+                                            item.nameId = item.name + ' #' + item.id;
+                                        } else item.nameId = item.name
 
-                                socialUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
-                                socialUsers[item.nameId] = item.id;
-                            });
+                                        socialUserNames.push({value: item.nameId, name: item.name, tokens: [item.id, item.name]});
+                                        socialUsers[item.nameId] = item.id;
+                                    });
 
-                            callback(socialUserNames);
-                        }})
-                    }
-                });
+                                    callback(socialUserNames);
+                                }})
+                        }
+                    });
             } else {
                 $('.input-people-add').attr('type', 'email');
                 $('.input-people-add').typeahead('destroy');
@@ -788,7 +801,7 @@ define([
         // Init all date fields
         //$('.date').datetimepicker();
 
-        $('#time-add-input-start').datetimepicker({pickTime: false, minDate: new Date()}).on('dp.change',function (e) {
+        $('#time-add-input-start').datetimepicker({pickTime: false, minDate: new Date()}).on('dp.change', function (e) {
             $('#time-add-input-end').data("DateTimePicker").setMinDate(e.date);
             $("#time-add-input-start").data("DateTimePicker").hide();
         }).find('input').click(function () {
@@ -799,7 +812,8 @@ define([
             $("#time-add-input-end").data("DateTimePicker").hide();
         }).find('input').click(function () {
             $("#time-add-input-end").data("DateTimePicker").show();
-        });;
+        });
+        ;
 
         routes.controllers.api.json.AdventureTimeController.getTimes(adv.id).ajax({data: {userId: advr.userId}, success: function (result) {
             $('#times-list tbody').empty();
@@ -1363,6 +1377,17 @@ define([
         },
         'click .btn-delete-place': function () {
             deletePlace($(this).closest('tr').data('placeid'), $(this));
+        },
+        'click .btn-next-place': function () {
+            currentStartIndex = $('#places-list').children().first().data('idx');
+            currentEndIndex = $('#places-list').children().last().data('idx');
+            nextIndex = currentEndIndex >= places.length - 1 ? 0 : currentStartIndex + 1;
+            showPlaces(nextIndex);
+        },
+        'click .btn-previous-place': function () {
+            currentStartIndex = $('#places-list').children().first().data('idx');
+            previousIndex = currentStartIndex < 1 ? 0 : currentStartIndex - 1;
+            showPlaces(previousIndex);
         },
 
         'click .btn-set-close-place': function () {

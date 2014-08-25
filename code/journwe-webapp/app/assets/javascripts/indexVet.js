@@ -14,6 +14,9 @@ require([
 
 
     utils.on({
+        'click .btn-adventure-new': function () {
+          $('#adventure-new').modal('show');
+        },
         'click .btn-yingyangyong-start': function () {
             $('#yingyangyong-container').slideDown(function () {
                 yingyangyong.resetBounds();
