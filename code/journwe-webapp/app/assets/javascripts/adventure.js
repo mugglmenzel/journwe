@@ -21,6 +21,8 @@ require([
         adventure.initializeEmails();
         adventure.initializeFiles();
 
+        adventure.initializeBookingRequests();
+
         adventure.initializeOptions();
 
 });
