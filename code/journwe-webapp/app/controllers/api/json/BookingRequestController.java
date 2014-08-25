@@ -32,12 +32,12 @@ import static play.mvc.Results.ok;
 public class BookingRequestController {
 
     private static final String ADVENTURE_ID = "adventureId";
-    private static final String ADVENTURE_NAME = "bookingRequest-adventureName";
-    private static final String FAVORITE_PLACE_ADDRESS = "bookingRequest-favoritePlaceAddress";
-    private static final String FAVORITE_PLACE_DESCRIPTION = "bookingRequest-favoritePlaceDescription";
-    private static final String FAVORITE_START_DATE = "bookingRequest-favoriteStartDate";
-    private static final String FAVORITE_END_DATE = "bookingRequest-favoriteEndDate";
-    private static final String ADDITIONAL_DESCRIPTION = "bookingRequest-additionalDescription";
+    private static final String ADVENTURE_NAME = "br-adventureName";
+    private static final String FAVORITE_PLACE_ADDRESS = "br-favoritePlaceAddress";
+    private static final String FAVORITE_PLACE_DESCRIPTION = "br-favoritePlaceDescription";
+    private static final String FAVORITE_START_DATE = "br-favoriteStartDate";
+    private static final String FAVORITE_END_DATE = "br-favoriteEndDate";
+    private static final String ADDITIONAL_DESCRIPTION = "br-additionalDescription";
 
     private final static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
 

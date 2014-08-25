@@ -1185,7 +1185,13 @@ define([
 
     var loadBookingRequests = function () {
         routes.controllers.api.json.BookingRequestController.getBookingRequest(adv.id).ajax({success: function (br) {
-            $('.bookingRequest-adventureName').html(br.getAdventureName());
+            if(br!=null) {
+                console.log($('#br-adventureName input').val());
+                $('#br-adventureName input').val(br["br-adventureName"]);
+            }
+            else {
+                console.log("No booking request generated, yet.");
+            }
         }});
     };
 
