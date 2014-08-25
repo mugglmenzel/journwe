@@ -1729,6 +1729,7 @@ define([
         initializeTimeline: initializeTimeline,
         initializeTodos: initializeTodos,
         initializeFiles: initializeFiles,
+        initializeBookingRequests: initializeBookingRequests,
         loadPublicAdventurers: loadPublicAdventurers,
         updateFavoriteTime: updateFavoriteTime,
         updateFavoritePlace: updateFavoritePlace
