@@ -1177,6 +1177,28 @@ define([
         });
     };
 
+    // BOOKING REQUESTS
+
+    var initializeBookingRequests = function () {
+        loadBookingRequests();
+    };
+
+    var loadBookingRequests = function () {
+        routes.controllers.api.json.BookingRequestController.getBookingRequest(adv.id).ajax({success: function (br) {
+            $('.bookingRequest-adventureName').html(br.getAdventureName());
+        }});
+    };
+
+
+    var createBookingRequest = function (advId, el) {
+        routes.controllers.api.json.BookingRequestController.createBookingRequestFromAdventure(advId).ajax({
+            success: function () {
+                el.fadeOut(function () {
+                    el.remove();
+                })
+            }});
+    };
+
 
     //LISTENER
 
@@ -1635,6 +1657,10 @@ define([
 
         },
 
+        'click .btn-create-new-booking-request': function () {
+            console.log("advid = "+adv.id);
+            createBookingRequest(adv.id, $(this));
+        },
 
         'click .btn-comment-add': function () {
             var val,
