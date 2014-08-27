@@ -27,7 +27,8 @@
                 </p>
                 <div class="clearfix">
                     <ul class="nav nav-pills">
-                        <li><a class="btn btn-default btn-adventure-new"><i class="fa fa-asterisk"></i> Start a JournWe</a></li>
+                        <li><a class="btn btn-primary btn-lg btn-adventure-new"><i class="fa fa-asterisk"></i> Start a JournWe</a></li>
+                        <li><a class="btn btn-default btn-get-inspired"><i class="fa fa-lightbulb-o"></i> Get Inspired</a></li>
                     </ul>
                 </div>
             </div>
@@ -39,9 +40,15 @@
         <h2><i class="fa fa-bookmark"></i> @Messages("index.myJournWes") <div class="pull-right"><button class="btn btn-adventure-my-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
         <div style="margin-bottom : 20px;">
 
+            <div class="clearfix">
+                <div class="btn-group btn-group-sm pull-right">
+                    <button class="btn btn-default"><i class="fa fa-th-list"></i></button>
+                    <button class="btn btn-default"><i class="fa fa-th-large"></i></button>
+                </div>
+            </div>
             <div class="adventures-list-full clearfix">
                 <span class="list-adventures-my"><div class="loader"></div></span>
-                <div class="adventure-entry" style="display: inline-block; vertical-align: top; width: 20%; padding: 5px;">
+                <div class="col-md-3 adventure-entry" style="display: inline-block; vertical-align: top; padding: 5px;">
                     <div><a class="btn-adventure-new" href="#"><h4 title="New JournWe"><i class="fa fa-asterisk"></i> New JournWe</h4></a></div>
                     <div style="margin-bottom: 5px">
                         <div class="label place" style="width: 100%;" title="Place"><i class="fa fa-globe"></i> ?</div>
@@ -55,9 +62,9 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center"><button class="btn btn-adventures-my-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
+            <div class="text-center hide"><button class="btn btn-adventures-my-load-more btn-default btn-block"> @Messages("adventure.general.button.more") </button></div>
             <script type="text/x-tmpl" id="adventure-my-template">
-                <div class="adventure-entry" data-id="{%=o.id%}" style="display: inline-block; vertical-align: top; width: 20%; padding: 5px;">
+                <div class="col-md-3 adventure-entry" data-id="{%=o.id%}" style="display: inline-block; vertical-align: top; padding: 5px;">
                     <div><a href="{%=o.link%}"><h4 title="{%=o.name%}">{%=o.name%}</h4></a></div>
                     <div style="margin-bottom: 5px">
                         <div class="label place" style="width: 100%;" title="Place"><i class="fa fa-globe"></i> {% if(o.favoritePlace != null) { %} {%=o.favoritePlace.address.substr(0,3).toUpperCase()%} {% } else { %} ? {% } %}&nbsp;</div> 
@@ -104,10 +111,8 @@
 
 
     <div class="jrn-container">
-        <h2><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
-        <p class="lead">
-        @Messages("inspiration.getInspired")
-        </p>
+        <h2 id="inspiration-categories"><i class="fa fa-folder-open"></i> @Messages("public.categories") <div class="pull-right"><button class="btn btn-categories-refresh btn-success btn-sm"><i class="fa fa-refresh"></i></button></div></h2>
+        <p class="lead">@Messages("inspiration.getInspired")</p>
 
         <div style="">
             <div id="categories-list" class="text-center"><div class="loader"></div></div>

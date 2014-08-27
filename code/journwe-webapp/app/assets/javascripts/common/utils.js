@@ -60,6 +60,12 @@ define(['routes', 'config'], function (routes) {
             }
         },
 
+        scrollTo: function (target, speed) {
+            $('html, body').animate({
+                scrollTop : $(target).offset().top
+            }, speed?speed:'slow');
+        },
+
         /**
          * Formats a date and return either the date or the time (if the date is today)
          * @param Date|Int

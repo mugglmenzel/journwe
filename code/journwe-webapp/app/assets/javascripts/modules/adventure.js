@@ -505,6 +505,7 @@ define([
             places = result;
 
             showPlaces();
+            showMarkers();
             updateFavoritePlace();
             updatePlaceVoteOpen(adv.placeVoteOpen);
         }});
@@ -519,11 +520,6 @@ define([
             replace.replaceWith(place).fadeIn();
         else
             $('#places-list').append(place).fadeIn();
-
-        var marker = new gmaps.Marker({animation: gmaps.Animation.DROP, map: map, position: new gmaps.LatLng(data.lat, data.lng), title: data.address});
-        markers[data.placeId] = marker;
-        map.setCenter(new gmaps.LatLng(data.lat, data.lng));
-        resetMapBounds();
 
         $('#placeoption-status-icon-' + data.placeId).addClass(votePlaceIconCSSClassMap[data.vote]);
         $('#placeoption-status-' + data.placeId).addClass(votePlaceButtonCSSClassMap[data.vote]);
@@ -549,6 +545,20 @@ define([
             $('#places-list').hide();
 
         $('.places-loading').hide();
+    };
+
+    var showMarkers = function (startIndex, sliceSize) {
+        if (!sliceSize) sliceSize = places.length;
+        if (!startIndex || startIndex < 0 || (startIndex+sliceSize) > places.length) startIndex = 0;
+        var actualSliceSize = startIndex+sliceSize > places.length ? places.length : sliceSize;
+
+        for (var idx = startIndex; idx < startIndex+actualSliceSize; idx++)
+            if (places[idx]) {
+                var marker = new gmaps.Marker({animation: gmaps.Animation.DROP, map: map, position: new gmaps.LatLng(places[idx].lat, places[idx].lng), title: places[idx].address});
+                markers[places[idx].placeId] = marker;
+            }
+
+        resetMapBounds();
     };
 
 

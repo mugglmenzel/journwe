@@ -47,6 +47,8 @@ public class Adventure {
 
     private String favoriteTimeId;
 
+    private Long lastActive;
+
     /**
      * @return the inspirationId
      */
@@ -241,6 +243,14 @@ public class Adventure {
 
     public void setTimeVoteOpen(Boolean timeVoteOpen) {
         this.timeVoteOpen = timeVoteOpen;
+    }
+
+    public Long getLastActive() {
+        return lastActive;
+    }
+
+    public void setLastActive(Long lastActive) {
+        this.lastActive = lastActive;
     }
 
     @Override

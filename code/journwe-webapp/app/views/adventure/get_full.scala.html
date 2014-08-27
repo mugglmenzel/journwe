@@ -19,9 +19,9 @@
 
 @main(adv.getName()) { } {
 
+    <div class="content">
+
         @defining(new JournweAuthorization(adv.getId)) { auth =>
-
-
 
             <div class="prime-image">
                 <div id="adventure-prime-image" style="width: 100%; height: 100px; background: url('http://www.placehold.it/1250x100/AAAAAA/EFEFEF&text=Drop+image') no-repeat center center transparent; background-size: auto 100%;">
@@ -60,13 +60,13 @@
 
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h2 class="panel-title">
+                                <h1 class="panel-title">
                                     <strong>
                                         <a href="#" class="editable" data-type="text" data-name="adventureName" data-pk="@adv.getId()"
                                         data-url="@html.routes.AdventureController.saveEditable()"
                                         data-original-title="Enter adventure name" data-inputclass="form-control ">@adv.getName()</a></strong><i class="fa fa-pencil muted"></i> <span></span>
                                     @if(ins != null) {<small>- <a href="@html.routes.InspirationController.get(ins.getId)">@ins.getName()</a></small>}
-                                </h2>
+                                </h1>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -84,17 +84,17 @@
                                     <div class="col-xs-11">
                                         <div>
                                             <div class="adventure-photos"></div>
-                                            <div class="polaroid" style="position: relative; float: left; width: 20%;">
-                                                <a class="btn-photo-upload"><img style="margin: 0px; width: 100%;" src="http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=add+photo"></a>
+                                            <div class="polaroid col-md-2">
+                                                <a class="btn-photo-upload"><img style="margin: 0px; width: 100%;" src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&text=add+photo"></a>
                                                 <input id="adventure-photo-file-input" type="file" class="hide"/>
                                             </div>
                                         </div>
                                         <div class="loader loader-photos stash"></div>
 
                                         <script type="text/x-tmpl" id="adventure-photo-template">
-                                            <div class="polaroid" style="position: relative; float: left; width: 20%;">
+                                            <div class="polaroid col-md-2">
                                                 <a class="btn-adventure-photo" data-index='{%=o.index%}'>
-                                                    <img style="margin: 0px; width: 100%;" src="{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/204x204/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=204&h=204&u=' + o.url)%}{% } %}">
+                                                    <img style="margin: 0px; width: 100%;" src="{% if(o == null || o.url == null) { %}{%=String('http://www.placehold.it/150x150/EFEFEF/AAAAAA&text=no+image')%}{% } else { %}{%=String('http://www.journwe.com/thumbnail?w=150&h=150&u=' + o.url)%}{% } %}">
                                                 </a>
                                                 <div style="background-color: rgba(255,255,255,0.6); position: absolute; bottom: 0px; left: 0px; right: 0px; padding: 2px;">
                                                     <button class="btn btn-default btn-photo-delete pull-right" data-id="{%=o.id%}"><i class="fa fa-trash-o"></i></button>
@@ -468,5 +468,6 @@
         </div>
 
     </div>
+</div>
 
 }(openGraphMeta("JournWe " + adv.getName, adv.getShortURL, "Join" + " " + adv.getName + ". " + adv.getDescription, adv.getImage), "adventure", scripts)

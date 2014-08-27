@@ -15,7 +15,10 @@ require([
 
     utils.on({
         'click .btn-adventure-new': function () {
-          $('#adventure-new').modal('show');
+            $('#adventure-new').modal('show');
+        },
+        'click .btn-get-inspired': function () {
+            utils.scrollTo($('#inspiration-categories'));
         },
         'click .btn-yingyangyong-start': function () {
             $('#yingyangyong-container').slideDown(function () {

@@ -1,21 +1,20 @@
 package controllers.api.json;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 import models.UserManager;
 import models.adventure.Adventure;
+import models.adventure.adventurer.Adventurer;
 import models.auth.SecuredUser;
 import models.dao.adventure.AdventureDAO;
 import models.dao.adventure.AdventurerDAO;
 import models.dao.adventure.PlaceOptionDAO;
 import models.dao.adventure.TimeOptionDAO;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.reflections.Reflections;
 import play.Logger;
 import play.Routes;
 import play.api.Play;
 import play.cache.Cache;
-import play.core.Router;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -23,11 +22,10 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import static play.data.Form.form;
@@ -50,8 +48,21 @@ public class ApplicationController extends Controller {
             Callable<String> resultsCallable = new Callable<String>() {
                 @Override
                 public String call() throws Exception {
+                    List<Adventure> advs = new AdventurerDAO().listAdventuresByUser(userId, null, -1); //new AdventurerDAO().listAdventuresByUser(userId, lastId, count);
+                    Logger.debug("advs before sort: " + advs);
+                    Collections.sort(advs, new Comparator<Adventure>() {
+                        @Override
+                        public int compare(Adventure adventure1, Adventure adventure2) {
+                            Long val1 = adventure1 == null || adventure1.getLastActive() == null ? 0L : adventure1.getLastActive();
+                            Long val2 = adventure2 == null || adventure2.getLastActive() == null ? 0L : adventure2.getLastActive();
+                            Logger.debug("comparing " + adventure1.getName() + " vs. " + adventure2.getName() + " = " + (val1.compareTo(val2)));
+                            return val1.compareTo(val2);
+                        }
+                    });
+                    Collections.reverse(advs);
+                    Logger.debug("advs after sort: " + advs);
                     List<ObjectNode> results = new ArrayList<ObjectNode>();
-                    for (Adventure adv : new AdventurerDAO().listAdventuresByUser(userId, lastId, count)) {
+                    for (Adventure adv : advs) {
                         if (adv != null) {
                             ObjectNode node = Json.newObject();
                             node.put("id", adv.getId());
@@ -62,7 +73,10 @@ public class ApplicationController extends Controller {
                             node.put("peopleCount", new AdventurerDAO().userCountByAdventure(adv.getId()));
                             node.put("favoritePlace", adv.getFavoritePlaceId() != null ? Json.toJson(new PlaceOptionDAO().get(adv.getId(), adv.getFavoritePlaceId())) : null);
                             node.put("favoriteTime", adv.getFavoriteTimeId() != null ? Json.toJson(new TimeOptionDAO().get(adv.getId(), adv.getFavoriteTimeId())) : null);
-                            node.put("status", new AdventurerDAO().get(adv.getId(), userId).getParticipationStatus().name());
+                            node.put("lastActive", adv.getLastActive());
+
+                            Adventurer advr = new AdventurerDAO().get(adv.getId(), userId);
+                            node.put("status", advr == null || advr.getParticipationStatus() == null ? "" : advr.getParticipationStatus().name());
                             results.add(node);
                         }
                     }
@@ -152,7 +166,6 @@ public class ApplicationController extends Controller {
             return internalServerError();
         }
     }
-
 
 
     /**

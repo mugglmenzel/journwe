@@ -16,6 +16,7 @@ import models.dao.manytomany.ManyToManyListQuery;
 import models.inspiration.Inspiration;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdventureDAO extends CommonEntityDAO<Adventure> {
@@ -28,6 +29,14 @@ public class AdventureDAO extends CommonEntityDAO<Adventure> {
         super(Adventure.class);
         adventureToInspirationListQuery = new ManyToManyListQuery<Adventure, Inspiration>(Adventure.class, Inspiration.class);
         adventureToCategoryListQuery = new ManyToManyListQuery<Adventure, Category>(Adventure.class, Category.class);
+    }
+
+    @Override
+    public Adventure get(String id) {
+        Adventure adv = super.get(id);
+        adv.setLastActive(new Date().getTime());
+        pm.save(adv);
+        return adv;
     }
 
     public int adventureCountByUser(String userId) {
