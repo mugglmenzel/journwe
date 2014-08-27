@@ -47,5 +47,5 @@ define([
 
     return function (call) {
         call();
-    }
+    };
 });

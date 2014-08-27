@@ -263,7 +263,7 @@ public class ApplicationController extends Controller {
 
     public static Result messages() {
         response().setContentType("text/javascript");
-        return ok("define(function(){ var messages = " + Json.toJson(scala.collection.JavaConversions.asJavaMap(play.api.i18n.Messages.messages(Play.current()).get(Http.Context.current().lang().code()).get())).toString() + "; return messages;});");
+        return ok("define(function(){ var messages = " + Json.toJson(scala.collection.JavaConversions.mapAsJavaMap(play.api.i18n.Messages.messages(Play.current()).get(Http.Context.current().lang().code()).get())).toString() + "; return messages;});");
     }
 
 }

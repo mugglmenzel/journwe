@@ -1,13 +1,14 @@
+import play.Play.autoImport._
 
 name := "dataCache"
 
 version := "1.0"
 
+scalaVersion := "2.11.1"
+
 libraryDependencies ++= Seq(
-  javaCore,
-  javaEbean,
   cache,
-  "com.github.mumoshu" %% "play2-memcached" % "0.3.0.2"
+  "com.github.mumoshu" %% "play2-memcached" % "0.6.0"
 )
 
 resolvers ++= Seq(
@@ -17,6 +18,6 @@ resolvers ++= Seq(
 )
 
 
-playJavaSettings
+lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
 doc in Compile <<= target.map(_ / "none")

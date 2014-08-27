@@ -44,7 +44,7 @@ require([
         routes.controllers.api.json.InspirationController.getImages(ins.id).ajax({success: function (images) {
             if (images) {
                 for (var i in images) {
-                    var image = $.extend({active: i == 0 ? 'active' : ''}, images[i]);
+                    var image = $.extend({active: i === 0 ? 'active' : ''}, images[i]);
                     $('.inspiration-photos').append(tmpl('inspiration-photo-template', image));
                     $('.carousel-indicators-inspiration-photos').append(tmpl('inspiration-photo-carousel-indicator-template', image));
                     $('.carousel-inner-inspiration-photos').append(tmpl('inspiration-photo-carousel-item-template', image));
@@ -108,7 +108,7 @@ require([
             $('#carousel-inspiration-photos').modal('hide');
         },
         'keydown body': function (e) {
-            e.keyCode == 27 && $('#carousel-inspiration-photos').modal('hide');
+            if (e.keyCode == 27) $('#carousel-inspiration-photos').modal('hide');
         },
         'click .btn-place-map-layers-show': function () {
             $.each(layers, function (i, val) {
@@ -118,15 +118,15 @@ require([
             gmaps.showMapLayers(placeMap, layers[$(this).data('layers')]);
             $(this).addClass('active');
         },
-        'focus #tip-add-text' : function () {
+        'focus #tip-add-text': function () {
             $('#tip-add-text').prop('rows', 3);
         },
-        'blur #tip-add-text' : function () {
+        'blur #tip-add-text': function () {
             $('#tip-add-text').prop('rows', 1);
         }
     });
 
-    if (ins.image != null && ins.image != "") {
+    if (ins.image !== null && ins.image !== "") {
         $('#background').css('background-image', 'url("http://www.journwe.com/thumbnail?w=1600&u=' + ins.image + '")').addClass('blur');
     } else utils.loadGenericBgImage();
 

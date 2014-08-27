@@ -9,12 +9,12 @@ import models.dao.adventure.AdventurerDAO;
 import models.dao.category.CategoryDAO;
 import models.user.User;
 import play.Logger;
-import play.api.templates.Html;
 import play.cache.Cache;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import play.twirl.api.Html;
 
 import java.util.concurrent.Callable;
 

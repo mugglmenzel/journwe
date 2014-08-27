@@ -17,8 +17,8 @@ require([
     };
 
     var renderAdventure = function (tmplId, adv) {
-        if (adv.favoriteTime != null && adv.favoriteTime.startDate != null) adv.favoriteTime.startDate = utils.formatDateShort(adv.favoriteTime.startDate);
-        if (adv.status != null) adv.cssLabel = utils.adventurerCSSLabel[adv.status];
+        if (adv.favoriteTime !== null && adv.favoriteTime.startDate !== null) adv.favoriteTime.startDate = utils.formatDateShort(adv.favoriteTime.startDate);
+        if (adv.status !== null) adv.cssLabel = utils.adventurerCSSLabel[adv.status];
         return $(tmpl(tmplId, adv));
     };
 

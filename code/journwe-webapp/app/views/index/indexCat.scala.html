@@ -14,10 +14,10 @@
 @main(Messages("journwe.subtitle")) { @if(Category.SUPER_CATEGORY.equals(cat.getId)){Travel Inspirations}else{Category <em>@cat.getName</em>} } {
 
 
-<div class="container content">
+<div class="container">
 
 
-    <div class="jrn-container jrn-no-round jrn-no-top-gap-page-header">
+    <div class="jrn-container jrn-no-top-round jrn-no-top-gap-page-header">
         <ol  class="breadcrumb row">
             <li class="active"><i class="fa fa-folder"></i></li>
             @if(cat != null) {
@@ -129,4 +129,4 @@
     </script>
 
 </div>
-}(Html.empty, "indexCat", scripts)
+}(HtmlFormat.empty, "indexCat", scripts)

@@ -1,4 +1,4 @@
-@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit ogMeta: Html = Html.empty, javascriptModule: String = null, scripts: Html = Html.empty, active: String = "home")
+@(title: String)(headerText: Html = Html("Welcome"))(content: Html)(implicit ogMeta: Html = HtmlFormat.empty, javascriptModule: String = null, scripts: Html = HtmlFormat.empty, active: String = "home")
 
 @import play.Play
 
@@ -7,7 +7,7 @@
 <html lang="@Http.Context.current().lang().language()">
 <head>
 	<title>JournWe - @Html(title)</title>
-    @if(!Html.empty.equals(ogMeta)) {
+    @if(!HtmlFormat.empty.equals(ogMeta)) {
         @ogMeta
     } else {
        @openGraphMeta(title)
@@ -17,7 +17,6 @@
     <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700'>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="@controllers.core.html.routes.CDNAssetsController.at("css/journwe.min.css")">
-    <link rel="stylesheet" href="@controllers.core.html.routes.CDNAssetsController.at("css/typeahead.js-bootstrap.min.css")">
 
     <link rel="shortcut icon" type="image/png" href="@controllers.core.html.routes.CDNAssetsController.at("img/favicon.png")">
 
@@ -51,7 +50,7 @@
 
 		<div class="main">
 				@if(!headerText.toString().equals(" ")){
-                    <div class="container">
+                    <div class="container content">
                         <div class="page-header">
                             <h1>@headerText</h1>
                         </div>
