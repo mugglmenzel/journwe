@@ -49,26 +49,9 @@ LessKeys.compress in Assets := true
 includeFilter in (Assets, LessKeys.less) := "journwe.less"
 
 // RequireJS
-requireJs ++= Seq(
-  "adventure.js",
-  "adventurePublic.js",
-  "index.js",
-  "indexCat.js",
-  "indexNew.js",
-  "indexVet.js",
-  "inspiration.js",
-  "landing.js",
-  "user.js",
-  "static.js"
-)
+RjsKeys.mainModule := "static"
 
-requireJsShim += "shim.js"
-
-RjsKeys.mainModule := "shim"
-
-//RjsKeys.mainConfig := "shim"
-
-//RjsKeys.mainConfigFile := file("app/assets/javascripts/shim.js")
+RjsKeys.mainConfig := "shim"
 
 RjsKeys.modules += JS.Object("name" -> "adventure")
 
@@ -88,7 +71,6 @@ RjsKeys.modules += JS.Object("name" -> "landing")
 
 RjsKeys.modules += JS.Object("name" -> "user")
 
-RjsKeys.modules += JS.Object("name" -> "static")
 
 
 

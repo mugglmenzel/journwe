@@ -1,4 +1,4 @@
-package controller;
+package services;
 
 import com.feth.play.module.mail.Mailer.Mail.Body;
 import play.Logger;

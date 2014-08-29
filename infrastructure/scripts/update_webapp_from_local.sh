@@ -23,7 +23,7 @@ echo ""
 echo "-- compiling JournWe web app"
 echo "compiling staged play web app..."
 cd $current_path/../../code/journwe-webapp/
-play -Dconfig.file=conf/application-prod.conf $2 compile dist
+$current_path/../activator/activator -Dconfig.file=conf/application-prod.conf $2 compile dist
 
 echo "-- preparing EC2 access"
 export AWS_ELB_HOME=$current_path/../elastic-load-balancing
@@ -44,6 +44,7 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
         echo "----- stopping play web server..."
         ssh $ssh_opts_terminal $ssh_host "sudo initctl stop journwe"
 	echo "----- unzipping..."
+	ssh $ssh_opts_terminal $ssh_host "rm -r journwe"
 	ssh $ssh_opts_terminal $ssh_host "unzip -q -o journwe-webapp-*.zip -d journwe"
 	echo "----- chmoding..."
 	ssh $ssh_opts_terminal $ssh_host "sudo chmod -R 777 journwe"

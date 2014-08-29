@@ -5,7 +5,7 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
 import com.amazonaws.services.simpleemail.model.*;
 import com.feth.play.module.mail.Mailer;
 import com.typesafe.config.ConfigFactory;
-import controller.JournweMailer;
+import services.JournweMailer;
 import models.dao.NotificationDAO;
 import models.dao.NotificationDigestQueueDAO;
 import models.dao.user.UserDAO;
