@@ -15,7 +15,7 @@ ASSETDIR="$EXTRACTDIR/public/"
 S3BUCKET="s3://journwe-assets/"
 
 rm -r $EXTRACTDIR/
-unzip $ASSETJAR -q -d $EXTRACTDIR/
+unzip -o -q $ASSETJAR -d $EXTRACTDIR/
 
 echo "check md5 hash and uploade changed local assets to s3 bucket now... sorry, this can take a while ..."
 echo "checking and uploading $ASSETDIR"
