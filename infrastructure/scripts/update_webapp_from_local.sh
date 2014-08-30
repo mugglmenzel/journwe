@@ -44,7 +44,7 @@ for instanceid in `elb-describe-instance-health $1 | awk '{print $2}'`; do
         echo "----- stopping play web server..."
         ssh $ssh_opts_terminal $ssh_host "sudo initctl stop journwe"
 	echo "----- unzipping..."
-	ssh $ssh_opts_terminal $ssh_host "rm -r journwe"
+	ssh $ssh_opts_terminal $ssh_host "rm -rf journwe"
 	ssh $ssh_opts_terminal $ssh_host "unzip -q -o journwe-webapp-*.zip -d journwe"
 	echo "----- chmoding..."
 	ssh $ssh_opts_terminal $ssh_host "sudo chmod -R 777 journwe"

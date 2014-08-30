@@ -21,6 +21,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.0.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.0")
 
-addSbtPlugin("com.slidingautonomy.sbt" % "sbt-imagemin" % "1.0.0")
+//addSbtPlugin("com.slidingautonomy.sbt" % "sbt-imagemin" % "1.0.0")
 
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")

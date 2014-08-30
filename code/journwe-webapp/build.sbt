@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   javaEbean,
   cache,
   filters,
-  "com.github.mumoshu" %% "play2-memcached" % "0.6.0",
+  "com.github.mumoshu" %% "play2-memcached" % "0.6.0" exclude("net.spy", "spymemcached"),
   "com.amazonaws" % "aws-java-sdk" % "1.7.5",
   "com.feth" %% "play-authenticate" % "0.6.5-SNAPSHOT",
   "com.rosaloves" % "bitlyj" % "2.0.0",
@@ -72,6 +72,8 @@ RjsKeys.modules += JS.Object("name" -> "landing")
 RjsKeys.modules += JS.Object("name" -> "user")
 
 
+// GZip
+includeFilter in gzip := "*.*"
 
 
 // Assets processing
