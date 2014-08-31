@@ -77,7 +77,7 @@ includeFilter in gzip := "*.*"
 
 
 // Assets processing
-pipelineStages := Seq(rjs, digest, gzip)
+pipelineStages := Seq(rjs, gzip)
 
 
 //requireNativePath := Some("java -cp lib/requireJs/js.jar:lib/requireJs/compiler.jar org.mozilla.javascript.tools.shell.Main lib/requireJs/r.js")

@@ -35,46 +35,30 @@ from S3Uri import S3Uri
 from ConnMan import ConnMan
 
 try:
-    import magic, gzip
+    import magic
     try:
         ## https://github.com/ahupp/python-magic
         magic_ = magic.Magic(mime=True)
         def mime_magic_file(file):
             return magic_.from_file(file)
-        def mime_magic_buffer(buffer):
-            return magic_.from_buffer(buffer)
     except TypeError:
         ## http://pypi.python.org/pypi/filemagic
         try:
             magic_ = magic.Magic(flags=magic.MAGIC_MIME)
             def mime_magic_file(file):
                 return magic_.id_filename(file)
-            def mime_magic_buffer(buffer):
-                return magic_.id_buffer(buffer)
         except TypeError:
             ## file-5.11 built-in python bindings
             magic_ = magic.open(magic.MAGIC_MIME)
             magic_.load()
             def mime_magic_file(file):
                 return magic_.file(file)
-            def mime_magic_buffer(buffer):
-                return magic_.buffer(buffer)
-
     except AttributeError:
         ## Older python-magic versions
         magic_ = magic.open(magic.MAGIC_MIME)
         magic_.load()
         def mime_magic_file(file):
             return magic_.file(file)
-        def mime_magic_buffer(buffer):
-            return magic_.buffer(buffer)
-
-    def mime_magic(file):
-        type = mime_magic_file(file)
-        if type != "application/x-gzip; charset=binary":
-            return (type, None)
-        else:
-            return (mime_magic_buffer(gzip.open(file).read(8192)), 'gzip')
 
 except ImportError, e:
     if str(e).find("magic") >= 0:
@@ -83,12 +67,37 @@ except ImportError, e:
         magic_message = "Module python-magic can't be used (%s)." % e.message
     magic_message += " Guessing MIME types based on file extensions."
     magic_warned = False
-    def mime_magic(file):
+    def mime_magic_file(file):
         global magic_warned
         if (not magic_warned):
             warning(magic_message)
             magic_warned = True
-        return mimetypes.guess_type(file)
+        return mimetypes.guess_type(file)[0]
+
+def mime_magic(file):
+    # we can't tell if a given copy of the magic library will take a
+    # filesystem-encoded string or a unicode value, so try first
+    # with the encoded string, then unicode.
+    def _mime_magic(file):
+        magictype = None
+        try:
+            magictype = mime_magic_file(file)
+        except UnicodeDecodeError:
+            magictype = mime_magic_file(unicodise(file))
+        return magictype
+
+    result = _mime_magic(file)
+    if result is not None:
+        if isinstance(result, str):
+            if ';' in result:
+                mimetype, charset = result.split(';')
+                charset = charset[len('charset'):]
+                result = (mimetype, charset)
+            else:
+                result = (result, None)
+    if result is None:
+        result = (None, None)
+    return result
 
 __all__ = []
 class S3Request(object):
@@ -229,7 +238,7 @@ class S3(object):
         response["list"] = getListFromXml(response["data"], "Bucket")
         return response
 
-    def bucket_list(self, bucket, prefix = None, recursive = None, batch_mode = False, uri_params = {}):
+    def bucket_list(self, bucket, prefix = None, recursive = None, uri_params = {}):
         def _list_truncated(data):
             ## <IsTruncated> can either be "true" or "false" or be missing completely
             is_truncated = getTextFromXml(data, ".//IsTruncated") or "false"
@@ -241,6 +250,7 @@ class S3(object):
         def _get_common_prefixes(data):
             return getListFromXml(data, "CommonPrefixes")
 
+        uri_params = uri_params.copy()
         truncated = True
         list = []
         prefixes = []
@@ -249,7 +259,7 @@ class S3(object):
             response = self.bucket_list_noparse(bucket, prefix, recursive, uri_params)
             current_list = _get_contents(response["data"])
             current_prefixes = _get_common_prefixes(response["data"])
-            truncated = _list_truncated(response["data"]) and not batch_mode
+            truncated = _list_truncated(response["data"])
             if truncated:
                 if current_list:
                     uri_params['marker'] = self.urlencode_string(current_list[-1]["Key"])
@@ -672,6 +682,23 @@ class S3(object):
     def delete_policy(self, uri):
         request = self.create_request("BUCKET_DELETE", uri = uri, extra = "?policy")
         debug(u"delete_policy(%s)" % uri)
+        response = self.send_request(request)
+        return response
+
+    def set_lifecycle_policy(self, uri, policy):
+        headers = SortedDict(ignore_case = True)
+        headers['content-md5'] = compute_content_md5(policy)
+        request = self.create_request("BUCKET_CREATE", uri = uri,
+                                      extra = "?lifecycle", headers=headers)
+        body = policy
+        debug(u"set_lifecycle_policy(%s): policy-xml: %s" % (uri, body))
+        request.sign()
+        response = self.send_request(request, body=body)
+        return response
+
+    def delete_lifecycle_policy(self, uri):
+        request = self.create_request("BUCKET_DELETE", uri = uri, extra = "?lifecycle")
+        debug(u"delete_lifecycle_policy(%s)" % uri)
         response = self.send_request(request)
         return response
 
@@ -1134,10 +1161,14 @@ class S3(object):
                 response["md5"] = response["headers"]["etag"]
 
         md5_hash = response["headers"]["etag"]
-        try:
-            md5_hash = response["s3cmd-attrs"]["md5"]
-        except KeyError:
-            pass
+        if not 'x-amz-meta-s3tools-gpgenc' in response["headers"]:
+            # we can't trust our stored md5 because we
+            # encrypted the file after calculating it but before
+            # uploading it.
+            try:
+                md5_hash = response["s3cmd-attrs"]["md5"]
+            except KeyError:
+                pass
 
         response["md5match"] = md5_hash.find(response["md5"]) >= 0
         response["elapsed"] = timestamp_end - timestamp_start

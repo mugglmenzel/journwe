@@ -16,11 +16,25 @@ import hmac
 import base64
 import errno
 import urllib
-import dateutil.parser
 from calendar import timegm
-
 from logging import debug, info, warning, error
-
+from ExitCodes import EX_OSFILE
+try:
+    import dateutil.parser
+except ImportError:
+    sys.stderr.write(u"""
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ImportError trying to import dateutil.parser.
+Please install the python dateutil module:
+$ sudo apt-get install python-dateutil
+  or
+$ sudo yum install python-dateutil
+  or
+$ pip install python-dateutil
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+""")
+    sys.stderr.flush()
+    sys.exit(EX_OSFILE)
 
 import Config
 import Exceptions
@@ -79,6 +93,11 @@ def getTreeFromXml(xml):
     except ExpatError, e:
         error(e)
         raise Exceptions.ParameterError("Bucket contains invalid filenames. Please run: s3cmd fixbucket s3://your-bucket/")
+    except Exception, e:
+        error(e)
+        error(xml)
+        raise
+
 __all__.append("getTreeFromXml")
 
 def getListFromXml(xml, node):
@@ -469,13 +488,14 @@ def calculateChecksum(buffer, mfile, offset, chunk_size, send_chunk):
 __all__.append("calculateChecksum")
 
 
-# Deal with the fact that pwd and grp modules don't exist for Windos
+# Deal with the fact that pwd and grp modules don't exist for Windows
 try:
     import pwd
     def getpwuid_username(uid):
         """returns a username from the password databse for the given uid"""
         return pwd.getpwuid(uid).pw_name
 except ImportError:
+    import getpass
     def getpwuid_username(uid):
         return getpass.getuser()
 __all__.append("getpwuid_username")
