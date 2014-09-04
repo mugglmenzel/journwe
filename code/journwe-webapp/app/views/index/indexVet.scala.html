@@ -15,12 +15,12 @@
     <div class="jrn-container">
 
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-sm-2">
                 <a href="@core.html.routes.UserController.getProfile(user.getId())">
                     <img class="img-circle img-responsive" @if(user.getImage()){src="/thumbnail?w=100&h=100&u=@user.getImage()"}else{src="http://www.placehold.it/100x100/EFEFEF/AAAAAA&text=no+image"}>
                 </a>
             </div>
-            <div class="col-md-10">
+            <div class="col-sm-10">
                 <a class="btn-link" href="@core.html.routes.UserController.getProfile(user.getId())"><h1>@user.getName()</h1></a>
                 <p class="lead">
                 @Messages("index.welcome")
